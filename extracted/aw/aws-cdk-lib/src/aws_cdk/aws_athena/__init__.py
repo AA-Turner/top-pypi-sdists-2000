@@ -149,6 +149,20 @@ class CfnCapacityReservation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCapacityReservation")
+    @builtins.classmethod
+    def arn_for_capacity_reservation(
+        cls,
+        resource: _ICapacityReservationRef_b5ac8483,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__65e5c5fb20b5937a61b9375b77df684f21fbdcdff52211d39c9e364b964b665a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapacityReservation", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -618,6 +632,17 @@ class CfnDataCatalog(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataCatalog")
+    @builtins.classmethod
+    def arn_for_data_catalog(cls, resource: _IDataCatalogRef_a1e1d9b1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c5f5ca49decace6fdf34c10d0c1fc4ebead025b43a45170c8a4a65b8ce679ed7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataCatalog", [resource]))
+
     @jsii.member(jsii_name="fromDataCatalogName")
     @builtins.classmethod
     def from_data_catalog_name(
@@ -1065,7 +1090,7 @@ class CfnNamedQuery(
         query_string: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        work_group: typing.Optional[builtins.str] = None,
+        work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::NamedQuery``.
 
@@ -1226,7 +1251,7 @@ class CfnNamedQueryProps:
         query_string: builtins.str,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
-        work_group: typing.Optional[builtins.str] = None,
+        work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
     ) -> None:
         '''Properties for defining a ``CfnNamedQuery``.
 
@@ -1312,13 +1337,15 @@ class CfnNamedQueryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def work_group(self) -> typing.Optional[builtins.str]:
+    def work_group(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]]:
         '''The name of the workgroup that contains the named query.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-namedquery.html#cfn-athena-namedquery-workgroup
         '''
         result = self._values.get("work_group")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1367,7 +1394,7 @@ class CfnPreparedStatement(
         *,
         query_statement: builtins.str,
         statement_name: builtins.str,
-        work_group: builtins.str,
+        work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Athena::PreparedStatement``.
@@ -1502,7 +1529,7 @@ class CfnPreparedStatementProps:
         *,
         query_statement: builtins.str,
         statement_name: builtins.str,
-        work_group: builtins.str,
+        work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnPreparedStatement``.
@@ -1565,14 +1592,14 @@ class CfnPreparedStatementProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def work_group(self) -> builtins.str:
+    def work_group(self) -> typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]:
         '''The workgroup to which the prepared statement belongs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-athena-preparedstatement.html#cfn-athena-preparedstatement-workgroup
         '''
         result = self._values.get("work_group")
         assert result is not None, "Required property 'work_group' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IWorkGroupRef_ee1f32da], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1743,6 +1770,17 @@ class CfnWorkGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkGroup")
+    @builtins.classmethod
+    def arn_for_work_group(cls, resource: _IWorkGroupRef_ee1f32da) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77fb2d670266f1ac4102b8f78f40b8676750ae6ea65cb3245b5487b331ea0374)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkGroup", [resource]))
 
     @jsii.member(jsii_name="fromWorkGroupName")
     @builtins.classmethod
@@ -3497,6 +3535,12 @@ def _typecheckingstub__7458bc9b2513dcdcbd6a0f9a6fcf8ad6ac0dd26405dc0f98526c7739e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__65e5c5fb20b5937a61b9375b77df684f21fbdcdff52211d39c9e364b964b665a(
+    resource: _ICapacityReservationRef_b5ac8483,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0bcae353c3f5a5e1be964ca831d796ba8924d38d98e4da35f1f4249f28af0833(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3569,6 +3613,12 @@ def _typecheckingstub__05023d61a95576869568bc095d9889b971a9d8c061cba5833a71f4423
     parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c5f5ca49decace6fdf34c10d0c1fc4ebead025b43a45170c8a4a65b8ce679ed7(
+    resource: _IDataCatalogRef_a1e1d9b1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3663,7 +3713,7 @@ def _typecheckingstub__70a6acd727802c2fa7a22438ae44b6660590077a4f16a3e6add10721d
     query_string: builtins.str,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
-    work_group: typing.Optional[builtins.str] = None,
+    work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3716,7 +3766,7 @@ def _typecheckingstub__6843e60f95befbeeac102b484bbd44b76e442a562d520fa09f15e78c6
     query_string: builtins.str,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
-    work_group: typing.Optional[builtins.str] = None,
+    work_group: typing.Optional[typing.Union[builtins.str, _IWorkGroupRef_ee1f32da]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3727,7 +3777,7 @@ def _typecheckingstub__2c4c8a39ce9fb61cd606b4abe521c05c0c7c27caa382a68b361cf3be6
     *,
     query_statement: builtins.str,
     statement_name: builtins.str,
-    work_group: builtins.str,
+    work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3773,7 +3823,7 @@ def _typecheckingstub__709f141308344c291dfca2deddc79eabfe04118b21e11aa37c781298b
     *,
     query_statement: builtins.str,
     statement_name: builtins.str,
-    work_group: builtins.str,
+    work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -3790,6 +3840,12 @@ def _typecheckingstub__be0f7d9e26f77f516ae56dabfd6aae7d4d7e7404767cea86eb51dbe5a
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     work_group_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     work_group_configuration_updates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.WorkGroupConfigurationUpdatesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__77fb2d670266f1ac4102b8f78f40b8676750ae6ea65cb3245b5487b331ea0374(
+    resource: _IWorkGroupRef_ee1f32da,
 ) -> None:
     """Type checking stubs"""
     pass

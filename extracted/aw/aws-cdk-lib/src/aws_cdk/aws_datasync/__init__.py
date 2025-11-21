@@ -96,6 +96,9 @@ from ..interfaces.aws_datasync import (
     LocationSMBReference as _LocationSMBReference_9787936e,
     TaskReference as _TaskReference_56755658,
 )
+from ..interfaces.aws_efs import IFileSystemRef as _IFileSystemRef_3dcf8b98
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IAgentRef_7dc116ab, _ITaggable_36806126)
@@ -174,6 +177,17 @@ class CfnAgent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAgent")
+    @builtins.classmethod
+    def arn_for_agent(cls, resource: _IAgentRef_7dc116ab) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6130ad11142d098dded503b6b252f778ba564b618ec7da93f981f047658cd344)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgent", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1388,7 +1402,7 @@ class CfnLocationEFS(
         *,
         ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationEFS.Ec2ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         access_point_arn: typing.Optional[builtins.str] = None,
-        efs_filesystem_arn: typing.Optional[builtins.str] = None,
+        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
         file_system_access_role_arn: typing.Optional[builtins.str] = None,
         in_transit_encryption: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
@@ -1686,7 +1700,7 @@ class CfnLocationEFSProps:
         *,
         ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationEFS.Ec2ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
         access_point_arn: typing.Optional[builtins.str] = None,
-        efs_filesystem_arn: typing.Optional[builtins.str] = None,
+        efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
         file_system_access_role_arn: typing.Optional[builtins.str] = None,
         in_transit_encryption: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
@@ -1778,13 +1792,15 @@ class CfnLocationEFSProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def efs_filesystem_arn(self) -> typing.Optional[builtins.str]:
+    def efs_filesystem_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]]:
         '''Specifies the ARN for your Amazon EFS file system.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locationefs.html#cfn-datasync-locationefs-efsfilesystemarn
         '''
         result = self._values.get("efs_filesystem_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]], result)
 
     @builtins.property
     def file_system_access_role_arn(self) -> typing.Optional[builtins.str]:
@@ -6043,7 +6059,7 @@ class CfnLocationS3(
         id: builtins.str,
         *,
         s3_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLocationS3.S3ConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        s3_bucket_arn: typing.Optional[builtins.str] = None,
+        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         s3_storage_class: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6278,7 +6294,7 @@ class CfnLocationS3Props:
         self,
         *,
         s3_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationS3.S3ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        s3_bucket_arn: typing.Optional[builtins.str] = None,
+        s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         s3_storage_class: typing.Optional[builtins.str] = None,
         subdirectory: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6349,13 +6365,15 @@ class CfnLocationS3Props:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnLocationS3.S3ConfigProperty], result)
 
     @builtins.property
-    def s3_bucket_arn(self) -> typing.Optional[builtins.str]:
+    def s3_bucket_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
         '''The ARN of the Amazon S3 bucket.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-locations3.html#cfn-datasync-locations3-s3bucketarn
         '''
         result = self._values.get("s3_bucket_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
 
     @builtins.property
     def s3_storage_class(self) -> typing.Optional[builtins.str]:
@@ -7558,9 +7576,9 @@ class CfnTask(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        destination_location_arn: builtins.str,
-        source_location_arn: builtins.str,
-        cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
+        destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
+        source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
+        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
         excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.FilterRuleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTask.ManifestConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7608,6 +7626,17 @@ class CfnTask(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTask")
+    @builtins.classmethod
+    def arn_for_task(cls, resource: _ITaskRef_0571d67b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11b47a1239ce321421d64f37b8a9e941eafa8581660074b27825eadc5a949b3e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTask", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9397,9 +9426,9 @@ class CfnTaskProps:
     def __init__(
         self,
         *,
-        destination_location_arn: builtins.str,
-        source_location_arn: builtins.str,
-        cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
+        destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
+        source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
+        cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
         excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.ManifestConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9559,27 +9588,33 @@ class CfnTaskProps:
             self._values["task_report_config"] = task_report_config
 
     @builtins.property
-    def destination_location_arn(self) -> builtins.str:
+    def destination_location_arn(
+        self,
+    ) -> typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4]:
         '''The Amazon Resource Name (ARN) of an AWS storage resource's location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-destinationlocationarn
         '''
         result = self._values.get("destination_location_arn")
         assert result is not None, "Required property 'destination_location_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4], result)
 
     @builtins.property
-    def source_location_arn(self) -> builtins.str:
+    def source_location_arn(
+        self,
+    ) -> typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4]:
         '''Specifies the ARN of your transfer's source location.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-sourcelocationarn
         '''
         result = self._values.get("source_location_arn")
         assert result is not None, "Required property 'source_location_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4], result)
 
     @builtins.property
-    def cloud_watch_log_group_arn(self) -> typing.Optional[builtins.str]:
+    def cloud_watch_log_group_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]]:
         '''Specifies the Amazon Resource Name (ARN) of an Amazon CloudWatch log group for monitoring your task.
 
         For Enhanced mode tasks, you don't need to specify anything. DataSync automatically sends logs to a CloudWatch log group named ``/aws/datasync`` .
@@ -9589,7 +9624,7 @@ class CfnTaskProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-datasync-task.html#cfn-datasync-task-cloudwatchloggrouparn
         '''
         result = self._values.get("cloud_watch_log_group_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]], result)
 
     @builtins.property
     def excludes(
@@ -9751,6 +9786,12 @@ def _typecheckingstub__d936a9373128610a07487a343ef5f669c26d2f82d825e32d371bce59b
     subnet_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_endpoint_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6130ad11142d098dded503b6b252f778ba564b618ec7da93f981f047658cd344(
+    resource: _IAgentRef_7dc116ab,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9957,7 +9998,7 @@ def _typecheckingstub__4f2ede238fa34ab9a0ff568aeab0bbaa47ee9542611afbf58163acd20
     *,
     ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationEFS.Ec2ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     access_point_arn: typing.Optional[builtins.str] = None,
-    efs_filesystem_arn: typing.Optional[builtins.str] = None,
+    efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
     file_system_access_role_arn: typing.Optional[builtins.str] = None,
     in_transit_encryption: typing.Optional[builtins.str] = None,
     subdirectory: typing.Optional[builtins.str] = None,
@@ -10032,7 +10073,7 @@ def _typecheckingstub__bd308e189fe63ce2cc80398d76a37684d9c1c36b8dfa1dfed227e06d9
     *,
     ec2_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationEFS.Ec2ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     access_point_arn: typing.Optional[builtins.str] = None,
-    efs_filesystem_arn: typing.Optional[builtins.str] = None,
+    efs_filesystem_arn: typing.Optional[typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]] = None,
     file_system_access_role_arn: typing.Optional[builtins.str] = None,
     in_transit_encryption: typing.Optional[builtins.str] = None,
     subdirectory: typing.Optional[builtins.str] = None,
@@ -10749,7 +10790,7 @@ def _typecheckingstub__ffb78212d43943a47f3d3a5e10125952e22d4754b8512843cf88c7c55
     id: builtins.str,
     *,
     s3_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationS3.S3ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    s3_bucket_arn: typing.Optional[builtins.str] = None,
+    s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     s3_storage_class: typing.Optional[builtins.str] = None,
     subdirectory: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10809,7 +10850,7 @@ def _typecheckingstub__ce8f8003886002426ef5ce44b74ed398416c8d59b6cf5b10816d2ddc1
 def _typecheckingstub__a1b9799e0fad9e71975d14e754aeb8ef0b5f52fcedcbabc328afae8c4a4afaa5(
     *,
     s3_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLocationS3.S3ConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    s3_bucket_arn: typing.Optional[builtins.str] = None,
+    s3_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     s3_storage_class: typing.Optional[builtins.str] = None,
     subdirectory: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10997,9 +11038,9 @@ def _typecheckingstub__9add9673a1f0ceb078949e967bce91066ff7e0441dae95d55c11c4a50
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    destination_location_arn: builtins.str,
-    source_location_arn: builtins.str,
-    cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
+    destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
+    source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
+    cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
     excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.ManifestConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11009,6 +11050,12 @@ def _typecheckingstub__9add9673a1f0ceb078949e967bce91066ff7e0441dae95d55c11c4a50
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     task_mode: typing.Optional[builtins.str] = None,
     task_report_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.TaskReportConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__11b47a1239ce321421d64f37b8a9e941eafa8581660074b27825eadc5a949b3e(
+    resource: _ITaskRef_0571d67b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11227,9 +11274,9 @@ def _typecheckingstub__85b602e4eeecb093e03804ba0a072531ddddf4c7a2a1bbcf685fd0ff2
 
 def _typecheckingstub__5632ab868186e470f4d8f0c14e3f12b71107be017f54f3194a076b9da30b50d8(
     *,
-    destination_location_arn: builtins.str,
-    source_location_arn: builtins.str,
-    cloud_watch_log_group_arn: typing.Optional[builtins.str] = None,
+    destination_location_arn: typing.Union[builtins.str, _ILocationEFSRef_6fba5e2e, _ILocationS3Ref_5240f1a4],
+    source_location_arn: typing.Union[builtins.str, _ILocationNFSRef_01d78c69, _ILocationS3Ref_5240f1a4],
+    cloud_watch_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
     excludes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     includes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.FilterRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     manifest_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTask.ManifestConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

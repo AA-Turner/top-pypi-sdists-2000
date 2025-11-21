@@ -10,7 +10,13 @@ import dbtlabs.proto.public.v1.fields.vscode_types_pb2
 import google.protobuf.descriptor
 import google.protobuf.internal.containers
 import google.protobuf.message
+import sys
 import typing
+
+if sys.version_info >= (3, 10):
+    import typing as typing_extensions
+else:
+    import typing_extensions
 
 DESCRIPTOR: google.protobuf.descriptor.FileDescriptor
 
@@ -31,6 +37,8 @@ class ExtensionActivated(google.protobuf.message.Message):
     IS_FUSION_INSTALLED_FIELD_NUMBER: builtins.int
     DBT_VERSION_FIELD_NUMBER: builtins.int
     DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    MODELS_COUNT_FIELD_NUMBER: builtins.int
+    ADAPTER_TYPE_FIELD_NUMBER: builtins.int
     os_name: builtins.str
     """os name"""
     os_version: builtins.str
@@ -51,6 +59,10 @@ class ExtensionActivated(google.protobuf.message.Message):
     """the version of dbt used in the project"""
     dbt_local_cookie_user_id: builtins.str
     """the anonymous user id stored at ~/.dbt/.user.yml"""
+    models_count: builtins.int
+    """project models count"""
+    adapter_type: builtins.str
+    """the type of adapter used in the project (snowflake, bigquery, etc)"""
     @property
     def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
     @property
@@ -73,11 +85,13 @@ class ExtensionActivated(google.protobuf.message.Message):
         is_fusion_installed: builtins.bool = ...,
         dbt_version: builtins.str = ...,
         dbt_local_cookie_user_id: builtins.str = ...,
+        models_count: builtins.int = ...,
+        adapter_type: builtins.str = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "dbt_version", b"dbt_version", "editor", b"editor", "enrichment", b"enrichment", "init_duration_ms", b"init_duration_ms", "init_error", b"init_error", "init_error_detail", b"init_error_detail", "init_success", b"init_success", "is_fusion_installed", b"is_fusion_installed", "is_lsp_installed", b"is_lsp_installed", "os_name", b"os_name", "os_version", b"os_version", "user", b"user"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["adapter_type", b"adapter_type", "dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "dbt_version", b"dbt_version", "editor", b"editor", "enrichment", b"enrichment", "init_duration_ms", b"init_duration_ms", "init_error", b"init_error", "init_error_detail", b"init_error_detail", "init_success", b"init_success", "is_fusion_installed", b"is_fusion_installed", "is_lsp_installed", b"is_lsp_installed", "models_count", b"models_count", "os_name", b"os_name", "os_version", b"os_version", "user", b"user"]) -> None: ...
 
-global___ExtensionActivated = ExtensionActivated
+Global___ExtensionActivated: typing_extensions.TypeAlias = ExtensionActivated
 
 @typing.final
 class ExtensionLspCompile(google.protobuf.message.Message):
@@ -150,7 +164,7 @@ class ExtensionLspCompile(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["adapter_type", b"adapter_type", "adapter_unique_id", b"adapter_unique_id", "compile_cause", b"compile_cause", "compile_success", b"compile_success", "compile_type", b"compile_type", "dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "dbt_version", b"dbt_version", "duration_ms", b"duration_ms", "editor", b"editor", "enrichment", b"enrichment", "errors", b"errors", "models_count", b"models_count", "project_id", b"project_id", "user", b"user", "user_initiated", b"user_initiated"]) -> None: ...
 
-global___ExtensionLspCompile = ExtensionLspCompile
+Global___ExtensionLspCompile: typing_extensions.TypeAlias = ExtensionLspCompile
 
 @typing.final
 class ExtensionUserStateChange(google.protobuf.message.Message):
@@ -183,7 +197,7 @@ class ExtensionUserStateChange(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["changed_to_state", b"changed_to_state", "dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionUserStateChange = ExtensionUserStateChange
+Global___ExtensionUserStateChange: typing_extensions.TypeAlias = ExtensionUserStateChange
 
 @typing.final
 class ExtensionCtePreview(google.protobuf.message.Message):
@@ -212,7 +226,7 @@ class ExtensionCtePreview(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionCtePreview = ExtensionCtePreview
+Global___ExtensionCtePreview: typing_extensions.TypeAlias = ExtensionCtePreview
 
 @typing.final
 class ExtensionLineageTabClicked(google.protobuf.message.Message):
@@ -241,7 +255,7 @@ class ExtensionLineageTabClicked(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionLineageTabClicked = ExtensionLineageTabClicked
+Global___ExtensionLineageTabClicked: typing_extensions.TypeAlias = ExtensionLineageTabClicked
 
 @typing.final
 class ExtensionColumnLineage(google.protobuf.message.Message):
@@ -270,7 +284,7 @@ class ExtensionColumnLineage(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionColumnLineage = ExtensionColumnLineage
+Global___ExtensionColumnLineage: typing_extensions.TypeAlias = ExtensionColumnLineage
 
 @typing.final
 class ExtensionShowCompiledFile(google.protobuf.message.Message):
@@ -299,7 +313,7 @@ class ExtensionShowCompiledFile(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionShowCompiledFile = ExtensionShowCompiledFile
+Global___ExtensionShowCompiledFile: typing_extensions.TypeAlias = ExtensionShowCompiledFile
 
 @typing.final
 class ExtensionModelRename(google.protobuf.message.Message):
@@ -328,7 +342,7 @@ class ExtensionModelRename(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionModelRename = ExtensionModelRename
+Global___ExtensionModelRename: typing_extensions.TypeAlias = ExtensionModelRename
 
 @typing.final
 class ExtensionColumnRename(google.protobuf.message.Message):
@@ -357,7 +371,7 @@ class ExtensionColumnRename(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> None: ...
 
-global___ExtensionColumnRename = ExtensionColumnRename
+Global___ExtensionColumnRename: typing_extensions.TypeAlias = ExtensionColumnRename
 
 @typing.final
 class ExtensionUsedBuildMenu(google.protobuf.message.Message):
@@ -390,7 +404,7 @@ class ExtensionUsedBuildMenu(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "selected_command", b"selected_command", "user", b"user"]) -> None: ...
 
-global___ExtensionUsedBuildMenu = ExtensionUsedBuildMenu
+Global___ExtensionUsedBuildMenu: typing_extensions.TypeAlias = ExtensionUsedBuildMenu
 
 @typing.final
 class ExtensionGetSupportPopupShown(google.protobuf.message.Message):
@@ -423,7 +437,7 @@ class ExtensionGetSupportPopupShown(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
 
-global___ExtensionGetSupportPopupShown = ExtensionGetSupportPopupShown
+Global___ExtensionGetSupportPopupShown: typing_extensions.TypeAlias = ExtensionGetSupportPopupShown
 
 @typing.final
 class ExtensionGetSupportClicked(google.protobuf.message.Message):
@@ -456,4 +470,292 @@ class ExtensionGetSupportClicked(google.protobuf.message.Message):
     def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
     def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
 
-global___ExtensionGetSupportClicked = ExtensionGetSupportClicked
+Global___ExtensionGetSupportClicked: typing_extensions.TypeAlias = ExtensionGetSupportClicked
+
+@typing.final
+class ExtensionGetSupportFormShown(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    SUPPORT_TYPE_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    support_type: builtins.str
+    """the type of support being offered"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        support_type: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
+
+Global___ExtensionGetSupportFormShown: typing_extensions.TypeAlias = ExtensionGetSupportFormShown
+
+@typing.final
+class ExtensionGetSupportUnverifiedNoticeShown(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    SUPPORT_TYPE_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    support_type: builtins.str
+    """the type of support being offered"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        support_type: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
+
+Global___ExtensionGetSupportUnverifiedNoticeShown: typing_extensions.TypeAlias = ExtensionGetSupportUnverifiedNoticeShown
+
+@typing.final
+class ExtensionGetSupportFormSubmitted(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    SUPPORT_TYPE_FIELD_NUMBER: builtins.int
+    SUCCESS_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    support_type: builtins.str
+    """the type of support that was submitted"""
+    success: builtins.bool
+    """whether the submission was successful"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        support_type: builtins.str = ...,
+        success: builtins.bool = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "success", b"success", "support_type", b"support_type", "user", b"user"]) -> None: ...
+
+Global___ExtensionGetSupportFormSubmitted: typing_extensions.TypeAlias = ExtensionGetSupportFormSubmitted
+
+@typing.final
+class ExtensionGetSupportFormCancelled(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    SUPPORT_TYPE_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    support_type: builtins.str
+    """the type of support being cancelled"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        support_type: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
+
+Global___ExtensionGetSupportFormCancelled: typing_extensions.TypeAlias = ExtensionGetSupportFormCancelled
+
+@typing.final
+class ExtensionGetSupportPanelClosed(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    SUPPORT_TYPE_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    support_type: builtins.str
+    """the type of support panel that was closed"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        support_type: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "support_type", b"support_type", "user", b"user"]) -> None: ...
+
+Global___ExtensionGetSupportPanelClosed: typing_extensions.TypeAlias = ExtensionGetSupportPanelClosed
+
+@typing.final
+class ExtensionCompareViewed(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    EVENT_ID_FIELD_NUMBER: builtins.int
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    event_id: builtins.str
+    """UUID to uniquely identify the event"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+        event_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "event_id", b"event_id", "user", b"user"]) -> None: ...
+
+Global___ExtensionCompareViewed: typing_extensions.TypeAlias = ExtensionCompareViewed
+
+@typing.final
+class ExtensionCompareStarted(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    COMPARE_ID_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    EVENT_ID_FIELD_NUMBER: builtins.int
+    compare_id: builtins.str
+    """anonymized identifier for this compare session"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    event_id: builtins.str
+    """UUID to uniquely identify the event"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        compare_id: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+        event_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["compare_id", b"compare_id", "dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "editor", b"editor", "enrichment", b"enrichment", "event_id", b"event_id", "user", b"user"]) -> None: ...
+
+Global___ExtensionCompareStarted: typing_extensions.TypeAlias = ExtensionCompareStarted
+
+@typing.final
+class ExtensionCompareFinished(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    ENRICHMENT_FIELD_NUMBER: builtins.int
+    EDITOR_FIELD_NUMBER: builtins.int
+    USER_FIELD_NUMBER: builtins.int
+    COMPARE_ID_FIELD_NUMBER: builtins.int
+    DURATION_MS_FIELD_NUMBER: builtins.int
+    COMPARE_SUCCESS_FIELD_NUMBER: builtins.int
+    FAILURE_REASON_FIELD_NUMBER: builtins.int
+    DBT_LOCAL_COOKIE_USER_ID_FIELD_NUMBER: builtins.int
+    EVENT_ID_FIELD_NUMBER: builtins.int
+    compare_id: builtins.str
+    """anonymized identifier for this compare session"""
+    duration_ms: builtins.int
+    """duration of the compare operation in milliseconds"""
+    compare_success: builtins.bool
+    """whether the compare operation completed successfully"""
+    failure_reason: builtins.str
+    """sanitized description of the failure, if any"""
+    dbt_local_cookie_user_id: builtins.str
+    """the anonymous user id stored at ~/.dbt/.user.yml"""
+    event_id: builtins.str
+    """UUID to uniquely identify the event"""
+    @property
+    def enrichment(self) -> dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment: ...
+    @property
+    def editor(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor: ...
+    @property
+    def user(self) -> dbtlabs.proto.public.v1.fields.vscode_types_pb2.User: ...
+    def __init__(
+        self,
+        *,
+        enrichment: dbtlabs.proto.public.v1.events.vortex_pb2.VortexMessageEnrichment | None = ...,
+        editor: dbtlabs.proto.public.v1.fields.vscode_types_pb2.Editor | None = ...,
+        user: dbtlabs.proto.public.v1.fields.vscode_types_pb2.User | None = ...,
+        compare_id: builtins.str = ...,
+        duration_ms: builtins.int = ...,
+        compare_success: builtins.bool = ...,
+        failure_reason: builtins.str = ...,
+        dbt_local_cookie_user_id: builtins.str = ...,
+        event_id: builtins.str = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["editor", b"editor", "enrichment", b"enrichment", "user", b"user"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["compare_id", b"compare_id", "compare_success", b"compare_success", "dbt_local_cookie_user_id", b"dbt_local_cookie_user_id", "duration_ms", b"duration_ms", "editor", b"editor", "enrichment", b"enrichment", "event_id", b"event_id", "failure_reason", b"failure_reason", "user", b"user"]) -> None: ...
+
+Global___ExtensionCompareFinished: typing_extensions.TypeAlias = ExtensionCompareFinished

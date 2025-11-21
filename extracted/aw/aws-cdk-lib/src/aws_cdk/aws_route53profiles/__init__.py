@@ -138,6 +138,17 @@ class CfnProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProfile")
+    @builtins.classmethod
+    def arn_for_profile(cls, resource: _IProfileRef_8fd1b1e8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__52d54ba2d1176fe354d89d52b39e659b4317922ef40399e50a28ef571c08a11a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProfile", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -935,6 +946,12 @@ def _typecheckingstub__a4c1f071f0e4e35c37cfd1564e9529ed7a07645071498a571c8b23339
     *,
     name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__52d54ba2d1176fe354d89d52b39e659b4317922ef40399e50a28ef571c08a11a(
+    resource: _IProfileRef_8fd1b1e8,
 ) -> None:
     """Type checking stubs"""
     pass

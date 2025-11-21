@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import ISecurityGroupRef as _ISecurityGroupRef_efa4ff18
 from ..interfaces.aws_opensearchserverless import (
     AccessPolicyReference as _AccessPolicyReference_645132eb,
     CollectionReference as _CollectionReference_355c1500,
@@ -376,7 +377,12 @@ class CfnCollection(
             name="name",
         
             # the properties below are optional
+            collection_group_name="collectionGroupName",
             description="description",
+            encryption_config=opensearchserverless.CfnCollection.EncryptionConfigProperty(
+                aws_owned_key=False,
+                kms_key_arn="kmsKeyArn"
+            ),
             standby_replicas="standbyReplicas",
             tags=[CfnTag(
                 key="key",
@@ -392,7 +398,9 @@ class CfnCollection(
         id: builtins.str,
         *,
         name: builtins.str,
+        collection_group_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCollection.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         standby_replicas: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
@@ -402,7 +410,9 @@ class CfnCollection(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the collection. Collection names must meet the following criteria: - Starts with a lowercase letter - Unique to your account and AWS Region - Contains between 3 and 28 characters - Contains only lowercase letters a-z, the numbers 0-9, and the hyphen (-)
+        :param collection_group_name: The name of the collection group. The name must meet the following criteria: Unique to your account and AWS Region Starts with a lowercase letter Contains only lowercase letters a-z, the numbers 0-9 and the hyphen (-) Contains between 3 and 32 characters
         :param description: A description of the collection.
+        :param encryption_config: The configuration to encrypt the collection.
         :param standby_replicas: Indicates whether to use standby replicas for the collection. You can't update this property after the collection is already created. If you attempt to modify this property, the collection continues to use the original value.
         :param tags: An arbitrary set of tags (key–value pairs) to associate with the collection. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param type: The type of collection. Possible values are ``SEARCH`` , ``TIMESERIES`` , and ``VECTORSEARCH`` . For more information, see `Choosing a collection type <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-overview.html#serverless-usecase>`_ .
@@ -413,13 +423,26 @@ class CfnCollection(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnCollectionProps(
             name=name,
+            collection_group_name=collection_group_name,
             description=description,
+            encryption_config=encryption_config,
             standby_replicas=standby_replicas,
             tags=tags,
             type=type,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCollection")
+    @builtins.classmethod
+    def arn_for_collection(cls, resource: _ICollectionRef_3c562476) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d0167f7d3d787b13b49c20d03c544759a3172a187f24bafb4c7a7cbc5bfde702)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCollection", [resource]))
 
     @jsii.member(jsii_name="fromCollectionArn")
     @builtins.classmethod
@@ -577,6 +600,19 @@ class CfnCollection(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="collectionGroupName")
+    def collection_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the collection group.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "collectionGroupName"))
+
+    @collection_group_name.setter
+    def collection_group_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55eec803323a7634331d41faa3594e0edeb5c3e15262c9eda7fd310c1e69a88c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "collectionGroupName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''A description of the collection.'''
@@ -588,6 +624,24 @@ class CfnCollection(
             type_hints = typing.get_type_hints(_typecheckingstub__85980a9398a34a6ff3d72193d32c1438940d0a83c1d83a04ccfa6ebaaccb9612)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="encryptionConfig")
+    def encryption_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollection.EncryptionConfigProperty"]]:
+        '''The configuration to encrypt the collection.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollection.EncryptionConfigProperty"]], jsii.get(self, "encryptionConfig"))
+
+    @encryption_config.setter
+    def encryption_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCollection.EncryptionConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a74c83a83b3b23eba3e69fa3f1bcb59dd56bfd687316a156c1775126cd094551)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "encryptionConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="standbyReplicas")
@@ -628,13 +682,87 @@ class CfnCollection(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "type", value) # pyright: ignore[reportArgumentType]
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_opensearchserverless.CfnCollection.EncryptionConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"aws_owned_key": "awsOwnedKey", "kms_key_arn": "kmsKeyArn"},
+    )
+    class EncryptionConfigProperty:
+        def __init__(
+            self,
+            *,
+            aws_owned_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration to encrypt the collection.
+
+            :param aws_owned_key: The configuration to encrypt the collection with AWS owned key.
+            :param kms_key_arn: The ARN of the KMS key to encrypt the collection with.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-collection-encryptionconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_opensearchserverless as opensearchserverless
+                
+                encryption_config_property = opensearchserverless.CfnCollection.EncryptionConfigProperty(
+                    aws_owned_key=False,
+                    kms_key_arn="kmsKeyArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__834b94cc298846a5bf61134fb27e603dd476782999349d69ca2c27cb80fa3bc1)
+                check_type(argname="argument aws_owned_key", value=aws_owned_key, expected_type=type_hints["aws_owned_key"])
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if aws_owned_key is not None:
+                self._values["aws_owned_key"] = aws_owned_key
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+
+        @builtins.property
+        def aws_owned_key(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''The configuration to encrypt the collection with AWS owned key.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-collection-encryptionconfig.html#cfn-opensearchserverless-collection-encryptionconfig-awsownedkey
+            '''
+            result = self._values.get("aws_owned_key")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the KMS key to encrypt the collection with.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchserverless-collection-encryptionconfig.html#cfn-opensearchserverless-collection-encryptionconfig-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EncryptionConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_opensearchserverless.CfnCollectionProps",
     jsii_struct_bases=[],
     name_mapping={
         "name": "name",
+        "collection_group_name": "collectionGroupName",
         "description": "description",
+        "encryption_config": "encryptionConfig",
         "standby_replicas": "standbyReplicas",
         "tags": "tags",
         "type": "type",
@@ -645,7 +773,9 @@ class CfnCollectionProps:
         self,
         *,
         name: builtins.str,
+        collection_group_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollection.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         standby_replicas: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
@@ -653,7 +783,9 @@ class CfnCollectionProps:
         '''Properties for defining a ``CfnCollection``.
 
         :param name: The name of the collection. Collection names must meet the following criteria: - Starts with a lowercase letter - Unique to your account and AWS Region - Contains between 3 and 28 characters - Contains only lowercase letters a-z, the numbers 0-9, and the hyphen (-)
+        :param collection_group_name: The name of the collection group. The name must meet the following criteria: Unique to your account and AWS Region Starts with a lowercase letter Contains only lowercase letters a-z, the numbers 0-9 and the hyphen (-) Contains between 3 and 32 characters
         :param description: A description of the collection.
+        :param encryption_config: The configuration to encrypt the collection.
         :param standby_replicas: Indicates whether to use standby replicas for the collection. You can't update this property after the collection is already created. If you attempt to modify this property, the collection continues to use the original value.
         :param tags: An arbitrary set of tags (key–value pairs) to associate with the collection. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         :param type: The type of collection. Possible values are ``SEARCH`` , ``TIMESERIES`` , and ``VECTORSEARCH`` . For more information, see `Choosing a collection type <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/serverless-overview.html#serverless-usecase>`_ .
@@ -671,7 +803,12 @@ class CfnCollectionProps:
                 name="name",
             
                 # the properties below are optional
+                collection_group_name="collectionGroupName",
                 description="description",
+                encryption_config=opensearchserverless.CfnCollection.EncryptionConfigProperty(
+                    aws_owned_key=False,
+                    kms_key_arn="kmsKeyArn"
+                ),
                 standby_replicas="standbyReplicas",
                 tags=[CfnTag(
                     key="key",
@@ -683,15 +820,21 @@ class CfnCollectionProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__dc3a9fff4dd66b4fe4e69ca639823a978df78a02743764020419d9b37d4f540e)
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument collection_group_name", value=collection_group_name, expected_type=type_hints["collection_group_name"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument encryption_config", value=encryption_config, expected_type=type_hints["encryption_config"])
             check_type(argname="argument standby_replicas", value=standby_replicas, expected_type=type_hints["standby_replicas"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
         }
+        if collection_group_name is not None:
+            self._values["collection_group_name"] = collection_group_name
         if description is not None:
             self._values["description"] = description
+        if encryption_config is not None:
+            self._values["encryption_config"] = encryption_config
         if standby_replicas is not None:
             self._values["standby_replicas"] = standby_replicas
         if tags is not None:
@@ -717,6 +860,21 @@ class CfnCollectionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
+    def collection_group_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the collection group.
+
+        The name must meet the following criteria:
+        Unique to your account and AWS Region
+        Starts with a lowercase letter
+        Contains only lowercase letters a-z, the numbers 0-9 and the hyphen (-)
+        Contains between 3 and 32 characters
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-collectiongroupname
+        '''
+        result = self._values.get("collection_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
         '''A description of the collection.
 
@@ -724,6 +882,17 @@ class CfnCollectionProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def encryption_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollection.EncryptionConfigProperty]]:
+        '''The configuration to encrypt the collection.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-collection.html#cfn-opensearchserverless-collection-encryptionconfig
+        '''
+        result = self._values.get("encryption_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollection.EncryptionConfigProperty]], result)
 
     @builtins.property
     def standby_replicas(self) -> typing.Optional[builtins.str]:
@@ -3047,7 +3216,7 @@ class CfnVpcEndpoint(
         name: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::OpenSearchServerless::VpcEndpoint``.
 
@@ -3196,7 +3365,7 @@ class CfnVpcEndpointProps:
         name: builtins.str,
         subnet_ids: typing.Sequence[builtins.str],
         vpc_id: builtins.str,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnVpcEndpoint``.
 
@@ -3268,13 +3437,15 @@ class CfnVpcEndpointProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''The unique identifiers of the security groups that define the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchserverless-vpcendpoint.html#cfn-opensearchserverless-vpcendpoint-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3370,10 +3541,18 @@ def _typecheckingstub__14f72b773d506ce15b59731aeb24f2f4a877a32d31af6ebf57a32ce70
     id: builtins.str,
     *,
     name: builtins.str,
+    collection_group_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollection.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     standby_replicas: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d0167f7d3d787b13b49c20d03c544759a3172a187f24bafb4c7a7cbc5bfde702(
+    resource: _ICollectionRef_3c562476,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3412,8 +3591,20 @@ def _typecheckingstub__5cdb6f4e81b00df109517f1c4b90835cef7bd07218c9f75976d033888
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__55eec803323a7634331d41faa3594e0edeb5c3e15262c9eda7fd310c1e69a88c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__85980a9398a34a6ff3d72193d32c1438940d0a83c1d83a04ccfa6ebaaccb9612(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a74c83a83b3b23eba3e69fa3f1bcb59dd56bfd687316a156c1775126cd094551(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCollection.EncryptionConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3436,10 +3627,20 @@ def _typecheckingstub__f407bc0eeb99c42f4a9d1d97573b8b10069685ea3e596d162939418b9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__834b94cc298846a5bf61134fb27e603dd476782999349d69ca2c27cb80fa3bc1(
+    *,
+    aws_owned_key: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__dc3a9fff4dd66b4fe4e69ca639823a978df78a02743764020419d9b37d4f540e(
     *,
     name: builtins.str,
+    collection_group_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCollection.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     standby_replicas: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
@@ -3786,7 +3987,7 @@ def _typecheckingstub__dbe678d204c3b8154a4eab3294ad9caae2eddc54ea43a540534d5f562
     name: builtins.str,
     subnet_ids: typing.Sequence[builtins.str],
     vpc_id: builtins.str,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3832,7 +4033,7 @@ def _typecheckingstub__1e4b9618641af3075893df923c3e35190dd8ae1fdea8503917862efec
     name: builtins.str,
     subnet_ids: typing.Sequence[builtins.str],
     vpc_id: builtins.str,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

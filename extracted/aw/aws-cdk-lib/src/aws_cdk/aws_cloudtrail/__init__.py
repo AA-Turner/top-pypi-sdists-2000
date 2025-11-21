@@ -271,6 +271,11 @@ from ..interfaces.aws_cloudtrail import (
     ResourcePolicyReference as _ResourcePolicyReference_79964037,
     TrailReference as _TrailReference_842f4da2,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kms import (
+    IAliasRef as _IAliasRef_43fafabd, IKeyRef as _IKeyRef_d4fc6ef3
+)
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
@@ -436,6 +441,17 @@ class CfnChannel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForChannel")
+    @builtins.classmethod
+    def arn_for_channel(cls, resource: _IChannelRef_578e7391) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__97a171a05a7e0a6e8d7d85a672e077237335c0dd1ae244cdb7c867b12fbd1efe)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannel", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -827,6 +843,17 @@ class CfnDashboard(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDashboard")
+    @builtins.classmethod
+    def arn_for_dashboard(cls, resource: _IDashboardRef_1dcd123e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c5660e666f816052caee3250fff994ef2ea26f37ea3e7ecdbc26b100aed9e21)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDashboard", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1535,7 +1562,7 @@ class CfnEventDataStore(
         :param ingestion_enabled: Specifies whether the event data store should start ingesting live events. The default is true.
         :param insights_destination: The ARN (or ID suffix of the ARN) of the destination event data store that logs Insights events. For more information, see `Create an event data store for CloudTrail Insights events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-insights.html>`_ .
         :param insight_selectors: A JSON string that contains the Insights types you want to log on an event data store. ``ApiCallRateInsight`` and ``ApiErrorRateInsight`` are valid Insight types. The ``ApiCallRateInsight`` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The ``ApiErrorRateInsight`` Insights type analyzes management API calls that result in error codes. The error is shown if the API call is unsuccessful.
-        :param kms_key_id: Specifies the AWS KMS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by ``alias/`` , a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. .. epigraph:: Disabling or deleting the KMS key, or removing CloudTrail permissions on the key, prevents CloudTrail from logging events to the event data store, and prevents users from querying the data in the event data store that was encrypted with the key. After you associate an event data store with a KMS key, the KMS key cannot be removed or changed. Before you disable or delete a KMS key that you are using with an event data store, delete or back up your event data store. CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - ``alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`` - ``12345678-1234-1234-1234-123456789012``
+        :param kms_key_id: Specifies the AWS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by ``alias/`` , a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. .. epigraph:: Disabling or deleting the KMS key, or removing CloudTrail permissions on the key, prevents CloudTrail from logging events to the event data store, and prevents users from querying the data in the event data store that was encrypted with the key. After you associate an event data store with a KMS key, the KMS key cannot be removed or changed. Before you disable or delete a KMS key that you are using with an event data store, delete or back up your event data store. CloudTrail also supports AWS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - ``alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`` - ``12345678-1234-1234-1234-123456789012``
         :param max_event_size: The maximum allowed size for events to be stored in the specified event data store. If you are using context key selectors, MaxEventSize must be set to Large.
         :param multi_region_enabled: Specifies whether the event data store includes events from all Regions, or only from the Region in which the event data store is created.
         :param name: The name of the event data store.
@@ -1568,6 +1595,20 @@ class CfnEventDataStore(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEventDataStore")
+    @builtins.classmethod
+    def arn_for_event_data_store(
+        cls,
+        resource: _IEventDataStoreRef_da898eb2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ccf1a1bb4801adcfa14ca5216b041fe1e3d5c18b12cab7e8e5eb3733536923a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventDataStore", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1784,7 +1825,7 @@ class CfnEventDataStore(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Specifies the AWS KMS key ID to use to encrypt the events delivered by CloudTrail.'''
+        '''Specifies the AWS  key ID to use to encrypt the events delivered by CloudTrail.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -2053,7 +2094,7 @@ class CfnEventDataStore(
         ) -> None:
             '''A single selector statement in an advanced event selector.
 
-            :param field: A field in a CloudTrail event record on which to filter events to be logged. For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the field is used only for selecting events as filtering is not supported. For CloudTrail management events, supported fields include ``eventCategory`` (required), ``eventSource`` , and ``readOnly`` . The following additional fields are available for event data stores: ``eventName`` , ``eventType`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail data events, supported fields include ``eventCategory`` (required), ``eventName`` , ``eventSource`` , ``eventType`` , ``resources.type`` (required), ``readOnly`` , ``resources.ARN`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail network activity events, supported fields include ``eventCategory`` (required), ``eventSource`` (required), ``eventName`` , ``errorCode`` , and ``vpcEndpointId`` . For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the only supported field is ``eventCategory`` . .. epigraph:: Selectors don't support the use of wildcards like ``*`` . To match multiple values with a single condition, you may use ``StartsWith`` , ``EndsWith`` , ``NotStartsWith`` , or ``NotEndsWith`` to explicitly match the beginning or end of the event field. - *``readOnly``* - This is an optional field that is only used for management events and data events. This field can be set to ``Equals`` with a value of ``true`` or ``false`` . If you do not add this field, CloudTrail logs both ``read`` and ``write`` events. A value of ``true`` logs only ``read`` events. A value of ``false`` logs only ``write`` events. - *``eventSource``* - This field is only used for management events, data events, and network activity events. For management events for trails, this is an optional field that can be set to ``NotEquals`` ``kms.amazonaws.com`` to exclude KMS management events, or ``NotEquals`` ``rdsdata.amazonaws.com`` to exclude RDS management events. For data events for trails, this is an optional field that you can use to include or exclude any event source and can use any operator. For management and data events for event data stores, this is an optional field that you can use to include or exclude any event source and can use any operator. For network activity events, this is a required field that only uses the ``Equals`` operator. Set this field to the event source for which you want to log network activity events. If you want to log network activity events for multiple event sources, you must create a separate field selector for each event source. For a list of services supporting network activity events, see `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* . - *``eventName``* - This is an optional field that is only used for data events, management events (for event data stores only), and network activity events. You can use any operator with ``eventName`` . You can use it to ﬁlter in or ﬁlter out specific events. You can have multiple values for this ﬁeld, separated by commas. - *``eventCategory``* - This field is required and must be set to ``Equals`` . - For CloudTrail management events, the value must be ``Management`` . - For CloudTrail data events, the value must be ``Data`` . - For CloudTrail network activity events, the value must be ``NetworkActivity`` . The following are used only for event data stores: - For CloudTrail Insights events, the value must be ``Insight`` . - For AWS Config configuration items, the value must be ``ConfigurationItem`` . - For Audit Manager evidence, the value must be ``Evidence`` . - For events outside of AWS , the value must be ``ActivityAuditLog`` . - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* . - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator. - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an AWS Management Console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators. - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator. For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* . You can have only one ``resources.type`` ﬁeld per selector. To log events on more than one resource type, add another selector. - *``resources.ARN``* - The ``resources.ARN`` is an optional field for data events. You can use any operator with ``resources.ARN`` , but if you use ``Equals`` or ``NotEquals`` , the value must exactly match the ARN of a valid resource of the type you've speciﬁed in the template as the value of resources.type. To log all data events for all objects in a specific S3 bucket, use the ``StartsWith`` operator, and include only the bucket ARN as the matching value. For more information about the ARN formats of data event resources, see `Actions, resources, and condition keys for AWS services <https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html>`_ in the *Service Authorization Reference* . .. epigraph:: You can't use the ``resources.ARN`` field to filter resource types that do not have ARNs. - *``userIdentity.arn``* - For event data stores, this is an optional field used to filter management and data events for actions taken by specific IAM identities. For trails, this is an optional field used to filter data events. You can use any operator with ``userIdentity.arn`` . For more information on the userIdentity element, see `CloudTrail userIdentity element <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html>`_ in the *AWS CloudTrail User Guide* . - *``vpcEndpointId``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This field identifies the VPC endpoint that the request passed through. You can use any operator with ``vpcEndpointId`` .
+            :param field: A field in a CloudTrail event record on which to filter events to be logged. For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the field is used only for selecting events as filtering is not supported. For CloudTrail management events, supported fields include ``eventCategory`` (required), ``eventSource`` , and ``readOnly`` . The following additional fields are available for event data stores: ``eventName`` , ``eventType`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail data events, supported fields include ``eventCategory`` (required), ``eventName`` , ``eventSource`` , ``eventType`` , ``resources.type`` (required), ``readOnly`` , ``resources.ARN`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail network activity events, supported fields include ``eventCategory`` (required), ``eventSource`` (required), ``eventName`` , ``errorCode`` , and ``vpcEndpointId`` . For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the only supported field is ``eventCategory`` . .. epigraph:: Selectors don't support the use of wildcards like ``*`` . To match multiple values with a single condition, you may use ``StartsWith`` , ``EndsWith`` , ``NotStartsWith`` , or ``NotEndsWith`` to explicitly match the beginning or end of the event field. - *``readOnly``* - This is an optional field that is only used for management events and data events. This field can be set to ``Equals`` with a value of ``true`` or ``false`` . If you do not add this field, CloudTrail logs both ``read`` and ``write`` events. A value of ``true`` logs only ``read`` events. A value of ``false`` logs only ``write`` events. - *``eventSource``* - This field is only used for management events, data events, and network activity events. For management events for trails, this is an optional field that can be set to ``NotEquals`` ``kms.amazonaws.com`` to exclude KMS management events, or ``NotEquals`` ``rdsdata.amazonaws.com`` to exclude RDS management events. For data events for trails, this is an optional field that you can use to include or exclude any event source and can use any operator. For management and data events for event data stores, this is an optional field that you can use to include or exclude any event source and can use any operator. For network activity events, this is a required field that only uses the ``Equals`` operator. Set this field to the event source for which you want to log network activity events. If you want to log network activity events for multiple event sources, you must create a separate field selector for each event source. For a list of services supporting network activity events, see `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* . - *``eventName``* - This is an optional field that is only used for data events, management events (for event data stores only), and network activity events. You can use any operator with ``eventName`` . You can use it to ﬁlter in or ﬁlter out specific events. You can have multiple values for this ﬁeld, separated by commas. - *``eventCategory``* - This field is required and must be set to ``Equals`` . - For CloudTrail management events, the value must be ``Management`` . - For CloudTrail data events, the value must be ``Data`` . - For CloudTrail network activity events, the value must be ``NetworkActivity`` . The following are used only for event data stores: - For CloudTrail Insights events, the value must be ``Insight`` . - For AWS Config configuration items, the value must be ``ConfigurationItem`` . - For Audit Manager evidence, the value must be ``Evidence`` . - For events outside of AWS , the value must be ``ActivityAuditLog`` . - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* . - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator. - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an the console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators. - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator. For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* . You can have only one ``resources.type`` ﬁeld per selector. To log events on more than one resource type, add another selector. - *``resources.ARN``* - The ``resources.ARN`` is an optional field for data events. You can use any operator with ``resources.ARN`` , but if you use ``Equals`` or ``NotEquals`` , the value must exactly match the ARN of a valid resource of the type you've speciﬁed in the template as the value of resources.type. To log all data events for all objects in a specific S3 bucket, use the ``StartsWith`` operator, and include only the bucket ARN as the matching value. For more information about the ARN formats of data event resources, see `Actions, resources, and condition keys for AWS services <https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html>`_ in the *Service Authorization Reference* . .. epigraph:: You can't use the ``resources.ARN`` field to filter resource types that do not have ARNs. - *``userIdentity.arn``* - For event data stores, this is an optional field used to filter management and data events for actions taken by specific IAM identities. For trails, this is an optional field used to filter data events. You can use any operator with ``userIdentity.arn`` . For more information on the userIdentity element, see `CloudTrail userIdentity element <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html>`_ in the *AWS CloudTrail User Guide* . - *``vpcEndpointId``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This field identifies the VPC endpoint that the request passed through. You can use any operator with ``vpcEndpointId`` .
             :param ends_with: An operator that includes events that match the last few characters of the event record field specified as the value of ``Field`` .
             :param equal_to: An operator that includes events that match the exact value of the event record field specified as the value of ``Field`` . This is the only valid operator that you can use with the ``readOnly`` , ``eventCategory`` , and ``resources.type`` fields.
             :param not_ends_with: An operator that excludes events that match the last few characters of the event record field specified as the value of ``Field`` .
@@ -2149,7 +2190,7 @@ class CfnEventDataStore(
             - For events outside of AWS , the value must be ``ActivityAuditLog`` .
             - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* .
             - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator.
-            - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an AWS Management Console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators.
+            - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an the console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators.
             - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator.
 
             For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* .
@@ -2425,7 +2466,7 @@ class CfnEventDataStoreProps:
         :param ingestion_enabled: Specifies whether the event data store should start ingesting live events. The default is true.
         :param insights_destination: The ARN (or ID suffix of the ARN) of the destination event data store that logs Insights events. For more information, see `Create an event data store for CloudTrail Insights events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-insights.html>`_ .
         :param insight_selectors: A JSON string that contains the Insights types you want to log on an event data store. ``ApiCallRateInsight`` and ``ApiErrorRateInsight`` are valid Insight types. The ``ApiCallRateInsight`` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The ``ApiErrorRateInsight`` Insights type analyzes management API calls that result in error codes. The error is shown if the API call is unsuccessful.
-        :param kms_key_id: Specifies the AWS KMS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by ``alias/`` , a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. .. epigraph:: Disabling or deleting the KMS key, or removing CloudTrail permissions on the key, prevents CloudTrail from logging events to the event data store, and prevents users from querying the data in the event data store that was encrypted with the key. After you associate an event data store with a KMS key, the KMS key cannot be removed or changed. Before you disable or delete a KMS key that you are using with an event data store, delete or back up your event data store. CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - ``alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`` - ``12345678-1234-1234-1234-123456789012``
+        :param kms_key_id: Specifies the AWS key ID to use to encrypt the events delivered by CloudTrail. The value can be an alias name prefixed by ``alias/`` , a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. .. epigraph:: Disabling or deleting the KMS key, or removing CloudTrail permissions on the key, prevents CloudTrail from logging events to the event data store, and prevents users from querying the data in the event data store that was encrypted with the key. After you associate an event data store with a KMS key, the KMS key cannot be removed or changed. Before you disable or delete a KMS key that you are using with an event data store, delete or back up your event data store. CloudTrail also supports AWS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - ``alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:alias/MyAliasName`` - ``arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012`` - ``12345678-1234-1234-1234-123456789012``
         :param max_event_size: The maximum allowed size for events to be stored in the specified event data store. If you are using context key selectors, MaxEventSize must be set to Large.
         :param multi_region_enabled: Specifies whether the event data store includes events from all Regions, or only from the Region in which the event data store is created.
         :param name: The name of the event data store.
@@ -2650,14 +2691,14 @@ class CfnEventDataStoreProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Specifies the AWS KMS key ID to use to encrypt the events delivered by CloudTrail.
+        '''Specifies the AWS  key ID to use to encrypt the events delivered by CloudTrail.
 
         The value can be an alias name prefixed by ``alias/`` , a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.
         .. epigraph::
 
            Disabling or deleting the KMS key, or removing CloudTrail permissions on the key, prevents CloudTrail from logging events to the event data store, and prevents users from querying the data in the event data store that was encrypted with the key. After you associate an event data store with a KMS key, the KMS key cannot be removed or changed. Before you disable or delete a KMS key that you are using with an event data store, delete or back up your event data store.
 
-        CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* .
+        CloudTrail also supports AWS  multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* .
 
         Examples:
 
@@ -3021,6 +3062,7 @@ class CfnTrail(
             )],
             include_global_service_events=False,
             insight_selectors=[cloudtrail.CfnTrail.InsightSelectorProperty(
+                event_categories=["eventCategories"],
                 insight_type="insightType"
             )],
             is_multi_region_trail=False,
@@ -3042,17 +3084,17 @@ class CfnTrail(
         id: builtins.str,
         *,
         is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        s3_bucket_name: builtins.str,
+        s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
         advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrail.AdvancedEventSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cloud_watch_logs_log_group_arn: typing.Optional[builtins.str] = None,
-        cloud_watch_logs_role_arn: typing.Optional[builtins.str] = None,
+        cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
+        cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrail.EventSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_global_service_events: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         insight_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrail.InsightSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         is_multi_region_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         is_organization_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         s3_key_prefix: typing.Optional[builtins.str] = None,
         sns_topic_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3073,7 +3115,7 @@ class CfnTrail(
         :param insight_selectors: A JSON string that contains the Insights types you want to log on a trail. ``ApiCallRateInsight`` and ``ApiErrorRateInsight`` are valid Insight types. The ``ApiCallRateInsight`` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The ``ApiErrorRateInsight`` Insights type analyzes management API calls that result in error codes. The error is shown if the API call is unsuccessful.
         :param is_multi_region_trail: Specifies whether the trail applies only to the current Region or to all Regions. The default is false. If the trail exists only in the current Region and this value is set to true, shadow trails (replications of the trail) will be created in the other Regions. If the trail exists in all Regions and this value is set to false, the trail will remain in the Region where it was created, and its shadow trails in other Regions will be deleted. As a best practice, consider using trails that log events in all Regions.
         :param is_organization_trail: Specifies whether the trail is applied to all accounts in an organization in AWS Organizations , or only for the current AWS account . The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the management account for an organization in AWS Organizations . If the trail is not an organization trail and this is set to ``true`` , the trail will be created in all AWS accounts that belong to the organization. If the trail is an organization trail and this is set to ``false`` , the trail will remain in the current AWS account but be deleted from all member accounts in the organization. .. epigraph:: Only the management account for the organization can convert an organization trail to a non-organization trail, or convert a non-organization trail to an organization trail.
-        :param kms_key_id: Specifies the AWS KMS key ID to use to encrypt the logs and digest files delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012 - 12345678-1234-1234-1234-123456789012
+        :param kms_key_id: Specifies the AWS key ID to use to encrypt the logs and digest files delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. CloudTrail also supports AWS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012 - 12345678-1234-1234-1234-123456789012
         :param s3_key_prefix: Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see `Finding Your CloudTrail Log Files <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/get-and-view-cloudtrail-log-files.html#cloudtrail-find-log-files>`_ . The maximum length is 200 characters.
         :param sns_topic_name: Specifies the name or ARN of the Amazon SNS topic defined for notification of log file delivery. The maximum length is 256 characters.
         :param tags: A custom set of tags (key-value pairs) for this trail.
@@ -3103,6 +3145,17 @@ class CfnTrail(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTrail")
+    @builtins.classmethod
+    def arn_for_trail(cls, resource: _ITrailRef_38211c4b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__234bffed074203dd4eb5af54215723c1177b9afb21d1aca06b6a2ab60d845620)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrail", [resource]))
 
     @jsii.member(jsii_name="fromTrailArn")
     @builtins.classmethod
@@ -3188,7 +3241,7 @@ class CfnTrail(
     @builtins.property
     @jsii.member(jsii_name="attrSnsTopicArn")
     def attr_sns_topic_arn(self) -> builtins.str:
-        '''``Ref`` returns the ARN of the Amazon SNS topic that's associated with the CloudTrail trail, such as ``arn:aws:sns:us-east-2:123456789012:mySNSTopic`` .
+        '''``Ref`` returns the ARN of the Amazon  topic that's associated with the CloudTrail trail, such as ``arn:aws:sns:us-east-2:123456789012:mySNSTopic`` .
 
         :cloudformationAttribute: SnsTopicArn
         '''
@@ -3401,7 +3454,7 @@ class CfnTrail(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Specifies the AWS KMS key ID to use to encrypt the logs and digest files delivered by CloudTrail.'''
+        '''Specifies the AWS  key ID to use to encrypt the logs and digest files delivered by CloudTrail.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -3619,7 +3672,7 @@ class CfnTrail(
         ) -> None:
             '''A single selector statement in an advanced event selector.
 
-            :param field: A field in a CloudTrail event record on which to filter events to be logged. For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the field is used only for selecting events as filtering is not supported. For CloudTrail management events, supported fields include ``eventCategory`` (required), ``eventSource`` , and ``readOnly`` . The following additional fields are available for event data stores: ``eventName`` , ``eventType`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail data events, supported fields include ``eventCategory`` (required), ``eventName`` , ``eventSource`` , ``eventType`` , ``resources.type`` (required), ``readOnly`` , ``resources.ARN`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail network activity events, supported fields include ``eventCategory`` (required), ``eventSource`` (required), ``eventName`` , ``errorCode`` , and ``vpcEndpointId`` . For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the only supported field is ``eventCategory`` . .. epigraph:: Selectors don't support the use of wildcards like ``*`` . To match multiple values with a single condition, you may use ``StartsWith`` , ``EndsWith`` , ``NotStartsWith`` , or ``NotEndsWith`` to explicitly match the beginning or end of the event field. - *``readOnly``* - This is an optional field that is only used for management events and data events. This field can be set to ``Equals`` with a value of ``true`` or ``false`` . If you do not add this field, CloudTrail logs both ``read`` and ``write`` events. A value of ``true`` logs only ``read`` events. A value of ``false`` logs only ``write`` events. - *``eventSource``* - This field is only used for management events, data events, and network activity events. For management events for trails, this is an optional field that can be set to ``NotEquals`` ``kms.amazonaws.com`` to exclude KMS management events, or ``NotEquals`` ``rdsdata.amazonaws.com`` to exclude RDS management events. For data events for trails, this is an optional field that you can use to include or exclude any event source and can use any operator. For management and data events for event data stores, this is an optional field that you can use to include or exclude any event source and can use any operator. For network activity events, this is a required field that only uses the ``Equals`` operator. Set this field to the event source for which you want to log network activity events. If you want to log network activity events for multiple event sources, you must create a separate field selector for each event source. For a list of services supporting network activity events, see `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* . - *``eventName``* - This is an optional field that is only used for data events, management events (for event data stores only), and network activity events. You can use any operator with ``eventName`` . You can use it to ﬁlter in or ﬁlter out specific events. You can have multiple values for this ﬁeld, separated by commas. - *``eventCategory``* - This field is required and must be set to ``Equals`` . - For CloudTrail management events, the value must be ``Management`` . - For CloudTrail data events, the value must be ``Data`` . - For CloudTrail network activity events, the value must be ``NetworkActivity`` . The following are used only for event data stores: - For CloudTrail Insights events, the value must be ``Insight`` . - For AWS Config configuration items, the value must be ``ConfigurationItem`` . - For Audit Manager evidence, the value must be ``Evidence`` . - For events outside of AWS , the value must be ``ActivityAuditLog`` . - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* . - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator. - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an AWS Management Console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators. - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator. For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* . You can have only one ``resources.type`` ﬁeld per selector. To log events on more than one resource type, add another selector. - *``resources.ARN``* - The ``resources.ARN`` is an optional field for data events. You can use any operator with ``resources.ARN`` , but if you use ``Equals`` or ``NotEquals`` , the value must exactly match the ARN of a valid resource of the type you've speciﬁed in the template as the value of resources.type. To log all data events for all objects in a specific S3 bucket, use the ``StartsWith`` operator, and include only the bucket ARN as the matching value. For more information about the ARN formats of data event resources, see `Actions, resources, and condition keys for AWS services <https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html>`_ in the *Service Authorization Reference* . .. epigraph:: You can't use the ``resources.ARN`` field to filter resource types that do not have ARNs. - *``userIdentity.arn``* - For event data stores, this is an optional field used to filter management and data events for actions taken by specific IAM identities. For trails, this is an optional field used to filter data events. You can use any operator with ``userIdentity.arn`` . For more information on the userIdentity element, see `CloudTrail userIdentity element <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html>`_ in the *AWS CloudTrail User Guide* . - *``vpcEndpointId``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This field identifies the VPC endpoint that the request passed through. You can use any operator with ``vpcEndpointId`` .
+            :param field: A field in a CloudTrail event record on which to filter events to be logged. For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the field is used only for selecting events as filtering is not supported. For CloudTrail management events, supported fields include ``eventCategory`` (required), ``eventSource`` , and ``readOnly`` . The following additional fields are available for event data stores: ``eventName`` , ``eventType`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail data events, supported fields include ``eventCategory`` (required), ``eventName`` , ``eventSource`` , ``eventType`` , ``resources.type`` (required), ``readOnly`` , ``resources.ARN`` , ``sessionCredentialFromConsole`` , and ``userIdentity.arn`` . For CloudTrail network activity events, supported fields include ``eventCategory`` (required), ``eventSource`` (required), ``eventName`` , ``errorCode`` , and ``vpcEndpointId`` . For event data stores for CloudTrail Insights events, AWS Config configuration items, Audit Manager evidence, or events outside of AWS , the only supported field is ``eventCategory`` . .. epigraph:: Selectors don't support the use of wildcards like ``*`` . To match multiple values with a single condition, you may use ``StartsWith`` , ``EndsWith`` , ``NotStartsWith`` , or ``NotEndsWith`` to explicitly match the beginning or end of the event field. - *``readOnly``* - This is an optional field that is only used for management events and data events. This field can be set to ``Equals`` with a value of ``true`` or ``false`` . If you do not add this field, CloudTrail logs both ``read`` and ``write`` events. A value of ``true`` logs only ``read`` events. A value of ``false`` logs only ``write`` events. - *``eventSource``* - This field is only used for management events, data events, and network activity events. For management events for trails, this is an optional field that can be set to ``NotEquals`` ``kms.amazonaws.com`` to exclude KMS management events, or ``NotEquals`` ``rdsdata.amazonaws.com`` to exclude RDS management events. For data events for trails, this is an optional field that you can use to include or exclude any event source and can use any operator. For management and data events for event data stores, this is an optional field that you can use to include or exclude any event source and can use any operator. For network activity events, this is a required field that only uses the ``Equals`` operator. Set this field to the event source for which you want to log network activity events. If you want to log network activity events for multiple event sources, you must create a separate field selector for each event source. For a list of services supporting network activity events, see `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* . - *``eventName``* - This is an optional field that is only used for data events, management events (for event data stores only), and network activity events. You can use any operator with ``eventName`` . You can use it to ﬁlter in or ﬁlter out specific events. You can have multiple values for this ﬁeld, separated by commas. - *``eventCategory``* - This field is required and must be set to ``Equals`` . - For CloudTrail management events, the value must be ``Management`` . - For CloudTrail data events, the value must be ``Data`` . - For CloudTrail network activity events, the value must be ``NetworkActivity`` . The following are used only for event data stores: - For CloudTrail Insights events, the value must be ``Insight`` . - For AWS Config configuration items, the value must be ``ConfigurationItem`` . - For Audit Manager evidence, the value must be ``Evidence`` . - For events outside of AWS , the value must be ``ActivityAuditLog`` . - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* . - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator. - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an the console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators. - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator. For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* . You can have only one ``resources.type`` ﬁeld per selector. To log events on more than one resource type, add another selector. - *``resources.ARN``* - The ``resources.ARN`` is an optional field for data events. You can use any operator with ``resources.ARN`` , but if you use ``Equals`` or ``NotEquals`` , the value must exactly match the ARN of a valid resource of the type you've speciﬁed in the template as the value of resources.type. To log all data events for all objects in a specific S3 bucket, use the ``StartsWith`` operator, and include only the bucket ARN as the matching value. For more information about the ARN formats of data event resources, see `Actions, resources, and condition keys for AWS services <https://docs.aws.amazon.com/service-authorization/latest/reference/reference_policies_actions-resources-contextkeys.html>`_ in the *Service Authorization Reference* . .. epigraph:: You can't use the ``resources.ARN`` field to filter resource types that do not have ARNs. - *``userIdentity.arn``* - For event data stores, this is an optional field used to filter management and data events for actions taken by specific IAM identities. For trails, this is an optional field used to filter data events. You can use any operator with ``userIdentity.arn`` . For more information on the userIdentity element, see `CloudTrail userIdentity element <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-user-identity.html>`_ in the *AWS CloudTrail User Guide* . - *``vpcEndpointId``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This field identifies the VPC endpoint that the request passed through. You can use any operator with ``vpcEndpointId`` .
             :param ends_with: An operator that includes events that match the last few characters of the event record field specified as the value of ``Field`` .
             :param equal_to: An operator that includes events that match the exact value of the event record field specified as the value of ``Field`` . This is the only valid operator that you can use with the ``readOnly`` , ``eventCategory`` , and ``resources.type`` fields.
             :param not_ends_with: An operator that excludes events that match the last few characters of the event record field specified as the value of ``Field`` .
@@ -3715,7 +3768,7 @@ class CfnTrail(
             - For events outside of AWS , the value must be ``ActivityAuditLog`` .
             - *``eventType``* - For event data stores, this is an optional field available for event data stores to filter management and data events on the event type. For trails, this is an optional field to filter data events on the event type. For information about available event types, see `CloudTrail record contents <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-event-reference-record-contents.html#ct-event-type>`_ in the *AWS CloudTrail user guide* .
             - *``errorCode``* - This ﬁeld is only used to filter CloudTrail network activity events and is optional. This is the error code to filter on. Currently, the only valid ``errorCode`` is ``VpceAccessDenied`` . ``errorCode`` can only use the ``Equals`` operator.
-            - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an AWS Management Console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators.
+            - *``sessionCredentialFromConsole``* - For event data stores, this is an optional field used to filter management and data events based on whether the events originated from an the console session. For trails, this is an optional field used to filter data events. ``sessionCredentialFromConsole`` can only use the ``Equals`` and ``NotEquals`` operators.
             - *``resources.type``* - This ﬁeld is required for CloudTrail data events. ``resources.type`` can only use the ``Equals`` operator.
 
             For a list of available resource types for data events, see `Data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html#logging-data-events>`_ in the *AWS CloudTrail User Guide* .
@@ -3960,7 +4013,7 @@ class CfnTrail(
             You cannot apply both event selectors and advanced event selectors to a trail.
 
             :param data_resources: CloudTrail supports data event logging for Amazon S3 objects in standard S3 buckets, AWS Lambda functions, and Amazon DynamoDB tables with basic event selectors. You can specify up to 250 resources for an individual event selector, but the total number of data resources cannot exceed 250 across all event selectors in a trail. This limit does not apply if you configure resource logging for all data events. For more information, see `Data Events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html>`_ and `Limits in AWS CloudTrail <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html>`_ in the *AWS CloudTrail User Guide* . .. epigraph:: To log data events for all other resource types including objects stored in `directory buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/directory-buckets-overview.html>`_ , you must use `AdvancedEventSelectors <https://docs.aws.amazon.com/awscloudtrail/latest/APIReference/API_AdvancedEventSelector.html>`_ . You must also use ``AdvancedEventSelectors`` if you want to filter on the ``eventName`` field.
-            :param exclude_management_event_sources: An optional list of service event sources from which you do not want management events to be logged on your trail. In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service or Amazon RDS Data API events by containing ``kms.amazonaws.com`` or ``rdsdata.amazonaws.com`` . By default, ``ExcludeManagementEventSources`` is empty, and AWS KMS and Amazon RDS Data API events are logged to your trail. You can exclude management event sources only in Regions that support the event source.
+            :param exclude_management_event_sources: An optional list of service event sources from which you do not want management events to be logged on your trail. In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service or Amazon RDS Data API events by containing ``kms.amazonaws.com`` or ``rdsdata.amazonaws.com`` . By default, ``ExcludeManagementEventSources`` is empty, and AWS and Amazon RDS Data API events are logged to your trail. You can exclude management event sources only in Regions that support the event source.
             :param include_management_events: Specify if you want your event selector to include management events for your trail. For more information, see `Management Events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* . By default, the value is ``true`` . The first copy of management events is free. You are charged for additional copies of management events that you are logging on any subsequent trail in the same Region. For more information about CloudTrail pricing, see `AWS CloudTrail Pricing <https://docs.aws.amazon.com/cloudtrail/pricing/>`_ .
             :param read_write_type: Specify if you want your trail to log read-only events, write-only events, or all. For example, the EC2 ``GetConsoleOutput`` is a read-only API operation and ``RunInstances`` is a write-only API operation. By default, the value is ``All`` .
 
@@ -4025,7 +4078,7 @@ class CfnTrail(
         ) -> typing.Optional[typing.List[builtins.str]]:
             '''An optional list of service event sources from which you do not want management events to be logged on your trail.
 
-            In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service or Amazon RDS Data API events by containing ``kms.amazonaws.com`` or ``rdsdata.amazonaws.com`` . By default, ``ExcludeManagementEventSources`` is empty, and AWS KMS and Amazon RDS Data API events are logged to your trail. You can exclude management event sources only in Regions that support the event source.
+            In this release, the list can be empty (disables the filter), or it can filter out AWS Key Management Service or Amazon RDS Data API events by containing ``kms.amazonaws.com`` or ``rdsdata.amazonaws.com`` . By default, ``ExcludeManagementEventSources`` is empty, and AWS  and Amazon RDS Data API events are logged to your trail. You can exclude management event sources only in Regions that support the event source.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-eventselector.html#cfn-cloudtrail-trail-eventselector-excludemanagementeventsources
             '''
@@ -4076,16 +4129,21 @@ class CfnTrail(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudtrail.CfnTrail.InsightSelectorProperty",
         jsii_struct_bases=[],
-        name_mapping={"insight_type": "insightType"},
+        name_mapping={
+            "event_categories": "eventCategories",
+            "insight_type": "insightType",
+        },
     )
     class InsightSelectorProperty:
         def __init__(
             self,
             *,
+            event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
             insight_type: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A JSON string that contains a list of Insights types that are logged on a trail.
 
+            :param event_categories: The categories of events for which to log insights. By default, insights are logged for management events only.
             :param insight_type: The type of Insights events to log on a trail. ``ApiCallRateInsight`` and ``ApiErrorRateInsight`` are valid Insight types. The ``ApiCallRateInsight`` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The ``ApiErrorRateInsight`` Insights type analyzes management API calls that result in error codes. The error is shown if the API call is unsuccessful.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-insightselector.html
@@ -4098,15 +4156,30 @@ class CfnTrail(
                 from aws_cdk import aws_cloudtrail as cloudtrail
                 
                 insight_selector_property = cloudtrail.CfnTrail.InsightSelectorProperty(
+                    event_categories=["eventCategories"],
                     insight_type="insightType"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__c36e7d325732c46967fd652ce7b5b56b5b548efaa4c260b4d0918a84e4b31748)
+                check_type(argname="argument event_categories", value=event_categories, expected_type=type_hints["event_categories"])
                 check_type(argname="argument insight_type", value=insight_type, expected_type=type_hints["insight_type"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if event_categories is not None:
+                self._values["event_categories"] = event_categories
             if insight_type is not None:
                 self._values["insight_type"] = insight_type
+
+        @builtins.property
+        def event_categories(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The categories of events for which to log insights.
+
+            By default, insights are logged for management events only.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-insightselector.html#cfn-cloudtrail-trail-insightselector-eventcategories
+            '''
+            result = self._values.get("event_categories")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def insight_type(self) -> typing.Optional[builtins.str]:
@@ -4160,17 +4233,17 @@ class CfnTrailProps:
         self,
         *,
         is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
-        s3_bucket_name: builtins.str,
+        s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
         advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cloud_watch_logs_log_group_arn: typing.Optional[builtins.str] = None,
-        cloud_watch_logs_role_arn: typing.Optional[builtins.str] = None,
+        cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
+        cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.EventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_global_service_events: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         insight_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.InsightSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         is_multi_region_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         is_organization_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         s3_key_prefix: typing.Optional[builtins.str] = None,
         sns_topic_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4189,7 +4262,7 @@ class CfnTrailProps:
         :param insight_selectors: A JSON string that contains the Insights types you want to log on a trail. ``ApiCallRateInsight`` and ``ApiErrorRateInsight`` are valid Insight types. The ``ApiCallRateInsight`` Insights type analyzes write-only management API calls that are aggregated per minute against a baseline API call volume. The ``ApiErrorRateInsight`` Insights type analyzes management API calls that result in error codes. The error is shown if the API call is unsuccessful.
         :param is_multi_region_trail: Specifies whether the trail applies only to the current Region or to all Regions. The default is false. If the trail exists only in the current Region and this value is set to true, shadow trails (replications of the trail) will be created in the other Regions. If the trail exists in all Regions and this value is set to false, the trail will remain in the Region where it was created, and its shadow trails in other Regions will be deleted. As a best practice, consider using trails that log events in all Regions.
         :param is_organization_trail: Specifies whether the trail is applied to all accounts in an organization in AWS Organizations , or only for the current AWS account . The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the management account for an organization in AWS Organizations . If the trail is not an organization trail and this is set to ``true`` , the trail will be created in all AWS accounts that belong to the organization. If the trail is an organization trail and this is set to ``false`` , the trail will remain in the current AWS account but be deleted from all member accounts in the organization. .. epigraph:: Only the management account for the organization can convert an organization trail to a non-organization trail, or convert a non-organization trail to an organization trail.
-        :param kms_key_id: Specifies the AWS KMS key ID to use to encrypt the logs and digest files delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012 - 12345678-1234-1234-1234-123456789012
+        :param kms_key_id: Specifies the AWS key ID to use to encrypt the logs and digest files delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier. CloudTrail also supports AWS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* . Examples: - alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:alias/MyAliasName - arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012 - 12345678-1234-1234-1234-123456789012
         :param s3_key_prefix: Specifies the Amazon S3 key prefix that comes after the name of the bucket you have designated for log file delivery. For more information, see `Finding Your CloudTrail Log Files <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/get-and-view-cloudtrail-log-files.html#cloudtrail-find-log-files>`_ . The maximum length is 200 characters.
         :param sns_topic_name: Specifies the name or ARN of the Amazon SNS topic defined for notification of log file delivery. The maximum length is 256 characters.
         :param tags: A custom set of tags (key-value pairs) for this trail.
@@ -4241,6 +4314,7 @@ class CfnTrailProps:
                 )],
                 include_global_service_events=False,
                 insight_selectors=[cloudtrail.CfnTrail.InsightSelectorProperty(
+                    event_categories=["eventCategories"],
                     insight_type="insightType"
                 )],
                 is_multi_region_trail=False,
@@ -4317,7 +4391,7 @@ class CfnTrailProps:
         return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
 
     @builtins.property
-    def s3_bucket_name(self) -> builtins.str:
+    def s3_bucket_name(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''Specifies the name of the Amazon S3 bucket designated for publishing log files.
 
         See `Amazon S3 Bucket naming rules <https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html>`_ .
@@ -4326,7 +4400,7 @@ class CfnTrailProps:
         '''
         result = self._values.get("s3_bucket_name")
         assert result is not None, "Required property 's3_bucket_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
     def advanced_event_selectors(
@@ -4344,7 +4418,9 @@ class CfnTrailProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AdvancedEventSelectorProperty]]]], result)
 
     @builtins.property
-    def cloud_watch_logs_log_group_arn(self) -> typing.Optional[builtins.str]:
+    def cloud_watch_logs_log_group_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]]:
         '''Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs are delivered.
 
         You must use a log group that exists in your account.
@@ -4357,10 +4433,12 @@ class CfnTrailProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-cloudwatchlogsloggrouparn
         '''
         result = self._values.get("cloud_watch_logs_log_group_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]], result)
 
     @builtins.property
-    def cloud_watch_logs_role_arn(self) -> typing.Optional[builtins.str]:
+    def cloud_watch_logs_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''Specifies the role for the CloudWatch Logs endpoint to assume to write to a user's log group.
 
         You must use a role that exists in your account.
@@ -4373,7 +4451,7 @@ class CfnTrailProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-cloudwatchlogsrolearn
         '''
         result = self._values.get("cloud_watch_logs_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def enable_log_file_validation(
@@ -4465,12 +4543,14 @@ class CfnTrailProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Specifies the AWS KMS key ID to use to encrypt the logs and digest files delivered by CloudTrail.
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]]:
+        '''Specifies the AWS  key ID to use to encrypt the logs and digest files delivered by CloudTrail.
 
         The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.
 
-        CloudTrail also supports AWS KMS multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* .
+        CloudTrail also supports AWS  multi-Region keys. For more information about multi-Region keys, see `Using multi-Region keys <https://docs.aws.amazon.com/kms/latest/developerguide/multi-region-keys-overview.html>`_ in the *AWS Key Management Service Developer Guide* .
 
         Examples:
 
@@ -4482,7 +4562,7 @@ class CfnTrailProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def s3_key_prefix(self) -> typing.Optional[builtins.str]:
@@ -5377,6 +5457,12 @@ def _typecheckingstub__4004ebed14c16ae6f20ecf5d65ea8487ea49b0bd7c3ce35ca361518f9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__97a171a05a7e0a6e8d7d85a672e077237335c0dd1ae244cdb7c867b12fbd1efe(
+    resource: _IChannelRef_578e7391,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__12052607593ad96dcef135d212789e6caf3b7f7cd49c9ce2468646f9efbcb963(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5440,6 +5526,12 @@ def _typecheckingstub__65875e3ceabcc57155f97b1541ff9d435e4456c9c7f0c980c1dea0ac9
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     termination_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     widgets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDashboard.WidgetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c5660e666f816052caee3250fff994ef2ea26f37ea3e7ecdbc26b100aed9e21(
+    resource: _IDashboardRef_1dcd123e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5543,6 +5635,12 @@ def _typecheckingstub__058a94222b13ad44b4607ad5932ec9b6a2defcb250ff436576e6e8976
     retention_period: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     termination_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5ccf1a1bb4801adcfa14ca5216b041fe1e3d5c18b12cab7e8e5eb3733536923a(
+    resource: _IEventDataStoreRef_da898eb2,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5760,21 +5858,27 @@ def _typecheckingstub__2259d5765ec84e4697f55f0d491871f1aa010feb94b3445a33a9e4b9f
     id: builtins.str,
     *,
     is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
-    s3_bucket_name: builtins.str,
+    s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
     advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    cloud_watch_logs_log_group_arn: typing.Optional[builtins.str] = None,
-    cloud_watch_logs_role_arn: typing.Optional[builtins.str] = None,
+    cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
+    cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.EventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_global_service_events: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     insight_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.InsightSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     is_multi_region_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     is_organization_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     s3_key_prefix: typing.Optional[builtins.str] = None,
     sns_topic_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trail_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__234bffed074203dd4eb5af54215723c1177b9afb21d1aca06b6a2ab60d845620(
+    resource: _ITrailRef_38211c4b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5944,6 +6048,7 @@ def _typecheckingstub__b6a456b792eafca6f1c49386b9ce4f496975ac1ff51f363686c31755c
 
 def _typecheckingstub__c36e7d325732c46967fd652ce7b5b56b5b548efaa4c260b4d0918a84e4b31748(
     *,
+    event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
     insight_type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -5952,17 +6057,17 @@ def _typecheckingstub__c36e7d325732c46967fd652ce7b5b56b5b548efaa4c260b4d0918a84e
 def _typecheckingstub__fe29eec9c2fc5386dadc73c14bab1f4c61dc9a7cd9ad26812bf169694fa1ed79(
     *,
     is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
-    s3_bucket_name: builtins.str,
+    s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
     advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    cloud_watch_logs_log_group_arn: typing.Optional[builtins.str] = None,
-    cloud_watch_logs_role_arn: typing.Optional[builtins.str] = None,
+    cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
+    cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.EventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_global_service_events: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     insight_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.InsightSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     is_multi_region_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     is_organization_trail: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     s3_key_prefix: typing.Optional[builtins.str] = None,
     sns_topic_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,

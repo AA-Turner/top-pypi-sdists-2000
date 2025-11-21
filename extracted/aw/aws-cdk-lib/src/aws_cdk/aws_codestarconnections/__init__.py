@@ -85,7 +85,7 @@ class CfnConnection(
 ):
     '''The AWS::CodeStarConnections::Connection resource can be used to connect external source providers with services like AWS CodePipeline .
 
-    *Note:* A connection created through AWS CloudFormation is in ``PENDING`` status by default. You can make its status ``AVAILABLE`` by updating the connection in the console.
+    *Note:* A connection created through CloudFormation is in ``PENDING`` status by default. You can make its status ``AVAILABLE`` by updating the connection in the console.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarconnections-connection.html
     :cloudformationResource: AWS::CodeStarConnections::Connection
@@ -141,6 +141,17 @@ class CfnConnection(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConnection")
+    @builtins.classmethod
+    def arn_for_connection(cls, resource: _IConnectionRef_df05f06e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f87ce1086cf1a89286f94e3773e3e344138c62742929f3e66078518ffe1f9eb8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnection", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -455,6 +466,20 @@ class CfnRepositoryLink(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRepositoryLink")
+    @builtins.classmethod
+    def arn_for_repository_link(
+        cls,
+        resource: _IRepositoryLinkRef_d7247fe4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__626b6585c9a51deb3ad2ce1444c4c7c2e64e5077e9a2b32320c02a0303dff123)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRepositoryLink", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1171,6 +1196,12 @@ def _typecheckingstub__1b31f55bcd270757c56f65f68558594d1908e1956199257e40b61ad13
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f87ce1086cf1a89286f94e3773e3e344138c62742929f3e66078518ffe1f9eb8(
+    resource: _IConnectionRef_df05f06e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__35ee59ed14cc3a52d66e46db3ccc3d36ea0c6b5133b23c09d6f13279a0159048(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1226,6 +1257,12 @@ def _typecheckingstub__fdf48b0dfdec692a05fb0520b1d1c224a8c2e2c7f2613c7a1e42179ef
     repository_name: builtins.str,
     encryption_key_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__626b6585c9a51deb3ad2ce1444c4c7c2e64e5077e9a2b32320c02a0303dff123(
+    resource: _IRepositoryLinkRef_d7247fe4,
 ) -> None:
     """Type checking stubs"""
     pass

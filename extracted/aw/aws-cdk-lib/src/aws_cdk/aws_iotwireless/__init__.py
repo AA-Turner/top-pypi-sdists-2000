@@ -164,6 +164,17 @@ class CfnDestination(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDestination")
+    @builtins.classmethod
+    def arn_for_destination(cls, resource: _IDestinationRef_4b0181ca) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ad3e91f1f14bc613d89e8b3feb876c3f630889cbe1ad27a65b6c6e38b6e0ff3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDestination", [resource]))
+
     @jsii.member(jsii_name="fromDestinationArn")
     @builtins.classmethod
     def from_destination_arn(
@@ -561,6 +572,20 @@ class CfnDeviceProfile(
         props = CfnDeviceProfileProps(lo_ra_wan=lo_ra_wan, name=name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDeviceProfile")
+    @builtins.classmethod
+    def arn_for_device_profile(
+        cls,
+        resource: _IDeviceProfileRef_265b7e10,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1c3eb713326e5e4f4a3747c9819fcc6cfae774e22e4d7b2a0aaf47b6e8e2eb3f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeviceProfile", [resource]))
 
     @jsii.member(jsii_name="fromDeviceProfileArn")
     @builtins.classmethod
@@ -1276,6 +1301,17 @@ class CfnFuotaTask(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForFuotaTask")
+    @builtins.classmethod
+    def arn_for_fuota_task(cls, resource: _IFuotaTaskRef_f399e9d4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__12c8860725bf293f2e4fe93018ddca41909f04dd99aec3275623aa15b4932aba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFuotaTask", [resource]))
+
     @jsii.member(jsii_name="fromFuotaTaskArn")
     @builtins.classmethod
     def from_fuota_task_arn(
@@ -1911,6 +1947,20 @@ class CfnMulticastGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForMulticastGroup")
+    @builtins.classmethod
+    def arn_for_multicast_group(
+        cls,
+        resource: _IMulticastGroupRef_aa211041,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ab751e4598f78fa05a205d003273c4e163bdee0b7dfb77acbce1c985c24cfbe)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMulticastGroup", [resource]))
+
     @jsii.member(jsii_name="fromMulticastGroupArn")
     @builtins.classmethod
     def from_multicast_group_arn(
@@ -2470,6 +2520,20 @@ class CfnNetworkAnalyzerConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForNetworkAnalyzerConfiguration")
+    @builtins.classmethod
+    def arn_for_network_analyzer_configuration(
+        cls,
+        resource: _INetworkAnalyzerConfigurationRef_342e1d7d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__813e6d4c900b137307e046df6a4e926e2df7f732220322c231125bb6e701fe87)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNetworkAnalyzerConfiguration", [resource]))
+
     @jsii.member(jsii_name="fromNetworkAnalyzerConfigurationArn")
     @builtins.classmethod
     def from_network_analyzer_configuration_arn(
@@ -2966,6 +3030,20 @@ class CfnPartnerAccount(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPartnerAccount")
+    @builtins.classmethod
+    def arn_for_partner_account(
+        cls,
+        resource: _IPartnerAccountRef_d86f33ac,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4206c7d458aec088921a510596977bef15902377cdfb5e1626fad9cd2fe3d251)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPartnerAccount", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3589,6 +3667,20 @@ class CfnServiceProfile(
         props = CfnServiceProfileProps(lo_ra_wan=lo_ra_wan, name=name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceProfile")
+    @builtins.classmethod
+    def arn_for_service_profile(
+        cls,
+        resource: _IServiceProfileRef_7a1bbf25,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b9a173257cb1be86609a3378fb513c0be3f0124bad6754574db7fb0a9844518e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceProfile", [resource]))
 
     @jsii.member(jsii_name="fromServiceProfileArn")
     @builtins.classmethod
@@ -4499,6 +4591,20 @@ class CfnTaskDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTaskDefinition")
+    @builtins.classmethod
+    def arn_for_task_definition(
+        cls,
+        resource: _ITaskDefinitionRef_d217db00,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__39b4f2511962115259cd3a343b1d8dc3013daa030a79b379ab443e3b15e94ffe)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTaskDefinition", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5349,6 +5455,20 @@ class CfnWirelessDevice(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWirelessDevice")
+    @builtins.classmethod
+    def arn_for_wireless_device(
+        cls,
+        resource: _IWirelessDeviceRef_3a65f428,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b5a01643821488706b05510eceb2bc8b596f1f10517c32d2280650a5e05bb83d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWirelessDevice", [resource]))
 
     @jsii.member(jsii_name="fromWirelessDeviceArn")
     @builtins.classmethod
@@ -6503,6 +6623,20 @@ class CfnWirelessDeviceImportTask(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWirelessDeviceImportTask")
+    @builtins.classmethod
+    def arn_for_wireless_device_import_task(
+        cls,
+        resource: _IWirelessDeviceImportTaskRef_84dee71f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d121c90d7dfb0259cd82cd60fb07e4d513bab61d418ad9a9c01e74eba9f65ba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWirelessDeviceImportTask", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7217,6 +7351,20 @@ class CfnWirelessGateway(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWirelessGateway")
+    @builtins.classmethod
+    def arn_for_wireless_gateway(
+        cls,
+        resource: _IWirelessGatewayRef_9d22b38e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__52e87db16172f969742b18c45b053883b10eb16912c8a34ed2774528056b9a29)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWirelessGateway", [resource]))
+
     @jsii.member(jsii_name="fromWirelessGatewayArn")
     @builtins.classmethod
     def from_wireless_gateway_arn(
@@ -7704,6 +7852,12 @@ def _typecheckingstub__f61ecfaf93e3a5ee3c176667153d7633c25d7bc246a1af5b680196650
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5ad3e91f1f14bc613d89e8b3feb876c3f630889cbe1ad27a65b6c6e38b6e0ff3(
+    resource: _IDestinationRef_4b0181ca,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7f90b1341ca0e815545f34b7f61706cf3669652ab00f4418fee6873861329272(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -7787,6 +7941,12 @@ def _typecheckingstub__8067f9295f2cbc045aef3949460556f66763c80bd130293a84c601e6d
     lo_ra_wan: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceProfile.LoRaWANDeviceProfileProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1c3eb713326e5e4f4a3747c9819fcc6cfae774e22e4d7b2a0aaf47b6e8e2eb3f(
+    resource: _IDeviceProfileRef_265b7e10,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7885,6 +8045,12 @@ def _typecheckingstub__7dc14d9e108784569e33639b9546be6bf6547039fdbf1476a6e6dc24a
     disassociate_wireless_device: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__12c8860725bf293f2e4fe93018ddca41909f04dd99aec3275623aa15b4932aba(
+    resource: _IFuotaTaskRef_f399e9d4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8015,6 +8181,12 @@ def _typecheckingstub__e6fc3915d7fdc89e5cd965ebe2f8ae8013d87d86fae4860debc0123a0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5ab751e4598f78fa05a205d003273c4e163bdee0b7dfb77acbce1c985c24cfbe(
+    resource: _IMulticastGroupRef_aa211041,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1e4574ee422fcf0ef4c4120eeea226e4a20bc0c14e7912579fde2c129dbfae77(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8115,6 +8287,12 @@ def _typecheckingstub__ef76e8561696d18827326b858a29c7a5bd71d6c55e2e8bf310bff5db6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__813e6d4c900b137307e046df6a4e926e2df7f732220322c231125bb6e701fe87(
+    resource: _INetworkAnalyzerConfigurationRef_342e1d7d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__55eef13b6d441bbc43c205b400be4f483a5971f2f70cac62f8197d0a6ca28da1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8210,6 +8388,12 @@ def _typecheckingstub__23050117a6e6495f26306a5fff82479bd5fc0476b02f8ebd675aaba88
     sidewalk_response: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerAccount.SidewalkAccountInfoWithFingerprintProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sidewalk_update: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerAccount.SidewalkUpdateAccountProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4206c7d458aec088921a510596977bef15902377cdfb5e1626fad9cd2fe3d251(
+    resource: _IPartnerAccountRef_d86f33ac,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8315,6 +8499,12 @@ def _typecheckingstub__ca074f221eda320f2c5d116c9446f9cd7110e09a78394cec71fb5ba02
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b9a173257cb1be86609a3378fb513c0be3f0124bad6754574db7fb0a9844518e(
+    resource: _IServiceProfileRef_7a1bbf25,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__720fa82707a0285118cc342620b6896bcee6d5a0bc95e1fc8d0ac2b93733a884(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8405,6 +8595,12 @@ def _typecheckingstub__3d10e64d4deea928b0f793f0894101d94fa8dbafc82f1f64d5fabc09f
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     task_definition_type: typing.Optional[builtins.str] = None,
     update: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.UpdateWirelessGatewayTaskCreateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__39b4f2511962115259cd3a343b1d8dc3013daa030a79b379ab443e3b15e94ffe(
+    resource: _ITaskDefinitionRef_d217db00,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8518,6 +8714,12 @@ def _typecheckingstub__a785469cac62290b28ca4347d5562cd8f4e0d3d2543a08bb415fcdfcd
     positioning: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     thing_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b5a01643821488706b05510eceb2bc8b596f1f10517c32d2280650a5e05bb83d(
+    resource: _IWirelessDeviceRef_3a65f428,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8696,6 +8898,12 @@ def _typecheckingstub__9b81904b6ea4a40be4179e391a0bb52c165600b850295d5a6b580ad76
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0d121c90d7dfb0259cd82cd60fb07e4d513bab61d418ad9a9c01e74eba9f65ba(
+    resource: _IWirelessDeviceImportTaskRef_84dee71f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__198856489aba15c5acfb8dfab7e2b4a71dc22d665121a8744c5ee52b5a33b0d1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8771,6 +8979,12 @@ def _typecheckingstub__83cf451292782ed7cf2ebb2ff51643f50a0853d30208d953201e94c64
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     thing_arn: typing.Optional[builtins.str] = None,
     thing_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__52e87db16172f969742b18c45b053883b10eb16912c8a34ed2774528056b9a29(
+    resource: _IWirelessGatewayRef_9d22b38e,
 ) -> None:
     """Type checking stubs"""
     pass

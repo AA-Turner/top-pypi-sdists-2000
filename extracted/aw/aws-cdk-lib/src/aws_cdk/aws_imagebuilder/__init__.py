@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IInstanceProfileRef as _IInstanceProfileRef_d6832c90
 from ..interfaces.aws_imagebuilder import (
     ComponentReference as _ComponentReference_306364a2,
     ContainerRecipeReference as _ContainerRecipeReference_ff6a8aa6,
@@ -87,6 +88,7 @@ from ..interfaces.aws_imagebuilder import (
     LifecyclePolicyReference as _LifecyclePolicyReference_4a6407e9,
     WorkflowReference as _WorkflowReference_190286b5,
 )
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 
 
 @jsii.implements(_IInspectable_c2943556, _IComponentRef_17c48319, _ITaggable_36806126)
@@ -179,6 +181,17 @@ class CfnComponent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForComponent")
+    @builtins.classmethod
+    def arn_for_component(cls, resource: _IComponentRef_17c48319) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4270ac55a96d7abbcc8e3ee0c0004ba58f74e9bbd869c53de4ccb8fd4592b91f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComponent", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -911,6 +924,20 @@ class CfnContainerRecipe(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForContainerRecipe")
+    @builtins.classmethod
+    def arn_for_container_recipe(
+        cls,
+        resource: _IContainerRecipeRef_c8fd8a45,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f2217f6405f9c9d65708bc9c622144f9245706c0efdd29bc4c53987ac547c67d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContainerRecipe", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -951,6 +978,59 @@ class CfnContainerRecipe(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersion")
+    def attr_latest_version(self) -> _IResolvable_da3f097b:
+        '''The latest version references of the container recipe.
+
+        :cloudformationAttribute: LatestVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionArn")
+    def attr_latest_version_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the container recipe.
+
+        .. epigraph::
+
+           Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows:
+
+           - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x.
+           - Version ARNs have only the first three nodes: ..
+           - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+
+        :cloudformationAttribute: LatestVersion.Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMajor")
+    def attr_latest_version_major(self) -> builtins.str:
+        '''The latest version ARN of the created container recipe, with the same major version.
+
+        :cloudformationAttribute: LatestVersion.Major
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMajor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMinor")
+    def attr_latest_version_minor(self) -> builtins.str:
+        '''The latest version ARN of the created container recipe, with the same minor version.
+
+        :cloudformationAttribute: LatestVersion.Minor
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMinor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionPatch")
+    def attr_latest_version_patch(self) -> builtins.str:
+        '''The latest version ARN of the created container recipe, with the same patch version.
+
+        :cloudformationAttribute: LatestVersion.Patch
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionPatch"))
 
     @builtins.property
     @jsii.member(jsii_name="attrName")
@@ -1722,6 +1802,119 @@ class CfnContainerRecipe(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnContainerRecipe.LatestVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "major": "major",
+            "minor": "minor",
+            "patch": "patch",
+        },
+    )
+    class LatestVersionProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            major: typing.Optional[builtins.str] = None,
+            minor: typing.Optional[builtins.str] = None,
+            patch: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The latest version references of the container recipe.
+
+            :param arn: The Amazon Resource Name (ARN) of the container recipe. .. epigraph:: Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows: - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x. - Version ARNs have only the first three nodes: .. - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+            :param major: The latest version ARN of the created container recipe, with the same major version.
+            :param minor: The latest version ARN of the created container recipe, with the same minor version.
+            :param patch: The latest version ARN of the created container recipe, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-containerrecipe-latestversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                latest_version_property = imagebuilder.CfnContainerRecipe.LatestVersionProperty(
+                    arn="arn",
+                    major="major",
+                    minor="minor",
+                    patch="patch"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ca8f460bd0a2cab441476d1767240515fb384cd1c3842ff6bf74efe37b4c2b62)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument major", value=major, expected_type=type_hints["major"])
+                check_type(argname="argument minor", value=minor, expected_type=type_hints["minor"])
+                check_type(argname="argument patch", value=patch, expected_type=type_hints["patch"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if major is not None:
+                self._values["major"] = major
+            if minor is not None:
+                self._values["minor"] = minor
+            if patch is not None:
+                self._values["patch"] = patch
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the container recipe.
+
+            .. epigraph::
+
+               Semantic versioning is included in each object's Amazon Resource Name (ARN), at the level that applies to that object as follows:
+
+               - Versionless ARNs and Name ARNs do not include specific values in any of the nodes. The nodes are either left off entirely, or they are specified as wildcards, for example: x.x.x.
+               - Version ARNs have only the first three nodes: ..
+               - Build version ARNs have all four nodes, and point to a specific build for a specific version of an object.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-containerrecipe-latestversion.html#cfn-imagebuilder-containerrecipe-latestversion-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def major(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created container recipe, with the same major version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-containerrecipe-latestversion.html#cfn-imagebuilder-containerrecipe-latestversion-major
+            '''
+            result = self._values.get("major")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def minor(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created container recipe, with the same minor version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-containerrecipe-latestversion.html#cfn-imagebuilder-containerrecipe-latestversion-minor
+            '''
+            result = self._values.get("minor")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def patch(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created container recipe, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-containerrecipe-latestversion.html#cfn-imagebuilder-containerrecipe-latestversion-patch
+            '''
+            result = self._values.get("patch")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LatestVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_imagebuilder.CfnContainerRecipe.TargetContainerRepositoryProperty",
         jsii_struct_bases=[],
         name_mapping={"repository_name": "repositoryName", "service": "service"},
@@ -2226,6 +2419,20 @@ class CfnDistributionConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDistributionConfiguration")
+    @builtins.classmethod
+    def arn_for_distribution_configuration(
+        cls,
+        resource: _IDistributionConfigurationRef_4ec38268,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__97e42939c30fb62123f34dbced8d96f46ab5966b5cf8bf109486b08a4ee5278c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDistributionConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3680,14 +3887,14 @@ class CfnImage(
         *,
         container_recipe_arn: typing.Optional[builtins.str] = None,
         deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.DeletionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        distribution_configuration_arn: typing.Optional[builtins.str] = None,
+        distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
         image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImagePipelineExecutionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_recipe_arn: typing.Optional[builtins.str] = None,
+        image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+        infrastructure_configuration_arn: typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.ImageLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImage.WorkflowConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -3731,6 +3938,17 @@ class CfnImage(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForImage")
+    @builtins.classmethod
+    def arn_for_image(cls, resource: _IImageRef_e59af9ea) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ffb7b3a431c2d371eb7605adae5f53c9d7fbed4a677876e8e718748c23cdffe)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImage", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4882,14 +5100,14 @@ class CfnImagePipeline(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        infrastructure_configuration_arn: builtins.str,
+        infrastructure_configuration_arn: typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01],
         name: builtins.str,
-        container_recipe_arn: typing.Optional[builtins.str] = None,
+        container_recipe_arn: typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]] = None,
         description: typing.Optional[builtins.str] = None,
-        distribution_configuration_arn: typing.Optional[builtins.str] = None,
+        distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
-        image_recipe_arn: typing.Optional[builtins.str] = None,
+        image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageScanningConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.ImageTestsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnImagePipeline.PipelineLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4941,6 +5159,20 @@ class CfnImagePipeline(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForImagePipeline")
+    @builtins.classmethod
+    def arn_for_image_pipeline(
+        cls,
+        resource: _IImagePipelineRef_e3aa2681,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf0d194c85bd857ede34548987ac1dbd0b912f99dfb20634cc248e2522df4ba0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImagePipeline", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5923,14 +6155,14 @@ class CfnImagePipelineProps:
     def __init__(
         self,
         *,
-        infrastructure_configuration_arn: builtins.str,
+        infrastructure_configuration_arn: typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01],
         name: builtins.str,
-        container_recipe_arn: typing.Optional[builtins.str] = None,
+        container_recipe_arn: typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]] = None,
         description: typing.Optional[builtins.str] = None,
-        distribution_configuration_arn: typing.Optional[builtins.str] = None,
+        distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
-        image_recipe_arn: typing.Optional[builtins.str] = None,
+        image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.PipelineLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6063,14 +6295,16 @@ class CfnImagePipelineProps:
             self._values["workflows"] = workflows
 
     @builtins.property
-    def infrastructure_configuration_arn(self) -> builtins.str:
+    def infrastructure_configuration_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]:
         '''The Amazon Resource Name (ARN) of the infrastructure configuration associated with this image pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-infrastructureconfigurationarn
         '''
         result = self._values.get("infrastructure_configuration_arn")
         assert result is not None, "Required property 'infrastructure_configuration_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -6083,13 +6317,15 @@ class CfnImagePipelineProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def container_recipe_arn(self) -> typing.Optional[builtins.str]:
+    def container_recipe_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]]:
         '''The Amazon Resource Name (ARN) of the container recipe that is used for this pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-containerrecipearn
         '''
         result = self._values.get("container_recipe_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -6101,13 +6337,15 @@ class CfnImagePipelineProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def distribution_configuration_arn(self) -> typing.Optional[builtins.str]:
+    def distribution_configuration_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]]:
         '''The Amazon Resource Name (ARN) of the distribution configuration associated with this image pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-distributionconfigurationarn
         '''
         result = self._values.get("distribution_configuration_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]], result)
 
     @builtins.property
     def enhanced_image_metadata_enabled(
@@ -6132,13 +6370,15 @@ class CfnImagePipelineProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def image_recipe_arn(self) -> typing.Optional[builtins.str]:
+    def image_recipe_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]]:
         '''The Amazon Resource Name (ARN) of the image recipe associated with this image pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-imagepipeline.html#cfn-imagebuilder-imagepipeline-imagerecipearn
         '''
         result = self._values.get("image_recipe_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]], result)
 
     @builtins.property
     def image_scanning_configuration(
@@ -6252,14 +6492,14 @@ class CfnImageProps:
         *,
         container_recipe_arn: typing.Optional[builtins.str] = None,
         deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.DeletionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        distribution_configuration_arn: typing.Optional[builtins.str] = None,
+        distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
         enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         execution_role: typing.Optional[builtins.str] = None,
         image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImagePipelineExecutionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        image_recipe_arn: typing.Optional[builtins.str] = None,
+        image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
         image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+        infrastructure_configuration_arn: typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -6395,13 +6635,15 @@ class CfnImageProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.DeletionSettingsProperty]], result)
 
     @builtins.property
-    def distribution_configuration_arn(self) -> typing.Optional[builtins.str]:
+    def distribution_configuration_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]]:
         '''The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-distributionconfigurationarn
         '''
         result = self._values.get("distribution_configuration_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]], result)
 
     @builtins.property
     def enhanced_image_metadata_enabled(
@@ -6437,13 +6679,15 @@ class CfnImageProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.ImagePipelineExecutionSettingsProperty]], result)
 
     @builtins.property
-    def image_recipe_arn(self) -> typing.Optional[builtins.str]:
+    def image_recipe_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]]:
         '''The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-imagerecipearn
         '''
         result = self._values.get("image_recipe_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]], result)
 
     @builtins.property
     def image_scanning_configuration(
@@ -6468,13 +6712,15 @@ class CfnImageProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnImage.ImageTestsConfigurationProperty]], result)
 
     @builtins.property
-    def infrastructure_configuration_arn(self) -> typing.Optional[builtins.str]:
+    def infrastructure_configuration_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]]:
         '''The Amazon Resource Name (ARN) of the infrastructure configuration that defines the environment in which your image will be built and tested.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-image.html#cfn-imagebuilder-image-infrastructureconfigurationarn
         '''
         result = self._values.get("infrastructure_configuration_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]], result)
 
     @builtins.property
     def logging_configuration(
@@ -6636,6 +6882,17 @@ class CfnImageRecipe(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForImageRecipe")
+    @builtins.classmethod
+    def arn_for_image_recipe(cls, resource: _IImageRecipeRef_9cfc70e3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__35d461b1b4cc1acd4f9efe30f8bf3524e94a9eae5897a9deac49bcf1c6889eff)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImageRecipe", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6676,6 +6933,51 @@ class CfnImageRecipe(
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersion")
+    def attr_latest_version(self) -> _IResolvable_da3f097b:
+        '''The latest version references of the image recipe.
+
+        :cloudformationAttribute: LatestVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLatestVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionArn")
+    def attr_latest_version_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the image recipe.
+
+        :cloudformationAttribute: LatestVersion.Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMajor")
+    def attr_latest_version_major(self) -> builtins.str:
+        '''The latest version ARN of the created image recipe, with the same major version.
+
+        :cloudformationAttribute: LatestVersion.Major
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMajor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionMinor")
+    def attr_latest_version_minor(self) -> builtins.str:
+        '''The latest version ARN of the created image recipe, with the same minor version.
+
+        :cloudformationAttribute: LatestVersion.Minor
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionMinor"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLatestVersionPatch")
+    def attr_latest_version_patch(self) -> builtins.str:
+        '''The latest version ARN of the created image recipe, with the same patch version.
+
+        :cloudformationAttribute: LatestVersion.Patch
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLatestVersionPatch"))
 
     @builtins.property
     @jsii.member(jsii_name="attrName")
@@ -7390,6 +7692,111 @@ class CfnImageRecipe(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImageRecipe.LatestVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "major": "major",
+            "minor": "minor",
+            "patch": "patch",
+        },
+    )
+    class LatestVersionProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            major: typing.Optional[builtins.str] = None,
+            minor: typing.Optional[builtins.str] = None,
+            patch: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The latest version references of the image recipe.
+
+            :param arn: The Amazon Resource Name (ARN) of the image recipe.
+            :param major: The latest version ARN of the created image recipe, with the same major version.
+            :param minor: The latest version ARN of the created image recipe, with the same minor version.
+            :param patch: The latest version ARN of the created image recipe, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagerecipe-latestversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_imagebuilder as imagebuilder
+                
+                latest_version_property = imagebuilder.CfnImageRecipe.LatestVersionProperty(
+                    arn="arn",
+                    major="major",
+                    minor="minor",
+                    patch="patch"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__231fa796f42ac67ecacd492b2b372390b7bf3485c1732b2ffdc8a835770ff66a)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument major", value=major, expected_type=type_hints["major"])
+                check_type(argname="argument minor", value=minor, expected_type=type_hints["minor"])
+                check_type(argname="argument patch", value=patch, expected_type=type_hints["patch"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if major is not None:
+                self._values["major"] = major
+            if minor is not None:
+                self._values["minor"] = minor
+            if patch is not None:
+                self._values["patch"] = patch
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the image recipe.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagerecipe-latestversion.html#cfn-imagebuilder-imagerecipe-latestversion-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def major(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image recipe, with the same major version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagerecipe-latestversion.html#cfn-imagebuilder-imagerecipe-latestversion-major
+            '''
+            result = self._values.get("major")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def minor(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image recipe, with the same minor version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagerecipe-latestversion.html#cfn-imagebuilder-imagerecipe-latestversion-minor
+            '''
+            result = self._values.get("minor")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def patch(self) -> typing.Optional[builtins.str]:
+            '''The latest version ARN of the created image recipe, with the same patch version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-imagebuilder-imagerecipe-latestversion.html#cfn-imagebuilder-imagerecipe-latestversion-patch
+            '''
+            result = self._values.get("patch")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LatestVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_imagebuilder.CfnImageRecipe.SystemsManagerAgentProperty",
         jsii_struct_bases=[],
         name_mapping={"uninstall_after_build": "uninstallAfterBuild"},
@@ -7766,7 +8173,7 @@ class CfnInfrastructureConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_profile_name: builtins.str,
+        instance_profile_name: typing.Union[builtins.str, _IInstanceProfileRef_d6832c90],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         instance_metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInfrastructureConfiguration.InstanceMetadataOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7776,7 +8183,7 @@ class CfnInfrastructureConfiguration(
         placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInfrastructureConfiguration.PlacementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        sns_topic_arn: typing.Optional[builtins.str] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
         subnet_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         terminate_instance_on_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -7822,6 +8229,20 @@ class CfnInfrastructureConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInfrastructureConfiguration")
+    @builtins.classmethod
+    def arn_for_infrastructure_configuration(
+        cls,
+        resource: _IInfrastructureConfigurationRef_a35e2e01,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c00020948b978cd5095969ac9561e66ec27bb76fe5db9718b527e8e5f2d8947a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInfrastructureConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8462,7 +8883,7 @@ class CfnInfrastructureConfigurationProps:
     def __init__(
         self,
         *,
-        instance_profile_name: builtins.str,
+        instance_profile_name: typing.Union[builtins.str, _IInstanceProfileRef_d6832c90],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         instance_metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.InstanceMetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8472,7 +8893,7 @@ class CfnInfrastructureConfigurationProps:
         placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.PlacementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-        sns_topic_arn: typing.Optional[builtins.str] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
         subnet_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         terminate_instance_on_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -8585,14 +9006,16 @@ class CfnInfrastructureConfigurationProps:
             self._values["terminate_instance_on_failure"] = terminate_instance_on_failure
 
     @builtins.property
-    def instance_profile_name(self) -> builtins.str:
+    def instance_profile_name(
+        self,
+    ) -> typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]:
         '''The instance profile to associate with the instance used to customize your Amazon EC2 AMI.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-infrastructureconfiguration.html#cfn-imagebuilder-infrastructureconfiguration-instanceprofilename
         '''
         result = self._values.get("instance_profile_name")
         assert result is not None, "Required property 'instance_profile_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceProfileRef_d6832c90], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -8691,7 +9114,9 @@ class CfnInfrastructureConfigurationProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def sns_topic_arn(self) -> typing.Optional[builtins.str]:
+    def sns_topic_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]]:
         '''The Amazon Resource Name (ARN) for the SNS topic to which we send image build event notifications.
 
         .. epigraph::
@@ -8701,7 +9126,7 @@ class CfnInfrastructureConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-imagebuilder-infrastructureconfiguration.html#cfn-imagebuilder-infrastructureconfiguration-snstopicarn
         '''
         result = self._values.get("sns_topic_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]], result)
 
     @builtins.property
     def subnet_id(self) -> typing.Optional[builtins.str]:
@@ -8871,6 +9296,20 @@ class CfnLifecyclePolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLifecyclePolicy")
+    @builtins.classmethod
+    def arn_for_lifecycle_policy(
+        cls,
+        resource: _ILifecyclePolicyRef_9d5f074d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5834a72e078b10742fe73e4de2e4493e4b1a49ff9c4a8136d8fca3d63828271f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLifecyclePolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10213,6 +10652,17 @@ class CfnWorkflow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWorkflow")
+    @builtins.classmethod
+    def arn_for_workflow(cls, resource: _IWorkflowRef_8f64c4af) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9fb47f1dcb1b0047a32697149389de1d0a0ef3398b0eb23f82ff81fc2bf234e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkflow", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10791,6 +11241,12 @@ def _typecheckingstub__cee6f52d40719e283a6d76c8b6a6d4fb48180c9c7f4901a21ff32e862
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4270ac55a96d7abbcc8e3ee0c0004ba58f74e9bbd869c53de4ccb8fd4592b91f(
+    resource: _IComponentRef_17c48319,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__40b669a1c43c3b3079f4db289296a5190bc19737cdacec67b41121ffeb77db84(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10908,6 +11364,12 @@ def _typecheckingstub__3c468d5dd819e845b41b9c236fc6bca416c9fb91fff1a793739f89182
     platform_override: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     working_directory: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f2217f6405f9c9d65708bc9c622144f9245706c0efdd29bc4c53987ac547c67d(
+    resource: _IContainerRecipeRef_c8fd8a45,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11062,6 +11524,16 @@ def _typecheckingstub__94feecd62024b3049c94588a2a0ff057d5b85caf4f2a481eda383b2a7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ca8f460bd0a2cab441476d1767240515fb384cd1c3842ff6bf74efe37b4c2b62(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    major: typing.Optional[builtins.str] = None,
+    minor: typing.Optional[builtins.str] = None,
+    patch: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__34199ca5f676bc80945fe7e849c29056158da64657ff83277eecd5cd3b62b859(
     *,
     repository_name: typing.Optional[builtins.str] = None,
@@ -11099,6 +11571,12 @@ def _typecheckingstub__424bed49628b17ab96124c2266e56c022dd960de454a320aa63124993
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__97e42939c30fb62123f34dbced8d96f46ab5966b5cf8bf109486b08a4ee5278c(
+    resource: _IDistributionConfigurationRef_4ec38268,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11252,17 +11730,23 @@ def _typecheckingstub__1406bc225111bc54a87c50d1d8180aed46d22e10134235c4fa581d313
     *,
     container_recipe_arn: typing.Optional[builtins.str] = None,
     deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.DeletionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    distribution_configuration_arn: typing.Optional[builtins.str] = None,
+    distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
     image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImagePipelineExecutionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    image_recipe_arn: typing.Optional[builtins.str] = None,
+    image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+    infrastructure_configuration_arn: typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ffb7b3a431c2d371eb7605adae5f53c9d7fbed4a677876e8e718748c23cdffe(
+    resource: _IImageRef_e59af9ea,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11435,14 +11919,14 @@ def _typecheckingstub__e2d099702ab4ebcb03c34ae00fedabfa81a0c5d3662aa1605c47ff1fc
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    infrastructure_configuration_arn: builtins.str,
+    infrastructure_configuration_arn: typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01],
     name: builtins.str,
-    container_recipe_arn: typing.Optional[builtins.str] = None,
+    container_recipe_arn: typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]] = None,
     description: typing.Optional[builtins.str] = None,
-    distribution_configuration_arn: typing.Optional[builtins.str] = None,
+    distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
-    image_recipe_arn: typing.Optional[builtins.str] = None,
+    image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.PipelineLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11450,6 +11934,12 @@ def _typecheckingstub__e2d099702ab4ebcb03c34ae00fedabfa81a0c5d3662aa1605c47ff1fc
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cf0d194c85bd857ede34548987ac1dbd0b912f99dfb20634cc248e2522df4ba0(
+    resource: _IImagePipelineRef_e3aa2681,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11624,14 +12114,14 @@ def _typecheckingstub__2e3c12bbd170116ab79a812e4141a317f3b456ad0a64acefae39ebbdf
 
 def _typecheckingstub__95f10c4451c6bf3f2cf15951831cd372e35975262c0be294c1ae7c774045ad9b(
     *,
-    infrastructure_configuration_arn: builtins.str,
+    infrastructure_configuration_arn: typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01],
     name: builtins.str,
-    container_recipe_arn: typing.Optional[builtins.str] = None,
+    container_recipe_arn: typing.Optional[typing.Union[builtins.str, _IContainerRecipeRef_c8fd8a45]] = None,
     description: typing.Optional[builtins.str] = None,
-    distribution_configuration_arn: typing.Optional[builtins.str] = None,
+    distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
-    image_recipe_arn: typing.Optional[builtins.str] = None,
+    image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImagePipeline.PipelineLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11647,14 +12137,14 @@ def _typecheckingstub__5f217922888735234464ee573256caba679b2c1215a99c91ad609c9c7
     *,
     container_recipe_arn: typing.Optional[builtins.str] = None,
     deletion_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.DeletionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    distribution_configuration_arn: typing.Optional[builtins.str] = None,
+    distribution_configuration_arn: typing.Optional[typing.Union[builtins.str, _IDistributionConfigurationRef_4ec38268]] = None,
     enhanced_image_metadata_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     execution_role: typing.Optional[builtins.str] = None,
     image_pipeline_execution_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImagePipelineExecutionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    image_recipe_arn: typing.Optional[builtins.str] = None,
+    image_recipe_arn: typing.Optional[typing.Union[builtins.str, _IImageRecipeRef_9cfc70e3]] = None,
     image_scanning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageScanningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     image_tests_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageTestsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    infrastructure_configuration_arn: typing.Optional[builtins.str] = None,
+    infrastructure_configuration_arn: typing.Optional[typing.Union[builtins.str, _IInfrastructureConfigurationRef_a35e2e01]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.ImageLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflows: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImage.WorkflowConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -11676,6 +12166,12 @@ def _typecheckingstub__b92e909d03413ceab5b5ff0737ae582bf88ebb71e7e89f62cc57922d1
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     working_directory: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__35d461b1b4cc1acd4f9efe30f8bf3524e94a9eae5897a9deac49bcf1c6889eff(
+    resource: _IImageRecipeRef_9cfc70e3,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11800,6 +12296,16 @@ def _typecheckingstub__49d4c4575e6e8aa63b1188dcd39472139fc5b35a563c27e7b8a0bdf27
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__231fa796f42ac67ecacd492b2b372390b7bf3485c1732b2ffdc8a835770ff66a(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    major: typing.Optional[builtins.str] = None,
+    minor: typing.Optional[builtins.str] = None,
+    patch: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ad92f3ddc08f7f471aea45f4940171af1f13b6aca47dcb6cecd2627b25787032(
     *,
     uninstall_after_build: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11827,7 +12333,7 @@ def _typecheckingstub__8df8a03094d1fe92963a315a657a78657df102ba9fbe66eda2c26bb8e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_profile_name: builtins.str,
+    instance_profile_name: typing.Union[builtins.str, _IInstanceProfileRef_d6832c90],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     instance_metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.InstanceMetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11837,10 +12343,16 @@ def _typecheckingstub__8df8a03094d1fe92963a315a657a78657df102ba9fbe66eda2c26bb8e
     placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.PlacementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    sns_topic_arn: typing.Optional[builtins.str] = None,
+    sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
     subnet_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     terminate_instance_on_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c00020948b978cd5095969ac9561e66ec27bb76fe5db9718b527e8e5f2d8947a(
+    resource: _IInfrastructureConfigurationRef_a35e2e01,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11976,7 +12488,7 @@ def _typecheckingstub__606aaff62e915101e470a1274dc963d43831117f9a85493e01f09a1ee
 
 def _typecheckingstub__cf8c493013f64742391c2bf93c7050f371ffeff0d9a35a3791f0b9fbb6019d47(
     *,
-    instance_profile_name: builtins.str,
+    instance_profile_name: typing.Union[builtins.str, _IInstanceProfileRef_d6832c90],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     instance_metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.InstanceMetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11986,7 +12498,7 @@ def _typecheckingstub__cf8c493013f64742391c2bf93c7050f371ffeff0d9a35a3791f0b9fbb
     placement: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInfrastructureConfiguration.PlacementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_tags: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
-    sns_topic_arn: typing.Optional[builtins.str] = None,
+    sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
     subnet_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     terminate_instance_on_failure: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -12006,6 +12518,12 @@ def _typecheckingstub__0b441913a83fc39b85885667ae1a4a4add28d162c2540cbe5daf57661
     description: typing.Optional[builtins.str] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5834a72e078b10742fe73e4de2e4493e4b1a49ff9c4a8136d8fca3d63828271f(
+    resource: _ILifecyclePolicyRef_9d5f074d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12176,6 +12694,12 @@ def _typecheckingstub__bd82b8722476efd9ae3c84a0cf5b8f1d6b48550745017b0d128afabf5
     kms_key_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     uri: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9fb47f1dcb1b0047a32697149389de1d0a0ef3398b0eb23f82ff81fc2bf234e(
+    resource: _IWorkflowRef_8f64c4af,
 ) -> None:
     """Type checking stubs"""
     pass

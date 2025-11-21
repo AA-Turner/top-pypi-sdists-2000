@@ -485,6 +485,17 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_c904150a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e75a5a277da4bcf232da258c132cb5b95247d2e081833eacf26962922fb66b89)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3824,7 +3835,7 @@ class CfnConfiguration(
         :param name: The name of the configuration. Configuration names are strings that match the regex "^[0-9A-Za-z][0-9A-Za-z-]{0,}$".
         :param server_properties: Contents of the ``server.properties`` file. When using the console, the SDK, or the AWS CLI , the contents of ``server.properties`` can be in plaintext.
         :param description: The description of the configuration.
-        :param kafka_versions_list: The `versions of Apache Kafka <https://docs.aws.amazon.com/msk/latest/developerguide/supported-kafka-versions.html>`_ with which you can use this MSK configuration. When you update the ``KafkaVersionsList`` property, AWS CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation. If your configuration is attached with any clusters created using the AWS Management Console or AWS CLI , you'll need to manually delete the old configuration from the console after the update completes. For more information, see `Can’t update KafkaVersionsList in MSK configuration <https://docs.aws.amazon.com/msk/latest/developerguide/troubleshooting.html#troubleshoot-kafkaversionslist-cfn-update-failure>`_ in the *Amazon MSK Developer Guide* .
+        :param kafka_versions_list: The `versions of Apache Kafka <https://docs.aws.amazon.com/msk/latest/developerguide/supported-kafka-versions.html>`_ with which you can use this MSK configuration. When you update the ``KafkaVersionsList`` property, CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation. If your configuration is attached with any clusters created using the AWS Management Console or AWS CLI , you'll need to manually delete the old configuration from the console after the update completes. For more information, see `Can’t update KafkaVersionsList in MSK configuration <https://docs.aws.amazon.com/msk/latest/developerguide/troubleshooting.html#troubleshoot-kafkaversionslist-cfn-update-failure>`_ in the *Amazon MSK Developer Guide* .
         :param latest_revision: Latest revision of the MSK configuration.
         '''
         if __debug__:
@@ -3840,6 +3851,20 @@ class CfnConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConfiguration")
+    @builtins.classmethod
+    def arn_for_configuration(
+        cls,
+        resource: _IConfigurationRef_69565de0,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5601e2fa62fb6760b6374bdd6766cd9625476a0ad605a83e4595963b29bcf7b4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4107,7 +4132,7 @@ class CfnConfigurationProps:
         :param name: The name of the configuration. Configuration names are strings that match the regex "^[0-9A-Za-z][0-9A-Za-z-]{0,}$".
         :param server_properties: Contents of the ``server.properties`` file. When using the console, the SDK, or the AWS CLI , the contents of ``server.properties`` can be in plaintext.
         :param description: The description of the configuration.
-        :param kafka_versions_list: The `versions of Apache Kafka <https://docs.aws.amazon.com/msk/latest/developerguide/supported-kafka-versions.html>`_ with which you can use this MSK configuration. When you update the ``KafkaVersionsList`` property, AWS CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation. If your configuration is attached with any clusters created using the AWS Management Console or AWS CLI , you'll need to manually delete the old configuration from the console after the update completes. For more information, see `Can’t update KafkaVersionsList in MSK configuration <https://docs.aws.amazon.com/msk/latest/developerguide/troubleshooting.html#troubleshoot-kafkaversionslist-cfn-update-failure>`_ in the *Amazon MSK Developer Guide* .
+        :param kafka_versions_list: The `versions of Apache Kafka <https://docs.aws.amazon.com/msk/latest/developerguide/supported-kafka-versions.html>`_ with which you can use this MSK configuration. When you update the ``KafkaVersionsList`` property, CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation. If your configuration is attached with any clusters created using the AWS Management Console or AWS CLI , you'll need to manually delete the old configuration from the console after the update completes. For more information, see `Can’t update KafkaVersionsList in MSK configuration <https://docs.aws.amazon.com/msk/latest/developerguide/troubleshooting.html#troubleshoot-kafkaversionslist-cfn-update-failure>`_ in the *Amazon MSK Developer Guide* .
         :param latest_revision: Latest revision of the MSK configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-msk-configuration.html
@@ -4186,7 +4211,7 @@ class CfnConfigurationProps:
     def kafka_versions_list(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The `versions of Apache Kafka <https://docs.aws.amazon.com/msk/latest/developerguide/supported-kafka-versions.html>`_ with which you can use this MSK configuration.
 
-        When you update the ``KafkaVersionsList`` property, AWS CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation.
+        When you update the ``KafkaVersionsList`` property, CloudFormation recreates a new configuration with the updated property before deleting the old configuration. Such an update requires a `resource replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ . To successfully update ``KafkaVersionsList`` , you must also update the ``Name`` property in the same operation.
 
         If your configuration is attached with any clusters created using the AWS Management Console or AWS CLI , you'll need to manually delete the old configuration from the console after the update completes.
 
@@ -4327,6 +4352,17 @@ class CfnReplicator(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForReplicator")
+    @builtins.classmethod
+    def arn_for_replicator(cls, resource: _IReplicatorRef_ba6501db) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a20d232a3d7d49608570b902443cac718dbfa90df96f02b2c4528ef82e73c3f8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReplicator", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5490,6 +5526,20 @@ class CfnServerlessCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForServerlessCluster")
+    @builtins.classmethod
+    def arn_for_serverless_cluster(
+        cls,
+        resource: _IServerlessClusterRef_d48e2d5f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4c93f4d91e17573e42546fbc849c188797135dc812964ea56d48fb92729fabf)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServerlessCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6060,6 +6110,20 @@ class CfnVpcConnection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVpcConnection")
+    @builtins.classmethod
+    def arn_for_vpc_connection(
+        cls,
+        resource: _IVpcConnectionRef_08dbabf3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4b4a4d61cbd6404213207ff188c3ce783ecd35b5a81b30e9bf49d7acb62b4dd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcConnection", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6420,6 +6484,12 @@ def _typecheckingstub__d267b4b2dcfdda539084655e7a1234ffaf8e77376f37d4914abbcef6c
     rebalancing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.RebalancingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     storage_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e75a5a277da4bcf232da258c132cb5b95247d2e081833eacf26962922fb66b89(
+    resource: _IClusterRef_c904150a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6843,6 +6913,12 @@ def _typecheckingstub__4496d16ab1313e2d6e75f55fc7cdb170962f756c6dc1149245dde1aba
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5601e2fa62fb6760b6374bdd6766cd9625476a0ad605a83e4595963b29bcf7b4(
+    resource: _IConfigurationRef_69565de0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1b6ce2f411d76bf4b2b3474cef8479b35e9ee5b510006374b01da6c190c75122(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6915,6 +6991,12 @@ def _typecheckingstub__dfeb157957f65ee344afab32ca8fffe9eb07ec631c59935f85e890a85
     service_execution_role_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a20d232a3d7d49608570b902443cac718dbfa90df96f02b2c4528ef82e73c3f8(
+    resource: _IReplicatorRef_ba6501db,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7062,6 +7144,12 @@ def _typecheckingstub__aef99cf7cce653b94ea5543af8d6966cab3ba1c8ff81b50f8736048ff
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d4c93f4d91e17573e42546fbc849c188797135dc812964ea56d48fb92729fabf(
+    resource: _IServerlessClusterRef_d48e2d5f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a6fcda27bf38beaaece2345e24c9ba42a7a611c55e20c87352dcd2f48c3d3b8c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7147,6 +7235,12 @@ def _typecheckingstub__910be42f1d726644d84801975cd038e26103e9dbcfb02007fe4ebdbeb
     target_cluster_arn: builtins.str,
     vpc_id: builtins.str,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4b4a4d61cbd6404213207ff188c3ce783ecd35b5a81b30e9bf49d7acb62b4dd(
+    resource: _IVpcConnectionRef_08dbabf3,
 ) -> None:
     """Type checking stubs"""
     pass

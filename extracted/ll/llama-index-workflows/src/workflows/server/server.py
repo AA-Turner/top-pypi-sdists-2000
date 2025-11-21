@@ -3,17 +3,17 @@
 from __future__ import annotations
 
 import asyncio
-from contextlib import asynccontextmanager
-from dataclasses import dataclass
 import json
 import logging
+from contextlib import asynccontextmanager
+from dataclasses import dataclass
+from datetime import datetime, timezone
 from importlib.metadata import version
 from pathlib import Path
-from typing import Any, AsyncGenerator, Callable, Awaitable
-from datetime import datetime, timezone
+from typing import Any, AsyncGenerator, Awaitable, Callable, cast
 
-from llama_index_instrumentation.dispatcher import instrument_tags
 import uvicorn
+from llama_index_instrumentation.dispatcher import instrument_tags
 from starlette.applications import Starlette
 from starlette.exceptions import HTTPException
 from starlette.middleware import Middleware
@@ -34,8 +34,6 @@ from workflows.events import (
     StopEvent,
 )
 from workflows.handler import WorkflowHandler
-
-
 from workflows.protocol import (
     CancelHandlerResponse,
     HandlerData,
@@ -47,6 +45,12 @@ from workflows.protocol import (
     WorkflowSchemaResponse,
     is_status_completed,
 )
+from workflows.protocol.serializable_events import (
+    EventEnvelope,
+    EventEnvelopeWithMetadata,
+    EventValidationError,
+)
+from workflows.representation_utils import extract_workflow_structure
 from workflows.server.abstract_workflow_store import (
     AbstractWorkflowStore,
     HandlerQuery,
@@ -58,12 +62,6 @@ from workflows.types import RunResultT
 
 # Protocol models are used on the client side; server responds with plain dicts
 from workflows.utils import _nanoid as nanoid
-from .representation_utils import _extract_workflow_structure
-from workflows.protocol.serializable_events import (
-    EventValidationError,
-    EventEnvelopeWithMetadata,
-    EventEnvelope,
-)
 
 logger = logging.getLogger()
 
@@ -90,7 +88,7 @@ class WorkflowServer:
 
         self._middleware = middleware or [
             Middleware(
-                CORSMiddleware,
+                CORSMiddleware,  # type: ignore[arg-type]
                 # regex echoes the origin header back, which some browsers require (rather than "*") when credentials are required
                 allow_origin_regex=".*",
                 allow_methods=["*"],
@@ -624,7 +622,7 @@ class WorkflowServer:
         """
         workflow = self._extract_workflow(request)
         try:
-            workflow_graph = _extract_workflow_structure(workflow.workflow)
+            workflow_graph = extract_workflow_structure(workflow.workflow)
         except Exception as e:
             raise HTTPException(
                 detail=f"Error while getting JSON workflow representation: {e}",
@@ -1036,12 +1034,14 @@ class WorkflowServer:
             "cancelled",
         }
 
-        status_in = (
-            list(set(allowed_status_values).intersection(status_values))
+        status_in: list[Status] | None = (
+            cast(
+                list[Status],
+                list(set(allowed_status_values).intersection(status_values)),
+            )
             if status_values is not None
             else None
         )
-
         persistent_handlers = await self._workflow_store.query(
             HandlerQuery(status_in=status_in, workflow_name_in=workflow_name_in)
         )
@@ -1675,4 +1675,4 @@ if __name__ == "__main__":
     dict_schema = server.openapi_schema()
     with open(args.output, "w") as f:
         json.dump(dict_schema, indent=2, fp=f)
-    print(f"OpenAPI schema written to {args.output}")
+    print(f"OpenAPI schema written to {args.output}")  # noqa: T201

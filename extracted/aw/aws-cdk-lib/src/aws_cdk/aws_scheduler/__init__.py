@@ -381,6 +381,7 @@ from ..aws_iam import (
     IRole as _IRole_235f5d8e,
 )
 from ..aws_kms import IKey as _IKey_5f11635f
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_scheduler import (
     IScheduleGroupRef as _IScheduleGroupRef_c08a74b7,
     IScheduleRef as _IScheduleRef_5286fcb6,
@@ -515,7 +516,7 @@ class CfnSchedule(
         description: typing.Optional[builtins.str] = None,
         end_date: typing.Optional[builtins.str] = None,
         group_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         name: typing.Optional[builtins.str] = None,
         schedule_expression_timezone: typing.Optional[builtins.str] = None,
         start_date: typing.Optional[builtins.str] = None,
@@ -556,6 +557,17 @@ class CfnSchedule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSchedule")
+    @builtins.classmethod
+    def arn_for_schedule(cls, resource: _IScheduleRef_5286fcb6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc94c2e4e6a33a3d1aa7e0663ea7d9c2d661091e25d237f9c9672f59868e9f13)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchedule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2347,6 +2359,20 @@ class CfnScheduleGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForScheduleGroup")
+    @builtins.classmethod
+    def arn_for_schedule_group(
+        cls,
+        resource: _IScheduleGroupRef_c08a74b7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3bf41141ca45d8816e093169bacba857d10c0fee6843a589cd33bcd31e8fea8c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScheduleGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2562,7 +2588,7 @@ class CfnScheduleProps:
         description: typing.Optional[builtins.str] = None,
         end_date: typing.Optional[builtins.str] = None,
         group_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         name: typing.Optional[builtins.str] = None,
         schedule_expression_timezone: typing.Optional[builtins.str] = None,
         start_date: typing.Optional[builtins.str] = None,
@@ -2791,13 +2817,15 @@ class CfnScheduleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+    def kms_key_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The Amazon Resource Name (ARN) for the customer managed KMS key that EventBridge Scheduler will use to encrypt and decrypt your data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-scheduler-schedule.html#cfn-scheduler-schedule-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -3139,7 +3167,11 @@ typing.cast(typing.Any, ISchedule).__jsii_proxy_class__ = lambda : _ISchedulePro
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_scheduler.IScheduleGroup")
-class IScheduleGroup(_IResource_c80c4260, typing_extensions.Protocol):
+class IScheduleGroup(
+    _IResource_c80c4260,
+    _IScheduleGroupRef_c08a74b7,
+    typing_extensions.Protocol,
+):
     '''Interface representing a created or an imported ``ScheduleGroup``.'''
 
     @builtins.property
@@ -3530,6 +3562,7 @@ class IScheduleGroup(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IScheduleGroupProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IScheduleGroupRef_c08a74b7), # type: ignore[misc]
 ):
     '''Interface representing a created or an imported ``ScheduleGroup``.'''
 
@@ -5513,6 +5546,12 @@ class ScheduleGroup(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "ScheduleGroupGrants":
+        '''Collection of grant methods for a ScheduleGroup.'''
+        return typing.cast("ScheduleGroupGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="scheduleGroupArn")
     def schedule_group_arn(self) -> builtins.str:
         '''The arn of the schedule group.'''
@@ -5523,6 +5562,86 @@ class ScheduleGroup(
     def schedule_group_name(self) -> builtins.str:
         '''The name of the schedule group.'''
         return typing.cast(builtins.str, jsii.get(self, "scheduleGroupName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="scheduleGroupRef")
+    def schedule_group_ref(self) -> _ScheduleGroupReference_fd0e4c46:
+        '''A reference to a ScheduleGroup resource.'''
+        return typing.cast(_ScheduleGroupReference_fd0e4c46, jsii.get(self, "scheduleGroupRef"))
+
+
+class ScheduleGroupGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_scheduler.ScheduleGroupGrants",
+):
+    '''Collection of grant methods for a IScheduleGroupRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_scheduler as scheduler
+        from aws_cdk.interfaces import aws_scheduler as interfaces_aws_scheduler
+        
+        # schedule_group_ref: interfaces_aws_scheduler.IScheduleGroupRef
+        
+        schedule_group_grants = scheduler.ScheduleGroupGrants.from_schedule_group(schedule_group_ref)
+    '''
+
+    @jsii.member(jsii_name="fromScheduleGroup")
+    @builtins.classmethod
+    def from_schedule_group(
+        cls,
+        resource: _IScheduleGroupRef_c08a74b7,
+    ) -> "ScheduleGroupGrants":
+        '''Creates grants for ScheduleGroupGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9cc7371d647bc50970e9ca9603093e34a7c37cafd5ab6a946be6e48216ee7bfd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("ScheduleGroupGrants", jsii.sinvoke(cls, "fromScheduleGroup", [resource]))
+
+    @jsii.member(jsii_name="deleteSchedules")
+    def delete_schedules(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant delete schedule permission for schedules in this group to the given principal.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b34ba3783d1c5bc9abcc9c2dec90f2f467794235c78c0de880c62c0019ea1d0)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "deleteSchedules", [grantee]))
+
+    @jsii.member(jsii_name="readSchedules")
+    def read_schedules(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant list and get schedule permissions for schedules in this group to the given principal.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__189ef665f3c945785f9299c0401cde139ddfdf0b17fddea567d78da09a800d71)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readSchedules", [grantee]))
+
+    @jsii.member(jsii_name="writeSchedules")
+    def write_schedules(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant create and update schedule permissions for schedules in this group to the given principal.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8df820fb6f1f94640f481f0c7ce3720efd7bdbacf688ca2fbe758e4f2e773ff2)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "writeSchedules", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IScheduleGroupRef_c08a74b7:
+        return typing.cast(_IScheduleGroupRef_c08a74b7, jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -6251,6 +6370,7 @@ __all__ = [
     "Schedule",
     "ScheduleExpression",
     "ScheduleGroup",
+    "ScheduleGroupGrants",
     "ScheduleGroupProps",
     "ScheduleProps",
     "ScheduleTargetConfig",
@@ -6270,11 +6390,17 @@ def _typecheckingstub__503b74ac170f15626de2456b6f8c40d2cdc1ab21574c821e051517099
     description: typing.Optional[builtins.str] = None,
     end_date: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     name: typing.Optional[builtins.str] = None,
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_date: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc94c2e4e6a33a3d1aa7e0663ea7d9c2d661091e25d237f9c9672f59868e9f13(
+    resource: _IScheduleRef_5286fcb6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6504,6 +6630,12 @@ def _typecheckingstub__55d5637c9b973d98ef3a23b13bf274e0a35bc07dfc27542f9b7185600
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3bf41141ca45d8816e093169bacba857d10c0fee6843a589cd33bcd31e8fea8c(
+    resource: _IScheduleGroupRef_c08a74b7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e179ed3a5ae801985e05b869adcf8daec39217aada45fa23844dd021dea92bda(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6544,7 +6676,7 @@ def _typecheckingstub__7259f3f17d67e55e8ad4459f637d0d8aa80d57d58cb928f6b0403a609
     description: typing.Optional[builtins.str] = None,
     end_date: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     name: typing.Optional[builtins.str] = None,
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_date: typing.Optional[builtins.str] = None,
@@ -6817,6 +6949,30 @@ def _typecheckingstub__ca970bf647095b0a6fd282ecce93e19b12761be780f7fac1db8cc3b6f
     statistic: typing.Optional[builtins.str] = None,
     unit: typing.Optional[_Unit_61bc6f70] = None,
     visible: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9cc7371d647bc50970e9ca9603093e34a7c37cafd5ab6a946be6e48216ee7bfd(
+    resource: _IScheduleGroupRef_c08a74b7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9b34ba3783d1c5bc9abcc9c2dec90f2f467794235c78c0de880c62c0019ea1d0(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__189ef665f3c945785f9299c0401cde139ddfdf0b17fddea567d78da09a800d71(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8df820fb6f1f94640f481f0c7ce3720efd7bdbacf688ca2fbe758e4f2e773ff2(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

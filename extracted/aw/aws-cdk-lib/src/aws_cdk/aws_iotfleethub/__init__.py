@@ -135,6 +135,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_acbdc0fc) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__daddc7bf9dbe9c634b123431ba51b43c538323ae78e1edf32af6df6d5684ecca)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="fromApplicationArn")
     @builtins.classmethod
     def from_application_arn(
@@ -484,6 +495,12 @@ def _typecheckingstub__b0980596631cbe713d270d139797274438ec1f918af98c8c9381e0d2b
     role_arn: builtins.str,
     application_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__daddc7bf9dbe9c634b123431ba51b43c538323ae78e1edf32af6df6d5684ecca(
+    resource: _IApplicationRef_acbdc0fc,
 ) -> None:
     """Type checking stubs"""
     pass

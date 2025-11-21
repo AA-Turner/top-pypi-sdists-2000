@@ -14,8 +14,8 @@ use clap::{Args, Parser, Subcommand};
 use uv_auth::Service;
 use uv_cache::CacheArgs;
 use uv_configuration::{
-    ExportFormat, IndexStrategy, KeyringProviderType, PackageNameSpecifier, ProjectBuildBackend,
-    TargetTriple, TrustedHost, TrustedPublishing, VersionControlSystem,
+    ExportFormat, IndexStrategy, KeyringProviderType, PackageNameSpecifier, PipCompileFormat,
+    ProjectBuildBackend, TargetTriple, TrustedHost, TrustedPublishing, VersionControlSystem,
 };
 use uv_distribution_types::{
     ConfigSettingEntry, ConfigSettingPackageEntry, Index, IndexUrl, Origin, PipExtraIndex,
@@ -1442,7 +1442,7 @@ pub struct PipCompileArgs {
     /// uv will infer the output format from the file extension of the output file, if
     /// provided. Otherwise, defaults to `requirements.txt`.
     #[arg(long, value_enum)]
-    pub format: Option<ExportFormat>,
+    pub format: Option<PipCompileFormat>,
 
     /// Include extras in the output file.
     ///
@@ -4543,9 +4543,10 @@ pub struct TreeArgs {
 
 #[derive(Args)]
 pub struct ExportArgs {
+    #[allow(clippy::doc_markdown)]
     /// The format to which `uv.lock` should be exported.
     ///
-    /// Supports both `requirements.txt` and `pylock.toml` (PEP 751) output formats.
+    /// Supports `requirements.txt`, `pylock.toml` (PEP 751) and CycloneDX v1.5 JSON output formats.
     ///
     /// uv will infer the output format from the file extension of the output file, if
     /// provided. Otherwise, defaults to `requirements.txt`.
@@ -7185,7 +7186,11 @@ pub struct WorkspaceDirArgs {
 }
 
 #[derive(Args, Debug)]
-pub struct WorkspaceListArgs;
+pub struct WorkspaceListArgs {
+    /// Show paths instead of names.
+    #[arg(long)]
+    pub paths: bool,
+}
 
 /// See [PEP 517](https://peps.python.org/pep-0517/) and
 /// [PEP 660](https://peps.python.org/pep-0660/) for specifications of the parameters.

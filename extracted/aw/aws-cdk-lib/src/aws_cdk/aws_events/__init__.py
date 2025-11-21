@@ -1090,6 +1090,20 @@ class CfnApiDestination(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApiDestination")
+    @builtins.classmethod
+    def arn_for_api_destination(
+        cls,
+        resource: _IApiDestinationRef_8cd0a954,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0cae8b33c8b49b1bead3c0542aea7eb4c47c3be3a5a1f83b4ec2b74afcf156e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApiDestination", [resource]))
+
     @jsii.member(jsii_name="fromApiDestinationArn")
     @builtins.classmethod
     def from_api_destination_arn(
@@ -1466,7 +1480,7 @@ class CfnArchive(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        source_arn: builtins.str,
+        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
         archive_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         event_pattern: typing.Any = None,
@@ -1481,7 +1495,7 @@ class CfnArchive(
         :param archive_name: The name for the archive to create.
         :param description: A description for the archive.
         :param event_pattern: An event pattern to use to filter events sent to the archive.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the archive. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the archive. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
         :param retention_days: The number of days to retain events for. Default value is 0. If set to 0, events are retained indefinitely
         '''
         if __debug__:
@@ -1498,6 +1512,17 @@ class CfnArchive(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForArchive")
+    @builtins.classmethod
+    def arn_for_archive(cls, resource: _IArchiveRef_e95a5adc) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__161b63ac9964567b1ba2caf77f9e06c3631ebb1a6e4a30c2cdf293b2361d5a3e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForArchive", [resource]))
 
     @jsii.member(jsii_name="fromArchiveArn")
     @builtins.classmethod
@@ -1646,7 +1671,7 @@ class CfnArchive(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyIdentifier")
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive.'''
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyIdentifier"))
 
     @kms_key_identifier.setter
@@ -1686,7 +1711,7 @@ class CfnArchiveProps:
     def __init__(
         self,
         *,
-        source_arn: builtins.str,
+        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
         archive_name: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         event_pattern: typing.Any = None,
@@ -1699,7 +1724,7 @@ class CfnArchiveProps:
         :param archive_name: The name for the archive to create.
         :param description: A description for the archive.
         :param event_pattern: An event pattern to use to filter events sent to the archive.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the archive. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the archive. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
         :param retention_days: The number of days to retain events for. Default value is 0. If set to 0, events are retained indefinitely
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-archive.html
@@ -1747,14 +1772,14 @@ class CfnArchiveProps:
             self._values["retention_days"] = retention_days
 
     @builtins.property
-    def source_arn(self) -> builtins.str:
+    def source_arn(self) -> typing.Union[builtins.str, _IEventBusRef_aa86e9b4]:
         '''The ARN of the event bus that sends events to the archive.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-archive.html#cfn-events-archive-sourcearn
         '''
         result = self._values.get("source_arn")
         assert result is not None, "Required property 'source_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IEventBusRef_aa86e9b4], result)
 
     @builtins.property
     def archive_name(self) -> typing.Optional[builtins.str]:
@@ -1785,7 +1810,7 @@ class CfnArchiveProps:
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive.
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this archive.
 
         The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN.
 
@@ -1958,7 +1983,7 @@ class CfnConnection(
         :param auth_parameters: The authorization parameters to use to authorize with the endpoint. You must include only authorization parameters for the ``AuthorizationType`` you specify.
         :param description: A description for the connection to create.
         :param invocation_connectivity_parameters: For connections to private APIs, the parameters to use for invoking the API. For more information, see `Connecting to private APIs <https://docs.aws.amazon.com/eventbridge/latest/userguide/connection-private.html>`_ in the **Amazon EventBridge User Guide** .
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the connection. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the connection. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param name: The name for the connection to create.
         '''
         if __debug__:
@@ -1975,6 +2000,17 @@ class CfnConnection(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConnection")
+    @builtins.classmethod
+    def arn_for_connection(cls, resource: _IConnectionRef_bea3332b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2ce066c4a5776b233d8f4b573d46a37a1d8d445cfddda110ef4bb5fcc33d95e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnection", [resource]))
 
     @jsii.member(jsii_name="fromConnectionArn")
     @builtins.classmethod
@@ -2187,7 +2223,7 @@ class CfnConnection(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyIdentifier")
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection.'''
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyIdentifier"))
 
     @kms_key_identifier.setter
@@ -3206,7 +3242,7 @@ class CfnConnectionProps:
         :param auth_parameters: The authorization parameters to use to authorize with the endpoint. You must include only authorization parameters for the ``AuthorizationType`` you specify.
         :param description: A description for the connection to create.
         :param invocation_connectivity_parameters: For connections to private APIs, the parameters to use for invoking the API. For more information, see `Connecting to private APIs <https://docs.aws.amazon.com/eventbridge/latest/userguide/connection-private.html>`_ in the **Amazon EventBridge User Guide** .
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the connection. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt the connection. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param name: The name for the connection to create.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-connection.html
@@ -3379,7 +3415,7 @@ class CfnConnectionProps:
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection.
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt this connection.
 
         The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN.
 
@@ -3495,6 +3531,17 @@ class CfnEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEndpoint")
+    @builtins.classmethod
+    def arn_for_endpoint(cls, resource: _IEndpointRef_c14d05f7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f8ddc899f477e5672e02d37bba97ef20e204d1e86007175c85b66e50ffa82e8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEndpoint", [resource]))
 
     @jsii.member(jsii_name="fromEndpointArn")
     @builtins.classmethod
@@ -4307,7 +4354,7 @@ class CfnEventBus(
         :param dead_letter_config: Configuration details of the Amazon SQS queue for EventBridge to use as a dead-letter queue (DLQ). For more information, see `Using dead-letter queues to process undelivered events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rule-event-delivery.html#eb-rule-dlq>`_ in the *EventBridge User Guide* .
         :param description: The event bus description.
         :param event_source_name: If you are creating a partner event bus, this specifies the partner event source that the new event bus will be matched with.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt events on the event bus. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: Schema discovery is not supported for event buses encrypted using a customer managed key. EventBridge returns an error if: - You call ``[CreateDiscoverer](https://docs.aws.amazon.com/eventbridge/latest/schema-reference/v1-discoverers.html#CreateDiscoverer)`` on an event bus set to use a customer managed key for encryption. - You call ``[UpdatedEventBus](https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_UpdatedEventBus.html)`` to set a customer managed key on an event bus with schema discovery enabled. To enable schema discovery on an event bus, choose to use an AWS owned key . For more information, see `Encrypting events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-encryption-event-bus-cmkey.html>`_ in the *Amazon EventBridge User Guide* . > If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt events on the event bus. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: Schema discovery is not supported for event buses encrypted using a customer managed key. EventBridge returns an error if: - You call ``[CreateDiscoverer](https://docs.aws.amazon.com/eventbridge/latest/schema-reference/v1-discoverers.html#CreateDiscoverer)`` on an event bus set to use a customer managed key for encryption. - You call ``[UpdatedEventBus](https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_UpdatedEventBus.html)`` to set a customer managed key on an event bus with schema discovery enabled. To enable schema discovery on an event bus, choose to use an AWS owned key . For more information, see `Encrypting events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-encryption-event-bus-cmkey.html>`_ in the *Amazon EventBridge User Guide* . > If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
         :param log_config: The logging configuration settings for the event bus. For more information, see `Configuring logs for event buses <https://docs.aws.amazon.com/eb-event-bus-logs.html>`_ in the *EventBridge User Guide* .
         :param policy: The permissions policy of the event bus, describing which other AWS accounts can write events to this event bus.
         :param tags: Tags to associate with the event bus.
@@ -4328,6 +4375,17 @@ class CfnEventBus(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEventBus")
+    @builtins.classmethod
+    def arn_for_event_bus(cls, resource: _IEventBusRef_aa86e9b4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f0fbdf4c12588b3a856d5449204a8cf2b449b8010d4f1e89075b9a88eba5ff8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventBus", [resource]))
 
     @jsii.member(jsii_name="fromEventBusArn")
     @builtins.classmethod
@@ -4504,7 +4562,7 @@ class CfnEventBus(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyIdentifier")
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus.'''
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyIdentifier"))
 
     @kms_key_identifier.setter
@@ -5207,7 +5265,7 @@ class CfnEventBusProps:
         :param dead_letter_config: Configuration details of the Amazon SQS queue for EventBridge to use as a dead-letter queue (DLQ). For more information, see `Using dead-letter queues to process undelivered events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-rule-event-delivery.html#eb-rule-dlq>`_ in the *EventBridge User Guide* .
         :param description: The event bus description.
         :param event_source_name: If you are creating a partner event bus, this specifies the partner event source that the new event bus will be matched with.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt events on the event bus. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: Schema discovery is not supported for event buses encrypted using a customer managed key. EventBridge returns an error if: - You call ``[CreateDiscoverer](https://docs.aws.amazon.com/eventbridge/latest/schema-reference/v1-discoverers.html#CreateDiscoverer)`` on an event bus set to use a customer managed key for encryption. - You call ``[UpdatedEventBus](https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_UpdatedEventBus.html)`` to set a customer managed key on an event bus with schema discovery enabled. To enable schema discovery on an event bus, choose to use an AWS owned key . For more information, see `Encrypting events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-encryption-event-bus-cmkey.html>`_ in the *Amazon EventBridge User Guide* . > If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. If you do not specify a customer managed key identifier, EventBridge uses an AWS owned key to encrypt events on the event bus. For more information, see `Identify and view keys <https://docs.aws.amazon.com/kms/latest/developerguide/viewing-keys.html>`_ in the *AWS Key Management Service Developer Guide* . .. epigraph:: Schema discovery is not supported for event buses encrypted using a customer managed key. EventBridge returns an error if: - You call ``[CreateDiscoverer](https://docs.aws.amazon.com/eventbridge/latest/schema-reference/v1-discoverers.html#CreateDiscoverer)`` on an event bus set to use a customer managed key for encryption. - You call ``[UpdatedEventBus](https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_UpdatedEventBus.html)`` to set a customer managed key on an event bus with schema discovery enabled. To enable schema discovery on an event bus, choose to use an AWS owned key . For more information, see `Encrypting events <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-encryption-event-bus-cmkey.html>`_ in the *Amazon EventBridge User Guide* . > If you have specified that EventBridge use a customer managed key for encrypting the source event bus, we strongly recommend you also specify a customer managed key for any archives for the event bus as well. For more information, see `Encrypting archives <https://docs.aws.amazon.com/eventbridge/latest/userguide/encryption-archives.html>`_ in the *Amazon EventBridge User Guide* .
         :param log_config: The logging configuration settings for the event bus. For more information, see `Configuring logs for event buses <https://docs.aws.amazon.com/eb-event-bus-logs.html>`_ in the *EventBridge User Guide* .
         :param policy: The permissions policy of the event bus, describing which other AWS accounts can write events to this event bus.
         :param tags: Tags to associate with the event bus.
@@ -5319,7 +5377,7 @@ class CfnEventBusProps:
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus.
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt events on this event bus.
 
         The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN.
 
@@ -5565,10 +5623,10 @@ class CfnRule(
         id: builtins.str,
         *,
         description: typing.Optional[builtins.str] = None,
-        event_bus_name: typing.Optional[builtins.str] = None,
+        event_bus_name: typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]] = None,
         event_pattern: typing.Any = None,
         name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         schedule_expression: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5586,7 +5644,7 @@ class CfnRule(
         :param schedule_expression: The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)". For more information, see `Creating an Amazon EventBridge rule that runs on a schedule <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html>`_ .
         :param state: The state of the rule. Valid values include: - ``DISABLED`` : The rule is disabled. EventBridge does not match any events against the rule. - ``ENABLED`` : The rule is enabled. EventBridge matches events against the rule, *except* for AWS management events delivered through CloudTrail. - ``ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS`` : The rule is enabled for all events, including AWS management events delivered through CloudTrail. Management events provide visibility into management operations that are performed on resources in your AWS account. These are also known as control plane operations. For more information, see `Logging management events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html#logging-management-events>`_ in the *CloudTrail User Guide* , and `Filtering management events from AWS services <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html#eb-service-event-cloudtrail>`_ in the **Amazon EventBridge User Guide** . This value is only valid for rules on the `default <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is-how-it-works-concepts.html#eb-bus-concepts-buses>`_ event bus or `custom event buses <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-event-bus.html>`_ . It does not apply to `partner event buses <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-saas.html>`_ .
         :param tags: Any tags assigned to the event rule.
-        :param targets: Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule. Targets are the resources that are invoked when a rule is triggered. The maximum number of entries per request is 10. .. epigraph:: Each rule can have up to five (5) targets associated with it at one time. For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** . Creating rules with built-in targets is supported only in the AWS Management Console . The built-in targets are: - ``Amazon EBS CreateSnapshot API call`` - ``Amazon EC2 RebootInstances API call`` - ``Amazon EC2 StopInstances API call`` - ``Amazon EC2 TerminateInstances API call`` For some target types, ``PutTargets`` provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the ``KinesisParameters`` argument. To invoke a command on multiple EC2 instances with one rule, you can use the ``RunCommandParameters`` field. To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions: - For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. - For EC2 instances, Kinesis Data Streams, AWS Step Functions state machines and API Gateway APIs, EventBridge relies on IAM roles that you specify in the ``RoleARN`` argument in ``PutTargets`` . For more information, see `Authentication and Access Control <https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html>`_ in the **Amazon EventBridge User Guide** . If another AWS account is in the same region and has granted you permission (using ``PutPermission`` ), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the ``Arn`` value when you run ``PutTargets`` . If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see `Amazon EventBridge Pricing <https://docs.aws.amazon.com/eventbridge/pricing/>`_ . .. epigraph:: ``Input`` , ``InputPath`` , and ``InputTransformer`` are not available with ``PutTarget`` if the target is an event bus of a different AWS account. If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure. For more information, see `Sending and Receiving Events Between AWS Accounts <https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html>`_ in the *Amazon EventBridge User Guide* . .. epigraph:: If you have an IAM role on a cross-account event bus target, a ``PutTargets`` call without a role on the same target (same ``Id`` and ``Arn`` ) will not remove the role. For more information about enabling cross-account events, see `PutPermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutPermission.html>`_ . *Input* , *InputPath* , and *InputTransformer* are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event: - If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target). - If *Input* is specified in the form of valid JSON, then the matched event is overridden with this constant. - If *InputPath* is specified in the form of JSONPath (for example, ``$.detail`` ), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed). - If *InputTransformer* is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target. When you specify ``InputPath`` or ``InputTransformer`` , you must use JSON dot notation, not bracket notation. When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect. This action can partially fail if too many requests are made at the same time. If that happens, ``FailedEntryCount`` is non-zero in the response and each entry in ``FailedEntries`` provides the ID of the failed target and the error code.
+        :param targets: Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule. Targets are the resources that are invoked when a rule is triggered. The maximum number of entries per request is 10. .. epigraph:: Each rule can have up to five (5) targets associated with it at one time. For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** . Creating rules with built-in targets is supported only in the the console . The built-in targets are: - ``Amazon EBS CreateSnapshot API call`` - ``Amazon EC2 RebootInstances API call`` - ``Amazon EC2 StopInstances API call`` - ``Amazon EC2 TerminateInstances API call`` For some target types, ``PutTargets`` provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the ``KinesisParameters`` argument. To invoke a command on multiple EC2 instances with one rule, you can use the ``RunCommandParameters`` field. To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions: - For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. - For EC2 instances, Kinesis Data Streams, AWS Step Functions state machines and API Gateway APIs, EventBridge relies on IAM roles that you specify in the ``RoleARN`` argument in ``PutTargets`` . For more information, see `Authentication and Access Control <https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html>`_ in the **Amazon EventBridge User Guide** . If another AWS account is in the same region and has granted you permission (using ``PutPermission`` ), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the ``Arn`` value when you run ``PutTargets`` . If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see `Amazon EventBridge Pricing <https://docs.aws.amazon.com/eventbridge/pricing/>`_ . .. epigraph:: ``Input`` , ``InputPath`` , and ``InputTransformer`` are not available with ``PutTarget`` if the target is an event bus of a different AWS account. If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure. For more information, see `Sending and Receiving Events Between AWS Accounts <https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html>`_ in the *Amazon EventBridge User Guide* . .. epigraph:: If you have an IAM role on a cross-account event bus target, a ``PutTargets`` call without a role on the same target (same ``Id`` and ``Arn`` ) will not remove the role. For more information about enabling cross-account events, see `PutPermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutPermission.html>`_ . *Input* , *InputPath* , and *InputTransformer* are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event: - If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target). - If *Input* is specified in the form of valid JSON, then the matched event is overridden with this constant. - If *InputPath* is specified in the form of JSONPath (for example, ``$.detail`` ), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed). - If *InputTransformer* is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target. When you specify ``InputPath`` or ``InputTransformer`` , you must use JSON dot notation, not bracket notation. When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect. This action can partially fail if too many requests are made at the same time. If that happens, ``FailedEntryCount`` is non-zero in the response and each entry in ``FailedEntries`` provides the ID of the failed target and the error code.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e06314755e55e41a2976ff974daa36bbbb473330c92c9fef111b716f2fe49cce)
@@ -5605,6 +5663,17 @@ class CfnRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRule")
+    @builtins.classmethod
+    def arn_for_rule(cls, resource: _IRuleRef_4038a611) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__47ddfdaa73e35b2bbb6599aa98e79e69ad6f7c74c287b09d3525d778ee3c984a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8274,10 +8343,10 @@ class CfnRuleProps:
         self,
         *,
         description: typing.Optional[builtins.str] = None,
-        event_bus_name: typing.Optional[builtins.str] = None,
+        event_bus_name: typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]] = None,
         event_pattern: typing.Any = None,
         name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         schedule_expression: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8293,7 +8362,7 @@ class CfnRuleProps:
         :param schedule_expression: The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)". For more information, see `Creating an Amazon EventBridge rule that runs on a schedule <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-rule-schedule.html>`_ .
         :param state: The state of the rule. Valid values include: - ``DISABLED`` : The rule is disabled. EventBridge does not match any events against the rule. - ``ENABLED`` : The rule is enabled. EventBridge matches events against the rule, *except* for AWS management events delivered through CloudTrail. - ``ENABLED_WITH_ALL_CLOUDTRAIL_MANAGEMENT_EVENTS`` : The rule is enabled for all events, including AWS management events delivered through CloudTrail. Management events provide visibility into management operations that are performed on resources in your AWS account. These are also known as control plane operations. For more information, see `Logging management events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-events-with-cloudtrail.html#logging-management-events>`_ in the *CloudTrail User Guide* , and `Filtering management events from AWS services <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-service-event.html#eb-service-event-cloudtrail>`_ in the **Amazon EventBridge User Guide** . This value is only valid for rules on the `default <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is-how-it-works-concepts.html#eb-bus-concepts-buses>`_ event bus or `custom event buses <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-event-bus.html>`_ . It does not apply to `partner event buses <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-saas.html>`_ .
         :param tags: Any tags assigned to the event rule.
-        :param targets: Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule. Targets are the resources that are invoked when a rule is triggered. The maximum number of entries per request is 10. .. epigraph:: Each rule can have up to five (5) targets associated with it at one time. For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** . Creating rules with built-in targets is supported only in the AWS Management Console . The built-in targets are: - ``Amazon EBS CreateSnapshot API call`` - ``Amazon EC2 RebootInstances API call`` - ``Amazon EC2 StopInstances API call`` - ``Amazon EC2 TerminateInstances API call`` For some target types, ``PutTargets`` provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the ``KinesisParameters`` argument. To invoke a command on multiple EC2 instances with one rule, you can use the ``RunCommandParameters`` field. To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions: - For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. - For EC2 instances, Kinesis Data Streams, AWS Step Functions state machines and API Gateway APIs, EventBridge relies on IAM roles that you specify in the ``RoleARN`` argument in ``PutTargets`` . For more information, see `Authentication and Access Control <https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html>`_ in the **Amazon EventBridge User Guide** . If another AWS account is in the same region and has granted you permission (using ``PutPermission`` ), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the ``Arn`` value when you run ``PutTargets`` . If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see `Amazon EventBridge Pricing <https://docs.aws.amazon.com/eventbridge/pricing/>`_ . .. epigraph:: ``Input`` , ``InputPath`` , and ``InputTransformer`` are not available with ``PutTarget`` if the target is an event bus of a different AWS account. If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure. For more information, see `Sending and Receiving Events Between AWS Accounts <https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html>`_ in the *Amazon EventBridge User Guide* . .. epigraph:: If you have an IAM role on a cross-account event bus target, a ``PutTargets`` call without a role on the same target (same ``Id`` and ``Arn`` ) will not remove the role. For more information about enabling cross-account events, see `PutPermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutPermission.html>`_ . *Input* , *InputPath* , and *InputTransformer* are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event: - If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target). - If *Input* is specified in the form of valid JSON, then the matched event is overridden with this constant. - If *InputPath* is specified in the form of JSONPath (for example, ``$.detail`` ), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed). - If *InputTransformer* is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target. When you specify ``InputPath`` or ``InputTransformer`` , you must use JSON dot notation, not bracket notation. When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect. This action can partially fail if too many requests are made at the same time. If that happens, ``FailedEntryCount`` is non-zero in the response and each entry in ``FailedEntries`` provides the ID of the failed target and the error code.
+        :param targets: Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule. Targets are the resources that are invoked when a rule is triggered. The maximum number of entries per request is 10. .. epigraph:: Each rule can have up to five (5) targets associated with it at one time. For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** . Creating rules with built-in targets is supported only in the the console . The built-in targets are: - ``Amazon EBS CreateSnapshot API call`` - ``Amazon EC2 RebootInstances API call`` - ``Amazon EC2 StopInstances API call`` - ``Amazon EC2 TerminateInstances API call`` For some target types, ``PutTargets`` provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the ``KinesisParameters`` argument. To invoke a command on multiple EC2 instances with one rule, you can use the ``RunCommandParameters`` field. To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions: - For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. - For EC2 instances, Kinesis Data Streams, AWS Step Functions state machines and API Gateway APIs, EventBridge relies on IAM roles that you specify in the ``RoleARN`` argument in ``PutTargets`` . For more information, see `Authentication and Access Control <https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html>`_ in the **Amazon EventBridge User Guide** . If another AWS account is in the same region and has granted you permission (using ``PutPermission`` ), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the ``Arn`` value when you run ``PutTargets`` . If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see `Amazon EventBridge Pricing <https://docs.aws.amazon.com/eventbridge/pricing/>`_ . .. epigraph:: ``Input`` , ``InputPath`` , and ``InputTransformer`` are not available with ``PutTarget`` if the target is an event bus of a different AWS account. If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure. For more information, see `Sending and Receiving Events Between AWS Accounts <https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html>`_ in the *Amazon EventBridge User Guide* . .. epigraph:: If you have an IAM role on a cross-account event bus target, a ``PutTargets`` call without a role on the same target (same ``Id`` and ``Arn`` ) will not remove the role. For more information about enabling cross-account events, see `PutPermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutPermission.html>`_ . *Input* , *InputPath* , and *InputTransformer* are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event: - If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target). - If *Input* is specified in the form of valid JSON, then the matched event is overridden with this constant. - If *InputPath* is specified in the form of JSONPath (for example, ``$.detail`` ), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed). - If *InputTransformer* is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target. When you specify ``InputPath`` or ``InputTransformer`` , you must use JSON dot notation, not bracket notation. When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect. This action can partially fail if too many requests are made at the same time. If that happens, ``FailedEntryCount`` is non-zero in the response and each entry in ``FailedEntries`` provides the ID of the failed target and the error code.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-rule.html
         :exampleMetadata: fixture=_generated
@@ -8479,7 +8548,9 @@ class CfnRuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def event_bus_name(self) -> typing.Optional[builtins.str]:
+    def event_bus_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]]:
         '''The name or ARN of the event bus associated with the rule.
 
         If you omit this, the default event bus is used.
@@ -8487,7 +8558,7 @@ class CfnRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-rule.html#cfn-events-rule-eventbusname
         '''
         result = self._values.get("event_bus_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]], result)
 
     @builtins.property
     def event_pattern(self) -> typing.Any:
@@ -8510,7 +8581,9 @@ class CfnRuleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the role that is used for target invocation.
 
         If you're setting an event bus in another account as the target and that account granted permission to your account through an organization instead of directly by the account ID, you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure, instead of here in this parameter.
@@ -8518,7 +8591,7 @@ class CfnRuleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-rule.html#cfn-events-rule-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def schedule_expression(self) -> typing.Optional[builtins.str]:
@@ -8574,7 +8647,7 @@ class CfnRuleProps:
 
         For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** .
 
-        Creating rules with built-in targets is supported only in the AWS Management Console . The built-in targets are:
+        Creating rules with built-in targets is supported only in the the console . The built-in targets are:
 
         - ``Amazon EBS CreateSnapshot API call``
         - ``Amazon EC2 RebootInstances API call``
@@ -9105,6 +9178,55 @@ class EventBusAttributes:
         return "EventBusAttributes(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class EventBusGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_events.EventBusGrants",
+):
+    '''Collection of grant methods for a IEventBusRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_events as events
+        from aws_cdk.interfaces import aws_events as interfaces_aws_events
+        
+        # event_bus_ref: interfaces_aws_events.IEventBusRef
+        
+        event_bus_grants = events.EventBusGrants.from_event_bus(event_bus_ref)
+    '''
+
+    @jsii.member(jsii_name="fromEventBus")
+    @builtins.classmethod
+    def from_event_bus(cls, resource: _IEventBusRef_aa86e9b4) -> "EventBusGrants":
+        '''Creates grants for EventBusGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ba7a45aeb8041abf98c164c1fefb79c4cfd2e21b154605ca852ffc2f1c0510d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("EventBusGrants", jsii.sinvoke(cls, "fromEventBus", [resource]))
+
+    @jsii.member(jsii_name="allPutEvents")
+    def all_put_events(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM Principal to send custom events to EventBridge so that they can be matched to rules.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d6d6e7cddbeeb94453138dae1073cb20bfce4e82a1d2aa1aec209ce5b28aead)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "allPutEvents", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IEventBusRef_aa86e9b4:
+        return typing.cast(_IEventBusRef_aa86e9b4, jsii.get(self, "resource"))
 
 
 class EventBusPolicy(
@@ -10133,7 +10255,11 @@ typing.cast(typing.Any, IConnection).__jsii_proxy_class__ = lambda : _IConnectio
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_events.IEventBus")
-class IEventBus(_IResource_c80c4260, typing_extensions.Protocol):
+class IEventBus(
+    _IResource_c80c4260,
+    _IEventBusRef_aa86e9b4,
+    typing_extensions.Protocol,
+):
     '''Interface which all EventBus based classes MUST implement.'''
 
     @builtins.property
@@ -10216,6 +10342,7 @@ class IEventBus(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IEventBusProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IEventBusRef_aa86e9b4), # type: ignore[misc]
 ):
     '''Interface which all EventBus based classes MUST implement.'''
 
@@ -13055,6 +13182,18 @@ class EventBus(
         return typing.cast(builtins.str, jsii.get(self, "eventBusPolicy"))
 
     @builtins.property
+    @jsii.member(jsii_name="eventBusRef")
+    def event_bus_ref(self) -> _EventBusReference_f9e830e1:
+        '''A reference to a EventBus resource.'''
+        return typing.cast(_EventBusReference_f9e830e1, jsii.get(self, "eventBusRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> EventBusGrants:
+        '''Collection of grant methods for an EventBus.'''
+        return typing.cast(EventBusGrants, jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="eventSourceName")
     def event_source_name(self) -> typing.Optional[builtins.str]:
         '''The name of the partner event source.'''
@@ -13089,6 +13228,7 @@ __all__ = [
     "CronOptions",
     "EventBus",
     "EventBusAttributes",
+    "EventBusGrants",
     "EventBusPolicy",
     "EventBusPolicyProps",
     "EventBusProps",
@@ -13192,6 +13332,12 @@ def _typecheckingstub__0c7f09c3557e2395656d23b74c8de1fbe1e4a3b537284c9d270edc631
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a0cae8b33c8b49b1bead3c0542aea7eb4c47c3be3a5a1f83b4ec2b74afcf156e(
+    resource: _IApiDestinationRef_8cd0a954,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e4d067d14eb4986a791825f5574a2a1b7996e52c30d1c10ce8e7b59e60ddb769(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -13272,12 +13418,18 @@ def _typecheckingstub__a963410c1802040879d7bcae9506f4438510f71eb6934c222d9c998db
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    source_arn: builtins.str,
+    source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
     archive_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     event_pattern: typing.Any = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
     retention_days: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__161b63ac9964567b1ba2caf77f9e06c3631ebb1a6e4a30c2cdf293b2361d5a3e(
+    resource: _IArchiveRef_e95a5adc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13348,7 +13500,7 @@ def _typecheckingstub__229cf18aa238d335d766c6c1400f98e797e1cf2caf404b1270a8fb743
 
 def _typecheckingstub__f8d605e2ff54dddadf4166fbd47f7e65ae554a5e5f40fa2fffd0d8af83ab1a27(
     *,
-    source_arn: builtins.str,
+    source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
     archive_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     event_pattern: typing.Any = None,
@@ -13368,6 +13520,12 @@ def _typecheckingstub__65bde9b35de094b905dd335652d04503af85c50ac027a006a1d7ec926
     invocation_connectivity_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.InvocationConnectivityParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b2ce066c4a5776b233d8f4b573d46a37a1d8d445cfddda110ef4bb5fcc33d95e(
+    resource: _IConnectionRef_bea3332b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13547,6 +13705,12 @@ def _typecheckingstub__66aefb2196270463c6a9f2eea0dcb5bb280d90c63f36870b21785e675
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2f8ddc899f477e5672e02d37bba97ef20e204d1e86007175c85b66e50ffa82e8(
+    resource: _IEndpointRef_c14d05f7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b8df0737b10ec98bf62c1be2c67715f159dc221d2935abd8e8ae6669ca458d7f(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -13678,6 +13842,12 @@ def _typecheckingstub__5766595a149723459145d9f55c6afa7ed3017d49f4af7cec85e0fffe2
     log_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventBus.LogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1f0fbdf4c12588b3a856d5449204a8cf2b449b8010d4f1e89075b9a88eba5ff8(
+    resource: _IEventBusRef_aa86e9b4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13875,14 +14045,20 @@ def _typecheckingstub__e06314755e55e41a2976ff974daa36bbbb473330c92c9fef111b716f2
     id: builtins.str,
     *,
     description: typing.Optional[builtins.str] = None,
-    event_bus_name: typing.Optional[builtins.str] = None,
+    event_bus_name: typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]] = None,
     event_pattern: typing.Any = None,
     name: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     schedule_expression: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.TargetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__47ddfdaa73e35b2bbb6599aa98e79e69ad6f7c74c287b09d3525d778ee3c984a(
+    resource: _IRuleRef_4038a611,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14168,10 +14344,10 @@ def _typecheckingstub__0bb173839da3c22730cab96567bb586361722029ca0fab74f2c0ebd9e
 def _typecheckingstub__1ba0cfcfcd9cab75c7bd4b5ffa2348687b001ab869ed65280a51c734b6b8cebf(
     *,
     description: typing.Optional[builtins.str] = None,
-    event_bus_name: typing.Optional[builtins.str] = None,
+    event_bus_name: typing.Optional[typing.Union[builtins.str, _IEventBusRef_aa86e9b4]] = None,
     event_pattern: typing.Any = None,
     name: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     schedule_expression: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -14219,6 +14395,18 @@ def _typecheckingstub__c3085d54e4409b80cc204254043c3355f775f156584926a7ed5a79033
     event_bus_name: builtins.str,
     event_bus_policy: builtins.str,
     event_source_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ba7a45aeb8041abf98c164c1fefb79c4cfd2e21b154605ca852ffc2f1c0510d(
+    resource: _IEventBusRef_aa86e9b4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d6d6e7cddbeeb94453138dae1073cb20bfce4e82a1d2aa1aec209ce5b28aead(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

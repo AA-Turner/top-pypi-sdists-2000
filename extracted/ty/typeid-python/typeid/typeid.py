@@ -1,3 +1,4 @@
+import uuid
 import warnings
 from typing import Optional
 
@@ -24,7 +25,7 @@ class TypeID:
         return cls(suffix=suffix, prefix=prefix)
 
     @classmethod
-    def from_uuid(cls, suffix: uuid6.UUID, prefix: Optional[str] = None):
+    def from_uuid(cls, suffix: uuid.UUID, prefix: Optional[str] = None):
         suffix_str = _convert_uuid_to_b32(suffix)
         return cls(suffix=suffix_str, prefix=prefix)
 
@@ -48,7 +49,7 @@ class TypeID:
         return value
 
     def __repr__(self):
-        return "%s(%r)" % (self.__class__.__name__, str(self))
+        return "%s.from_string(%r)" % (self.__class__.__name__, str(self))
 
     def __eq__(self, value: object) -> bool:
         if not isinstance(value, TypeID):
@@ -74,7 +75,7 @@ def from_string(string: str) -> TypeID:
     return TypeID.from_string(string=string)
 
 
-def from_uuid(suffix: uuid6.UUID, prefix: Optional[str] = None) -> TypeID:
+def from_uuid(suffix: uuid.UUID, prefix: Optional[str] = None) -> TypeID:
     warnings.warn("Consider TypeID.from_uuid instead.", DeprecationWarning)
     return TypeID.from_uuid(suffix=suffix, prefix=prefix)
 
@@ -96,7 +97,7 @@ def get_prefix_and_suffix(string: str) -> tuple:
     return prefix, suffix
 
 
-def _convert_uuid_to_b32(uuid_instance: uuid6.UUID) -> str:
+def _convert_uuid_to_b32(uuid_instance: uuid.UUID) -> str:
     return base32.encode(list(uuid_instance.bytes))
 
 

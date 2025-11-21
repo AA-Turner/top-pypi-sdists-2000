@@ -66,6 +66,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_events import IEventBusRef as _IEventBusRef_aa86e9b4
 from ..interfaces.aws_eventschemas import (
     DiscovererReference as _DiscovererReference_52fd091c,
     IDiscovererRef as _IDiscovererRef_40eee464,
@@ -116,7 +117,7 @@ class CfnDiscoverer(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        source_arn: builtins.str,
+        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
         cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDiscoverer.TagsEntryProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -142,6 +143,17 @@ class CfnDiscoverer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDiscoverer")
+    @builtins.classmethod
+    def arn_for_discoverer(cls, resource: _IDiscovererRef_40eee464) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__06f90c61e9a3d12f265f81eab38d425b597d2d7e28fb0546743dcddeb172a812)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDiscoverer", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -368,7 +380,7 @@ class CfnDiscovererProps:
     def __init__(
         self,
         *,
-        source_arn: builtins.str,
+        source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
         cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[CfnDiscoverer.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -418,14 +430,14 @@ class CfnDiscovererProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def source_arn(self) -> builtins.str:
+    def source_arn(self) -> typing.Union[builtins.str, _IEventBusRef_aa86e9b4]:
         '''The ARN of the event bus.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eventschemas-discoverer.html#cfn-eventschemas-discoverer-sourcearn
         '''
         result = self._values.get("source_arn")
         assert result is not None, "Required property 'source_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IEventBusRef_aa86e9b4], result)
 
     @builtins.property
     def cross_account(
@@ -526,6 +538,17 @@ class CfnRegistry(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRegistry")
+    @builtins.classmethod
+    def arn_for_registry(cls, resource: _IRegistryRef_007bdb40) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2d7095b99f4de7eada4f34fcee3ae438279272d4bfaa438e9a7de1eb31c1f3de)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRegistry", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1106,6 +1129,17 @@ class CfnSchema(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSchema")
+    @builtins.classmethod
+    def arn_for_schema(cls, resource: _ISchemaRef_85adc95a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03ff91ebdcd99691b2c94a9fa64d1c257518ad1332a8aefc4e2039634e66daa1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchema", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1509,10 +1543,16 @@ def _typecheckingstub__c6de86d5a427a463ae500f08a01bbbbb1a7e5c02fcfcd3f1f30636758
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    source_arn: builtins.str,
+    source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
     cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDiscoverer.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__06f90c61e9a3d12f265f81eab38d425b597d2d7e28fb0546743dcddeb172a812(
+    resource: _IDiscovererRef_40eee464,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1563,7 +1603,7 @@ def _typecheckingstub__8474d9c87ec86399a0d85d3b5386ddc8baf06ba1964693f15122f050a
 
 def _typecheckingstub__add35f90727b55854c3eefb472afcafa74b28a09aa410e1c3aa8a3128fa89a68(
     *,
-    source_arn: builtins.str,
+    source_arn: typing.Union[builtins.str, _IEventBusRef_aa86e9b4],
     cross_account: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDiscoverer.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1578,6 +1618,12 @@ def _typecheckingstub__afa8b8787bb752aaa6ea6c7d930a60af4b640432a5163a02767bd01c6
     description: typing.Optional[builtins.str] = None,
     registry_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnRegistry.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2d7095b99f4de7eada4f34fcee3ae438279272d4bfaa438e9a7de1eb31c1f3de(
+    resource: _IRegistryRef_007bdb40,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1689,6 +1735,12 @@ def _typecheckingstub__932c87e95b88ceabe68e304bed1c0517a1d9d901885f0e20ecd498449
     description: typing.Optional[builtins.str] = None,
     schema_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnSchema.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03ff91ebdcd99691b2c94a9fa64d1c257518ad1332a8aefc4e2039634e66daa1(
+    resource: _ISchemaRef_85adc95a,
 ) -> None:
     """Type checking stubs"""
     pass

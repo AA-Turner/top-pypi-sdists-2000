@@ -18,7 +18,6 @@ import modal.parallel_map
 import modal.proxy
 import modal.retries
 import modal.schedule
-import modal.scheduler_placement
 import modal.secret
 import modal.volume
 import modal_proto.api_pb2
@@ -97,7 +96,8 @@ class Function(
         batch_max_size: typing.Optional[int] = None,
         batch_wait_ms: typing.Optional[int] = None,
         cloud: typing.Optional[str] = None,
-        scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
+        region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
         is_builder_function: bool = False,
         is_auto_snapshot: bool = False,
         enable_memory_snapshot: bool = False,

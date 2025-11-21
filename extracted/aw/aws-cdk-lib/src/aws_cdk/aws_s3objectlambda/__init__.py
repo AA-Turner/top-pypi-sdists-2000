@@ -140,6 +140,17 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessPoint")
+    @builtins.classmethod
+    def arn_for_access_point(cls, resource: _IAccessPointRef_22b02bce) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__06444ab8b2f9ba6206f38f54678eaf6f0787ca9d63e3291eeef56b3796acf45d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPoint", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1279,6 +1290,12 @@ def _typecheckingstub__fc24858ef1979ca1cb8fba3d4a06956342322b232c5594f16f11ee6c3
     *,
     object_lambda_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.ObjectLambdaConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__06444ab8b2f9ba6206f38f54678eaf6f0787ca9d63e3291eeef56b3796acf45d(
+    resource: _IAccessPointRef_22b02bce,
 ) -> None:
     """Type checking stubs"""
     pass

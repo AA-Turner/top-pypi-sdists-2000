@@ -64,6 +64,7 @@ from .. import (
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_lookoutmetrics import (
     AlertReference as _AlertReference_73a426bb,
     AnomalyDetectorReference as _AnomalyDetectorReference_c01b78d5,
@@ -150,6 +151,17 @@ class CfnAlert(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAlert")
+    @builtins.classmethod
+    def arn_for_alert(cls, resource: _IAlertRef_f1434fff) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__067a4d083eaa74e381d588052acf304dc111409daa9c5a0d6ced2f7337dba686)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlert", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -748,7 +760,7 @@ class CfnAnomalyDetector(
         metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalyDetector.MetricSetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         anomaly_detector_description: typing.Optional[builtins.str] = None,
         anomaly_detector_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     ) -> None:
         '''Create a new ``AWS::LookoutMetrics::AnomalyDetector``.
 
@@ -773,6 +785,20 @@ class CfnAnomalyDetector(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAnomalyDetector")
+    @builtins.classmethod
+    def arn_for_anomaly_detector(
+        cls,
+        resource: _IAnomalyDetectorRef_2d878a8f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c8cf636c8f7cf7279c49b9fa3feb0fda966a92c233e7106c81669b28ba865267)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnomalyDetector", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2541,7 +2567,7 @@ class CfnAnomalyDetectorProps:
         metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricSetProperty, typing.Dict[builtins.str, typing.Any]]]]],
         anomaly_detector_description: typing.Optional[builtins.str] = None,
         anomaly_detector_name: typing.Optional[builtins.str] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAnomalyDetector``.
 
@@ -2709,13 +2735,15 @@ class CfnAnomalyDetectorProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+    def kms_key_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ARN of the KMS key to use to encrypt your data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutmetrics-anomalydetector.html#cfn-lookoutmetrics-anomalydetector-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2747,6 +2775,12 @@ def _typecheckingstub__f8728605cf8a8c3531f6dae116746c94e17fc40f4b10454ed68253f75
     anomaly_detector_arn: builtins.str,
     alert_description: typing.Optional[builtins.str] = None,
     alert_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__067a4d083eaa74e381d588052acf304dc111409daa9c5a0d6ced2f7337dba686(
+    resource: _IAlertRef_f1434fff,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2836,7 +2870,13 @@ def _typecheckingstub__31ab81393e1b85b97eacf8fc50ccdd65726ebe4cd344f89434267d135
     metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricSetProperty, typing.Dict[builtins.str, typing.Any]]]]],
     anomaly_detector_description: typing.Optional[builtins.str] = None,
     anomaly_detector_name: typing.Optional[builtins.str] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c8cf636c8f7cf7279c49b9fa3feb0fda966a92c233e7106c81669b28ba865267(
+    resource: _IAnomalyDetectorRef_2d878a8f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3028,7 +3068,7 @@ def _typecheckingstub__ac2e9b61e4663a0d7be16c47f2f04bda869f46de5537627485274ac9d
     metric_set_list: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MetricSetProperty, typing.Dict[builtins.str, typing.Any]]]]],
     anomaly_detector_description: typing.Optional[builtins.str] = None,
     anomaly_detector_name: typing.Optional[builtins.str] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

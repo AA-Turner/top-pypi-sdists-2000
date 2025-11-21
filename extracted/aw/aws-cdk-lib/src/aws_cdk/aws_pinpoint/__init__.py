@@ -2307,6 +2307,17 @@ class CfnApp(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApp")
+    @builtins.classmethod
+    def arn_for_app(cls, resource: _IAppRef_0c16f66a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d90c1319fa8bccd3d2111729642c787d821a42c51163a0ceab22650ba2a91048)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApp", [resource]))
+
     @jsii.member(jsii_name="fromAppArn")
     @builtins.classmethod
     def from_app_arn(
@@ -3968,6 +3979,17 @@ class CfnCampaign(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCampaign")
+    @builtins.classmethod
+    def arn_for_campaign(cls, resource: _ICampaignRef_f0c17498) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f04f082c4ad5a85f20c7ee88200d243dd97d8a1b3e683a830d363bf17f6baf8e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCampaign", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8851,6 +8873,20 @@ class CfnEmailTemplate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEmailTemplate")
+    @builtins.classmethod
+    def arn_for_email_template(
+        cls,
+        resource: _IEmailTemplateRef_6a5076b2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67b67deabf7e38a2002af5b0e1677a22e17df9def86d2c14acdf7b511b4ec94d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEmailTemplate", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9866,6 +9902,20 @@ class CfnInAppTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInAppTemplate")
+    @builtins.classmethod
+    def arn_for_in_app_template(
+        cls,
+        resource: _IInAppTemplateRef_3b6f9dee,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45e2ed2aa05e380272e94157cea06c152d3941ec19952e231d93c9ccb129cff3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInAppTemplate", [resource]))
 
     @jsii.member(jsii_name="fromInAppTemplateArn")
     @builtins.classmethod
@@ -11122,6 +11172,20 @@ class CfnPushTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPushTemplate")
+    @builtins.classmethod
+    def arn_for_push_template(
+        cls,
+        resource: _IPushTemplateRef_7e742797,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__44034889e66af9d5cc718129cedcfd3318873647dbe7db8ae10c657546e52012)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPushTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12516,6 +12580,17 @@ class CfnSegment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSegment")
+    @builtins.classmethod
+    def arn_for_segment(cls, resource: _ISegmentRef_9a56cdde) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__46e4da6b2642225259dba4b39af8880f216b749dab5b19eb1157e6a54bb095e7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSegment", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14230,6 +14305,17 @@ class CfnSmsTemplate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSmsTemplate")
+    @builtins.classmethod
+    def arn_for_sms_template(cls, resource: _ISmsTemplateRef_657f9e4f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__901d80c5b9a60d5e3f26208abf9e57a6bc9c77ad31aae86bca3a275fe76ed9a2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSmsTemplate", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -15209,6 +15295,12 @@ def _typecheckingstub__6b0f8bd367843c451288aaaaf44baa44f09abffc0daba385520088889
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d90c1319fa8bccd3d2111729642c787d821a42c51163a0ceab22650ba2a91048(
+    resource: _IAppRef_0c16f66a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70f0e32e7cd279e91fc578d15e5825d6dcb28ef1b582e7668a98f90634869397(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -15430,6 +15522,12 @@ def _typecheckingstub__37daefd9aecddac1551b6da8a771d74af1f7a13678f1d1fb2d351fab8
     template_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.TemplateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     treatment_description: typing.Optional[builtins.str] = None,
     treatment_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f04f082c4ad5a85f20c7ee88200d243dd97d8a1b3e683a830d363bf17f6baf8e(
+    resource: _ICampaignRef_f0c17498,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15927,6 +16025,12 @@ def _typecheckingstub__de92e890e6311a7e5df00104dcb543dcbde46783a8f7ec2de256f236f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__67b67deabf7e38a2002af5b0e1677a22e17df9def86d2c14acdf7b511b4ec94d(
+    resource: _IEmailTemplateRef_6a5076b2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f42a278c52013133399f446e5f556044c118bbcf83e230b9f2be36ee65826b57(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16124,6 +16228,12 @@ def _typecheckingstub__e512a1e228b31487f3066dd3e4275e9158997062fd71387d46ccec376
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__45e2ed2aa05e380272e94157cea06c152d3941ec19952e231d93c9ccb129cff3(
+    resource: _IInAppTemplateRef_3b6f9dee,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7898da1bc1151a8ef759559d1854b73041f5d2282451650929579ba04d1f3295(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -16273,6 +16383,12 @@ def _typecheckingstub__0c19924c3c4d187e6a4e597c337133470b5e94ec01287814b990418d1
     gcm: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPushTemplate.AndroidPushNotificationTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Any = None,
     template_description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__44034889e66af9d5cc718129cedcfd3318873647dbe7db8ae10c657546e52012(
+    resource: _IPushTemplateRef_7e742797,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16466,6 +16582,12 @@ def _typecheckingstub__f709a034a24c1bdbcf2c3ad69a8ec499d4a31c52228cfccf041a018ef
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__46e4da6b2642225259dba4b39af8880f216b749dab5b19eb1157e6a54bb095e7(
+    resource: _ISegmentRef_9a56cdde,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ab85436978fff9eb6b667bf369ce182d580e19493d318100b008eac7b205fad6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16633,6 +16755,12 @@ def _typecheckingstub__1536fb6b841b2ae28085a22bbac5257230add94dcddd63c390ad3d694
     default_substitutions: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
     template_description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__901d80c5b9a60d5e3f26208abf9e57a6bc9c77ad31aae86bca3a275fe76ed9a2(
+    resource: _ISmsTemplateRef_657f9e4f,
 ) -> None:
     """Type checking stubs"""
     pass

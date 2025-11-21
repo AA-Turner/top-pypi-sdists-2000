@@ -166,9 +166,9 @@ class CfnInvestigationGroup(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: Specify either the name or the ARN of the investigation group that you want to view. This is used to set the name of the investigation group.
-        :param chatbot_notification_channels: Use this property to integrate CloudWatch investigations with chat applications. This property is an array. For the first string, specify the ARN of an Amazon SNS topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
+        :param chatbot_notification_channels: Use this property to integrate CloudWatch investigations with chat applications. This property is an array. For the first string, specify the ARN of an Amazon topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
         :param cross_account_configurations: List of ``sourceRoleArn`` values that have been configured for cross-account access.
-        :param encryption_config: Specifies the customer managed AWS KMS key that the investigation group uses to encrypt data, if there is one. If not, the investigation group uses an AWS key to encrypt the data.
+        :param encryption_config: Specifies the customer managed AWS key that the investigation group uses to encrypt data, if there is one. If not, the investigation group uses an AWS key to encrypt the data.
         :param investigation_group_policy: Returns the JSON of the IAM resource policy associated with the specified investigation group in a string. For example, ``{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"aiops.alarms.cloudwatch.amazonaws.com\\"},\\"Action\\":[\\"aiops:CreateInvestigation\\",\\"aiops:CreateInvestigationEvent\\"],\\"Resource\\":\\"*\\",\\"Condition\\":{\\"StringEquals\\":{\\"aws:SourceAccount\\":\\"111122223333\\"},\\"ArnLike\\":{\\"aws:SourceArn\\":\\"arn:aws:cloudwatch:us-east-1:111122223333:alarm:*\\"}}}]}`` .
         :param is_cloud_trail_event_history_enabled: Specify ``true`` to enable CloudWatch investigations to have access to change events that are recorded by CloudTrail. The default is ``true`` .
         :param retention_in_days: Specifies how long that investigation data is kept.
@@ -194,6 +194,20 @@ class CfnInvestigationGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInvestigationGroup")
+    @builtins.classmethod
+    def arn_for_investigation_group(
+        cls,
+        resource: _IInvestigationGroupRef_717b970b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ade5fcbfafccd785c8a0f241106950fd30c55bf04674a7c23fa210cfbc9e86ce)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInvestigationGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -341,7 +355,7 @@ class CfnInvestigationGroup(
     def encryption_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.EncryptionConfigMapProperty"]]:
-        '''Specifies the customer managed AWS KMS key that the investigation group uses to encrypt data, if there is one.'''
+        '''Specifies the customer managed AWS  key that the investigation group uses to encrypt data, if there is one.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInvestigationGroup.EncryptionConfigMapProperty"]], jsii.get(self, "encryptionConfig"))
 
     @encryption_config.setter
@@ -460,7 +474,7 @@ class CfnInvestigationGroup(
             This structure is a string array. For the first string, specify the ARN of an Amazon SNS topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
 
             :param chat_configuration_arns: Returns the Amazon Resource Name (ARN) of any third-party chat integrations configured for the account.
-            :param sns_topic_arn: Returns the ARN of an Amazon SNS topic used for third-party chat integrations.
+            :param sns_topic_arn: Returns the ARN of an Amazon topic used for third-party chat integrations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aiops-investigationgroup-chatbotnotificationchannel.html
             :exampleMetadata: fixture=_generated
@@ -497,7 +511,7 @@ class CfnInvestigationGroup(
 
         @builtins.property
         def sns_topic_arn(self) -> typing.Optional[builtins.str]:
-            '''Returns the ARN of an Amazon SNS topic used for third-party chat integrations.
+            '''Returns the ARN of an Amazon  topic used for third-party chat integrations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-aiops-investigationgroup-chatbotnotificationchannel.html#cfn-aiops-investigationgroup-chatbotnotificationchannel-snstopicarn
             '''
@@ -585,7 +599,7 @@ class CfnInvestigationGroup(
             encryption_configuration_type: typing.Optional[builtins.str] = None,
             kms_key_id: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Use this structure if you want to use a customer managed AWS KMS key to encrypt your investigation data.
+            '''Use this structure if you want to use a customer managed AWS  key to encrypt your investigation data.
 
             If you omit this parameter, CloudWatch investigations will use an AWS key to encrypt the data. For more information, see `Encryption of investigation data <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Investigations-Security.html#Investigations-KMS>`_ .
 
@@ -680,9 +694,9 @@ class CfnInvestigationGroupProps:
         '''Properties for defining a ``CfnInvestigationGroup``.
 
         :param name: Specify either the name or the ARN of the investigation group that you want to view. This is used to set the name of the investigation group.
-        :param chatbot_notification_channels: Use this property to integrate CloudWatch investigations with chat applications. This property is an array. For the first string, specify the ARN of an Amazon SNS topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
+        :param chatbot_notification_channels: Use this property to integrate CloudWatch investigations with chat applications. This property is an array. For the first string, specify the ARN of an Amazon topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
         :param cross_account_configurations: List of ``sourceRoleArn`` values that have been configured for cross-account access.
-        :param encryption_config: Specifies the customer managed AWS KMS key that the investigation group uses to encrypt data, if there is one. If not, the investigation group uses an AWS key to encrypt the data.
+        :param encryption_config: Specifies the customer managed AWS key that the investigation group uses to encrypt data, if there is one. If not, the investigation group uses an AWS key to encrypt the data.
         :param investigation_group_policy: Returns the JSON of the IAM resource policy associated with the specified investigation group in a string. For example, ``{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":{\\"Service\\":\\"aiops.alarms.cloudwatch.amazonaws.com\\"},\\"Action\\":[\\"aiops:CreateInvestigation\\",\\"aiops:CreateInvestigationEvent\\"],\\"Resource\\":\\"*\\",\\"Condition\\":{\\"StringEquals\\":{\\"aws:SourceAccount\\":\\"111122223333\\"},\\"ArnLike\\":{\\"aws:SourceArn\\":\\"arn:aws:cloudwatch:us-east-1:111122223333:alarm:*\\"}}}]}`` .
         :param is_cloud_trail_event_history_enabled: Specify ``true`` to enable CloudWatch investigations to have access to change events that are recorded by CloudTrail. The default is ``true`` .
         :param retention_in_days: Specifies how long that investigation data is kept.
@@ -777,7 +791,7 @@ class CfnInvestigationGroupProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.ChatbotNotificationChannelProperty]]]]:
         '''Use this property to integrate CloudWatch investigations with chat applications.
 
-        This property is an array. For the first string, specify the ARN of an Amazon SNS topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
+        This property is an array. For the first string, specify the ARN of an Amazon  topic. For the array of strings, specify the ARNs of one or more chat applications configurations that you want to associate with that topic. For more information about these configuration ARNs, see `Getting started with Amazon Q in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/getting-started.html>`_ and `Resource type defined by AWS Chatbot <https://docs.aws.amazon.com/service-authorization/latest/reference/list_awschatbot.html#awschatbot-resources-for-iam-policies>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-aiops-investigationgroup.html#cfn-aiops-investigationgroup-chatbotnotificationchannels
         '''
@@ -799,7 +813,7 @@ class CfnInvestigationGroupProps:
     def encryption_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInvestigationGroup.EncryptionConfigMapProperty]]:
-        '''Specifies the customer managed AWS KMS key that the investigation group uses to encrypt data, if there is one.
+        '''Specifies the customer managed AWS  key that the investigation group uses to encrypt data, if there is one.
 
         If not, the investigation group uses an AWS key to encrypt the data.
 
@@ -903,6 +917,12 @@ def _typecheckingstub__f390e65acdf4efe0289b1b8e5f17c031f7a88a13963effed34b7d4944
     role_arn: typing.Optional[builtins.str] = None,
     tag_key_boundaries: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ade5fcbfafccd785c8a0f241106950fd30c55bf04674a7c23fa210cfbc9e86ce(
+    resource: _IInvestigationGroupRef_717b970b,
 ) -> None:
     """Type checking stubs"""
     pass

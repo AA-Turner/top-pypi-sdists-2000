@@ -136,6 +136,17 @@ class CfnAccessor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessor")
+    @builtins.classmethod
+    def arn_for_accessor(cls, resource: _IAccessorRef_6ea8c0bb) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ff210b7b7b1954aea9777a2d2cea89336754de2d57302b375d70e48d74103a6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessor", [resource]))
+
     @jsii.member(jsii_name="fromAccessorArn")
     @builtins.classmethod
     def from_accessor_arn(
@@ -516,6 +527,17 @@ class CfnMember(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMember")
+    @builtins.classmethod
+    def arn_for_member(cls, resource: _IMemberRef_eb79b2aa) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55c5824bd099d17d4dee4b049ddbeb9bba1e8a220dbc9af5fc352e15fcad154d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMember", [resource]))
 
     @jsii.member(jsii_name="fromMemberId")
     @builtins.classmethod
@@ -1531,6 +1553,17 @@ class CfnNode(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForNode")
+    @builtins.classmethod
+    def arn_for_node(cls, resource: _INodeRef_c51264f7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__64fdff5699b4b9b21a27180b7c1b5f528d57ad325e56e62f6eb3d97855c2bb9e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNode", [resource]))
+
     @jsii.member(jsii_name="fromNodeArn")
     @builtins.classmethod
     def from_node_arn(
@@ -1899,6 +1932,12 @@ def _typecheckingstub__d7fae27137bea89baceda53b3dc015adf08084fe0dc7addf5f6ceece1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0ff210b7b7b1954aea9777a2d2cea89336754de2d57302b375d70e48d74103a6(
+    resource: _IAccessorRef_6ea8c0bb,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__18014559eefd9327a42c84c5955cef0a421d0c4fa24df7d1efd5782023c267c1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1962,6 +2001,12 @@ def _typecheckingstub__f440aedf38983e9bd6c40a21512108e2511416c6c14702ff310a996c2
     invitation_id: typing.Optional[builtins.str] = None,
     network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMember.NetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     network_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__55c5824bd099d17d4dee4b049ddbeb9bba1e8a220dbc9af5fc352e15fcad154d(
+    resource: _IMemberRef_eb79b2aa,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2093,6 +2138,12 @@ def _typecheckingstub__48dbd6ef5c42666453e84796d418e81144be49dedf064e93bf40d44fb
     network_id: builtins.str,
     node_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnNode.NodeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     member_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__64fdff5699b4b9b21a27180b7c1b5f528d57ad325e56e62f6eb3d97855c2bb9e(
+    resource: _INodeRef_c51264f7,
 ) -> None:
     """Type checking stubs"""
     pass

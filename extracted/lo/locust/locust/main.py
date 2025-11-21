@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import locust
+from locust.opentelemetry import setup_opentelemetry
 
 import atexit
 import errno
@@ -201,10 +202,16 @@ def main():
     if not options.skip_log_setup:
         setup_logging(options.loglevel, options.logfile)
 
+    start_message = f"Starting Locust {version}{locust_exporter_version}"
+
+    if options.otel:
+        setup_opentelemetry()
+        start_message += ", OpenTelemetry enabled"
+
     children = []
     logger = logging.getLogger(__name__)
 
-    logger.info(f"Starting Locust {version}{locust_exporter_version}")
+    logger.info(start_message)
 
     if options.processes:
         if os.name == "nt":

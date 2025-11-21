@@ -1204,6 +1204,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_768db227) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22807b42e65fd4bdb3d46dbfc5db1a3c8da710fa907f23ec80b54268ba24093c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="fromApplicationId")
     @builtins.classmethod
     def from_application_id(
@@ -1476,13 +1487,13 @@ class CfnConfigurationProfile(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
         location_uri: builtins.str,
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        retrieval_role_arn: typing.Optional[builtins.str] = None,
+        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
         validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationProfile.ValidatorsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1565,7 +1576,7 @@ class CfnConfigurationProfile(
     def attr_kms_key_arn(self) -> builtins.str:
         '''The Amazon Resource Name of the AWS Key Management Service key to encrypt new configuration data versions in the AWS AppConfig hosted configuration store.
 
-        This attribute is only used for ``hosted`` configuration types. To encrypt data managed in other configuration stores, see the documentation for how to specify an AWS KMS key for that particular service.
+        This attribute is only used for ``hosted`` configuration types. To encrypt data managed in other configuration stores, see the documentation for how to specify an AWS  key for that particular service.
 
         :cloudformationAttribute: KmsKeyArn
         '''
@@ -1819,13 +1830,13 @@ class CfnConfigurationProfileProps:
     def __init__(
         self,
         *,
-        application_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
         location_uri: builtins.str,
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
-        retrieval_role_arn: typing.Optional[builtins.str] = None,
+        retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
         validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationProfile.ValidatorsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1906,14 +1917,14 @@ class CfnConfigurationProfileProps:
             self._values["validators"] = validators
 
     @builtins.property
-    def application_id(self) -> builtins.str:
+    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
 
     @builtins.property
     def location_uri(self) -> builtins.str:
@@ -1978,7 +1989,9 @@ class CfnConfigurationProfileProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def retrieval_role_arn(self) -> typing.Optional[builtins.str]:
+    def retrieval_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The ARN of an IAM role with permission to access the configuration at the specified ``LocationUri`` .
 
         .. epigraph::
@@ -1988,7 +2001,7 @@ class CfnConfigurationProfileProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-configurationprofile.html#cfn-appconfig-configurationprofile-retrievalrolearn
         '''
         result = self._values.get("retrieval_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2710,6 +2723,20 @@ class CfnDeploymentStrategy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDeploymentStrategy")
+    @builtins.classmethod
+    def arn_for_deployment_strategy(
+        cls,
+        resource: _IDeploymentStrategyRef_2cd4ca44,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21be8a8f09be1869a15eb825954b62834d6feb1b2cecc262d6d3b94617aef5d1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeploymentStrategy", [resource]))
+
     @jsii.member(jsii_name="fromDeploymentStrategyId")
     @builtins.classmethod
     def from_deployment_strategy_id(
@@ -3140,7 +3167,7 @@ class CfnEnvironment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -3469,7 +3496,7 @@ class CfnEnvironmentProps:
     def __init__(
         self,
         *,
-        application_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
         name: builtins.str,
         deletion_protection_check: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -3533,14 +3560,14 @@ class CfnEnvironmentProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def application_id(self) -> builtins.str:
+    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-environment.html#cfn-appconfig-environment-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -3702,6 +3729,17 @@ class CfnExtension(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForExtension")
+    @builtins.classmethod
+    def arn_for_extension(cls, resource: _IExtensionRef_abba29c3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aae3a7d3b2764d3144aefee1f56dbba5d9e752d94e2f69f1f1eeb1243095f037)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExtension", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4137,6 +4175,20 @@ class CfnExtensionAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForExtensionAssociation")
+    @builtins.classmethod
+    def arn_for_extension_association(
+        cls,
+        resource: _IExtensionAssociationRef_1b672c9b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4b4e735607454b0644a5b7e0c1628a1eb9fe974f05d4ba90dda0d1e8520d71a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExtensionAssociation", [resource]))
 
     @jsii.member(jsii_name="fromExtensionAssociationArn")
     @builtins.classmethod
@@ -4677,8 +4729,8 @@ class CfnHostedConfigurationVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_id: builtins.str,
-        configuration_profile_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
         content: builtins.str,
         content_type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -4874,8 +4926,8 @@ class CfnHostedConfigurationVersionProps:
     def __init__(
         self,
         *,
-        application_id: builtins.str,
-        configuration_profile_id: builtins.str,
+        application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+        configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
         content: builtins.str,
         content_type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -4936,24 +4988,26 @@ class CfnHostedConfigurationVersionProps:
             self._values["version_label"] = version_label
 
     @builtins.property
-    def application_id(self) -> builtins.str:
+    def application_id(self) -> typing.Union[builtins.str, _IApplicationRef_768db227]:
         '''The application ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-hostedconfigurationversion.html#cfn-appconfig-hostedconfigurationversion-applicationid
         '''
         result = self._values.get("application_id")
         assert result is not None, "Required property 'application_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_768db227], result)
 
     @builtins.property
-    def configuration_profile_id(self) -> builtins.str:
+    def configuration_profile_id(
+        self,
+    ) -> typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9]:
         '''The configuration profile ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appconfig-hostedconfigurationversion.html#cfn-appconfig-hostedconfigurationversion-configurationprofileid
         '''
         result = self._values.get("configuration_profile_id")
         assert result is not None, "Required property 'configuration_profile_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9], result)
 
     @builtins.property
     def content(self) -> builtins.str:
@@ -13956,6 +14010,12 @@ def _typecheckingstub__c5cb8c402a0d1a836162f596142de6ed2a1f2a0635a355ae334b92eb1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__22807b42e65fd4bdb3d46dbfc5db1a3c8da710fa907f23ec80b54268ba24093c(
+    resource: _IApplicationRef_768db227,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__afd571466571231348a78cb931c25e5d1b3c70347a376b9d64e551c1d6126654(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -14007,13 +14067,13 @@ def _typecheckingstub__332c05b5fb120e53a9fcdde311f2bc23aaec927aa0e70b013e72cc2ce
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
     location_uri: builtins.str,
     name: builtins.str,
     deletion_protection_check: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
-    retrieval_role_arn: typing.Optional[builtins.str] = None,
+    retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
     validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationProfile.ValidatorsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14103,13 +14163,13 @@ def _typecheckingstub__e3e2223bb16cf91626b0a44db9aa8ec9190717961f143668d3ff6961e
 
 def _typecheckingstub__37522e89a156f185f3387aea77d01f8010adde3d2bcfeb76862a70fd9b7e08bc(
     *,
-    application_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
     location_uri: builtins.str,
     name: builtins.str,
     deletion_protection_check: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
-    retrieval_role_arn: typing.Optional[builtins.str] = None,
+    retrieval_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
     validators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationProfile.ValidatorsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14240,6 +14300,12 @@ def _typecheckingstub__bb88c221f102c1b57ba4f19db7656eb36ff011a70e3643e39d048c313
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21be8a8f09be1869a15eb825954b62834d6feb1b2cecc262d6d3b94617aef5d1(
+    resource: _IDeploymentStrategyRef_2cd4ca44,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a211633629f45a21de52e2d3b8c73b520eee7fc38d9ec5fafe4d90b277a310a5(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -14326,7 +14392,7 @@ def _typecheckingstub__f357d5cab83004926812cf34c99a144f4f5d23ca26e4a818590a95062
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
     name: builtins.str,
     deletion_protection_check: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -14402,7 +14468,7 @@ def _typecheckingstub__43d91f41d1c9d1acd545d0999d47687e0e5b7be03ec08728e3c5aa73f
 
 def _typecheckingstub__a6c9856f1a5a9dfaed9be42ec835bb6eac4d4882999b993cbd02b3b11bbfe1ca(
     *,
-    application_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
     name: builtins.str,
     deletion_protection_check: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -14422,6 +14488,12 @@ def _typecheckingstub__d3442a7f4d7a9c3256544c6b0526d285ef0cf3970ec1f140b344aed1a
     latest_version_number: typing.Optional[jsii.Number] = None,
     parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExtension.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aae3a7d3b2764d3144aefee1f56dbba5d9e752d94e2f69f1f1eeb1243095f037(
+    resource: _IExtensionRef_abba29c3,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14502,6 +14574,12 @@ def _typecheckingstub__b2e5a069dff64a93330fdfc39cee819956ed46cafa89dc1aee558b0c2
     parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     resource_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4b4e735607454b0644a5b7e0c1628a1eb9fe974f05d4ba90dda0d1e8520d71a(
+    resource: _IExtensionAssociationRef_1b672c9b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14591,8 +14669,8 @@ def _typecheckingstub__9f2dc9ae7157f5223a79cf8ea4a7355ec285dbe0fda348428c6e0e6cd
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_id: builtins.str,
-    configuration_profile_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+    configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
     content: builtins.str,
     content_type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -14658,8 +14736,8 @@ def _typecheckingstub__384487882c55b43a28f4a742590e489e653df19c023a94fbfacb65cdf
 
 def _typecheckingstub__d2e12025d283b0b516fc7a346d00f20eff94d8259ba3fc82c8cb240aeb05264e(
     *,
-    application_id: builtins.str,
-    configuration_profile_id: builtins.str,
+    application_id: typing.Union[builtins.str, _IApplicationRef_768db227],
+    configuration_profile_id: typing.Union[builtins.str, _IConfigurationProfileRef_3e332cf9],
     content: builtins.str,
     content_type: builtins.str,
     description: typing.Optional[builtins.str] = None,

@@ -185,7 +185,7 @@ class CfnComponentVersion(
         :param id: Construct identifier for this resource (unique in its scope).
         :param inline_recipe: The recipe to use to create the component. The recipe defines the component's metadata, parameters, dependencies, lifecycle, artifacts, and platform compatibility. You must specify either ``InlineRecipe`` or ``LambdaFunction`` .
         :param lambda_function: The parameters to create a component from a Lambda function. You must specify either ``InlineRecipe`` or ``LambdaFunction`` .
-        :param tags: Application-specific metadata to attach to the component version. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
+        :param tags: Application-specific metadata to attach to the component version. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f5d46224f527e073fe7f6fbe54ccaca3f0045fcc0ade3462681ae8b0575c59e0)
@@ -196,6 +196,20 @@ class CfnComponentVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForComponentVersion")
+    @builtins.classmethod
+    def arn_for_component_version(
+        cls,
+        resource: _IComponentVersionRef_0bf9ff8c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a1d635cca1071594073026b07b7c8160d1f7d954abea7929a8c9f7a135393fd2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComponentVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1449,7 +1463,7 @@ class CfnComponentVersionProps:
 
         :param inline_recipe: The recipe to use to create the component. The recipe defines the component's metadata, parameters, dependencies, lifecycle, artifacts, and platform compatibility. You must specify either ``InlineRecipe`` or ``LambdaFunction`` .
         :param lambda_function: The parameters to create a component from a Lambda function. You must specify either ``InlineRecipe`` or ``LambdaFunction`` .
-        :param tags: Application-specific metadata to attach to the component version. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
+        :param tags: Application-specific metadata to attach to the component version. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-componentversion.html
         :exampleMetadata: fixture=_generated
@@ -1564,7 +1578,7 @@ class CfnComponentVersionProps:
 
         You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* .
 
-        This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates::
+        This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates::
 
            "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value"
            }
@@ -1704,7 +1718,7 @@ class CfnDeployment(
         :param deployment_policies: The deployment policies for the deployment. These policies define how the deployment updates components and handles failure.
         :param iot_job_configuration: The job configuration for the deployment configuration. The job configuration specifies the rollout, timeout, and stop configurations for the deployment configuration.
         :param parent_target_arn: The parent deployment's `ARN <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ for a subdeployment.
-        :param tags: Application-specific metadata to attach to the deployment. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
+        :param tags: Application-specific metadata to attach to the deployment. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e0099ed4b9647f1e31fee9e80f3453ed07e5b916846f269d15cb7aa59c5b0f80)
@@ -1721,6 +1735,17 @@ class CfnDeployment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDeployment")
+    @builtins.classmethod
+    def arn_for_deployment(cls, resource: _IDeploymentRef_59e837ab) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1572fd5fedc24178f9cfd46325747881043040f5ee5d2786c15b9b3104786e00)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeployment", [resource]))
 
     @jsii.member(jsii_name="fromDeploymentId")
     @builtins.classmethod
@@ -3086,7 +3111,7 @@ class CfnDeploymentProps:
         :param deployment_policies: The deployment policies for the deployment. These policies define how the deployment updates components and handles failure.
         :param iot_job_configuration: The job configuration for the deployment configuration. The job configuration specifies the rollout, timeout, and stop configurations for the deployment configuration.
         :param parent_target_arn: The parent deployment's `ARN <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ for a subdeployment.
-        :param tags: Application-specific metadata to attach to the deployment. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
+        :param tags: Application-specific metadata to attach to the deployment. You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* . This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates:: "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value" }
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-greengrassv2-deployment.html
         :exampleMetadata: fixture=_generated
@@ -3256,7 +3281,7 @@ class CfnDeploymentProps:
 
         You can use tags in IAM policies to control access to AWS IoT Greengrass resources. You can also use tags to categorize your resources. For more information, see `Tag your AWS IoT Greengrass Version 2 resources <https://docs.aws.amazon.com/greengrass/v2/developerguide/tag-resources.html>`_ in the *AWS IoT Greengrass V2 Developer Guide* .
 
-        This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in AWS CloudFormation templates::
+        This ``Json`` property type is processed as a map of key-value pairs. It uses the following format, which is different from most ``Tags`` implementations in CloudFormation templates::
 
            "Tags": { "KeyName0": "value", "KeyName1": "value", "KeyName2": "value"
            }
@@ -3294,6 +3319,12 @@ def _typecheckingstub__f5d46224f527e073fe7f6fbe54ccaca3f0045fcc0ade3462681ae8b05
     inline_recipe: typing.Optional[builtins.str] = None,
     lambda_function: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentVersion.LambdaFunctionRecipeSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a1d635cca1071594073026b07b7c8160d1f7d954abea7929a8c9f7a135393fd2(
+    resource: _IComponentVersionRef_0bf9ff8c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3438,6 +3469,12 @@ def _typecheckingstub__e0099ed4b9647f1e31fee9e80f3453ed07e5b916846f269d15cb7aa59
     iot_job_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentIoTJobConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     parent_target_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1572fd5fedc24178f9cfd46325747881043040f5ee5d2786c15b9b3104786e00(
+    resource: _IDeploymentRef_59e837ab,
 ) -> None:
     """Type checking stubs"""
     pass

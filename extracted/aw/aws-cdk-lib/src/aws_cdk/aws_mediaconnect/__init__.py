@@ -86,8 +86,12 @@ from ..interfaces.aws_mediaconnect import (
     IFlowSourceRef as _IFlowSourceRef_b94a8321,
     IFlowVpcInterfaceRef as _IFlowVpcInterfaceRef_d5bcec46,
     IGatewayRef as _IGatewayRef_4783a0c6,
+    IRouterInputRef as _IRouterInputRef_6915df50,
     IRouterNetworkInterfaceRef as _IRouterNetworkInterfaceRef_05bd061c,
+    IRouterOutputRef as _IRouterOutputRef_afa317cd,
+    RouterInputReference as _RouterInputReference_b71c2141,
     RouterNetworkInterfaceReference as _RouterNetworkInterfaceReference_fdc8b08c,
+    RouterOutputReference as _RouterOutputReference_12c4ea61,
 )
 
 
@@ -208,6 +212,17 @@ class CfnBridge(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBridge")
+    @builtins.classmethod
+    def arn_for_bridge(cls, resource: _IBridgeRef_2f2ab872) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61c94f5a708599ab90700dbc916f984911d2356933cecac7cb8883e4716ef8e3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBridge", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2792,6 +2807,17 @@ class CfnFlow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFlow")
+    @builtins.classmethod
+    def arn_for_flow(cls, resource: _IFlowRef_c5e8f48d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c54b3021fd089afdcef76ee7ca3c18274773c4b4384f46a6700f34b567e51aa4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFlow", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6507,7 +6533,6 @@ class CfnFlowOutput(
         
         cfn_flow_output = mediaconnect.CfnFlowOutput(self, "MyCfnFlowOutput",
             flow_arn="flowArn",
-            protocol="protocol",
         
             # the properties below are optional
             cidr_allow_list=["cidrAllowList"],
@@ -6547,6 +6572,7 @@ class CfnFlowOutput(
             ndi_speed_hq_quality=123,
             output_status="outputStatus",
             port=123,
+            protocol="protocol",
             remote_id="remoteId",
             router_integration_state="routerIntegrationState",
             router_integration_transit_encryption=mediaconnect.CfnFlowOutput.FlowTransitEncryptionProperty(
@@ -6575,7 +6601,6 @@ class CfnFlowOutput(
         id: builtins.str,
         *,
         flow_arn: builtins.str,
-        protocol: builtins.str,
         cidr_allow_list: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         destination: typing.Optional[builtins.str] = None,
@@ -6588,6 +6613,7 @@ class CfnFlowOutput(
         ndi_speed_hq_quality: typing.Optional[jsii.Number] = None,
         output_status: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional[builtins.str] = None,
         remote_id: typing.Optional[builtins.str] = None,
         router_integration_state: typing.Optional[builtins.str] = None,
         router_integration_transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlowOutput.FlowTransitEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6600,7 +6626,6 @@ class CfnFlowOutput(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param flow_arn: The Amazon Resource Name (ARN) of the flow this output is attached to.
-        :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param cidr_allow_list: The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.
         :param description: A description of the output. This description appears only on the MediaConnect console and will not be seen by the end user.
         :param destination: The IP address where you want to send the output.
@@ -6613,9 +6638,10 @@ class CfnFlowOutput(
         :param ndi_speed_hq_quality: A quality setting for the NDI Speed HQ encoder.
         :param output_status: An indication of whether the output should transmit data or not.
         :param port: The port to use when content is distributed to this output.
+        :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param remote_id: The remote ID for the Zixi-pull stream.
         :param router_integration_state: 
-        :param router_integration_transit_encryption: The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+        :param router_integration_transit_encryption: Information about the encryption of the flow.
         :param smoothing_latency: The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
         :param stream_id: The stream ID that you want to use for this transport. This parameter applies only to Zixi and SRT caller-based streams.
         :param vpc_interface_attachment: The name of the VPC interface attachment to use for this output.
@@ -6626,7 +6652,6 @@ class CfnFlowOutput(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnFlowOutputProps(
             flow_arn=flow_arn,
-            protocol=protocol,
             cidr_allow_list=cidr_allow_list,
             description=description,
             destination=destination,
@@ -6639,6 +6664,7 @@ class CfnFlowOutput(
             ndi_speed_hq_quality=ndi_speed_hq_quality,
             output_status=output_status,
             port=port,
+            protocol=protocol,
             remote_id=remote_id,
             router_integration_state=router_integration_state,
             router_integration_transit_encryption=router_integration_transit_encryption,
@@ -6711,19 +6737,6 @@ class CfnFlowOutput(
             type_hints = typing.get_type_hints(_typecheckingstub__15b58a8b918485e48f2bd2cbf5a806a141e4d5ae34f2cf830391b88420333717)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "flowArn", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
-    @jsii.member(jsii_name="protocol")
-    def protocol(self) -> builtins.str:
-        '''The protocol to use for the output.'''
-        return typing.cast(builtins.str, jsii.get(self, "protocol"))
-
-    @protocol.setter
-    def protocol(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9a09f7a6d8ae99d18b6e3bb11284fa5b865ca2146c5efb07536e593ee9a05bc7)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "protocol", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="cidrAllowList")
@@ -6895,6 +6908,19 @@ class CfnFlowOutput(
         jsii.set(self, "port", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="protocol")
+    def protocol(self) -> typing.Optional[builtins.str]:
+        '''The protocol to use for the output.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "protocol"))
+
+    @protocol.setter
+    def protocol(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9a09f7a6d8ae99d18b6e3bb11284fa5b865ca2146c5efb07536e593ee9a05bc7)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "protocol", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="remoteId")
     def remote_id(self) -> typing.Optional[builtins.str]:
         '''The remote ID for the Zixi-pull stream.'''
@@ -6924,7 +6950,7 @@ class CfnFlowOutput(
     def router_integration_transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowOutput.FlowTransitEncryptionProperty"]]:
-        '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.'''
+        '''Information about the encryption of the flow.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowOutput.FlowTransitEncryptionProperty"]], jsii.get(self, "routerIntegrationTransitEncryption"))
 
     @router_integration_transit_encryption.setter
@@ -7740,7 +7766,6 @@ class CfnFlowOutput(
     jsii_struct_bases=[],
     name_mapping={
         "flow_arn": "flowArn",
-        "protocol": "protocol",
         "cidr_allow_list": "cidrAllowList",
         "description": "description",
         "destination": "destination",
@@ -7753,6 +7778,7 @@ class CfnFlowOutput(
         "ndi_speed_hq_quality": "ndiSpeedHqQuality",
         "output_status": "outputStatus",
         "port": "port",
+        "protocol": "protocol",
         "remote_id": "remoteId",
         "router_integration_state": "routerIntegrationState",
         "router_integration_transit_encryption": "routerIntegrationTransitEncryption",
@@ -7766,7 +7792,6 @@ class CfnFlowOutputProps:
         self,
         *,
         flow_arn: builtins.str,
-        protocol: builtins.str,
         cidr_allow_list: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
         destination: typing.Optional[builtins.str] = None,
@@ -7779,6 +7804,7 @@ class CfnFlowOutputProps:
         ndi_speed_hq_quality: typing.Optional[jsii.Number] = None,
         output_status: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
+        protocol: typing.Optional[builtins.str] = None,
         remote_id: typing.Optional[builtins.str] = None,
         router_integration_state: typing.Optional[builtins.str] = None,
         router_integration_transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowOutput.FlowTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7789,7 +7815,6 @@ class CfnFlowOutputProps:
         '''Properties for defining a ``CfnFlowOutput``.
 
         :param flow_arn: The Amazon Resource Name (ARN) of the flow this output is attached to.
-        :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param cidr_allow_list: The range of IP addresses that should be allowed to initiate output requests to this flow. These IP addresses should be in the form of a Classless Inter-Domain Routing (CIDR) block; for example, 10.0.0.0/16.
         :param description: A description of the output. This description appears only on the MediaConnect console and will not be seen by the end user.
         :param destination: The IP address where you want to send the output.
@@ -7802,9 +7827,10 @@ class CfnFlowOutputProps:
         :param ndi_speed_hq_quality: A quality setting for the NDI Speed HQ encoder.
         :param output_status: An indication of whether the output should transmit data or not.
         :param port: The port to use when content is distributed to this output.
+        :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param remote_id: The remote ID for the Zixi-pull stream.
         :param router_integration_state: 
-        :param router_integration_transit_encryption: The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+        :param router_integration_transit_encryption: Information about the encryption of the flow.
         :param smoothing_latency: The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
         :param stream_id: The stream ID that you want to use for this transport. This parameter applies only to Zixi and SRT caller-based streams.
         :param vpc_interface_attachment: The name of the VPC interface attachment to use for this output.
@@ -7822,7 +7848,6 @@ class CfnFlowOutputProps:
             
             cfn_flow_output_props = mediaconnect.CfnFlowOutputProps(
                 flow_arn="flowArn",
-                protocol="protocol",
             
                 # the properties below are optional
                 cidr_allow_list=["cidrAllowList"],
@@ -7862,6 +7887,7 @@ class CfnFlowOutputProps:
                 ndi_speed_hq_quality=123,
                 output_status="outputStatus",
                 port=123,
+                protocol="protocol",
                 remote_id="remoteId",
                 router_integration_state="routerIntegrationState",
                 router_integration_transit_encryption=mediaconnect.CfnFlowOutput.FlowTransitEncryptionProperty(
@@ -7886,7 +7912,6 @@ class CfnFlowOutputProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__90cee4cbdefa91956af92950bb2bfd2da4fa4f982f439596444cda5251a2c34d)
             check_type(argname="argument flow_arn", value=flow_arn, expected_type=type_hints["flow_arn"])
-            check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
             check_type(argname="argument cidr_allow_list", value=cidr_allow_list, expected_type=type_hints["cidr_allow_list"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
             check_type(argname="argument destination", value=destination, expected_type=type_hints["destination"])
@@ -7899,6 +7924,7 @@ class CfnFlowOutputProps:
             check_type(argname="argument ndi_speed_hq_quality", value=ndi_speed_hq_quality, expected_type=type_hints["ndi_speed_hq_quality"])
             check_type(argname="argument output_status", value=output_status, expected_type=type_hints["output_status"])
             check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+            check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
             check_type(argname="argument remote_id", value=remote_id, expected_type=type_hints["remote_id"])
             check_type(argname="argument router_integration_state", value=router_integration_state, expected_type=type_hints["router_integration_state"])
             check_type(argname="argument router_integration_transit_encryption", value=router_integration_transit_encryption, expected_type=type_hints["router_integration_transit_encryption"])
@@ -7907,7 +7933,6 @@ class CfnFlowOutputProps:
             check_type(argname="argument vpc_interface_attachment", value=vpc_interface_attachment, expected_type=type_hints["vpc_interface_attachment"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "flow_arn": flow_arn,
-            "protocol": protocol,
         }
         if cidr_allow_list is not None:
             self._values["cidr_allow_list"] = cidr_allow_list
@@ -7933,6 +7958,8 @@ class CfnFlowOutputProps:
             self._values["output_status"] = output_status
         if port is not None:
             self._values["port"] = port
+        if protocol is not None:
+            self._values["protocol"] = protocol
         if remote_id is not None:
             self._values["remote_id"] = remote_id
         if router_integration_state is not None:
@@ -7954,20 +7981,6 @@ class CfnFlowOutputProps:
         '''
         result = self._values.get("flow_arn")
         assert result is not None, "Required property 'flow_arn' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
-    def protocol(self) -> builtins.str:
-        '''The protocol to use for the output.
-
-        .. epigraph::
-
-           AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-protocol
-        '''
-        result = self._values.get("protocol")
-        assert result is not None, "Required property 'protocol' is missing"
         return typing.cast(builtins.str, result)
 
     @builtins.property
@@ -8095,6 +8108,19 @@ class CfnFlowOutputProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
+    def protocol(self) -> typing.Optional[builtins.str]:
+        '''The protocol to use for the output.
+
+        .. epigraph::
+
+           AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-protocol
+        '''
+        result = self._values.get("protocol")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def remote_id(self) -> typing.Optional[builtins.str]:
         '''The remote ID for the Zixi-pull stream.
 
@@ -8115,7 +8141,7 @@ class CfnFlowOutputProps:
     def router_integration_transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowOutput.FlowTransitEncryptionProperty]]:
-        '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+        '''Information about the encryption of the flow.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-routerintegrationtransitencryption
         '''
@@ -10073,6 +10099,17 @@ class CfnGateway(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGateway")
+    @builtins.classmethod
+    def arn_for_gateway(cls, resource: _IGatewayRef_4783a0c6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__846fb03e786e5db212456f5e176807bc8fa26425b8fcdcd3acceeb914a80546a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGateway", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10349,6 +10386,2939 @@ class CfnGatewayProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IRouterInputRef_6915df50, _ITaggableV2_4e6798f8)
+class CfnRouterInput(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput",
+):
+    '''Represents a router input in AWS Elemental MediaConnect that is used to ingest content to be transmitted to router outputs.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html
+    :cloudformationResource: AWS::MediaConnect::RouterInput
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_mediaconnect as mediaconnect
+        
+        # automatic: Any
+        # default_: Any
+        
+        cfn_router_input = mediaconnect.CfnRouterInput(self, "MyCfnRouterInput",
+            configuration=mediaconnect.CfnRouterInput.RouterInputConfigurationProperty(
+                failover=mediaconnect.CfnRouterInput.FailoverRouterInputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configurations=[mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+        
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            source_address="sourceAddress",
+                            source_port=123,
+        
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+        
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    )],
+                    source_priority_mode="sourcePriorityMode",
+        
+                    # the properties below are optional
+                    primary_source_index=123
+                ),
+                media_connect_flow=mediaconnect.CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty(
+                    source_transit_decryption=mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+        
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+        
+                    # the properties below are optional
+                    flow_arn="flowArn",
+                    flow_output_arn="flowOutputArn"
+                ),
+                merge=mediaconnect.CfnRouterInput.MergeRouterInputConfigurationProperty(
+                    merge_recovery_window_milliseconds=123,
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configurations=[mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+        
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        )
+                    )]
+                ),
+                standard=mediaconnect.CfnRouterInput.StandardRouterInputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configuration=mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+        
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            source_address="sourceAddress",
+                            source_port=123,
+        
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+        
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    ),
+        
+                    # the properties below are optional
+                    protocol="protocol"
+                )
+            ),
+            maximum_bitrate=123,
+            name="name",
+            routing_scope="routingScope",
+            tier="tier",
+        
+            # the properties below are optional
+            availability_zone="availabilityZone",
+            maintenance_configuration=mediaconnect.CfnRouterInput.MaintenanceConfigurationProperty(
+                default=default_,
+                preferred_day_time=mediaconnect.CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty(
+                    day="day",
+                    time="time"
+                )
+            ),
+            region_name="regionName",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )],
+            transit_encryption=mediaconnect.CfnRouterInput.RouterInputTransitEncryptionProperty(
+                encryption_key_configuration=mediaconnect.CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty(
+                    automatic=automatic,
+                    secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                ),
+        
+                # the properties below are optional
+                encryption_key_type="encryptionKeyType"
+            )
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        maximum_bitrate: jsii.Number,
+        name: builtins.str,
+        routing_scope: builtins.str,
+        tier: builtins.str,
+        availability_zone: typing.Optional[builtins.str] = None,
+        maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.MaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        region_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RouterInputTransitEncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::MediaConnect::RouterInput``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param configuration: The configuration settings for a router input.
+        :param maximum_bitrate: The maximum bitrate for the router input.
+        :param name: The name of the router input.
+        :param routing_scope: 
+        :param tier: 
+        :param availability_zone: The Availability Zone where you want to create the router input. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        :param region_name: The AWS Region for the router input. Defaults to the current region if not specified.
+        :param tags: Key-value pairs that can be used to tag and organize this router input.
+        :param transit_encryption: Information about the encryption of the flow.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8fa24b13aaffdcfc1e47f3ced2e884afe1fe974cb91ceb3f0702e3ed196e0855)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnRouterInputProps(
+            configuration=configuration,
+            maximum_bitrate=maximum_bitrate,
+            name=name,
+            routing_scope=routing_scope,
+            tier=tier,
+            availability_zone=availability_zone,
+            maintenance_configuration=maintenance_configuration,
+            region_name=region_name,
+            tags=tags,
+            transit_encryption=transit_encryption,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRouterInput")
+    @builtins.classmethod
+    def arn_for_router_input(cls, resource: _IRouterInputRef_6915df50) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b62b590ea740d308b838213af0b2cd196493374e80cd7c3686bd872b19cfdfeb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRouterInput", [resource]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c944fb547e87f295306d8735bbf0eeac4ac8a0b6018a5739d3a31d2e1e718ef6)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e30a6d884b369ff6382f442459ba4c11662a15636af2d199fbc1aa1a790ea21)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The timestamp when the router input was created.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''The unique identifier of the router input.
+
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrInputType")
+    def attr_input_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: InputType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrInputType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIpAddress")
+    def attr_ip_address(self) -> builtins.str:
+        '''The IP address of the router input.
+
+        :cloudformationAttribute: IpAddress
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrIpAddress"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMaintenanceType")
+    def attr_maintenance_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: MaintenanceType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrMaintenanceType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRoutedOutputs")
+    def attr_routed_outputs(self) -> jsii.Number:
+        '''The number of router outputs associated with the router input.
+
+        :cloudformationAttribute: RoutedOutputs
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "attrRoutedOutputs"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedAt")
+    def attr_updated_at(self) -> builtins.str:
+        '''The timestamp when the router input was last updated.
+
+        :cloudformationAttribute: UpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="routerInputRef")
+    def router_input_ref(self) -> _RouterInputReference_b71c2141:
+        '''A reference to a RouterInput resource.'''
+        return typing.cast(_RouterInputReference_b71c2141, jsii.get(self, "routerInputRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputConfigurationProperty"]:
+        '''The configuration settings for a router input.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputConfigurationProperty"], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputConfigurationProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc19a3af1b324b171b747b68112c85cb261bd6957bab7764b849ca52d9245142)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="maximumBitrate")
+    def maximum_bitrate(self) -> jsii.Number:
+        '''The maximum bitrate for the router input.'''
+        return typing.cast(jsii.Number, jsii.get(self, "maximumBitrate"))
+
+    @maximum_bitrate.setter
+    def maximum_bitrate(self, value: jsii.Number) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9b9c8e82a356b3f89719f6bbfe30b90040f8129a03f8ce150ad2a8b87ed8246)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "maximumBitrate", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the router input.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8cad73940b17fe84f1f0b506b19a2f76e3972f6d1b1a71c747442330ba7cdd4b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routingScope")
+    def routing_scope(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "routingScope"))
+
+    @routing_scope.setter
+    def routing_scope(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__00684f4fd383ed48bfa0345b412a77ecbdd623ac32a218fb0294e30e4ed401bc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingScope", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tier")
+    def tier(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "tier"))
+
+    @tier.setter
+    def tier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__84d00c9475e25cd260ddceb328a82f02a2cb361571f2a5fd671818fb15dd8cd3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="availabilityZone")
+    def availability_zone(self) -> typing.Optional[builtins.str]:
+        '''The Availability Zone where you want to create the router input.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "availabilityZone"))
+
+    @availability_zone.setter
+    def availability_zone(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d3dc1a9f3d38364d1ad15584e3cfaccae3ba843735b9a10bd75fa94a9736e60)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "availabilityZone", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="maintenanceConfiguration")
+    def maintenance_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MaintenanceConfigurationProperty"]]:
+        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MaintenanceConfigurationProperty"]], jsii.get(self, "maintenanceConfiguration"))
+
+    @maintenance_configuration.setter
+    def maintenance_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MaintenanceConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7c1170f7ba129480fda3e3b9954bf9b3bab26579ad56ca54217519dd369f2de8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "maintenanceConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="regionName")
+    def region_name(self) -> typing.Optional[builtins.str]:
+        '''The AWS Region for the router input.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "regionName"))
+
+    @region_name.setter
+    def region_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__74fded60926c739a4b66f4bd6fdd901f417bee400d49f669f01a8545de0e3052)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "regionName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs that can be used to tag and organize this router input.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a824b54cbbdf5489ae89810bc583b0c20d4cfb25aeb8745e7f408d889b008ac)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="transitEncryption")
+    def transit_encryption(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionProperty"]]:
+        '''Information about the encryption of the flow.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionProperty"]], jsii.get(self, "transitEncryption"))
+
+    @transit_encryption.setter
+    def transit_encryption(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b52cf5469dfc840d14b0db5fb2454e8064b964427f444c618452b6c06465337)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "transitEncryption", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.FailoverRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "network_interface_arn": "networkInterfaceArn",
+            "protocol_configurations": "protocolConfigurations",
+            "source_priority_mode": "sourcePriorityMode",
+            "primary_source_index": "primarySourceIndex",
+        },
+    )
+    class FailoverRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            network_interface_arn: builtins.str,
+            protocol_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            source_priority_mode: builtins.str,
+            primary_source_index: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration settings for a failover router input that allows switching between two input sources.
+
+            :param network_interface_arn: The ARN of the network interface to use for this failover router input.
+            :param protocol_configurations: A list of exactly two protocol configurations for the failover input sources. Both must use the same protocol type.
+            :param source_priority_mode: 
+            :param primary_source_index: The index (0 or 1) that specifies which source in the protocol configurations list is currently active. Used to control which of the two failover sources is currently selected. This field is ignored when sourcePriorityMode is set to NO_PRIORITY
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                failover_router_input_configuration_property = mediaconnect.CfnRouterInput.FailoverRouterInputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configurations=[mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+                
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            source_address="sourceAddress",
+                            source_port=123,
+                
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+                
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    )],
+                    source_priority_mode="sourcePriorityMode",
+                
+                    # the properties below are optional
+                    primary_source_index=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0b915443cb98891bf89e968e2338dbbd48e7fc3e6389d7cf5425707945361655)
+                check_type(argname="argument network_interface_arn", value=network_interface_arn, expected_type=type_hints["network_interface_arn"])
+                check_type(argname="argument protocol_configurations", value=protocol_configurations, expected_type=type_hints["protocol_configurations"])
+                check_type(argname="argument source_priority_mode", value=source_priority_mode, expected_type=type_hints["source_priority_mode"])
+                check_type(argname="argument primary_source_index", value=primary_source_index, expected_type=type_hints["primary_source_index"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "network_interface_arn": network_interface_arn,
+                "protocol_configurations": protocol_configurations,
+                "source_priority_mode": source_priority_mode,
+            }
+            if primary_source_index is not None:
+                self._values["primary_source_index"] = primary_source_index
+
+        @builtins.property
+        def network_interface_arn(self) -> builtins.str:
+            '''The ARN of the network interface to use for this failover router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputconfiguration-networkinterfacearn
+            '''
+            result = self._values.get("network_interface_arn")
+            assert result is not None, "Required property 'network_interface_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def protocol_configurations(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty"]]]:
+            '''A list of exactly two protocol configurations for the failover input sources.
+
+            Both must use the same protocol type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputconfiguration-protocolconfigurations
+            '''
+            result = self._values.get("protocol_configurations")
+            assert result is not None, "Required property 'protocol_configurations' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty"]]], result)
+
+        @builtins.property
+        def source_priority_mode(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputconfiguration-sourceprioritymode
+            '''
+            result = self._values.get("source_priority_mode")
+            assert result is not None, "Required property 'source_priority_mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def primary_source_index(self) -> typing.Optional[jsii.Number]:
+            '''The index (0 or 1) that specifies which source in the protocol configurations list is currently active.
+
+            Used to control which of the two failover sources is currently selected. This field is ignored when sourcePriorityMode is set to NO_PRIORITY
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputconfiguration-primarysourceindex
+            '''
+            result = self._values.get("primary_source_index")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FailoverRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "rist": "rist",
+            "rtp": "rtp",
+            "srt_caller": "srtCaller",
+            "srt_listener": "srtListener",
+        },
+    )
+    class FailoverRouterInputProtocolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RistRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RtpRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtCallerRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtListenerRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param rist: The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+            :param rtp: The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+            :param srt_caller: The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in caller mode, including the source address and port, minimum latency, stream ID, and decryption key configuration.
+            :param srt_listener: The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                failover_router_input_protocol_configuration_property = mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty(
+                    rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                        port=123,
+                        recovery_latency_milliseconds=123
+                    ),
+                    rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                        port=123,
+                
+                        # the properties below are optional
+                        forward_error_correction="forwardErrorCorrection"
+                    ),
+                    srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                        minimum_latency_milliseconds=123,
+                        source_address="sourceAddress",
+                        source_port=123,
+                
+                        # the properties below are optional
+                        decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                        stream_id="streamId"
+                    ),
+                    srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                        minimum_latency_milliseconds=123,
+                        port=123,
+                
+                        # the properties below are optional
+                        decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d8f038e6a58a77278305824f4d096d5103bdf9497e022340099fbe631d35cdea)
+                check_type(argname="argument rist", value=rist, expected_type=type_hints["rist"])
+                check_type(argname="argument rtp", value=rtp, expected_type=type_hints["rtp"])
+                check_type(argname="argument srt_caller", value=srt_caller, expected_type=type_hints["srt_caller"])
+                check_type(argname="argument srt_listener", value=srt_listener, expected_type=type_hints["srt_listener"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if rist is not None:
+                self._values["rist"] = rist
+            if rtp is not None:
+                self._values["rtp"] = rtp
+            if srt_caller is not None:
+                self._values["srt_caller"] = srt_caller
+            if srt_listener is not None:
+                self._values["srt_listener"] = srt_listener
+
+        @builtins.property
+        def rist(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration-rist
+            '''
+            result = self._values.get("rist")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def rtp(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration-rtp
+            '''
+            result = self._values.get("rtp")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_caller(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtCallerRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in caller mode, including the source address and port, minimum latency, stream ID, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration-srtcaller
+            '''
+            result = self._values.get("srt_caller")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtCallerRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_listener(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtListenerRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-failoverrouterinputprotocolconfiguration-srtlistener
+            '''
+            result = self._values.get("srt_listener")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtListenerRouterInputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FailoverRouterInputProtocolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"automatic": "automatic", "secrets_manager": "secretsManager"},
+    )
+    class FlowTransitEncryptionKeyConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            automatic: typing.Any = None,
+            secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param automatic: Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+            :param secrets_manager: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                flow_transit_encryption_key_configuration_property = mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                    automatic=automatic,
+                    secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2f46fb21f29424f9cdada7e8baeb37950068c69dd5988f39da2d4d57ad111304)
+                check_type(argname="argument automatic", value=automatic, expected_type=type_hints["automatic"])
+                check_type(argname="argument secrets_manager", value=secrets_manager, expected_type=type_hints["secrets_manager"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if automatic is not None:
+                self._values["automatic"] = automatic
+            if secrets_manager is not None:
+                self._values["secrets_manager"] = secrets_manager
+
+        @builtins.property
+        def automatic(self) -> typing.Any:
+            '''Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-flowtransitencryptionkeyconfiguration-automatic
+            '''
+            result = self._values.get("automatic")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def secrets_manager(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"]]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-flowtransitencryptionkeyconfiguration-secretsmanager
+            '''
+            result = self._values.get("secrets_manager")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FlowTransitEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "encryption_key_configuration": "encryptionKeyConfiguration",
+            "encryption_key_type": "encryptionKeyType",
+        },
+    )
+    class FlowTransitEncryptionProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            encryption_key_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+
+            :param encryption_key_configuration: Configuration settings for flow transit encryption keys.
+            :param encryption_key_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                flow_transit_encryption_property = mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty(
+                    encryption_key_configuration=mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                        automatic=automatic,
+                        secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    encryption_key_type="encryptionKeyType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ee7cb3dd62027be3aaef58d8e915eab27767b66fa11f87aff2f38eb8e4f62449)
+                check_type(argname="argument encryption_key_configuration", value=encryption_key_configuration, expected_type=type_hints["encryption_key_configuration"])
+                check_type(argname="argument encryption_key_type", value=encryption_key_type, expected_type=type_hints["encryption_key_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key_configuration": encryption_key_configuration,
+            }
+            if encryption_key_type is not None:
+                self._values["encryption_key_type"] = encryption_key_type
+
+        @builtins.property
+        def encryption_key_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty"]:
+            '''Configuration settings for flow transit encryption keys.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryption.html#cfn-mediaconnect-routerinput-flowtransitencryption-encryptionkeyconfiguration
+            '''
+            result = self._values.get("encryption_key_configuration")
+            assert result is not None, "Required property 'encryption_key_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty"], result)
+
+        @builtins.property
+        def encryption_key_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-flowtransitencryption.html#cfn-mediaconnect-routerinput-flowtransitencryption-encryptionkeytype
+            '''
+            result = self._values.get("encryption_key_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FlowTransitEncryptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.MaintenanceConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"default": "default", "preferred_day_time": "preferredDayTime"},
+    )
+    class MaintenanceConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            default: typing.Any = None,
+            preferred_day_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param default: Configuration settings for default maintenance scheduling.
+            :param preferred_day_time: Configuration for preferred day and time maintenance settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-maintenanceconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # default_: Any
+                
+                maintenance_configuration_property = mediaconnect.CfnRouterInput.MaintenanceConfigurationProperty(
+                    default=default_,
+                    preferred_day_time=mediaconnect.CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty(
+                        day="day",
+                        time="time"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a02453ffb5787750cf8b7c68ece86b453aeac195bd6b7a67d442069cdfaf86c1)
+                check_type(argname="argument default", value=default, expected_type=type_hints["default"])
+                check_type(argname="argument preferred_day_time", value=preferred_day_time, expected_type=type_hints["preferred_day_time"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if default is not None:
+                self._values["default"] = default
+            if preferred_day_time is not None:
+                self._values["preferred_day_time"] = preferred_day_time
+
+        @builtins.property
+        def default(self) -> typing.Any:
+            '''Configuration settings for default maintenance scheduling.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-maintenanceconfiguration.html#cfn-mediaconnect-routerinput-maintenanceconfiguration-default
+            '''
+            result = self._values.get("default")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def preferred_day_time(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty"]]:
+            '''Configuration for preferred day and time maintenance settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-maintenanceconfiguration.html#cfn-mediaconnect-routerinput-maintenanceconfiguration-preferreddaytime
+            '''
+            result = self._values.get("preferred_day_time")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MaintenanceConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "source_transit_decryption": "sourceTransitDecryption",
+            "flow_arn": "flowArn",
+            "flow_output_arn": "flowOutputArn",
+        },
+    )
+    class MediaConnectFlowRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            source_transit_decryption: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.FlowTransitEncryptionProperty", typing.Dict[builtins.str, typing.Any]]],
+            flow_arn: typing.Optional[builtins.str] = None,
+            flow_output_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for connecting a router input to a flow output.
+
+            :param source_transit_decryption: The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+            :param flow_arn: The ARN of the flow to connect to.
+            :param flow_output_arn: The ARN of the flow output to connect to this router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                media_connect_flow_router_input_configuration_property = mediaconnect.CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty(
+                    source_transit_decryption=mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+                
+                    # the properties below are optional
+                    flow_arn="flowArn",
+                    flow_output_arn="flowOutputArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__07cd74860f626ccccd2d7b9722c16c895a7f51382af41cc9a3aa3da275bb3b5f)
+                check_type(argname="argument source_transit_decryption", value=source_transit_decryption, expected_type=type_hints["source_transit_decryption"])
+                check_type(argname="argument flow_arn", value=flow_arn, expected_type=type_hints["flow_arn"])
+                check_type(argname="argument flow_output_arn", value=flow_output_arn, expected_type=type_hints["flow_output_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "source_transit_decryption": source_transit_decryption,
+            }
+            if flow_arn is not None:
+                self._values["flow_arn"] = flow_arn
+            if flow_output_arn is not None:
+                self._values["flow_output_arn"] = flow_output_arn
+
+        @builtins.property
+        def source_transit_decryption(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FlowTransitEncryptionProperty"]:
+            '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration.html#cfn-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration-sourcetransitdecryption
+            '''
+            result = self._values.get("source_transit_decryption")
+            assert result is not None, "Required property 'source_transit_decryption' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FlowTransitEncryptionProperty"], result)
+
+        @builtins.property
+        def flow_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the flow to connect to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration.html#cfn-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration-flowarn
+            '''
+            result = self._values.get("flow_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def flow_output_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the flow output to connect to this router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration.html#cfn-mediaconnect-routerinput-mediaconnectflowrouterinputconfiguration-flowoutputarn
+            '''
+            result = self._values.get("flow_output_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MediaConnectFlowRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.MergeRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "merge_recovery_window_milliseconds": "mergeRecoveryWindowMilliseconds",
+            "network_interface_arn": "networkInterfaceArn",
+            "protocol_configurations": "protocolConfigurations",
+        },
+    )
+    class MergeRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            merge_recovery_window_milliseconds: jsii.Number,
+            network_interface_arn: builtins.str,
+            protocol_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.MergeRouterInputProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]],
+        ) -> None:
+            '''Configuration settings for a merge router input that combines two input sources.
+
+            :param merge_recovery_window_milliseconds: The time window in milliseconds for merging the two input sources.
+            :param network_interface_arn: The ARN of the network interface to use for this merge router input.
+            :param protocol_configurations: A list of exactly two protocol configurations for the merge input sources. Both must use the same protocol type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                merge_router_input_configuration_property = mediaconnect.CfnRouterInput.MergeRouterInputConfigurationProperty(
+                    merge_recovery_window_milliseconds=123,
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configurations=[mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+                
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        )
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c207577b6eab68f0d1c3f7593cc0b00c18a7e10d165eed0314d6bcb41a434578)
+                check_type(argname="argument merge_recovery_window_milliseconds", value=merge_recovery_window_milliseconds, expected_type=type_hints["merge_recovery_window_milliseconds"])
+                check_type(argname="argument network_interface_arn", value=network_interface_arn, expected_type=type_hints["network_interface_arn"])
+                check_type(argname="argument protocol_configurations", value=protocol_configurations, expected_type=type_hints["protocol_configurations"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "merge_recovery_window_milliseconds": merge_recovery_window_milliseconds,
+                "network_interface_arn": network_interface_arn,
+                "protocol_configurations": protocol_configurations,
+            }
+
+        @builtins.property
+        def merge_recovery_window_milliseconds(self) -> jsii.Number:
+            '''The time window in milliseconds for merging the two input sources.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputconfiguration.html#cfn-mediaconnect-routerinput-mergerouterinputconfiguration-mergerecoverywindowmilliseconds
+            '''
+            result = self._values.get("merge_recovery_window_milliseconds")
+            assert result is not None, "Required property 'merge_recovery_window_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def network_interface_arn(self) -> builtins.str:
+            '''The ARN of the network interface to use for this merge router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputconfiguration.html#cfn-mediaconnect-routerinput-mergerouterinputconfiguration-networkinterfacearn
+            '''
+            result = self._values.get("network_interface_arn")
+            assert result is not None, "Required property 'network_interface_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def protocol_configurations(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MergeRouterInputProtocolConfigurationProperty"]]]:
+            '''A list of exactly two protocol configurations for the merge input sources.
+
+            Both must use the same protocol type.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputconfiguration.html#cfn-mediaconnect-routerinput-mergerouterinputconfiguration-protocolconfigurations
+            '''
+            result = self._values.get("protocol_configurations")
+            assert result is not None, "Required property 'protocol_configurations' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MergeRouterInputProtocolConfigurationProperty"]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MergeRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"rist": "rist", "rtp": "rtp"},
+    )
+    class MergeRouterInputProtocolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RistRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RtpRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param rist: The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+            :param rtp: The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputprotocolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                merge_router_input_protocol_configuration_property = mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty(
+                    rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                        port=123,
+                        recovery_latency_milliseconds=123
+                    ),
+                    rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                        port=123,
+                
+                        # the properties below are optional
+                        forward_error_correction="forwardErrorCorrection"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d4bff0ea4788435a62555083659b5a3393ff9c2dc3b37396f56d5473c1b65763)
+                check_type(argname="argument rist", value=rist, expected_type=type_hints["rist"])
+                check_type(argname="argument rtp", value=rtp, expected_type=type_hints["rtp"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if rist is not None:
+                self._values["rist"] = rist
+            if rtp is not None:
+                self._values["rtp"] = rtp
+
+        @builtins.property
+        def rist(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-mergerouterinputprotocolconfiguration-rist
+            '''
+            result = self._values.get("rist")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def rtp(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-mergerouterinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-mergerouterinputprotocolconfiguration-rtp
+            '''
+            result = self._values.get("rtp")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MergeRouterInputProtocolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"day": "day", "time": "time"},
+    )
+    class PreferredDayTimeMaintenanceConfigurationProperty:
+        def __init__(self, *, day: builtins.str, time: builtins.str) -> None:
+            '''Configuration for preferred day and time maintenance settings.
+
+            :param day: 
+            :param time: The preferred time for maintenance operations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-preferreddaytimemaintenanceconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                preferred_day_time_maintenance_configuration_property = mediaconnect.CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty(
+                    day="day",
+                    time="time"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bc21d5c65ee1f7e8a6d879dc6bdeea6e77c637daf5b2e9885e67ec9a9279f8d5)
+                check_type(argname="argument day", value=day, expected_type=type_hints["day"])
+                check_type(argname="argument time", value=time, expected_type=type_hints["time"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "day": day,
+                "time": time,
+            }
+
+        @builtins.property
+        def day(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-preferreddaytimemaintenanceconfiguration.html#cfn-mediaconnect-routerinput-preferreddaytimemaintenanceconfiguration-day
+            '''
+            result = self._values.get("day")
+            assert result is not None, "Required property 'day' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def time(self) -> builtins.str:
+            '''The preferred time for maintenance operations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-preferreddaytimemaintenanceconfiguration.html#cfn-mediaconnect-routerinput-preferreddaytimemaintenanceconfiguration-time
+            '''
+            result = self._values.get("time")
+            assert result is not None, "Required property 'time' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PreferredDayTimeMaintenanceConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "port": "port",
+            "recovery_latency_milliseconds": "recoveryLatencyMilliseconds",
+        },
+    )
+    class RistRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            port: jsii.Number,
+            recovery_latency_milliseconds: jsii.Number,
+        ) -> None:
+            '''The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+
+            :param port: The port number used for the RIST protocol in the router input configuration.
+            :param recovery_latency_milliseconds: The recovery latency in milliseconds for the RIST protocol in the router input configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-ristrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                rist_router_input_configuration_property = mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                    port=123,
+                    recovery_latency_milliseconds=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__53b65288b7279c56646f36579c820e91edb724a5c19852f9a2b528f0d5893abd)
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument recovery_latency_milliseconds", value=recovery_latency_milliseconds, expected_type=type_hints["recovery_latency_milliseconds"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "port": port,
+                "recovery_latency_milliseconds": recovery_latency_milliseconds,
+            }
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''The port number used for the RIST protocol in the router input configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-ristrouterinputconfiguration.html#cfn-mediaconnect-routerinput-ristrouterinputconfiguration-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def recovery_latency_milliseconds(self) -> jsii.Number:
+            '''The recovery latency in milliseconds for the RIST protocol in the router input configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-ristrouterinputconfiguration.html#cfn-mediaconnect-routerinput-ristrouterinputconfiguration-recoverylatencymilliseconds
+            '''
+            result = self._values.get("recovery_latency_milliseconds")
+            assert result is not None, "Required property 'recovery_latency_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RistRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "failover": "failover",
+            "media_connect_flow": "mediaConnectFlow",
+            "merge": "merge",
+            "standard": "standard",
+        },
+    )
+    class RouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            failover: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.FailoverRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            media_connect_flow: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            merge: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.MergeRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            standard: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.StandardRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param failover: Configuration settings for a failover router input that allows switching between two input sources.
+            :param media_connect_flow: Configuration settings for connecting a router input to a flow output.
+            :param merge: Configuration settings for a merge router input that combines two input sources.
+            :param standard: The configuration settings for a standard router input, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                router_input_configuration_property = mediaconnect.CfnRouterInput.RouterInputConfigurationProperty(
+                    failover=mediaconnect.CfnRouterInput.FailoverRouterInputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configurations=[mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+                
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                source_address="sourceAddress",
+                                source_port=123,
+                
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+                
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        )],
+                        source_priority_mode="sourcePriorityMode",
+                
+                        # the properties below are optional
+                        primary_source_index=123
+                    ),
+                    media_connect_flow=mediaconnect.CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty(
+                        source_transit_decryption=mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+                
+                        # the properties below are optional
+                        flow_arn="flowArn",
+                        flow_output_arn="flowOutputArn"
+                    ),
+                    merge=mediaconnect.CfnRouterInput.MergeRouterInputConfigurationProperty(
+                        merge_recovery_window_milliseconds=123,
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configurations=[mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+                
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            )
+                        )]
+                    ),
+                    standard=mediaconnect.CfnRouterInput.StandardRouterInputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configuration=mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+                
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                source_address="sourceAddress",
+                                source_port=123,
+                
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+                
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        protocol="protocol"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__367935140f8b2e56d02ff3e2c05252a68073eace6c0eeda3b7abeeeac1209e1b)
+                check_type(argname="argument failover", value=failover, expected_type=type_hints["failover"])
+                check_type(argname="argument media_connect_flow", value=media_connect_flow, expected_type=type_hints["media_connect_flow"])
+                check_type(argname="argument merge", value=merge, expected_type=type_hints["merge"])
+                check_type(argname="argument standard", value=standard, expected_type=type_hints["standard"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if failover is not None:
+                self._values["failover"] = failover
+            if media_connect_flow is not None:
+                self._values["media_connect_flow"] = media_connect_flow
+            if merge is not None:
+                self._values["merge"] = merge
+            if standard is not None:
+                self._values["standard"] = standard
+
+        @builtins.property
+        def failover(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FailoverRouterInputConfigurationProperty"]]:
+            '''Configuration settings for a failover router input that allows switching between two input sources.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputconfiguration.html#cfn-mediaconnect-routerinput-routerinputconfiguration-failover
+            '''
+            result = self._values.get("failover")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.FailoverRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def media_connect_flow(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty"]]:
+            '''Configuration settings for connecting a router input to a flow output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputconfiguration.html#cfn-mediaconnect-routerinput-routerinputconfiguration-mediaconnectflow
+            '''
+            result = self._values.get("media_connect_flow")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def merge(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MergeRouterInputConfigurationProperty"]]:
+            '''Configuration settings for a merge router input that combines two input sources.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputconfiguration.html#cfn-mediaconnect-routerinput-routerinputconfiguration-merge
+            '''
+            result = self._values.get("merge")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MergeRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def standard(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.StandardRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a standard router input, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputconfiguration.html#cfn-mediaconnect-routerinput-routerinputconfiguration-standard
+            '''
+            result = self._values.get("standard")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.StandardRouterInputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "rist": "rist",
+            "rtp": "rtp",
+            "srt_caller": "srtCaller",
+            "srt_listener": "srtListener",
+        },
+    )
+    class RouterInputProtocolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RistRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RtpRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtCallerRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtListenerRouterInputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param rist: The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+            :param rtp: The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+            :param srt_caller: The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in caller mode, including the source address and port, minimum latency, stream ID, and decryption key configuration.
+            :param srt_listener: The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputprotocolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                router_input_protocol_configuration_property = mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty(
+                    rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                        port=123,
+                        recovery_latency_milliseconds=123
+                    ),
+                    rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                        port=123,
+                
+                        # the properties below are optional
+                        forward_error_correction="forwardErrorCorrection"
+                    ),
+                    srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                        minimum_latency_milliseconds=123,
+                        source_address="sourceAddress",
+                        source_port=123,
+                
+                        # the properties below are optional
+                        decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                        stream_id="streamId"
+                    ),
+                    srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                        minimum_latency_milliseconds=123,
+                        port=123,
+                
+                        # the properties below are optional
+                        decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6bee2f8b18c83277f36b402b57e84bb58ee2a5352632583caaeb637773d1069c)
+                check_type(argname="argument rist", value=rist, expected_type=type_hints["rist"])
+                check_type(argname="argument rtp", value=rtp, expected_type=type_hints["rtp"])
+                check_type(argname="argument srt_caller", value=srt_caller, expected_type=type_hints["srt_caller"])
+                check_type(argname="argument srt_listener", value=srt_listener, expected_type=type_hints["srt_listener"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if rist is not None:
+                self._values["rist"] = rist
+            if rtp is not None:
+                self._values["rtp"] = rtp
+            if srt_caller is not None:
+                self._values["srt_caller"] = srt_caller
+            if srt_listener is not None:
+                self._values["srt_listener"] = srt_listener
+
+        @builtins.property
+        def rist(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the RIST (Reliable Internet Stream Transport) protocol, including the port and recovery latency.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-routerinputprotocolconfiguration-rist
+            '''
+            result = self._values.get("rist")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RistRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def rtp(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-routerinputprotocolconfiguration-rtp
+            '''
+            result = self._values.get("rtp")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RtpRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_caller(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtCallerRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in caller mode, including the source address and port, minimum latency, stream ID, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-routerinputprotocolconfiguration-srtcaller
+            '''
+            result = self._values.get("srt_caller")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtCallerRouterInputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_listener(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtListenerRouterInputConfigurationProperty"]]:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and decryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputprotocolconfiguration.html#cfn-mediaconnect-routerinput-routerinputprotocolconfiguration-srtlistener
+            '''
+            result = self._values.get("srt_listener")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtListenerRouterInputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterInputProtocolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"automatic": "automatic", "secrets_manager": "secretsManager"},
+    )
+    class RouterInputTransitEncryptionKeyConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            automatic: typing.Any = None,
+            secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param automatic: Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+            :param secrets_manager: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                router_input_transit_encryption_key_configuration_property = mediaconnect.CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty(
+                    automatic=automatic,
+                    secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fcc66546aaf31b61e1efa68ba13e70820ab56b959d9cce333b0e5b3482a1bc09)
+                check_type(argname="argument automatic", value=automatic, expected_type=type_hints["automatic"])
+                check_type(argname="argument secrets_manager", value=secrets_manager, expected_type=type_hints["secrets_manager"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if automatic is not None:
+                self._values["automatic"] = automatic
+            if secrets_manager is not None:
+                self._values["secrets_manager"] = secrets_manager
+
+        @builtins.property
+        def automatic(self) -> typing.Any:
+            '''Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-routerinputtransitencryptionkeyconfiguration-automatic
+            '''
+            result = self._values.get("automatic")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def secrets_manager(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"]]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-routerinputtransitencryptionkeyconfiguration-secretsmanager
+            '''
+            result = self._values.get("secrets_manager")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterInputTransitEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RouterInputTransitEncryptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "encryption_key_configuration": "encryptionKeyConfiguration",
+            "encryption_key_type": "encryptionKeyType",
+        },
+    )
+    class RouterInputTransitEncryptionProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            encryption_key_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The transit encryption settings for a router input.
+
+            :param encryption_key_configuration: Defines the configuration settings for transit encryption keys.
+            :param encryption_key_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                router_input_transit_encryption_property = mediaconnect.CfnRouterInput.RouterInputTransitEncryptionProperty(
+                    encryption_key_configuration=mediaconnect.CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty(
+                        automatic=automatic,
+                        secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    encryption_key_type="encryptionKeyType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__85f5061e2ce8c42b22b7dc305382ea9bfa145cf532ef8f62591b3684205d6713)
+                check_type(argname="argument encryption_key_configuration", value=encryption_key_configuration, expected_type=type_hints["encryption_key_configuration"])
+                check_type(argname="argument encryption_key_type", value=encryption_key_type, expected_type=type_hints["encryption_key_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key_configuration": encryption_key_configuration,
+            }
+            if encryption_key_type is not None:
+                self._values["encryption_key_type"] = encryption_key_type
+
+        @builtins.property
+        def encryption_key_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty"]:
+            '''Defines the configuration settings for transit encryption keys.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryption.html#cfn-mediaconnect-routerinput-routerinputtransitencryption-encryptionkeyconfiguration
+            '''
+            result = self._values.get("encryption_key_configuration")
+            assert result is not None, "Required property 'encryption_key_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty"], result)
+
+        @builtins.property
+        def encryption_key_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-routerinputtransitencryption.html#cfn-mediaconnect-routerinput-routerinputtransitencryption-encryptionkeytype
+            '''
+            result = self._values.get("encryption_key_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterInputTransitEncryptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "port": "port",
+            "forward_error_correction": "forwardErrorCorrection",
+        },
+    )
+    class RtpRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            port: jsii.Number,
+            forward_error_correction: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a Router Input using the RTP (Real-Time Transport Protocol) protocol, including the port and forward error correction state.
+
+            :param port: The port number used for the RTP protocol in the router input configuration.
+            :param forward_error_correction: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-rtprouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                rtp_router_input_configuration_property = mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                    port=123,
+                
+                    # the properties below are optional
+                    forward_error_correction="forwardErrorCorrection"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3cb7da58ee58865b37c64051cce4480a789d51b84a87b3f8c0bb5c8c54eaed49)
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument forward_error_correction", value=forward_error_correction, expected_type=type_hints["forward_error_correction"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "port": port,
+            }
+            if forward_error_correction is not None:
+                self._values["forward_error_correction"] = forward_error_correction
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''The port number used for the RTP protocol in the router input configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-rtprouterinputconfiguration.html#cfn-mediaconnect-routerinput-rtprouterinputconfiguration-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def forward_error_correction(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-rtprouterinputconfiguration.html#cfn-mediaconnect-routerinput-rtprouterinputconfiguration-forwarderrorcorrection
+            '''
+            result = self._values.get("forward_error_correction")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RtpRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"role_arn": "roleArn", "secret_arn": "secretArn"},
+    )
+    class SecretsManagerEncryptionKeyConfigurationProperty:
+        def __init__(self, *, role_arn: builtins.str, secret_arn: builtins.str) -> None:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :param role_arn: The ARN of the IAM role assumed by MediaConnect to access the AWS Secrets Manager secret.
+            :param secret_arn: The ARN of the AWS Secrets Manager secret used for transit encryption.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-secretsmanagerencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                secrets_manager_encryption_key_configuration_property = mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                    role_arn="roleArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__656ecf17b2aa0c4612970c8eb2678158214e80be3a6040146c524608d6fe0ffc)
+                check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "role_arn": role_arn,
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def role_arn(self) -> builtins.str:
+            '''The ARN of the IAM role assumed by MediaConnect to access the AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-secretsmanagerencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-secretsmanagerencryptionkeyconfiguration-rolearn
+            '''
+            result = self._values.get("role_arn")
+            assert result is not None, "Required property 'role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''The ARN of the AWS Secrets Manager secret used for transit encryption.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-secretsmanagerencryptionkeyconfiguration.html#cfn-mediaconnect-routerinput-secretsmanagerencryptionkeyconfiguration-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SecretsManagerEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "minimum_latency_milliseconds": "minimumLatencyMilliseconds",
+            "source_address": "sourceAddress",
+            "source_port": "sourcePort",
+            "decryption_configuration": "decryptionConfiguration",
+            "stream_id": "streamId",
+        },
+    )
+    class SrtCallerRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            minimum_latency_milliseconds: jsii.Number,
+            source_address: builtins.str,
+            source_port: jsii.Number,
+            decryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtDecryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in caller mode, including the source address and port, minimum latency, stream ID, and decryption key configuration.
+
+            :param minimum_latency_milliseconds: The minimum latency in milliseconds for the SRT protocol in caller mode.
+            :param source_address: The source IP address for the SRT protocol in caller mode.
+            :param source_port: The source port number for the SRT protocol in caller mode.
+            :param decryption_configuration: Contains the configuration settings for decrypting SRT streams, including the encryption key details and decryption parameters.
+            :param stream_id: The stream ID for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_caller_router_input_configuration_property = mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                    minimum_latency_milliseconds=123,
+                    source_address="sourceAddress",
+                    source_port=123,
+                
+                    # the properties below are optional
+                    decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                        encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                    stream_id="streamId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__beeb94f30bd48ba57793ec4ae9b1de79893c6af67077601ee991d8325f1c1155)
+                check_type(argname="argument minimum_latency_milliseconds", value=minimum_latency_milliseconds, expected_type=type_hints["minimum_latency_milliseconds"])
+                check_type(argname="argument source_address", value=source_address, expected_type=type_hints["source_address"])
+                check_type(argname="argument source_port", value=source_port, expected_type=type_hints["source_port"])
+                check_type(argname="argument decryption_configuration", value=decryption_configuration, expected_type=type_hints["decryption_configuration"])
+                check_type(argname="argument stream_id", value=stream_id, expected_type=type_hints["stream_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "minimum_latency_milliseconds": minimum_latency_milliseconds,
+                "source_address": source_address,
+                "source_port": source_port,
+            }
+            if decryption_configuration is not None:
+                self._values["decryption_configuration"] = decryption_configuration
+            if stream_id is not None:
+                self._values["stream_id"] = stream_id
+
+        @builtins.property
+        def minimum_latency_milliseconds(self) -> jsii.Number:
+            '''The minimum latency in milliseconds for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtcallerrouterinputconfiguration-minimumlatencymilliseconds
+            '''
+            result = self._values.get("minimum_latency_milliseconds")
+            assert result is not None, "Required property 'minimum_latency_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def source_address(self) -> builtins.str:
+            '''The source IP address for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtcallerrouterinputconfiguration-sourceaddress
+            '''
+            result = self._values.get("source_address")
+            assert result is not None, "Required property 'source_address' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def source_port(self) -> jsii.Number:
+            '''The source port number for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtcallerrouterinputconfiguration-sourceport
+            '''
+            result = self._values.get("source_port")
+            assert result is not None, "Required property 'source_port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def decryption_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtDecryptionConfigurationProperty"]]:
+            '''Contains the configuration settings for decrypting SRT streams, including the encryption key details and decryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtcallerrouterinputconfiguration-decryptionconfiguration
+            '''
+            result = self._values.get("decryption_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtDecryptionConfigurationProperty"]], result)
+
+        @builtins.property
+        def stream_id(self) -> typing.Optional[builtins.str]:
+            '''The stream ID for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtcallerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtcallerrouterinputconfiguration-streamid
+            '''
+            result = self._values.get("stream_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtCallerRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"encryption_key": "encryptionKey"},
+    )
+    class SrtDecryptionConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Contains the configuration settings for decrypting SRT streams, including the encryption key details and decryption parameters.
+
+            :param encryption_key: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtdecryptionconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_decryption_configuration_property = mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9b8e55bc2cc629dfc624dfe6751b96283b3f6c08591aba80e4005288f47ee98a)
+                check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key": encryption_key,
+            }
+
+        @builtins.property
+        def encryption_key(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtdecryptionconfiguration.html#cfn-mediaconnect-routerinput-srtdecryptionconfiguration-encryptionkey
+            '''
+            result = self._values.get("encryption_key")
+            assert result is not None, "Required property 'encryption_key' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtDecryptionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "minimum_latency_milliseconds": "minimumLatencyMilliseconds",
+            "port": "port",
+            "decryption_configuration": "decryptionConfiguration",
+        },
+    )
+    class SrtListenerRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            minimum_latency_milliseconds: jsii.Number,
+            port: jsii.Number,
+            decryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.SrtDecryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The configuration settings for a router input using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and decryption key configuration.
+
+            :param minimum_latency_milliseconds: The minimum latency in milliseconds for the SRT protocol in listener mode.
+            :param port: The port number for the SRT protocol in listener mode.
+            :param decryption_configuration: Contains the configuration settings for decrypting SRT streams, including the encryption key details and decryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtlistenerrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_listener_router_input_configuration_property = mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                    minimum_latency_milliseconds=123,
+                    port=123,
+                
+                    # the properties below are optional
+                    decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                        encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2020f903810fd45bfaa02594fdb1a23bdb3bcc4a9ac870d479f9756284d1f45d)
+                check_type(argname="argument minimum_latency_milliseconds", value=minimum_latency_milliseconds, expected_type=type_hints["minimum_latency_milliseconds"])
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument decryption_configuration", value=decryption_configuration, expected_type=type_hints["decryption_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "minimum_latency_milliseconds": minimum_latency_milliseconds,
+                "port": port,
+            }
+            if decryption_configuration is not None:
+                self._values["decryption_configuration"] = decryption_configuration
+
+        @builtins.property
+        def minimum_latency_milliseconds(self) -> jsii.Number:
+            '''The minimum latency in milliseconds for the SRT protocol in listener mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtlistenerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtlistenerrouterinputconfiguration-minimumlatencymilliseconds
+            '''
+            result = self._values.get("minimum_latency_milliseconds")
+            assert result is not None, "Required property 'minimum_latency_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''The port number for the SRT protocol in listener mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtlistenerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtlistenerrouterinputconfiguration-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def decryption_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtDecryptionConfigurationProperty"]]:
+            '''Contains the configuration settings for decrypting SRT streams, including the encryption key details and decryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-srtlistenerrouterinputconfiguration.html#cfn-mediaconnect-routerinput-srtlistenerrouterinputconfiguration-decryptionconfiguration
+            '''
+            result = self._values.get("decryption_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.SrtDecryptionConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtListenerRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInput.StandardRouterInputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "network_interface_arn": "networkInterfaceArn",
+            "protocol_configuration": "protocolConfiguration",
+            "protocol": "protocol",
+        },
+    )
+    class StandardRouterInputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            network_interface_arn: builtins.str,
+            protocol_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterInput.RouterInputProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            protocol: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a standard router input, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :param network_interface_arn: The Amazon Resource Name (ARN) of the network interface associated with the standard router input.
+            :param protocol_configuration: The protocol configuration settings for a router input.
+            :param protocol: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-standardrouterinputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                standard_router_input_configuration_property = mediaconnect.CfnRouterInput.StandardRouterInputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configuration=mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                            port=123,
+                            recovery_latency_milliseconds=123
+                        ),
+                        rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                            port=123,
+                
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            source_address="sourceAddress",
+                            source_port=123,
+                
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+                
+                            # the properties below are optional
+                            decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    protocol="protocol"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__95ce52cf6881e0f95e336a6920de1725ead5c20a78c3b050791def2f0629d492)
+                check_type(argname="argument network_interface_arn", value=network_interface_arn, expected_type=type_hints["network_interface_arn"])
+                check_type(argname="argument protocol_configuration", value=protocol_configuration, expected_type=type_hints["protocol_configuration"])
+                check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "network_interface_arn": network_interface_arn,
+                "protocol_configuration": protocol_configuration,
+            }
+            if protocol is not None:
+                self._values["protocol"] = protocol
+
+        @builtins.property
+        def network_interface_arn(self) -> builtins.str:
+            '''The Amazon Resource Name (ARN) of the network interface associated with the standard router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-standardrouterinputconfiguration.html#cfn-mediaconnect-routerinput-standardrouterinputconfiguration-networkinterfacearn
+            '''
+            result = self._values.get("network_interface_arn")
+            assert result is not None, "Required property 'network_interface_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def protocol_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputProtocolConfigurationProperty"]:
+            '''The protocol configuration settings for a router input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-standardrouterinputconfiguration.html#cfn-mediaconnect-routerinput-standardrouterinputconfiguration-protocolconfiguration
+            '''
+            result = self._values.get("protocol_configuration")
+            assert result is not None, "Required property 'protocol_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputProtocolConfigurationProperty"], result)
+
+        @builtins.property
+        def protocol(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routerinput-standardrouterinputconfiguration.html#cfn-mediaconnect-routerinput-standardrouterinputconfiguration-protocol
+            '''
+            result = self._values.get("protocol")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StandardRouterInputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterInputProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "configuration": "configuration",
+        "maximum_bitrate": "maximumBitrate",
+        "name": "name",
+        "routing_scope": "routingScope",
+        "tier": "tier",
+        "availability_zone": "availabilityZone",
+        "maintenance_configuration": "maintenanceConfiguration",
+        "region_name": "regionName",
+        "tags": "tags",
+        "transit_encryption": "transitEncryption",
+    },
+)
+class CfnRouterInputProps:
+    def __init__(
+        self,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        maximum_bitrate: jsii.Number,
+        name: builtins.str,
+        routing_scope: builtins.str,
+        tier: builtins.str,
+        availability_zone: typing.Optional[builtins.str] = None,
+        maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        region_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRouterInput``.
+
+        :param configuration: The configuration settings for a router input.
+        :param maximum_bitrate: The maximum bitrate for the router input.
+        :param name: The name of the router input.
+        :param routing_scope: 
+        :param tier: 
+        :param availability_zone: The Availability Zone where you want to create the router input. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        :param region_name: The AWS Region for the router input. Defaults to the current region if not specified.
+        :param tags: Key-value pairs that can be used to tag and organize this router input.
+        :param transit_encryption: Information about the encryption of the flow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_mediaconnect as mediaconnect
+            
+            # automatic: Any
+            # default_: Any
+            
+            cfn_router_input_props = mediaconnect.CfnRouterInputProps(
+                configuration=mediaconnect.CfnRouterInput.RouterInputConfigurationProperty(
+                    failover=mediaconnect.CfnRouterInput.FailoverRouterInputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configurations=[mediaconnect.CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+            
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                source_address="sourceAddress",
+                                source_port=123,
+            
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+            
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        )],
+                        source_priority_mode="sourcePriorityMode",
+            
+                        # the properties below are optional
+                        primary_source_index=123
+                    ),
+                    media_connect_flow=mediaconnect.CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty(
+                        source_transit_decryption=mediaconnect.CfnRouterInput.FlowTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+            
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+            
+                        # the properties below are optional
+                        flow_arn="flowArn",
+                        flow_output_arn="flowOutputArn"
+                    ),
+                    merge=mediaconnect.CfnRouterInput.MergeRouterInputConfigurationProperty(
+                        merge_recovery_window_milliseconds=123,
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configurations=[mediaconnect.CfnRouterInput.MergeRouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+            
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            )
+                        )]
+                    ),
+                    standard=mediaconnect.CfnRouterInput.StandardRouterInputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configuration=mediaconnect.CfnRouterInput.RouterInputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterInput.RistRouterInputConfigurationProperty(
+                                port=123,
+                                recovery_latency_milliseconds=123
+                            ),
+                            rtp=mediaconnect.CfnRouterInput.RtpRouterInputConfigurationProperty(
+                                port=123,
+            
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterInput.SrtCallerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                source_address="sourceAddress",
+                                source_port=123,
+            
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterInput.SrtListenerRouterInputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+            
+                                # the properties below are optional
+                                decryption_configuration=mediaconnect.CfnRouterInput.SrtDecryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        ),
+            
+                        # the properties below are optional
+                        protocol="protocol"
+                    )
+                ),
+                maximum_bitrate=123,
+                name="name",
+                routing_scope="routingScope",
+                tier="tier",
+            
+                # the properties below are optional
+                availability_zone="availabilityZone",
+                maintenance_configuration=mediaconnect.CfnRouterInput.MaintenanceConfigurationProperty(
+                    default=default_,
+                    preferred_day_time=mediaconnect.CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty(
+                        day="day",
+                        time="time"
+                    )
+                ),
+                region_name="regionName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                transit_encryption=mediaconnect.CfnRouterInput.RouterInputTransitEncryptionProperty(
+                    encryption_key_configuration=mediaconnect.CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty(
+                        automatic=automatic,
+                        secrets_manager=mediaconnect.CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+            
+                    # the properties below are optional
+                    encryption_key_type="encryptionKeyType"
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__629abd36e1d3f5d9a60304da2c55389ba519de279616eb9eae24baa19310f5f4)
+            check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+            check_type(argname="argument maximum_bitrate", value=maximum_bitrate, expected_type=type_hints["maximum_bitrate"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument routing_scope", value=routing_scope, expected_type=type_hints["routing_scope"])
+            check_type(argname="argument tier", value=tier, expected_type=type_hints["tier"])
+            check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+            check_type(argname="argument maintenance_configuration", value=maintenance_configuration, expected_type=type_hints["maintenance_configuration"])
+            check_type(argname="argument region_name", value=region_name, expected_type=type_hints["region_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument transit_encryption", value=transit_encryption, expected_type=type_hints["transit_encryption"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "configuration": configuration,
+            "maximum_bitrate": maximum_bitrate,
+            "name": name,
+            "routing_scope": routing_scope,
+            "tier": tier,
+        }
+        if availability_zone is not None:
+            self._values["availability_zone"] = availability_zone
+        if maintenance_configuration is not None:
+            self._values["maintenance_configuration"] = maintenance_configuration
+        if region_name is not None:
+            self._values["region_name"] = region_name
+        if tags is not None:
+            self._values["tags"] = tags
+        if transit_encryption is not None:
+            self._values["transit_encryption"] = transit_encryption
+
+    @builtins.property
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputConfigurationProperty]:
+        '''The configuration settings for a router input.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-configuration
+        '''
+        result = self._values.get("configuration")
+        assert result is not None, "Required property 'configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputConfigurationProperty], result)
+
+    @builtins.property
+    def maximum_bitrate(self) -> jsii.Number:
+        '''The maximum bitrate for the router input.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-maximumbitrate
+        '''
+        result = self._values.get("maximum_bitrate")
+        assert result is not None, "Required property 'maximum_bitrate' is missing"
+        return typing.cast(jsii.Number, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the router input.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def routing_scope(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-routingscope
+        '''
+        result = self._values.get("routing_scope")
+        assert result is not None, "Required property 'routing_scope' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tier(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-tier
+        '''
+        result = self._values.get("tier")
+        assert result is not None, "Required property 'tier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def availability_zone(self) -> typing.Optional[builtins.str]:
+        '''The Availability Zone where you want to create the router input.
+
+        This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-availabilityzone
+        '''
+        result = self._values.get("availability_zone")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def maintenance_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.MaintenanceConfigurationProperty]]:
+        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-maintenanceconfiguration
+        '''
+        result = self._values.get("maintenance_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.MaintenanceConfigurationProperty]], result)
+
+    @builtins.property
+    def region_name(self) -> typing.Optional[builtins.str]:
+        '''The AWS Region for the router input.
+
+        Defaults to the current region if not specified.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-regionname
+        '''
+        result = self._values.get("region_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs that can be used to tag and organize this router input.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def transit_encryption(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputTransitEncryptionProperty]]:
+        '''Information about the encryption of the flow.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-transitencryption
+        '''
+        result = self._values.get("transit_encryption")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputTransitEncryptionProperty]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRouterInputProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IRouterNetworkInterfaceRef_05bd061c, _ITaggableV2_4e6798f8)
 class CfnRouterNetworkInterface(
     _CfnResource_9df397a6,
@@ -10418,6 +13388,20 @@ class CfnRouterNetworkInterface(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRouterNetworkInterface")
+    @builtins.classmethod
+    def arn_for_router_network_interface(
+        cls,
+        resource: _IRouterNetworkInterfaceRef_05bd061c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31cc864547a94937d2c7f541798d2155fb714db7022c9ef5c73db0655c89a985)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRouterNetworkInterface", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10985,6 +13969,2384 @@ class CfnRouterNetworkInterfaceProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IRouterOutputRef_afa317cd, _ITaggableV2_4e6798f8)
+class CfnRouterOutput(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput",
+):
+    '''Represents a router input in AWS Elemental MediaConnect that can be used to egress content transmitted from router inputs.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html
+    :cloudformationResource: AWS::MediaConnect::RouterOutput
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_mediaconnect as mediaconnect
+        
+        # automatic: Any
+        # default_: Any
+        
+        cfn_router_output = mediaconnect.CfnRouterOutput(self, "MyCfnRouterOutput",
+            configuration=mediaconnect.CfnRouterOutput.RouterOutputConfigurationProperty(
+                media_connect_flow=mediaconnect.CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty(
+                    destination_transit_encryption=mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+        
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+        
+                    # the properties below are optional
+                    flow_arn="flowArn",
+                    flow_source_arn="flowSourceArn"
+                ),
+                media_live_input=mediaconnect.CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty(
+                    destination_transit_encryption=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+        
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+        
+                    # the properties below are optional
+                    media_live_input_arn="mediaLiveInputArn",
+                    media_live_pipeline_id="mediaLivePipelineId"
+                ),
+                standard=mediaconnect.CfnRouterOutput.StandardRouterOutputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configuration=mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123
+                        ),
+                        rtp=mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123,
+        
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123,
+                            minimum_latency_milliseconds=123,
+        
+                            # the properties below are optional
+                            encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+        
+                            # the properties below are optional
+                            encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    ),
+        
+                    # the properties below are optional
+                    protocol="protocol"
+                )
+            ),
+            maximum_bitrate=123,
+            name="name",
+            routing_scope="routingScope",
+            tier="tier",
+        
+            # the properties below are optional
+            availability_zone="availabilityZone",
+            maintenance_configuration=mediaconnect.CfnRouterOutput.MaintenanceConfigurationProperty(
+                default=default_,
+                preferred_day_time=mediaconnect.CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty(
+                    day="day",
+                    time="time"
+                )
+            ),
+            region_name="regionName",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.RouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        maximum_bitrate: jsii.Number,
+        name: builtins.str,
+        routing_scope: builtins.str,
+        tier: builtins.str,
+        availability_zone: typing.Optional[builtins.str] = None,
+        maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.MaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        region_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::MediaConnect::RouterOutput``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param configuration: The configuration settings for a router output.
+        :param maximum_bitrate: The maximum bitrate for the router output.
+        :param name: The name of the router output.
+        :param routing_scope: 
+        :param tier: 
+        :param availability_zone: The Availability Zone where you want to create the router output. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        :param region_name: The AWS Region for the router output. Defaults to the current region if not specified.
+        :param tags: Key-value pairs that can be used to tag this router output.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d0723832b1d0cb17f5bcd9018d140834abd5e94bc96fb3fb67d22f77fb5439c3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnRouterOutputProps(
+            configuration=configuration,
+            maximum_bitrate=maximum_bitrate,
+            name=name,
+            routing_scope=routing_scope,
+            tier=tier,
+            availability_zone=availability_zone,
+            maintenance_configuration=maintenance_configuration,
+            region_name=region_name,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRouterOutput")
+    @builtins.classmethod
+    def arn_for_router_output(
+        cls,
+        resource: _IRouterOutputRef_afa317cd,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24a2fbac160b0fd704ba7504535f3e38f1a17f7911da11e6a5c0eb4336436bbc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRouterOutput", [resource]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__46c254968a788990028c9b84207c991e7dbd51c1a2e4cd0ceb7a94af8e32e549)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96ef8ccb0c5e0eb94acef4319249f97dfa0ce9d3c9e57dbf2db800211064be5d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The timestamp when the router output was created.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''The unique identifier of the router output.
+
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIpAddress")
+    def attr_ip_address(self) -> builtins.str:
+        '''The IP address of the router output.
+
+        :cloudformationAttribute: IpAddress
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrIpAddress"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMaintenanceType")
+    def attr_maintenance_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: MaintenanceType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrMaintenanceType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrOutputType")
+    def attr_output_type(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: OutputType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrOutputType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRoutedState")
+    def attr_routed_state(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: RoutedState
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrRoutedState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedAt")
+    def attr_updated_at(self) -> builtins.str:
+        '''The timestamp when the router output was last updated.
+
+        :cloudformationAttribute: UpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="routerOutputRef")
+    def router_output_ref(self) -> _RouterOutputReference_12c4ea61:
+        '''A reference to a RouterOutput resource.'''
+        return typing.cast(_RouterOutputReference_12c4ea61, jsii.get(self, "routerOutputRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RouterOutputConfigurationProperty"]:
+        '''The configuration settings for a router output.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RouterOutputConfigurationProperty"], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RouterOutputConfigurationProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f147da00aaf1cdc7014a62b08d8cdc0f9cfce3df5d377973424d2f11377219c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="maximumBitrate")
+    def maximum_bitrate(self) -> jsii.Number:
+        '''The maximum bitrate for the router output.'''
+        return typing.cast(jsii.Number, jsii.get(self, "maximumBitrate"))
+
+    @maximum_bitrate.setter
+    def maximum_bitrate(self, value: jsii.Number) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6343c02a4b0b9d5d865add8c4d996a26f8389b83b214b7350ac7818a31991557)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "maximumBitrate", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the router output.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4216c7d780d8fb5794084f06923c5c5b6e06951c7c74d95e570b19c17f16c07d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routingScope")
+    def routing_scope(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "routingScope"))
+
+    @routing_scope.setter
+    def routing_scope(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31256d5031051647600a9f3e6d4c7348c96db2131b170cbb3b84d03cb08508d9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routingScope", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tier")
+    def tier(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "tier"))
+
+    @tier.setter
+    def tier(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1241eacdcaad6a0aadee10ac0ca9c13dd7f59cf1e7f5d785c7c1fc63190e220)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tier", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="availabilityZone")
+    def availability_zone(self) -> typing.Optional[builtins.str]:
+        '''The Availability Zone where you want to create the router output.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "availabilityZone"))
+
+    @availability_zone.setter
+    def availability_zone(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b8371a3dd1aa326607abab281477f883dfadb45d27717b05bafb937c2ca7c31)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "availabilityZone", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="maintenanceConfiguration")
+    def maintenance_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MaintenanceConfigurationProperty"]]:
+        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MaintenanceConfigurationProperty"]], jsii.get(self, "maintenanceConfiguration"))
+
+    @maintenance_configuration.setter
+    def maintenance_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MaintenanceConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e2d9d66ea8cc6f7fb9f2d963cee39b38487405038346bed562a4282d170af87a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "maintenanceConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="regionName")
+    def region_name(self) -> typing.Optional[builtins.str]:
+        '''The AWS Region for the router output.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "regionName"))
+
+    @region_name.setter
+    def region_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f23a2bac43b9e1bd96cf5c900f5ae7d229b5b15428c990a76f5392b3623edc92)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "regionName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs that can be used to tag this router output.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cb6937ae740be264a96755b4785a6121ef85f3be99b91fb48ef0d32ab567b808)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"automatic": "automatic", "secrets_manager": "secretsManager"},
+    )
+    class FlowTransitEncryptionKeyConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            automatic: typing.Any = None,
+            secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param automatic: Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+            :param secrets_manager: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                flow_transit_encryption_key_configuration_property = mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                    automatic=automatic,
+                    secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d2919cc0452cea1b6c29eff661620544fa1903342e65d8def16c87e34ebac3af)
+                check_type(argname="argument automatic", value=automatic, expected_type=type_hints["automatic"])
+                check_type(argname="argument secrets_manager", value=secrets_manager, expected_type=type_hints["secrets_manager"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if automatic is not None:
+                self._values["automatic"] = automatic
+            if secrets_manager is not None:
+                self._values["secrets_manager"] = secrets_manager
+
+        @builtins.property
+        def automatic(self) -> typing.Any:
+            '''Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-flowtransitencryptionkeyconfiguration-automatic
+            '''
+            result = self._values.get("automatic")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def secrets_manager(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"]]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-flowtransitencryptionkeyconfiguration-secretsmanager
+            '''
+            result = self._values.get("secrets_manager")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FlowTransitEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "encryption_key_configuration": "encryptionKeyConfiguration",
+            "encryption_key_type": "encryptionKeyType",
+        },
+    )
+    class FlowTransitEncryptionProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            encryption_key_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+
+            :param encryption_key_configuration: Configuration settings for flow transit encryption keys.
+            :param encryption_key_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                flow_transit_encryption_property = mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty(
+                    encryption_key_configuration=mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                        automatic=automatic,
+                        secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    encryption_key_type="encryptionKeyType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__eb7cec781c17f5df2ca2950847ce1a86c7e216d13b67c9830306688dd24f423c)
+                check_type(argname="argument encryption_key_configuration", value=encryption_key_configuration, expected_type=type_hints["encryption_key_configuration"])
+                check_type(argname="argument encryption_key_type", value=encryption_key_type, expected_type=type_hints["encryption_key_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key_configuration": encryption_key_configuration,
+            }
+            if encryption_key_type is not None:
+                self._values["encryption_key_type"] = encryption_key_type
+
+        @builtins.property
+        def encryption_key_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty"]:
+            '''Configuration settings for flow transit encryption keys.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryption.html#cfn-mediaconnect-routeroutput-flowtransitencryption-encryptionkeyconfiguration
+            '''
+            result = self._values.get("encryption_key_configuration")
+            assert result is not None, "Required property 'encryption_key_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty"], result)
+
+        @builtins.property
+        def encryption_key_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-flowtransitencryption.html#cfn-mediaconnect-routeroutput-flowtransitencryption-encryptionkeytype
+            '''
+            result = self._values.get("encryption_key_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FlowTransitEncryptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.MaintenanceConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"default": "default", "preferred_day_time": "preferredDayTime"},
+    )
+    class MaintenanceConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            default: typing.Any = None,
+            preferred_day_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param default: Configuration settings for default maintenance scheduling.
+            :param preferred_day_time: Configuration for preferred day and time maintenance settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-maintenanceconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # default_: Any
+                
+                maintenance_configuration_property = mediaconnect.CfnRouterOutput.MaintenanceConfigurationProperty(
+                    default=default_,
+                    preferred_day_time=mediaconnect.CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty(
+                        day="day",
+                        time="time"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3168eb6355c5a713c93dcf1c47b10105621a55ece693c6e8524178049155072b)
+                check_type(argname="argument default", value=default, expected_type=type_hints["default"])
+                check_type(argname="argument preferred_day_time", value=preferred_day_time, expected_type=type_hints["preferred_day_time"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if default is not None:
+                self._values["default"] = default
+            if preferred_day_time is not None:
+                self._values["preferred_day_time"] = preferred_day_time
+
+        @builtins.property
+        def default(self) -> typing.Any:
+            '''Configuration settings for default maintenance scheduling.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-maintenanceconfiguration.html#cfn-mediaconnect-routeroutput-maintenanceconfiguration-default
+            '''
+            result = self._values.get("default")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def preferred_day_time(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty"]]:
+            '''Configuration for preferred day and time maintenance settings.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-maintenanceconfiguration.html#cfn-mediaconnect-routeroutput-maintenanceconfiguration-preferreddaytime
+            '''
+            result = self._values.get("preferred_day_time")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MaintenanceConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_transit_encryption": "destinationTransitEncryption",
+            "flow_arn": "flowArn",
+            "flow_source_arn": "flowSourceArn",
+        },
+    )
+    class MediaConnectFlowRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destination_transit_encryption: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.FlowTransitEncryptionProperty", typing.Dict[builtins.str, typing.Any]]],
+            flow_arn: typing.Optional[builtins.str] = None,
+            flow_source_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for connecting a router output to a MediaConnect flow source.
+
+            :param destination_transit_encryption: The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+            :param flow_arn: The ARN of the flow to connect to this router output.
+            :param flow_source_arn: The ARN of the flow source to connect to this router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                media_connect_flow_router_output_configuration_property = mediaconnect.CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty(
+                    destination_transit_encryption=mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+                
+                    # the properties below are optional
+                    flow_arn="flowArn",
+                    flow_source_arn="flowSourceArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c91e97d97b93eb546e4ca89c6248ae26ae42ceadf35a6181ea7b383b55804b49)
+                check_type(argname="argument destination_transit_encryption", value=destination_transit_encryption, expected_type=type_hints["destination_transit_encryption"])
+                check_type(argname="argument flow_arn", value=flow_arn, expected_type=type_hints["flow_arn"])
+                check_type(argname="argument flow_source_arn", value=flow_source_arn, expected_type=type_hints["flow_source_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destination_transit_encryption": destination_transit_encryption,
+            }
+            if flow_arn is not None:
+                self._values["flow_arn"] = flow_arn
+            if flow_source_arn is not None:
+                self._values["flow_source_arn"] = flow_source_arn
+
+        @builtins.property
+        def destination_transit_encryption(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.FlowTransitEncryptionProperty"]:
+            '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration-destinationtransitencryption
+            '''
+            result = self._values.get("destination_transit_encryption")
+            assert result is not None, "Required property 'destination_transit_encryption' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.FlowTransitEncryptionProperty"], result)
+
+        @builtins.property
+        def flow_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the flow to connect to this router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration-flowarn
+            '''
+            result = self._values.get("flow_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def flow_source_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the flow source to connect to this router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-mediaconnectflowrouteroutputconfiguration-flowsourcearn
+            '''
+            result = self._values.get("flow_source_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MediaConnectFlowRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_transit_encryption": "destinationTransitEncryption",
+            "media_live_input_arn": "mediaLiveInputArn",
+            "media_live_pipeline_id": "mediaLivePipelineId",
+        },
+    )
+    class MediaLiveInputRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destination_transit_encryption: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.MediaLiveTransitEncryptionProperty", typing.Dict[builtins.str, typing.Any]]],
+            media_live_input_arn: typing.Optional[builtins.str] = None,
+            media_live_pipeline_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for connecting a router output to a MediaLive input.
+
+            :param destination_transit_encryption: The encryption configuration that defines how content is encrypted during transit between MediaConnect Router and MediaLive. This configuration determines whether encryption keys are automatically managed by the service or manually managed through AWS Secrets Manager.
+            :param media_live_input_arn: The ARN of the MediaLive input to connect to this router output.
+            :param media_live_pipeline_id: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                media_live_input_router_output_configuration_property = mediaconnect.CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty(
+                    destination_transit_encryption=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty(
+                        encryption_key_configuration=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                            automatic=automatic,
+                            secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        encryption_key_type="encryptionKeyType"
+                    ),
+                
+                    # the properties below are optional
+                    media_live_input_arn="mediaLiveInputArn",
+                    media_live_pipeline_id="mediaLivePipelineId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__296fe8c5575c6daa0aee10695b4fa916e9cc5d0a13736ad1ed6b81b458d5454e)
+                check_type(argname="argument destination_transit_encryption", value=destination_transit_encryption, expected_type=type_hints["destination_transit_encryption"])
+                check_type(argname="argument media_live_input_arn", value=media_live_input_arn, expected_type=type_hints["media_live_input_arn"])
+                check_type(argname="argument media_live_pipeline_id", value=media_live_pipeline_id, expected_type=type_hints["media_live_pipeline_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destination_transit_encryption": destination_transit_encryption,
+            }
+            if media_live_input_arn is not None:
+                self._values["media_live_input_arn"] = media_live_input_arn
+            if media_live_pipeline_id is not None:
+                self._values["media_live_pipeline_id"] = media_live_pipeline_id
+
+        @builtins.property
+        def destination_transit_encryption(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveTransitEncryptionProperty"]:
+            '''The encryption configuration that defines how content is encrypted during transit between MediaConnect Router and MediaLive.
+
+            This configuration determines whether encryption keys are automatically managed by the service or manually managed through AWS Secrets Manager.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration-destinationtransitencryption
+            '''
+            result = self._values.get("destination_transit_encryption")
+            assert result is not None, "Required property 'destination_transit_encryption' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveTransitEncryptionProperty"], result)
+
+        @builtins.property
+        def media_live_input_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the MediaLive input to connect to this router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration-medialiveinputarn
+            '''
+            result = self._values.get("media_live_input_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def media_live_pipeline_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-medialiveinputrouteroutputconfiguration-medialivepipelineid
+            '''
+            result = self._values.get("media_live_pipeline_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MediaLiveInputRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"automatic": "automatic", "secrets_manager": "secretsManager"},
+    )
+    class MediaLiveTransitEncryptionKeyConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            automatic: typing.Any = None,
+            secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param automatic: Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+            :param secrets_manager: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                media_live_transit_encryption_key_configuration_property = mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                    automatic=automatic,
+                    secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__15fd9e770cad7633d1755bc0f3ee7c7619085574f4779ab136bccba68f8b110e)
+                check_type(argname="argument automatic", value=automatic, expected_type=type_hints["automatic"])
+                check_type(argname="argument secrets_manager", value=secrets_manager, expected_type=type_hints["secrets_manager"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if automatic is not None:
+                self._values["automatic"] = automatic
+            if secrets_manager is not None:
+                self._values["secrets_manager"] = secrets_manager
+
+        @builtins.property
+        def automatic(self) -> typing.Any:
+            '''Configuration settings for automatic encryption key management, where MediaConnect handles key creation and rotation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-medialivetransitencryptionkeyconfiguration-automatic
+            '''
+            result = self._values.get("automatic")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def secrets_manager(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"]]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-medialivetransitencryptionkeyconfiguration-secretsmanager
+            '''
+            result = self._values.get("secrets_manager")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MediaLiveTransitEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "encryption_key_configuration": "encryptionKeyConfiguration",
+            "encryption_key_type": "encryptionKeyType",
+        },
+    )
+    class MediaLiveTransitEncryptionProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            encryption_key_type: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The encryption configuration that defines how content is encrypted during transit between MediaConnect Router and MediaLive.
+
+            This configuration determines whether encryption keys are automatically managed by the service or manually managed through AWS Secrets Manager.
+
+            :param encryption_key_configuration: Configuration settings for the MediaLive transit encryption key.
+            :param encryption_key_type: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                media_live_transit_encryption_property = mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty(
+                    encryption_key_configuration=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                        automatic=automatic,
+                        secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    encryption_key_type="encryptionKeyType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bca59142eba771d1b11d62bea50d63c8ea9c3e3f701bc82dec8d3053a8e335a9)
+                check_type(argname="argument encryption_key_configuration", value=encryption_key_configuration, expected_type=type_hints["encryption_key_configuration"])
+                check_type(argname="argument encryption_key_type", value=encryption_key_type, expected_type=type_hints["encryption_key_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key_configuration": encryption_key_configuration,
+            }
+            if encryption_key_type is not None:
+                self._values["encryption_key_type"] = encryption_key_type
+
+        @builtins.property
+        def encryption_key_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty"]:
+            '''Configuration settings for the MediaLive transit encryption key.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryption.html#cfn-mediaconnect-routeroutput-medialivetransitencryption-encryptionkeyconfiguration
+            '''
+            result = self._values.get("encryption_key_configuration")
+            assert result is not None, "Required property 'encryption_key_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty"], result)
+
+        @builtins.property
+        def encryption_key_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-medialivetransitencryption.html#cfn-mediaconnect-routeroutput-medialivetransitencryption-encryptionkeytype
+            '''
+            result = self._values.get("encryption_key_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MediaLiveTransitEncryptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"day": "day", "time": "time"},
+    )
+    class PreferredDayTimeMaintenanceConfigurationProperty:
+        def __init__(self, *, day: builtins.str, time: builtins.str) -> None:
+            '''Configuration for preferred day and time maintenance settings.
+
+            :param day: 
+            :param time: The preferred time for maintenance operations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-preferreddaytimemaintenanceconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                preferred_day_time_maintenance_configuration_property = mediaconnect.CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty(
+                    day="day",
+                    time="time"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__06a3dadf828214b14502e7163f28e97ca8eaba7fe6816f85989f565bc4e469d7)
+                check_type(argname="argument day", value=day, expected_type=type_hints["day"])
+                check_type(argname="argument time", value=time, expected_type=type_hints["time"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "day": day,
+                "time": time,
+            }
+
+        @builtins.property
+        def day(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-preferreddaytimemaintenanceconfiguration.html#cfn-mediaconnect-routeroutput-preferreddaytimemaintenanceconfiguration-day
+            '''
+            result = self._values.get("day")
+            assert result is not None, "Required property 'day' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def time(self) -> builtins.str:
+            '''The preferred time for maintenance operations.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-preferreddaytimemaintenanceconfiguration.html#cfn-mediaconnect-routeroutput-preferreddaytimemaintenanceconfiguration-time
+            '''
+            result = self._values.get("time")
+            assert result is not None, "Required property 'time' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PreferredDayTimeMaintenanceConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_address": "destinationAddress",
+            "destination_port": "destinationPort",
+        },
+    )
+    class RistRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destination_address: builtins.str,
+            destination_port: jsii.Number,
+        ) -> None:
+            '''The configuration settings for a router output using the RIST (Reliable Internet Stream Transport) protocol, including the destination address and port.
+
+            :param destination_address: The destination IP address for the RIST protocol in the router output configuration.
+            :param destination_port: The destination port number for the RIST protocol in the router output configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-ristrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                rist_router_output_configuration_property = mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                    destination_address="destinationAddress",
+                    destination_port=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ae36a4a425b1a376a579bc881963342c2907067c5765e9a309cac9c1792dec7c)
+                check_type(argname="argument destination_address", value=destination_address, expected_type=type_hints["destination_address"])
+                check_type(argname="argument destination_port", value=destination_port, expected_type=type_hints["destination_port"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destination_address": destination_address,
+                "destination_port": destination_port,
+            }
+
+        @builtins.property
+        def destination_address(self) -> builtins.str:
+            '''The destination IP address for the RIST protocol in the router output configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-ristrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-ristrouteroutputconfiguration-destinationaddress
+            '''
+            result = self._values.get("destination_address")
+            assert result is not None, "Required property 'destination_address' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def destination_port(self) -> jsii.Number:
+            '''The destination port number for the RIST protocol in the router output configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-ristrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-ristrouteroutputconfiguration-destinationport
+            '''
+            result = self._values.get("destination_port")
+            assert result is not None, "Required property 'destination_port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RistRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.RouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "media_connect_flow": "mediaConnectFlow",
+            "media_live_input": "mediaLiveInput",
+            "standard": "standard",
+        },
+    )
+    class RouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            media_connect_flow: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            media_live_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            standard: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.StandardRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param media_connect_flow: Configuration settings for connecting a router output to a MediaConnect flow source.
+            :param media_live_input: Configuration settings for connecting a router output to a MediaLive input.
+            :param standard: The configuration settings for a standard router output, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                # automatic: Any
+                
+                router_output_configuration_property = mediaconnect.CfnRouterOutput.RouterOutputConfigurationProperty(
+                    media_connect_flow=mediaconnect.CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty(
+                        destination_transit_encryption=mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+                
+                        # the properties below are optional
+                        flow_arn="flowArn",
+                        flow_source_arn="flowSourceArn"
+                    ),
+                    media_live_input=mediaconnect.CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty(
+                        destination_transit_encryption=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+                
+                        # the properties below are optional
+                        media_live_input_arn="mediaLiveInputArn",
+                        media_live_pipeline_id="mediaLivePipelineId"
+                    ),
+                    standard=mediaconnect.CfnRouterOutput.StandardRouterOutputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configuration=mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123
+                            ),
+                            rtp=mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123,
+                
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123,
+                                minimum_latency_milliseconds=123,
+                
+                                # the properties below are optional
+                                encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+                
+                                # the properties below are optional
+                                encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        ),
+                
+                        # the properties below are optional
+                        protocol="protocol"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__195e2aba5e342493ec27f8f63f43810db21ee1b303be1cfa962c7f9a490a7d3d)
+                check_type(argname="argument media_connect_flow", value=media_connect_flow, expected_type=type_hints["media_connect_flow"])
+                check_type(argname="argument media_live_input", value=media_live_input, expected_type=type_hints["media_live_input"])
+                check_type(argname="argument standard", value=standard, expected_type=type_hints["standard"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if media_connect_flow is not None:
+                self._values["media_connect_flow"] = media_connect_flow
+            if media_live_input is not None:
+                self._values["media_live_input"] = media_live_input
+            if standard is not None:
+                self._values["standard"] = standard
+
+        @builtins.property
+        def media_connect_flow(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty"]]:
+            '''Configuration settings for connecting a router output to a MediaConnect flow source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputconfiguration-mediaconnectflow
+            '''
+            result = self._values.get("media_connect_flow")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty"]], result)
+
+        @builtins.property
+        def media_live_input(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty"]]:
+            '''Configuration settings for connecting a router output to a MediaLive input.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputconfiguration-medialiveinput
+            '''
+            result = self._values.get("media_live_input")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty"]], result)
+
+        @builtins.property
+        def standard(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.StandardRouterOutputConfigurationProperty"]]:
+            '''The configuration settings for a standard router output, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputconfiguration-standard
+            '''
+            result = self._values.get("standard")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.StandardRouterOutputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "rist": "rist",
+            "rtp": "rtp",
+            "srt_caller": "srtCaller",
+            "srt_listener": "srtListener",
+        },
+    )
+    class RouterOutputProtocolConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.RistRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.RtpRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param rist: The configuration settings for a router output using the RIST (Reliable Internet Stream Transport) protocol, including the destination address and port.
+            :param rtp: The configuration settings for a router output using the RTP (Real-Time Transport Protocol) protocol, including the destination address and port, and forward error correction state.
+            :param srt_caller: The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in caller mode, including the destination address and port, minimum latency, stream ID, and encryption key configuration.
+            :param srt_listener: The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and encryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputprotocolconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                router_output_protocol_configuration_property = mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty(
+                    rist=mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                        destination_address="destinationAddress",
+                        destination_port=123
+                    ),
+                    rtp=mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                        destination_address="destinationAddress",
+                        destination_port=123,
+                
+                        # the properties below are optional
+                        forward_error_correction="forwardErrorCorrection"
+                    ),
+                    srt_caller=mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                        destination_address="destinationAddress",
+                        destination_port=123,
+                        minimum_latency_milliseconds=123,
+                
+                        # the properties below are optional
+                        encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        ),
+                        stream_id="streamId"
+                    ),
+                    srt_listener=mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                        minimum_latency_milliseconds=123,
+                        port=123,
+                
+                        # the properties below are optional
+                        encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                            encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                role_arn="roleArn",
+                                secret_arn="secretArn"
+                            )
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__562d01ca7d13c69f8bd962654080b4d33fa8642743ff71dd15962ebd61569f3d)
+                check_type(argname="argument rist", value=rist, expected_type=type_hints["rist"])
+                check_type(argname="argument rtp", value=rtp, expected_type=type_hints["rtp"])
+                check_type(argname="argument srt_caller", value=srt_caller, expected_type=type_hints["srt_caller"])
+                check_type(argname="argument srt_listener", value=srt_listener, expected_type=type_hints["srt_listener"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if rist is not None:
+                self._values["rist"] = rist
+            if rtp is not None:
+                self._values["rtp"] = rtp
+            if srt_caller is not None:
+                self._values["srt_caller"] = srt_caller
+            if srt_listener is not None:
+                self._values["srt_listener"] = srt_listener
+
+        @builtins.property
+        def rist(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RistRouterOutputConfigurationProperty"]]:
+            '''The configuration settings for a router output using the RIST (Reliable Internet Stream Transport) protocol, including the destination address and port.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputprotocolconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputprotocolconfiguration-rist
+            '''
+            result = self._values.get("rist")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RistRouterOutputConfigurationProperty"]], result)
+
+        @builtins.property
+        def rtp(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RtpRouterOutputConfigurationProperty"]]:
+            '''The configuration settings for a router output using the RTP (Real-Time Transport Protocol) protocol, including the destination address and port, and forward error correction state.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputprotocolconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputprotocolconfiguration-rtp
+            '''
+            result = self._values.get("rtp")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RtpRouterOutputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_caller(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty"]]:
+            '''The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in caller mode, including the destination address and port, minimum latency, stream ID, and encryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputprotocolconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputprotocolconfiguration-srtcaller
+            '''
+            result = self._values.get("srt_caller")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty"]], result)
+
+        @builtins.property
+        def srt_listener(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty"]]:
+            '''The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and encryption key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-routeroutputprotocolconfiguration.html#cfn-mediaconnect-routeroutput-routeroutputprotocolconfiguration-srtlistener
+            '''
+            result = self._values.get("srt_listener")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterOutputProtocolConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_address": "destinationAddress",
+            "destination_port": "destinationPort",
+            "forward_error_correction": "forwardErrorCorrection",
+        },
+    )
+    class RtpRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destination_address: builtins.str,
+            destination_port: jsii.Number,
+            forward_error_correction: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a router output using the RTP (Real-Time Transport Protocol) protocol, including the destination address and port, and forward error correction state.
+
+            :param destination_address: The destination IP address for the RTP protocol in the router output configuration.
+            :param destination_port: The destination port number for the RTP protocol in the router output configuration.
+            :param forward_error_correction: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-rtprouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                rtp_router_output_configuration_property = mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                    destination_address="destinationAddress",
+                    destination_port=123,
+                
+                    # the properties below are optional
+                    forward_error_correction="forwardErrorCorrection"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__979ac0b18bf0bc76a507f9f24868b0ff8e68ab9d4bf73ca30f060372ccbea196)
+                check_type(argname="argument destination_address", value=destination_address, expected_type=type_hints["destination_address"])
+                check_type(argname="argument destination_port", value=destination_port, expected_type=type_hints["destination_port"])
+                check_type(argname="argument forward_error_correction", value=forward_error_correction, expected_type=type_hints["forward_error_correction"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destination_address": destination_address,
+                "destination_port": destination_port,
+            }
+            if forward_error_correction is not None:
+                self._values["forward_error_correction"] = forward_error_correction
+
+        @builtins.property
+        def destination_address(self) -> builtins.str:
+            '''The destination IP address for the RTP protocol in the router output configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-rtprouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-rtprouteroutputconfiguration-destinationaddress
+            '''
+            result = self._values.get("destination_address")
+            assert result is not None, "Required property 'destination_address' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def destination_port(self) -> jsii.Number:
+            '''The destination port number for the RTP protocol in the router output configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-rtprouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-rtprouteroutputconfiguration-destinationport
+            '''
+            result = self._values.get("destination_port")
+            assert result is not None, "Required property 'destination_port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def forward_error_correction(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-rtprouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-rtprouteroutputconfiguration-forwarderrorcorrection
+            '''
+            result = self._values.get("forward_error_correction")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RtpRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"role_arn": "roleArn", "secret_arn": "secretArn"},
+    )
+    class SecretsManagerEncryptionKeyConfigurationProperty:
+        def __init__(self, *, role_arn: builtins.str, secret_arn: builtins.str) -> None:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :param role_arn: The ARN of the IAM role assumed by MediaConnect to access the AWS Secrets Manager secret.
+            :param secret_arn: The ARN of the AWS Secrets Manager secret used for transit encryption.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-secretsmanagerencryptionkeyconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                secrets_manager_encryption_key_configuration_property = mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                    role_arn="roleArn",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__066db337f47042a13b7d50a298df594df0a3bcbe095ae9b4f093e6805b55e954)
+                check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "role_arn": role_arn,
+                "secret_arn": secret_arn,
+            }
+
+        @builtins.property
+        def role_arn(self) -> builtins.str:
+            '''The ARN of the IAM role assumed by MediaConnect to access the AWS Secrets Manager secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-secretsmanagerencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-secretsmanagerencryptionkeyconfiguration-rolearn
+            '''
+            result = self._values.get("role_arn")
+            assert result is not None, "Required property 'role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''The ARN of the AWS Secrets Manager secret used for transit encryption.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-secretsmanagerencryptionkeyconfiguration.html#cfn-mediaconnect-routeroutput-secretsmanagerencryptionkeyconfiguration-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SecretsManagerEncryptionKeyConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destination_address": "destinationAddress",
+            "destination_port": "destinationPort",
+            "minimum_latency_milliseconds": "minimumLatencyMilliseconds",
+            "encryption_configuration": "encryptionConfiguration",
+            "stream_id": "streamId",
+        },
+    )
+    class SrtCallerRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            destination_address: builtins.str,
+            destination_port: jsii.Number,
+            minimum_latency_milliseconds: jsii.Number,
+            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SrtEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            stream_id: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in caller mode, including the destination address and port, minimum latency, stream ID, and encryption key configuration.
+
+            :param destination_address: The destination IP address for the SRT protocol in caller mode.
+            :param destination_port: The destination port number for the SRT protocol in caller mode.
+            :param minimum_latency_milliseconds: The minimum latency in milliseconds for the SRT protocol in caller mode.
+            :param encryption_configuration: Contains the configuration settings for encrypting SRT streams, including the encryption key details and encryption parameters.
+            :param stream_id: The stream ID for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_caller_router_output_configuration_property = mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                    destination_address="destinationAddress",
+                    destination_port=123,
+                    minimum_latency_milliseconds=123,
+                
+                    # the properties below are optional
+                    encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                        encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    ),
+                    stream_id="streamId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7c3254adaa7e8d0f5267957a6b36ec0a736bd46e05edb0d526175da04f002a94)
+                check_type(argname="argument destination_address", value=destination_address, expected_type=type_hints["destination_address"])
+                check_type(argname="argument destination_port", value=destination_port, expected_type=type_hints["destination_port"])
+                check_type(argname="argument minimum_latency_milliseconds", value=minimum_latency_milliseconds, expected_type=type_hints["minimum_latency_milliseconds"])
+                check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
+                check_type(argname="argument stream_id", value=stream_id, expected_type=type_hints["stream_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "destination_address": destination_address,
+                "destination_port": destination_port,
+                "minimum_latency_milliseconds": minimum_latency_milliseconds,
+            }
+            if encryption_configuration is not None:
+                self._values["encryption_configuration"] = encryption_configuration
+            if stream_id is not None:
+                self._values["stream_id"] = stream_id
+
+        @builtins.property
+        def destination_address(self) -> builtins.str:
+            '''The destination IP address for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration-destinationaddress
+            '''
+            result = self._values.get("destination_address")
+            assert result is not None, "Required property 'destination_address' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def destination_port(self) -> jsii.Number:
+            '''The destination port number for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration-destinationport
+            '''
+            result = self._values.get("destination_port")
+            assert result is not None, "Required property 'destination_port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def minimum_latency_milliseconds(self) -> jsii.Number:
+            '''The minimum latency in milliseconds for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration-minimumlatencymilliseconds
+            '''
+            result = self._values.get("minimum_latency_milliseconds")
+            assert result is not None, "Required property 'minimum_latency_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def encryption_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtEncryptionConfigurationProperty"]]:
+            '''Contains the configuration settings for encrypting SRT streams, including the encryption key details and encryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration-encryptionconfiguration
+            '''
+            result = self._values.get("encryption_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtEncryptionConfigurationProperty"]], result)
+
+        @builtins.property
+        def stream_id(self) -> typing.Optional[builtins.str]:
+            '''The stream ID for the SRT protocol in caller mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtcallerrouteroutputconfiguration-streamid
+            '''
+            result = self._values.get("stream_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtCallerRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"encryption_key": "encryptionKey"},
+    )
+    class SrtEncryptionConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            encryption_key: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''Contains the configuration settings for encrypting SRT streams, including the encryption key details and encryption parameters.
+
+            :param encryption_key: The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtencryptionconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_encryption_configuration_property = mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                    encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                        role_arn="roleArn",
+                        secret_arn="secretArn"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bd76c0aac777140ccfdcd9b8dde075deccd8b20e8fb2f4ae5c88addc5b54ccef)
+                check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "encryption_key": encryption_key,
+            }
+
+        @builtins.property
+        def encryption_key(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"]:
+            '''The configuration settings for transit encryption using AWS Secrets Manager, including the secret ARN and role ARN.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtencryptionconfiguration.html#cfn-mediaconnect-routeroutput-srtencryptionconfiguration-encryptionkey
+            '''
+            result = self._values.get("encryption_key")
+            assert result is not None, "Required property 'encryption_key' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtEncryptionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "minimum_latency_milliseconds": "minimumLatencyMilliseconds",
+            "port": "port",
+            "encryption_configuration": "encryptionConfiguration",
+        },
+    )
+    class SrtListenerRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            minimum_latency_milliseconds: jsii.Number,
+            port: jsii.Number,
+            encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.SrtEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''The configuration settings for a router output using the SRT (Secure Reliable Transport) protocol in listener mode, including the port, minimum latency, and encryption key configuration.
+
+            :param minimum_latency_milliseconds: The minimum latency in milliseconds for the SRT protocol in listener mode.
+            :param port: The port number for the SRT protocol in listener mode.
+            :param encryption_configuration: Contains the configuration settings for encrypting SRT streams, including the encryption key details and encryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                srt_listener_router_output_configuration_property = mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                    minimum_latency_milliseconds=123,
+                    port=123,
+                
+                    # the properties below are optional
+                    encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                        encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                            role_arn="roleArn",
+                            secret_arn="secretArn"
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__46a504c749dcd4fafe4de2e4d8b321ec6c39bf1a1cb6ef1c43a2b6dbee93549e)
+                check_type(argname="argument minimum_latency_milliseconds", value=minimum_latency_milliseconds, expected_type=type_hints["minimum_latency_milliseconds"])
+                check_type(argname="argument port", value=port, expected_type=type_hints["port"])
+                check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "minimum_latency_milliseconds": minimum_latency_milliseconds,
+                "port": port,
+            }
+            if encryption_configuration is not None:
+                self._values["encryption_configuration"] = encryption_configuration
+
+        @builtins.property
+        def minimum_latency_milliseconds(self) -> jsii.Number:
+            '''The minimum latency in milliseconds for the SRT protocol in listener mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration-minimumlatencymilliseconds
+            '''
+            result = self._values.get("minimum_latency_milliseconds")
+            assert result is not None, "Required property 'minimum_latency_milliseconds' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def port(self) -> jsii.Number:
+            '''The port number for the SRT protocol in listener mode.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration-port
+            '''
+            result = self._values.get("port")
+            assert result is not None, "Required property 'port' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def encryption_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtEncryptionConfigurationProperty"]]:
+            '''Contains the configuration settings for encrypting SRT streams, including the encryption key details and encryption parameters.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-srtlistenerrouteroutputconfiguration-encryptionconfiguration
+            '''
+            result = self._values.get("encryption_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.SrtEncryptionConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SrtListenerRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutput.StandardRouterOutputConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "network_interface_arn": "networkInterfaceArn",
+            "protocol_configuration": "protocolConfiguration",
+            "protocol": "protocol",
+        },
+    )
+    class StandardRouterOutputConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            network_interface_arn: builtins.str,
+            protocol_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnRouterOutput.RouterOutputProtocolConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+            protocol: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The configuration settings for a standard router output, including the protocol, protocol-specific configuration, network interface, and availability zone.
+
+            :param network_interface_arn: The Amazon Resource Name (ARN) of the network interface associated with the standard router output.
+            :param protocol_configuration: The protocol configuration settings for a router output.
+            :param protocol: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-standardrouteroutputconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_mediaconnect as mediaconnect
+                
+                standard_router_output_configuration_property = mediaconnect.CfnRouterOutput.StandardRouterOutputConfigurationProperty(
+                    network_interface_arn="networkInterfaceArn",
+                    protocol_configuration=mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty(
+                        rist=mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123
+                        ),
+                        rtp=mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123,
+                
+                            # the properties below are optional
+                            forward_error_correction="forwardErrorCorrection"
+                        ),
+                        srt_caller=mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                            destination_address="destinationAddress",
+                            destination_port=123,
+                            minimum_latency_milliseconds=123,
+                
+                            # the properties below are optional
+                            encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+                            stream_id="streamId"
+                        ),
+                        srt_listener=mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                            minimum_latency_milliseconds=123,
+                            port=123,
+                
+                            # the properties below are optional
+                            encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            )
+                        )
+                    ),
+                
+                    # the properties below are optional
+                    protocol="protocol"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__010befd5e2660537f2f9db5cecf3b56ab325c13eace710cabb8f4ab0cb7d831b)
+                check_type(argname="argument network_interface_arn", value=network_interface_arn, expected_type=type_hints["network_interface_arn"])
+                check_type(argname="argument protocol_configuration", value=protocol_configuration, expected_type=type_hints["protocol_configuration"])
+                check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "network_interface_arn": network_interface_arn,
+                "protocol_configuration": protocol_configuration,
+            }
+            if protocol is not None:
+                self._values["protocol"] = protocol
+
+        @builtins.property
+        def network_interface_arn(self) -> builtins.str:
+            '''The Amazon Resource Name (ARN) of the network interface associated with the standard router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-standardrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-standardrouteroutputconfiguration-networkinterfacearn
+            '''
+            result = self._values.get("network_interface_arn")
+            assert result is not None, "Required property 'network_interface_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def protocol_configuration(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RouterOutputProtocolConfigurationProperty"]:
+            '''The protocol configuration settings for a router output.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-standardrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-standardrouteroutputconfiguration-protocolconfiguration
+            '''
+            result = self._values.get("protocol_configuration")
+            assert result is not None, "Required property 'protocol_configuration' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.RouterOutputProtocolConfigurationProperty"], result)
+
+        @builtins.property
+        def protocol(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-routeroutput-standardrouteroutputconfiguration.html#cfn-mediaconnect-routeroutput-standardrouteroutputconfiguration-protocol
+            '''
+            result = self._values.get("protocol")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StandardRouterOutputConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_mediaconnect.CfnRouterOutputProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "configuration": "configuration",
+        "maximum_bitrate": "maximumBitrate",
+        "name": "name",
+        "routing_scope": "routingScope",
+        "tier": "tier",
+        "availability_zone": "availabilityZone",
+        "maintenance_configuration": "maintenanceConfiguration",
+        "region_name": "regionName",
+        "tags": "tags",
+    },
+)
+class CfnRouterOutputProps:
+    def __init__(
+        self,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        maximum_bitrate: jsii.Number,
+        name: builtins.str,
+        routing_scope: builtins.str,
+        tier: builtins.str,
+        availability_zone: typing.Optional[builtins.str] = None,
+        maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        region_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnRouterOutput``.
+
+        :param configuration: The configuration settings for a router output.
+        :param maximum_bitrate: The maximum bitrate for the router output.
+        :param name: The name of the router output.
+        :param routing_scope: 
+        :param tier: 
+        :param availability_zone: The Availability Zone where you want to create the router output. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        :param region_name: The AWS Region for the router output. Defaults to the current region if not specified.
+        :param tags: Key-value pairs that can be used to tag this router output.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_mediaconnect as mediaconnect
+            
+            # automatic: Any
+            # default_: Any
+            
+            cfn_router_output_props = mediaconnect.CfnRouterOutputProps(
+                configuration=mediaconnect.CfnRouterOutput.RouterOutputConfigurationProperty(
+                    media_connect_flow=mediaconnect.CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty(
+                        destination_transit_encryption=mediaconnect.CfnRouterOutput.FlowTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+            
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+            
+                        # the properties below are optional
+                        flow_arn="flowArn",
+                        flow_source_arn="flowSourceArn"
+                    ),
+                    media_live_input=mediaconnect.CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty(
+                        destination_transit_encryption=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionProperty(
+                            encryption_key_configuration=mediaconnect.CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty(
+                                automatic=automatic,
+                                secrets_manager=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                    role_arn="roleArn",
+                                    secret_arn="secretArn"
+                                )
+                            ),
+            
+                            # the properties below are optional
+                            encryption_key_type="encryptionKeyType"
+                        ),
+            
+                        # the properties below are optional
+                        media_live_input_arn="mediaLiveInputArn",
+                        media_live_pipeline_id="mediaLivePipelineId"
+                    ),
+                    standard=mediaconnect.CfnRouterOutput.StandardRouterOutputConfigurationProperty(
+                        network_interface_arn="networkInterfaceArn",
+                        protocol_configuration=mediaconnect.CfnRouterOutput.RouterOutputProtocolConfigurationProperty(
+                            rist=mediaconnect.CfnRouterOutput.RistRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123
+                            ),
+                            rtp=mediaconnect.CfnRouterOutput.RtpRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123,
+            
+                                # the properties below are optional
+                                forward_error_correction="forwardErrorCorrection"
+                            ),
+                            srt_caller=mediaconnect.CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty(
+                                destination_address="destinationAddress",
+                                destination_port=123,
+                                minimum_latency_milliseconds=123,
+            
+                                # the properties below are optional
+                                encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                ),
+                                stream_id="streamId"
+                            ),
+                            srt_listener=mediaconnect.CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty(
+                                minimum_latency_milliseconds=123,
+                                port=123,
+            
+                                # the properties below are optional
+                                encryption_configuration=mediaconnect.CfnRouterOutput.SrtEncryptionConfigurationProperty(
+                                    encryption_key=mediaconnect.CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty(
+                                        role_arn="roleArn",
+                                        secret_arn="secretArn"
+                                    )
+                                )
+                            )
+                        ),
+            
+                        # the properties below are optional
+                        protocol="protocol"
+                    )
+                ),
+                maximum_bitrate=123,
+                name="name",
+                routing_scope="routingScope",
+                tier="tier",
+            
+                # the properties below are optional
+                availability_zone="availabilityZone",
+                maintenance_configuration=mediaconnect.CfnRouterOutput.MaintenanceConfigurationProperty(
+                    default=default_,
+                    preferred_day_time=mediaconnect.CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty(
+                        day="day",
+                        time="time"
+                    )
+                ),
+                region_name="regionName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__47e40b68b394725a4935bfc1b6ffcf51630ed2e6a0f1075f0c828959594668c7)
+            check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+            check_type(argname="argument maximum_bitrate", value=maximum_bitrate, expected_type=type_hints["maximum_bitrate"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument routing_scope", value=routing_scope, expected_type=type_hints["routing_scope"])
+            check_type(argname="argument tier", value=tier, expected_type=type_hints["tier"])
+            check_type(argname="argument availability_zone", value=availability_zone, expected_type=type_hints["availability_zone"])
+            check_type(argname="argument maintenance_configuration", value=maintenance_configuration, expected_type=type_hints["maintenance_configuration"])
+            check_type(argname="argument region_name", value=region_name, expected_type=type_hints["region_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "configuration": configuration,
+            "maximum_bitrate": maximum_bitrate,
+            "name": name,
+            "routing_scope": routing_scope,
+            "tier": tier,
+        }
+        if availability_zone is not None:
+            self._values["availability_zone"] = availability_zone
+        if maintenance_configuration is not None:
+            self._values["maintenance_configuration"] = maintenance_configuration
+        if region_name is not None:
+            self._values["region_name"] = region_name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnRouterOutput.RouterOutputConfigurationProperty]:
+        '''The configuration settings for a router output.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-configuration
+        '''
+        result = self._values.get("configuration")
+        assert result is not None, "Required property 'configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnRouterOutput.RouterOutputConfigurationProperty], result)
+
+    @builtins.property
+    def maximum_bitrate(self) -> jsii.Number:
+        '''The maximum bitrate for the router output.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-maximumbitrate
+        '''
+        result = self._values.get("maximum_bitrate")
+        assert result is not None, "Required property 'maximum_bitrate' is missing"
+        return typing.cast(jsii.Number, result)
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the router output.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def routing_scope(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-routingscope
+        '''
+        result = self._values.get("routing_scope")
+        assert result is not None, "Required property 'routing_scope' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tier(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-tier
+        '''
+        result = self._values.get("tier")
+        assert result is not None, "Required property 'tier' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def availability_zone(self) -> typing.Optional[builtins.str]:
+        '''The Availability Zone where you want to create the router output.
+
+        This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-availabilityzone
+        '''
+        result = self._values.get("availability_zone")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def maintenance_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterOutput.MaintenanceConfigurationProperty]]:
+        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-maintenanceconfiguration
+        '''
+        result = self._values.get("maintenance_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterOutput.MaintenanceConfigurationProperty]], result)
+
+    @builtins.property
+    def region_name(self) -> typing.Optional[builtins.str]:
+        '''The AWS Region for the router output.
+
+        Defaults to the current region if not specified.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-regionname
+        '''
+        result = self._values.get("region_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs that can be used to tag this router output.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnRouterOutputProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "CfnBridge",
     "CfnBridgeOutput",
@@ -11004,8 +16366,12 @@ __all__ = [
     "CfnFlowVpcInterfaceProps",
     "CfnGateway",
     "CfnGatewayProps",
+    "CfnRouterInput",
+    "CfnRouterInputProps",
     "CfnRouterNetworkInterface",
     "CfnRouterNetworkInterfaceProps",
+    "CfnRouterOutput",
+    "CfnRouterOutputProps",
 ]
 
 publication.publish()
@@ -11021,6 +16387,12 @@ def _typecheckingstub__21d1f093ae6c3ef104fbfbb93b13b3338230662ddb218fed6d74e5040
     ingress_gateway_bridge: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBridge.IngressGatewayBridgeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     outputs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBridge.BridgeOutputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     source_failover_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBridge.FailoverConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__61c94f5a708599ab90700dbc916f984911d2356933cecac7cb8883e4716ef8e3(
+    resource: _IBridgeRef_2f2ab872,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11351,6 +16723,12 @@ def _typecheckingstub__3568a95be2a886825b3db731f10e2fdea8be142c554d1e2055d7e22f5
     source_failover_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.FailoverConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_monitoring_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.SourceMonitoringConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_interfaces: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.VpcInterfaceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c54b3021fd089afdcef76ee7ca3c18274773c4b4384f46a6700f34b567e51aa4(
+    resource: _IFlowRef_c5e8f48d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11776,7 +17154,6 @@ def _typecheckingstub__50a855342b002f2aaf180af2a85e45ce23346b4a5b582c00ee1a8474e
     id: builtins.str,
     *,
     flow_arn: builtins.str,
-    protocol: builtins.str,
     cidr_allow_list: typing.Optional[typing.Sequence[builtins.str]] = None,
     description: typing.Optional[builtins.str] = None,
     destination: typing.Optional[builtins.str] = None,
@@ -11789,6 +17166,7 @@ def _typecheckingstub__50a855342b002f2aaf180af2a85e45ce23346b4a5b582c00ee1a8474e
     ndi_speed_hq_quality: typing.Optional[jsii.Number] = None,
     output_status: typing.Optional[builtins.str] = None,
     port: typing.Optional[jsii.Number] = None,
+    protocol: typing.Optional[builtins.str] = None,
     remote_id: typing.Optional[builtins.str] = None,
     router_integration_state: typing.Optional[builtins.str] = None,
     router_integration_transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowOutput.FlowTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11812,12 +17190,6 @@ def _typecheckingstub__8fe52bb8ba629a55d8f6926893cc92e58afb2df918e7d368aeddb04aa
     pass
 
 def _typecheckingstub__15b58a8b918485e48f2bd2cbf5a806a141e4d5ae34f2cf830391b88420333717(
-    value: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__9a09f7a6d8ae99d18b6e3bb11284fa5b865ca2146c5efb07536e593ee9a05bc7(
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -11891,6 +17263,12 @@ def _typecheckingstub__6b4c653e5fd4b3a28c65a69d506d6616ef027aa50bccc2d72a02bc2ff
 
 def _typecheckingstub__082204a6d2f259b91fea6a581b0aa8a534b0e447853734806818dfa91f967458(
     value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9a09f7a6d8ae99d18b6e3bb11284fa5b865ca2146c5efb07536e593ee9a05bc7(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12009,7 +17387,6 @@ def _typecheckingstub__7072f99adeda4341a6581cacf2975b777cc5b063364d5416156250ca7
 def _typecheckingstub__90cee4cbdefa91956af92950bb2bfd2da4fa4f982f439596444cda5251a2c34d(
     *,
     flow_arn: builtins.str,
-    protocol: builtins.str,
     cidr_allow_list: typing.Optional[typing.Sequence[builtins.str]] = None,
     description: typing.Optional[builtins.str] = None,
     destination: typing.Optional[builtins.str] = None,
@@ -12022,6 +17399,7 @@ def _typecheckingstub__90cee4cbdefa91956af92950bb2bfd2da4fa4f982f439596444cda525
     ndi_speed_hq_quality: typing.Optional[jsii.Number] = None,
     output_status: typing.Optional[builtins.str] = None,
     port: typing.Optional[jsii.Number] = None,
+    protocol: typing.Optional[builtins.str] = None,
     remote_id: typing.Optional[builtins.str] = None,
     router_integration_state: typing.Optional[builtins.str] = None,
     router_integration_transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowOutput.FlowTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -12325,6 +17703,12 @@ def _typecheckingstub__4a889ede67aac65e3ba7da8735ec09aa46c53edb047800db832cc8f04
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__846fb03e786e5db212456f5e176807bc8fa26425b8fcdcd3acceeb914a80546a(
+    resource: _IGatewayRef_4783a0c6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__15b19201085d642ad5919470c92f83f2874346dacf31c924443c14fa4ce8557e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12372,6 +17756,292 @@ def _typecheckingstub__87c57a9fbadb9701c4e8bd3f97f24fe63b6ebd3d8f830d826fedc59b0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8fa24b13aaffdcfc1e47f3ced2e884afe1fe974cb91ceb3f0702e3ed196e0855(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    maximum_bitrate: jsii.Number,
+    name: builtins.str,
+    routing_scope: builtins.str,
+    tier: builtins.str,
+    availability_zone: typing.Optional[builtins.str] = None,
+    maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    region_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b62b590ea740d308b838213af0b2cd196493374e80cd7c3686bd872b19cfdfeb(
+    resource: _IRouterInputRef_6915df50,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c944fb547e87f295306d8735bbf0eeac4ac8a0b6018a5739d3a31d2e1e718ef6(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e30a6d884b369ff6382f442459ba4c11662a15636af2d199fbc1aa1a790ea21(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc19a3af1b324b171b747b68112c85cb261bd6957bab7764b849ca52d9245142(
+    value: typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputConfigurationProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9b9c8e82a356b3f89719f6bbfe30b90040f8129a03f8ce150ad2a8b87ed8246(
+    value: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8cad73940b17fe84f1f0b506b19a2f76e3972f6d1b1a71c747442330ba7cdd4b(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__00684f4fd383ed48bfa0345b412a77ecbdd623ac32a218fb0294e30e4ed401bc(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__84d00c9475e25cd260ddceb328a82f02a2cb361571f2a5fd671818fb15dd8cd3(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d3dc1a9f3d38364d1ad15584e3cfaccae3ba843735b9a10bd75fa94a9736e60(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7c1170f7ba129480fda3e3b9954bf9b3bab26579ad56ca54217519dd369f2de8(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.MaintenanceConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__74fded60926c739a4b66f4bd6fdd901f417bee400d49f669f01a8545de0e3052(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a824b54cbbdf5489ae89810bc583b0c20d4cfb25aeb8745e7f408d889b008ac(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b52cf5469dfc840d14b0db5fb2454e8064b964427f444c618452b6c06465337(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputTransitEncryptionProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b915443cb98891bf89e968e2338dbbd48e7fc3e6389d7cf5425707945361655(
+    *,
+    network_interface_arn: builtins.str,
+    protocol_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.FailoverRouterInputProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    source_priority_mode: builtins.str,
+    primary_source_index: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8f038e6a58a77278305824f4d096d5103bdf9497e022340099fbe631d35cdea(
+    *,
+    rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RistRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RtpRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtCallerRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtListenerRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2f46fb21f29424f9cdada7e8baeb37950068c69dd5988f39da2d4d57ad111304(
+    *,
+    automatic: typing.Any = None,
+    secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ee7cb3dd62027be3aaef58d8e915eab27767b66fa11f87aff2f38eb8e4f62449(
+    *,
+    encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.FlowTransitEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    encryption_key_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a02453ffb5787750cf8b7c68ece86b453aeac195bd6b7a67d442069cdfaf86c1(
+    *,
+    default: typing.Any = None,
+    preferred_day_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.PreferredDayTimeMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07cd74860f626ccccd2d7b9722c16c895a7f51382af41cc9a3aa3da275bb3b5f(
+    *,
+    source_transit_decryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.FlowTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]],
+    flow_arn: typing.Optional[builtins.str] = None,
+    flow_output_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c207577b6eab68f0d1c3f7593cc0b00c18a7e10d165eed0314d6bcb41a434578(
+    *,
+    merge_recovery_window_milliseconds: jsii.Number,
+    network_interface_arn: builtins.str,
+    protocol_configurations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MergeRouterInputProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4bff0ea4788435a62555083659b5a3393ff9c2dc3b37396f56d5473c1b65763(
+    *,
+    rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RistRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RtpRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc21d5c65ee1f7e8a6d879dc6bdeea6e77c637daf5b2e9885e67ec9a9279f8d5(
+    *,
+    day: builtins.str,
+    time: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53b65288b7279c56646f36579c820e91edb724a5c19852f9a2b528f0d5893abd(
+    *,
+    port: jsii.Number,
+    recovery_latency_milliseconds: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__367935140f8b2e56d02ff3e2c05252a68073eace6c0eeda3b7abeeeac1209e1b(
+    *,
+    failover: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.FailoverRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    media_connect_flow: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MediaConnectFlowRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    merge: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MergeRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    standard: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.StandardRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6bee2f8b18c83277f36b402b57e84bb58ee2a5352632583caaeb637773d1069c(
+    *,
+    rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RistRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RtpRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtCallerRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtListenerRouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fcc66546aaf31b61e1efa68ba13e70820ab56b959d9cce333b0e5b3482a1bc09(
+    *,
+    automatic: typing.Any = None,
+    secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__85f5061e2ce8c42b22b7dc305382ea9bfa145cf532ef8f62591b3684205d6713(
+    *,
+    encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputTransitEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    encryption_key_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3cb7da58ee58865b37c64051cce4480a789d51b84a87b3f8c0bb5c8c54eaed49(
+    *,
+    port: jsii.Number,
+    forward_error_correction: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__656ecf17b2aa0c4612970c8eb2678158214e80be3a6040146c524608d6fe0ffc(
+    *,
+    role_arn: builtins.str,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__beeb94f30bd48ba57793ec4ae9b1de79893c6af67077601ee991d8325f1c1155(
+    *,
+    minimum_latency_milliseconds: jsii.Number,
+    source_address: builtins.str,
+    source_port: jsii.Number,
+    decryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtDecryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    stream_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9b8e55bc2cc629dfc624dfe6751b96283b3f6c08591aba80e4005288f47ee98a(
+    *,
+    encryption_key: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2020f903810fd45bfaa02594fdb1a23bdb3bcc4a9ac870d479f9756284d1f45d(
+    *,
+    minimum_latency_milliseconds: jsii.Number,
+    port: jsii.Number,
+    decryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.SrtDecryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__95ce52cf6881e0f95e336a6920de1725ead5c20a78c3b050791def2f0629d492(
+    *,
+    network_interface_arn: builtins.str,
+    protocol_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    protocol: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__629abd36e1d3f5d9a60304da2c55389ba519de279616eb9eae24baa19310f5f4(
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    maximum_bitrate: jsii.Number,
+    name: builtins.str,
+    routing_scope: builtins.str,
+    tier: builtins.str,
+    availability_zone: typing.Optional[builtins.str] = None,
+    maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    region_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    transit_encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterInput.RouterInputTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__24310ca09a20908bd3bbf12dedeae64057a241ad260d0173c063494e94a5e372(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -12380,6 +18050,12 @@ def _typecheckingstub__24310ca09a20908bd3bbf12dedeae64057a241ad260d0173c063494e9
     name: builtins.str,
     region_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31cc864547a94937d2c7f541798d2155fb714db7022c9ef5c73db0655c89a985(
+    resource: _IRouterNetworkInterfaceRef_05bd061c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12454,6 +18130,256 @@ def _typecheckingstub__0c96298441d1fa6afb4e99a0f43137a8859e8ca44045c1e46e91194e3
     *,
     configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterNetworkInterface.RouterNetworkInterfaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
+    region_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d0723832b1d0cb17f5bcd9018d140834abd5e94bc96fb3fb67d22f77fb5439c3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    maximum_bitrate: jsii.Number,
+    name: builtins.str,
+    routing_scope: builtins.str,
+    tier: builtins.str,
+    availability_zone: typing.Optional[builtins.str] = None,
+    maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    region_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24a2fbac160b0fd704ba7504535f3e38f1a17f7911da11e6a5c0eb4336436bbc(
+    resource: _IRouterOutputRef_afa317cd,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__46c254968a788990028c9b84207c991e7dbd51c1a2e4cd0ceb7a94af8e32e549(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__96ef8ccb0c5e0eb94acef4319249f97dfa0ce9d3c9e57dbf2db800211064be5d(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7f147da00aaf1cdc7014a62b08d8cdc0f9cfce3df5d377973424d2f11377219c(
+    value: typing.Union[_IResolvable_da3f097b, CfnRouterOutput.RouterOutputConfigurationProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6343c02a4b0b9d5d865add8c4d996a26f8389b83b214b7350ac7818a31991557(
+    value: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4216c7d780d8fb5794084f06923c5c5b6e06951c7c74d95e570b19c17f16c07d(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31256d5031051647600a9f3e6d4c7348c96db2131b170cbb3b84d03cb08508d9(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e1241eacdcaad6a0aadee10ac0ca9c13dd7f59cf1e7f5d785c7c1fc63190e220(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b8371a3dd1aa326607abab281477f883dfadb45d27717b05bafb937c2ca7c31(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e2d9d66ea8cc6f7fb9f2d963cee39b38487405038346bed562a4282d170af87a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterOutput.MaintenanceConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f23a2bac43b9e1bd96cf5c900f5ae7d229b5b15428c990a76f5392b3623edc92(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cb6937ae740be264a96755b4785a6121ef85f3be99b91fb48ef0d32ab567b808(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2919cc0452cea1b6c29eff661620544fa1903342e65d8def16c87e34ebac3af(
+    *,
+    automatic: typing.Any = None,
+    secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb7cec781c17f5df2ca2950847ce1a86c7e216d13b67c9830306688dd24f423c(
+    *,
+    encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.FlowTransitEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    encryption_key_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3168eb6355c5a713c93dcf1c47b10105621a55ece693c6e8524178049155072b(
+    *,
+    default: typing.Any = None,
+    preferred_day_time: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.PreferredDayTimeMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c91e97d97b93eb546e4ca89c6248ae26ae42ceadf35a6181ea7b383b55804b49(
+    *,
+    destination_transit_encryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.FlowTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]],
+    flow_arn: typing.Optional[builtins.str] = None,
+    flow_source_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__296fe8c5575c6daa0aee10695b4fa916e9cc5d0a13736ad1ed6b81b458d5454e(
+    *,
+    destination_transit_encryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MediaLiveTransitEncryptionProperty, typing.Dict[builtins.str, typing.Any]]],
+    media_live_input_arn: typing.Optional[builtins.str] = None,
+    media_live_pipeline_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__15fd9e770cad7633d1755bc0f3ee7c7619085574f4779ab136bccba68f8b110e(
+    *,
+    automatic: typing.Any = None,
+    secrets_manager: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bca59142eba771d1b11d62bea50d63c8ea9c3e3f701bc82dec8d3053a8e335a9(
+    *,
+    encryption_key_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MediaLiveTransitEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    encryption_key_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__06a3dadf828214b14502e7163f28e97ca8eaba7fe6816f85989f565bc4e469d7(
+    *,
+    day: builtins.str,
+    time: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae36a4a425b1a376a579bc881963342c2907067c5765e9a309cac9c1792dec7c(
+    *,
+    destination_address: builtins.str,
+    destination_port: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__195e2aba5e342493ec27f8f63f43810db21ee1b303be1cfa962c7f9a490a7d3d(
+    *,
+    media_connect_flow: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MediaConnectFlowRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    media_live_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MediaLiveInputRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    standard: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.StandardRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__562d01ca7d13c69f8bd962654080b4d33fa8642743ff71dd15962ebd61569f3d(
+    *,
+    rist: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RistRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rtp: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RtpRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_caller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SrtCallerRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    srt_listener: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SrtListenerRouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__979ac0b18bf0bc76a507f9f24868b0ff8e68ab9d4bf73ca30f060372ccbea196(
+    *,
+    destination_address: builtins.str,
+    destination_port: jsii.Number,
+    forward_error_correction: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__066db337f47042a13b7d50a298df594df0a3bcbe095ae9b4f093e6805b55e954(
+    *,
+    role_arn: builtins.str,
+    secret_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7c3254adaa7e8d0f5267957a6b36ec0a736bd46e05edb0d526175da04f002a94(
+    *,
+    destination_address: builtins.str,
+    destination_port: jsii.Number,
+    minimum_latency_milliseconds: jsii.Number,
+    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SrtEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    stream_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bd76c0aac777140ccfdcd9b8dde075deccd8b20e8fb2f4ae5c88addc5b54ccef(
+    *,
+    encryption_key: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SecretsManagerEncryptionKeyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__46a504c749dcd4fafe4de2e4d8b321ec6c39bf1a1cb6ef1c43a2b6dbee93549e(
+    *,
+    minimum_latency_milliseconds: jsii.Number,
+    port: jsii.Number,
+    encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.SrtEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__010befd5e2660537f2f9db5cecf3b56ab325c13eace710cabb8f4ab0cb7d831b(
+    *,
+    network_interface_arn: builtins.str,
+    protocol_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RouterOutputProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    protocol: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__47e40b68b394725a4935bfc1b6ffcf51630ed2e6a0f1075f0c828959594668c7(
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.RouterOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    maximum_bitrate: jsii.Number,
+    name: builtins.str,
+    routing_scope: builtins.str,
+    tier: builtins.str,
+    availability_zone: typing.Optional[builtins.str] = None,
+    maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRouterOutput.MaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     region_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

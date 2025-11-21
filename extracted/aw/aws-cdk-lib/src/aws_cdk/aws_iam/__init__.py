@@ -1620,7 +1620,7 @@ class CfnGroup(
         id: builtins.str,
         *,
         group_name: typing.Optional[builtins.str] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         path: typing.Optional[builtins.str] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnGroup.PolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -1628,7 +1628,7 @@ class CfnGroup(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param group_name: The name of the group to create. Do not include the path in this value. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the group name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param group_name: The name of the group to create. Do not include the path in this value. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the group name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param managed_policy_arns: The Amazon Resource Name (ARN) of the IAM policy you want to attach. For more information about ARNs, see `Amazon Resource Names (ARNs) <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path to the group. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param policies: Adds or updates an inline policy document that is embedded in the specified IAM group. To view AWS::IAM::Group snippets, see `Declaring an IAM Group Resource <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-iam-group>`_ . .. epigraph:: The name of each inline policy for a role, user, or group must be unique. If you don't choose unique names, updates to the IAM identity will fail. For information about limits on the number of inline policies that you can embed in a group, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* .
@@ -1645,6 +1645,17 @@ class CfnGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGroup")
+    @builtins.classmethod
+    def arn_for_group(cls, resource: _IGroupRef_aeb1d9f6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3980f39025e91ce99b498701692fb8425cc9af4321db09d71dbd3368a8936555)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1893,7 +1904,7 @@ class CfnGroupPolicy(
         :param id: Construct identifier for this resource (unique in its scope).
         :param group_name: The name of the group to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-.
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__4f890caaa5f6b29722a17bf5c714640d202cb740a7f07aec5a5ced9b53eed348)
@@ -2009,7 +2020,7 @@ class CfnGroupPolicyProps:
 
         :param group_name: The name of the group to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-.
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-grouppolicy.html
         :exampleMetadata: fixture=_generated
@@ -2070,7 +2081,7 @@ class CfnGroupPolicyProps:
     def policy_document(self) -> typing.Any:
         '''The policy document.
 
-        You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
+        You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
 
         The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following:
 
@@ -2110,13 +2121,13 @@ class CfnGroupProps:
         self,
         *,
         group_name: typing.Optional[builtins.str] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         path: typing.Optional[builtins.str] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnGroup``.
 
-        :param group_name: The name of the group to create. Do not include the path in this value. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the group name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param group_name: The name of the group to create. Do not include the path in this value. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the group name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param managed_policy_arns: The Amazon Resource Name (ARN) of the IAM policy you want to attach. For more information about ARNs, see `Amazon Resource Names (ARNs) <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path to the group. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param policies: Adds or updates an inline policy document that is embedded in the specified IAM group. To view AWS::IAM::Group snippets, see `Declaring an IAM Group Resource <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-iam-group>`_ . .. epigraph:: The name of each inline policy for a role, user, or group must be unique. If you don't choose unique names, updates to the IAM identity will fail. For information about limits on the number of inline policies that you can embed in a group, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* .
@@ -2162,12 +2173,12 @@ class CfnGroupProps:
     def group_name(self) -> typing.Optional[builtins.str]:
         '''The name of the group to create. Do not include the path in this value.
 
-        The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the group name.
+        The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the group name.
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
 
-        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
+        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
         .. epigraph::
 
            Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
@@ -2178,7 +2189,9 @@ class CfnGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def managed_policy_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def managed_policy_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]]:
         '''The Amazon Resource Name (ARN) of the IAM policy you want to attach.
 
         For more information about ARNs, see `Amazon Resource Names (ARNs) <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
@@ -2186,7 +2199,7 @@ class CfnGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-group.html#cfn-iam-group-managedpolicyarns
         '''
         result = self._values.get("managed_policy_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]], result)
 
     @builtins.property
     def path(self) -> typing.Optional[builtins.str]:
@@ -2265,7 +2278,7 @@ class CfnInstanceProfile(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        roles: typing.Sequence[builtins.str],
+        roles: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
         instance_profile_name: typing.Optional[builtins.str] = None,
         path: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2286,6 +2299,20 @@ class CfnInstanceProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInstanceProfile")
+    @builtins.classmethod
+    def arn_for_instance_profile(
+        cls,
+        resource: _IInstanceProfileRef_d6832c90,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__511cf624861b94d053cb656d41bfb85226b39bae88821676b01740944f0811d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstanceProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2394,7 +2421,7 @@ class CfnInstanceProfileProps:
     def __init__(
         self,
         *,
-        roles: typing.Sequence[builtins.str],
+        roles: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
         instance_profile_name: typing.Optional[builtins.str] = None,
         path: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2435,7 +2462,7 @@ class CfnInstanceProfileProps:
             self._values["path"] = path
 
     @builtins.property
-    def roles(self) -> typing.List[builtins.str]:
+    def roles(self) -> typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The name of the role to associate with the instance profile.
 
         Only one role can be assigned to an EC2 instance at a time, and all applications on the instance share the same role and permissions.
@@ -2444,7 +2471,7 @@ class CfnInstanceProfileProps:
         '''
         result = self._values.get("roles")
         assert result is not None, "Required property 'roles' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def instance_profile_name(self) -> typing.Optional[builtins.str]:
@@ -2530,22 +2557,22 @@ class CfnManagedPolicy(
         *,
         policy_document: typing.Any,
         description: typing.Optional[builtins.str] = None,
-        groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
         managed_policy_name: typing.Optional[builtins.str] = None,
         path: typing.Optional[builtins.str] = None,
-        roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        users: typing.Optional[typing.Sequence[builtins.str]] = None,
+        roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        users: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserRef_b0ccca76]]] = None,
     ) -> None:
         '''Create a new ``AWS::IAM::ManagedPolicy``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param policy_document: The JSON policy document that you want to use as the content for the new policy. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The maximum length of the policy document that you can pass in this operation, including whitespace, is listed below. To view the maximum character counts of a managed policy with no whitespaces, see `IAM and AWS STS character quotas <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length>`_ . To learn more about JSON policy grammar, see `Grammar of the IAM JSON policy language <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>`_ in the *IAM User Guide* . The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The JSON policy document that you want to use as the content for the new policy. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The maximum length of the policy document that you can pass in this operation, including whitespace, is listed below. To view the maximum character counts of a managed policy with no whitespaces, see `IAM and AWS STS character quotas <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length>`_ . To learn more about JSON policy grammar, see `Grammar of the IAM JSON policy language <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>`_ in the *IAM User Guide* . The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         :param description: A friendly description of the policy. Typically used to store information about the permissions defined in the policy. For example, "Grants access to production DynamoDB tables." The policy description is immutable. After a value is assigned, it cannot be changed.
         :param groups: The name (friendly name, not ARN) of the group to attach the policy to. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param managed_policy_name: The friendly name of the policy. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param managed_policy_name: The friendly name of the policy. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param path: The path for the policy. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters. .. epigraph:: You cannot use an asterisk (*) in the path name. Default: - "/"
-        :param roles: The name (friendly name, not ARN) of the role to attach the policy to. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param roles: The name (friendly name, not ARN) of the role to attach the policy to. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
         :param users: The name (friendly name, not ARN) of the IAM user to attach the policy to. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         '''
         if __debug__:
@@ -2798,20 +2825,20 @@ class CfnManagedPolicyProps:
         *,
         policy_document: typing.Any,
         description: typing.Optional[builtins.str] = None,
-        groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
         managed_policy_name: typing.Optional[builtins.str] = None,
         path: typing.Optional[builtins.str] = None,
-        roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        users: typing.Optional[typing.Sequence[builtins.str]] = None,
+        roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        users: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserRef_b0ccca76]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnManagedPolicy``.
 
-        :param policy_document: The JSON policy document that you want to use as the content for the new policy. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The maximum length of the policy document that you can pass in this operation, including whitespace, is listed below. To view the maximum character counts of a managed policy with no whitespaces, see `IAM and AWS STS character quotas <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length>`_ . To learn more about JSON policy grammar, see `Grammar of the IAM JSON policy language <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>`_ in the *IAM User Guide* . The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The JSON policy document that you want to use as the content for the new policy. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The maximum length of the policy document that you can pass in this operation, including whitespace, is listed below. To view the maximum character counts of a managed policy with no whitespaces, see `IAM and AWS STS character quotas <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length>`_ . To learn more about JSON policy grammar, see `Grammar of the IAM JSON policy language <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_grammar.html>`_ in the *IAM User Guide* . The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         :param description: A friendly description of the policy. Typically used to store information about the permissions defined in the policy. For example, "Grants access to production DynamoDB tables." The policy description is immutable. After a value is assigned, it cannot be changed.
         :param groups: The name (friendly name, not ARN) of the group to attach the policy to. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param managed_policy_name: The friendly name of the policy. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param managed_policy_name: The friendly name of the policy. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param path: The path for the policy. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters. .. epigraph:: You cannot use an asterisk (*) in the path name. Default: - "/"
-        :param roles: The name (friendly name, not ARN) of the role to attach the policy to. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param roles: The name (friendly name, not ARN) of the role to attach the policy to. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
         :param users: The name (friendly name, not ARN) of the IAM user to attach the policy to. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html
@@ -2866,7 +2893,7 @@ class CfnManagedPolicyProps:
     def policy_document(self) -> typing.Any:
         '''The JSON policy document that you want to use as the content for the new policy.
 
-        You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
+        You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
 
         The maximum length of the policy document that you can pass in this operation, including whitespace, is listed below. To view the maximum character counts of a managed policy with no whitespaces, see `IAM and AWS STS character quotas <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-quotas.html#reference_iam-quotas-entity-length>`_ .
 
@@ -2898,7 +2925,9 @@ class CfnManagedPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]]:
         '''The name (friendly name, not ARN) of the group to attach the policy to.
 
         This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
@@ -2906,7 +2935,7 @@ class CfnManagedPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-groups
         '''
         result = self._values.get("groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]], result)
 
     @builtins.property
     def managed_policy_name(self) -> typing.Optional[builtins.str]:
@@ -2916,7 +2945,7 @@ class CfnManagedPolicyProps:
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
 
-        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
+        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
         .. epigraph::
 
            Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
@@ -2947,21 +2976,25 @@ class CfnManagedPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def roles(self) -> typing.Optional[typing.List[builtins.str]]:
+    def roles(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]]:
         '''The name (friendly name, not ARN) of the role to attach the policy to.
 
         This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         .. epigraph::
 
-           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-roles
         '''
         result = self._values.get("roles")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]], result)
 
     @builtins.property
-    def users(self) -> typing.Optional[typing.List[builtins.str]]:
+    def users(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IUserRef_b0ccca76]]]:
         '''The name (friendly name, not ARN) of the IAM user to attach the policy to.
 
         This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
@@ -2969,7 +3002,7 @@ class CfnManagedPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-managedpolicy.html#cfn-iam-managedpolicy-users
         '''
         result = self._values.get("users")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IUserRef_b0ccca76]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3065,6 +3098,20 @@ class CfnOIDCProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOIDCProvider")
+    @builtins.classmethod
+    def arn_for_oidc_provider(
+        cls,
+        resource: _IOIDCProviderRef_a866c7c8,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fab4fe6f3e4db72e34d9bb9535a6cd4366d92f1c50e499ef665ae1a82c7cc813)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOIDCProvider", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3358,10 +3405,10 @@ class CfnPolicy(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param groups: The name of the group to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-.
-        :param roles: The name of the role to associate the policy with. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param roles: The name of the role to associate the policy with. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
         :param users: The name of the user to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         '''
         if __debug__:
@@ -3519,10 +3566,10 @@ class CfnPolicyProps:
     ) -> None:
         '''Properties for defining a ``CfnPolicy``.
 
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param groups: The name of the group to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-.
-        :param roles: The name of the role to associate the policy with. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param roles: The name of the role to associate the policy with. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@- .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
         :param users: The name of the user to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html
@@ -3568,7 +3615,7 @@ class CfnPolicyProps:
     def policy_document(self) -> typing.Any:
         '''The policy document.
 
-        You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
+        You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
 
         The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following:
 
@@ -3612,7 +3659,7 @@ class CfnPolicyProps:
         This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         .. epigraph::
 
-           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html#cfn-iam-policy-roles
         '''
@@ -3693,10 +3740,10 @@ class CfnRole(
         *,
         assume_role_policy_document: typing.Any,
         description: typing.Optional[builtins.str] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         max_session_duration: typing.Optional[jsii.Number] = None,
         path: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[builtins.str] = None,
+        permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRole.PolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         role_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3711,8 +3758,8 @@ class CfnRole(
         :param max_session_duration: The maximum session duration (in seconds) that you want to set for the specified role. If you do not specify a value for this setting, the default value of one hour is applied. This setting can have a value from 1 hour to 12 hours. Anyone who assumes the role from the AWS CLI or API can use the ``DurationSeconds`` API parameter or the ``duration-seconds`` AWS CLI parameter to request a longer session. The ``MaxSessionDuration`` setting determines the maximum duration that can be requested using the ``DurationSeconds`` parameter. If users don't specify a value for the ``DurationSeconds`` parameter, their security credentials are valid for one hour by default. This applies when you use the ``AssumeRole*`` API operations or the ``assume-role*`` AWS CLI operations but does not apply when you use those operations to create a console URL. For more information, see `Using IAM roles <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html>`_ in the *IAM User Guide* .
         :param path: The path to the role. For more information about paths, see `IAM Identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters. Default: - "/"
         :param permissions_boundary: The ARN of the policy used to set the permissions boundary for the role. For more information about permissions boundaries, see `Permissions boundaries for IAM identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* .
-        :param policies: Adds or updates an inline policy document that is embedded in the specified IAM role. When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role. You can update a role's trust policy later. For more information about IAM roles, go to `Using Roles to Delegate Permissions and Federate Identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html>`_ . A role can also have an attached managed policy. For information about policies, see `Managed Policies and Inline Policies <https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html>`_ in the *IAM User Guide* . For information about limits on the number of inline policies that you can embed with a role, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* . .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
-        :param role_name: A name for the IAM role, up to 64 characters in length. For valid values, see the ``RoleName`` parameter for the ```CreateRole`` <https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html>`_ action in the *IAM User Guide* . This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The role name must be unique within the account. Role names are not distinguished by case. For example, you cannot create roles named both "Role1" and "role1". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the role name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param policies: Adds or updates an inline policy document that is embedded in the specified IAM role. When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role. You can update a role's trust policy later. For more information about IAM roles, go to `Using Roles to Delegate Permissions and Federate Identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html>`_ . A role can also have an attached managed policy. For information about policies, see `Managed Policies and Inline Policies <https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html>`_ in the *IAM User Guide* . For information about limits on the number of inline policies that you can embed with a role, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* . .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param role_name: A name for the IAM role, up to 64 characters in length. For valid values, see the ``RoleName`` parameter for the ```CreateRole`` <https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html>`_ action in the *IAM User Guide* . This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The role name must be unique within the account. Role names are not distinguished by case. For example, you cannot create roles named both "Role1" and "role1". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the role name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param tags: A list of tags that are attached to the role. For more information about tagging, see `Tagging IAM resources <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html>`_ in the *IAM User Guide* .
         '''
         if __debug__:
@@ -3732,6 +3779,17 @@ class CfnRole(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRole")
+    @builtins.classmethod
+    def arn_for_role(cls, resource: _IRoleRef_8400221f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aed7930ffdab40f4113234c4ce249e72c7b8fb0328ee2238e91d57b3368ac29b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRole", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4065,7 +4123,7 @@ class CfnRolePolicy(
         :param id: Construct identifier for this resource (unique in its scope).
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param role_name: The name of the role to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f1532590762c98b830f41db58b5d7333f7f995a90f128be89292c180ecefabf3)
@@ -4181,7 +4239,7 @@ class CfnRolePolicyProps:
 
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param role_name: The name of the role to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-rolepolicy.html
         :exampleMetadata: fixture=_generated
@@ -4242,7 +4300,7 @@ class CfnRolePolicyProps:
     def policy_document(self) -> typing.Any:
         '''The policy document.
 
-        You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
+        You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
 
         The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following:
 
@@ -4288,10 +4346,10 @@ class CfnRoleProps:
         *,
         assume_role_policy_document: typing.Any,
         description: typing.Optional[builtins.str] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         max_session_duration: typing.Optional[jsii.Number] = None,
         path: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[builtins.str] = None,
+        permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRole.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         role_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4304,8 +4362,8 @@ class CfnRoleProps:
         :param max_session_duration: The maximum session duration (in seconds) that you want to set for the specified role. If you do not specify a value for this setting, the default value of one hour is applied. This setting can have a value from 1 hour to 12 hours. Anyone who assumes the role from the AWS CLI or API can use the ``DurationSeconds`` API parameter or the ``duration-seconds`` AWS CLI parameter to request a longer session. The ``MaxSessionDuration`` setting determines the maximum duration that can be requested using the ``DurationSeconds`` parameter. If users don't specify a value for the ``DurationSeconds`` parameter, their security credentials are valid for one hour by default. This applies when you use the ``AssumeRole*`` API operations or the ``assume-role*`` AWS CLI operations but does not apply when you use those operations to create a console URL. For more information, see `Using IAM roles <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html>`_ in the *IAM User Guide* .
         :param path: The path to the role. For more information about paths, see `IAM Identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters. Default: - "/"
         :param permissions_boundary: The ARN of the policy used to set the permissions boundary for the role. For more information about permissions boundaries, see `Permissions boundaries for IAM identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* .
-        :param policies: Adds or updates an inline policy document that is embedded in the specified IAM role. When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role. You can update a role's trust policy later. For more information about IAM roles, go to `Using Roles to Delegate Permissions and Federate Identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html>`_ . A role can also have an attached managed policy. For information about policies, see `Managed Policies and Inline Policies <https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html>`_ in the *IAM User Guide* . For information about limits on the number of inline policies that you can embed with a role, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* . .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
-        :param role_name: A name for the IAM role, up to 64 characters in length. For valid values, see the ``RoleName`` parameter for the ```CreateRole`` <https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html>`_ action in the *IAM User Guide* . This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The role name must be unique within the account. Role names are not distinguished by case. For example, you cannot create roles named both "Role1" and "role1". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the role name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param policies: Adds or updates an inline policy document that is embedded in the specified IAM role. When you embed an inline policy in a role, the inline policy is used as part of the role's access (permissions) policy. The role's trust policy is created at the same time as the role. You can update a role's trust policy later. For more information about IAM roles, go to `Using Roles to Delegate Permissions and Federate Identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html>`_ . A role can also have an attached managed policy. For information about policies, see `Managed Policies and Inline Policies <https://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html>`_ in the *IAM User Guide* . For information about limits on the number of inline policies that you can embed with a role, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* . .. epigraph:: If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+        :param role_name: A name for the IAM role, up to 64 characters in length. For valid values, see the ``RoleName`` parameter for the ```CreateRole`` <https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html>`_ action in the *IAM User Guide* . This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The role name must be unique within the account. Role names are not distinguished by case. For example, you cannot create roles named both "Role1" and "role1". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the role name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         :param tags: A list of tags that are attached to the role. For more information about tagging, see `Tagging IAM resources <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html>`_ in the *IAM User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html
@@ -4393,7 +4451,9 @@ class CfnRoleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def managed_policy_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def managed_policy_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]]:
         '''A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the role.
 
         For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
@@ -4401,7 +4461,7 @@ class CfnRoleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-managedpolicyarns
         '''
         result = self._values.get("managed_policy_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]], result)
 
     @builtins.property
     def max_session_duration(self) -> typing.Optional[jsii.Number]:
@@ -4432,7 +4492,9 @@ class CfnRoleProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def permissions_boundary(self) -> typing.Optional[builtins.str]:
+    def permissions_boundary(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]:
         '''The ARN of the policy used to set the permissions boundary for the role.
 
         For more information about permissions boundaries, see `Permissions boundaries for IAM identities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* .
@@ -4440,7 +4502,7 @@ class CfnRoleProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-permissionsboundary
         '''
         result = self._values.get("permissions_boundary")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]], result)
 
     @builtins.property
     def policies(
@@ -4455,7 +4517,7 @@ class CfnRoleProps:
         For information about limits on the number of inline policies that you can embed with a role, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* .
         .. epigraph::
 
-           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that AWS CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
+           If an external policy (such as ``AWS::IAM::Policy`` or ``AWS::IAM::ManagedPolicy`` ) has a ``Ref`` to a role and if a resource (such as ``AWS::ECS::Service`` ) also has a ``Ref`` to the same role, add a ``DependsOn`` attribute to the resource to make the resource depend on the external policy. This dependency ensures that the role's policy is available throughout the resource's lifecycle. For example, when you delete a stack with an ``AWS::ECS::Service`` resource, the ``DependsOn`` attribute ensures that CloudFormation deletes the ``AWS::ECS::Service`` resource before deleting its role's policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-policies
         '''
@@ -4470,9 +4532,9 @@ class CfnRoleProps:
 
         This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The role name must be unique within the account. Role names are not distinguished by case. For example, you cannot create roles named both "Role1" and "role1".
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the role name.
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the role name.
 
-        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
+        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
         .. epigraph::
 
            Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
@@ -4513,14 +4575,14 @@ class CfnSAMLProvider(
 ):
     '''Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.
 
-    The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS .
+    The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the the console or one that supports API access to AWS .
 
     When you create the SAML provider resource, you upload a SAML metadata document that you get from your IdP. That document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.
     .. epigraph::
 
        This operation requires `Signature Version 4 <https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html>`_ .
 
-    For more information, see `Enabling SAML 2.0 federated users to access the AWS Management Console <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html>`_ and `About SAML 2.0-based federation <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html>`_ in the *IAM User Guide* .
+    For more information, see `Enabling SAML 2.0 federated users to access the the console <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html>`_ and `About SAML 2.0-based federation <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html>`_ in the *IAM User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-samlprovider.html
     :cloudformationResource: AWS::IAM::SAMLProvider
@@ -4589,6 +4651,20 @@ class CfnSAMLProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSAMLProvider")
+    @builtins.classmethod
+    def arn_for_saml_provider(
+        cls,
+        resource: _ISAMLProviderRef_6e369856,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b1f1e65df7127c08c1603f184585a56d767362a3b5afeaa5a74ddaabf619b5da)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSAMLProvider", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5072,6 +5148,20 @@ class CfnServerCertificate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServerCertificate")
+    @builtins.classmethod
+    def arn_for_server_certificate(
+        cls,
+        resource: _IServerCertificateRef_005ddfcc,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bdc593551fa8cc6ccbfd2bc0375f5568203a3f854d4f715a6b618e4b88274326)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServerCertificate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5654,11 +5744,11 @@ class CfnUser(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
         login_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUser.LoginProfileProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         path: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[builtins.str] = None,
+        permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUser.PolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         user_name: typing.Optional[builtins.str] = None,
@@ -5668,13 +5758,13 @@ class CfnUser(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param groups: A list of group names to which you want to add the user.
-        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
+        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the the console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
         :param managed_policy_arns: A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the user. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path for the user name. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param permissions_boundary: The ARN of the managed policy that is used to set the permissions boundary for the user. A permissions boundary policy defines the maximum permissions that identity-based policies can grant to an entity, but does not grant permissions. Permissions boundaries do not define the maximum permissions that a resource-based policy can grant to an entity. To learn more, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* . For more information about policy types, see `Policy types <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policy-types>`_ in the *IAM User Guide* .
         :param policies: Adds or updates an inline policy document that is embedded in the specified IAM user. To view AWS::IAM::User snippets, see `Declaring an IAM User Resource <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-iam-user>`_ . .. epigraph:: The name of each policy for a role, user, or group must be unique. If you don't choose unique names, updates to the IAM identity will fail. For information about limits on the number of inline policies that you can embed in a user, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* .
         :param tags: A list of tags that you want to attach to the new user. Each tag consists of a key name and an associated value. For more information about tagging, see `Tagging IAM resources <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html>`_ in the *IAM User Guide* . .. epigraph:: If any one of the tags is invalid or if you exceed the allowed maximum number of tags, then the entire request fails and the resource is not created.
-        :param user_name: The name of the user to create. Do not include the path in this value. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The user name must be unique within the account. User names are not distinguished by case. For example, you cannot create users named both "John" and "john". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the user name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param user_name: The name of the user to create. Do not include the path in this value. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The user name must be unique within the account. User names are not distinguished by case. For example, you cannot create users named both "John" and "john". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the user name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b453e8e55124e84a27aa60acd149280051b756df30318da37839b1e4ca523687)
@@ -5692,6 +5782,17 @@ class CfnUser(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUser")
+    @builtins.classmethod
+    def arn_for_user(cls, resource: _IUserRef_b0ccca76) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__53586ff3825069b3269d54a7efd5838a24c958e3815fb51409e5578af38ed8a2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5886,7 +5987,7 @@ class CfnUser(
             password: builtins.str,
             password_reset_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console .
+            '''Creates a password for the specified user, giving the user the ability to access AWS services through the the console .
 
             For more information about managing passwords, see `Managing Passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
 
@@ -6082,7 +6183,7 @@ class CfnUserPolicy(
         :param id: Construct identifier for this resource (unique in its scope).
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param user_name: The name of the user to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b09938208fba24d256ecd68450b14a065d6488754943e666f9c0528cd0571773)
@@ -6198,7 +6299,7 @@ class CfnUserPolicyProps:
 
         :param policy_name: The name of the policy document. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
         :param user_name: The name of the user to associate the policy with. This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-
-        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
+        :param policy_document: The policy document. You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following: - Any printable ASCII character ranging from the space character ( ``\\u0020`` ) through the end of the ASCII character range - The printable characters in the Basic Latin and Latin-1 Supplement character set (through ``\\u00FF`` ) - The special characters tab ( ``\\u0009`` ), line feed ( ``\\u000A`` ), and carriage return ( ``\\u000D`` )
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-userpolicy.html
         :exampleMetadata: fixture=_generated
@@ -6259,7 +6360,7 @@ class CfnUserPolicyProps:
     def policy_document(self) -> typing.Any:
         '''The policy document.
 
-        You must provide policies in JSON format in IAM. However, for AWS CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. AWS CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
+        You must provide policies in JSON format in IAM. However, for CloudFormation templates formatted in YAML, you can provide the policy in JSON or YAML format. CloudFormation always converts a YAML policy to JSON format before submitting it to IAM.
 
         The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ used to validate this parameter is a string of characters consisting of the following:
 
@@ -6302,11 +6403,11 @@ class CfnUserProps:
     def __init__(
         self,
         *,
-        groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
         login_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.LoginProfileProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
         path: typing.Optional[builtins.str] = None,
-        permissions_boundary: typing.Optional[builtins.str] = None,
+        permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         user_name: typing.Optional[builtins.str] = None,
@@ -6314,13 +6415,13 @@ class CfnUserProps:
         '''Properties for defining a ``CfnUser``.
 
         :param groups: A list of group names to which you want to add the user.
-        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
+        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the the console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
         :param managed_policy_arns: A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the user. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path for the user name. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param permissions_boundary: The ARN of the managed policy that is used to set the permissions boundary for the user. A permissions boundary policy defines the maximum permissions that identity-based policies can grant to an entity, but does not grant permissions. Permissions boundaries do not define the maximum permissions that a resource-based policy can grant to an entity. To learn more, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* . For more information about policy types, see `Policy types <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policy-types>`_ in the *IAM User Guide* .
         :param policies: Adds or updates an inline policy document that is embedded in the specified IAM user. To view AWS::IAM::User snippets, see `Declaring an IAM User Resource <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-iam-user>`_ . .. epigraph:: The name of each policy for a role, user, or group must be unique. If you don't choose unique names, updates to the IAM identity will fail. For information about limits on the number of inline policies that you can embed in a user, see `Limitations on IAM Entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html>`_ in the *IAM User Guide* .
         :param tags: A list of tags that you want to attach to the new user. Each tag consists of a key name and an associated value. For more information about tagging, see `Tagging IAM resources <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html>`_ in the *IAM User Guide* . .. epigraph:: If any one of the tags is invalid or if you exceed the allowed maximum number of tags, then the entire request fails and the resource is not created.
-        :param user_name: The name of the user to create. Do not include the path in this value. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The user name must be unique within the account. User names are not distinguished by case. For example, you cannot create users named both "John" and "john". If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the user name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
+        :param user_name: The name of the user to create. Do not include the path in this value. This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The user name must be unique within the account. User names are not distinguished by case. For example, you cannot create users named both "John" and "john". If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the user name. If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ . .. epigraph:: Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-user.html
         :exampleMetadata: fixture=_generated
@@ -6384,13 +6485,15 @@ class CfnUserProps:
             self._values["user_name"] = user_name
 
     @builtins.property
-    def groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]]:
         '''A list of group names to which you want to add the user.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-user.html#cfn-iam-user-groups
         '''
         result = self._values.get("groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]], result)
 
     @builtins.property
     def login_profile(
@@ -6398,9 +6501,9 @@ class CfnUserProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUser.LoginProfileProperty]]:
         '''Creates a password for the specified IAM user.
 
-        A password allows an IAM user to access AWS services through the AWS Management Console .
+        A password allows an IAM user to access AWS services through the the console .
 
-        You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console .
+        You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console .
 
         For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
 
@@ -6410,7 +6513,9 @@ class CfnUserProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUser.LoginProfileProperty]], result)
 
     @builtins.property
-    def managed_policy_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def managed_policy_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]]:
         '''A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the user.
 
         For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
@@ -6418,7 +6523,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-user.html#cfn-iam-user-managedpolicyarns
         '''
         result = self._values.get("managed_policy_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]], result)
 
     @builtins.property
     def path(self) -> typing.Optional[builtins.str]:
@@ -6436,7 +6541,9 @@ class CfnUserProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def permissions_boundary(self) -> typing.Optional[builtins.str]:
+    def permissions_boundary(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]:
         '''The ARN of the managed policy that is used to set the permissions boundary for the user.
 
         A permissions boundary policy defines the maximum permissions that identity-based policies can grant to an entity, but does not grant permissions. Permissions boundaries do not define the maximum permissions that a resource-based policy can grant to an entity. To learn more, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* .
@@ -6446,7 +6553,7 @@ class CfnUserProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-user.html#cfn-iam-user-permissionsboundary
         '''
         result = self._values.get("permissions_boundary")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]], result)
 
     @builtins.property
     def policies(
@@ -6486,9 +6593,9 @@ class CfnUserProps:
 
         This parameter allows (per its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The user name must be unique within the account. User names are not distinguished by case. For example, you cannot create users named both "John" and "john".
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the user name.
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the user name.
 
-        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in AWS CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
+        If you specify a name, you must specify the ``CAPABILITY_NAMED_IAM`` value to acknowledge your template's capabilities. For more information, see `Acknowledging IAM Resources in CloudFormation Templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-iam-template.html#using-iam-capabilities>`_ .
         .. epigraph::
 
            Naming an IAM resource can cause an unrecoverable error if you reuse the same template in multiple Regions. To prevent this, we recommend using ``Fn::Join`` and ``AWS::Region`` to create a Region-specific name, as in the following example: ``{"Fn::Join": ["", [{"Ref": "AWS::Region"}, {"Ref": "MyResourceName"}]]}`` .
@@ -7850,6 +7957,59 @@ class Grant(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.Grant"):
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_iam.GrantOnKeyResult",
+    jsii_struct_bases=[],
+    name_mapping={"grant": "grant"},
+)
+class GrantOnKeyResult:
+    def __init__(self, *, grant: typing.Optional[Grant] = None) -> None:
+        '''Result of a call to grantOnKey().
+
+        :param grant: The Grant object, if a grant was created. Default: No grant
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_iam as iam
+            
+            # grant: iam.Grant
+            
+            grant_on_key_result = iam.GrantOnKeyResult(
+                grant=grant
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d966b064e777c60501cf45b81c5f2072ab9bfb4b7def5ee0ad6a6e273fe0630)
+            check_type(argname="argument grant", value=grant, expected_type=type_hints["grant"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if grant is not None:
+            self._values["grant"] = grant
+
+    @builtins.property
+    def grant(self) -> typing.Optional[Grant]:
+        '''The Grant object, if a grant was created.
+
+        :default: No grant
+        '''
+        result = self._values.get("grant")
+        return typing.cast(typing.Optional[Grant], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "GrantOnKeyResult(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_iam.GrantOnPrincipalAndResourceOptions",
     jsii_struct_bases=[CommonGrantOptions],
     name_mapping={
@@ -8292,6 +8452,57 @@ class GrantWithResourceOptions(CommonGrantOptions):
         )
 
 
+class GrantableResources(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_iam.GrantableResources",
+):
+    '''Utility methods to check for specific types of grantable resources.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_iam as iam
+        
+        grantable_resources = iam.GrantableResources()
+    '''
+
+    def __init__(self) -> None:
+        jsii.create(self.__class__, self, [])
+
+    @jsii.member(jsii_name="isEncryptedResource")
+    @builtins.classmethod
+    def is_encrypted_resource(
+        cls,
+        resource: _constructs_77d1e7e8.IConstruct,
+    ) -> builtins.bool:
+        '''Whether this resource holds data that can be encrypted using a KMS key.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5dd532720c67899493c38541d1d1385824a8c552f89bc513c1e00d86714b7a75)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isEncryptedResource", [resource]))
+
+    @jsii.member(jsii_name="isResourceWithPolicy")
+    @builtins.classmethod
+    def is_resource_with_policy(
+        cls,
+        resource: _IEnvironmentAware_f39049ee,
+    ) -> builtins.bool:
+        '''Whether this resource admits a resource policy.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6abc7b14c1bac1d5c3ea94fff54da43a5f9d27cb6330751d69f1723006eac104)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isResourceWithPolicy", [resource]))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_iam.GroupProps",
     jsii_struct_bases=[],
@@ -8460,6 +8671,52 @@ class _IAccessKeyProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAccessKey).__jsii_proxy_class__ = lambda : _IAccessKeyProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IEncryptedResource")
+class IEncryptedResource(_IResource_c80c4260, typing_extensions.Protocol):
+    '''A resource that contains data that can be encrypted, using a KMS key.'''
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: "IGrantable",
+        *actions: builtins.str,
+    ) -> GrantOnKeyResult:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        ...
+
+
+class _IEncryptedResourceProxy(
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+):
+    '''A resource that contains data that can be encrypted, using a KMS key.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_iam.IEncryptedResource"
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: "IGrantable",
+        *actions: builtins.str,
+    ) -> GrantOnKeyResult:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31391fca81b6f55a5127b16e129f61e26bf7e16d7075081f448434495d73fe70)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(GrantOnKeyResult, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IEncryptedResource).__jsii_proxy_class__ = lambda : _IEncryptedResourceProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_iam.IGrantable")
@@ -11726,6 +11983,58 @@ class PrincipalPolicyFragment(
         return typing.cast(typing.Mapping[builtins.str, typing.List[builtins.str]], jsii.get(self, "principalJson"))
 
 
+class RoleGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.RoleGrants"):
+    '''Collection of grant methods for a IRoleRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_iam as iam
+        from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+        
+        # role_ref: interfaces_aws_iam.IRoleRef
+        
+        role_grants = iam.RoleGrants.from_role(role_ref)
+    '''
+
+    @jsii.member(jsii_name="fromRole")
+    @builtins.classmethod
+    def from_role(cls, role: _IRoleRef_8400221f) -> "RoleGrants":
+        '''Creates grants for IRoleRef.
+
+        :param role: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dffa67cf033b90d54f11e95ec0b1a8cd60db661c810a4fd24dc03933a21d5c87)
+            check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+        return typing.cast("RoleGrants", jsii.sinvoke(cls, "fromRole", [role]))
+
+    @jsii.member(jsii_name="assumeRole")
+    def assume_role(self, identity: IPrincipal) -> Grant:
+        '''Grant permissions to the given principal to assume this role.
+
+        :param identity: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0e43e158983e4dd015aa840081e69baed377aba2f7fd40438b55ae1fb555e272)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        return typing.cast(Grant, jsii.invoke(self, "assumeRole", [identity]))
+
+    @jsii.member(jsii_name="passRole")
+    def pass_role(self, identity: IPrincipal) -> Grant:
+        '''Grant permissions to the given principal to pass this role.
+
+        :param identity: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__557aabeb0c114b0578fa478004131fa9486a9be7effa997358f0dbebe32cf40c)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        return typing.cast(Grant, jsii.invoke(self, "passRole", [identity]))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_iam.RoleLookupOptions",
     jsii_struct_bases=[FromRoleArnOptions],
@@ -11880,25 +12189,30 @@ class RoleProps:
         :param permissions_boundary: AWS supports permissions boundaries for IAM entities (users or roles). A permissions boundary is an advanced feature for using a managed policy to set the maximum permissions that an identity-based policy can grant to an IAM entity. An entity's permissions boundary allows it to perform only the actions that are allowed by both its identity-based policies and its permissions boundaries. Default: - No permissions boundary.
         :param role_name: A name for the IAM role. For valid values, see the RoleName parameter for the CreateRole action in the IAM API Reference. IMPORTANT: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. If you specify a name, you must specify the CAPABILITY_NAMED_IAM value to acknowledge your template's capabilities. For more information, see Acknowledging IAM Resources in AWS CloudFormation Templates. Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the role name.
 
-        :exampleMetadata: infused
+        :exampleMetadata: fixture=default infused
 
         Example::
 
-            lambda_role = iam.Role(self, "Role",
-                assumed_by=iam.ServicePrincipal("lambda.amazonaws.com"),
-                description="Example role..."
+            # Create a browser
+            browser = agentcore.BrowserCustom(self, "MyBrowser",
+                browser_custom_name="my_browser",
+                description="Browser for web automation",
+                network_configuration=agentcore.BrowserNetworkConfiguration.using_public_network()
             )
             
-            stream = kinesis.Stream(self, "MyEncryptedStream",
-                encryption=kinesis.StreamEncryption.KMS
-            )
-            stream_consumer = kinesis.StreamConsumer(self, "MyStreamConsumer",
-                stream_consumer_name="MyStreamConsumer",
-                stream=stream
+            # Create a role that needs access to the browser
+            user_role = iam.Role(self, "UserRole",
+                assumed_by=iam.ServicePrincipal("lambda.amazonaws.com")
             )
             
-            # give lambda permissions to read stream via the stream consumer
-            stream_consumer.grant_read(lambda_role)
+            # Grant read permissions (Get and List actions)
+            browser.grant_read(user_role)
+            
+            # Grant use permissions (Start, Update, Stop actions)
+            browser.grant_use(user_role)
+            
+            # Grant specific custom permissions
+            browser.grant(user_role, "bedrock-agentcore:GetBrowserSession")
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9c9223cb9fa6dff45ee4fd7013629ab18542c2499a83f542c5405968fad2287c)
@@ -14650,6 +14964,12 @@ class Role(
         return typing.cast(IPrincipal, jsii.get(self, "grantPrincipal"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> RoleGrants:
+        '''Collection of grant methods for a Role.'''
+        return typing.cast(RoleGrants, jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="policyFragment")
     def policy_fragment(self) -> PrincipalPolicyFragment:
         '''Returns the role.'''
@@ -16250,15 +16570,18 @@ __all__ = [
     "FromRoleArnOptions",
     "FromRoleNameOptions",
     "Grant",
+    "GrantOnKeyResult",
     "GrantOnPrincipalAndResourceOptions",
     "GrantOnPrincipalOptions",
     "GrantPolicyWithResourceOptions",
     "GrantWithResourceOptions",
+    "GrantableResources",
     "Group",
     "GroupProps",
     "IAccessKey",
     "IAssumeRolePrincipal",
     "IComparablePrincipal",
+    "IEncryptedResource",
     "IGrantable",
     "IGroup",
     "IIdentity",
@@ -16297,6 +16620,7 @@ __all__ = [
     "PrincipalPolicyFragment",
     "PrincipalWithConditions",
     "Role",
+    "RoleGrants",
     "RoleLookupOptions",
     "RoleProps",
     "SamlConsolePrincipal",
@@ -16399,9 +16723,15 @@ def _typecheckingstub__20b2c419e0a9df4f72befe689959dc5d68aff361365a09c398c4a5645
     id: builtins.str,
     *,
     group_name: typing.Optional[builtins.str] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     path: typing.Optional[builtins.str] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3980f39025e91ce99b498701692fb8425cc9af4321db09d71dbd3368a8936555(
+    resource: _IGroupRef_aeb1d9f6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16503,7 +16833,7 @@ def _typecheckingstub__fa640a2b964f19199ce54686b7fd65c710619c4f560d010f4b3ceaac8
 def _typecheckingstub__83c00814903fe43cbe21eca7faddcd90dcea9ec971aac6d8d2daf6b50f845df0(
     *,
     group_name: typing.Optional[builtins.str] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     path: typing.Optional[builtins.str] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -16514,9 +16844,15 @@ def _typecheckingstub__31ec5f0ea7f9ac49e8ad53cc5faa514c2ff04ae0962ad9e9fb0274b3c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    roles: typing.Sequence[builtins.str],
+    roles: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
     instance_profile_name: typing.Optional[builtins.str] = None,
     path: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__511cf624861b94d053cb656d41bfb85226b39bae88821676b01740944f0811d9(
+    resource: _IInstanceProfileRef_d6832c90,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16553,7 +16889,7 @@ def _typecheckingstub__cbfe487716a390ca26e092b03b19bce39babeaa672e667fad6be4aed4
 
 def _typecheckingstub__13af24b231dab76416337b37eed1fc0eb441fa93214942c4f328be745d78987f(
     *,
-    roles: typing.Sequence[builtins.str],
+    roles: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
     instance_profile_name: typing.Optional[builtins.str] = None,
     path: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -16566,11 +16902,11 @@ def _typecheckingstub__3a8c17449d46e088e632540cdf9eb1a587f03d90f16e24cec8b7c30c9
     *,
     policy_document: typing.Any,
     description: typing.Optional[builtins.str] = None,
-    groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
     managed_policy_name: typing.Optional[builtins.str] = None,
     path: typing.Optional[builtins.str] = None,
-    roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    users: typing.Optional[typing.Sequence[builtins.str]] = None,
+    roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    users: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserRef_b0ccca76]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16633,11 +16969,11 @@ def _typecheckingstub__7363835eb798096a2561a7a8a91d2914cb5cb1e71dbda6de66efc5952
     *,
     policy_document: typing.Any,
     description: typing.Optional[builtins.str] = None,
-    groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
     managed_policy_name: typing.Optional[builtins.str] = None,
     path: typing.Optional[builtins.str] = None,
-    roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    users: typing.Optional[typing.Sequence[builtins.str]] = None,
+    roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    users: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserRef_b0ccca76]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16650,6 +16986,12 @@ def _typecheckingstub__5cc57bdb168ce990f6466a329942805a3eead54a8207df63d06106140
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     thumbprint_list: typing.Optional[typing.Sequence[builtins.str]] = None,
     url: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fab4fe6f3e4db72e34d9bb9535a6cd4366d92f1c50e499ef665ae1a82c7cc813(
+    resource: _IOIDCProviderRef_a866c7c8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16772,13 +17114,19 @@ def _typecheckingstub__b418623e6c6b819228e2a7c5d9c5341241e5b0e738f77eeabd6cacec7
     *,
     assume_role_policy_document: typing.Any,
     description: typing.Optional[builtins.str] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     max_session_duration: typing.Optional[jsii.Number] = None,
     path: typing.Optional[builtins.str] = None,
-    permissions_boundary: typing.Optional[builtins.str] = None,
+    permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRole.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     role_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aed7930ffdab40f4113234c4ce249e72c7b8fb0328ee2238e91d57b3368ac29b(
+    resource: _IRoleRef_8400221f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16911,10 +17259,10 @@ def _typecheckingstub__5103775c44bc4d8c2381a2d9cd5bbb47d14617e4000af5af24e41da60
     *,
     assume_role_policy_document: typing.Any,
     description: typing.Optional[builtins.str] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     max_session_duration: typing.Optional[jsii.Number] = None,
     path: typing.Optional[builtins.str] = None,
-    permissions_boundary: typing.Optional[builtins.str] = None,
+    permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRole.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     role_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -16933,6 +17281,12 @@ def _typecheckingstub__f64934981377388842130b01da042285d0dfa38ef82a7537c7ff86f5d
     remove_private_key: typing.Optional[builtins.str] = None,
     saml_metadata_document: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b1f1e65df7127c08c1603f184585a56d767362a3b5afeaa5a74ddaabf619b5da(
+    resource: _ISAMLProviderRef_6e369856,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17022,6 +17376,12 @@ def _typecheckingstub__b6cf37b70ff9a27f22bc984fc19e96b2e42e00f83cc2e2efd66e3b46e
     private_key: typing.Optional[builtins.str] = None,
     server_certificate_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bdc593551fa8cc6ccbfd2bc0375f5568203a3f854d4f715a6b618e4b88274326(
+    resource: _IServerCertificateRef_005ddfcc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17140,14 +17500,20 @@ def _typecheckingstub__b453e8e55124e84a27aa60acd149280051b756df30318da37839b1e4c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
     login_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.LoginProfileProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     path: typing.Optional[builtins.str] = None,
-    permissions_boundary: typing.Optional[builtins.str] = None,
+    permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53586ff3825069b3269d54a7efd5838a24c958e3815fb51409e5578af38ed8a2(
+    resource: _IUserRef_b0ccca76,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17280,11 +17646,11 @@ def _typecheckingstub__fe6f239efe54addc57c69dc765719968f9ffeb9e19e348f502085249d
 
 def _typecheckingstub__8b4312dc8ff103705c67491ae6f470e2644acffd396e5635261bf47e9a8a945f(
     *,
-    groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IGroupRef_aeb1d9f6]]] = None,
     login_profile: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.LoginProfileProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    managed_policy_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    managed_policy_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]]] = None,
     path: typing.Optional[builtins.str] = None,
-    permissions_boundary: typing.Optional[builtins.str] = None,
+    permissions_boundary: typing.Optional[typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.PolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_name: typing.Optional[builtins.str] = None,
@@ -17465,6 +17831,13 @@ def _typecheckingstub__18a4ff4a989416437955a50d12b650943c445c1bd75cbc2f47d193904
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6d966b064e777c60501cf45b81c5f2072ab9bfb4b7def5ee0ad6a6e273fe0630(
+    *,
+    grant: typing.Optional[Grant] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a60e5877e638d22c44d2e72be768df7f85caf47bec9ab2e6b2adcce826a6aae0(
     *,
     actions: typing.Sequence[builtins.str],
@@ -17501,11 +17874,30 @@ def _typecheckingstub__d76f68f1d67dcad526c87768d88423a4092a0ef3127be7cb534620448
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5dd532720c67899493c38541d1d1385824a8c552f89bc513c1e00d86714b7a75(
+    resource: _constructs_77d1e7e8.IConstruct,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6abc7b14c1bac1d5c3ea94fff54da43a5f9d27cb6330751d69f1723006eac104(
+    resource: _IEnvironmentAware_f39049ee,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7889ad6c97f3c96c3ead5d27bd1231fba11aadae1700a9dcd088123609e9b9a5(
     *,
     group_name: typing.Optional[builtins.str] = None,
     managed_policies: typing.Optional[typing.Sequence[IManagedPolicy]] = None,
     path: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31391fca81b6f55a5127b16e129f61e26bf7e16d7075081f448434495d73fe70(
+    grantee: IGrantable,
+    *actions: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17946,6 +18338,24 @@ def _typecheckingstub__b1307ab5f5dd84b7184f36603f7af026efb2798812c35c96dbe60552f
 def _typecheckingstub__278426b331a0d887bf9449f77f6f9c562033abef58a3d7279c5604a1e1c928ea(
     principal_json: typing.Mapping[builtins.str, typing.Sequence[builtins.str]],
     conditions: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dffa67cf033b90d54f11e95ec0b1a8cd60db661c810a4fd24dc03933a21d5c87(
+    role: _IRoleRef_8400221f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0e43e158983e4dd015aa840081e69baed377aba2f7fd40438b55ae1fb555e272(
+    identity: IPrincipal,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__557aabeb0c114b0578fa478004131fa9486a9be7effa997358f0dbebe32cf40c(
+    identity: IPrincipal,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18656,5 +19066,5 @@ def _typecheckingstub__c7271e79a3715a166397ac94ded3c4043db8b40c10213ffae6abbb3a1
     """Type checking stubs"""
     pass
 
-for cls in [IAccessKey, IAssumeRolePrincipal, IComparablePrincipal, IGrantable, IGroup, IIdentity, IInstanceProfile, IManagedPolicy, IOidcProvider, IOpenIdConnectProvider, IPolicy, IPrincipal, IResourceWithPolicy, IResourceWithPolicyV2, IRole, ISamlProvider, IUser]:
+for cls in [IAccessKey, IAssumeRolePrincipal, IComparablePrincipal, IEncryptedResource, IGrantable, IGroup, IIdentity, IInstanceProfile, IManagedPolicy, IOidcProvider, IOpenIdConnectProvider, IPolicy, IPrincipal, IResourceWithPolicy, IResourceWithPolicyV2, IRole, ISamlProvider, IUser]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

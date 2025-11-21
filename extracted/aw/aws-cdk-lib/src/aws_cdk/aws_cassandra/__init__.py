@@ -143,6 +143,17 @@ class CfnKeyspace(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForKeyspace")
+    @builtins.classmethod
+    def arn_for_keyspace(cls, resource: _IKeyspaceRef_f37c6d41) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__68dff84d5bfda5a7172449191c8464e7f95a1d7da32f22653dbbacc6b900ab2d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForKeyspace", [resource]))
+
     @jsii.member(jsii_name="fromKeyspaceName")
     @builtins.classmethod
     def from_keyspace_name(
@@ -2863,6 +2874,12 @@ def _typecheckingstub__9cd64888a8d1139f7fef90a6f2cad1bf287a6d09115cfa1d1147c1afd
     keyspace_name: typing.Optional[builtins.str] = None,
     replication_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKeyspace.ReplicationSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__68dff84d5bfda5a7172449191c8464e7f95a1d7da32f22653dbbacc6b900ab2d(
+    resource: _IKeyspaceRef_f37c6d41,
 ) -> None:
     """Type checking stubs"""
     pass

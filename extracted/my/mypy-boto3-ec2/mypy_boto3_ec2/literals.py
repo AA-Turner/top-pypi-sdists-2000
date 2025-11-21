@@ -268,6 +268,8 @@ __all__ = (
     "ElasticGpuStateType",
     "ElasticGpuStatusType",
     "EnaSupportType",
+    "EncryptionStateValueType",
+    "EncryptionSupportOptionValueType",
     "EndDateTypeType",
     "EndpointIpAddressTypeType",
     "EphemeralNvmeSupportType",
@@ -593,6 +595,9 @@ __all__ = (
     "TransitGatewayAttachmentResourceTypeType",
     "TransitGatewayAttachmentStateType",
     "TransitGatewayConnectPeerStateType",
+    "TransitGatewayMeteringPayerTypeType",
+    "TransitGatewayMeteringPolicyEntryStateType",
+    "TransitGatewayMeteringPolicyStateType",
     "TransitGatewayMulitcastDomainAssociationStateType",
     "TransitGatewayMulticastDomainStateType",
     "TransitGatewayPolicyTableStateType",
@@ -634,6 +639,7 @@ __all__ = (
     "VpcBlockPublicAccessExclusionsAllowedType",
     "VpcBlockPublicAccessStateType",
     "VpcCidrBlockStateCodeType",
+    "VpcEncryptionControlExclusionStateInputType",
     "VpcEncryptionControlExclusionStateType",
     "VpcEncryptionControlModeType",
     "VpcEncryptionControlStateType",
@@ -768,8 +774,10 @@ ByoipCidrStateType = Literal[
     "deprovisioned",
     "failed-deprovision",
     "failed-provision",
+    "pending-advertising",
     "pending-deprovision",
     "pending-provision",
+    "pending-withdrawal",
     "provisioned",
     "provisioned-not-publicly-advertisable",
 ]
@@ -1102,6 +1110,8 @@ EkPubKeyTypeType = Literal["ecc-sec-p384", "rsa-2048"]
 ElasticGpuStateType = Literal["ATTACHED"]
 ElasticGpuStatusType = Literal["IMPAIRED", "OK"]
 EnaSupportType = Literal["required", "supported", "unsupported"]
+EncryptionStateValueType = Literal["disabled", "disabling", "enabled", "enabling"]
+EncryptionSupportOptionValueType = Literal["disable", "enable"]
 EndDateTypeType = Literal["limited", "unlimited"]
 EndpointIpAddressTypeType = Literal["dual-stack", "ipv4", "ipv6"]
 EphemeralNvmeSupportType = Literal["required", "supported", "unsupported"]
@@ -2462,9 +2472,9 @@ IpamPolicyStateType = Literal[
     "restore-in-progress",
 ]
 IpamPoolAllocationResourceTypeType = Literal[
-    "custom", "ec2-public-ipv4-pool", "eip", "ipam-pool", "subnet", "vpc"
+    "anycast-ip-list", "custom", "ec2-public-ipv4-pool", "eip", "ipam-pool", "subnet", "vpc"
 ]
-IpamPoolAwsServiceType = Literal["ec2"]
+IpamPoolAwsServiceType = Literal["ec2", "global-services"]
 IpamPoolCidrFailureCodeType = Literal["cidr-not-available", "limit-exceeded"]
 IpamPoolCidrStateType = Literal[
     "deprovisioned",
@@ -2528,6 +2538,7 @@ IpamPrefixListResolverTargetStateType = Literal[
 IpamPrefixListResolverVersionCreationStatusType = Literal["failure", "pending", "success"]
 IpamPublicAddressAssociationStatusType = Literal["associated", "disassociated"]
 IpamPublicAddressAwsServiceType = Literal[
+    "cloudfront",
     "database-migration-service",
     "elastic-container-service",
     "global-accelerator",
@@ -2541,6 +2552,7 @@ IpamPublicAddressAwsServiceType = Literal[
 IpamPublicAddressTypeType = Literal[
     "amazon-owned-contig",
     "amazon-owned-eip",
+    "anycast-ip-list-ip",
     "byoip",
     "ec2-public-ip",
     "service-managed-byoip",
@@ -2572,7 +2584,9 @@ IpamResourceDiscoveryStateType = Literal[
     "modify-in-progress",
     "restore-in-progress",
 ]
-IpamResourceTypeType = Literal["eip", "eni", "ipv6-pool", "public-ipv4-pool", "subnet", "vpc"]
+IpamResourceTypeType = Literal[
+    "anycast-ip-list", "eip", "eni", "ipv6-pool", "public-ipv4-pool", "subnet", "vpc"
+]
 IpamScopeExternalAuthorityTypeType = Literal["infoblox"]
 IpamScopeStateType = Literal[
     "create-complete",
@@ -2901,6 +2915,7 @@ ResourceTypeType = Literal[
     "transit-gateway",
     "transit-gateway-attachment",
     "transit-gateway-connect-peer",
+    "transit-gateway-metering-policy",
     "transit-gateway-multicast-domain",
     "transit-gateway-policy-table",
     "transit-gateway-route-table",
@@ -2914,6 +2929,7 @@ ResourceTypeType = Literal[
     "volume",
     "vpc",
     "vpc-block-public-access-exclusion",
+    "vpc-encryption-control",
     "vpc-endpoint",
     "vpc-endpoint-connection",
     "vpc-endpoint-connection-device-type",
@@ -3095,6 +3111,13 @@ TransitGatewayAttachmentStateType = Literal[
     "rollingBack",
 ]
 TransitGatewayConnectPeerStateType = Literal["available", "deleted", "deleting", "pending"]
+TransitGatewayMeteringPayerTypeType = Literal[
+    "destination-attachment-owner", "source-attachment-owner", "transit-gateway-owner"
+]
+TransitGatewayMeteringPolicyEntryStateType = Literal["available", "deleted"]
+TransitGatewayMeteringPolicyStateType = Literal[
+    "available", "deleted", "deleting", "modifying", "pending"
+]
 TransitGatewayMulitcastDomainAssociationStateType = Literal[
     "associated",
     "associating",
@@ -3170,6 +3193,7 @@ VpcBlockPublicAccessStateType = Literal["default-state", "update-complete", "upd
 VpcCidrBlockStateCodeType = Literal[
     "associated", "associating", "disassociated", "disassociating", "failed", "failing"
 ]
+VpcEncryptionControlExclusionStateInputType = Literal["disable", "enable"]
 VpcEncryptionControlExclusionStateType = Literal["disabled", "disabling", "enabled", "enabling"]
 VpcEncryptionControlModeType = Literal["enforce", "monitor"]
 VpcEncryptionControlStateType = Literal[

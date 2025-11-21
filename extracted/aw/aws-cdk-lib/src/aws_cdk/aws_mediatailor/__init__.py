@@ -191,6 +191,17 @@ class CfnChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForChannel")
+    @builtins.classmethod
+    def arn_for_channel(cls, resource: _IChannelRef_3696dd49) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__418fb2485d366f3c8a7b8a95c0dcf780cd3d97d1eacd74f40d7d10b930f2ab95)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannel", [resource]))
+
     @jsii.member(jsii_name="fromChannelArn")
     @builtins.classmethod
     def from_channel_arn(
@@ -1411,6 +1422,17 @@ class CfnLiveSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLiveSource")
+    @builtins.classmethod
+    def arn_for_live_source(cls, resource: _ILiveSourceRef_aff5e4da) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b2b664e7ed5590505b220acf48fbfff98a521078fb4767ee5949f9cbd9c0e6a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLiveSource", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1895,6 +1917,20 @@ class CfnPlaybackConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPlaybackConfiguration")
+    @builtins.classmethod
+    def arn_for_playback_configuration(
+        cls,
+        resource: _IPlaybackConfigurationRef_12fbcfb6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3335a30b563b424b55efc3fb3fba650a85702c1595cf9e59fff9aeeca795f023)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPlaybackConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3696,6 +3732,20 @@ class CfnSourceLocation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSourceLocation")
+    @builtins.classmethod
+    def arn_for_source_location(
+        cls,
+        resource: _ISourceLocationRef_240f0e28,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0d17f619c660f9b6fd1fb2b7aeb5e9f11758a50027ed09924fa2715dfe61616)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSourceLocation", [resource]))
+
     @jsii.member(jsii_name="fromSourceLocationArn")
     @builtins.classmethod
     def from_source_location_arn(
@@ -4488,6 +4538,17 @@ class CfnVodSource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVodSource")
+    @builtins.classmethod
+    def arn_for_vod_source(cls, resource: _IVodSourceRef_6ec4c083) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__224cd199576868d6ca76d7e26d603a6d1c6751f09853b7fb5b817a6eb612797a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVodSource", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4847,6 +4908,12 @@ def _typecheckingstub__95afc802641850838d7d754c58072c279165a93bff5fc055789c1090a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__418fb2485d366f3c8a7b8a95c0dcf780cd3d97d1eacd74f40d7d10b930f2ab95(
+    resource: _IChannelRef_3696dd49,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4d19144d331ba31edd24b53fe62ecd68291785594e4276f682970808562a8790(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5048,6 +5115,12 @@ def _typecheckingstub__caad9e925cf2074f54088c0241999fdbc5c194736555867b7765527f3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6b2b664e7ed5590505b220acf48fbfff98a521078fb4767ee5949f9cbd9c0e6a(
+    resource: _ILiveSourceRef_aff5e4da,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ed469803ff91fff7fc3040fc3d0bb3fa9a21fd4b59da12961328098a4c73f954(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5125,6 +5198,12 @@ def _typecheckingstub__3dcfb97a898a80ee6a7b069e26028183e8a797f0c48fdbd4fe6ecb8ad
     slate_ad_url: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     transcode_profile_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3335a30b563b424b55efc3fb3fba650a85702c1595cf9e59fff9aeeca795f023(
+    resource: _IPlaybackConfigurationRef_12fbcfb6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5382,6 +5461,12 @@ def _typecheckingstub__dd693d384196965a6e6e42aa969746fa450f3a5099e7be68c145dcc9f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a0d17f619c660f9b6fd1fb2b7aeb5e9f11758a50027ed09924fa2715dfe61616(
+    resource: _ISourceLocationRef_240f0e28,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7e847088619cd1680f1c77248b1fed78fe233ca2f074624e89178586546d9d84(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5505,6 +5590,12 @@ def _typecheckingstub__456acf01c6ad372c9c8ba7c229fe88f13ceaab57f8599ae26cb522443
     source_location_name: builtins.str,
     vod_source_name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__224cd199576868d6ca76d7e26d603a6d1c6751f09853b7fb5b817a6eb612797a(
+    resource: _IVodSourceRef_6ec4c083,
 ) -> None:
     """Type checking stubs"""
     pass

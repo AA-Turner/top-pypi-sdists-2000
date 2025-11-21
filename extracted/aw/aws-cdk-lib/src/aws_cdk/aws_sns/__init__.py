@@ -432,13 +432,25 @@ from ..aws_codestarnotifications import (
 from ..aws_iam import (
     AddToResourcePolicyResult as _AddToResourcePolicyResult_1d0a53ad,
     Grant as _Grant_a7ae64f8,
+    GrantOnKeyResult as _GrantOnKeyResult_35320c49,
+    IEncryptedResource as _IEncryptedResource_8e9bf351,
     IGrantable as _IGrantable_71c4f5de,
+    IResourceWithPolicyV2 as _IResourceWithPolicyV2_01035ec6,
     PolicyDocument as _PolicyDocument_3ac34393,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..aws_kms import IKey as _IKey_5f11635f
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kinesisfirehose import (
+    IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53
+)
+from ..interfaces.aws_kms import (
+    IAliasRef as _IAliasRef_43fafabd, IKeyRef as _IKeyRef_d4fc6ef3
+)
+from ..interfaces.aws_lambda import (
+    IFunctionRef as _IFunctionRef_2601eb33, IVersionRef as _IVersionRef_4fdb94ad
+)
 from ..interfaces.aws_sns import (
     ISubscriptionRef as _ISubscriptionRef_6b5d0f32,
     ITopicInlinePolicyRef as _ITopicInlinePolicyRef_e13c4e42,
@@ -449,6 +461,7 @@ from ..interfaces.aws_sns import (
     TopicPolicyReference as _TopicPolicyReference_150954d5,
     TopicReference as _TopicReference_3fef3390,
 )
+from ..interfaces.aws_sqs import IQueueRef as _IQueueRef_fa8b2198
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_sns.BackoffFunction")
@@ -576,7 +589,7 @@ class CfnSubscription(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_sns.CfnSubscription",
 ):
-    '''The ``AWS::SNS::Subscription`` resource subscribes an endpoint to an Amazon SNS topic.
+    '''The ``AWS::SNS::Subscription`` resource subscribes an endpoint to an Amazon  topic.
 
     For a subscription to be created, the owner of the endpoint must` confirm the subscription.
 
@@ -618,32 +631,32 @@ class CfnSubscription(
         id: builtins.str,
         *,
         protocol: builtins.str,
-        topic_arn: builtins.str,
+        topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
         delivery_policy: typing.Any = None,
-        endpoint: typing.Optional[builtins.str] = None,
+        endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
         filter_policy: typing.Any = None,
         filter_policy_scope: typing.Optional[builtins.str] = None,
         raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         redrive_policy: typing.Any = None,
         region: typing.Optional[builtins.str] = None,
         replay_policy: typing.Any = None,
-        subscription_role_arn: typing.Optional[builtins.str] = None,
+        subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::SNS::Subscription``.
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+        :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
         :param topic_arn: The ARN of the topic to subscribe to.
-        :param delivery_policy: The delivery policy JSON assigned to the subscription. Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon SNS Developer Guide* .
-        :param endpoint: The subscription's endpoint. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
-        :param filter_policy: The filter policy JSON assigned to the subscription. Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon SNS Developer Guide* .
+        :param delivery_policy: The delivery policy JSON assigned to the subscription. Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon Developer Guide* .
+        :param endpoint: The subscription's endpoint. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
+        :param filter_policy: The filter policy JSON assigned to the subscription. Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon Developer Guide* .
         :param filter_policy_scope: This attribute lets you choose the filtering scope by using one of the following string value types:. - ``MessageAttributes`` (default) - The filter is applied on the message attributes. - ``MessageBody`` - The filter is applied on the message body. .. epigraph:: ``Null`` is not a valid value for ``FilterPolicyScope`` . To delete a filter policy, delete the ``FilterPolicy`` property but keep ``FilterPolicyScope`` property as is.
-        :param raw_message_delivery: When set to ``true`` , enables raw message delivery. Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* .
+        :param raw_message_delivery: When set to ``true`` , enables raw message delivery. Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* .
         :param redrive_policy: When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can't be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing. For more information about the redrive policy and dead-letter queues, see `Amazon SQS dead-letter queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>`_ in the *Amazon SQS Developer Guide* .
-        :param region: For cross-region subscriptions, the region in which the topic resides. If no region is specified, AWS CloudFormation uses the region of the caller as the default. If you perform an update operation that only updates the ``Region`` property of a ``AWS::SNS::Subscription`` resource, that operation will fail unless you are either: - Updating the ``Region`` from ``NULL`` to the caller region. - Updating the ``Region`` from the caller region to ``NULL`` .
-        :param replay_policy: Specifies whether Amazon SNS resends the notification to the subscription when a message's attribute changes.
-        :param subscription_role_arn: This property applies only to Amazon Data Firehose delivery stream subscriptions. Specify the ARN of the IAM role that has the following: - Permission to write to the Amazon Data Firehose delivery stream - Amazon SNS listed as a trusted entity Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon SNS Developer Guide.*
+        :param region: For cross-region subscriptions, the region in which the topic resides. If no region is specified, CloudFormation uses the region of the caller as the default. If you perform an update operation that only updates the ``Region`` property of a ``AWS::SNS::Subscription`` resource, that operation will fail unless you are either: - Updating the ``Region`` from ``NULL`` to the caller region. - Updating the ``Region`` from the caller region to ``NULL`` .
+        :param replay_policy: Specifies whether Amazon resends the notification to the subscription when a message's attribute changes.
+        :param subscription_role_arn: This property applies only to Amazon Data Firehose delivery stream subscriptions. Specify the ARN of the IAM role that has the following: - Permission to write to the Amazon Data Firehose delivery stream - Amazon listed as a trusted entity Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon Developer Guide.*
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3f3839647e73879ccdb1519ec2afccf78b6168046279d32c5390b3e2543d1fec)
@@ -664,6 +677,17 @@ class CfnSubscription(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSubscription")
+    @builtins.classmethod
+    def arn_for_subscription(cls, resource: _ISubscriptionRef_6b5d0f32) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bbfe0ae586df25665e857e136d6cd352d0daa872bafc16c3b01dcb589fea78b5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSubscription", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -840,7 +864,7 @@ class CfnSubscription(
     @builtins.property
     @jsii.member(jsii_name="replayPolicy")
     def replay_policy(self) -> typing.Any:
-        '''Specifies whether Amazon SNS resends the notification to the subscription when a message's attribute changes.'''
+        '''Specifies whether Amazon  resends the notification to the subscription when a message's attribute changes.'''
         return typing.cast(typing.Any, jsii.get(self, "replayPolicy"))
 
     @replay_policy.setter
@@ -886,30 +910,30 @@ class CfnSubscriptionProps:
         self,
         *,
         protocol: builtins.str,
-        topic_arn: builtins.str,
+        topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
         delivery_policy: typing.Any = None,
-        endpoint: typing.Optional[builtins.str] = None,
+        endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
         filter_policy: typing.Any = None,
         filter_policy_scope: typing.Optional[builtins.str] = None,
         raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         redrive_policy: typing.Any = None,
         region: typing.Optional[builtins.str] = None,
         replay_policy: typing.Any = None,
-        subscription_role_arn: typing.Optional[builtins.str] = None,
+        subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscription``.
 
-        :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+        :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
         :param topic_arn: The ARN of the topic to subscribe to.
-        :param delivery_policy: The delivery policy JSON assigned to the subscription. Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon SNS Developer Guide* .
-        :param endpoint: The subscription's endpoint. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
-        :param filter_policy: The filter policy JSON assigned to the subscription. Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon SNS Developer Guide* .
+        :param delivery_policy: The delivery policy JSON assigned to the subscription. Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon Developer Guide* .
+        :param endpoint: The subscription's endpoint. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
+        :param filter_policy: The filter policy JSON assigned to the subscription. Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon Developer Guide* .
         :param filter_policy_scope: This attribute lets you choose the filtering scope by using one of the following string value types:. - ``MessageAttributes`` (default) - The filter is applied on the message attributes. - ``MessageBody`` - The filter is applied on the message body. .. epigraph:: ``Null`` is not a valid value for ``FilterPolicyScope`` . To delete a filter policy, delete the ``FilterPolicy`` property but keep ``FilterPolicyScope`` property as is.
-        :param raw_message_delivery: When set to ``true`` , enables raw message delivery. Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* .
+        :param raw_message_delivery: When set to ``true`` , enables raw message delivery. Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon API Reference* .
         :param redrive_policy: When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can't be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing. For more information about the redrive policy and dead-letter queues, see `Amazon SQS dead-letter queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>`_ in the *Amazon SQS Developer Guide* .
-        :param region: For cross-region subscriptions, the region in which the topic resides. If no region is specified, AWS CloudFormation uses the region of the caller as the default. If you perform an update operation that only updates the ``Region`` property of a ``AWS::SNS::Subscription`` resource, that operation will fail unless you are either: - Updating the ``Region`` from ``NULL`` to the caller region. - Updating the ``Region`` from the caller region to ``NULL`` .
-        :param replay_policy: Specifies whether Amazon SNS resends the notification to the subscription when a message's attribute changes.
-        :param subscription_role_arn: This property applies only to Amazon Data Firehose delivery stream subscriptions. Specify the ARN of the IAM role that has the following: - Permission to write to the Amazon Data Firehose delivery stream - Amazon SNS listed as a trusted entity Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon SNS Developer Guide.*
+        :param region: For cross-region subscriptions, the region in which the topic resides. If no region is specified, CloudFormation uses the region of the caller as the default. If you perform an update operation that only updates the ``Region`` property of a ``AWS::SNS::Subscription`` resource, that operation will fail unless you are either: - Updating the ``Region`` from ``NULL`` to the caller region. - Updating the ``Region`` from the caller region to ``NULL`` .
+        :param replay_policy: Specifies whether Amazon resends the notification to the subscription when a message's attribute changes.
+        :param subscription_role_arn: This property applies only to Amazon Data Firehose delivery stream subscriptions. Specify the ARN of the IAM role that has the following: - Permission to write to the Amazon Data Firehose delivery stream - Amazon listed as a trusted entity Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon Developer Guide.*
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html
         :exampleMetadata: fixture=_generated
@@ -981,7 +1005,7 @@ class CfnSubscriptionProps:
     def protocol(self) -> builtins.str:
         '''The subscription's protocol.
 
-        For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+        For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon  API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-protocol
         '''
@@ -990,20 +1014,20 @@ class CfnSubscriptionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def topic_arn(self) -> builtins.str:
+    def topic_arn(self) -> typing.Union[builtins.str, _ITopicRef_29aa9a88]:
         '''The ARN of the topic to subscribe to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-topicarn
         '''
         result = self._values.get("topic_arn")
         assert result is not None, "Required property 'topic_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ITopicRef_29aa9a88], result)
 
     @builtins.property
     def delivery_policy(self) -> typing.Any:
         '''The delivery policy JSON assigned to the subscription.
 
-        Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon SNS Developer Guide* .
+        Enables the subscriber to define the message delivery retry strategy in the case of an HTTP/S endpoint subscribed to the topic. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon  API Reference* and `Message delivery retries <https://docs.aws.amazon.com/sns/latest/dg/sns-message-delivery-retries.html>`_ in the *Amazon  Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-deliverypolicy
         '''
@@ -1011,21 +1035,23 @@ class CfnSubscriptionProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def endpoint(self) -> typing.Optional[builtins.str]:
+    def endpoint(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]]:
         '''The subscription's endpoint.
 
-        The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+        The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon  API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-endpoint
         '''
         result = self._values.get("endpoint")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]], result)
 
     @builtins.property
     def filter_policy(self) -> typing.Any:
         '''The filter policy JSON assigned to the subscription.
 
-        Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon SNS Developer Guide* .
+        Enables the subscriber to filter out unwanted messages. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon  API Reference* and `Message filtering <https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html>`_ in the *Amazon  Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-filterpolicy
         '''
@@ -1054,7 +1080,7 @@ class CfnSubscriptionProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''When set to ``true`` , enables raw message delivery.
 
-        Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon SNS API Reference* .
+        Raw messages don't contain any JSON formatting and can be sent to Amazon SQS and HTTP/S endpoints. For more information, see ``[GetSubscriptionAttributes](https://docs.aws.amazon.com/sns/latest/api/API_GetSubscriptionAttributes.html)`` in the *Amazon  API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-rawmessagedelivery
         '''
@@ -1078,7 +1104,7 @@ class CfnSubscriptionProps:
     def region(self) -> typing.Optional[builtins.str]:
         '''For cross-region subscriptions, the region in which the topic resides.
 
-        If no region is specified, AWS CloudFormation uses the region of the caller as the default.
+        If no region is specified, CloudFormation uses the region of the caller as the default.
 
         If you perform an update operation that only updates the ``Region`` property of a ``AWS::SNS::Subscription`` resource, that operation will fail unless you are either:
 
@@ -1092,7 +1118,7 @@ class CfnSubscriptionProps:
 
     @builtins.property
     def replay_policy(self) -> typing.Any:
-        '''Specifies whether Amazon SNS resends the notification to the subscription when a message's attribute changes.
+        '''Specifies whether Amazon  resends the notification to the subscription when a message's attribute changes.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-replaypolicy
         '''
@@ -1100,20 +1126,22 @@ class CfnSubscriptionProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def subscription_role_arn(self) -> typing.Optional[builtins.str]:
+    def subscription_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''This property applies only to Amazon Data Firehose delivery stream subscriptions.
 
         Specify the ARN of the IAM role that has the following:
 
         - Permission to write to the Amazon Data Firehose delivery stream
-        - Amazon SNS listed as a trusted entity
+        - Amazon  listed as a trusted entity
 
-        Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon SNS Developer Guide.*
+        Specifying a valid ARN for this attribute is required for Firehose delivery stream subscriptions. For more information, see `Fanout to Amazon Data Firehose delivery streams <https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html>`_ in the *Amazon  Developer Guide.*
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html#cfn-sns-subscription-subscriptionrolearn
         '''
         result = self._values.get("subscription_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1137,7 +1165,7 @@ class CfnTopic(
 
     .. epigraph::
 
-       One account can create a maximum of 100,000 standard topics and 1,000 FIFO topics. For more information, see `Amazon SNS endpoints and quotas <https://docs.aws.amazon.com/general/latest/gr/sns.html>`_ in the *AWS General Reference* .
+       One account can create a maximum of 100,000 standard topics and 1,000 FIFO topics. For more information, see `Amazon  endpoints and quotas <https://docs.aws.amazon.com/general/latest/gr/sns.html>`_ in the *AWS General Reference* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html
     :cloudformationResource: AWS::SNS::Topic
@@ -1194,7 +1222,7 @@ class CfnTopic(
         display_name: typing.Optional[builtins.str] = None,
         fifo_throughput_scope: typing.Optional[builtins.str] = None,
         fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_master_key_id: typing.Optional[builtins.str] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         signature_version: typing.Optional[builtins.str] = None,
         subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTopic.SubscriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1205,19 +1233,19 @@ class CfnTopic(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param archive_policy: The ``ArchivePolicy`` determines the number of days Amazon SNS retains messages in FIFO topics. You can set a retention period ranging from 1 to 365 days. This property is only applicable to FIFO topics; attempting to use it with standard topics will result in a creation failure.
-        :param content_based_deduplication: ``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics. By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon SNS automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
+        :param archive_policy: The ``ArchivePolicy`` determines the number of days Amazon retains messages in FIFO topics. You can set a retention period ranging from 1 to 365 days. This property is only applicable to FIFO topics; attempting to use it with standard topics will result in a creation failure.
+        :param content_based_deduplication: ``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics. By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
         :param data_protection_policy: The body of the policy document you want to use for this topic. You can only add one policy per topic. The policy must be in JSON string format. Length Constraints: Maximum length of 30,720.
         :param delivery_status_logging: The ``DeliveryStatusLogging`` configuration enables you to log the delivery status of messages sent from your Amazon SNS topic to subscribed endpoints with the following supported delivery protocols:. - HTTP - Amazon Kinesis Data Firehose - AWS Lambda - Platform application endpoint - Amazon Simple Queue Service Once configured, log entries are sent to Amazon CloudWatch Logs.
-        :param display_name: The display name to use for an Amazon SNS topic with SMS subscriptions. The display name must be maximum 100 characters long, including hyphens (-), underscores (_), spaces, and tabs.
+        :param display_name: The display name to use for an Amazon topic with SMS subscriptions. The display name must be maximum 100 characters long, including hyphens (-), underscores (_), spaces, and tabs.
         :param fifo_throughput_scope: Specifies the throughput quota and deduplication behavior to apply for the FIFO topic. Valid values are ``Topic`` or ``MessageGroup`` .
         :param fifo_topic: Set to true to create a FIFO topic.
-        :param kms_master_key_id: The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* . This property applies only to `server-side-encryption <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html>`_ .
+        :param kms_master_key_id: The ID of an AWS managed customer master key (CMK) for Amazon or a custom CMK. For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* . This property applies only to `server-side-encryption <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html>`_ .
         :param signature_version: The signature version corresponds to the hashing algorithm used while creating the signature of the notifications, subscription confirmations, or unsubscribe confirmation messages sent by Amazon SNS. By default, ``SignatureVersion`` is set to ``1`` .
-        :param subscription: The Amazon SNS subscriptions (endpoints) for this topic. .. epigraph:: If you specify the ``Subscription`` property in the ``AWS::SNS::Topic`` resource and it creates an associated subscription resource, the associated subscription is not deleted when the ``AWS::SNS::Topic`` resource is deleted.
+        :param subscription: The Amazon subscriptions (endpoints) for this topic. .. epigraph:: If you specify the ``Subscription`` property in the ``AWS::SNS::Topic`` resource and it creates an associated subscription resource, the associated subscription is not deleted when the ``AWS::SNS::Topic`` resource is deleted.
         :param tags: The list of tags to add to a new topic. .. epigraph:: To be able to tag a topic on creation, you must have the ``sns:CreateTopic`` and ``sns:TagResource`` permissions.
-        :param topic_name: The name of the topic you want to create. Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with ``.fifo`` . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param tracing_config: Tracing mode of an Amazon SNS topic. By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon SNS publisher to its subscriptions. If set to ``Active`` , Amazon SNS will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
+        :param topic_name: The name of the topic you want to create. Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with ``.fifo`` . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param tracing_config: Tracing mode of an Amazon topic. By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon publisher to its subscriptions. If set to ``Active`` , Amazon will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3c3e689eaa6b740299fa6db2e53acc51021bc5deb0a8dd6d7bc29e8a364a1dfe)
@@ -1240,6 +1268,17 @@ class CfnTopic(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTopic")
+    @builtins.classmethod
+    def arn_for_topic(cls, resource: _ITopicRef_29aa9a88) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ffaaef8809b39b447db02b10a85be584f76ad77caa2cfff4ed9a4880fe8e08c2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTopic", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1274,7 +1313,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="attrTopicArn")
     def attr_topic_arn(self) -> builtins.str:
-        '''Returns the ARN of an Amazon SNS topic.
+        '''Returns the ARN of an Amazon  topic.
 
         :cloudformationAttribute: TopicArn
         '''
@@ -1283,7 +1322,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="attrTopicName")
     def attr_topic_name(self) -> builtins.str:
-        '''Returns the name of an Amazon SNS topic.
+        '''Returns the name of an Amazon  topic.
 
         :cloudformationAttribute: TopicName
         '''
@@ -1309,7 +1348,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="archivePolicy")
     def archive_policy(self) -> typing.Any:
-        '''The ``ArchivePolicy`` determines the number of days Amazon SNS retains messages in FIFO topics.'''
+        '''The ``ArchivePolicy`` determines the number of days Amazon  retains messages in FIFO topics.'''
         return typing.cast(typing.Any, jsii.get(self, "archivePolicy"))
 
     @archive_policy.setter
@@ -1371,7 +1410,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="displayName")
     def display_name(self) -> typing.Optional[builtins.str]:
-        '''The display name to use for an Amazon SNS topic with SMS subscriptions.'''
+        '''The display name to use for an Amazon  topic with SMS subscriptions.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "displayName"))
 
     @display_name.setter
@@ -1415,7 +1454,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="kmsMasterKeyId")
     def kms_master_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK.'''
+        '''The ID of an AWS managed customer master key (CMK) for Amazon  or a custom CMK.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsMasterKeyId"))
 
     @kms_master_key_id.setter
@@ -1443,7 +1482,7 @@ class CfnTopic(
     def subscription(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.SubscriptionProperty"]]]]:
-        '''The Amazon SNS subscriptions (endpoints) for this topic.'''
+        '''The Amazon  subscriptions (endpoints) for this topic.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTopic.SubscriptionProperty"]]]], jsii.get(self, "subscription"))
 
     @subscription.setter
@@ -1485,7 +1524,7 @@ class CfnTopic(
     @builtins.property
     @jsii.member(jsii_name="tracingConfig")
     def tracing_config(self) -> typing.Optional[builtins.str]:
-        '''Tracing mode of an Amazon SNS topic.'''
+        '''Tracing mode of an Amazon  topic.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "tracingConfig"))
 
     @tracing_config.setter
@@ -1616,14 +1655,14 @@ class CfnTopic(
     )
     class SubscriptionProperty:
         def __init__(self, *, endpoint: builtins.str, protocol: builtins.str) -> None:
-            '''``Subscription`` is an embedded property that describes the subscription endpoints of an Amazon SNS topic.
+            '''``Subscription`` is an embedded property that describes the subscription endpoints of an Amazon  topic.
 
             .. epigraph::
 
                For full control over subscription behavior (for example, delivery policy, filtering, raw message delivery, and cross-region subscriptions), use the `AWS::SNS::Subscription <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-subscription.html>`_ resource.
 
-            :param endpoint: The endpoint that receives notifications from the Amazon SNS topic. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
-            :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+            :param endpoint: The endpoint that receives notifications from the Amazon topic. The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
+            :param protocol: The subscription's protocol. For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon API Reference* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-topic-subscription.html
             :exampleMetadata: fixture=_generated
@@ -1650,9 +1689,9 @@ class CfnTopic(
 
         @builtins.property
         def endpoint(self) -> builtins.str:
-            '''The endpoint that receives notifications from the Amazon SNS topic.
+            '''The endpoint that receives notifications from the Amazon  topic.
 
-            The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+            The endpoint value depends on the protocol that you specify. For more information, see the ``Endpoint`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon  API Reference* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-topic-subscription.html#cfn-sns-topic-subscription-endpoint
             '''
@@ -1664,7 +1703,7 @@ class CfnTopic(
         def protocol(self) -> builtins.str:
             '''The subscription's protocol.
 
-            For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon SNS API Reference* .
+            For more information, see the ``Protocol`` parameter of the ``[Subscribe](https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html)`` action in the *Amazon  API Reference* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-topic-subscription.html#cfn-sns-topic-subscription-protocol
             '''
@@ -1690,7 +1729,7 @@ class CfnTopicInlinePolicy(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_sns.CfnTopicInlinePolicy",
 ):
-    '''The ``AWS::SNS::TopicInlinePolicy`` resource associates one Amazon SNS topic with one policy.
+    '''The ``AWS::SNS::TopicInlinePolicy`` resource associates one Amazon  topic with one policy.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topicinlinepolicy.html
     :cloudformationResource: AWS::SNS::TopicInlinePolicy
@@ -1722,7 +1761,7 @@ class CfnTopicInlinePolicy(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param policy_document: A policy document that contains permissions to add to the specified Amazon SNS topic.
+        :param policy_document: A policy document that contains permissions to add to the specified Amazon topic.
         :param topic_arn: The Amazon Resource Name (ARN) of the topic to which you want to add the policy.
         '''
         if __debug__:
@@ -1779,7 +1818,7 @@ class CfnTopicInlinePolicy(
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
     def policy_document(self) -> typing.Any:
-        '''A policy document that contains permissions to add to the specified Amazon SNS topic.'''
+        '''A policy document that contains permissions to add to the specified Amazon  topic.'''
         return typing.cast(typing.Any, jsii.get(self, "policyDocument"))
 
     @policy_document.setter
@@ -1812,7 +1851,7 @@ class CfnTopicInlinePolicyProps:
     def __init__(self, *, policy_document: typing.Any, topic_arn: builtins.str) -> None:
         '''Properties for defining a ``CfnTopicInlinePolicy``.
 
-        :param policy_document: A policy document that contains permissions to add to the specified Amazon SNS topic.
+        :param policy_document: A policy document that contains permissions to add to the specified Amazon topic.
         :param topic_arn: The Amazon Resource Name (ARN) of the topic to which you want to add the policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topicinlinepolicy.html
@@ -1842,7 +1881,7 @@ class CfnTopicInlinePolicyProps:
 
     @builtins.property
     def policy_document(self) -> typing.Any:
-        '''A policy document that contains permissions to add to the specified Amazon SNS topic.
+        '''A policy document that contains permissions to add to the specified Amazon  topic.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topicinlinepolicy.html#cfn-sns-topicinlinepolicy-policydocument
         '''
@@ -1878,9 +1917,9 @@ class CfnTopicPolicy(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_sns.CfnTopicPolicy",
 ):
-    '''The ``AWS::SNS::TopicPolicy`` resource associates Amazon SNS topics with a policy.
+    '''The ``AWS::SNS::TopicPolicy`` resource associates Amazon  topics with a policy.
 
-    For an example snippet, see `Declaring an Amazon SNS policy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-sns-policy>`_ in the *AWS CloudFormation User Guide* .
+    For an example snippet, see `Declaring an Amazon  policy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-sns-policy>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topicpolicy.html
     :cloudformationResource: AWS::SNS::TopicPolicy
@@ -2106,7 +2145,7 @@ class CfnTopicProps:
         display_name: typing.Optional[builtins.str] = None,
         fifo_throughput_scope: typing.Optional[builtins.str] = None,
         fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_master_key_id: typing.Optional[builtins.str] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         signature_version: typing.Optional[builtins.str] = None,
         subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopic.SubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2115,19 +2154,19 @@ class CfnTopicProps:
     ) -> None:
         '''Properties for defining a ``CfnTopic``.
 
-        :param archive_policy: The ``ArchivePolicy`` determines the number of days Amazon SNS retains messages in FIFO topics. You can set a retention period ranging from 1 to 365 days. This property is only applicable to FIFO topics; attempting to use it with standard topics will result in a creation failure.
-        :param content_based_deduplication: ``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics. By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon SNS automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
+        :param archive_policy: The ``ArchivePolicy`` determines the number of days Amazon retains messages in FIFO topics. You can set a retention period ranging from 1 to 365 days. This property is only applicable to FIFO topics; attempting to use it with standard topics will result in a creation failure.
+        :param content_based_deduplication: ``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics. By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
         :param data_protection_policy: The body of the policy document you want to use for this topic. You can only add one policy per topic. The policy must be in JSON string format. Length Constraints: Maximum length of 30,720.
         :param delivery_status_logging: The ``DeliveryStatusLogging`` configuration enables you to log the delivery status of messages sent from your Amazon SNS topic to subscribed endpoints with the following supported delivery protocols:. - HTTP - Amazon Kinesis Data Firehose - AWS Lambda - Platform application endpoint - Amazon Simple Queue Service Once configured, log entries are sent to Amazon CloudWatch Logs.
-        :param display_name: The display name to use for an Amazon SNS topic with SMS subscriptions. The display name must be maximum 100 characters long, including hyphens (-), underscores (_), spaces, and tabs.
+        :param display_name: The display name to use for an Amazon topic with SMS subscriptions. The display name must be maximum 100 characters long, including hyphens (-), underscores (_), spaces, and tabs.
         :param fifo_throughput_scope: Specifies the throughput quota and deduplication behavior to apply for the FIFO topic. Valid values are ``Topic`` or ``MessageGroup`` .
         :param fifo_topic: Set to true to create a FIFO topic.
-        :param kms_master_key_id: The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* . This property applies only to `server-side-encryption <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html>`_ .
+        :param kms_master_key_id: The ID of an AWS managed customer master key (CMK) for Amazon or a custom CMK. For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* . This property applies only to `server-side-encryption <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html>`_ .
         :param signature_version: The signature version corresponds to the hashing algorithm used while creating the signature of the notifications, subscription confirmations, or unsubscribe confirmation messages sent by Amazon SNS. By default, ``SignatureVersion`` is set to ``1`` .
-        :param subscription: The Amazon SNS subscriptions (endpoints) for this topic. .. epigraph:: If you specify the ``Subscription`` property in the ``AWS::SNS::Topic`` resource and it creates an associated subscription resource, the associated subscription is not deleted when the ``AWS::SNS::Topic`` resource is deleted.
+        :param subscription: The Amazon subscriptions (endpoints) for this topic. .. epigraph:: If you specify the ``Subscription`` property in the ``AWS::SNS::Topic`` resource and it creates an associated subscription resource, the associated subscription is not deleted when the ``AWS::SNS::Topic`` resource is deleted.
         :param tags: The list of tags to add to a new topic. .. epigraph:: To be able to tag a topic on creation, you must have the ``sns:CreateTopic`` and ``sns:TagResource`` permissions.
-        :param topic_name: The name of the topic you want to create. Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with ``.fifo`` . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param tracing_config: Tracing mode of an Amazon SNS topic. By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon SNS publisher to its subscriptions. If set to ``Active`` , Amazon SNS will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
+        :param topic_name: The name of the topic you want to create. Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with ``.fifo`` . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param tracing_config: Tracing mode of an Amazon topic. By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon publisher to its subscriptions. If set to ``Active`` , Amazon will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html
         :exampleMetadata: fixture=_generated
@@ -2215,7 +2254,7 @@ class CfnTopicProps:
 
     @builtins.property
     def archive_policy(self) -> typing.Any:
-        '''The ``ArchivePolicy`` determines the number of days Amazon SNS retains messages in FIFO topics.
+        '''The ``ArchivePolicy`` determines the number of days Amazon  retains messages in FIFO topics.
 
         You can set a retention period ranging from 1 to 365 days. This property is only applicable to FIFO topics; attempting to use it with standard topics will result in a creation failure.
 
@@ -2230,7 +2269,7 @@ class CfnTopicProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''``ContentBasedDeduplication`` enables deduplication of messages based on their content for FIFO topics.
 
-        By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon SNS automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
+        By default, this property is set to false. If you create a FIFO topic with ``ContentBasedDeduplication`` set to false, you must provide a ``MessageDeduplicationId`` for each ``Publish`` action. When set to true, Amazon  automatically generates a ``MessageDeduplicationId`` using a SHA-256 hash of the message body (excluding message attributes). You can optionally override this generated value by specifying a ``MessageDeduplicationId`` in the ``Publish`` action. Note that this property only applies to FIFO topics; using it with standard topics will cause the creation to fail.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-contentbaseddeduplication
         '''
@@ -2273,7 +2312,7 @@ class CfnTopicProps:
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
-        '''The display name to use for an Amazon SNS topic with SMS subscriptions.
+        '''The display name to use for an Amazon  topic with SMS subscriptions.
 
         The display name must be maximum 100 characters long, including hyphens (-), underscores (_), spaces, and tabs.
 
@@ -2305,8 +2344,10 @@ class CfnTopicProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def kms_master_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK.
+    def kms_master_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]]:
+        '''The ID of an AWS managed customer master key (CMK) for Amazon  or a custom CMK.
 
         For more information, see `Key terms <https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms>`_ . For more examples, see ``[KeyId](https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters)`` in the *AWS Key Management Service API Reference* .
 
@@ -2315,7 +2356,7 @@ class CfnTopicProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-kmsmasterkeyid
         '''
         result = self._values.get("kms_master_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def signature_version(self) -> typing.Optional[builtins.str]:
@@ -2332,7 +2373,7 @@ class CfnTopicProps:
     def subscription(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTopic.SubscriptionProperty]]]]:
-        '''The Amazon SNS subscriptions (endpoints) for this topic.
+        '''The Amazon  subscriptions (endpoints) for this topic.
 
         .. epigraph::
 
@@ -2362,7 +2403,7 @@ class CfnTopicProps:
 
         Topic names must include only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long. FIFO topic names must end with ``.fifo`` .
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the topic name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -2374,9 +2415,9 @@ class CfnTopicProps:
 
     @builtins.property
     def tracing_config(self) -> typing.Optional[builtins.str]:
-        '''Tracing mode of an Amazon SNS topic.
+        '''Tracing mode of an Amazon  topic.
 
-        By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon SNS publisher to its subscriptions. If set to ``Active`` , Amazon SNS will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
+        By default ``TracingConfig`` is set to ``PassThrough`` , and the topic passes through the tracing header it receives from an Amazon  publisher to its subscriptions. If set to ``Active`` , Amazon  will vend X-Ray segment data to topic owner account if the sampled flag in the tracing header is true.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sns-topic.html#cfn-sns-topic-tracingconfig
         '''
@@ -2798,6 +2839,7 @@ class HealthyRetryPolicy:
 class ITopic(
     _IResource_c80c4260,
     _INotificationRuleTarget_faa3b79b,
+    _ITopicRef_29aa9a88,
     typing_extensions.Protocol,
 ):
     '''Represents an SNS topic.'''
@@ -3256,6 +3298,7 @@ class ITopic(
 class _ITopicProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_INotificationRuleTarget_faa3b79b), # type: ignore[misc]
+    jsii.proxy_for(_ITopicRef_29aa9a88), # type: ignore[misc]
 ):
     '''Represents an SNS topic.'''
 
@@ -5323,7 +5366,7 @@ class TopicAttributes:
         )
 
 
-@jsii.implements(ITopic)
+@jsii.implements(ITopic, _IEncryptedResource_8e9bf351)
 class TopicBase(
     _Resource_45bc6135,
     metaclass=jsii.JSIIAbstractClass,
@@ -5425,6 +5468,23 @@ class TopicBase(
     def _create_topic_policy(self) -> None:
         '''Creates a topic policy for this topic.'''
         return typing.cast(None, jsii.invoke(self, "createTopicPolicy", []))
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ce89a40f3ee891286bc5bec459e09598cca501355d0cfc14590802e29b63400)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPublish")
     def grant_publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
@@ -5989,6 +6049,12 @@ class TopicBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "TopicGrants":
+        '''Collection of grant methods for a Topic.'''
+        return typing.cast("TopicGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="topicArn")
     @abc.abstractmethod
     def topic_arn(self) -> builtins.str:
@@ -6001,6 +6067,12 @@ class TopicBase(
     def topic_name(self) -> builtins.str:
         '''The name of the topic.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="topicRef")
+    def topic_ref(self) -> _TopicReference_3fef3390:
+        '''A reference to a Topic resource.'''
+        return typing.cast(_TopicReference_3fef3390, jsii.get(self, "topicRef"))
 
     @builtins.property
     @jsii.member(jsii_name="masterKey")
@@ -6077,6 +6149,73 @@ class _TopicBaseProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, TopicBase).__jsii_proxy_class__ = lambda : _TopicBaseProxy
+
+
+class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicGrants"):
+    '''Collection of grant methods for a ITopicRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_sns as sns
+        from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+        
+        # topic_ref: interfaces_aws_sns.ITopicRef
+        
+        topic_grants = sns.TopicGrants.from_topic(topic_ref)
+    '''
+
+    @jsii.member(jsii_name="fromTopic")
+    @builtins.classmethod
+    def from_topic(cls, resource: _ITopicRef_29aa9a88) -> "TopicGrants":
+        '''Creates grants for TopicGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__49194548f41ee58482b70d336bbdf1e8bc28d376384415758c6be3ef8ac61af2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("TopicGrants", jsii.sinvoke(cls, "fromTopic", [resource]))
+
+    @jsii.member(jsii_name="publish")
+    def publish(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant topic publishing permissions to the given identity.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8bf479968ed22475a7cf3ba952d0fbaf29b257cdc1f6fc41ee3373aa47616b16)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "publish", [grantee]))
+
+    @jsii.member(jsii_name="subscribe")
+    def subscribe(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant topic subscribing permissions to the given identity.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f34ce9741908a1b428b55a6e2f87344241a8bf1141078a293c323f21ef7d8603)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "subscribe", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _ITopicRef_29aa9a88:
+        return typing.cast(_ITopicRef_29aa9a88, jsii.get(self, "resource"))
+
+    @builtins.property
+    @jsii.member(jsii_name="encryptedResource")
+    def _encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
+        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], jsii.get(self, "encryptedResource"))
+
+    @builtins.property
+    @jsii.member(jsii_name="policyResource")
+    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
+        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
 
 
 class TopicPolicy(
@@ -7088,6 +7227,7 @@ __all__ = [
     "Topic",
     "TopicAttributes",
     "TopicBase",
+    "TopicGrants",
     "TopicPolicy",
     "TopicPolicyProps",
     "TopicProps",
@@ -7110,16 +7250,22 @@ def _typecheckingstub__3f3839647e73879ccdb1519ec2afccf78b6168046279d32c5390b3e25
     id: builtins.str,
     *,
     protocol: builtins.str,
-    topic_arn: builtins.str,
+    topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
     delivery_policy: typing.Any = None,
-    endpoint: typing.Optional[builtins.str] = None,
+    endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
     filter_policy: typing.Any = None,
     filter_policy_scope: typing.Optional[builtins.str] = None,
     raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     redrive_policy: typing.Any = None,
     region: typing.Optional[builtins.str] = None,
     replay_policy: typing.Any = None,
-    subscription_role_arn: typing.Optional[builtins.str] = None,
+    subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bbfe0ae586df25665e857e136d6cd352d0daa872bafc16c3b01dcb589fea78b5(
+    resource: _ISubscriptionRef_6b5d0f32,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7205,16 +7351,16 @@ def _typecheckingstub__a71b3667b255126f8bc5b4059f4687fa922e718121515d78883ff30eb
 def _typecheckingstub__0227b0c451693656571029cae1cbec74d209cf9e946210145d282e8f03fd1d28(
     *,
     protocol: builtins.str,
-    topic_arn: builtins.str,
+    topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
     delivery_policy: typing.Any = None,
-    endpoint: typing.Optional[builtins.str] = None,
+    endpoint: typing.Optional[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad, _IQueueRef_fa8b2198]] = None,
     filter_policy: typing.Any = None,
     filter_policy_scope: typing.Optional[builtins.str] = None,
     raw_message_delivery: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     redrive_policy: typing.Any = None,
     region: typing.Optional[builtins.str] = None,
     replay_policy: typing.Any = None,
-    subscription_role_arn: typing.Optional[builtins.str] = None,
+    subscription_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7230,12 +7376,18 @@ def _typecheckingstub__3c3e689eaa6b740299fa6db2e53acc51021bc5deb0a8dd6d7bc29e8a3
     display_name: typing.Optional[builtins.str] = None,
     fifo_throughput_scope: typing.Optional[builtins.str] = None,
     fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_master_key_id: typing.Optional[builtins.str] = None,
+    kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     signature_version: typing.Optional[builtins.str] = None,
     subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopic.SubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     topic_name: typing.Optional[builtins.str] = None,
     tracing_config: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ffaaef8809b39b447db02b10a85be584f76ad77caa2cfff4ed9a4880fe8e08c2(
+    resource: _ITopicRef_29aa9a88,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7441,7 +7593,7 @@ def _typecheckingstub__39eaeffb1fed865d99c7cf51cdf720d8471aec20b2163161ef50035fb
     display_name: typing.Optional[builtins.str] = None,
     fifo_throughput_scope: typing.Optional[builtins.str] = None,
     fifo_topic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_master_key_id: typing.Optional[builtins.str] = None,
+    kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     signature_version: typing.Optional[builtins.str] = None,
     subscription: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopic.SubscriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7681,6 +7833,13 @@ def _typecheckingstub__04cdaba4727d1a890bbc0d5d2854229f71f59b72c42feadb21ad6387b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7ce89a40f3ee891286bc5bec459e09598cca501355d0cfc14590802e29b63400(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6461236ee087e9f8e6de731371b913e918bbd3ec5d928bd677a69c9c8eb82381(
     grantee: _IGrantable_71c4f5de,
 ) -> None:
@@ -7714,6 +7873,24 @@ def _typecheckingstub__b07969d7a2c71869715d0fe87d9b0d9d67f663ddecc9d81d353ba532f
 
 def _typecheckingstub__41d14f58fd3a68985cc9146f591de9ef04f0766e0e4ab580bec4fe74fde70eee(
     value: typing.Optional[builtins.bool],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__49194548f41ee58482b70d336bbdf1e8bc28d376384415758c6be3ef8ac61af2(
+    resource: _ITopicRef_29aa9a88,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8bf479968ed22475a7cf3ba952d0fbaf29b257cdc1f6fc41ee3373aa47616b16(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f34ce9741908a1b428b55a6e2f87344241a8bf1141078a293c323f21ef7d8603(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

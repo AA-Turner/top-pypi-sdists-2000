@@ -832,6 +832,7 @@ from ..interfaces.aws_codedeploy import (
     IDeploymentConfigRef as _IDeploymentConfigRef_bc0b49ed,
     IDeploymentGroupRef as _IDeploymentGroupRef_120f3b25,
 )
+from ..interfaces.aws_lambda import IFunctionRef as _IFunctionRef_2601eb33
 
 
 @jsii.data_type(
@@ -1321,7 +1322,7 @@ class CfnApplication(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_name: typing.Optional[builtins.str] = None,
+        application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         compute_platform: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1329,7 +1330,7 @@ class CfnApplication(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param application_name: A name for the application. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: Updates to ``ApplicationName`` are not supported.
+        :param application_name: A name for the application. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: Updates to ``ApplicationName`` are not supported.
         :param compute_platform: The compute platform that CodeDeploy deploys the application to.
         :param tags: The metadata that you apply to CodeDeploy applications to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
         '''
@@ -1344,6 +1345,17 @@ class CfnApplication(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_1ffc51d6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__65fb096b527288448183f1879f6664e320555e133980271cc54dfb32999430f0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
     @jsii.member(jsii_name="fromApplicationName")
     @builtins.classmethod
@@ -1466,13 +1478,13 @@ class CfnApplicationProps:
     def __init__(
         self,
         *,
-        application_name: typing.Optional[builtins.str] = None,
+        application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         compute_platform: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnApplication``.
 
-        :param application_name: A name for the application. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: Updates to ``ApplicationName`` are not supported.
+        :param application_name: A name for the application. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: Updates to ``ApplicationName`` are not supported.
         :param compute_platform: The compute platform that CodeDeploy deploys the application to.
         :param tags: The metadata that you apply to CodeDeploy applications to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
 
@@ -1508,10 +1520,12 @@ class CfnApplicationProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def application_name(self) -> typing.Optional[builtins.str]:
+    def application_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
         '''A name for the application.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the application name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            Updates to ``ApplicationName`` are not supported.
@@ -1519,7 +1533,7 @@ class CfnApplicationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-application.html#cfn-codedeploy-application-applicationname
         '''
         result = self._values.get("application_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
 
     @builtins.property
     def compute_platform(self) -> typing.Optional[builtins.str]:
@@ -1620,7 +1634,7 @@ class CfnDeploymentConfig(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param compute_platform: The destination platform type for the deployment ( ``Lambda`` , ``Server`` , or ``ECS`` ).
-        :param deployment_config_name: A name for the deployment configuration. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param deployment_config_name: A name for the deployment configuration. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param minimum_healthy_hosts: The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value. The type parameter takes either of the following values: - HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value. - FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances. The value parameter takes an integer. For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95. For more information about instance health, see `CodeDeploy Instance Health <https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html>`_ in the AWS CodeDeploy User Guide.
         :param traffic_routing_config: The configuration that specifies how the deployment traffic is routed.
         :param zonal_config: Configure the ``ZonalConfig`` object if you want AWS CodeDeploy to deploy your application to one `Availability Zone <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones>`_ at a time, within an AWS Region. For more information about the zonal configuration feature, see `zonal configuration <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config>`_ in the *CodeDeploy User Guide* .
@@ -2297,7 +2311,7 @@ class CfnDeploymentConfigProps:
         '''Properties for defining a ``CfnDeploymentConfig``.
 
         :param compute_platform: The destination platform type for the deployment ( ``Lambda`` , ``Server`` , or ``ECS`` ).
-        :param deployment_config_name: A name for the deployment configuration. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param deployment_config_name: A name for the deployment configuration. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param minimum_healthy_hosts: The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value. The type parameter takes either of the following values: - HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value. - FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances. The value parameter takes an integer. For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95. For more information about instance health, see `CodeDeploy Instance Health <https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html>`_ in the AWS CodeDeploy User Guide.
         :param traffic_routing_config: The configuration that specifies how the deployment traffic is routed.
         :param zonal_config: Configure the ``ZonalConfig`` object if you want AWS CodeDeploy to deploy your application to one `Availability Zone <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-availability-zones>`_ at a time, within an AWS Region. For more information about the zonal configuration feature, see `zonal configuration <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations-create.html#zonal-config>`_ in the *CodeDeploy User Guide* .
@@ -2373,7 +2387,7 @@ class CfnDeploymentConfigProps:
     def deployment_config_name(self) -> typing.Optional[builtins.str]:
         '''A name for the deployment configuration.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment configuration name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -2454,7 +2468,7 @@ class CfnDeploymentGroup(
     For more information, see `CreateDeploymentGroup <https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_CreateDeploymentGroup.html>`_ in the *CodeDeploy API Reference* .
     .. epigraph::
 
-       Amazon ECS blue/green deployments through CodeDeploy do not use the ``AWS::CodeDeploy::DeploymentGroup`` resource. To perform Amazon ECS blue/green deployments, use the ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using AWS CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
+       Amazon ECS blue/green deployments through CodeDeploy do not use the ``AWS::CodeDeploy::DeploymentGroup`` resource. To perform Amazon ECS blue/green deployments, use the ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html
     :cloudformationResource: AWS::CodeDeploy::DeploymentGroup
@@ -2623,16 +2637,16 @@ class CfnDeploymentGroup(
         :param service_role_arn: A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see `Create a Service Role for AWS CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html>`_ in the *AWS CodeDeploy User Guide* . .. epigraph:: In some cases, you might need to add a dependency on the service role's policy. For more information, see IAM role policy in `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param alarm_configuration: Information about the Amazon CloudWatch alarms that are associated with the deployment group.
         :param auto_rollback_configuration: Information about the automatic rollback configuration that is associated with the deployment group. If you specify this property, don't specify the ``Deployment`` property.
-        :param auto_scaling_groups: A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
+        :param auto_scaling_groups: A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
         :param blue_green_deployment_configuration: Information about blue/green deployment options for a deployment group.
         :param deployment: The application revision to deploy to this deployment group. If you specify this property, your target application revision is deployed as soon as the provisioning process is complete. If you specify this property, don't specify the ``AutoRollbackConfiguration`` property.
         :param deployment_config_name: A deployment configuration name or a predefined configuration name. With predefined configurations, you can deploy application revisions to one instance at a time ( ``CodeDeployDefault.OneAtATime`` ), half of the instances at a time ( ``CodeDeployDefault.HalfAtATime`` ), or all the instances at once ( ``CodeDeployDefault.AllAtOnce`` ). For more information and valid values, see `Working with Deployment Configurations <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html>`_ in the *AWS CodeDeploy User Guide* .
-        :param deployment_group_name: A name for the deployment group. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param deployment_style: Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer. If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties. .. epigraph:: For blue/green deployments, AWS CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using AWS CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
+        :param deployment_group_name: A name for the deployment group. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param deployment_style: Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer. If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties. .. epigraph:: For blue/green deployments, CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
         :param ec2_tag_filters: The Amazon EC2 tags that are already applied to Amazon EC2 instances that you want to include in the deployment group. CodeDeploy includes all Amazon EC2 instances identified by any of the tags you specify in this deployment group. Duplicates are not allowed. You can specify ``EC2TagFilters`` or ``Ec2TagSet`` , but not both.
         :param ec2_tag_set: Information about groups of tags applied to Amazon EC2 instances. The deployment group includes only Amazon EC2 instances identified by all the tag groups. Cannot be used in the same call as ``ec2TagFilter`` .
         :param ecs_services: The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format ``<clustername>:<servicename>`` .
-        :param load_balancer_info: Information about the load balancer to use in a deployment. For more information, see `Integrating CodeDeploy with Elastic Load Balancing <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
+        :param load_balancer_info: Information about the load balancer to use in a deployment. For more information, see `Integrating CodeDeploy with ELB <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
         :param on_premises_instance_tag_filters: The on-premises instance tags already applied to on-premises instances that you want to include in the deployment group. CodeDeploy includes all on-premises instances identified by any of the tags you specify in this deployment group. To register on-premises instances with CodeDeploy , see `Working with On-Premises Instances for CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-on-premises.html>`_ in the *AWS CodeDeploy User Guide* . Duplicates are not allowed. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
@@ -2789,7 +2803,7 @@ class CfnDeploymentGroup(
     @builtins.property
     @jsii.member(jsii_name="autoScalingGroups")
     def auto_scaling_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.'''
+        '''A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.'''
         return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "autoScalingGroups"))
 
     @auto_scaling_groups.setter
@@ -4059,13 +4073,13 @@ class CfnDeploymentGroup(
     )
     class ELBInfoProperty:
         def __init__(self, *, name: typing.Optional[builtins.str] = None) -> None:
-            '''The ``ELBInfo`` property type specifies information about the Elastic Load Balancing load balancer used for an CodeDeploy deployment group.
+            '''The ``ELBInfo`` property type specifies information about the ELB load balancer used for an CodeDeploy deployment group.
 
             If you specify the ``ELBInfo`` property, the ``DeploymentStyle.DeploymentOption`` property must be set to ``WITH_TRAFFIC_CONTROL`` for AWS CodeDeploy to route your traffic using the specified load balancers.
 
             ``ELBInfo`` is a property of the `AWS CodeDeploy DeploymentGroup LoadBalancerInfo <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-loadbalancerinfo.html>`_ property type.
 
-            :param name: For blue/green deployments, the name of the load balancer that is used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete. .. epigraph:: AWS CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
+            :param name: For blue/green deployments, the name of the load balancer that is used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete. .. epigraph:: CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-elbinfo.html
             :exampleMetadata: fixture=_generated
@@ -4094,7 +4108,7 @@ class CfnDeploymentGroup(
             For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete.
             .. epigraph::
 
-               AWS CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
+               CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-elbinfo.html#cfn-codedeploy-deploymentgroup-elbinfo-name
             '''
@@ -4258,12 +4272,12 @@ class CfnDeploymentGroup(
         ) -> None:
             '''The ``LoadBalancerInfo`` property type specifies information about the load balancer or target group used for an AWS CodeDeploy deployment group.
 
-            For more information, see `Integrating CodeDeploy with Elastic Load Balancing <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
+            For more information, see `Integrating CodeDeploy with ELB <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
 
-            For AWS CloudFormation to use the properties specified in ``LoadBalancerInfo`` , the ``DeploymentStyle.DeploymentOption`` property must be set to ``WITH_TRAFFIC_CONTROL`` . If ``DeploymentStyle.DeploymentOption`` is not set to ``WITH_TRAFFIC_CONTROL`` , AWS CloudFormation ignores any settings specified in ``LoadBalancerInfo`` .
+            For CloudFormation to use the properties specified in ``LoadBalancerInfo`` , the ``DeploymentStyle.DeploymentOption`` property must be set to ``WITH_TRAFFIC_CONTROL`` . If ``DeploymentStyle.DeploymentOption`` is not set to ``WITH_TRAFFIC_CONTROL`` , CloudFormation ignores any settings specified in ``LoadBalancerInfo`` .
             .. epigraph::
 
-               AWS CloudFormation supports blue/green deployments on the AWS Lambda compute platform only.
+               CloudFormation supports blue/green deployments on the AWS Lambda compute platform only.
 
             ``LoadBalancerInfo`` is a property of the `DeploymentGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html>`_ resource.
 
@@ -4848,7 +4862,7 @@ class CfnDeploymentGroup(
     )
     class TargetGroupInfoProperty:
         def __init__(self, *, name: typing.Optional[builtins.str] = None) -> None:
-            '''The ``TargetGroupInfo`` property type specifies information about a target group in Elastic Load Balancing to use in a deployment.
+            '''The ``TargetGroupInfo`` property type specifies information about a target group in ELB to use in a deployment.
 
             Instances are registered as targets in a target group, and traffic is routed to the target group. For more information, see `TargetGroupInfo <https://docs.aws.amazon.com/codedeploy/latest/APIReference/API_TargetGroupInfo.html>`_ in the *AWS CodeDeploy API Reference*
 
@@ -4856,7 +4870,7 @@ class CfnDeploymentGroup(
 
             ``TargetGroupInfo`` is a property of the `LoadBalancerInfo <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-loadbalancerinfo.html>`_ property type.
 
-            :param name: For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. No duplicates allowed. .. epigraph:: AWS CloudFormation supports blue/green deployments on AWS Lambda compute platforms only. This value cannot exceed 32 characters, so you should use the ``Name`` property of the target group, or the ``TargetGroupName`` attribute with the ``Fn::GetAtt`` intrinsic function, as shown in the following example. Don't use the group's Amazon Resource Name (ARN) or ``TargetGroupFullName`` attribute.
+            :param name: For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. No duplicates allowed. .. epigraph:: CloudFormation supports blue/green deployments on AWS Lambda compute platforms only. This value cannot exceed 32 characters, so you should use the ``Name`` property of the target group, or the ``TargetGroupName`` attribute with the ``Fn::GetAtt`` intrinsic function, as shown in the following example. Don't use the group's Amazon Resource Name (ARN) or ``TargetGroupFullName`` attribute.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-targetgroupinfo.html
             :exampleMetadata: fixture=_generated
@@ -4885,7 +4899,7 @@ class CfnDeploymentGroup(
             For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. No duplicates allowed.
             .. epigraph::
 
-               AWS CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
+               CloudFormation supports blue/green deployments on AWS Lambda compute platforms only.
 
             This value cannot exceed 32 characters, so you should use the ``Name`` property of the target group, or the ``TargetGroupName`` attribute with the ``Fn::GetAtt`` intrinsic function, as shown in the following example. Don't use the group's Amazon Resource Name (ARN) or ``TargetGroupFullName`` attribute.
 
@@ -5218,16 +5232,16 @@ class CfnDeploymentGroupProps:
         :param service_role_arn: A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see `Create a Service Role for AWS CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html>`_ in the *AWS CodeDeploy User Guide* . .. epigraph:: In some cases, you might need to add a dependency on the service role's policy. For more information, see IAM role policy in `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param alarm_configuration: Information about the Amazon CloudWatch alarms that are associated with the deployment group.
         :param auto_rollback_configuration: Information about the automatic rollback configuration that is associated with the deployment group. If you specify this property, don't specify the ``Deployment`` property.
-        :param auto_scaling_groups: A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
+        :param auto_scaling_groups: A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created. Duplicates are not allowed.
         :param blue_green_deployment_configuration: Information about blue/green deployment options for a deployment group.
         :param deployment: The application revision to deploy to this deployment group. If you specify this property, your target application revision is deployed as soon as the provisioning process is complete. If you specify this property, don't specify the ``AutoRollbackConfiguration`` property.
         :param deployment_config_name: A deployment configuration name or a predefined configuration name. With predefined configurations, you can deploy application revisions to one instance at a time ( ``CodeDeployDefault.OneAtATime`` ), half of the instances at a time ( ``CodeDeployDefault.HalfAtATime`` ), or all the instances at once ( ``CodeDeployDefault.AllAtOnce`` ). For more information and valid values, see `Working with Deployment Configurations <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html>`_ in the *AWS CodeDeploy User Guide* .
-        :param deployment_group_name: A name for the deployment group. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
-        :param deployment_style: Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer. If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties. .. epigraph:: For blue/green deployments, AWS CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using AWS CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
+        :param deployment_group_name: A name for the deployment group. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param deployment_style: Attributes that determine the type of deployment to run and whether to route deployment traffic behind a load balancer. If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties. .. epigraph:: For blue/green deployments, CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
         :param ec2_tag_filters: The Amazon EC2 tags that are already applied to Amazon EC2 instances that you want to include in the deployment group. CodeDeploy includes all Amazon EC2 instances identified by any of the tags you specify in this deployment group. Duplicates are not allowed. You can specify ``EC2TagFilters`` or ``Ec2TagSet`` , but not both.
         :param ec2_tag_set: Information about groups of tags applied to Amazon EC2 instances. The deployment group includes only Amazon EC2 instances identified by all the tag groups. Cannot be used in the same call as ``ec2TagFilter`` .
         :param ecs_services: The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format ``<clustername>:<servicename>`` .
-        :param load_balancer_info: Information about the load balancer to use in a deployment. For more information, see `Integrating CodeDeploy with Elastic Load Balancing <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
+        :param load_balancer_info: Information about the load balancer to use in a deployment. For more information, see `Integrating CodeDeploy with ELB <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
         :param on_premises_instance_tag_filters: The on-premises instance tags already applied to on-premises instances that you want to include in the deployment group. CodeDeploy includes all on-premises instances identified by any of the tags you specify in this deployment group. To register on-premises instances with CodeDeploy , see `Working with On-Premises Instances for CodeDeploy <https://docs.aws.amazon.com/codedeploy/latest/userguide/instances-on-premises.html>`_ in the *AWS CodeDeploy User Guide* . Duplicates are not allowed. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
@@ -5480,7 +5494,7 @@ class CfnDeploymentGroupProps:
 
     @builtins.property
     def auto_scaling_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''A list of associated Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.
+        '''A list of associated Amazon EC2 Auto Scaling groups that CodeDeploy automatically deploys revisions to when new instances are created.
 
         Duplicates are not allowed.
 
@@ -5528,7 +5542,7 @@ class CfnDeploymentGroupProps:
     def deployment_group_name(self) -> typing.Optional[builtins.str]:
         '''A name for the deployment group.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the deployment group name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -5547,7 +5561,7 @@ class CfnDeploymentGroupProps:
         If you specify this property with a blue/green deployment type, don't specify the ``AutoScalingGroups`` , ``LoadBalancerInfo`` , or ``Deployment`` properties.
         .. epigraph::
 
-           For blue/green deployments, AWS CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using AWS CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
+           For blue/green deployments, CloudFormation supports deployments on Lambda compute platforms only. You can perform Amazon ECS blue/green deployments using ``AWS::CodeDeploy::BlueGreen`` hook. See `Perform Amazon ECS blue/green deployments through CodeDeploy using CloudFormation <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/blue-green.html>`_ for more information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-deploymentstyle
         '''
@@ -5601,7 +5615,7 @@ class CfnDeploymentGroupProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeploymentGroup.LoadBalancerInfoProperty]]:
         '''Information about the load balancer to use in a deployment.
 
-        For more information, see `Integrating CodeDeploy with Elastic Load Balancing <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
+        For more information, see `Integrating CodeDeploy with ELB <https://docs.aws.amazon.com/codedeploy/latest/userguide/integrations-aws-elastic-load-balancing.html>`_ in the *AWS CodeDeploy User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html#cfn-codedeploy-deploymentgroup-loadbalancerinfo
         '''
@@ -10560,9 +10574,15 @@ def _typecheckingstub__cdb5a43a5eee290cb73c7a01531e1ffdf06d171c94caaa945bee8063b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_name: typing.Optional[builtins.str] = None,
+    application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     compute_platform: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__65fb096b527288448183f1879f6664e320555e133980271cc54dfb32999430f0(
+    resource: _IApplicationRef_1ffc51d6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10607,7 +10627,7 @@ def _typecheckingstub__3b760e30495233c290b05641b219df0417ec34a7cdcb66209b7692573
 
 def _typecheckingstub__3aeaaf4451457e6e36767224eb97c6e700e8d8faacb23edf47d5dd4c18588590(
     *,
-    application_name: typing.Optional[builtins.str] = None,
+    application_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     compute_platform: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

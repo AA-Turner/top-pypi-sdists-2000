@@ -173,6 +173,17 @@ class CfnChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForChannel")
+    @builtins.classmethod
+    def arn_for_channel(cls, resource: _IChannelRef_095ba255) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f2fbbc07607d70e24aa38fb56a7d832c03ddbd7253a9086cff4a4f28e49c6ad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannel", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -630,6 +641,20 @@ class CfnChannelGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForChannelGroup")
+    @builtins.classmethod
+    def arn_for_channel_group(
+        cls,
+        resource: _IChannelGroupRef_c3346570,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__47c614cdf8b613a37bbbe710ed5424a75298a86b8d731c8cff13d2379ae87053)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannelGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1509,6 +1534,20 @@ class CfnOriginEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOriginEndpoint")
+    @builtins.classmethod
+    def arn_for_origin_endpoint(
+        cls,
+        resource: _IOriginEndpointRef_33e12a65,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__088dd42120adc4b1441a9341c86b2cb87e16b9cdf0510c7b926c01862c901a7a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOriginEndpoint", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4742,7 +4781,7 @@ class CfnOriginEndpointPolicy(
             '''The settings to enable CDN authorization headers in MediaPackage.
 
             :param cdn_identifier_secret_arns: The ARN for the secret in Secrets Manager that your CDN uses for authorization to access the endpoint.
-            :param secrets_role_arn: The ARN for the IAM role that gives MediaPackage read access to Secrets Manager and AWS KMS for CDN authorization.
+            :param secrets_role_arn: The ARN for the IAM role that gives MediaPackage read access to Secrets Manager and AWS for CDN authorization.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpointpolicy-cdnauthconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -4779,7 +4818,7 @@ class CfnOriginEndpointPolicy(
 
         @builtins.property
         def secrets_role_arn(self) -> builtins.str:
-            '''The ARN for the IAM role that gives MediaPackage read access to Secrets Manager and AWS KMS for CDN authorization.
+            '''The ARN for the IAM role that gives MediaPackage read access to Secrets Manager and AWS  for CDN authorization.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediapackagev2-originendpointpolicy-cdnauthconfiguration.html#cfn-mediapackagev2-originendpointpolicy-cdnauthconfiguration-secretsrolearn
             '''
@@ -5389,6 +5428,12 @@ def _typecheckingstub__f5f12d43fb05232f03795c27e5dde1f408f5762e93edacb27e01efb9e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4f2fbbc07607d70e24aa38fb56a7d832c03ddbd7253a9086cff4a4f28e49c6ad(
+    resource: _IChannelRef_095ba255,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e420705ca6e035f67df6dc549d10387c546517b6ba6c086e3e8a2aa9d31185d9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5473,6 +5518,12 @@ def _typecheckingstub__0d830ced0539d40633bba571496a990f327b96c8fb475a589dba800d2
     channel_group_name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__47c614cdf8b613a37bbbe710ed5424a75298a86b8d731c8cff13d2379ae87053(
+    resource: _IChannelGroupRef_c3346570,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5596,6 +5647,12 @@ def _typecheckingstub__7dba3dfc2892c78e53aee7675a7a24aa25c0b29481aca92446e31a0d8
     segment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpoint.SegmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     startover_window_seconds: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__088dd42120adc4b1441a9341c86b2cb87e16b9cdf0510c7b926c01862c901a7a(
+    resource: _IOriginEndpointRef_33e12a65,
 ) -> None:
     """Type checking stubs"""
     pass

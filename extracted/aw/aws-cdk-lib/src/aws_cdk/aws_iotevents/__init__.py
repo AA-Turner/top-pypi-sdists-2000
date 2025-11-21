@@ -72,6 +72,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_iotevents import (
     AlarmModelReference as _AlarmModelReference_2b426d5b,
     DetectorModelReference as _DetectorModelReference_972f68ba,
@@ -287,6 +288,17 @@ class CfnAlarmModel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAlarmModel")
+    @builtins.classmethod
+    def arn_for_alarm_model(cls, resource: _IAlarmModelRef_aa095d2c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5f1ed3ba9d52fbe77628ba0d4ae396b1e743cd77ad8834265ce45146b0f21e11)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlarmModel", [resource]))
 
     @jsii.member(jsii_name="fromAlarmModelName")
     @builtins.classmethod
@@ -3158,13 +3170,13 @@ class CfnDetectorModel(
     You create a *detector model* (a model of your equipment or process) using *states* . For each state, you define conditional (Boolean) logic that evaluates the incoming inputs to detect significant events. When an event is detected, it can change the state or trigger custom-built or predefined actions using other AWS services. You can define additional events that trigger actions when entering or exiting a state and, optionally, when a condition is met. For more information, see `How to Use AWS IoT Events <https://docs.aws.amazon.com/iotevents/latest/developerguide/how-to-use-iotevents.html>`_ in the *AWS IoT Events Developer Guide* .
     .. epigraph::
 
-       When you successfully update a detector model (using the AWS IoT Events console, AWS IoT Events API or CLI commands, or AWS CloudFormation ) all detector instances created by the model are reset to their initial states. (The detector's ``state`` , and the values of any variables and timers are reset.)
+       When you successfully update a detector model (using the AWS IoT Events console, AWS IoT Events API or CLI commands, or CloudFormation ) all detector instances created by the model are reset to their initial states. (The detector's ``state`` , and the values of any variables and timers are reset.)
 
-       When you successfully update a detector model (using the AWS IoT Events console, AWS IoT Events API or CLI commands, or AWS CloudFormation ) the version number of the detector model is incremented. (A detector model with version number 1 before the update has version number 2 after the update succeeds.)
+       When you successfully update a detector model (using the AWS IoT Events console, AWS IoT Events API or CLI commands, or CloudFormation ) the version number of the detector model is incremented. (A detector model with version number 1 before the update has version number 2 after the update succeeds.)
 
-       If you attempt to update a detector model using AWS CloudFormation and the update does not succeed, the system may, in some cases, restore the original detector model. When this occurs, the detector model's version is incremented twice (for example, from version 1 to version 3) and the detector instances are reset.
+       If you attempt to update a detector model using CloudFormation and the update does not succeed, the system may, in some cases, restore the original detector model. When this occurs, the detector model's version is incremented twice (for example, from version 1 to version 3) and the detector instances are reset.
 
-       Also, be aware that if you attempt to update several detector models at once using AWS CloudFormation , some updates may succeed and others fail. In this case, the effects on each detector model's detector instances and version number depend on whether the update succeeded or failed, with the results as stated.
+       Also, be aware that if you attempt to update several detector models at once using CloudFormation , some updates may succeed and others fail. In this case, the effects on each detector model's detector instances and version number depend on whether the update succeeded or failed, with the results as stated.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotevents-detectormodel.html
     :cloudformationResource: AWS::IoTEvents::DetectorModel
@@ -3181,7 +3193,7 @@ class CfnDetectorModel(
         id: builtins.str,
         *,
         detector_model_definition: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDetectorModel.DetectorModelDefinitionProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         detector_model_description: typing.Optional[builtins.str] = None,
         detector_model_name: typing.Optional[builtins.str] = None,
         evaluation_method: typing.Optional[builtins.str] = None,
@@ -3215,6 +3227,20 @@ class CfnDetectorModel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDetectorModel")
+    @builtins.classmethod
+    def arn_for_detector_model(
+        cls,
+        resource: _IDetectorModelRef_06d464f3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33348d55e11eaefd1c7cc825fc1db475c77a3850d73ca2ed00f46f5a9be20d95)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDetectorModel", [resource]))
 
     @jsii.member(jsii_name="fromDetectorModelName")
     @builtins.classmethod
@@ -6849,7 +6875,7 @@ class CfnDetectorModelProps:
         self,
         *,
         detector_model_definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetectorModel.DetectorModelDefinitionProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         detector_model_description: typing.Optional[builtins.str] = None,
         detector_model_name: typing.Optional[builtins.str] = None,
         evaluation_method: typing.Optional[builtins.str] = None,
@@ -6910,14 +6936,14 @@ class CfnDetectorModelProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDetectorModel.DetectorModelDefinitionProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of the role that grants permission to AWS IoT Events to perform its operations.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iotevents-detectormodel.html#cfn-iotevents-detectormodel-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def detector_model_description(self) -> typing.Optional[builtins.str]:
@@ -7050,6 +7076,17 @@ class CfnInput(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInput")
+    @builtins.classmethod
+    def arn_for_input(cls, resource: _IInputRef_62cda116) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__526272d642331e8f9bd4913d601582f31848a53f908f1c5736e34c2c673219dd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInput", [resource]))
 
     @jsii.member(jsii_name="fromInputName")
     @builtins.classmethod
@@ -7445,6 +7482,12 @@ def _typecheckingstub__ef7f48b87ae58ab2d16bfb25fbcc61ae8753eb0c9a5b0016eec37a52e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5f1ed3ba9d52fbe77628ba0d4ae396b1e743cd77ad8834265ce45146b0f21e11(
+    resource: _IAlarmModelRef_aa095d2c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__08129328e28cb00ce8f3d88ce6a01d350ff74f935ed83c2a1b71d2c0cb21a69d(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -7719,12 +7762,18 @@ def _typecheckingstub__7801b6324e5f272a708fd3542c09e1cc61e7621f542ce11a4795b2717
     id: builtins.str,
     *,
     detector_model_definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetectorModel.DetectorModelDefinitionProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     detector_model_description: typing.Optional[builtins.str] = None,
     detector_model_name: typing.Optional[builtins.str] = None,
     evaluation_method: typing.Optional[builtins.str] = None,
     key: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__33348d55e11eaefd1c7cc825fc1db475c77a3850d73ca2ed00f46f5a9be20d95(
+    resource: _IDetectorModelRef_06d464f3,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8023,7 +8072,7 @@ def _typecheckingstub__58cc9b74b1b13a3df88f86605e6204fc4e2bb97b6a508a626a96132e5
 def _typecheckingstub__1e2611711600761b56c5b9240bfddb7ec561f2c659e9c9866ca3e31a313119eb(
     *,
     detector_model_definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDetectorModel.DetectorModelDefinitionProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     detector_model_description: typing.Optional[builtins.str] = None,
     detector_model_name: typing.Optional[builtins.str] = None,
     evaluation_method: typing.Optional[builtins.str] = None,
@@ -8041,6 +8090,12 @@ def _typecheckingstub__11855be4f7bee53ad741f6363d8e68467f417b7f7483fc55460da1fe9
     input_description: typing.Optional[builtins.str] = None,
     input_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__526272d642331e8f9bd4913d601582f31848a53f908f1c5736e34c2c673219dd(
+    resource: _IInputRef_62cda116,
 ) -> None:
     """Type checking stubs"""
     pass

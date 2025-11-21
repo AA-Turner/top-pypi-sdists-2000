@@ -136,6 +136,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_5ddf8623) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__42a4b3272549596111990267ab471f85d4650980689eb241b994d4f5332b317d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="fromApplicationArn")
     @builtins.classmethod
     def from_application_arn(
@@ -474,6 +485,20 @@ class CfnAttributeGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAttributeGroup")
+    @builtins.classmethod
+    def arn_for_attribute_group(
+        cls,
+        resource: _IAttributeGroupRef_1973b6d2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__73edb5d13fc8dbe494bad56745f548eb0fd69b4dc41a1ced45631c543cfcc7f9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAttributeGroup", [resource]))
 
     @jsii.member(jsii_name="fromAttributeGroupArn")
     @builtins.classmethod
@@ -1248,6 +1273,12 @@ def _typecheckingstub__91487768dfb6dbf9a0c92291ea29984fa2e03a14eb546f250cf397d25
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__42a4b3272549596111990267ab471f85d4650980689eb241b994d4f5332b317d(
+    resource: _IApplicationRef_5ddf8623,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__955a2e8ef9349aa04e3db911200984b604b9a25a10f842542d8fedf3bbd11c5b(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1311,6 +1342,12 @@ def _typecheckingstub__0d30783c939e9f88ec79a761d7c3f519f2a0838afdc04bd3644e3b2f8
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__73edb5d13fc8dbe494bad56745f548eb0fd69b4dc41a1ced45631c543cfcc7f9(
+    resource: _IAttributeGroupRef_1973b6d2,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -199,6 +199,20 @@ class CfnConnectAttachment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConnectAttachment")
+    @builtins.classmethod
+    def arn_for_connect_attachment(
+        cls,
+        resource: _IConnectAttachmentRef_a30cead3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ee1be6a9d104e822b3b538a22053ead64afb1897ec32bbbe03a3ced8ad8d6e7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnectAttachment", [resource]))
+
     @jsii.member(jsii_name="fromAttachmentId")
     @builtins.classmethod
     def from_attachment_id(
@@ -1770,6 +1784,17 @@ class CfnCoreNetwork(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCoreNetwork")
+    @builtins.classmethod
+    def arn_for_core_network(cls, resource: _ICoreNetworkRef_8dd330e9) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__369dfbd2b8835ef1ae2b98a0e9601f46e1aba9df5923a622d2ee027df62b0b00)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCoreNetwork", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2766,6 +2791,17 @@ class CfnDevice(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDevice")
+    @builtins.classmethod
+    def arn_for_device(cls, resource: _IDeviceRef_97bec682) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a6930fd79ae03ecd436d75b552b72d0d032fedbec10afbabf50e9ef7dd1ebfff)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDevice", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4122,6 +4158,20 @@ class CfnGlobalNetwork(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGlobalNetwork")
+    @builtins.classmethod
+    def arn_for_global_network(
+        cls,
+        resource: _IGlobalNetworkRef_d3d17d9c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__499a9bc2f78e7f8636a786fe6bc78703115f4ecdde635bc008316eede031b394)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGlobalNetwork", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4432,6 +4482,17 @@ class CfnLink(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLink")
+    @builtins.classmethod
+    def arn_for_link(cls, resource: _ILinkRef_0ee155bf) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea60940d4d81ce6e47c555cac571111303351b66446fe1b31ce4681409b3eff6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLink", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5151,6 +5212,17 @@ class CfnSite(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSite")
+    @builtins.classmethod
+    def arn_for_site(cls, resource: _ISiteRef_286ac729) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dea5785d41bc6107ef0e6fa89c2020b5fc9ffb4393f83859b93926e871db9a1a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSite", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6564,7 +6636,7 @@ class CfnTransitGatewayRegistration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        global_network_id: builtins.str,
+        global_network_id: typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c],
         transit_gateway_arn: builtins.str,
     ) -> None:
         '''Create a new ``AWS::NetworkManager::TransitGatewayRegistration``.
@@ -6667,7 +6739,7 @@ class CfnTransitGatewayRegistrationProps:
     def __init__(
         self,
         *,
-        global_network_id: builtins.str,
+        global_network_id: typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c],
         transit_gateway_arn: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnTransitGatewayRegistration``.
@@ -6699,14 +6771,16 @@ class CfnTransitGatewayRegistrationProps:
         }
 
     @builtins.property
-    def global_network_id(self) -> builtins.str:
+    def global_network_id(
+        self,
+    ) -> typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c]:
         '''The ID of the global network.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkmanager-transitgatewayregistration.html#cfn-networkmanager-transitgatewayregistration-globalnetworkid
         '''
         result = self._values.get("global_network_id")
         assert result is not None, "Required property 'global_network_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c], result)
 
     @builtins.property
     def transit_gateway_arn(self) -> builtins.str:
@@ -7519,6 +7593,20 @@ class CfnVpcAttachment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVpcAttachment")
+    @builtins.classmethod
+    def arn_for_vpc_attachment(
+        cls,
+        resource: _IVpcAttachmentRef_dd1cf2f0,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ecb8222bb0a126f3893e7e38ff93217f1bf950664bea9a3146e2169fd6b7b98)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcAttachment", [resource]))
 
     @jsii.member(jsii_name="fromAttachmentId")
     @builtins.classmethod
@@ -8365,6 +8453,12 @@ def _typecheckingstub__d7415843def493b65c590878e3897c27e4c459f5d736fb5ee9738e5a1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6ee1be6a9d104e822b3b538a22053ead64afb1897ec32bbbe03a3ced8ad8d6e7(
+    resource: _IConnectAttachmentRef_a30cead3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9e037d8713710ba9021433de3be9ec51641f433285ddda8f6ffd832125cf10a0(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8594,6 +8688,12 @@ def _typecheckingstub__ef3cb1cd4abb4fa5b383cbcb25ab3b19985891cac9ee903fdc80a4b78
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__369dfbd2b8835ef1ae2b98a0e9601f46e1aba9df5923a622d2ee027df62b0b00(
+    resource: _ICoreNetworkRef_8dd330e9,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ab8dfe0941f0bb31d0cd5ffec09e9e0e64f454ca60a61a7e724ae83857fed362(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8747,6 +8847,12 @@ def _typecheckingstub__8ad564c84e64f3433b234887d19dd14a76b326ebbe6db1b2c11c4e75c
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
     vendor: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a6930fd79ae03ecd436d75b552b72d0d032fedbec10afbabf50e9ef7dd1ebfff(
+    resource: _IDeviceRef_97bec682,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8960,6 +9066,12 @@ def _typecheckingstub__dcd77a1264244ecd5c8ad8fbf6038975eda0a4a49d5da9ba92306e218
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__499a9bc2f78e7f8636a786fe6bc78703115f4ecdde635bc008316eede031b394(
+    resource: _IGlobalNetworkRef_d3d17d9c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2a4d6bdc69ded81dc7371bcc908a8c470d45d7400be9b04c8aab8fda39abcee9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9017,6 +9129,12 @@ def _typecheckingstub__a85b1ccff185ece01ba7173d98d2c10359b58386e88607b0ea915c94a
     provider: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ea60940d4d81ce6e47c555cac571111303351b66446fe1b31ce4681409b3eff6(
+    resource: _ILinkRef_0ee155bf,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9154,6 +9272,12 @@ def _typecheckingstub__02d26caf3b597f4f3cac9111625d8131c4deeefd4ab607c87a0c1af54
     description: typing.Optional[builtins.str] = None,
     location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSite.LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dea5785d41bc6107ef0e6fa89c2020b5fc9ffb4393f83859b93926e871db9a1a(
+    resource: _ISiteRef_286ac729,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9359,7 +9483,7 @@ def _typecheckingstub__5d58980f8dc1987d036b6c6bdc2763c637f0d4882af63c260e581bf14
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    global_network_id: builtins.str,
+    global_network_id: typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c],
     transit_gateway_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -9391,7 +9515,7 @@ def _typecheckingstub__7660bc4e9fada811170861b820a6606047adea2f279a8d4735670e4fa
 
 def _typecheckingstub__168dccdac681a836e54cbf046c9c06f14467cc24f0848929cbd9cb756b713041(
     *,
-    global_network_id: builtins.str,
+    global_network_id: typing.Union[builtins.str, _IGlobalNetworkRef_d3d17d9c],
     transit_gateway_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -9500,6 +9624,12 @@ def _typecheckingstub__962ef8273d6d2d97a33b00603b7bf87793fdecfaae4031352d9cbc1bc
     proposed_network_function_group_change: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVpcAttachment.ProposedNetworkFunctionGroupChangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     proposed_segment_change: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVpcAttachment.ProposedSegmentChangeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ecb8222bb0a126f3893e7e38ff93217f1bf950664bea9a3146e2169fd6b7b98(
+    resource: _IVpcAttachmentRef_dd1cf2f0,
 ) -> None:
     """Type checking stubs"""
     pass

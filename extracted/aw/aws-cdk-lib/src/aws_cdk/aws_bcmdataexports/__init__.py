@@ -171,6 +171,17 @@ class CfnExport(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForExport")
+    @builtins.classmethod
+    def arn_for_export(cls, resource: _IExportRef_b461bf7e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1ac852891765b90129d86e3d26a4be42863013dd8832f177058ca01db31746e3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExport", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1049,6 +1060,12 @@ def _typecheckingstub__b2bcca1af59fac907ca8714563d055c566e701daae8450fde60df7c0e
     *,
     export: typing.Union[_IResolvable_da3f097b, typing.Union[CfnExport.ExportProperty, typing.Dict[builtins.str, typing.Any]]],
     tags: typing.Optional[typing.Sequence[typing.Union[CfnExport.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ac852891765b90129d86e3d26a4be42863013dd8832f177058ca01db31746e3(
+    resource: _IExportRef_b461bf7e,
 ) -> None:
     """Type checking stubs"""
     pass

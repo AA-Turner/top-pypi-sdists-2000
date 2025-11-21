@@ -358,6 +358,10 @@ from ..aws_iam import (
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..aws_kms import IKey as _IKey_5f11635f
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_efs import (
     AccessPointReference as _AccessPointReference_4b264f5d,
     FileSystemReference as _FileSystemReference_4a6f4058,
@@ -883,7 +887,7 @@ class CfnAccessPoint(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        file_system_id: builtins.str,
+        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
         access_point_tags: typing.Optional[typing.Sequence[typing.Union["CfnAccessPoint.AccessPointTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         client_token: typing.Optional[builtins.str] = None,
         posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAccessPoint.PosixUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -912,6 +916,17 @@ class CfnAccessPoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAccessPoint")
+    @builtins.classmethod
+    def arn_for_access_point(cls, resource: _IAccessPointRef_437d4bf7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef4ff80183efd6185fb6a911b206ec3d97137f853d127a17bb2bfd7b14459e63)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPoint", [resource]))
 
     @jsii.member(jsii_name="fromAccessPointArn")
     @builtins.classmethod
@@ -1464,7 +1479,7 @@ class CfnAccessPointProps:
     def __init__(
         self,
         *,
-        file_system_id: builtins.str,
+        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
         access_point_tags: typing.Optional[typing.Sequence[typing.Union[CfnAccessPoint.AccessPointTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         client_token: typing.Optional[builtins.str] = None,
         posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PosixUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1533,7 +1548,7 @@ class CfnAccessPointProps:
             self._values["root_directory"] = root_directory
 
     @builtins.property
-    def file_system_id(self) -> builtins.str:
+    def file_system_id(self) -> typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]:
         '''The ID of the EFS file system that the access point applies to.
 
         Accepts only the ID format for input when specifying a file system, for example ``fs-0123456789abcedf2`` .
@@ -1542,7 +1557,7 @@ class CfnAccessPointProps:
         '''
         result = self._values.get("file_system_id")
         assert result is not None, "Required property 'file_system_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFileSystemRef_3dcf8b98], result)
 
     @builtins.property
     def access_point_tags(
@@ -1672,7 +1687,7 @@ class CfnFileSystem(
         file_system_policy: typing.Any = None,
         file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.FileSystemProtectionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_tags: typing.Optional[typing.Sequence[typing.Union["CfnFileSystem.ElasticFileSystemTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFileSystem.LifecyclePolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         performance_mode: typing.Optional[builtins.str] = None,
         provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
@@ -1718,6 +1733,17 @@ class CfnFileSystem(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFileSystem")
+    @builtins.classmethod
+    def arn_for_file_system(cls, resource: _IFileSystemRef_3dcf8b98) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c39d8ea61a783b816b12338bccf8c47cbab11084e8e1a8de0853d5006696acec)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFileSystem", [resource]))
 
     @jsii.member(jsii_name="fromFileSystemArn")
     @builtins.classmethod
@@ -2590,7 +2616,7 @@ class CfnFileSystemProps:
         file_system_policy: typing.Any = None,
         file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.FileSystemProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_tags: typing.Optional[typing.Sequence[typing.Union[CfnFileSystem.ElasticFileSystemTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.LifecyclePolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         performance_mode: typing.Optional[builtins.str] = None,
         provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
@@ -2791,7 +2817,9 @@ class CfnFileSystemProps:
         return typing.cast(typing.Optional[typing.List[CfnFileSystem.ElasticFileSystemTagProperty]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ID of the AWS KMS key to be used to protect the encrypted file system.
 
         This parameter is only required if you want to use a nondefault KMS key . If this parameter is not specified, the default KMS key for Amazon EFS is used. This ID can be in one of the following formats:
@@ -2806,7 +2834,7 @@ class CfnFileSystemProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-filesystem.html#cfn-efs-filesystem-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def lifecycle_policies(
@@ -2929,9 +2957,9 @@ class CfnMountTarget(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        file_system_id: builtins.str,
-        security_groups: typing.Sequence[builtins.str],
-        subnet_id: builtins.str,
+        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
+        security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
         ip_address: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv6_address: typing.Optional[builtins.str] = None,
@@ -3120,9 +3148,9 @@ class CfnMountTargetProps:
     def __init__(
         self,
         *,
-        file_system_id: builtins.str,
-        security_groups: typing.Sequence[builtins.str],
-        subnet_id: builtins.str,
+        file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
+        security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
         ip_address: typing.Optional[builtins.str] = None,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv6_address: typing.Optional[builtins.str] = None,
@@ -3177,17 +3205,19 @@ class CfnMountTargetProps:
             self._values["ipv6_address"] = ipv6_address
 
     @builtins.property
-    def file_system_id(self) -> builtins.str:
+    def file_system_id(self) -> typing.Union[builtins.str, _IFileSystemRef_3dcf8b98]:
         '''The ID of the file system for which to create the mount target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html#cfn-efs-mounttarget-filesystemid
         '''
         result = self._values.get("file_system_id")
         assert result is not None, "Required property 'file_system_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFileSystemRef_3dcf8b98], result)
 
     @builtins.property
-    def security_groups(self) -> typing.List[builtins.str]:
+    def security_groups(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
         '''VPC security group IDs, of the form ``sg-xxxxxxxx`` .
 
         These must be for the same VPC as the subnet specified. The maximum number of security groups depends on account quota. For more information, see `Amazon VPC Quotas <https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html>`_ in the *Amazon VPC User Guide* (see the *Security Groups* table). If you don't specify a security group, then Amazon EFS uses the default security group for the subnet's VPC.
@@ -3196,10 +3226,10 @@ class CfnMountTargetProps:
         '''
         result = self._values.get("security_groups")
         assert result is not None, "Required property 'security_groups' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
 
     @builtins.property
-    def subnet_id(self) -> builtins.str:
+    def subnet_id(self) -> typing.Union[builtins.str, _ISubnetRef_ac31e361]:
         '''The ID of the subnet to add the mount target in.
 
         For One Zone file systems, use the subnet that is associated with the file system's Availability Zone. The subnet type must be the same type as the ``IpAddressType`` .
@@ -3208,7 +3238,7 @@ class CfnMountTargetProps:
         '''
         result = self._values.get("subnet_id")
         assert result is not None, "Required property 'subnet_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ISubnetRef_ac31e361], result)
 
     @builtins.property
     def ip_address(self) -> typing.Optional[builtins.str]:
@@ -5138,11 +5168,17 @@ def _typecheckingstub__ee6cf8e32e236f5b64c41d34d8956a146a19df0d9467273bec84f3053
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    file_system_id: builtins.str,
+    file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
     access_point_tags: typing.Optional[typing.Sequence[typing.Union[CfnAccessPoint.AccessPointTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     client_token: typing.Optional[builtins.str] = None,
     posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PosixUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     root_directory: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.RootDirectoryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ef4ff80183efd6185fb6a911b206ec3d97137f853d127a17bb2bfd7b14459e63(
+    resource: _IAccessPointRef_437d4bf7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5241,7 +5277,7 @@ def _typecheckingstub__89b051df2a59c0884b5df1f891e75e8c5eecc226e4e3c37de3b47e49f
 
 def _typecheckingstub__4d9e6a6ec2a31d2d52416a71ce47e5ce1ad556ab26693686a787d2d7d21231d6(
     *,
-    file_system_id: builtins.str,
+    file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
     access_point_tags: typing.Optional[typing.Sequence[typing.Union[CfnAccessPoint.AccessPointTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     client_token: typing.Optional[builtins.str] = None,
     posix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PosixUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5261,12 +5297,18 @@ def _typecheckingstub__cc457ee31ba660f40c549433977317b66ec9b461edc7a3afd3a157dcf
     file_system_policy: typing.Any = None,
     file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.FileSystemProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_tags: typing.Optional[typing.Sequence[typing.Union[CfnFileSystem.ElasticFileSystemTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.LifecyclePolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     performance_mode: typing.Optional[builtins.str] = None,
     provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
     replication_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     throughput_mode: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c39d8ea61a783b816b12338bccf8c47cbab11084e8e1a8de0853d5006696acec(
+    resource: _IFileSystemRef_3dcf8b98,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5437,7 +5479,7 @@ def _typecheckingstub__925156e2041b66f4aaa35cff9ceb098b90fd9cbb2027eb0431f56b2aa
     file_system_policy: typing.Any = None,
     file_system_protection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.FileSystemProtectionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_tags: typing.Optional[typing.Sequence[typing.Union[CfnFileSystem.ElasticFileSystemTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     lifecycle_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.LifecyclePolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     performance_mode: typing.Optional[builtins.str] = None,
     provisioned_throughput_in_mibps: typing.Optional[jsii.Number] = None,
@@ -5451,9 +5493,9 @@ def _typecheckingstub__53e47daec02e70bf8a73cac8e0366ac0f8a6af5ccf7598cf37952afe9
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    file_system_id: builtins.str,
-    security_groups: typing.Sequence[builtins.str],
-    subnet_id: builtins.str,
+    file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
+    security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
     ip_address: typing.Optional[builtins.str] = None,
     ip_address_type: typing.Optional[builtins.str] = None,
     ipv6_address: typing.Optional[builtins.str] = None,
@@ -5511,9 +5553,9 @@ def _typecheckingstub__4d32de6237501dc91f3fc4a5121f4d28b9f910af301fcb6a625250a25
 
 def _typecheckingstub__f2ad126af1a9797276c238562f8185eb06a56da00a9b12a35504f9d72fbdc711(
     *,
-    file_system_id: builtins.str,
-    security_groups: typing.Sequence[builtins.str],
-    subnet_id: builtins.str,
+    file_system_id: typing.Union[builtins.str, _IFileSystemRef_3dcf8b98],
+    security_groups: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_id: typing.Union[builtins.str, _ISubnetRef_ac31e361],
     ip_address: typing.Optional[builtins.str] = None,
     ip_address_type: typing.Optional[builtins.str] = None,
     ipv6_address: typing.Optional[builtins.str] = None,

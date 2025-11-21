@@ -116,6 +116,11 @@ from ..aws_ec2 import (
     Port as _Port_85922693,
     SubnetSelection as _SubnetSelection_e57d76df,
 )
+from ..interfaces.aws_ec2 import (
+    IInstanceRef as _IInstanceRef_b97803cb,
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_elasticloadbalancing import (
     ILoadBalancerRef as _ILoadBalancerRef_6a68b4e1,
     LoadBalancerReference as _LoadBalancerReference_35a92ab4,
@@ -225,13 +230,13 @@ class CfnLoadBalancer(
         connection_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.ConnectionSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cross_zone: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.HealthCheckProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        instances: typing.Optional[typing.Sequence[builtins.str]] = None,
+        instances: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IInstanceRef_b97803cb]]] = None,
         lb_cookie_stickiness_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.LBCookieStickinessPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         load_balancer_name: typing.Optional[builtins.str] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.PoliciesProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         scheme: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticLoadBalancing::LoadBalancer``.
@@ -1494,13 +1499,13 @@ class CfnLoadBalancerProps:
         connection_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.ConnectionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         cross_zone: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.HealthCheckProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        instances: typing.Optional[typing.Sequence[builtins.str]] = None,
+        instances: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IInstanceRef_b97803cb]]] = None,
         lb_cookie_stickiness_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.LBCookieStickinessPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         load_balancer_name: typing.Optional[builtins.str] = None,
         policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.PoliciesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         scheme: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+        subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLoadBalancer``.
@@ -1754,13 +1759,15 @@ class CfnLoadBalancerProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnLoadBalancer.HealthCheckProperty]], result)
 
     @builtins.property
-    def instances(self) -> typing.Optional[typing.List[builtins.str]]:
+    def instances(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IInstanceRef_b97803cb]]]:
         '''The IDs of the instances for the load balancer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-instances
         '''
         result = self._values.get("instances")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IInstanceRef_b97803cb]]], result)
 
     @builtins.property
     def lb_cookie_stickiness_policy(
@@ -1813,7 +1820,9 @@ class CfnLoadBalancerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''The security groups for the load balancer.
 
         Valid only for load balancers in a VPC.
@@ -1821,10 +1830,12 @@ class CfnLoadBalancerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-securitygroups
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
-    def subnets(self) -> typing.Optional[typing.List[builtins.str]]:
+    def subnets(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''The IDs of the subnets for the load balancer. You can specify at most one subnet per Availability Zone.
 
         Update requires replacement if you did not previously specify a subnet or if you are removing all subnets. Otherwise, update requires no interruption. To update to a different subnet in the current Availability Zone, you must first update to a subnet in a different Availability Zone, then update to the new subnet in the original Availability Zone.
@@ -1832,7 +1843,7 @@ class CfnLoadBalancerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancing-loadbalancer.html#cfn-elasticloadbalancing-loadbalancer-subnets
         '''
         result = self._values.get("subnets")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2733,13 +2744,13 @@ def _typecheckingstub__ad4de01fae3e412612aab1283fdbc2d6f0e2fef6e20c971f887b72cbc
     connection_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.ConnectionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cross_zone: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.HealthCheckProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    instances: typing.Optional[typing.Sequence[builtins.str]] = None,
+    instances: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IInstanceRef_b97803cb]]] = None,
     lb_cookie_stickiness_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.LBCookieStickinessPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     load_balancer_name: typing.Optional[builtins.str] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.PoliciesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     scheme: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-    subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+    subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -2938,13 +2949,13 @@ def _typecheckingstub__bd1da7c70c0e221c24372bbc8f77dcf3db6604c10128921e49a0b9b14
     connection_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.ConnectionSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cross_zone: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     health_check: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.HealthCheckProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    instances: typing.Optional[typing.Sequence[builtins.str]] = None,
+    instances: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IInstanceRef_b97803cb]]] = None,
     lb_cookie_stickiness_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.LBCookieStickinessPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     load_balancer_name: typing.Optional[builtins.str] = None,
     policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.PoliciesProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     scheme: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-    subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+    subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

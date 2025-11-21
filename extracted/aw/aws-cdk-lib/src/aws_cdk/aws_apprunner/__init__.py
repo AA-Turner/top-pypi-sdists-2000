@@ -85,6 +85,7 @@ from ..interfaces.aws_apprunner import (
     VpcConnectorReference as _VpcConnectorReference_0d63765c,
     VpcIngressConnectionReference as _VpcIngressConnectionReference_64b165fb,
 )
+from ..interfaces.aws_ec2 import ISecurityGroupRef as _ISecurityGroupRef_efa4ff18
 
 
 @jsii.implements(_IInspectable_c2943556, _IAutoScalingConfigurationRef_99168b63, _ITaggableV2_4e6798f8)
@@ -161,6 +162,20 @@ class CfnAutoScalingConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAutoScalingConfiguration")
+    @builtins.classmethod
+    def arn_for_auto_scaling_configuration(
+        cls,
+        resource: _IAutoScalingConfigurationRef_99168b63,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b07092ed9a3c8f611b357cee86d2b88d22d76e53f344d607685c237ceccda147)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAutoScalingConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -499,7 +514,7 @@ class CfnObservabilityConfiguration(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param observability_configuration_name: A name for the observability configuration. When you use it for the first time in an AWS Region , App Runner creates revision number ``1`` of this name. When you use the same name in subsequent calls, App Runner creates incremental revisions of the configuration. .. epigraph:: The name ``DefaultConfiguration`` is reserved. You can't use it to create a new observability configuration, and you can't create a revision of it. When you want to use your own observability configuration for your App Runner service, *create a configuration with a different name* , and then provide it when you create or update your service. If you don't specify a name, AWS CloudFormation generates a name for your observability configuration.
+        :param observability_configuration_name: A name for the observability configuration. When you use it for the first time in an AWS Region , App Runner creates revision number ``1`` of this name. When you use the same name in subsequent calls, App Runner creates incremental revisions of the configuration. .. epigraph:: The name ``DefaultConfiguration`` is reserved. You can't use it to create a new observability configuration, and you can't create a revision of it. When you want to use your own observability configuration for your App Runner service, *create a configuration with a different name* , and then provide it when you create or update your service. If you don't specify a name, CloudFormation generates a name for your observability configuration.
         :param tags: A list of metadata items that you can associate with your observability configuration resource. A tag is a key-value pair.
         :param trace_configuration: The configuration of the tracing feature within this observability configuration. If you don't specify it, App Runner doesn't enable tracing.
         '''
@@ -514,6 +529,20 @@ class CfnObservabilityConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForObservabilityConfiguration")
+    @builtins.classmethod
+    def arn_for_observability_configuration(
+        cls,
+        resource: _IObservabilityConfigurationRef_fbef63e4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cd84b25eaccc90a9b1c076d3c7ca8fa5d7ea74d4897284e61f1b4cc1e05e16ca)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForObservabilityConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -714,7 +743,7 @@ class CfnObservabilityConfigurationProps:
     ) -> None:
         '''Properties for defining a ``CfnObservabilityConfiguration``.
 
-        :param observability_configuration_name: A name for the observability configuration. When you use it for the first time in an AWS Region , App Runner creates revision number ``1`` of this name. When you use the same name in subsequent calls, App Runner creates incremental revisions of the configuration. .. epigraph:: The name ``DefaultConfiguration`` is reserved. You can't use it to create a new observability configuration, and you can't create a revision of it. When you want to use your own observability configuration for your App Runner service, *create a configuration with a different name* , and then provide it when you create or update your service. If you don't specify a name, AWS CloudFormation generates a name for your observability configuration.
+        :param observability_configuration_name: A name for the observability configuration. When you use it for the first time in an AWS Region , App Runner creates revision number ``1`` of this name. When you use the same name in subsequent calls, App Runner creates incremental revisions of the configuration. .. epigraph:: The name ``DefaultConfiguration`` is reserved. You can't use it to create a new observability configuration, and you can't create a revision of it. When you want to use your own observability configuration for your App Runner service, *create a configuration with a different name* , and then provide it when you create or update your service. If you don't specify a name, CloudFormation generates a name for your observability configuration.
         :param tags: A list of metadata items that you can associate with your observability configuration resource. A tag is a key-value pair.
         :param trace_configuration: The configuration of the tracing feature within this observability configuration. If you don't specify it, App Runner doesn't enable tracing.
 
@@ -762,7 +791,7 @@ class CfnObservabilityConfigurationProps:
 
            When you want to use your own observability configuration for your App Runner service, *create a configuration with a different name* , and then provide it when you create or update your service.
 
-        If you don't specify a name, AWS CloudFormation generates a name for your observability configuration.
+        If you don't specify a name, CloudFormation generates a name for your observability configuration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-observabilityconfiguration.html#cfn-apprunner-observabilityconfiguration-observabilityconfigurationname
         '''
@@ -953,7 +982,7 @@ class CfnService(
         :param instance_configuration: The runtime configuration of instances (scaling units) of your service.
         :param network_configuration: Configuration settings related to network traffic of the web application that the App Runner service runs.
         :param observability_configuration: The observability configuration of your service.
-        :param service_name: A name for the App Runner service. It must be unique across all the running App Runner services in your AWS account in the AWS Region . If you don't specify a name, AWS CloudFormation generates a name for your service.
+        :param service_name: A name for the App Runner service. It must be unique across all the running App Runner services in your AWS account in the AWS Region . If you don't specify a name, CloudFormation generates a name for your service.
         :param tags: An optional list of metadata items that you can associate with the App Runner service resource. A tag is a key-value pair.
         '''
         if __debug__:
@@ -973,6 +1002,17 @@ class CfnService(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForService")
+    @builtins.classmethod
+    def arn_for_service(cls, resource: _IServiceRef_276b8cc6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c6f8abcf3c751311864f64ca375c6961e4b50cd160a536f5f02bccee469b4f34)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForService", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2916,7 +2956,7 @@ class CfnServiceProps:
         :param instance_configuration: The runtime configuration of instances (scaling units) of your service.
         :param network_configuration: Configuration settings related to network traffic of the web application that the App Runner service runs.
         :param observability_configuration: The observability configuration of your service.
-        :param service_name: A name for the App Runner service. It must be unique across all the running App Runner services in your AWS account in the AWS Region . If you don't specify a name, AWS CloudFormation generates a name for your service.
+        :param service_name: A name for the App Runner service. It must be unique across all the running App Runner services in your AWS account in the AWS Region . If you don't specify a name, CloudFormation generates a name for your service.
         :param tags: An optional list of metadata items that you can associate with the App Runner service resource. A tag is a key-value pair.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-service.html
@@ -3152,7 +3192,7 @@ class CfnServiceProps:
 
         It must be unique across all the running App Runner services in your AWS account in the AWS Region .
 
-        If you don't specify a name, AWS CloudFormation generates a name for your service.
+        If you don't specify a name, CloudFormation generates a name for your service.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-service.html#cfn-apprunner-service-servicename
         '''
@@ -3223,7 +3263,7 @@ class CfnVpcConnector(
         id: builtins.str,
         *,
         subnets: typing.Sequence[builtins.str],
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_connector_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3234,7 +3274,7 @@ class CfnVpcConnector(
         :param subnets: A list of IDs of subnets that App Runner should use when it associates your service with a custom Amazon VPC. Specify IDs of subnets of a single Amazon VPC. App Runner determines the Amazon VPC from the subnets you specify. .. epigraph:: App Runner only supports subnets of IP address type *IPv4* and *dual stack* (IPv4 and IPv6).
         :param security_groups: A list of IDs of security groups that App Runner should use for access to AWS resources under the specified subnets. If not specified, App Runner uses the default security group of the Amazon VPC. The default security group allows all outbound traffic.
         :param tags: A list of metadata items that you can associate with your VPC connector resource. A tag is a key-value pair. .. epigraph:: A ``VpcConnector`` is immutable, so you cannot update its tags. To change the tags, replace the resource. To replace a ``VpcConnector`` , you must provide a new combination of security groups.
-        :param vpc_connector_name: A name for the VPC connector. If you don't specify a name, AWS CloudFormation generates a name for your VPC connector.
+        :param vpc_connector_name: A name for the VPC connector. If you don't specify a name, CloudFormation generates a name for your VPC connector.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__be589026c3fd7633e7cbbae6a2059ec8d285e62b05b7dce52a6d06b534940bf3)
@@ -3248,6 +3288,20 @@ class CfnVpcConnector(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVpcConnector")
+    @builtins.classmethod
+    def arn_for_vpc_connector(
+        cls,
+        resource: _IVpcConnectorRef_37eb44ed,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d48e3355ae4016b25937c4573225ac7242b4d9111c8bd0fc755da7d061a66a5e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcConnector", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3390,7 +3444,7 @@ class CfnVpcConnectorProps:
         self,
         *,
         subnets: typing.Sequence[builtins.str],
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_connector_name: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3399,7 +3453,7 @@ class CfnVpcConnectorProps:
         :param subnets: A list of IDs of subnets that App Runner should use when it associates your service with a custom Amazon VPC. Specify IDs of subnets of a single Amazon VPC. App Runner determines the Amazon VPC from the subnets you specify. .. epigraph:: App Runner only supports subnets of IP address type *IPv4* and *dual stack* (IPv4 and IPv6).
         :param security_groups: A list of IDs of security groups that App Runner should use for access to AWS resources under the specified subnets. If not specified, App Runner uses the default security group of the Amazon VPC. The default security group allows all outbound traffic.
         :param tags: A list of metadata items that you can associate with your VPC connector resource. A tag is a key-value pair. .. epigraph:: A ``VpcConnector`` is immutable, so you cannot update its tags. To change the tags, replace the resource. To replace a ``VpcConnector`` , you must provide a new combination of security groups.
-        :param vpc_connector_name: A name for the VPC connector. If you don't specify a name, AWS CloudFormation generates a name for your VPC connector.
+        :param vpc_connector_name: A name for the VPC connector. If you don't specify a name, CloudFormation generates a name for your VPC connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-vpcconnector.html
         :exampleMetadata: fixture=_generated
@@ -3454,7 +3508,9 @@ class CfnVpcConnectorProps:
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of IDs of security groups that App Runner should use for access to AWS resources under the specified subnets.
 
         If not specified, App Runner uses the default security group of the Amazon VPC. The default security group allows all outbound traffic.
@@ -3462,7 +3518,7 @@ class CfnVpcConnectorProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-vpcconnector.html#cfn-apprunner-vpcconnector-securitygroups
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -3482,7 +3538,7 @@ class CfnVpcConnectorProps:
     def vpc_connector_name(self) -> typing.Optional[builtins.str]:
         '''A name for the VPC connector.
 
-        If you don't specify a name, AWS CloudFormation generates a name for your VPC connector.
+        If you don't specify a name, CloudFormation generates a name for your VPC connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apprunner-vpcconnector.html#cfn-apprunner-vpcconnector-vpcconnectorname
         '''
@@ -3570,6 +3626,20 @@ class CfnVpcIngressConnection(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVpcIngressConnection")
+    @builtins.classmethod
+    def arn_for_vpc_ingress_connection(
+        cls,
+        resource: _IVpcIngressConnectionRef_58d73e34,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c87b856f3cb85d608c841ce8d6e4b56eafbf705ac36b1d61858622e6d2db264)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcIngressConnection", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3923,6 +3993,12 @@ def _typecheckingstub__a097973cb063319e04b0f6e6c21b4cfd5c92b8418d4ae98fd7a13b5ef
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b07092ed9a3c8f611b357cee86d2b88d22d76e53f344d607685c237ceccda147(
+    resource: _IAutoScalingConfigurationRef_99168b63,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__543708ceb6604b166bc6eed37718011031e49891f6312bd156560547d85091a3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3987,6 +4063,12 @@ def _typecheckingstub__b238f814243acf19fa88af79842810e60380a88ae9065727ec71a1f3e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cd84b25eaccc90a9b1c076d3c7ca8fa5d7ea74d4897284e61f1b4cc1e05e16ca(
+    resource: _IObservabilityConfigurationRef_fbef63e4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7573b8057d1f727c6f989a8a051a5419de5cb4e5bfba9e84827ba331b857930b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4046,6 +4128,12 @@ def _typecheckingstub__4f3344ac8fb704588f823f8fe3348e96180ce7161e948774f8ff00397
     observability_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceObservabilityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     service_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c6f8abcf3c751311864f64ca375c6961e4b50cd160a536f5f02bccee469b4f34(
+    resource: _IServiceRef_276b8cc6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4279,9 +4367,15 @@ def _typecheckingstub__be589026c3fd7633e7cbbae6a2059ec8d285e62b05b7dce52a6d06b53
     id: builtins.str,
     *,
     subnets: typing.Sequence[builtins.str],
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_connector_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d48e3355ae4016b25937c4573225ac7242b4d9111c8bd0fc755da7d061a66a5e(
+    resource: _IVpcConnectorRef_37eb44ed,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4325,7 +4419,7 @@ def _typecheckingstub__73ecdd2e55710876cadbdcb04b4c04bb7358741703d21df85a608b981
 def _typecheckingstub__b3874001d469c9a53bc1ebacc92f127d716349bc989287cfb6de624b3a435282(
     *,
     subnets: typing.Sequence[builtins.str],
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_connector_name: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -4340,6 +4434,12 @@ def _typecheckingstub__afbb5f9e033f465b7f8f245446cf2a67c499f7755bf4e573bb4e74c62
     service_arn: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_ingress_connection_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8c87b856f3cb85d608c841ce8d6e4b56eafbf705ac36b1d61858622e6d2db264(
+    resource: _IVpcIngressConnectionRef_58d73e34,
 ) -> None:
     """Type checking stubs"""
     pass

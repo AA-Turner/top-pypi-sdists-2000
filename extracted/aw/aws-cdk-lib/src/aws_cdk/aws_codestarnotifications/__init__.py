@@ -184,12 +184,12 @@ class CfnNotificationRule(
         :param event_type_ids: A list of event types associated with this notification rule. For a complete list of event types and IDs, see `Notification concepts <https://docs.aws.amazon.com/dtconsole/latest/userguide/concepts.html#concepts-api>`_ in the *Developer Tools Console User Guide* .
         :param name: The name for the notification rule. Notification rule names must be unique in your AWS account .
         :param resource: The Amazon Resource Name (ARN) of the resource to associate with the notification rule. Supported resources include pipelines in AWS CodePipeline , repositories in AWS CodeCommit , and build projects in AWS CodeBuild .
-        :param targets: A list of Amazon Resource Names (ARNs) of Amazon SNS topics and clients to associate with the notification rule.
+        :param targets: A list of Amazon Resource Names (ARNs) of Amazon topics and clients to associate with the notification rule.
         :param created_by: The name or email alias of the person who created the notification rule.
         :param event_type_id: The event type associated with this notification rule. For a complete list of event types and IDs, see `Notification concepts <https://docs.aws.amazon.com/dtconsole/latest/userguide/concepts.html#concepts-api>`_ in the *Developer Tools Console User Guide* .
         :param status: The status of the notification rule. The default value is ``ENABLED`` . If the status is set to ``DISABLED`` , notifications aren't sent for the notification rule.
         :param tags: A list of tags to apply to this notification rule. Key names cannot start with " ``aws`` ".
-        :param target_address: The Amazon Resource Name (ARN) of the Amazon SNS topic or client.
+        :param target_address: The Amazon Resource Name (ARN) of the Amazon topic or client.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__724996b7b605c1ccec7fc232a8e933db042d262c4932936112f67cf6c1086ace)
@@ -209,6 +209,20 @@ class CfnNotificationRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForNotificationRule")
+    @builtins.classmethod
+    def arn_for_notification_rule(
+        cls,
+        resource: _INotificationRuleRef_72554e3b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e81708227acb98da73d79e733ff85bbe1c6146c47676c1ea6b92d00ee0dac1f5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNotificationRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -323,7 +337,7 @@ class CfnNotificationRule(
     def targets(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNotificationRule.TargetProperty"]]]:
-        '''A list of Amazon Resource Names (ARNs) of Amazon SNS topics and  clients to associate with the notification rule.'''
+        '''A list of Amazon Resource Names (ARNs) of Amazon  topics and  clients to associate with the notification rule.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnNotificationRule.TargetProperty"]]], jsii.get(self, "targets"))
 
     @targets.setter
@@ -394,7 +408,7 @@ class CfnNotificationRule(
     @builtins.property
     @jsii.member(jsii_name="targetAddress")
     def target_address(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the Amazon SNS topic or  client.'''
+        '''The Amazon Resource Name (ARN) of the Amazon  topic or  client.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "targetAddress"))
 
     @target_address.setter
@@ -517,12 +531,12 @@ class CfnNotificationRuleProps:
         :param event_type_ids: A list of event types associated with this notification rule. For a complete list of event types and IDs, see `Notification concepts <https://docs.aws.amazon.com/dtconsole/latest/userguide/concepts.html#concepts-api>`_ in the *Developer Tools Console User Guide* .
         :param name: The name for the notification rule. Notification rule names must be unique in your AWS account .
         :param resource: The Amazon Resource Name (ARN) of the resource to associate with the notification rule. Supported resources include pipelines in AWS CodePipeline , repositories in AWS CodeCommit , and build projects in AWS CodeBuild .
-        :param targets: A list of Amazon Resource Names (ARNs) of Amazon SNS topics and clients to associate with the notification rule.
+        :param targets: A list of Amazon Resource Names (ARNs) of Amazon topics and clients to associate with the notification rule.
         :param created_by: The name or email alias of the person who created the notification rule.
         :param event_type_id: The event type associated with this notification rule. For a complete list of event types and IDs, see `Notification concepts <https://docs.aws.amazon.com/dtconsole/latest/userguide/concepts.html#concepts-api>`_ in the *Developer Tools Console User Guide* .
         :param status: The status of the notification rule. The default value is ``ENABLED`` . If the status is set to ``DISABLED`` , notifications aren't sent for the notification rule.
         :param tags: A list of tags to apply to this notification rule. Key names cannot start with " ``aws`` ".
-        :param target_address: The Amazon Resource Name (ARN) of the Amazon SNS topic or client.
+        :param target_address: The Amazon Resource Name (ARN) of the Amazon topic or client.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarnotifications-notificationrule.html
         :exampleMetadata: fixture=_generated
@@ -635,7 +649,7 @@ class CfnNotificationRuleProps:
     def targets(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnNotificationRule.TargetProperty]]]:
-        '''A list of Amazon Resource Names (ARNs) of Amazon SNS topics and  clients to associate with the notification rule.
+        '''A list of Amazon Resource Names (ARNs) of Amazon  topics and  clients to associate with the notification rule.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarnotifications-notificationrule.html#cfn-codestarnotifications-notificationrule-targets
         '''
@@ -687,7 +701,7 @@ class CfnNotificationRuleProps:
 
     @builtins.property
     def target_address(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the Amazon SNS topic or  client.
+        '''The Amazon Resource Name (ARN) of the Amazon  topic or  client.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestarnotifications-notificationrule.html#cfn-codestarnotifications-notificationrule-targetaddress
         '''
@@ -1460,6 +1474,12 @@ def _typecheckingstub__724996b7b605c1ccec7fc232a8e933db042d262c4932936112f67cf6c
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     target_address: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e81708227acb98da73d79e733ff85bbe1c6146c47676c1ea6b92d00ee0dac1f5(
+    resource: _INotificationRuleRef_72554e3b,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -138,6 +138,20 @@ class CfnEmailContact(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEmailContact")
+    @builtins.classmethod
+    def arn_for_email_contact(
+        cls,
+        resource: _IEmailContactRef_3b55344c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__800f55852aefaadf354726e75bd68267dcb3a33397489653d1e7d090255791c7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEmailContact", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -548,6 +562,12 @@ def _typecheckingstub__1de25815cbc5e561d0f90c0eee8ffe57e0f8551698ba5a811da29f445
     email_address: builtins.str,
     name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__800f55852aefaadf354726e75bd68267dcb3a33397489653d1e7d090255791c7(
+    resource: _IEmailContactRef_3b55344c,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -162,6 +162,17 @@ class CfnAllowList(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAllowList")
+    @builtins.classmethod
+    def arn_for_allow_list(cls, resource: _IAllowListRef_966cd924) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1fedad2a68eb91135625e77bd721cd53f201572e319c0c53b4833459f3277f4c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAllowList", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -224,12 +235,12 @@ class CfnAllowList(
         If the list's criteria specify a regular expression ( ``Regex`` ), this value is typically ``OK`` . Macie can compile the expression. If the list's criteria specify an Amazon S3 object ( ``S3WordsList`` ), possible values are:
 
         - ``OK`` - Macie can retrieve and parse the contents of the object.
-        - ``S3_OBJECT_ACCESS_DENIED`` - Macie isn't allowed to access the object or the object is encrypted with a customer managed AWS KMS key that Macie isn't allowed to use. Check the bucket policy and other permissions settings for the bucket and the object. If the object is encrypted, also ensure that it's encrypted with a key that Macie is allowed to use.
+        - ``S3_OBJECT_ACCESS_DENIED`` - Macie isn't allowed to access the object or the object is encrypted with a customer managed AWS  key that Macie isn't allowed to use. Check the bucket policy and other permissions settings for the bucket and the object. If the object is encrypted, also ensure that it's encrypted with a key that Macie is allowed to use.
         - ``S3_OBJECT_EMPTY`` - Macie can retrieve the object but the object doesn't contain any content. Ensure that the object contains the correct entries. Also ensure that the list's criteria specify the correct bucket and object names.
         - ``S3_OBJECT_NOT_FOUND`` - The object doesn't exist in Amazon S3 . Ensure that the list's criteria specify the correct bucket and object names.
         - ``S3_OBJECT_OVERSIZE`` - Macie can retrieve the object. However, the object contains too many entries or its storage size exceeds the quota for an allow list. Try breaking the list into multiple files and ensure that each file doesn't exceed any quotas. Then configure list settings in Macie for each file.
         - ``S3_THROTTLED`` - Amazon S3 throttled the request to retrieve the object. Wait a few minutes and then try again.
-        - ``S3_USER_ACCESS_DENIED`` - Amazon S3 denied the request to retrieve the object. If the specified object exists, you're not allowed to access it or it's encrypted with an AWS KMS key that you're not allowed to use. Work with your AWS administrator to ensure that the list's criteria specify the correct bucket and object names, and you have read access to the bucket and the object. If the object is encrypted, also ensure that it's encrypted with a key that you're allowed to use.
+        - ``S3_USER_ACCESS_DENIED`` - Amazon S3 denied the request to retrieve the object. If the specified object exists, you're not allowed to access it or it's encrypted with an AWS  key that you're not allowed to use. Work with your AWS administrator to ensure that the list's criteria specify the correct bucket and object names, and you have read access to the bucket and the object. If the object is encrypted, also ensure that it's encrypted with a key that you're allowed to use.
         - ``UNKNOWN_ERROR`` - A transient or internal error occurred when Macie attempted to retrieve or parse the object. Wait a few minutes and then try again. A list can also have this status if it's encrypted with a key that Amazon S3 and Macie can't access or use.
 
         For more information, see `Allow list options and requirements <https://docs.aws.amazon.com/macie/latest/user/allow-lists-options.html>`_ in the *Amazon Macie User Guide* .
@@ -682,6 +693,20 @@ class CfnCustomDataIdentifier(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCustomDataIdentifier")
+    @builtins.classmethod
+    def arn_for_custom_data_identifier(
+        cls,
+        resource: _ICustomDataIdentifierRef_a9132897,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__70ba3e65c40801f92045549f95de020360fa376de498b4b455198bd88b16f5ba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomDataIdentifier", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1108,6 +1133,20 @@ class CfnFindingsFilter(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFindingsFilter")
+    @builtins.classmethod
+    def arn_for_findings_filter(
+        cls,
+        resource: _IFindingsFilterRef_4f285375,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4958ec0cd32d45b8bf4be7ecdb8e1d43b577eb97fa9a3eadd789d91afbf176d0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFindingsFilter", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1985,6 +2024,12 @@ def _typecheckingstub__ef55cb8aaca32dcf264ac0e8768dc1c5a0b1471c41c8de3c9575f2000
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1fedad2a68eb91135625e77bd721cd53f201572e319c0c53b4833459f3277f4c(
+    resource: _IAllowListRef_966cd924,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__de89a42feae1bdccf1b7fb468bda2c5700b1aa71c5c523cb2c69a8c666ae8e2a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2058,6 +2103,12 @@ def _typecheckingstub__8462f70ed2396867e691499b8338ee06166375569e4774b35cad18418
     keywords: typing.Optional[typing.Sequence[builtins.str]] = None,
     maximum_match_distance: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__70ba3e65c40801f92045549f95de020360fa376de498b4b455198bd88b16f5ba(
+    resource: _ICustomDataIdentifierRef_a9132897,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2139,6 +2190,12 @@ def _typecheckingstub__11b08ade332eec06142e65a0667c3f977a9418dbb1685fc4d53acba74
     description: typing.Optional[builtins.str] = None,
     position: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4958ec0cd32d45b8bf4be7ecdb8e1d43b577eb97fa9a3eadd789d91afbf176d0(
+    resource: _IFindingsFilterRef_4f285375,
 ) -> None:
     """Type checking stubs"""
     pass

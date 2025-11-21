@@ -182,6 +182,17 @@ class CfnCapability(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCapability")
+    @builtins.classmethod
+    def arn_for_capability(cls, resource: _ICapabilityRef_a9e3b056) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8bcc4a343b2fef67007379dbe7d4f17b8cba46535cf982ff85c33bfdd5bfc97b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapability", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1055,6 +1066,17 @@ class CfnPartnership(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPartnership")
+    @builtins.classmethod
+    def arn_for_partnership(cls, resource: _IPartnershipRef_05c55884) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__398ccb3e1e18bbd3a8b4c230d176f5c735b4006baca0ffe05ee37dd48a2c7c92)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPartnership", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2810,6 +2832,17 @@ class CfnProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProfile")
+    @builtins.classmethod
+    def arn_for_profile(cls, resource: _IProfileRef_a1a5e2cf) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c8922df630e011cc3b27789507237cfb6c7eefd5eed23c92e926403cb3dfc0f5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProfile", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3315,6 +3348,17 @@ class CfnTransformer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTransformer")
+    @builtins.classmethod
+    def arn_for_transformer(cls, resource: _ITransformerRef_17b6e3da) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92f752500638eb567622e8779c86622588a63cad00a53ca24b32e826fc78285f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTransformer", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5338,6 +5382,12 @@ def _typecheckingstub__0e2c877d8f658a8bd5b2b87fa89276114a47d5d48d6051351c42b159c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8bcc4a343b2fef67007379dbe7d4f17b8cba46535cf982ff85c33bfdd5bfc97b(
+    resource: _ICapabilityRef_a9e3b056,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__69250f68db11c0c5d1b5dc6e2fd42eb03c44b04345584670f06ca66a9283eb35(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5443,6 +5493,12 @@ def _typecheckingstub__187ce4b824b0d27162e457adfee9761451ebc9ba1fbb31b215de741e2
     capability_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnership.CapabilityOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     phone: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__398ccb3e1e18bbd3a8b4c230d176f5c735b4006baca0ffe05ee37dd48a2c7c92(
+    resource: _IPartnershipRef_05c55884,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5634,6 +5690,12 @@ def _typecheckingstub__6e54fea50428e19dd273372ef5650a89d4610c6422804677c9be788a7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c8922df630e011cc3b27789507237cfb6c7eefd5eed23c92e926403cb3dfc0f5(
+    resource: _IProfileRef_a1a5e2cf,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5271088abc585a3db11af1eacb47274605ad9acc14f75da9da9239d3a3697541(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5709,6 +5771,12 @@ def _typecheckingstub__fb0d6d0f8083b8bc38eb61c54d65c6e72d668ba067f31569d0213bf7d
     sample_document: typing.Optional[builtins.str] = None,
     sample_documents: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTransformer.SampleDocumentsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92f752500638eb567622e8779c86622588a63cad00a53ca24b32e826fc78285f(
+    resource: _ITransformerRef_17b6e3da,
 ) -> None:
     """Type checking stubs"""
     pass

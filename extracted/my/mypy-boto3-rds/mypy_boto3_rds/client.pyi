@@ -541,6 +541,7 @@ class Exceptions(BaseClientExceptions):
     TenantDatabaseNotFoundFault: type[BotocoreClientError]
     TenantDatabaseQuotaExceededFault: type[BotocoreClientError]
     UnsupportedDBEngineVersionFault: type[BotocoreClientError]
+    VpcEncryptionControlViolationException: type[BotocoreClientError]
 
 class RDSClient(BaseClient):
     """

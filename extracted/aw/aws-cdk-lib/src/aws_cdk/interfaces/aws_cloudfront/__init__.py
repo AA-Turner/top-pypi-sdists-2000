@@ -184,6 +184,74 @@ class CloudFrontOriginAccessIdentityReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.ConnectionFunctionReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "connection_function_arn": "connectionFunctionArn",
+        "connection_function_id": "connectionFunctionId",
+    },
+)
+class ConnectionFunctionReference:
+    def __init__(
+        self,
+        *,
+        connection_function_arn: builtins.str,
+        connection_function_id: builtins.str,
+    ) -> None:
+        '''A reference to a ConnectionFunction resource.
+
+        :param connection_function_arn: The ARN of the ConnectionFunction resource.
+        :param connection_function_id: The Id of the ConnectionFunction resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            
+            connection_function_reference = interfaces_aws_cloudfront.ConnectionFunctionReference(
+                connection_function_arn="connectionFunctionArn",
+                connection_function_id="connectionFunctionId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd7b0bb64cedf15636618e6b755d87dc4aca386789f0be0876627def8997a3ad)
+            check_type(argname="argument connection_function_arn", value=connection_function_arn, expected_type=type_hints["connection_function_arn"])
+            check_type(argname="argument connection_function_id", value=connection_function_id, expected_type=type_hints["connection_function_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "connection_function_arn": connection_function_arn,
+            "connection_function_id": connection_function_id,
+        }
+
+    @builtins.property
+    def connection_function_arn(self) -> builtins.str:
+        '''The ARN of the ConnectionFunction resource.'''
+        result = self._values.get("connection_function_arn")
+        assert result is not None, "Required property 'connection_function_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def connection_function_id(self) -> builtins.str:
+        '''The Id of the ConnectionFunction resource.'''
+        result = self._values.get("connection_function_id")
+        assert result is not None, "Required property 'connection_function_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ConnectionFunctionReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.ConnectionGroupReference",
     jsii_struct_bases=[],
     name_mapping={
@@ -605,6 +673,53 @@ class _ICloudFrontOriginAccessIdentityRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, ICloudFrontOriginAccessIdentityRef).__jsii_proxy_class__ = lambda : _ICloudFrontOriginAccessIdentityRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.IConnectionFunctionRef"
+)
+class IConnectionFunctionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a ConnectionFunction.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="connectionFunctionRef")
+    def connection_function_ref(self) -> ConnectionFunctionReference:
+        '''(experimental) A reference to a ConnectionFunction resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IConnectionFunctionRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a ConnectionFunction.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_cloudfront.IConnectionFunctionRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="connectionFunctionRef")
+    def connection_function_ref(self) -> ConnectionFunctionReference:
+        '''(experimental) A reference to a ConnectionFunction resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(ConnectionFunctionReference, jsii.get(self, "connectionFunctionRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IConnectionFunctionRef).__jsii_proxy_class__ = lambda : _IConnectionFunctionRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.IConnectionGroupRef")
@@ -1827,6 +1942,7 @@ __all__ = [
     "AnycastIpListReference",
     "CachePolicyReference",
     "CloudFrontOriginAccessIdentityReference",
+    "ConnectionFunctionReference",
     "ConnectionGroupReference",
     "ContinuousDeploymentPolicyReference",
     "DistributionReference",
@@ -1835,6 +1951,7 @@ __all__ = [
     "IAnycastIpListRef",
     "ICachePolicyRef",
     "ICloudFrontOriginAccessIdentityRef",
+    "IConnectionFunctionRef",
     "IConnectionGroupRef",
     "IContinuousDeploymentPolicyRef",
     "IDistributionRef",
@@ -1881,6 +1998,14 @@ def _typecheckingstub__eafc53ec8d44d91d599196eff2812b8d3e750f75445fecc2278717520
 def _typecheckingstub__ac62879d2ba5cdd6aa45b9be7d13a0247d5901fc9a2cbb8b4ce248ceeae24403(
     *,
     cloud_front_origin_access_identity_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fd7b0bb64cedf15636618e6b755d87dc4aca386789f0be0876627def8997a3ad(
+    *,
+    connection_function_arn: builtins.str,
+    connection_function_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1994,5 +2119,5 @@ def _typecheckingstub__69b032e15f12676ea4499a1b53874c8d182ed57bcf8be49701395b5cf
     """Type checking stubs"""
     pass
 
-for cls in [IAnycastIpListRef, ICachePolicyRef, ICloudFrontOriginAccessIdentityRef, IConnectionGroupRef, IContinuousDeploymentPolicyRef, IDistributionRef, IDistributionTenantRef, IFunctionRef, IKeyGroupRef, IKeyValueStoreRef, IMonitoringSubscriptionRef, IOriginAccessControlRef, IOriginRequestPolicyRef, IPublicKeyRef, IRealtimeLogConfigRef, IResponseHeadersPolicyRef, IStreamingDistributionRef, IVpcOriginRef]:
+for cls in [IAnycastIpListRef, ICachePolicyRef, ICloudFrontOriginAccessIdentityRef, IConnectionFunctionRef, IConnectionGroupRef, IContinuousDeploymentPolicyRef, IDistributionRef, IDistributionTenantRef, IFunctionRef, IKeyGroupRef, IKeyValueStoreRef, IMonitoringSubscriptionRef, IOriginAccessControlRef, IOriginRequestPolicyRef, IPublicKeyRef, IRealtimeLogConfigRef, IResponseHeadersPolicyRef, IStreamingDistributionRef, IVpcOriginRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

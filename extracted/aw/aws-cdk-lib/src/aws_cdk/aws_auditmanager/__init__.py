@@ -191,6 +191,17 @@ class CfnAssessment(
 
         jsii.create(self.__class__, self, [scope_, id, props])
 
+    @jsii.member(jsii_name="arnForAssessment")
+    @builtins.classmethod
+    def arn_for_assessment(cls, resource: _IAssessmentRef_c02968a4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6c373e86f7061e512a57c2b840038c0c4ba3756e288c2444a46302b913d96fa7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssessment", [resource]))
+
     @jsii.member(jsii_name="fromAssessmentArn")
     @builtins.classmethod
     def from_assessment_arn(
@@ -1340,6 +1351,12 @@ def _typecheckingstub__92bc07048cc88ff5fa41ca724a6b42a6ae66b35846d9ddafe90b7f486
     scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssessment.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c373e86f7061e512a57c2b840038c0c4ba3756e288c2444a46302b913d96fa7(
+    resource: _IAssessmentRef_c02968a4,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -90,7 +90,7 @@ class CfnConnection(
 ):
     '''A resource that is used to connect third-party source providers with services like CodePipeline.
 
-    Note: A connection created through AWS CloudFormation , the CLI, or the SDK is in ``PENDING`` status by default. You can make its status ``AVAILABLE`` by updating the connection in the console.
+    Note: A connection created through CloudFormation , the CLI, or the SDK is in ``PENDING`` status by default. You can make its status ``AVAILABLE`` by updating the connection in the console.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codeconnections-connection.html
     :cloudformationResource: AWS::CodeConnections::Connection
@@ -146,6 +146,17 @@ class CfnConnection(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConnection")
+    @builtins.classmethod
+    def arn_for_connection(cls, resource: _IConnectionRef_31f0710d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f0ebbeeb1a7e2051887bff67db79721fdc6e69076719f3a98c63ec4924102c1b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnection", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -410,6 +421,12 @@ def _typecheckingstub__da00c1ce515c51afa7843809dadd2cb48a76e0e91dd2a8096cc430768
     host_arn: typing.Optional[builtins.str] = None,
     provider_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f0ebbeeb1a7e2051887bff67db79721fdc6e69076719f3a98c63ec4924102c1b(
+    resource: _IConnectionRef_31f0710d,
 ) -> None:
     """Type checking stubs"""
     pass

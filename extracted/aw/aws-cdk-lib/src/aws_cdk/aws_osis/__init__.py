@@ -197,6 +197,17 @@ class CfnPipeline(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPipeline")
+    @builtins.classmethod
+    def arn_for_pipeline(cls, resource: _IPipelineRef_ac9b5b1c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e3b678c92a360ed9ba650ff8808b90eb42567213c31064c9ed59eefa7aee3e9f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPipeline", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1320,6 +1331,12 @@ def _typecheckingstub__f7720fc023720b487ee160161639df896ae055ed55f72c575e20e1b94
     resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.VpcOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e3b678c92a360ed9ba650ff8808b90eb42567213c31064c9ed59eefa7aee3e9f(
+    resource: _IPipelineRef_ac9b5b1c,
 ) -> None:
     """Type checking stubs"""
     pass

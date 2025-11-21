@@ -67,6 +67,15 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_appsync import IGraphQLApiRef as _IGraphQLApiRef_d46d77ba
+from ..interfaces.aws_elasticloadbalancingv2 import (
+    ILoadBalancerRef as _ILoadBalancerRef_13acd8f1
+)
+from ..interfaces.aws_kinesisfirehose import (
+    IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53
+)
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 from ..interfaces.aws_wafv2 import (
     IIPSetRef as _IIPSetRef_7ceca2ca,
     ILoggingConfigurationRef as _ILoggingConfigurationRef_d8299b46,
@@ -142,7 +151,7 @@ class CfnIPSet(
         :param id: Construct identifier for this resource (unique in its scope).
         :param addresses: Contains an array of strings that specifies zero or more IP addresses or blocks of IP addresses that you want AWS WAF to inspect for in incoming requests. All addresses must be specified using Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports all IPv4 and IPv6 CIDR ranges except for ``/0`` . Example address strings: - For requests that originated from the IP address 192.0.2.44, specify ``192.0.2.44/32`` . - For requests that originated from IP addresses from 192.0.2.0 to 192.0.2.255, specify ``192.0.2.0/24`` . - For requests that originated from the IP address 1111:0000:0000:0000:0000:0000:0000:0111, specify ``1111:0000:0000:0000:0000:0000:0000:0111/128`` . - For requests that originated from IP addresses 1111:0000:0000:0000:0000:0000:0000:0000 to 1111:0000:0000:0000:ffff:ffff:ffff:ffff, specify ``1111:0000:0000:0000:0000:0000:0000:0000/64`` . For more information about CIDR notation, see the Wikipedia entry `Classless Inter-Domain Routing <https://docs.aws.amazon.com/https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ . Example JSON ``Addresses`` specifications: - Empty array: ``"Addresses": []`` - Array with one address: ``"Addresses": ["192.0.2.44/32"]`` - Array with three addresses: ``"Addresses": ["192.0.2.44/32", "192.0.2.0/24", "192.0.0.0/16"]`` - INVALID specification: ``"Addresses": [""]`` INVALID
         :param ip_address_version: The version of the IP addresses, either ``IPV4`` or ``IPV6`` .
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param description: A description of the IP set that helps with identification.
         :param name: The name of the IP set. You cannot change the name of an ``IPSet`` after you create it.
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. .. epigraph:: To modify tags on existing resources, use the AWS WAF APIs or command line interface. With AWS CloudFormation , you can only add tags to AWS WAF resources during resource creation.
@@ -161,6 +170,17 @@ class CfnIPSet(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForIPSet")
+    @builtins.classmethod
+    def arn_for_ip_set(cls, resource: _IIPSetRef_7ceca2ca) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__201f713fec3926208232a5faee8c8e61640f612aa9c6020f96795d8c0e1eb50c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIPSet", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -333,7 +353,7 @@ class CfnIPSetProps:
 
         :param addresses: Contains an array of strings that specifies zero or more IP addresses or blocks of IP addresses that you want AWS WAF to inspect for in incoming requests. All addresses must be specified using Classless Inter-Domain Routing (CIDR) notation. AWS WAF supports all IPv4 and IPv6 CIDR ranges except for ``/0`` . Example address strings: - For requests that originated from the IP address 192.0.2.44, specify ``192.0.2.44/32`` . - For requests that originated from IP addresses from 192.0.2.0 to 192.0.2.255, specify ``192.0.2.0/24`` . - For requests that originated from the IP address 1111:0000:0000:0000:0000:0000:0000:0111, specify ``1111:0000:0000:0000:0000:0000:0000:0111/128`` . - For requests that originated from IP addresses 1111:0000:0000:0000:0000:0000:0000:0000 to 1111:0000:0000:0000:ffff:ffff:ffff:ffff, specify ``1111:0000:0000:0000:0000:0000:0000:0000/64`` . For more information about CIDR notation, see the Wikipedia entry `Classless Inter-Domain Routing <https://docs.aws.amazon.com/https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing>`_ . Example JSON ``Addresses`` specifications: - Empty array: ``"Addresses": []`` - Array with one address: ``"Addresses": ["192.0.2.44/32"]`` - Array with three addresses: ``"Addresses": ["192.0.2.44/32", "192.0.2.0/24", "192.0.0.0/16"]`` - INVALID specification: ``"Addresses": [""]`` INVALID
         :param ip_address_version: The version of the IP addresses, either ``IPV4`` or ``IPV6`` .
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param description: A description of the IP set that helps with identification.
         :param name: The name of the IP set. You cannot change the name of an ``IPSet`` after you create it.
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. .. epigraph:: To modify tags on existing resources, use the AWS WAF APIs or command line interface. With AWS CloudFormation , you can only add tags to AWS WAF resources during resource creation.
@@ -423,7 +443,7 @@ class CfnIPSetProps:
     def scope(self) -> builtins.str:
         '''Specifies whether this is for an Amazon CloudFront distribution or for a regional application.
 
-        A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
+        A regional application can be an Application Load Balancer (ALB), an  REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
         .. epigraph::
 
            For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
@@ -547,8 +567,8 @@ class CfnLoggingConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        log_destination_configs: typing.Sequence[builtins.str],
-        resource_arn: builtins.str,
+        log_destination_configs: typing.Sequence[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]],
+        resource_arn: typing.Union[builtins.str, _IWebACLRef_3dd0843c],
         logging_filter: typing.Any = None,
         redacted_fields: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.FieldToMatchProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -1450,8 +1470,8 @@ class CfnLoggingConfigurationProps:
     def __init__(
         self,
         *,
-        log_destination_configs: typing.Sequence[builtins.str],
-        resource_arn: builtins.str,
+        log_destination_configs: typing.Sequence[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]],
+        resource_arn: typing.Union[builtins.str, _IWebACLRef_3dd0843c],
         logging_filter: typing.Any = None,
         redacted_fields: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.FieldToMatchProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -1509,7 +1529,9 @@ class CfnLoggingConfigurationProps:
             self._values["redacted_fields"] = redacted_fields
 
     @builtins.property
-    def log_destination_configs(self) -> typing.List[builtins.str]:
+    def log_destination_configs(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]]:
         '''The logging destination configuration that you want to associate with the web ACL.
 
         .. epigraph::
@@ -1520,17 +1542,17 @@ class CfnLoggingConfigurationProps:
         '''
         result = self._values.get("log_destination_configs")
         assert result is not None, "Required property 'log_destination_configs' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]], result)
 
     @builtins.property
-    def resource_arn(self) -> builtins.str:
+    def resource_arn(self) -> typing.Union[builtins.str, _IWebACLRef_3dd0843c]:
         '''The Amazon Resource Name (ARN) of the web ACL that you want to associate with ``LogDestinationConfigs`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-wafv2-loggingconfiguration.html#cfn-wafv2-loggingconfiguration-resourcearn
         '''
         result = self._values.get("resource_arn")
         assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IWebACLRef_3dd0843c], result)
 
     @builtins.property
     def logging_filter(self) -> typing.Any:
@@ -1631,7 +1653,7 @@ class CfnRegexPatternSet(
         :param scope_: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param regular_expression_list: The regular expression patterns in the set.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param description: A description of the set that helps with identification.
         :param name: The name of the set. You cannot change the name after you create the set.
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. .. epigraph:: To modify tags on existing resources, use the AWS WAF APIs or command line interface. With AWS CloudFormation , you can only add tags to AWS WAF resources during resource creation.
@@ -1649,6 +1671,20 @@ class CfnRegexPatternSet(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForRegexPatternSet")
+    @builtins.classmethod
+    def arn_for_regex_pattern_set(
+        cls,
+        resource: _IRegexPatternSetRef_4af57c5a,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7fe577888e5b3e8cd39fb3ecf6e411adfb5dc3ce1dcd51c7e7d18726416dda1f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRegexPatternSet", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1805,7 +1841,7 @@ class CfnRegexPatternSetProps:
         '''Properties for defining a ``CfnRegexPatternSet``.
 
         :param regular_expression_list: The regular expression patterns in the set.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param description: A description of the set that helps with identification.
         :param name: The name of the set. You cannot change the name after you create the set.
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource. .. epigraph:: To modify tags on existing resources, use the AWS WAF APIs or command line interface. With AWS CloudFormation , you can only add tags to AWS WAF resources during resource creation.
@@ -1864,7 +1900,7 @@ class CfnRegexPatternSetProps:
     def scope(self) -> builtins.str:
         '''Specifies whether this is for an Amazon CloudFront distribution or for a regional application.
 
-        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
+        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an  REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
         .. epigraph::
 
            For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
@@ -1967,7 +2003,7 @@ class CfnRuleGroup(
         :param scope_: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param capacity: The web ACL capacity units (WCUs) required for this rule group. When you create your own rule group, you define this, and you cannot change it after creation. When you add or modify the rules in a rule group, AWS WAF enforces this limit. AWS WAF uses WCUs to calculate and control the operating resources that are used to run your rules, rule groups, and web ACLs. AWS WAF calculates capacity differently for each rule type, to reflect the relative cost of each rule. Simple rules that cost little to run use fewer WCUs than more complex rules that use more processing power. Rule group capacity is fixed at creation, which helps users plan their web ACL WCU usage when they use a rule group. The WCU limit for web ACLs is 1,500.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection.
         :param available_labels: The labels that one or more rules in this rule group add to matching web requests. These labels are defined in the ``RuleLabels`` for a ``Rule`` .
         :param consumed_labels: The labels that one or more rules in this rule group match against in label match statements. These labels are defined in a ``LabelMatchStatement`` specification, in the ``Statement`` definition of a rule.
@@ -1995,6 +2031,17 @@ class CfnRuleGroup(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForRuleGroup")
+    @builtins.classmethod
+    def arn_for_rule_group(cls, resource: _IRuleGroupRef_42ed609b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__baeae4b260465d3d290925f1b2728f47b446311cacba91113fb14ac94e4220b3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRuleGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11147,7 +11194,7 @@ class CfnRuleGroupProps:
         '''Properties for defining a ``CfnRuleGroup``.
 
         :param capacity: The web ACL capacity units (WCUs) required for this rule group. When you create your own rule group, you define this, and you cannot change it after creation. When you add or modify the rules in a rule group, AWS WAF enforces this limit. AWS WAF uses WCUs to calculate and control the operating resources that are used to run your rules, rule groups, and web ACLs. AWS WAF calculates capacity differently for each rule type, to reflect the relative cost of each rule. Simple rules that cost little to run use fewer WCUs than more complex rules that use more processing power. Rule group capacity is fixed at creation, which helps users plan their web ACL WCU usage when they use a rule group. The WCU limit for web ACLs is 1,500.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
         :param visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection.
         :param available_labels: The labels that one or more rules in this rule group add to matching web requests. These labels are defined in the ``RuleLabels`` for a ``Rule`` .
         :param consumed_labels: The labels that one or more rules in this rule group match against in label match statements. These labels are defined in a ``LabelMatchStatement`` specification, in the ``Statement`` definition of a rule.
@@ -11214,7 +11261,7 @@ class CfnRuleGroupProps:
     def scope(self) -> builtins.str:
         '''Specifies whether this is for an Amazon CloudFront distribution or for a regional application.
 
-        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
+        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an  REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
         .. epigraph::
 
            For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
@@ -11355,7 +11402,7 @@ class CfnWebACL(
 
     The rules in a web ACL can be a combination of explicitly defined rules and rule groups that you reference from the web ACL. The rule groups can be rule groups that you manage or rule groups that are managed by others.
 
-    You can associate a web ACL with one or more AWS resources to protect. The resources can be an Amazon CloudFront distribution, an Amazon API Gateway REST API, an Application Load Balancer , an AWS AppSync GraphQL API , an Amazon Cognito user pool, an AWS App Runner service, an AWS Amplify application, or an AWS Verified Access instance.
+    You can associate a web ACL with one or more AWS resources to protect. The resources can be an Amazon CloudFront distribution, an  REST API, an Application Load Balancer , an AWS AppSync GraphQL API , an Amazon Cognito user pool, an AWS App Runner service, an AWS Amplify application, or an AWS Verified Access instance.
 
     For more information, see `Web access control lists (web ACLs) <https://docs.aws.amazon.com/waf/latest/developerguide/web-acl.html>`_ in the *AWS WAF developer guide* .
 
@@ -11363,7 +11410,7 @@ class CfnWebACL(
 
     If you use Shield Advanced automatic application layer DDoS mitigation, the web ACLs that you use with automatic mitigation have a rule group rule whose name starts with ``ShieldMitigationRuleGroup`` . This rule is used for automatic mitigations and it's managed for you in the web ACL by Shield Advanced and AWS WAF . You'll see the rule listed among the web ACL rules when you view the web ACL through the AWS WAF interfaces.
 
-    When you manage the web ACL through AWS CloudFormation interfaces, you won't see the Shield Advanced rule. AWS CloudFormation doesn't include this type of rule in the stack drift status between the actual configuration of the web ACL and your web ACL template.
+    When you manage the web ACL through CloudFormation interfaces, you won't see the Shield Advanced rule. CloudFormation doesn't include this type of rule in the stack drift status between the actual configuration of the web ACL and your web ACL template.
 
     Don't add the Shield Advanced rule group rule to your web ACL template. The rule shouldn't be in your template. When you update the web ACL template in a stack, the Shield Advanced rule is maintained for you by AWS WAF in the resulting web ACL.
 
@@ -11404,7 +11451,7 @@ class CfnWebACL(
         :param scope_: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param default_action: The action to perform if none of the ``Rules`` contained in the ``WebACL`` match.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` . For information about how to define the association of the web ACL with your resource, see ``WebACLAssociation`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` . For information about how to define the association of the web ACL with your resource, see ``WebACLAssociation`` .
         :param visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection.
         :param application_config: Returns a list of ``ApplicationAttribute`` s.
         :param association_config: Specifies custom configurations for the associations between the web ACL and protected resources. Use this to customize the maximum size of the request body that your protected resources forward to AWS WAF for inspection. You can customize this setting for CloudFront, API Gateway, Amazon Cognito, App Runner, or Verified Access resources. The default setting is 16 KB (16,384 bytes). .. epigraph:: You are charged additional fees when your protected resources forward body sizes that are larger than the default. For more information, see `AWS WAF Pricing <https://docs.aws.amazon.com/waf/pricing/>`_ . For Application Load Balancer and AWS AppSync , the limit is fixed at 8 KB (8,192 bytes).
@@ -11442,6 +11489,17 @@ class CfnWebACL(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForWebACL")
+    @builtins.classmethod
+    def arn_for_web_acl(cls, resource: _IWebACLRef_3dd0843c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__29507d6097c3a609b45bd6193fde456a7bf0b8092b71e159f6482bdc25de1a89)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWebACL", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -21349,7 +21407,7 @@ class CfnWebACLAssociation(
 
     For information, including how to migrate your AWS WAF resources from the prior release, see the `AWS WAF developer guide <https://docs.aws.amazon.com/waf/latest/developerguide/waf-chapter.html>`_ .
 
-    Use a web ACL association to define an association between a web ACL and a regional application resource, to protect the resource. A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, an AWS Amplify application, or an AWS Verified Access instance.
+    Use a web ACL association to define an association between a web ACL and a regional application resource, to protect the resource. A regional application can be an Application Load Balancer (ALB), an  REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, an AWS Amplify application, or an AWS Verified Access instance.
 
     For Amazon CloudFront , don't use this resource. Instead, use your CloudFront distribution configuration. To associate a web ACL with a distribution, provide the Amazon Resource Name (ARN) of the ``WebACL`` to your CloudFront distribution configuration. To disassociate a web ACL, provide an empty ARN. For information, see `AWS::CloudFront::Distribution <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html>`_ .
 
@@ -21390,7 +21448,7 @@ class CfnWebACLAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        resource_arn: builtins.str,
+        resource_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c],
         web_acl_arn: builtins.str,
     ) -> None:
         '''Create a new ``AWS::WAFv2::WebACLAssociation``.
@@ -21487,7 +21545,7 @@ class CfnWebACLAssociationProps:
     def __init__(
         self,
         *,
-        resource_arn: builtins.str,
+        resource_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c],
         web_acl_arn: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnWebACLAssociation``.
@@ -21520,7 +21578,9 @@ class CfnWebACLAssociationProps:
         }
 
     @builtins.property
-    def resource_arn(self) -> builtins.str:
+    def resource_arn(
+        self,
+    ) -> typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c]:
         '''The Amazon Resource Name (ARN) of the resource to associate with the web ACL.
 
         The ARN must be in one of the following formats:
@@ -21537,7 +21597,7 @@ class CfnWebACLAssociationProps:
         '''
         result = self._values.get("resource_arn")
         assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c], result)
 
     @builtins.property
     def web_acl_arn(self) -> builtins.str:
@@ -21605,7 +21665,7 @@ class CfnWebACLProps:
         '''Properties for defining a ``CfnWebACL``.
 
         :param default_action: The action to perform if none of the ``Rules`` contained in the ``WebACL`` match.
-        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` . For information about how to define the association of the web ACL with your resource, see ``WebACLAssociation`` .
+        :param scope: Specifies whether this is for an Amazon CloudFront distribution or for a regional application. For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` . .. epigraph:: For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` . For information about how to define the association of the web ACL with your resource, see ``WebACLAssociation`` .
         :param visibility_config: Defines and enables Amazon CloudWatch metrics and web request sample collection.
         :param application_config: Returns a list of ``ApplicationAttribute`` s.
         :param association_config: Specifies custom configurations for the associations between the web ACL and protected resources. Use this to customize the maximum size of the request body that your protected resources forward to AWS WAF for inspection. You can customize this setting for CloudFront, API Gateway, Amazon Cognito, App Runner, or Verified Access resources. The default setting is 16 KB (16,384 bytes). .. epigraph:: You are charged additional fees when your protected resources forward body sizes that are larger than the default. For more information, see `AWS WAF Pricing <https://docs.aws.amazon.com/waf/pricing/>`_ . For Application Load Balancer and AWS AppSync , the limit is fixed at 8 KB (8,192 bytes).
@@ -21690,7 +21750,7 @@ class CfnWebACLProps:
     def scope(self) -> builtins.str:
         '''Specifies whether this is for an Amazon CloudFront distribution or for a regional application.
 
-        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an Amazon API Gateway REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
+        For an AWS Amplify application, use ``CLOUDFRONT`` . A regional application can be an Application Load Balancer (ALB), an  REST API, an AWS AppSync GraphQL API, an Amazon Cognito user pool, an AWS App Runner service, or an AWS Verified Access instance. Valid Values are ``CLOUDFRONT`` and ``REGIONAL`` .
         .. epigraph::
 
            For ``CLOUDFRONT`` , you must create your WAFv2 resources in the US East (N. Virginia) Region, ``us-east-1`` .
@@ -21914,6 +21974,12 @@ def _typecheckingstub__039afc69c65e0dd02b0d7963f7fa0f2983949d351922a3fbe8afc7cd0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__201f713fec3926208232a5faee8c8e61640f612aa9c6020f96795d8c0e1eb50c(
+    resource: _IIPSetRef_7ceca2ca,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0600a367beb5e92220f305b2a290f7e6c367a23cdd9bdc5ba244ae1705a05b3a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21978,8 +22044,8 @@ def _typecheckingstub__8a8c4ba5ee1b98a4ed1dd5001182ec8712406026687793bcb17c7a787
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_destination_configs: typing.Sequence[builtins.str],
-    resource_arn: builtins.str,
+    log_destination_configs: typing.Sequence[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]],
+    resource_arn: typing.Union[builtins.str, _IWebACLRef_3dd0843c],
     logging_filter: typing.Any = None,
     redacted_fields: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.FieldToMatchProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -22098,8 +22164,8 @@ def _typecheckingstub__fcdbe2344105f56809989a50b71b674a0abcb188986d4b216ba3fc5f4
 
 def _typecheckingstub__713893ab58a2ac0a37391a960bcaeb40dad62a9addec656d6016e0911ff1d752(
     *,
-    log_destination_configs: typing.Sequence[builtins.str],
-    resource_arn: builtins.str,
+    log_destination_configs: typing.Sequence[typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]],
+    resource_arn: typing.Union[builtins.str, _IWebACLRef_3dd0843c],
     logging_filter: typing.Any = None,
     redacted_fields: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.FieldToMatchProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -22115,6 +22181,12 @@ def _typecheckingstub__c9cac4ad6f53737b9539cafcf1c5335cc1730b94e91e16609b8484eeb
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7fe577888e5b3e8cd39fb3ecf6e411adfb5dc3ce1dcd51c7e7d18726416dda1f(
+    resource: _IRegexPatternSetRef_4af57c5a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22186,6 +22258,12 @@ def _typecheckingstub__39414085bb3516b24d65751cc1c079ecf5858068f282c2e495c801870
     name: typing.Optional[builtins.str] = None,
     rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuleGroup.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__baeae4b260465d3d290925f1b2728f47b446311cacba91113fb14ac94e4220b3(
+    resource: _IRuleGroupRef_42ed609b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22791,6 +22869,12 @@ def _typecheckingstub__03030a65c492e95a1d1ae5ddafd6acbb9efdfa7e18b6367ac7e03eb8f
     rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWebACL.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     token_domains: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__29507d6097c3a609b45bd6193fde456a7bf0b8092b71e159f6482bdc25de1a89(
+    resource: _IWebACLRef_3dd0843c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23651,7 +23735,7 @@ def _typecheckingstub__ea3ed0968a72c37b5b8cc6d169658fe191a7ff1683a934d6fbd9df313
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    resource_arn: builtins.str,
+    resource_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c],
     web_acl_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -23683,7 +23767,7 @@ def _typecheckingstub__8901144ebc2cb9bb94e2f5572d5259c7d90c20c9705517f4d16a8fdaa
 
 def _typecheckingstub__93cbb499bbbd2600e53f0e1d138ab15569244c877052ef575c5114953859a4db(
     *,
-    resource_arn: builtins.str,
+    resource_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1, _IGraphQLApiRef_d46d77ba, _IWebACLRef_3dd0843c],
     web_acl_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""

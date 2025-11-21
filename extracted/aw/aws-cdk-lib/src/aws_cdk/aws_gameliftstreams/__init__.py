@@ -165,6 +165,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_2ee70e7c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c94c187779bbccffe5da1d4a0c4f62df421d8664f8a29a623939455de67474bc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -618,7 +629,7 @@ class CfnStreamGroup(
     Values for capacity must be whole number multiples of the tenancy value of the stream group's stream class.
     .. epigraph::
 
-       Application association is not currently supported in AWS CloudFormation . To link additional applications to a stream group, use the Amazon GameLift Streams console or the AWS CLI .
+       Application association is not currently supported in CloudFormation . To link additional applications to a stream group, use the Amazon GameLift Streams console or the AWS CLI .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gameliftstreams-streamgroup.html
     :cloudformationResource: AWS::GameLiftStreams::StreamGroup
@@ -686,6 +697,17 @@ class CfnStreamGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStreamGroup")
+    @builtins.classmethod
+    def arn_for_stream_group(cls, resource: _IStreamGroupRef_ad23a873) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a8540278fdd3b8a4498e2cc4cfa8e5b9cc8d4b5c4d3cc416a36f562cacdbd5ba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStreamGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1208,6 +1230,12 @@ def _typecheckingstub__98acfa7b89cf716a7d04ae3a442e9ce27afcc5fb822ef47ddf9f1d824
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c94c187779bbccffe5da1d4a0c4f62df421d8664f8a29a623939455de67474bc(
+    resource: _IApplicationRef_2ee70e7c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2d76bc5828ad9405857a447dd5e09d353f094e8dace57a54f0cf310c8491cdf2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1292,6 +1320,12 @@ def _typecheckingstub__79f0f973b06de7ae1a48df1df69579c9c8dfd0885945a959686fdddf3
     stream_class: builtins.str,
     default_application: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamGroup.DefaultApplicationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a8540278fdd3b8a4498e2cc4cfa8e5b9cc8d4b5c4d3cc416a36f562cacdbd5ba(
+    resource: _IStreamGroupRef_ad23a873,
 ) -> None:
     """Type checking stubs"""
     pass

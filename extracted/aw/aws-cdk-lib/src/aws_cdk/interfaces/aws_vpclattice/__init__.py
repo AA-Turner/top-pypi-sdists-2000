@@ -132,6 +132,55 @@ class AuthPolicyReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_vpclattice.DomainVerificationReference",
+    jsii_struct_bases=[],
+    name_mapping={"domain_verification_arn": "domainVerificationArn"},
+)
+class DomainVerificationReference:
+    def __init__(self, *, domain_verification_arn: builtins.str) -> None:
+        '''A reference to a DomainVerification resource.
+
+        :param domain_verification_arn: The Arn of the DomainVerification resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            
+            domain_verification_reference = interfaces_aws_vpclattice.DomainVerificationReference(
+                domain_verification_arn="domainVerificationArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ef18a4e614451bd32b33743bc39d1adf9ef27a0a1833a41e87b1c46cc07d2a7)
+            check_type(argname="argument domain_verification_arn", value=domain_verification_arn, expected_type=type_hints["domain_verification_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "domain_verification_arn": domain_verification_arn,
+        }
+
+    @builtins.property
+    def domain_verification_arn(self) -> builtins.str:
+        '''The Arn of the DomainVerification resource.'''
+        result = self._values.get("domain_verification_arn")
+        assert result is not None, "Required property 'domain_verification_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DomainVerificationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.interface(
     jsii_type="aws-cdk-lib.interfaces.aws_vpclattice.IAccessLogSubscriptionRef"
 )
@@ -222,6 +271,53 @@ class _IAuthPolicyRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAuthPolicyRef).__jsii_proxy_class__ = lambda : _IAuthPolicyRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_vpclattice.IDomainVerificationRef"
+)
+class IDomainVerificationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a DomainVerification.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="domainVerificationRef")
+    def domain_verification_ref(self) -> DomainVerificationReference:
+        '''(experimental) A reference to a DomainVerification resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDomainVerificationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DomainVerification.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_vpclattice.IDomainVerificationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="domainVerificationRef")
+    def domain_verification_ref(self) -> DomainVerificationReference:
+        '''(experimental) A reference to a DomainVerification resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(DomainVerificationReference, jsii.get(self, "domainVerificationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDomainVerificationRef).__jsii_proxy_class__ = lambda : _IDomainVerificationRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_vpclattice.IListenerRef")
@@ -1295,8 +1391,10 @@ class TargetGroupReference:
 __all__ = [
     "AccessLogSubscriptionReference",
     "AuthPolicyReference",
+    "DomainVerificationReference",
     "IAccessLogSubscriptionRef",
     "IAuthPolicyRef",
+    "IDomainVerificationRef",
     "IListenerRef",
     "IResourceConfigurationRef",
     "IResourceGatewayRef",
@@ -1333,6 +1431,13 @@ def _typecheckingstub__eee6fd0541b13ea53ebc8ac1ffc56bc5e0359ce79eb968e43350edd24
 def _typecheckingstub__6b4222593547993629599ee186ee2a7ac5673c4cd311653690629108d2b945f1(
     *,
     resource_identifier: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ef18a4e614451bd32b33743bc39d1adf9ef27a0a1833a41e87b1c46cc07d2a7(
+    *,
+    domain_verification_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1414,5 +1519,5 @@ def _typecheckingstub__41490e38d96c29ab679d2317b367a7029adf48425cfcd15e0615e8325
     """Type checking stubs"""
     pass
 
-for cls in [IAccessLogSubscriptionRef, IAuthPolicyRef, IListenerRef, IResourceConfigurationRef, IResourceGatewayRef, IResourcePolicyRef, IRuleRef, IServiceNetworkRef, IServiceNetworkResourceAssociationRef, IServiceNetworkServiceAssociationRef, IServiceNetworkVpcAssociationRef, IServiceRef, ITargetGroupRef]:
+for cls in [IAccessLogSubscriptionRef, IAuthPolicyRef, IDomainVerificationRef, IListenerRef, IResourceConfigurationRef, IResourceGatewayRef, IResourcePolicyRef, IRuleRef, IServiceNetworkRef, IServiceNetworkResourceAssociationRef, IServiceNetworkServiceAssociationRef, IServiceNetworkVpcAssociationRef, IServiceRef, ITargetGroupRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

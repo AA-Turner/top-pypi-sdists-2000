@@ -1358,6 +1358,38 @@ fn = lambda_.Function(self, "MyFunction",
 )
 ```
 
+## Lambda with Tenant Isolation
+
+Lambda functions can be configured with tenant isolation to ensure that different tenants never share the same execution environment. This is useful for SaaS applications where you need to guarantee compute isolation between untrusted tenants while using a single Lambda function.
+
+```python
+fn = lambda_.Function(self, "MyFunction",
+    runtime=lambda_.Runtime.NODEJS_18_X,
+    handler="index.handler",
+    code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler")),
+    tenancy_config=lambda_.TenancyConfig.PER_TENANT
+)
+```
+
+**Important considerations:**
+
+* **Immutable configuration**: Tenant isolation can only be configured during function creation and cannot be modified on existing functions.
+* **Incompatible features**: The following features are not compatible with tenant isolation and will result in CloudFormation deployment errors:
+
+  * **Provisioned Concurrency**
+  * **Function URLs**
+  * **SnapStart**
+  * **Event Source Mappings** (except API Gateway):
+
+    * ❌ SQS
+    * ❌ DynamoDB
+    * ❌ Kinesis
+    * ❌ MSK
+    * ❌ Self-managed Kafka
+    * ✅ API Gateway (supported)
+
+CDK validates these restrictions at synthesis time and provides clear error messages when incompatible features are configured.
+
 ### Legacy Log Retention
 
 As an alternative to providing a custom, user controlled log group, the legacy `logRetention` property can be used to set a different expiration period.
@@ -1758,6 +1790,16 @@ from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
 from ..aws_signer import ISigningProfile as _ISigningProfile_5140a756
 from ..aws_sns import ITopic as _ITopic_9eca4852
 from ..aws_sqs import IQueue as _IQueue_7ed6f679
+from ..interfaces.aws_cognito import IUserPoolRef as _IUserPoolRef_0b7d02b5
+from ..interfaces.aws_events import IRuleRef as _IRuleRef_4038a611
+from ..interfaces.aws_iam import (
+    IRoleRef as _IRoleRef_8400221f, IUserRef as _IUserRef_b0ccca76
+)
+from ..interfaces.aws_iot import ITopicRuleRef as _ITopicRuleRef_748e9f37
+from ..interfaces.aws_kinesis import IStreamRef as _IStreamRef_b484e253
+from ..interfaces.aws_kinesisfirehose import (
+    IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53
+)
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_lambda import (
     AliasReference as _AliasReference_de21ecaa,
@@ -1781,6 +1823,11 @@ from ..interfaces.aws_lambda import (
     UrlReference as _UrlReference_4ae6d27d,
     VersionReference as _VersionReference_91666182,
 )
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
+from ..interfaces.aws_msk import IClusterRef as _IClusterRef_c904150a
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
+from ..interfaces.aws_sqs import IQueueRef as _IQueueRef_fa8b2198
 
 
 @jsii.data_type(
@@ -3365,6 +3412,17 @@ class CfnAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAlias")
+    @builtins.classmethod
+    def arn_for_alias(cls, resource: _IAliasRef_ff1cf51c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be2b336adaa6a3baddb386ebe76ea44a8fc21caf406ad043b9f5df28f691a070)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlias", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3903,7 +3961,7 @@ class CfnCodeSigningConfig(
         :param allowed_publishers: List of allowed publishers.
         :param code_signing_policies: The code signing policy controls the validation failure action for signature mismatch or expiry.
         :param description: Code signing configuration description.
-        :param tags: A list of tags to add to the code signing configuration. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of tags to add to the code signing configuration. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__df94ded3fb87e8ca56187dcab5a6bf12d335e2671120df0386f527f736b58b76)
@@ -3917,6 +3975,20 @@ class CfnCodeSigningConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCodeSigningConfig")
+    @builtins.classmethod
+    def arn_for_code_signing_config(
+        cls,
+        resource: _ICodeSigningConfigRef_1d909622,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4354bcf64a3d47874832c73a1dbc66c91c2012cfe7b46cbeafc0f192fbf49022)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSigningConfig", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4188,7 +4260,7 @@ class CfnCodeSigningConfigProps:
         :param allowed_publishers: List of allowed publishers.
         :param code_signing_policies: The code signing policy controls the validation failure action for signature mismatch or expiry.
         :param description: Code signing configuration description.
-        :param tags: A list of tags to add to the code signing configuration. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of tags to add to the code signing configuration. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-codesigningconfig.html
         :exampleMetadata: fixture=_generated
@@ -4269,7 +4341,7 @@ class CfnCodeSigningConfigProps:
 
         .. epigraph::
 
-           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-codesigningconfig.html#cfn-lambda-codesigningconfig-tags
         '''
@@ -4331,7 +4403,7 @@ class CfnEventInvokeConfig(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         qualifier: builtins.str,
         destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventInvokeConfig.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
@@ -4698,7 +4770,7 @@ class CfnEventInvokeConfigProps:
     def __init__(
         self,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         qualifier: builtins.str,
         destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventInvokeConfig.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
@@ -4757,7 +4829,7 @@ class CfnEventInvokeConfigProps:
             self._values["maximum_retry_attempts"] = maximum_retry_attempts
 
     @builtins.property
-    def function_name(self) -> builtins.str:
+    def function_name(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
         '''The name of the Lambda function.
 
         *Minimum* : ``1``
@@ -4770,7 +4842,7 @@ class CfnEventInvokeConfigProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
 
     @builtins.property
     def qualifier(self) -> builtins.str:
@@ -4907,6 +4979,9 @@ class CfnEventSourceMapping(
             ),
             function_response_types=["functionResponseTypes"],
             kms_key_arn="kmsKeyArn",
+            logging_config=lambda.CfnEventSourceMapping.LoggingConfigProperty(
+                system_log_level="systemLogLevel"
+            ),
             maximum_batching_window_in_seconds=123,
             maximum_record_age_in_seconds=123,
             maximum_retry_attempts=123,
@@ -4916,7 +4991,8 @@ class CfnEventSourceMapping(
             parallelization_factor=123,
             provisioned_poller_config=lambda.CfnEventSourceMapping.ProvisionedPollerConfigProperty(
                 maximum_pollers=123,
-                minimum_pollers=123
+                minimum_pollers=123,
+                poller_group_name="pollerGroupName"
             ),
             queues=["queues"],
             scaling_config=lambda.CfnEventSourceMapping.ScalingConfigProperty(
@@ -4961,17 +5037,18 @@ class CfnEventSourceMapping(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
         amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         batch_size: typing.Optional[jsii.Number] = None,
         bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.DestinationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.DocumentDBEventSourceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        event_source_arn: typing.Optional[builtins.str] = None,
+        event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
         filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.FilterCriteriaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
+        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEventSourceMapping.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -5003,21 +5080,22 @@ class CfnEventSourceMapping(
         :param event_source_arn: The Amazon Resource Name (ARN) of the event source. - *Amazon Kinesis* – The ARN of the data stream or a stream consumer. - *Amazon DynamoDB Streams* – The ARN of the stream. - *Amazon Simple Queue Service* – The ARN of the queue. - *Amazon Managed Streaming for Apache Kafka* – The ARN of the cluster or the ARN of the VPC connection (for `cross-account event source mappings <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#msk-multi-vpc>`_ ). - *Amazon MQ* – The ARN of the broker. - *Amazon DocumentDB* – The ARN of the DocumentDB change stream.
         :param filter_criteria: An object that defines the filter criteria that determine whether Lambda should process an event. For more information, see `Lambda event filtering <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html>`_ .
         :param function_response_types: (Kinesis, DynamoDB Streams, and SQS) A list of current response type enums applied to the event source mapping. Valid Values: ``ReportBatchItemFailures``
-        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
+        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
+        :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param maximum_batching_window_in_seconds: The maximum amount of time, in seconds, that Lambda spends gathering records before invoking the function. *Default ( Kinesis , DynamoDB , Amazon SQS event sources)* : 0 *Default ( Amazon MSK , Kafka, Amazon MQ , Amazon DocumentDB event sources)* : 500 ms *Related setting:* For Amazon SQS event sources, when you set ``BatchSize`` to a value greater than 10, you must set ``MaximumBatchingWindowInSeconds`` to at least 1.
         :param maximum_record_age_in_seconds: (Kinesis and DynamoDB Streams only) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
         :param maximum_retry_attempts: (Kinesis and DynamoDB Streams only) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
         :param metrics_config: The metrics configuration for your event source. For more information, see `Event source mapping metrics <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#event-source-mapping-metrics>`_ .
         :param parallelization_factor: (Kinesis and DynamoDB Streams only) The number of batches to process concurrently from each shard. The default value is 1.
-        :param provisioned_poller_config: (Amazon MSK and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
+        :param provisioned_poller_config: (Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
         :param queues: (Amazon MQ) The name of the Amazon MQ broker destination queue to consume.
-        :param scaling_config: (Amazon SQS only) The scaling configuration for the event source. For more information, see `Configuring maximum concurrency for Amazon SQS event sources <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-max-concurrency>`_ .
+        :param scaling_config: This property is for Amazon SQS event sources only. You cannot use ``ProvisionedPollerConfig`` while using ``ScalingConfig`` . These options are mutually exclusive. To remove the scaling configuration, pass an empty value.
         :param self_managed_event_source: The self-managed Apache Kafka cluster for your event source.
         :param self_managed_kafka_event_source_config: Specific configuration settings for a self-managed Apache Kafka event source.
         :param source_access_configurations: An array of the authentication protocol, VPC components, or virtual host to secure and define your event source.
         :param starting_position: The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB. - *LATEST* - Read only new records. - *TRIM_HORIZON* - Process all available records. - *AT_TIMESTAMP* - Specify a time from which to start reading records.
         :param starting_position_timestamp: With ``StartingPosition`` set to ``AT_TIMESTAMP`` , the time from which to start reading, in Unix time seconds. ``StartingPositionTimestamp`` cannot be in the future.
-        :param tags: A list of tags to add to the event source mapping. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of tags to add to the event source mapping. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
         :param topics: The name of the Kafka topic.
         :param tumbling_window_in_seconds: (Kinesis and DynamoDB Streams only) The duration in seconds of a processing window for DynamoDB and Kinesis Streams event sources. A value of 0 seconds indicates no tumbling window.
         '''
@@ -5037,6 +5115,7 @@ class CfnEventSourceMapping(
             filter_criteria=filter_criteria,
             function_response_types=function_response_types,
             kms_key_arn=kms_key_arn,
+            logging_config=logging_config,
             maximum_batching_window_in_seconds=maximum_batching_window_in_seconds,
             maximum_record_age_in_seconds=maximum_record_age_in_seconds,
             maximum_retry_attempts=maximum_retry_attempts,
@@ -5056,6 +5135,20 @@ class CfnEventSourceMapping(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEventSourceMapping")
+    @builtins.classmethod
+    def arn_for_event_source_mapping(
+        cls,
+        resource: _IEventSourceMappingRef_4f65ddd1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8008b865c4dba070edd3cc4b8abba8299cc9642118e7f4c9ba62f362515ef388)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventSourceMapping", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5291,7 +5384,7 @@ class CfnEventSourceMapping(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .'''
+        '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -5300,6 +5393,24 @@ class CfnEventSourceMapping(
             type_hints = typing.get_type_hints(_typecheckingstub__5110117b05ec57a413615f5bf30afd8bbafb2be839685cf0e158a1b4de420fbc)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "kmsKeyArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="loggingConfig")
+    def logging_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]]:
+        '''The function's Amazon CloudWatch Logs configuration settings.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]], jsii.get(self, "loggingConfig"))
+
+    @logging_config.setter
+    def logging_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.LoggingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50572dc451e3255eed97449e37c01de9cf1dd845d673eda663a86b2a920b36c6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "loggingConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="maximumBatchingWindowInSeconds")
@@ -5382,7 +5493,7 @@ class CfnEventSourceMapping(
     def provisioned_poller_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]]:
-        '''(Amazon MSK and self-managed Apache Kafka only) The provisioned mode configuration for the event source.'''
+        '''(Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ProvisionedPollerConfigProperty"]], jsii.get(self, "provisionedPollerConfig"))
 
     @provisioned_poller_config.setter
@@ -5413,7 +5524,7 @@ class CfnEventSourceMapping(
     def scaling_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ScalingConfigProperty"]]:
-        '''(Amazon SQS only) The scaling configuration for the event source.'''
+        '''This property is for Amazon SQS event sources only.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.ScalingConfigProperty"]], jsii.get(self, "scalingConfig"))
 
     @scaling_config.setter
@@ -5957,6 +6068,63 @@ class CfnEventSourceMapping(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnEventSourceMapping.LoggingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"system_log_level": "systemLogLevel"},
+    )
+    class LoggingConfigProperty:
+        def __init__(
+            self,
+            *,
+            system_log_level: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''The function's Amazon CloudWatch Logs configuration settings.
+
+            :param system_log_level: Set this property to filter the system logs for your function that Lambda sends to CloudWatch. Lambda only sends system logs at the selected level of detail and lower, where ``DEBUG`` is the highest level and ``WARN`` is the lowest.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-loggingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                logging_config_property = lambda.CfnEventSourceMapping.LoggingConfigProperty(
+                    system_log_level="systemLogLevel"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2d33f06f90220bba548777a045b654eb6bd18cb11ee50c4c1e4fc8b6f0736c87)
+                check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if system_log_level is not None:
+                self._values["system_log_level"] = system_log_level
+
+        @builtins.property
+        def system_log_level(self) -> typing.Optional[builtins.str]:
+            '''Set this property to filter the system logs for your function that Lambda sends to CloudWatch.
+
+            Lambda only sends system logs at the selected level of detail and lower, where ``DEBUG`` is the highest level and ``WARN`` is the lowest.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-loggingconfig.html#cfn-lambda-eventsourcemapping-loggingconfig-systemloglevel
+            '''
+            result = self._values.get("system_log_level")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LoggingConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lambda.CfnEventSourceMapping.MetricsConfigProperty",
         jsii_struct_bases=[],
         name_mapping={"metrics": "metrics"},
@@ -6085,6 +6253,7 @@ class CfnEventSourceMapping(
         name_mapping={
             "maximum_pollers": "maximumPollers",
             "minimum_pollers": "minimumPollers",
+            "poller_group_name": "pollerGroupName",
         },
     )
     class ProvisionedPollerConfigProperty:
@@ -6093,11 +6262,13 @@ class CfnEventSourceMapping(
             *,
             maximum_pollers: typing.Optional[jsii.Number] = None,
             minimum_pollers: typing.Optional[jsii.Number] = None,
+            poller_group_name: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ configuration for the event source. Use provisioned mode to customize the minimum and maximum number of event pollers for your event source.
+            '''The `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ configuration for the event source. Use Provisioned Mode to customize the minimum and maximum number of event pollers for your event source.
 
-            :param maximum_pollers: The maximum number of event pollers this event source can scale up to.
-            :param minimum_pollers: The minimum number of event pollers this event source can scale down to.
+            :param maximum_pollers: The maximum number of event pollers this event source can scale up to. For Amazon SQS events source mappings, default is 200, and minimum value allowed is 2. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 200, and minimum value allowed is 1.
+            :param minimum_pollers: The minimum number of event pollers this event source can scale down to. For Amazon SQS events source mappings, default is 2, and minimum 2 required. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 1.
+            :param poller_group_name: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html
             :exampleMetadata: fixture=_generated
@@ -6110,22 +6281,28 @@ class CfnEventSourceMapping(
                 
                 provisioned_poller_config_property = lambda.CfnEventSourceMapping.ProvisionedPollerConfigProperty(
                     maximum_pollers=123,
-                    minimum_pollers=123
+                    minimum_pollers=123,
+                    poller_group_name="pollerGroupName"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__a9766af813d9de7c91becd9b74bcc63c9c769afaf9eb6a30dc155ee230decc1b)
                 check_type(argname="argument maximum_pollers", value=maximum_pollers, expected_type=type_hints["maximum_pollers"])
                 check_type(argname="argument minimum_pollers", value=minimum_pollers, expected_type=type_hints["minimum_pollers"])
+                check_type(argname="argument poller_group_name", value=poller_group_name, expected_type=type_hints["poller_group_name"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if maximum_pollers is not None:
                 self._values["maximum_pollers"] = maximum_pollers
             if minimum_pollers is not None:
                 self._values["minimum_pollers"] = minimum_pollers
+            if poller_group_name is not None:
+                self._values["poller_group_name"] = poller_group_name
 
         @builtins.property
         def maximum_pollers(self) -> typing.Optional[jsii.Number]:
             '''The maximum number of event pollers this event source can scale up to.
+
+            For Amazon SQS events source mappings, default is 200, and minimum value allowed is 2. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 200, and minimum value allowed is 1.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html#cfn-lambda-eventsourcemapping-provisionedpollerconfig-maximumpollers
             '''
@@ -6136,10 +6313,20 @@ class CfnEventSourceMapping(
         def minimum_pollers(self) -> typing.Optional[jsii.Number]:
             '''The minimum number of event pollers this event source can scale down to.
 
+            For Amazon SQS events source mappings, default is 2, and minimum 2 required. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 1.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html#cfn-lambda-eventsourcemapping-provisionedpollerconfig-minimumpollers
             '''
             result = self._values.get("minimum_pollers")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def poller_group_name(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html#cfn-lambda-eventsourcemapping-provisionedpollerconfig-pollergroupname
+            '''
+            result = self._values.get("poller_group_name")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6700,6 +6887,7 @@ class CfnEventSourceMapping(
         "filter_criteria": "filterCriteria",
         "function_response_types": "functionResponseTypes",
         "kms_key_arn": "kmsKeyArn",
+        "logging_config": "loggingConfig",
         "maximum_batching_window_in_seconds": "maximumBatchingWindowInSeconds",
         "maximum_record_age_in_seconds": "maximumRecordAgeInSeconds",
         "maximum_retry_attempts": "maximumRetryAttempts",
@@ -6722,17 +6910,18 @@ class CfnEventSourceMappingProps:
     def __init__(
         self,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
         amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         batch_size: typing.Optional[jsii.Number] = None,
         bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        event_source_arn: typing.Optional[builtins.str] = None,
+        event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
         filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
+        logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
         maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -6762,21 +6951,22 @@ class CfnEventSourceMappingProps:
         :param event_source_arn: The Amazon Resource Name (ARN) of the event source. - *Amazon Kinesis* – The ARN of the data stream or a stream consumer. - *Amazon DynamoDB Streams* – The ARN of the stream. - *Amazon Simple Queue Service* – The ARN of the queue. - *Amazon Managed Streaming for Apache Kafka* – The ARN of the cluster or the ARN of the VPC connection (for `cross-account event source mappings <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#msk-multi-vpc>`_ ). - *Amazon MQ* – The ARN of the broker. - *Amazon DocumentDB* – The ARN of the DocumentDB change stream.
         :param filter_criteria: An object that defines the filter criteria that determine whether Lambda should process an event. For more information, see `Lambda event filtering <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html>`_ .
         :param function_response_types: (Kinesis, DynamoDB Streams, and SQS) A list of current response type enums applied to the event source mapping. Valid Values: ``ReportBatchItemFailures``
-        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
+        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
+        :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param maximum_batching_window_in_seconds: The maximum amount of time, in seconds, that Lambda spends gathering records before invoking the function. *Default ( Kinesis , DynamoDB , Amazon SQS event sources)* : 0 *Default ( Amazon MSK , Kafka, Amazon MQ , Amazon DocumentDB event sources)* : 500 ms *Related setting:* For Amazon SQS event sources, when you set ``BatchSize`` to a value greater than 10, you must set ``MaximumBatchingWindowInSeconds`` to at least 1.
         :param maximum_record_age_in_seconds: (Kinesis and DynamoDB Streams only) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
         :param maximum_retry_attempts: (Kinesis and DynamoDB Streams only) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
         :param metrics_config: The metrics configuration for your event source. For more information, see `Event source mapping metrics <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#event-source-mapping-metrics>`_ .
         :param parallelization_factor: (Kinesis and DynamoDB Streams only) The number of batches to process concurrently from each shard. The default value is 1.
-        :param provisioned_poller_config: (Amazon MSK and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
+        :param provisioned_poller_config: (Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
         :param queues: (Amazon MQ) The name of the Amazon MQ broker destination queue to consume.
-        :param scaling_config: (Amazon SQS only) The scaling configuration for the event source. For more information, see `Configuring maximum concurrency for Amazon SQS event sources <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-max-concurrency>`_ .
+        :param scaling_config: This property is for Amazon SQS event sources only. You cannot use ``ProvisionedPollerConfig`` while using ``ScalingConfig`` . These options are mutually exclusive. To remove the scaling configuration, pass an empty value.
         :param self_managed_event_source: The self-managed Apache Kafka cluster for your event source.
         :param self_managed_kafka_event_source_config: Specific configuration settings for a self-managed Apache Kafka event source.
         :param source_access_configurations: An array of the authentication protocol, VPC components, or virtual host to secure and define your event source.
         :param starting_position: The position in a stream from which to start reading. Required for Amazon Kinesis and Amazon DynamoDB. - *LATEST* - Read only new records. - *TRIM_HORIZON* - Process all available records. - *AT_TIMESTAMP* - Specify a time from which to start reading records.
         :param starting_position_timestamp: With ``StartingPosition`` set to ``AT_TIMESTAMP`` , the time from which to start reading, in Unix time seconds. ``StartingPositionTimestamp`` cannot be in the future.
-        :param tags: A list of tags to add to the event source mapping. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of tags to add to the event source mapping. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
         :param topics: The name of the Kafka topic.
         :param tumbling_window_in_seconds: (Kinesis and DynamoDB Streams only) The duration in seconds of a processing window for DynamoDB and Kinesis Streams event sources. A value of 0 seconds indicates no tumbling window.
 
@@ -6828,6 +7018,9 @@ class CfnEventSourceMappingProps:
                 ),
                 function_response_types=["functionResponseTypes"],
                 kms_key_arn="kmsKeyArn",
+                logging_config=lambda.CfnEventSourceMapping.LoggingConfigProperty(
+                    system_log_level="systemLogLevel"
+                ),
                 maximum_batching_window_in_seconds=123,
                 maximum_record_age_in_seconds=123,
                 maximum_retry_attempts=123,
@@ -6837,7 +7030,8 @@ class CfnEventSourceMappingProps:
                 parallelization_factor=123,
                 provisioned_poller_config=lambda.CfnEventSourceMapping.ProvisionedPollerConfigProperty(
                     maximum_pollers=123,
-                    minimum_pollers=123
+                    minimum_pollers=123,
+                    poller_group_name="pollerGroupName"
                 ),
                 queues=["queues"],
                 scaling_config=lambda.CfnEventSourceMapping.ScalingConfigProperty(
@@ -6889,6 +7083,7 @@ class CfnEventSourceMappingProps:
             check_type(argname="argument filter_criteria", value=filter_criteria, expected_type=type_hints["filter_criteria"])
             check_type(argname="argument function_response_types", value=function_response_types, expected_type=type_hints["function_response_types"])
             check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            check_type(argname="argument logging_config", value=logging_config, expected_type=type_hints["logging_config"])
             check_type(argname="argument maximum_batching_window_in_seconds", value=maximum_batching_window_in_seconds, expected_type=type_hints["maximum_batching_window_in_seconds"])
             check_type(argname="argument maximum_record_age_in_seconds", value=maximum_record_age_in_seconds, expected_type=type_hints["maximum_record_age_in_seconds"])
             check_type(argname="argument maximum_retry_attempts", value=maximum_retry_attempts, expected_type=type_hints["maximum_retry_attempts"])
@@ -6928,6 +7123,8 @@ class CfnEventSourceMappingProps:
             self._values["function_response_types"] = function_response_types
         if kms_key_arn is not None:
             self._values["kms_key_arn"] = kms_key_arn
+        if logging_config is not None:
+            self._values["logging_config"] = logging_config
         if maximum_batching_window_in_seconds is not None:
             self._values["maximum_batching_window_in_seconds"] = maximum_batching_window_in_seconds
         if maximum_record_age_in_seconds is not None:
@@ -6962,7 +7159,9 @@ class CfnEventSourceMappingProps:
             self._values["tumbling_window_in_seconds"] = tumbling_window_in_seconds
 
     @builtins.property
-    def function_name(self) -> builtins.str:
+    def function_name(
+        self,
+    ) -> typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad]:
         '''The name or ARN of the Lambda function.
 
         **Name formats** - *Function name* – ``MyFunction`` .
@@ -6977,7 +7176,7 @@ class CfnEventSourceMappingProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad], result)
 
     @builtins.property
     def amazon_managed_kafka_event_source_config(
@@ -7061,7 +7260,9 @@ class CfnEventSourceMappingProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def event_source_arn(self) -> typing.Optional[builtins.str]:
+    def event_source_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]]:
         '''The Amazon Resource Name (ARN) of the event source.
 
         - *Amazon Kinesis* – The ARN of the data stream or a stream consumer.
@@ -7074,7 +7275,7 @@ class CfnEventSourceMappingProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-eventsourcearn
         '''
         result = self._values.get("event_source_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]], result)
 
     @builtins.property
     def filter_criteria(
@@ -7102,12 +7303,23 @@ class CfnEventSourceMappingProps:
 
     @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
+        '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def logging_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.LoggingConfigProperty]]:
+        '''The function's Amazon CloudWatch Logs configuration settings.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-loggingconfig
+        '''
+        result = self._values.get("logging_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.LoggingConfigProperty]], result)
 
     @builtins.property
     def maximum_batching_window_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -7179,7 +7391,7 @@ class CfnEventSourceMappingProps:
     def provisioned_poller_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ProvisionedPollerConfigProperty]]:
-        '''(Amazon MSK and self-managed Apache Kafka only) The provisioned mode configuration for the event source.
+        '''(Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source.
 
         For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
 
@@ -7201,9 +7413,9 @@ class CfnEventSourceMappingProps:
     def scaling_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.ScalingConfigProperty]]:
-        '''(Amazon SQS only) The scaling configuration for the event source.
+        '''This property is for Amazon SQS event sources only.
 
-        For more information, see `Configuring maximum concurrency for Amazon SQS event sources <https://docs.aws.amazon.com/lambda/latest/dg/with-sqs.html#events-sqs-max-concurrency>`_ .
+        You cannot use ``ProvisionedPollerConfig`` while using ``ScalingConfig`` . These options are mutually exclusive. To remove the scaling configuration, pass an empty value.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-scalingconfig
         '''
@@ -7273,7 +7485,7 @@ class CfnEventSourceMappingProps:
 
         .. epigraph::
 
-           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-tags
         '''
@@ -7407,6 +7619,9 @@ class CfnFunction(
                 key="key",
                 value="value"
             )],
+            tenancy_config=lambda.CfnFunction.TenancyConfigProperty(
+                tenant_isolation_mode="tenantIsolationMode"
+            ),
             timeout=123,
             tracing_config=lambda.CfnFunction.TracingConfigProperty(
                 mode="mode"
@@ -7425,9 +7640,9 @@ class CfnFunction(
         id: builtins.str,
         *,
         code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-        code_signing_config_arn: typing.Optional[builtins.str] = None,
+        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7436,8 +7651,8 @@ class CfnFunction(
         function_name: typing.Optional[builtins.str] = None,
         handler: typing.Optional[builtins.str] = None,
         image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.ImageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
-        layers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
         logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
@@ -7447,6 +7662,7 @@ class CfnFunction(
         runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.RuntimeManagementConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.SnapStartProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.TenancyConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
         tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.TracingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7464,10 +7680,10 @@ class CfnFunction(
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
-        :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, AWS CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
-        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
+        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
         :param layers: A list of `function layers <https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html>`_ to add to the function's execution environment. Specify each layer by its ARN, including the version.
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param memory_size: The amount of `memory available to the function <https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console>`_ at runtime. Increasing the function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB. Note that new AWS accounts have reduced concurrency and memory quotas. AWS raises these quotas automatically based on your usage. You can also request a quota increase.
@@ -7477,7 +7693,8 @@ class CfnFunction(
         :param runtime: The identifier of the function's `runtime <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html>`_ . Runtime is required if the deployment package is a .zip file archive. Specifying a runtime results in an error if you're deploying a function using a container image. The following list includes deprecated runtimes. Lambda blocks creating new functions and updating existing functions shortly after each runtime is deprecated. For more information, see `Runtime use after deprecation <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-deprecation-levels>`_ . For a list of all currently supported runtimes, see `Supported runtimes <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtimes-supported>`_ .
         :param runtime_management_config: Sets the runtime management configuration for a function's version. For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
         :param snap_start: The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
-        :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tenancy_config: 
         :param timeout: The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds. For more information, see `Lambda execution environment <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html>`_ .
         :param tracing_config: Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .
         :param vpc_config: For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can access resources and the internet only through that VPC. For more information, see `Configuring a Lambda function to access resources in a VPC <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
@@ -7510,12 +7727,24 @@ class CfnFunction(
             runtime_management_config=runtime_management_config,
             snap_start=snap_start,
             tags=tags,
+            tenancy_config=tenancy_config,
             timeout=timeout,
             tracing_config=tracing_config,
             vpc_config=vpc_config,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFunction")
+    @builtins.classmethod
+    def arn_for_function(cls, resource: _IFunctionRef_2601eb33) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e79b88a70072303e0da56995cb507805f4233398a348e962a7b3cf121aec34ea)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFunction", [resource]))
 
     @jsii.member(jsii_name="fromFunctionArn")
     @builtins.classmethod
@@ -7832,7 +8061,7 @@ class CfnFunction(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt the following resources:.'''
+        '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that's used to encrypt the following resources:.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -7991,6 +8220,23 @@ class CfnFunction(
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]], jsii.get(self, "tenancyConfig"))
+
+    @tenancy_config.setter
+    def tenancy_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3bc85c6d0eed7e19d7938f47d9fbed1a3bc285103ee041df5e42d20226858747)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tenancyConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="timeout")
     def timeout(self) -> typing.Optional[jsii.Number]:
         '''The amount of time (in seconds) that Lambda allows a function to run before stopping it.'''
@@ -8066,7 +8312,7 @@ class CfnFunction(
 
             .. epigraph::
 
-               When you specify source code inline for a Node.js function, the ``index`` file that AWS CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
+               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
 
             Changes to a deployment package in Amazon S3 or a container image in ECR are not detected automatically during stack updates. To update the function code, change the object key or version in the template.
 
@@ -8074,8 +8320,8 @@ class CfnFunction(
             :param s3_bucket: An Amazon S3 bucket in the same AWS Region as your function. The bucket can be in a different AWS account .
             :param s3_key: The Amazon S3 key of the deployment package.
             :param s3_object_version: For versioned objects, the version of the deployment package object to use.
-            :param source_kms_key_arn: The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ .
-            :param zip_file: (Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` . .. epigraph:: When you specify source code inline for a Node.js function, the ``index`` file that AWS CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions. For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash. If you specify a function that interacts with an AWS CloudFormation custom resource, you don't have to write your own functions to send responses to the custom resource that invoked the function. AWS CloudFormation provides a response module ( `cfn-response <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html>`_ ) that simplifies sending responses. See `Using AWS Lambda with AWS CloudFormation <https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html>`_ for details.
+            :param source_kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ .
+            :param zip_file: (Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` . .. epigraph:: When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions. For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash. If you specify a function that interacts with an AWS CloudFormation custom resource, you don't have to write your own functions to send responses to the custom resource that invoked the function. AWS CloudFormation provides a response module ( `cfn-response <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html>`_ ) that simplifies sending responses. See `Using AWS Lambda with AWS CloudFormation <https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html>`_ for details.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-code.html
             :exampleMetadata: fixture=_generated
@@ -8157,7 +8403,7 @@ class CfnFunction(
 
         @builtins.property
         def source_kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ .
+            '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-code.html#cfn-lambda-function-code-sourcekmskeyarn
             '''
@@ -8166,11 +8412,11 @@ class CfnFunction(
 
         @builtins.property
         def zip_file(self) -> typing.Optional[builtins.str]:
-            '''(Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, AWS CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` .
+            '''(Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` .
 
             .. epigraph::
 
-               When you specify source code inline for a Node.js function, the ``index`` file that AWS CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
+               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
 
             For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash.
 
@@ -8855,6 +9101,57 @@ class CfnFunction(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.TenancyConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"tenant_isolation_mode": "tenantIsolationMode"},
+    )
+    class TenancyConfigProperty:
+        def __init__(self, *, tenant_isolation_mode: builtins.str) -> None:
+            '''
+            :param tenant_isolation_mode: Determines how your Lambda function isolates execution environments between tenants.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-tenancyconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                tenancy_config_property = lambda.CfnFunction.TenancyConfigProperty(
+                    tenant_isolation_mode="tenantIsolationMode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d27c2df2edbb06e90b63e347fd836b16f8e975d6232dfb0ed84a4b5c17fa81ae)
+                check_type(argname="argument tenant_isolation_mode", value=tenant_isolation_mode, expected_type=type_hints["tenant_isolation_mode"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "tenant_isolation_mode": tenant_isolation_mode,
+            }
+
+        @builtins.property
+        def tenant_isolation_mode(self) -> builtins.str:
+            '''Determines how your Lambda function isolates execution environments between tenants.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-tenancyconfig.html#cfn-lambda-function-tenancyconfig-tenantisolationmode
+            '''
+            result = self._values.get("tenant_isolation_mode")
+            assert result is not None, "Required property 'tenant_isolation_mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TenancyConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.TracingConfigProperty",
         jsii_struct_bases=[],
         name_mapping={"mode": "mode"},
@@ -8927,9 +9224,9 @@ class CfnFunction(
             When you connect a function to a VPC, Lambda creates an elastic network interface for each combination of security group and subnet in the function's VPC configuration. The function can only access resources and the internet through that VPC. For more information, see `VPC Settings <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
             .. epigraph::
 
-               When you delete a function, AWS CloudFormation monitors the state of its network interfaces and waits for Lambda to delete them before proceeding. If the VPC is defined in the same stack, the network interfaces need to be deleted by Lambda before AWS CloudFormation can delete the VPC's resources.
+               When you delete a function, CloudFormation monitors the state of its network interfaces and waits for Lambda to delete them before proceeding. If the VPC is defined in the same stack, the network interfaces need to be deleted by Lambda before CloudFormation can delete the VPC's resources.
 
-               To monitor network interfaces, AWS CloudFormation needs the ``ec2:DescribeNetworkInterfaces`` permission. It obtains this from the user or role that modifies the stack. If you don't provide this permission, AWS CloudFormation does not wait for network interfaces to be deleted.
+               To monitor network interfaces, CloudFormation needs the ``ec2:DescribeNetworkInterfaces`` permission. It obtains this from the user or role that modifies the stack. If you don't provide this permission, CloudFormation does not wait for network interfaces to be deleted.
 
             :param ipv6_allowed_for_dual_stack: Allows outbound IPv6 traffic on VPC functions that are connected to dual-stack subnets.
             :param security_group_ids: A list of VPC security group IDs.
@@ -9031,6 +9328,7 @@ class CfnFunction(
         "runtime_management_config": "runtimeManagementConfig",
         "snap_start": "snapStart",
         "tags": "tags",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing_config": "tracingConfig",
         "vpc_config": "vpcConfig",
@@ -9041,9 +9339,9 @@ class CfnFunctionProps:
         self,
         *,
         code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-        code_signing_config_arn: typing.Optional[builtins.str] = None,
+        code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9052,8 +9350,8 @@ class CfnFunctionProps:
         function_name: typing.Optional[builtins.str] = None,
         handler: typing.Optional[builtins.str] = None,
         image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_arn: typing.Optional[builtins.str] = None,
-        layers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+        layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
         logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
@@ -9063,6 +9361,7 @@ class CfnFunctionProps:
         runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.RuntimeManagementConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.SnapStartProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TenancyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         timeout: typing.Optional[jsii.Number] = None,
         tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TracingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9078,10 +9377,10 @@ class CfnFunctionProps:
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
-        :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, AWS CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
-        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
+        :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
         :param layers: A list of `function layers <https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html>`_ to add to the function's execution environment. Specify each layer by its ARN, including the version.
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param memory_size: The amount of `memory available to the function <https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console>`_ at runtime. Increasing the function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB. Note that new AWS accounts have reduced concurrency and memory quotas. AWS raises these quotas automatically based on your usage. You can also request a quota increase.
@@ -9091,7 +9390,8 @@ class CfnFunctionProps:
         :param runtime: The identifier of the function's `runtime <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html>`_ . Runtime is required if the deployment package is a .zip file archive. Specifying a runtime results in an error if you're deploying a function using a container image. The following list includes deprecated runtimes. Lambda blocks creating new functions and updating existing functions shortly after each runtime is deprecated. For more information, see `Runtime use after deprecation <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-deprecation-levels>`_ . For a list of all currently supported runtimes, see `Supported runtimes <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtimes-supported>`_ .
         :param runtime_management_config: Sets the runtime management configuration for a function's version. For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
         :param snap_start: The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
-        :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tenancy_config: 
         :param timeout: The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds. For more information, see `Lambda execution environment <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html>`_ .
         :param tracing_config: Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .
         :param vpc_config: For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can access resources and the internet only through that VPC. For more information, see `Configuring a Lambda function to access resources in a VPC <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
@@ -9168,6 +9468,9 @@ class CfnFunctionProps:
                     key="key",
                     value="value"
                 )],
+                tenancy_config=lambda.CfnFunction.TenancyConfigProperty(
+                    tenant_isolation_mode="tenantIsolationMode"
+                ),
                 timeout=123,
                 tracing_config=lambda.CfnFunction.TracingConfigProperty(
                     mode="mode"
@@ -9204,6 +9507,7 @@ class CfnFunctionProps:
             check_type(argname="argument runtime_management_config", value=runtime_management_config, expected_type=type_hints["runtime_management_config"])
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing_config", value=tracing_config, expected_type=type_hints["tracing_config"])
             check_type(argname="argument vpc_config", value=vpc_config, expected_type=type_hints["vpc_config"])
@@ -9253,6 +9557,8 @@ class CfnFunctionProps:
             self._values["snap_start"] = snap_start
         if tags is not None:
             self._values["tags"] = tags
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing_config is not None:
@@ -9275,14 +9581,14 @@ class CfnFunctionProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnFunction.CodeProperty], result)
 
     @builtins.property
-    def role(self) -> builtins.str:
+    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the function's execution role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def architectures(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -9296,7 +9602,9 @@ class CfnFunctionProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def code_signing_config_arn(self) -> typing.Optional[builtins.str]:
+    def code_signing_config_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]]:
         '''To enable code signing for this function, specify the ARN of a code-signing configuration.
 
         A code-signing configuration
@@ -9305,7 +9613,7 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-codesigningconfigarn
         '''
         result = self._values.get("code_signing_config_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]], result)
 
     @builtins.property
     def dead_letter_config(
@@ -9372,7 +9680,7 @@ class CfnFunctionProps:
     def function_name(self) -> typing.Optional[builtins.str]:
         '''The name of the Lambda function, up to 64 characters in length.
 
-        If you don't specify a name, AWS CloudFormation generates one.
+        If you don't specify a name, CloudFormation generates one.
 
         If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
 
@@ -9406,8 +9714,10 @@ class CfnFunctionProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.ImageConfigProperty]], result)
 
     @builtins.property
-    def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS Key Management Service ( AWS KMS ) customer managed key that's used to encrypt the following resources:.
+    def kms_key_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+        '''The ARN of the AWS Key Management Service ( AWS  ) customer managed key that's used to encrypt the following resources:.
 
         - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ .
         - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots.
@@ -9419,16 +9729,18 @@ class CfnFunctionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-kmskeyarn
         '''
         result = self._values.get("kms_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
-    def layers(self) -> typing.Optional[typing.List[builtins.str]]:
+    def layers(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]]:
         '''A list of `function layers <https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html>`_ to add to the function's execution environment. Specify each layer by its ARN, including the version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-layers
         '''
         result = self._values.get("layers")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]], result)
 
     @builtins.property
     def logging_config(
@@ -9526,12 +9838,22 @@ class CfnFunctionProps:
 
         .. epigraph::
 
-           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+           You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tags
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def tenancy_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tenancyconfig
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[jsii.Number]:
@@ -9653,6 +9975,20 @@ class CfnLayerVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLayerVersion")
+    @builtins.classmethod
+    def arn_for_layer_version(
+        cls,
+        resource: _ILayerVersionRef_45d18037,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e89f4e428e926bc517531a6abef6877f97f8955718bc357a97d453d3226e6546)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLayerVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9927,7 +10263,7 @@ class CfnLayerVersionPermission(
         id: builtins.str,
         *,
         action: builtins.str,
-        layer_version_arn: builtins.str,
+        layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
         principal: builtins.str,
         organization_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10071,7 +10407,7 @@ class CfnLayerVersionPermissionProps:
         self,
         *,
         action: builtins.str,
-        layer_version_arn: builtins.str,
+        layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
         principal: builtins.str,
         organization_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10127,14 +10463,16 @@ class CfnLayerVersionPermissionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def layer_version_arn(self) -> builtins.str:
+    def layer_version_arn(
+        self,
+    ) -> typing.Union[builtins.str, _ILayerVersionRef_45d18037]:
         '''The name or Amazon Resource Name (ARN) of the layer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-layerversionpermission.html#cfn-lambda-layerversionpermission-layerversionarn
         '''
         result = self._values.get("layer_version_arn")
         assert result is not None, "Required property 'layer_version_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILayerVersionRef_45d18037], result)
 
     @builtins.property
     def principal(self) -> builtins.str:
@@ -10467,14 +10805,14 @@ class CfnPermission(
         id: builtins.str,
         *,
         action: builtins.str,
-        function_name: builtins.str,
-        principal: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
+        principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
         invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
-        source_arn: typing.Optional[builtins.str] = None,
+        source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
     ) -> None:
         '''Create a new ``AWS::Lambda::Permission``.
 
@@ -10700,14 +11038,14 @@ class CfnPermissionProps:
         self,
         *,
         action: builtins.str,
-        function_name: builtins.str,
-        principal: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
+        principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
         event_source_token: typing.Optional[builtins.str] = None,
         function_url_auth_type: typing.Optional[builtins.str] = None,
         invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         principal_org_id: typing.Optional[builtins.str] = None,
         source_account: typing.Optional[builtins.str] = None,
-        source_arn: typing.Optional[builtins.str] = None,
+        source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
     ) -> None:
         '''Properties for defining a ``CfnPermission``.
 
@@ -10786,7 +11124,9 @@ class CfnPermissionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def function_name(self) -> builtins.str:
+    def function_name(
+        self,
+    ) -> typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad]:
         '''The name or ARN of the Lambda function, version, or alias.
 
         **Name formats** - *Function name* – ``my-function`` (name-only), ``my-function:v1`` (with alias).
@@ -10800,10 +11140,12 @@ class CfnPermissionProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad], result)
 
     @builtins.property
-    def principal(self) -> builtins.str:
+    def principal(
+        self,
+    ) -> typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76]:
         '''The AWS service , AWS account , IAM user, or IAM role that invokes the function.
 
         If you specify a service, use ``SourceArn`` or ``SourceAccount`` to limit who can invoke the function through that service.
@@ -10812,7 +11154,7 @@ class CfnPermissionProps:
         '''
         result = self._values.get("principal")
         assert result is not None, "Required property 'principal' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76], result)
 
     @builtins.property
     def event_source_token(self) -> typing.Optional[builtins.str]:
@@ -10870,7 +11212,9 @@ class CfnPermissionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def source_arn(self) -> typing.Optional[builtins.str]:
+    def source_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]]:
         '''For AWS services , the ARN of the AWS resource that invokes the function.
 
         For example, an Amazon S3 bucket or Amazon SNS topic.
@@ -10880,7 +11224,7 @@ class CfnPermissionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html#cfn-lambda-permission-sourcearn
         '''
         result = self._values.get("source_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10938,7 +11282,7 @@ class CfnUrl(
         id: builtins.str,
         *,
         auth_type: builtins.str,
-        target_function_arn: builtins.str,
+        target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUrl.CorsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         invoke_mode: typing.Optional[builtins.str] = None,
         qualifier: typing.Optional[builtins.str] = None,
@@ -11266,7 +11610,7 @@ class CfnUrlProps:
         self,
         *,
         auth_type: builtins.str,
-        target_function_arn: builtins.str,
+        target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUrl.CorsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         invoke_mode: typing.Optional[builtins.str] = None,
         qualifier: typing.Optional[builtins.str] = None,
@@ -11336,7 +11680,7 @@ class CfnUrlProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def target_function_arn(self) -> builtins.str:
+    def target_function_arn(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
         '''The name of the Lambda function.
 
         **Name formats** - *Function name* - ``my-function`` .
@@ -11350,7 +11694,7 @@ class CfnUrlProps:
         '''
         result = self._values.get("target_function_arn")
         assert result is not None, "Required property 'target_function_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
 
     @builtins.property
     def cors(
@@ -11437,7 +11781,7 @@ class CfnVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11759,7 +12103,7 @@ class CfnVersionProps:
     def __init__(
         self,
         *,
-        function_name: builtins.str,
+        function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11819,7 +12163,7 @@ class CfnVersionProps:
             self._values["runtime_policy"] = runtime_policy
 
     @builtins.property
-    def function_name(self) -> builtins.str:
+    def function_name(self) -> typing.Union[builtins.str, _IFunctionRef_2601eb33]:
         '''The name or ARN of the Lambda function.
 
         **Name formats** - *Function name* - ``MyFunction`` .
@@ -11833,7 +12177,7 @@ class CfnVersionProps:
         '''
         result = self._values.get("function_name")
         assert result is not None, "Required property 'function_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFunctionRef_2601eb33], result)
 
     @builtins.property
     def code_sha256(self) -> typing.Optional[builtins.str]:
@@ -15667,6 +16011,7 @@ class FilterRule(
         "same_environment": "sameEnvironment",
         "security_group": "securityGroup",
         "skip_permissions": "skipPermissions",
+        "tenancy_config": "tenancyConfig",
     },
 )
 class FunctionAttributes:
@@ -15679,6 +16024,7 @@ class FunctionAttributes:
         same_environment: typing.Optional[builtins.bool] = None,
         security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
         skip_permissions: typing.Optional[builtins.bool] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
     ) -> None:
         '''Represents a Lambda function defined outside of this stack.
 
@@ -15688,6 +16034,7 @@ class FunctionAttributes:
         :param same_environment: Setting this property informs the CDK that the imported function is in the same environment as the stack. This affects certain behaviours such as, whether this function's permission can be modified. When not configured, the CDK attempts to auto-determine this. For environment agnostic stacks, i.e., stacks where the account is not specified with the ``env`` property, this is determined to be false. Set this to property *ONLY IF* the imported function is in the same account as the stack it's imported in. Default: - depends: true, if the Stack is configured with an explicit ``env`` (account and region) and the account is the same as this function. For environment-agnostic stacks this will default to ``false``.
         :param security_group: The security group of this Lambda, if in a VPC. This needs to be given in order to support allowing connections to this Lambda.
         :param skip_permissions: Setting this property informs the CDK that the imported function ALREADY HAS the necessary permissions for what you are trying to do. When not configured, the CDK attempts to auto-determine whether or not additional permissions are necessary on the function when grant APIs are used. If the CDK tried to add permissions on an imported lambda, it will fail. Set this property *ONLY IF* you are committing to manage the imported function's permissions outside of CDK. You are acknowledging that your CDK code alone will have insufficient permissions to access the imported function. Default: false
+        :param tenancy_config: The tenancy configuration of this Lambda Function. Default: - Tenant isolation is not enabled
 
         :exampleMetadata: infused
 
@@ -15714,6 +16061,7 @@ class FunctionAttributes:
             check_type(argname="argument same_environment", value=same_environment, expected_type=type_hints["same_environment"])
             check_type(argname="argument security_group", value=security_group, expected_type=type_hints["security_group"])
             check_type(argname="argument skip_permissions", value=skip_permissions, expected_type=type_hints["skip_permissions"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "function_arn": function_arn,
         }
@@ -15727,6 +16075,8 @@ class FunctionAttributes:
             self._values["security_group"] = security_group
         if skip_permissions is not None:
             self._values["skip_permissions"] = skip_permissions
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
 
     @builtins.property
     def function_arn(self) -> builtins.str:
@@ -15802,6 +16152,15 @@ class FunctionAttributes:
         result = self._values.get("skip_permissions")
         return typing.cast(typing.Optional[builtins.bool], result)
 
+    @builtins.property
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration of this Lambda Function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional["TenancyConfig"], result)
+
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
 
@@ -15864,6 +16223,7 @@ class FunctionAttributes:
         "snap_start": "snapStart",
         "system_log_level": "systemLogLevel",
         "system_log_level_v2": "systemLogLevelV2",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing": "tracing",
         "vpc": "vpc",
@@ -15920,6 +16280,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional["Tracing"] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -15973,6 +16334,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -16016,6 +16378,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             # snap_start_conf: lambda.SnapStartConf
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
+            # tenancy_config: lambda.TenancyConfig
             # topic: sns.Topic
             # vpc: ec2.Vpc
             
@@ -16083,6 +16446,7 @@ class FunctionOptions(EventInvokeConfigOptions):
                 snap_start=snap_start_conf,
                 system_log_level="systemLogLevel",
                 system_log_level_v2=lambda_.SystemLogLevel.INFO,
+                tenancy_config=tenancy_config,
                 timeout=cdk.Duration.minutes(30),
                 tracing=lambda_.Tracing.ACTIVE,
                 vpc=vpc,
@@ -16152,6 +16516,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
             check_type(argname="argument system_log_level_v2", value=system_log_level_v2, expected_type=type_hints["system_log_level_v2"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing", value=tracing, expected_type=type_hints["tracing"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
@@ -16249,6 +16614,8 @@ class FunctionOptions(EventInvokeConfigOptions):
             self._values["system_log_level"] = system_log_level
         if system_log_level_v2 is not None:
             self._values["system_log_level_v2"] = system_log_level_v2
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing is not None:
@@ -16821,6 +17188,15 @@ class FunctionOptions(EventInvokeConfigOptions):
         '''
         result = self._values.get("system_log_level_v2")
         return typing.cast(typing.Optional["SystemLogLevel"], result)
+
+    @builtins.property
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration for the function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -16932,6 +17308,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         "snap_start": "snapStart",
         "system_log_level": "systemLogLevel",
         "system_log_level_v2": "systemLogLevelV2",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing": "tracing",
         "vpc": "vpc",
@@ -16991,6 +17368,7 @@ class FunctionProps(FunctionOptions):
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional["Tracing"] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -17046,6 +17424,7 @@ class FunctionProps(FunctionOptions):
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -17135,6 +17514,7 @@ class FunctionProps(FunctionOptions):
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
             check_type(argname="argument system_log_level_v2", value=system_log_level_v2, expected_type=type_hints["system_log_level_v2"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing", value=tracing, expected_type=type_hints["tracing"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
@@ -17239,6 +17619,8 @@ class FunctionProps(FunctionOptions):
             self._values["system_log_level"] = system_log_level
         if system_log_level_v2 is not None:
             self._values["system_log_level_v2"] = system_log_level_v2
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing is not None:
@@ -17811,6 +18193,15 @@ class FunctionProps(FunctionOptions):
         '''
         result = self._values.get("system_log_level_v2")
         return typing.cast(typing.Optional["SystemLogLevel"], result)
+
+    @builtins.property
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration for the function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional["TenancyConfig"], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -18694,6 +19085,12 @@ class IFunction(
         '''The IAM role associated with this function.'''
         ...
 
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration for this function.'''
+        ...
+
     @jsii.member(jsii_name="addEventSource")
     def add_event_source(self, source: IEventSource) -> None:
         '''Adds an event source to this function.
@@ -19157,6 +19554,12 @@ class _IFunctionProxy(
     def role(self) -> typing.Optional[_IRole_235f5d8e]:
         '''The IAM role associated with this function.'''
         return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration for this function.'''
+        return typing.cast(typing.Optional["TenancyConfig"], jsii.get(self, "tenancyConfig"))
 
     @jsii.member(jsii_name="addEventSource")
     def add_event_source(self, source: IEventSource) -> None:
@@ -23507,6 +23910,7 @@ class SchemaRegistryProps:
         "snap_start": "snapStart",
         "system_log_level": "systemLogLevel",
         "system_log_level_v2": "systemLogLevelV2",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing": "tracing",
         "vpc": "vpc",
@@ -23568,6 +23972,7 @@ class SingletonFunctionProps(FunctionProps):
         snap_start: typing.Optional["SnapStartConf"] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional["SystemLogLevel"] = None,
+        tenancy_config: typing.Optional["TenancyConfig"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional["Tracing"] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -23626,6 +24031,7 @@ class SingletonFunctionProps(FunctionProps):
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -23702,6 +24108,7 @@ class SingletonFunctionProps(FunctionProps):
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
             check_type(argname="argument system_log_level_v2", value=system_log_level_v2, expected_type=type_hints["system_log_level_v2"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing", value=tracing, expected_type=type_hints["tracing"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
@@ -23809,6 +24216,8 @@ class SingletonFunctionProps(FunctionProps):
             self._values["system_log_level"] = system_log_level
         if system_log_level_v2 is not None:
             self._values["system_log_level_v2"] = system_log_level_v2
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing is not None:
@@ -24383,6 +24792,15 @@ class SingletonFunctionProps(FunctionProps):
         return typing.cast(typing.Optional["SystemLogLevel"], result)
 
     @builtins.property
+    def tenancy_config(self) -> typing.Optional["TenancyConfig"]:
+        '''The tenancy configuration for the function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional["TenancyConfig"], result)
+
+    @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
@@ -24791,6 +25209,57 @@ class SystemLogLevel(enum.Enum):
     '''Lambda will capture only logs at debug level.'''
     WARN = "WARN"
     '''Lambda will capture only logs at warn level.'''
+
+
+class TenancyConfig(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.TenancyConfig",
+):
+    '''Specify the tenant isolation mode for Lambda functions.
+
+    This is incompatible with:
+
+    - SnapStart
+    - Provisioned Concurrency
+    - Function URLs
+    - Most Event sources (only API Gateway is supported)
+
+    :exampleMetadata: infused
+
+    Example::
+
+        fn = lambda_.Function(self, "MyFunction",
+            runtime=lambda_.Runtime.NODEJS_18_X,
+            handler="index.handler",
+            code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler")),
+            tenancy_config=lambda_.TenancyConfig.PER_TENANT
+        )
+    '''
+
+    def __init__(self, mode: builtins.str) -> None:
+        '''
+        :param mode: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a96cdcd99dfc0b63e9703fa17111ce6b3a9ba8da5959bc9fedebe88e086e0b09)
+            check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+        jsii.create(self.__class__, self, [mode])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PER_TENANT")
+    def PER_TENANT(cls) -> "TenancyConfig":
+        '''Each tenant gets a dedicated execution environment.
+
+        Execution environments are not shared between different tenants,
+        but can be reused for the same tenant to avoid cold starts.
+        '''
+        return typing.cast("TenancyConfig", jsii.sget(cls, "PER_TENANT"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfigProperty")
+    def tenancy_config_property(self) -> CfnFunction.TenancyConfigProperty:
+        '''The CloudFormation property for tenancy configuration.'''
+        return typing.cast(CfnFunction.TenancyConfigProperty, jsii.get(self, "tenancyConfigProperty"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_lambda.Tracing")
@@ -26532,6 +27001,7 @@ class CodeSigningConfig(
         "snap_start": "snapStart",
         "system_log_level": "systemLogLevel",
         "system_log_level_v2": "systemLogLevelV2",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing": "tracing",
         "vpc": "vpc",
@@ -26589,6 +27059,7 @@ class DockerImageFunctionProps(FunctionOptions):
         snap_start: typing.Optional[SnapStartConf] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+        tenancy_config: typing.Optional[TenancyConfig] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[Tracing] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -26643,6 +27114,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -26713,6 +27185,7 @@ class DockerImageFunctionProps(FunctionOptions):
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
             check_type(argname="argument system_log_level_v2", value=system_log_level_v2, expected_type=type_hints["system_log_level_v2"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing", value=tracing, expected_type=type_hints["tracing"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
@@ -26813,6 +27286,8 @@ class DockerImageFunctionProps(FunctionOptions):
             self._values["system_log_level"] = system_log_level
         if system_log_level_v2 is not None:
             self._values["system_log_level_v2"] = system_log_level_v2
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing is not None:
@@ -27383,6 +27858,15 @@ class DockerImageFunctionProps(FunctionOptions):
         '''
         result = self._values.get("system_log_level_v2")
         return typing.cast(typing.Optional[SystemLogLevel], result)
+
+    @builtins.property
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for the function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional[TenancyConfig], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -28386,6 +28870,13 @@ class FunctionBase(
         '''
         ...
 
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    @abc.abstractmethod
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for this function.'''
+        ...
+
 
 class _FunctionBaseProxy(
     FunctionBase,
@@ -28445,6 +28936,12 @@ class _FunctionBaseProxy(
         Undefined if the function was imported without a role.
         '''
         return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for this function.'''
+        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, FunctionBase).__jsii_proxy_class__ = lambda : _FunctionBaseProxy
@@ -28713,6 +29210,12 @@ class QualifiedFunctionBase(
         '''The ARN(s) to put into the resource field of the generated IAM policy for grantInvoke().'''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "resourceArnsForGrantInvoke"))
 
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for this function.'''
+        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+
 
 class _QualifiedFunctionBaseProxy(
     QualifiedFunctionBase,
@@ -28815,6 +29318,7 @@ class SingletonFunction(
         snap_start: typing.Optional[SnapStartConf] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+        tenancy_config: typing.Optional[TenancyConfig] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[Tracing] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -28874,6 +29378,7 @@ class SingletonFunction(
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -28935,6 +29440,7 @@ class SingletonFunction(
             snap_start=snap_start,
             system_log_level=system_log_level,
             system_log_level_v2=system_log_level_v2,
+            tenancy_config=tenancy_config,
             timeout=timeout,
             tracing=tracing,
             vpc=vpc,
@@ -29200,6 +29706,12 @@ class SingletonFunction(
         Undefined if the function was imported without a role.
         '''
         return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
+
+    @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for this function.'''
+        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
 
 
 @jsii.implements(IVersion)
@@ -29793,15 +30305,7 @@ class Function(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_lambda.Function",
 ):
-    '''Deploys a file from inside the construct library as a function.
-
-    The supplied file is subject to the 4096 bytes limit of being embedded in a
-    CloudFormation template.
-
-    The construct includes an associated role with the lambda.
-
-    This construct does not yet reproduce all features from the underlying resource
-    library.
+    '''This construct does not yet reproduce all features from the underlying resource library.
 
     :exampleMetadata: fixture=default infused
 
@@ -29879,6 +30383,7 @@ class Function(
         snap_start: typing.Optional[SnapStartConf] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+        tenancy_config: typing.Optional[TenancyConfig] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[Tracing] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -29936,6 +30441,7 @@ class Function(
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -29995,6 +30501,7 @@ class Function(
             snap_start=snap_start,
             system_log_level=system_log_level,
             system_log_level_v2=system_log_level_v2,
+            tenancy_config=tenancy_config,
             timeout=timeout,
             tracing=tracing,
             vpc=vpc,
@@ -30064,6 +30571,7 @@ class Function(
         same_environment: typing.Optional[builtins.bool] = None,
         security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
         skip_permissions: typing.Optional[builtins.bool] = None,
+        tenancy_config: typing.Optional[TenancyConfig] = None,
     ) -> IFunction:
         '''Creates a Lambda function object which represents a function not defined within this stack.
 
@@ -30078,6 +30586,7 @@ class Function(
         :param same_environment: Setting this property informs the CDK that the imported function is in the same environment as the stack. This affects certain behaviours such as, whether this function's permission can be modified. When not configured, the CDK attempts to auto-determine this. For environment agnostic stacks, i.e., stacks where the account is not specified with the ``env`` property, this is determined to be false. Set this to property *ONLY IF* the imported function is in the same account as the stack it's imported in. Default: - depends: true, if the Stack is configured with an explicit ``env`` (account and region) and the account is the same as this function. For environment-agnostic stacks this will default to ``false``.
         :param security_group: The security group of this Lambda, if in a VPC. This needs to be given in order to support allowing connections to this Lambda.
         :param skip_permissions: Setting this property informs the CDK that the imported function ALREADY HAS the necessary permissions for what you are trying to do. When not configured, the CDK attempts to auto-determine whether or not additional permissions are necessary on the function when grant APIs are used. If the CDK tried to add permissions on an imported lambda, it will fail. Set this property *ONLY IF* you are committing to manage the imported function's permissions outside of CDK. You are acknowledging that your CDK code alone will have insufficient permissions to access the imported function. Default: false
+        :param tenancy_config: The tenancy configuration of this Lambda Function. Default: - Tenant isolation is not enabled
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0314871ffe8a90ab123d97c8e9331a3a020ccf38e840e2d13208baa979616d4a)
@@ -30090,6 +30599,7 @@ class Function(
             same_environment=same_environment,
             security_group=security_group,
             skip_permissions=skip_permissions,
+            tenancy_config=tenancy_config,
         )
 
         return typing.cast(IFunction, jsii.sinvoke(cls, "fromFunctionAttributes", [scope, id, attrs]))
@@ -30700,6 +31210,12 @@ class Function(
         return typing.cast(typing.Optional[_IRole_235f5d8e], jsii.get(self, "role"))
 
     @builtins.property
+    @jsii.member(jsii_name="tenancyConfig")
+    def tenancy_config(self) -> typing.Optional[TenancyConfig]:
+        '''The tenancy configuration for this function.'''
+        return typing.cast(typing.Optional[TenancyConfig], jsii.get(self, "tenancyConfig"))
+
+    @builtins.property
     @jsii.member(jsii_name="timeout")
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
         '''The timeout configured for this lambda.'''
@@ -30770,6 +31286,7 @@ class DockerImageFunction(
         snap_start: typing.Optional[SnapStartConf] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+        tenancy_config: typing.Optional[TenancyConfig] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[Tracing] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -30825,6 +31342,7 @@ class DockerImageFunction(
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -30882,6 +31400,7 @@ class DockerImageFunction(
             snap_start=snap_start,
             system_log_level=system_log_level,
             system_log_level_v2=system_log_level_v2,
+            tenancy_config=tenancy_config,
             timeout=timeout,
             tracing=tracing,
             vpc=vpc,
@@ -31037,6 +31556,7 @@ __all__ = [
     "SourceAccessConfigurationType",
     "StartingPosition",
     "SystemLogLevel",
+    "TenancyConfig",
     "Tracing",
     "UntrustedArtifactOnDeployment",
     "UtilizationScalingOptions",
@@ -31194,6 +31714,12 @@ def _typecheckingstub__681471c67952a7e725f76572ad9bf09e1c634a81914690dff68e934c0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__be2b336adaa6a3baddb386ebe76ea44a8fc21caf406ad043b9f5df28f691a070(
+    resource: _IAliasRef_ff1cf51c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9899ddb1059c2ccb62cea6384916f2265c3afd08fe74e95deae2f78e81be791d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -31288,6 +31814,12 @@ def _typecheckingstub__df94ded3fb87e8ca56187dcab5a6bf12d335e2671120df0386f527f73
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4354bcf64a3d47874832c73a1dbc66c91c2012cfe7b46cbeafc0f192fbf49022(
+    resource: _ICodeSigningConfigRef_1d909622,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2899ed65ab9f2fa74efa2f2afb7573cefa2bf40192b38cf9f93e3ef003342555(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -31352,7 +31884,7 @@ def _typecheckingstub__6bd7732654f4625d1267d5f7861f25ea037a2874bbbd321167126c1bb
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     qualifier: builtins.str,
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventInvokeConfig.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
@@ -31427,7 +31959,7 @@ def _typecheckingstub__dc7615bb8bd11fce4f56a0c5d830f988a0be9aa6ad1f43e72e3492c57
 
 def _typecheckingstub__ac54c49f9269d96bcac2603a2bed06e61e0cc3f8f741fd5d43a4ecce77ab5480(
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     qualifier: builtins.str,
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventInvokeConfig.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
@@ -31440,17 +31972,18 @@ def _typecheckingstub__2fc9432254acf5a7dbe3c68dcedbda61de1f0e804a81d20ae79e04857
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
     amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     batch_size: typing.Optional[jsii.Number] = None,
     bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    event_source_arn: typing.Optional[builtins.str] = None,
+    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
     filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
+    logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
     maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
     maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -31467,6 +32000,12 @@ def _typecheckingstub__2fc9432254acf5a7dbe3c68dcedbda61de1f0e804a81d20ae79e04857
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     topics: typing.Optional[typing.Sequence[builtins.str]] = None,
     tumbling_window_in_seconds: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8008b865c4dba070edd3cc4b8abba8299cc9642118e7f4c9ba62f362515ef388(
+    resource: _IEventSourceMappingRef_4f65ddd1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31545,6 +32084,12 @@ def _typecheckingstub__d464545d76bb56469faf58591d3fb0044c464a1cdb5b122bf47e0b3ea
 
 def _typecheckingstub__5110117b05ec57a413615f5bf30afd8bbafb2be839685cf0e158a1b4de420fbc(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50572dc451e3255eed97449e37c01de9cf1dd845d673eda663a86b2a920b36c6(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.LoggingConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31690,6 +32235,13 @@ def _typecheckingstub__acb927ec413c738ab6535754146b1867f086be8268300a02f7729708b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2d33f06f90220bba548777a045b654eb6bd18cb11ee50c4c1e4fc8b6f0736c87(
+    *,
+    system_log_level: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2794f7591f6e9d936a343631f5bf6dacc111c669ab59b5a405ceaa9be22e3bc3(
     *,
     metrics: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -31708,6 +32260,7 @@ def _typecheckingstub__a9766af813d9de7c91becd9b74bcc63c9c769afaf9eb6a30dc155ee23
     *,
     maximum_pollers: typing.Optional[jsii.Number] = None,
     minimum_pollers: typing.Optional[jsii.Number] = None,
+    poller_group_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31769,17 +32322,18 @@ def _typecheckingstub__5697e31d4997b590460e48d14a70e090315e713aced0fbad6af21c376
 
 def _typecheckingstub__28f15573fb2525439f034f01287568e3c4a4d28fda953b3059f294655b5624e6(
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
     amazon_managed_kafka_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.AmazonManagedKafkaEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     batch_size: typing.Optional[jsii.Number] = None,
     bisect_batch_on_function_error: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     document_db_event_source_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.DocumentDBEventSourceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    event_source_arn: typing.Optional[builtins.str] = None,
+    event_source_arn: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198, _IClusterRef_c904150a]] = None,
     filter_criteria: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.FilterCriteriaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     function_response_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
+    logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventSourceMapping.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_batching_window_in_seconds: typing.Optional[jsii.Number] = None,
     maximum_record_age_in_seconds: typing.Optional[jsii.Number] = None,
     maximum_retry_attempts: typing.Optional[jsii.Number] = None,
@@ -31805,9 +32359,9 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     id: builtins.str,
     *,
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-    code_signing_config_arn: typing.Optional[builtins.str] = None,
+    code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -31816,8 +32370,8 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     function_name: typing.Optional[builtins.str] = None,
     handler: typing.Optional[builtins.str] = None,
     image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
-    layers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+    layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     package_type: typing.Optional[builtins.str] = None,
@@ -31827,9 +32381,16 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.RuntimeManagementConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.SnapStartProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TenancyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout: typing.Optional[jsii.Number] = None,
     tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TracingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e79b88a70072303e0da56995cb507805f4233398a348e962a7b3cf121aec34ea(
+    resource: _IFunctionRef_2601eb33,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32000,6 +32561,12 @@ def _typecheckingstub__174edd947716c328063162b1193e4d16e0c3ac15949326027a5bfae9f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3bc85c6d0eed7e19d7938f47d9fbed1a3bc285103ee041df5e42d20226858747(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__75ee5de813fc2d2189124f8a0417b55380d01a0a385d8d51fa9f785efab2b32e(
     value: typing.Optional[jsii.Number],
 ) -> None:
@@ -32101,6 +32668,13 @@ def _typecheckingstub__a8c30fc32979de48dec265fdc148bad358e17833f41e94ce229570c60
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d27c2df2edbb06e90b63e347fd836b16f8e975d6232dfb0ed84a4b5c17fa81ae(
+    *,
+    tenant_isolation_mode: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__65e495ff14e5431c99933211c1c9d543a50b4aefcbe3cefdac26535ec6a0582a(
     *,
     mode: typing.Optional[builtins.str] = None,
@@ -32120,9 +32694,9 @@ def _typecheckingstub__f84311d147ce21fce755207e6e5de59a158ee8d2d1ad51b2f80c05f54
 def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40aebc3532(
     *,
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
-    code_signing_config_arn: typing.Optional[builtins.str] = None,
+    code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -32131,8 +32705,8 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     function_name: typing.Optional[builtins.str] = None,
     handler: typing.Optional[builtins.str] = None,
     image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_arn: typing.Optional[builtins.str] = None,
-    layers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
+    layers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILayerVersionRef_45d18037]]] = None,
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     package_type: typing.Optional[builtins.str] = None,
@@ -32142,6 +32716,7 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     runtime_management_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.RuntimeManagementConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snap_start: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.SnapStartProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tenancy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TenancyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout: typing.Optional[jsii.Number] = None,
     tracing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.TracingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -32159,6 +32734,12 @@ def _typecheckingstub__429b31c977f42a0ad4faddf9465b3e17e6ec6694dad3dbc572a06eef3
     description: typing.Optional[builtins.str] = None,
     layer_name: typing.Optional[builtins.str] = None,
     license_info: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e89f4e428e926bc517531a6abef6877f97f8955718bc357a97d453d3226e6546(
+    resource: _ILayerVersionRef_45d18037,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32225,7 +32806,7 @@ def _typecheckingstub__a34577503cda5332d6d532dd850e19bd6607e7fdf611f9085d56969de
     id: builtins.str,
     *,
     action: builtins.str,
-    layer_version_arn: builtins.str,
+    layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
     principal: builtins.str,
     organization_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -32271,7 +32852,7 @@ def _typecheckingstub__45c67e7ddd4fde4ad3243685942dee1cdc90213c5a305f4ccea252422
 def _typecheckingstub__963d0e6aa91417f1b389ca86ebb0939b6f8784c8421540668eb489f936cf4428(
     *,
     action: builtins.str,
-    layer_version_arn: builtins.str,
+    layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
     principal: builtins.str,
     organization_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -32304,14 +32885,14 @@ def _typecheckingstub__c457a277b84dbba5bd94a2c0135335b8d7dbb3d409b1fa988b4f5a219
     id: builtins.str,
     *,
     action: builtins.str,
-    function_name: builtins.str,
-    principal: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
+    principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[builtins.str] = None,
     invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
-    source_arn: typing.Optional[builtins.str] = None,
+    source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32385,14 +32966,14 @@ def _typecheckingstub__5e353afa8c93203f738da3be5d082cb1816a03108506ae44264327d28
 def _typecheckingstub__b0c90e5a512dc08c54978bc1f6bf13992ad2d1d5c793f2b05fc82eef380f8c66(
     *,
     action: builtins.str,
-    function_name: builtins.str,
-    principal: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33, _IVersionRef_4fdb94ad],
+    principal: typing.Union[builtins.str, _IRoleRef_8400221f, _IUserRef_b0ccca76],
     event_source_token: typing.Optional[builtins.str] = None,
     function_url_auth_type: typing.Optional[builtins.str] = None,
     invoked_via_function_url: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
-    source_arn: typing.Optional[builtins.str] = None,
+    source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32402,7 +32983,7 @@ def _typecheckingstub__850b2a3a2e0bfd3ea79643487b3e93ff15d7e3bd7ad17ee73f8cd8e69
     id: builtins.str,
     *,
     auth_type: builtins.str,
-    target_function_arn: builtins.str,
+    target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUrl.CorsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     invoke_mode: typing.Optional[builtins.str] = None,
     qualifier: typing.Optional[builtins.str] = None,
@@ -32467,7 +33048,7 @@ def _typecheckingstub__3069061575a0c1c37c172de2f11fad3cb36fe8a659e96295949f0ba09
 def _typecheckingstub__4634895f8e4f2a27a10f8fe128328e17466d0a557507896b4af8bb0780b94865(
     *,
     auth_type: builtins.str,
-    target_function_arn: builtins.str,
+    target_function_arn: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     cors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUrl.CorsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     invoke_mode: typing.Optional[builtins.str] = None,
     qualifier: typing.Optional[builtins.str] = None,
@@ -32479,7 +33060,7 @@ def _typecheckingstub__1d4b3bf8a38fd246db911713fe99ad93f55dc635dbdaae114631921a1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -32547,7 +33128,7 @@ def _typecheckingstub__5271b1ea8263a6edb2968858109cfe102982debe5174ae7adf47b240b
 
 def _typecheckingstub__63ba63c43bc52bb365203cebb308fd393d4c03a8aee52a0336a1396964d3cf9e(
     *,
-    function_name: builtins.str,
+    function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -33012,6 +33593,7 @@ def _typecheckingstub__21b8745bfbc448de18ae3288cd649f0f58b46805fdde32ce01f134b33
     same_environment: typing.Optional[builtins.bool] = None,
     security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
     skip_permissions: typing.Optional[builtins.bool] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33064,6 +33646,7 @@ def _typecheckingstub__59918bb957d892739733c7a5849db990615fe5329709ad7ba703e0ee4
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -33120,6 +33703,7 @@ def _typecheckingstub__94e70d11aa3c53737d418dbb9983973dfc06dbdef5c8cc30613cc3c6d
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -33718,6 +34302,7 @@ def _typecheckingstub__68a03ec9f866a29c77aabcf8328c63a49511790fa9714874f255b3292
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -33741,6 +34326,12 @@ def _typecheckingstub__e13128179c159b48d0de9577ddd20c80c4f0bcd04b6d3b478b8382db3
 
 def _typecheckingstub__7d36f0cc329a26624261dbdd6abf45bf17eba23520a5a3a92f7c390bd334c75b(
     name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a96cdcd99dfc0b63e9703fa17111ce6b3a9ba8da5959bc9fedebe88e086e0b09(
+    mode: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33975,6 +34566,7 @@ def _typecheckingstub__04dd97f4b18c00e7ee0981f2428664401ae0b75dbda6102ea3ef53d08
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -34247,6 +34839,7 @@ def _typecheckingstub__e7b766bff13bb7266787cec9bebb600187e19c1672e530bb9cfa31649
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -34475,6 +35068,7 @@ def _typecheckingstub__724895b6b59aaf2b678ef25f2beca19fb114fc04ff6b37edef28e12b3
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -34512,6 +35106,7 @@ def _typecheckingstub__0314871ffe8a90ab123d97c8e9331a3a020ccf38e840e2d13208baa97
     same_environment: typing.Optional[builtins.bool] = None,
     security_group: typing.Optional[_ISecurityGroup_acf8a799] = None,
     skip_permissions: typing.Optional[builtins.bool] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34625,6 +35220,7 @@ def _typecheckingstub__368a49fe1f866c7ea7986c57b6f8488d0fddea8f62bf05ec1ed7eb09b
     snap_start: typing.Optional[SnapStartConf] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[SystemLogLevel] = None,
+    tenancy_config: typing.Optional[TenancyConfig] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[Tracing] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,

@@ -188,6 +188,17 @@ class CfnAlarm(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAlarm")
+    @builtins.classmethod
+    def arn_for_alarm(cls, resource: _IAlarmRef_6cd14bfe) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ae5869af5473c7e12b4a08ba4a5a5acbdc21485caff55d66afdc63910eb3c86)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlarm", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -724,6 +735,17 @@ class CfnBucket(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForBucket")
+    @builtins.classmethod
+    def arn_for_bucket(cls, resource: _IBucketRef_94b2e9c2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7127b2d598b76f6618f6dc23407139cc7d9dea1df814058cf34f9ecd42e62bd7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBucket", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1240,6 +1262,17 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCertificate")
+    @builtins.classmethod
+    def arn_for_certificate(cls, resource: _ICertificateRef_a38eb928) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8a316be0596db222b2e06bf6539c7046dd97ea8ac9e96f2bcdd41ca47e5114c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCertificate", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1572,7 +1605,7 @@ class CfnContainer(
         :param service_name: The name of the container service.
         :param container_service_deployment: An object that describes the current container deployment of the container service.
         :param is_disabled: A Boolean value indicating whether the container service is disabled.
-        :param private_registry_access: An object that describes the configuration for the container service to access private container image repositories, such as Amazon Elastic Container Registry ( Amazon ECR ) private repositories. For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
+        :param private_registry_access: An object that describes the configuration for the container service to access private container image repositories, such as ( Amazon ECR ) private repositories. For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
         :param public_domain_names: The public domain name of the container service, such as ``example.com`` and ``www.example.com`` . You can specify up to four public domain names for a container service. The domain names that you specify are used when you create a deployment with a container that is configured as the public endpoint of your container service. If you don't specify public domain names, then you can use the default domain of the container service. .. epigraph:: You must create and validate an SSL/TLS certificate before you can use public domain names with your container service. Use the `AWS::Lightsail::Certificate <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-certificate.html>`_ resource to create a certificate for the public domain names that you want to use with your container service.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* . .. epigraph:: The ``Value`` of ``Tags`` is optional for Lightsail resources.
         '''
@@ -1592,6 +1625,17 @@ class CfnContainer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForContainer")
+    @builtins.classmethod
+    def arn_for_container(cls, resource: _IContainerRef_448c22ea) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__726d902269c1e0c2573a7c83d8a0442f2cbe751577e87481432a4f1a6c4c5434)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContainer", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1760,7 +1804,7 @@ class CfnContainer(
     def private_registry_access(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PrivateRegistryAccessProperty"]]:
-        '''An object that describes the configuration for the container service to access private container image repositories, such as Amazon Elastic Container Registry ( Amazon ECR ) private repositories.'''
+        '''An object that describes the configuration for the container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnContainer.PrivateRegistryAccessProperty"]], jsii.get(self, "privateRegistryAccess"))
 
     @private_registry_access.setter
@@ -2414,7 +2458,7 @@ class CfnContainer(
             *,
             ecr_image_puller_role: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnContainer.EcrImagePullerRoleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''Describes the configuration for an Amazon Lightsail container service to access private container image repositories, such as Amazon Elastic Container Registry ( Amazon ECR ) private repositories.
+            '''Describes the configuration for an Amazon Lightsail container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.
 
             For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
 
@@ -2673,7 +2717,7 @@ class CfnContainerProps:
         :param service_name: The name of the container service.
         :param container_service_deployment: An object that describes the current container deployment of the container service.
         :param is_disabled: A Boolean value indicating whether the container service is disabled.
-        :param private_registry_access: An object that describes the configuration for the container service to access private container image repositories, such as Amazon Elastic Container Registry ( Amazon ECR ) private repositories. For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
+        :param private_registry_access: An object that describes the configuration for the container service to access private container image repositories, such as ( Amazon ECR ) private repositories. For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
         :param public_domain_names: The public domain name of the container service, such as ``example.com`` and ``www.example.com`` . You can specify up to four public domain names for a container service. The domain names that you specify are used when you create a deployment with a container that is configured as the public endpoint of your container service. If you don't specify public domain names, then you can use the default domain of the container service. .. epigraph:: You must create and validate an SSL/TLS certificate before you can use public domain names with your container service. Use the `AWS::Lightsail::Certificate <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lightsail-certificate.html>`_ resource to create a certificate for the public domain names that you want to use with your container service.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* . .. epigraph:: The ``Value`` of ``Tags`` is optional for Lightsail resources.
 
@@ -2822,7 +2866,7 @@ class CfnContainerProps:
     def private_registry_access(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnContainer.PrivateRegistryAccessProperty]]:
-        '''An object that describes the configuration for the container service to access private container image repositories, such as Amazon Elastic Container Registry ( Amazon ECR ) private repositories.
+        '''An object that describes the configuration for the container service to access private container image repositories, such as  ( Amazon ECR ) private repositories.
 
         For more information, see `Configuring access to an Amazon ECR private repository for an Amazon Lightsail container service <https://docs.aws.amazon.com/lightsail/latest/userguide/amazon-lightsail-container-service-ecr-private-repo-access>`_ in the *Amazon Lightsail Developer Guide* .
 
@@ -2990,6 +3034,17 @@ class CfnDatabase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDatabase")
+    @builtins.classmethod
+    def arn_for_database(cls, resource: _IDatabaseRef_3bb9625f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__654468719a0740a09de6b0d09c514963506ab8960b304a0843651076ae99792b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatabase", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3901,6 +3956,17 @@ class CfnDisk(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDisk")
+    @builtins.classmethod
+    def arn_for_disk(cls, resource: _IDiskRef_07664287) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__022511771a31bad33aa1ec7986e9d331d522971df7bb4cb3373dfaff62e2f766)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDisk", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4603,6 +4669,20 @@ class CfnDiskSnapshot(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDiskSnapshot")
+    @builtins.classmethod
+    def arn_for_disk_snapshot(
+        cls,
+        resource: _IDiskSnapshotRef_954b35e1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a302472af9c27c4cd17976233595ec65645d3d89b4cd728de26b37ae20d2cc13)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDiskSnapshot", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5070,6 +5150,17 @@ class CfnDistribution(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDistribution")
+    @builtins.classmethod
+    def arn_for_distribution(cls, resource: _IDistributionRef_512dbafd) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__123a0f7b4a4a4f24149ba23fb9bc2af25b6b40ee256ae69b1aaa74c8c53b11cd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDistribution", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6326,6 +6417,17 @@ class CfnDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_3b81a960) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__507adbd9cac81e1b26f69ff326ef8b58e8c6e3fbddc6a969ca1fd759170a79f7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6927,6 +7029,17 @@ class CfnInstance(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInstance")
+    @builtins.classmethod
+    def arn_for_instance(cls, resource: _IInstanceRef_f1c05940) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2419d0e08b78146be7001deab1a3cc6da43f509cacff5bfa6086ca95d2714e01)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstance", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8652,6 +8765,20 @@ class CfnInstanceSnapshot(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForInstanceSnapshot")
+    @builtins.classmethod
+    def arn_for_instance_snapshot(
+        cls,
+        resource: _IInstanceSnapshotRef_c18fd10c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b680e0a26ecef603df6458d62954e2b76f1b9dd332d7dbc56415bf55110ddb40)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstanceSnapshot", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9081,6 +9208,20 @@ class CfnLoadBalancer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLoadBalancer")
+    @builtins.classmethod
+    def arn_for_load_balancer(
+        cls,
+        resource: _ILoadBalancerRef_7b5a1371,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__93173a1abd78aa34f032b80172c878c975f9f8183380b6cec32e79a1da0af60f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoadBalancer", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9548,6 +9689,20 @@ class CfnLoadBalancerTlsCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLoadBalancerTlsCertificate")
+    @builtins.classmethod
+    def arn_for_load_balancer_tls_certificate(
+        cls,
+        resource: _ILoadBalancerTlsCertificateRef_c1bbdf26,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c93e56752b81d552f3c3eb1619cbda484b9390527e323d53e4608e7395603e19)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoadBalancerTlsCertificate", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9907,6 +10062,17 @@ class CfnStaticIp(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForStaticIp")
+    @builtins.classmethod
+    def arn_for_static_ip(cls, resource: _IStaticIpRef_8b78d790) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f5fec6acb37516a22ebc86911e5da7d51f5c18b6829fb60a2274e689fb94bfd5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStaticIp", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10128,6 +10294,12 @@ def _typecheckingstub__52a6d2c9652c1f935ede5b57250bb327a005cfd64bafaed966f96abbe
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7ae5869af5473c7e12b4a08ba4a5a5acbdc21485caff55d66afdc63910eb3c86(
+    resource: _IAlarmRef_6cd14bfe,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__92cba21d204152e76e818434e3b1baf4a449ecb411f8200900c1e7cff19b2968(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10238,6 +10410,12 @@ def _typecheckingstub__3f94a4bda809634204637b79ee8727ab741bdbc1389aa69314a9dd6ac
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7127b2d598b76f6618f6dc23407139cc7d9dea1df814058cf34f9ecd42e62bd7(
+    resource: _IBucketRef_94b2e9c2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5a55634856786112230a563acc6361f686fcc4372251819f23a60e0b7448a375(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10325,6 +10503,12 @@ def _typecheckingstub__5e46c9c2a31601388f0189b39ac759febe04b899bf6d84e063082749d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f8a316be0596db222b2e06bf6539c7046dd97ea8ac9e96f2bcdd41ca47e5114c(
+    resource: _ICertificateRef_a38eb928,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cd78f535b6f19bc334f8884c826df32506a72bb7be7a48483b6d136b462c2467(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10383,6 +10567,12 @@ def _typecheckingstub__94bac8a5de27a74603b05e36d9c72422cb8c35ec6940b2bcc87094fd2
     private_registry_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.PrivateRegistryAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     public_domain_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnContainer.PublicDomainNameProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__726d902269c1e0c2573a7c83d8a0442f2cbe751577e87481432a4f1a6c4c5434(
+    resource: _IContainerRef_448c22ea,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10563,6 +10753,12 @@ def _typecheckingstub__723ca4244db57b3b52ce3ed934765e22e79b12ddfe526a8f6db7bdabf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__654468719a0740a09de6b0d09c514963506ab8960b304a0843651076ae99792b(
+    resource: _IDatabaseRef_3bb9625f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__26cc577f7a052133e01e9648ef301f73e94aaaff3448f91e3db303c34c8e1570(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10714,6 +10910,12 @@ def _typecheckingstub__80a3acf97fc9eaa657a04acbab637a1d0adb76d1178dbca352280131a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__022511771a31bad33aa1ec7986e9d331d522971df7bb4cb3373dfaff62e2f766(
+    resource: _IDiskRef_07664287,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea4f169865a73e68a220949579e4971d18e071074b75df08ffa1bf72dedb580c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10809,6 +11011,12 @@ def _typecheckingstub__635e9a5f927b657b2b6980a2d21a19d4d6ef337bedbd026386a095935
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a302472af9c27c4cd17976233595ec65645d3d89b4cd728de26b37ae20d2cc13(
+    resource: _IDiskSnapshotRef_954b35e1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__04aab83a28e37e63c1b2e591b678f9b3cb34b471058c106321646e02dbd6677b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10870,6 +11078,12 @@ def _typecheckingstub__9482ccb96453330c51f380a8c1e2e74f0c57b789e803cc41a6d1f7dcb
     ip_address_type: typing.Optional[builtins.str] = None,
     is_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__123a0f7b4a4a4f24149ba23fb9bc2af25b6b40ee256ae69b1aaa74c8c53b11cd(
+    resource: _IDistributionRef_512dbafd,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11035,6 +11249,12 @@ def _typecheckingstub__fe82b246fe7ed5830d2f0fc5524cb4172fd4d2438795a1aba9ad5e6fd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__507adbd9cac81e1b26f69ff326ef8b58e8c6e3fbddc6a969ca1fd759170a79f7(
+    resource: _IDomainRef_3b81a960,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c5869283d5873a582cc7febd55d88bc8f89d5e0d976b0c63a738d68a672de289(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11109,6 +11329,12 @@ def _typecheckingstub__f56ba2d2d7e68ec61cd3684949f9d2894843d2a820ea3c2a5dce40b36
     state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstance.StateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_data: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2419d0e08b78146be7001deab1a3cc6da43f509cacff5bfa6086ca95d2714e01(
+    resource: _IInstanceRef_f1c05940,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11311,6 +11537,12 @@ def _typecheckingstub__b541a8ae34465f7b9196a2ba229a1f5fd9a1a2d84c59e0a52b4bb8767
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b680e0a26ecef603df6458d62954e2b76f1b9dd332d7dbc56415bf55110ddb40(
+    resource: _IInstanceSnapshotRef_c18fd10c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a49419df28b40d6b77fd339d87e736dc724796cbd17301bcdb9351d9f3dcbdbb(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11371,6 +11603,12 @@ def _typecheckingstub__7424f399a4c81195a3832bf4c1d53a1869a11a94a74f58e7efaf927f4
     session_stickiness_lb_cookie_duration_seconds: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     tls_policy_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__93173a1abd78aa34f032b80172c878c975f9f8183380b6cec32e79a1da0af60f(
+    resource: _ILoadBalancerRef_7b5a1371,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11470,6 +11708,12 @@ def _typecheckingstub__0690a757a43538375584bafa46effdc256cd7146a3c192b0c4ff30490
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c93e56752b81d552f3c3eb1619cbda484b9390527e323d53e4608e7395603e19(
+    resource: _ILoadBalancerTlsCertificateRef_c1bbdf26,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a97d8d5e661589838048f732390ac6917df684142502cf96d4c4bedf29b23918(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11536,6 +11780,12 @@ def _typecheckingstub__f5a6b62049424b56120c89b71c0a6a728662c6441d26ce029e6afa1e2
     *,
     static_ip_name: builtins.str,
     attached_to: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f5fec6acb37516a22ebc86911e5da7d51f5c18b6829fb60a2274e689fb94bfd5(
+    resource: _IStaticIpRef_8b78d790,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -158,6 +158,17 @@ class CfnContact(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForContact")
+    @builtins.classmethod
+    def arn_for_contact(cls, resource: _IContactRef_43eeaa3a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9e68c3750de35e8cfdd54217dda1642ea9dca9e003466917e1b02e390c32bb36)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContact", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -682,6 +693,20 @@ class CfnContactChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForContactChannel")
+    @builtins.classmethod
+    def arn_for_contact_channel(
+        cls,
+        resource: _IContactChannelRef_c6b96ce3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8973c90d8cc94ee0e98690a6c5eb9062189dfc2809fcca6cd876d975dfdc8701)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactChannel", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1158,6 +1183,17 @@ class CfnPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPlan")
+    @builtins.classmethod
+    def arn_for_plan(cls, resource: _IPlanRef_78302c0c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e6e701e027b441a628d79619ec19edde99ef2cd1c8745fad4906d20a829af237)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPlan", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1775,6 +1811,17 @@ class CfnRotation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRotation")
+    @builtins.classmethod
+    def arn_for_rotation(cls, resource: _IRotationRef_bdee0de7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__da85f123f37e43a633240d553fdcbe617197cb7333c30755fea61ec2cd153c8c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRotation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2566,6 +2613,12 @@ def _typecheckingstub__96185056d36e15643884f48a931b8d7005ac84a62576223bb952c8832
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9e68c3750de35e8cfdd54217dda1642ea9dca9e003466917e1b02e390c32bb36(
+    resource: _IContactRef_43eeaa3a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d145b029ad2942410a46b8ef97eda343598f927706f2322d3e0ecae3a114269c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2654,6 +2707,12 @@ def _typecheckingstub__1617a23866261103ffbfe512be7356fd9cfde9f098fbbb8abeafd44e7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8973c90d8cc94ee0e98690a6c5eb9062189dfc2809fcca6cd876d975dfdc8701(
+    resource: _IContactChannelRef_c6b96ce3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c79c2a0f8c2fcfce619e0d43bafe063c344e896341db65e50b14635676b3f64(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2725,6 +2784,12 @@ def _typecheckingstub__f6e0c22680f733d3f22f01f5aa4b1401c09fcbf33bd52ea8ce6e15665
     contact_id: builtins.str,
     rotation_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     stages: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlan.StageProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e6e701e027b441a628d79619ec19edde99ef2cd1c8745fad4906d20a829af237(
+    resource: _IPlanRef_78302c0c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2810,6 +2875,12 @@ def _typecheckingstub__26eef7672fdd8123b01e699b8130ced5537ce3c542ab77ee1c6c06cb0
     start_time: builtins.str,
     time_zone_id: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__da85f123f37e43a633240d553fdcbe617197cb7333c30755fea61ec2cd153c8c(
+    resource: _IRotationRef_bdee0de7,
 ) -> None:
     """Type checking stubs"""
     pass

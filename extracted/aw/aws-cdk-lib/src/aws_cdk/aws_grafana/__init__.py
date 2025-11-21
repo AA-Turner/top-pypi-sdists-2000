@@ -68,6 +68,7 @@ from ..interfaces.aws_grafana import (
     IWorkspaceRef as _IWorkspaceRef_9ec37edd,
     WorkspaceReference as _WorkspaceReference_e8dd807e,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.implements(_IInspectable_c2943556, _IWorkspaceRef_9ec37edd)
@@ -158,7 +159,7 @@ class CfnWorkspace(
         organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
         organization_role_name: typing.Optional[builtins.str] = None,
         plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.SamlConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stack_set_name: typing.Optional[builtins.str] = None,
         vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkspace.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1246,7 +1247,7 @@ class CfnWorkspaceProps:
         organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
         organization_role_name: typing.Optional[builtins.str] = None,
         plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.SamlConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         stack_set_name: typing.Optional[builtins.str] = None,
         vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1532,7 +1533,9 @@ class CfnWorkspaceProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The IAM role that grants permissions to the AWS resources that the workspace will view data from.
 
         This role must already exist.
@@ -1540,7 +1543,7 @@ class CfnWorkspaceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-grafana-workspace.html#cfn-grafana-workspace-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def saml_configuration(
@@ -1613,7 +1616,7 @@ def _typecheckingstub__972564e8260607f3980c99a1e9aecab41a9a45a486b896a29b3870ef3
     organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
     organization_role_name: typing.Optional[builtins.str] = None,
     plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.SamlConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stack_set_name: typing.Optional[builtins.str] = None,
     vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1805,7 +1808,7 @@ def _typecheckingstub__58b0ac807ec7944eb7226ae6fc02b338bc05594b2b8737ec34bf5dbde
     organizational_units: typing.Optional[typing.Sequence[builtins.str]] = None,
     organization_role_name: typing.Optional[builtins.str] = None,
     plugin_admin_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     saml_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.SamlConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stack_set_name: typing.Optional[builtins.str] = None,
     vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

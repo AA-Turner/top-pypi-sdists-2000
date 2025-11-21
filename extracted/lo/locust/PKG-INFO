@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: locust
-Version: 2.42.3
+Version: 2.42.5
 Summary: Developer-friendly load testing framework
 Project-URL: homepage, https://locust.io/
 Project-URL: repository, https://github.com/locustio/locust
@@ -31,10 +31,10 @@ Requires-Dist: flask-login>=0.6.3
 Requires-Dist: flask>=2.0.0
 Requires-Dist: gevent!=25.8.1,<26.0.0,>=24.10.1
 Requires-Dist: geventhttpclient>=2.3.1
-Requires-Dist: locust-cloud>=1.28.1
+Requires-Dist: locust-cloud>=1.29.0
 Requires-Dist: msgpack>=1.0.0
 Requires-Dist: psutil>=5.9.1
-Requires-Dist: pytest<9.0.0,>=8.3.3
+Requires-Dist: pytest<10,>=8.3.3
 Requires-Dist: python-engineio>=4.12.2
 Requires-Dist: python-socketio[client]>=5.13.0
 Requires-Dist: pywin32; sys_platform == 'win32'
@@ -49,6 +49,12 @@ Provides-Extra: milvus
 Requires-Dist: pymilvus>=2.5.0; extra == 'milvus'
 Provides-Extra: mqtt
 Requires-Dist: paho-mqtt>=2.1.0; extra == 'mqtt'
+Provides-Extra: otel
+Requires-Dist: opentelemetry-exporter-otlp-proto-grpc>=1.38.0; extra == 'otel'
+Requires-Dist: opentelemetry-exporter-otlp-proto-http>=1.38.0; extra == 'otel'
+Requires-Dist: opentelemetry-instrumentation-requests>=0.59b0; extra == 'otel'
+Requires-Dist: opentelemetry-instrumentation-urllib3>=0.59b0; extra == 'otel'
+Requires-Dist: opentelemetry-sdk>=1.38.0; extra == 'otel'
 Description-Content-Type: text/markdown
 
 # Locust

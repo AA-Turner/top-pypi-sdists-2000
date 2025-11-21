@@ -68,6 +68,8 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_timestream import (
     DatabaseReference as _DatabaseReference_878e2d6a,
     IDatabaseRef as _IDatabaseRef_b98a2003,
@@ -88,7 +90,7 @@ class CfnDatabase(
 ):
     '''Creates a new Timestream database.
 
-    If the AWS KMS key is not specified, the database will be encrypted with a Timestream managed AWS KMS key located in your account. Refer to `AWS managed AWS KMS keys <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ for more info. `Service quotas apply <https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html>`_ . See `code sample <https://docs.aws.amazon.com/timestream/latest/developerguide/code-samples.create-db.html>`_ for details.
+    If the AWS  key is not specified, the database will be encrypted with a Timestream managed AWS  key located in your account. Refer to `AWS managed AWS  keys <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ for more info. `Service quotas apply <https://docs.aws.amazon.com/timestream/latest/developerguide/ts-limits.html>`_ . See `code sample <https://docs.aws.amazon.com/timestream/latest/developerguide/code-samples.create-db.html>`_ for details.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-database.html
     :cloudformationResource: AWS::Timestream::Database
@@ -116,7 +118,7 @@ class CfnDatabase(
         id: builtins.str,
         *,
         database_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Timestream::Database``.
@@ -124,7 +126,7 @@ class CfnDatabase(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param database_name: The name of the Timestream database. *Length Constraints* : Minimum length of 3 bytes. Maximum length of 256 bytes.
-        :param kms_key_id: The identifier of the AWS KMS key used to encrypt the data stored in the database.
+        :param kms_key_id: The identifier of the AWS key used to encrypt the data stored in the database.
         :param tags: The tags to add to the database.
         '''
         if __debug__:
@@ -136,6 +138,17 @@ class CfnDatabase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDatabase")
+    @builtins.classmethod
+    def arn_for_database(cls, resource: _IDatabaseRef_b98a2003) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__046c0a4726dd646251e82891d86d3b95307369bbd67bf1c46eb08fe18142985d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatabase", [resource]))
 
     @jsii.member(jsii_name="fromDatabaseArn")
     @builtins.classmethod
@@ -251,7 +264,7 @@ class CfnDatabase(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS key used to encrypt the data stored in the database.'''
+        '''The identifier of the AWS  key used to encrypt the data stored in the database.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -289,13 +302,13 @@ class CfnDatabaseProps:
         self,
         *,
         database_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDatabase``.
 
         :param database_name: The name of the Timestream database. *Length Constraints* : Minimum length of 3 bytes. Maximum length of 256 bytes.
-        :param kms_key_id: The identifier of the AWS KMS key used to encrypt the data stored in the database.
+        :param kms_key_id: The identifier of the AWS key used to encrypt the data stored in the database.
         :param tags: The tags to add to the database.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-database.html
@@ -341,13 +354,15 @@ class CfnDatabaseProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS key used to encrypt the data stored in the database.
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+        '''The identifier of the AWS  key used to encrypt the data stored in the database.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-database.html#cfn-timestream-database-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -489,6 +504,20 @@ class CfnInfluxDBInstance(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInfluxDBInstance")
+    @builtins.classmethod
+    def arn_for_influx_db_instance(
+        cls,
+        resource: _IInfluxDBInstanceRef_adefa1a4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1bb3798c9f0dbb1f290ab96e7f63a4fa43df26d2ab3a4c079bbbcbb195fde74)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInfluxDBInstance", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1426,9 +1455,9 @@ class CfnScheduledQuery(
         notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledQuery.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         query_string: builtins.str,
         schedule_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledQuery.ScheduleConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
-        scheduled_query_execution_role_arn: builtins.str,
+        scheduled_query_execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         client_token: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         scheduled_query_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScheduledQuery.TargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1466,6 +1495,20 @@ class CfnScheduledQuery(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForScheduledQuery")
+    @builtins.classmethod
+    def arn_for_scheduled_query(
+        cls,
+        resource: _IScheduledQueryRef_fe91b7e9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__136b6a9a4ec8477481842818afb44b3133e8a60e35b46e430fe45c479ac5a3bb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScheduledQuery", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2787,9 +2830,9 @@ class CfnScheduledQueryProps:
         notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
         query_string: builtins.str,
         schedule_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.ScheduleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-        scheduled_query_execution_role_arn: builtins.str,
+        scheduled_query_execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         client_token: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         scheduled_query_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2973,14 +3016,16 @@ class CfnScheduledQueryProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnScheduledQuery.ScheduleConfigurationProperty], result)
 
     @builtins.property
-    def scheduled_query_execution_role_arn(self) -> builtins.str:
+    def scheduled_query_execution_role_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN for the IAM role that Timestream will assume when running the scheduled query.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-scheduledquery.html#cfn-timestream-scheduledquery-scheduledqueryexecutionrolearn
         '''
         result = self._values.get("scheduled_query_execution_role_arn")
         assert result is not None, "Required property 'scheduled_query_execution_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def client_token(self) -> typing.Optional[builtins.str]:
@@ -2997,7 +3042,9 @@ class CfnScheduledQueryProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The Amazon KMS key used to encrypt the scheduled query resource, at-rest.
 
         If the Amazon KMS key is not specified, the scheduled query resource will be encrypted with a Timestream owned Amazon KMS key. To specify a KMS key, use the key ID, key ARN, alias name, or alias ARN. When using an alias name, prefix the name with *alias/*
@@ -3007,7 +3054,7 @@ class CfnScheduledQueryProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-timestream-scheduledquery.html#cfn-timestream-scheduledquery-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def scheduled_query_name(self) -> typing.Optional[builtins.str]:
@@ -3103,7 +3150,7 @@ class CfnTable(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        database_name: builtins.str,
+        database_name: typing.Union[builtins.str, _IDatabaseRef_b98a2003],
         magnetic_store_write_properties: typing.Any = None,
         retention_properties: typing.Any = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.SchemaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3135,6 +3182,17 @@ class CfnTable(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTable")
+    @builtins.classmethod
+    def arn_for_table(cls, resource: _ITableRef_93a3bc2d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b03b9bb65b514db92f8cec73ae39990041fd6ff857928031129ba3efb237d36)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTable", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3638,7 +3696,7 @@ class CfnTable(
 
             :param bucket_name: The bucket name of the customer S3 bucket.
             :param encryption_option: The encryption option for the customer S3 location. Options are S3 server-side encryption with an S3 managed key or AWS managed key.
-            :param kms_key_id: The AWS KMS key ID for the customer S3 location when encrypting with an AWS managed key.
+            :param kms_key_id: The AWS key ID for the customer S3 location when encrypting with an AWS managed key.
             :param object_key_prefix: The object key preview for the customer S3 location.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-timestream-table-s3configuration.html
@@ -3698,7 +3756,7 @@ class CfnTable(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS KMS key ID for the customer S3 location when encrypting with an AWS managed key.
+            '''The AWS  key ID for the customer S3 location when encrypting with an AWS managed key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-timestream-table-s3configuration.html#cfn-timestream-table-s3configuration-kmskeyid
             '''
@@ -3807,7 +3865,7 @@ class CfnTableProps:
     def __init__(
         self,
         *,
-        database_name: builtins.str,
+        database_name: typing.Union[builtins.str, _IDatabaseRef_b98a2003],
         magnetic_store_write_properties: typing.Any = None,
         retention_properties: typing.Any = None,
         schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3880,7 +3938,7 @@ class CfnTableProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def database_name(self) -> builtins.str:
+    def database_name(self) -> typing.Union[builtins.str, _IDatabaseRef_b98a2003]:
         '''The name of the Timestream database that contains this table.
 
         *Length Constraints* : Minimum length of 3 bytes. Maximum length of 256 bytes.
@@ -3889,7 +3947,7 @@ class CfnTableProps:
         '''
         result = self._values.get("database_name")
         assert result is not None, "Required property 'database_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDatabaseRef_b98a2003], result)
 
     @builtins.property
     def magnetic_store_write_properties(self) -> typing.Any:
@@ -4013,8 +4071,14 @@ def _typecheckingstub__df267d6c98734bb503e076f315371b3537a6654cdfd5246386d41db61
     id: builtins.str,
     *,
     database_name: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__046c0a4726dd646251e82891d86d3b95307369bbd67bf1c46eb08fe18142985d(
+    resource: _IDatabaseRef_b98a2003,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4068,7 +4132,7 @@ def _typecheckingstub__c161fd44298031bcce0863494a5d3a09a73703fe8c50ee977b03cbe4c
 def _typecheckingstub__fffb8befe8374295020dd254ed0c77820bb26fc0d94c59e0a34f89d6fb3f295c(
     *,
     database_name: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -4095,6 +4159,12 @@ def _typecheckingstub__261e4a43f1d3c329e317698aa3b0f0428b7e7d3646c4c536f48fd191f
     username: typing.Optional[builtins.str] = None,
     vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     vpc_subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e1bb3798c9f0dbb1f290ab96e7f63a4fa43df26d2ab3a4c079bbbcbb195fde74(
+    resource: _IInfluxDBInstanceRef_adefa1a4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4259,12 +4329,18 @@ def _typecheckingstub__17cb9c0ebf2969eb32b3d5921e02d6b922a461b4f7becdb1bf28f83cb
     notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     query_string: builtins.str,
     schedule_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.ScheduleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    scheduled_query_execution_role_arn: builtins.str,
+    scheduled_query_execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     client_token: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     scheduled_query_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__136b6a9a4ec8477481842818afb44b3133e8a60e35b46e430fe45c479ac5a3bb(
+    resource: _IScheduledQueryRef_fe91b7e9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4440,9 +4516,9 @@ def _typecheckingstub__2caf5d9713b0dd130de3eaf553fcdda6f169bfdde6f8f293349239a73
     notification_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     query_string: builtins.str,
     schedule_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.ScheduleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
-    scheduled_query_execution_role_arn: builtins.str,
+    scheduled_query_execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     client_token: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     scheduled_query_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScheduledQuery.TargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4454,12 +4530,18 @@ def _typecheckingstub__aad96eaee00841ee49968da22b6ed13b3777f265d71c1981b2f1b217c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    database_name: builtins.str,
+    database_name: typing.Union[builtins.str, _IDatabaseRef_b98a2003],
     magnetic_store_write_properties: typing.Any = None,
     retention_properties: typing.Any = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     table_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b03b9bb65b514db92f8cec73ae39990041fd6ff857928031129ba3efb237d36(
+    resource: _ITableRef_93a3bc2d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4563,7 +4645,7 @@ def _typecheckingstub__09067b1978c488643c66537ddae08f743cfe6b4aac79c820f90d9c083
 
 def _typecheckingstub__a9edb9a2aaa51342f4db373e24edd938478a52c96340bde2bc89fe7b86eb4431(
     *,
-    database_name: builtins.str,
+    database_name: typing.Union[builtins.str, _IDatabaseRef_b98a2003],
     magnetic_store_write_properties: typing.Any = None,
     retention_properties: typing.Any = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SchemaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

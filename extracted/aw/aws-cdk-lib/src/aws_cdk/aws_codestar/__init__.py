@@ -83,7 +83,7 @@ class CfnGitHubRepository(
 ):
     '''The ``AWS::CodeStar::GitHubRepository`` resource creates a GitHub repository where users can store source code for use with AWS workflows.
 
-    You must provide a location for the source code ZIP file in the AWS CloudFormation template, so the code can be uploaded to the created repository. You must have created a personal access token in GitHub to provide in the AWS CloudFormation template. AWS uses this token to connect to GitHub on your behalf.
+    You must provide a location for the source code ZIP file in the CloudFormation template, so the code can be uploaded to the created repository. You must have created a personal access token in GitHub to provide in the CloudFormation template. AWS uses this token to connect to GitHub on your behalf.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html
     :cloudformationResource: AWS::CodeStar::GitHubRepository
@@ -135,9 +135,9 @@ class CfnGitHubRepository(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param repository_name: The name of the repository you want to create in GitHub with AWS CloudFormation stack creation.
+        :param repository_name: The name of the repository you want to create in GitHub with CloudFormation stack creation.
         :param repository_owner: The GitHub user name for the owner of the GitHub repository to be created. If this repository should be owned by a GitHub organization, provide its name.
-        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.
+        :param code: Information about code to be committed to a repository after it is created in an CloudFormation stack.
         :param connection_arn: 
         :param enable_issues: Indicates whether to enable issues for the GitHub repository. You can use GitHub issues to track information and bugs for your repository.
         :param is_private: Indicates whether the GitHub repository is a private repository. If so, you choose who can see and commit to this repository.
@@ -214,7 +214,7 @@ class CfnGitHubRepository(
     @builtins.property
     @jsii.member(jsii_name="repositoryName")
     def repository_name(self) -> builtins.str:
-        '''The name of the repository you want to create in GitHub with AWS CloudFormation stack creation.'''
+        '''The name of the repository you want to create in GitHub with CloudFormation stack creation.'''
         return typing.cast(builtins.str, jsii.get(self, "repositoryName"))
 
     @repository_name.setter
@@ -242,7 +242,7 @@ class CfnGitHubRepository(
     def code(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.CodeProperty"]]:
-        '''Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.'''
+        '''Information about code to be committed to a repository after it is created in an CloudFormation stack.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnGitHubRepository.CodeProperty"]], jsii.get(self, "code"))
 
     @code.setter
@@ -519,9 +519,9 @@ class CfnGitHubRepositoryProps:
     ) -> None:
         '''Properties for defining a ``CfnGitHubRepository``.
 
-        :param repository_name: The name of the repository you want to create in GitHub with AWS CloudFormation stack creation.
+        :param repository_name: The name of the repository you want to create in GitHub with CloudFormation stack creation.
         :param repository_owner: The GitHub user name for the owner of the GitHub repository to be created. If this repository should be owned by a GitHub organization, provide its name.
-        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.
+        :param code: Information about code to be committed to a repository after it is created in an CloudFormation stack.
         :param connection_arn: 
         :param enable_issues: Indicates whether to enable issues for the GitHub repository. You can use GitHub issues to track information and bugs for your repository.
         :param is_private: Indicates whether the GitHub repository is a private repository. If so, you choose who can see and commit to this repository.
@@ -587,7 +587,7 @@ class CfnGitHubRepositoryProps:
 
     @builtins.property
     def repository_name(self) -> builtins.str:
-        '''The name of the repository you want to create in GitHub with AWS CloudFormation stack creation.
+        '''The name of the repository you want to create in GitHub with CloudFormation stack creation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html#cfn-codestar-githubrepository-repositoryname
         '''
@@ -611,7 +611,7 @@ class CfnGitHubRepositoryProps:
     def code(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnGitHubRepository.CodeProperty]]:
-        '''Information about code to be committed to a repository after it is created in an AWS CloudFormation stack.
+        '''Information about code to be committed to a repository after it is created in an CloudFormation stack.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codestar-githubrepository.html#cfn-codestar-githubrepository-code
         '''

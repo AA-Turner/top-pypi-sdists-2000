@@ -80,7 +80,7 @@ class CfnGrant(
 ):
     '''Specifies a grant.
 
-    A grant shares the use of license entitlements with specific AWS accounts . For more information, see `Granted licenses <https://docs.aws.amazon.com/license-manager/latest/userguide/granted-licenses.html>`_ in the *AWS License Manager User Guide* .
+    A grant shares the use of license entitlements with specific AWS accounts . For more information, see `Granted licenses <https://docs.aws.amazon.com/license-manager/latest/userguide/granted-licenses.html>`_ in the *License Manager User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-grant.html
     :cloudformationResource: AWS::LicenseManager::Grant
@@ -139,6 +139,17 @@ class CfnGrant(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGrant")
+    @builtins.classmethod
+    def arn_for_grant(cls, resource: _IGrantRef_b205a504) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d75a1343afb37f47732759e1bffa4521f7146f8652ca23eb417d8545df2c5632)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGrant", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -434,7 +445,7 @@ class CfnLicense(
 ):
     '''Specifies a granted license.
 
-    Granted licenses are licenses for products that your organization purchased from AWS Marketplace or directly from a seller who integrated their software with managed entitlements. For more information, see `Granted licenses <https://docs.aws.amazon.com/license-manager/latest/userguide/granted-licenses.html>`_ in the *AWS License Manager User Guide* .
+    Granted licenses are licenses for products that your organization purchased from AWS Marketplace or directly from a seller who integrated their software with managed entitlements. For more information, see `Granted licenses <https://docs.aws.amazon.com/license-manager/latest/userguide/granted-licenses.html>`_ in the *License Manager User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-licensemanager-license.html
     :cloudformationResource: AWS::LicenseManager::License
@@ -544,6 +555,17 @@ class CfnLicense(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLicense")
+    @builtins.classmethod
+    def arn_for_license(cls, resource: _ILicenseRef_ae3cfc85) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__edbf08bc914e74c1bdf307cc4a134bf853aec8fa0fa88bdae05d34aad073560d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLicense", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1637,6 +1659,12 @@ def _typecheckingstub__e8429ee81c009103dd15c76170dfb52e5ca38f72a8912b82d6e63e3f4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d75a1343afb37f47732759e1bffa4521f7146f8652ca23eb417d8545df2c5632(
+    resource: _IGrantRef_b205a504,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__06f3d843a99f00dd40b93f69a334bda31af66745c91ef0da13aef948b5e7cd3b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1712,6 +1740,12 @@ def _typecheckingstub__4fa5716b8b0216bdd1da1f12239ad6038aa037294da7f4a1f0215f1b1
     license_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLicense.MetadataProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     product_sku: typing.Optional[builtins.str] = None,
     status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__edbf08bc914e74c1bdf307cc4a134bf853aec8fa0fa88bdae05d34aad073560d(
+    resource: _ILicenseRef_ae3cfc85,
 ) -> None:
     """Type checking stubs"""
     pass

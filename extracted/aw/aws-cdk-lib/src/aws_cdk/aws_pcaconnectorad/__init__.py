@@ -159,6 +159,17 @@ class CfnConnector(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConnector")
+    @builtins.classmethod
+    def arn_for_connector(cls, resource: _IConnectorRef_326d99a5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5fe1d3219931782f8eb572b88e9686c0c1fdd31e50bd9054eba69419b516859f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnector", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -522,6 +533,20 @@ class CfnDirectoryRegistration(
         props = CfnDirectoryRegistrationProps(directory_id=directory_id, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDirectoryRegistration")
+    @builtins.classmethod
+    def arn_for_directory_registration(
+        cls,
+        resource: _IDirectoryRegistrationRef_cd17a4de,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__577bad17eb64b5e06f926a4da6798ee8be0686daab43e29c0696c55e040707fd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDirectoryRegistration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1202,6 +1227,17 @@ class CfnTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTemplate")
+    @builtins.classmethod
+    def arn_for_template(cls, resource: _ITemplateRef_1b150fa8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ca83fc9f9dde4acda819f5d0049c2062ed2495dae5d9a37f163a144aa158600)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6321,6 +6357,12 @@ def _typecheckingstub__a12163a6729548e5010cdebd16984d9bc442d61e9fbbf189c986731db
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5fe1d3219931782f8eb572b88e9686c0c1fdd31e50bd9054eba69419b516859f(
+    resource: _IConnectorRef_326d99a5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__995fc1e26ccbb1d65aff429128879ca6773f054cc4f117a8e1447be68e0afc96(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6381,6 +6423,12 @@ def _typecheckingstub__9e325d6e149baf8a596306043eb453d2d3f8e118e00d5278dd37d6c33
     *,
     directory_id: builtins.str,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__577bad17eb64b5e06f926a4da6798ee8be0686daab43e29c0696c55e040707fd(
+    resource: _IDirectoryRegistrationRef_cd17a4de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6468,6 +6516,12 @@ def _typecheckingstub__058e4ad420b7fd03441f402ba72d6e3735672960ebcc0af660d043e5d
     name: builtins.str,
     reenroll_all_certificate_holders: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ca83fc9f9dde4acda819f5d0049c2062ed2495dae5d9a37f163a144aa158600(
+    resource: _ITemplateRef_1b150fa8,
 ) -> None:
     """Type checking stubs"""
     pass

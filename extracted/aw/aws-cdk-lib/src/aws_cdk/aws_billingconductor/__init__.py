@@ -99,19 +99,18 @@ class CfnBillingGroup(
         
         cfn_billing_group = billingconductor.CfnBillingGroup(self, "MyCfnBillingGroup",
             account_grouping=billingconductor.CfnBillingGroup.AccountGroupingProperty(
+                auto_associate=False,
                 linked_account_ids=["linkedAccountIds"],
-        
-                # the properties below are optional
-                auto_associate=False
+                responsibility_transfer_arn="responsibilityTransferArn"
             ),
             computation_preference=billingconductor.CfnBillingGroup.ComputationPreferenceProperty(
                 pricing_plan_arn="pricingPlanArn"
             ),
             name="name",
-            primary_account_id="primaryAccountId",
         
             # the properties below are optional
             description="description",
+            primary_account_id="primaryAccountId",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -127,8 +126,8 @@ class CfnBillingGroup(
         account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBillingGroup.AccountGroupingProperty", typing.Dict[builtins.str, typing.Any]]],
         computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBillingGroup.ComputationPreferenceProperty", typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        primary_account_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        primary_account_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::BillingConductor::BillingGroup``.
@@ -138,8 +137,8 @@ class CfnBillingGroup(
         :param account_grouping: The set of accounts that will be under the billing group. The set of accounts resemble the linked accounts in a consolidated billing family.
         :param computation_preference: The preferences and settings that will be used to compute the AWS charges for a billing group.
         :param name: The billing group's name.
-        :param primary_account_id: The account ID that serves as the main account in a billing group.
         :param description: The description of the billing group.
+        :param primary_account_id: The account ID that serves as the main account in a billing group.
         :param tags: A map that contains tag keys and tag values that are attached to a billing group.
         '''
         if __debug__:
@@ -150,12 +149,26 @@ class CfnBillingGroup(
             account_grouping=account_grouping,
             computation_preference=computation_preference,
             name=name,
-            primary_account_id=primary_account_id,
             description=description,
+            primary_account_id=primary_account_id,
             tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBillingGroup")
+    @builtins.classmethod
+    def arn_for_billing_group(
+        cls,
+        resource: _IBillingGroupRef_86ba3c16,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d5727bfe6853a7a78ddc730abe2f20008e8fdc01a64a867ee2d8e308ffedbcd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBillingGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -310,19 +323,6 @@ class CfnBillingGroup(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="primaryAccountId")
-    def primary_account_id(self) -> builtins.str:
-        '''The account ID that serves as the main account in a billing group.'''
-        return typing.cast(builtins.str, jsii.get(self, "primaryAccountId"))
-
-    @primary_account_id.setter
-    def primary_account_id(self, value: builtins.str) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__646e42b3eea2692844d00bd93cbeba06bbc5856813d7c83f651e58c4b732edb1)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "primaryAccountId", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''The description of the billing group.'''
@@ -334,6 +334,19 @@ class CfnBillingGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__4fc1781db3881f01d158fbbb578c5ea178837f7c8778e4d3e24edfbbb0f4a04d)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="primaryAccountId")
+    def primary_account_id(self) -> typing.Optional[builtins.str]:
+        '''The account ID that serves as the main account in a billing group.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "primaryAccountId"))
+
+    @primary_account_id.setter
+    def primary_account_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__646e42b3eea2692844d00bd93cbeba06bbc5856813d7c83f651e58c4b732edb1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "primaryAccountId", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
@@ -352,23 +365,26 @@ class CfnBillingGroup(
         jsii_type="aws-cdk-lib.aws_billingconductor.CfnBillingGroup.AccountGroupingProperty",
         jsii_struct_bases=[],
         name_mapping={
-            "linked_account_ids": "linkedAccountIds",
             "auto_associate": "autoAssociate",
+            "linked_account_ids": "linkedAccountIds",
+            "responsibility_transfer_arn": "responsibilityTransferArn",
         },
     )
     class AccountGroupingProperty:
         def __init__(
             self,
             *,
-            linked_account_ids: typing.Sequence[builtins.str],
             auto_associate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            linked_account_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+            responsibility_transfer_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The set of accounts that will be under the billing group.
 
             The set of accounts resemble the linked accounts in a consolidated billing family.
 
-            :param linked_account_ids: The account IDs that make up the billing group. Account IDs must be a part of the consolidated billing family, and not associated with another billing group.
             :param auto_associate: Specifies if this billing group will automatically associate newly added AWS accounts that join your consolidated billing family.
+            :param linked_account_ids: The account IDs that make up the billing group. Account IDs must be a part of the consolidated billing family, and not associated with another billing group.
+            :param responsibility_transfer_arn: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html
             :exampleMetadata: fixture=_generated
@@ -380,33 +396,23 @@ class CfnBillingGroup(
                 from aws_cdk import aws_billingconductor as billingconductor
                 
                 account_grouping_property = billingconductor.CfnBillingGroup.AccountGroupingProperty(
+                    auto_associate=False,
                     linked_account_ids=["linkedAccountIds"],
-                
-                    # the properties below are optional
-                    auto_associate=False
+                    responsibility_transfer_arn="responsibilityTransferArn"
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__f49e139e00b0b5c04a1b1b546023b83549fcc6843b2bc7fa73b39fd6736ee578)
-                check_type(argname="argument linked_account_ids", value=linked_account_ids, expected_type=type_hints["linked_account_ids"])
                 check_type(argname="argument auto_associate", value=auto_associate, expected_type=type_hints["auto_associate"])
-            self._values: typing.Dict[builtins.str, typing.Any] = {
-                "linked_account_ids": linked_account_ids,
-            }
+                check_type(argname="argument linked_account_ids", value=linked_account_ids, expected_type=type_hints["linked_account_ids"])
+                check_type(argname="argument responsibility_transfer_arn", value=responsibility_transfer_arn, expected_type=type_hints["responsibility_transfer_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
             if auto_associate is not None:
                 self._values["auto_associate"] = auto_associate
-
-        @builtins.property
-        def linked_account_ids(self) -> typing.List[builtins.str]:
-            '''The account IDs that make up the billing group.
-
-            Account IDs must be a part of the consolidated billing family, and not associated with another billing group.
-
-            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html#cfn-billingconductor-billinggroup-accountgrouping-linkedaccountids
-            '''
-            result = self._values.get("linked_account_ids")
-            assert result is not None, "Required property 'linked_account_ids' is missing"
-            return typing.cast(typing.List[builtins.str], result)
+            if linked_account_ids is not None:
+                self._values["linked_account_ids"] = linked_account_ids
+            if responsibility_transfer_arn is not None:
+                self._values["responsibility_transfer_arn"] = responsibility_transfer_arn
 
         @builtins.property
         def auto_associate(
@@ -418,6 +424,25 @@ class CfnBillingGroup(
             '''
             result = self._values.get("auto_associate")
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def linked_account_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The account IDs that make up the billing group.
+
+            Account IDs must be a part of the consolidated billing family, and not associated with another billing group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html#cfn-billingconductor-billinggroup-accountgrouping-linkedaccountids
+            '''
+            result = self._values.get("linked_account_ids")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def responsibility_transfer_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-billingconductor-billinggroup-accountgrouping.html#cfn-billingconductor-billinggroup-accountgrouping-responsibilitytransferarn
+            '''
+            result = self._values.get("responsibility_transfer_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -490,8 +515,8 @@ class CfnBillingGroup(
         "account_grouping": "accountGrouping",
         "computation_preference": "computationPreference",
         "name": "name",
-        "primary_account_id": "primaryAccountId",
         "description": "description",
+        "primary_account_id": "primaryAccountId",
         "tags": "tags",
     },
 )
@@ -502,8 +527,8 @@ class CfnBillingGroupProps:
         account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.AccountGroupingProperty, typing.Dict[builtins.str, typing.Any]]],
         computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.ComputationPreferenceProperty, typing.Dict[builtins.str, typing.Any]]],
         name: builtins.str,
-        primary_account_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
+        primary_account_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBillingGroup``.
@@ -511,8 +536,8 @@ class CfnBillingGroupProps:
         :param account_grouping: The set of accounts that will be under the billing group. The set of accounts resemble the linked accounts in a consolidated billing family.
         :param computation_preference: The preferences and settings that will be used to compute the AWS charges for a billing group.
         :param name: The billing group's name.
-        :param primary_account_id: The account ID that serves as the main account in a billing group.
         :param description: The description of the billing group.
+        :param primary_account_id: The account ID that serves as the main account in a billing group.
         :param tags: A map that contains tag keys and tag values that are attached to a billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html
@@ -526,19 +551,18 @@ class CfnBillingGroupProps:
             
             cfn_billing_group_props = billingconductor.CfnBillingGroupProps(
                 account_grouping=billingconductor.CfnBillingGroup.AccountGroupingProperty(
+                    auto_associate=False,
                     linked_account_ids=["linkedAccountIds"],
-            
-                    # the properties below are optional
-                    auto_associate=False
+                    responsibility_transfer_arn="responsibilityTransferArn"
                 ),
                 computation_preference=billingconductor.CfnBillingGroup.ComputationPreferenceProperty(
                     pricing_plan_arn="pricingPlanArn"
                 ),
                 name="name",
-                primary_account_id="primaryAccountId",
             
                 # the properties below are optional
                 description="description",
+                primary_account_id="primaryAccountId",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -550,17 +574,18 @@ class CfnBillingGroupProps:
             check_type(argname="argument account_grouping", value=account_grouping, expected_type=type_hints["account_grouping"])
             check_type(argname="argument computation_preference", value=computation_preference, expected_type=type_hints["computation_preference"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument primary_account_id", value=primary_account_id, expected_type=type_hints["primary_account_id"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument primary_account_id", value=primary_account_id, expected_type=type_hints["primary_account_id"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "account_grouping": account_grouping,
             "computation_preference": computation_preference,
             "name": name,
-            "primary_account_id": primary_account_id,
         }
         if description is not None:
             self._values["description"] = description
+        if primary_account_id is not None:
+            self._values["primary_account_id"] = primary_account_id
         if tags is not None:
             self._values["tags"] = tags
 
@@ -601,22 +626,21 @@ class CfnBillingGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def primary_account_id(self) -> builtins.str:
-        '''The account ID that serves as the main account in a billing group.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html#cfn-billingconductor-billinggroup-primaryaccountid
-        '''
-        result = self._values.get("primary_account_id")
-        assert result is not None, "Required property 'primary_account_id' is missing"
-        return typing.cast(builtins.str, result)
-
-    @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
         '''The description of the billing group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html#cfn-billingconductor-billinggroup-description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def primary_account_id(self) -> typing.Optional[builtins.str]:
+        '''The account ID that serves as the main account in a billing group.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-billingconductor-billinggroup.html#cfn-billingconductor-billinggroup-primaryaccountid
+        '''
+        result = self._values.get("primary_account_id")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -747,6 +771,20 @@ class CfnCustomLineItem(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCustomLineItem")
+    @builtins.classmethod
+    def arn_for_custom_line_item(
+        cls,
+        resource: _ICustomLineItemRef_c7ad9dbf,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5297fff29fe9a6202a4454f8a5b819791a9363fbb3a2916d0d5379704ef90b16)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomLineItem", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1752,6 +1790,17 @@ class CfnPricingPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPricingPlan")
+    @builtins.classmethod
+    def arn_for_pricing_plan(cls, resource: _IPricingPlanRef_bcdd307a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ed43017dc10ffaafd04c990ad98ebd4151463672d696468d62bc91b58cdd68ad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPricingPlan", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2097,6 +2146,17 @@ class CfnPricingRule(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForPricingRule")
+    @builtins.classmethod
+    def arn_for_pricing_rule(cls, resource: _IPricingRuleRef_3b8a6f60) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b15528dcf35a466a7153099f6477515c8081c025e14ce8bbc2e4c7d86d2a986)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPricingRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2699,9 +2759,15 @@ def _typecheckingstub__34db7ef1df00bd83f1d6bc7787b13169d6053ecbe4f7a96747e98db54
     account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.AccountGroupingProperty, typing.Dict[builtins.str, typing.Any]]],
     computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.ComputationPreferenceProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
-    primary_account_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    primary_account_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d5727bfe6853a7a78ddc730abe2f20008e8fdc01a64a867ee2d8e308ffedbcd(
+    resource: _IBillingGroupRef_86ba3c16,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2736,13 +2802,13 @@ def _typecheckingstub__b8ed4a5183989c6d90d5d14a8b43461549c879acf7cb150cd90684591
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__646e42b3eea2692844d00bd93cbeba06bbc5856813d7c83f651e58c4b732edb1(
-    value: builtins.str,
+def _typecheckingstub__4fc1781db3881f01d158fbbb578c5ea178837f7c8778e4d3e24edfbbb0f4a04d(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__4fc1781db3881f01d158fbbb578c5ea178837f7c8778e4d3e24edfbbb0f4a04d(
+def _typecheckingstub__646e42b3eea2692844d00bd93cbeba06bbc5856813d7c83f651e58c4b732edb1(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -2756,8 +2822,9 @@ def _typecheckingstub__b79940f00b13b42629eb04481540a4b5f0ae2c81a08ba0818cb87b23a
 
 def _typecheckingstub__f49e139e00b0b5c04a1b1b546023b83549fcc6843b2bc7fa73b39fd6736ee578(
     *,
-    linked_account_ids: typing.Sequence[builtins.str],
     auto_associate: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    linked_account_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    responsibility_transfer_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2774,8 +2841,8 @@ def _typecheckingstub__5a5043cf89961ee1d8d0ec8cc20920f3427a03234cc6ae7ee74c77dca
     account_grouping: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.AccountGroupingProperty, typing.Dict[builtins.str, typing.Any]]],
     computation_preference: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBillingGroup.ComputationPreferenceProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
-    primary_account_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    primary_account_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -2794,6 +2861,12 @@ def _typecheckingstub__6c43da03f91fab487cb7b12443aac4a35ef34bfe36c0ce02a150eca1a
     description: typing.Optional[builtins.str] = None,
     presentation_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCustomLineItem.PresentationDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5297fff29fe9a6202a4454f8a5b819791a9363fbb3a2916d0d5379704ef90b16(
+    resource: _ICustomLineItemRef_c7ad9dbf,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2940,6 +3013,12 @@ def _typecheckingstub__5d0ad9e961729ad9fd5da8d3aced4288d20cd531e9ef7f77cb628016c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ed43017dc10ffaafd04c990ad98ebd4151463672d696468d62bc91b58cdd68ad(
+    resource: _IPricingPlanRef_bcdd307a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7ccc28b9652afce0100da6c48f0f841a4f01d03482cad5f13db27c4c6977cc8b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3001,6 +3080,12 @@ def _typecheckingstub__44900bb3a1f7831b3596ad895c7741866b619bfcbfa011b93a64dfccf
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     tiering: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPricingRule.TieringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     usage_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b15528dcf35a466a7153099f6477515c8081c025e14ce8bbc2e4c7d86d2a986(
+    resource: _IPricingRuleRef_3b8a6f60,
 ) -> None:
     """Type checking stubs"""
     pass

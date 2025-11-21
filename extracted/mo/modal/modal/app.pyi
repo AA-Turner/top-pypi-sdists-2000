@@ -487,6 +487,7 @@ class _App:
         is_generator: typing.Optional[bool] = None,
         cloud: typing.Optional[str] = None,
         region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
@@ -494,7 +495,6 @@ class _App:
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
-        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
         _experimental_restrict_output: bool = False,
@@ -503,6 +503,7 @@ class _App:
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
+        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> _FunctionDecoratorType:
         """Decorator to register a new Modal Function with this App."""
         ...
@@ -540,6 +541,7 @@ class _App:
         startup_timeout: typing.Optional[int] = None,
         cloud: typing.Optional[str] = None,
         region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
@@ -547,7 +549,6 @@ class _App:
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
-        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
         _experimental_restrict_output: bool = False,
@@ -556,6 +557,7 @@ class _App:
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
+        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal._partial_function._PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
         ...
@@ -1148,6 +1150,7 @@ class App:
         is_generator: typing.Optional[bool] = None,
         cloud: typing.Optional[str] = None,
         region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
@@ -1155,7 +1158,6 @@ class App:
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
-        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
         _experimental_restrict_output: bool = False,
@@ -1164,6 +1166,7 @@ class App:
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
+        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> _FunctionDecoratorType:
         """Decorator to register a new Modal Function with this App."""
         ...
@@ -1201,6 +1204,7 @@ class App:
         startup_timeout: typing.Optional[int] = None,
         cloud: typing.Optional[str] = None,
         region: typing.Union[str, collections.abc.Sequence[str], None] = None,
+        nonpreemptible: bool = False,
         enable_memory_snapshot: bool = False,
         block_network: bool = False,
         restrict_modal_access: bool = False,
@@ -1208,7 +1212,6 @@ class App:
         i6pn: typing.Optional[bool] = None,
         include_source: typing.Optional[bool] = None,
         experimental_options: typing.Optional[dict[str, typing.Any]] = None,
-        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
         _experimental_proxy_ip: typing.Optional[str] = None,
         _experimental_custom_scaling_factor: typing.Optional[float] = None,
         _experimental_restrict_output: bool = False,
@@ -1217,6 +1220,7 @@ class App:
         container_idle_timeout: typing.Optional[int] = None,
         allow_concurrent_inputs: typing.Optional[int] = None,
         _experimental_buffer_containers: typing.Optional[int] = None,
+        _experimental_scheduler_placement: typing.Optional[modal.scheduler_placement.SchedulerPlacement] = None,
     ) -> collections.abc.Callable[[typing.Union[CLS_T, modal.partial_function.PartialFunction]], CLS_T]:
         """Decorator to register a new Modal [Cls](https://modal.com/docs/reference/modal.Cls) with this App."""
         ...

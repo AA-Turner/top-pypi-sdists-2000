@@ -510,7 +510,9 @@ struct aws_s3_client_config {
      * Optional.
      * Size of parts the object will be downloaded or uploaded in, in bytes.
      * This only affects AWS_S3_META_REQUEST_TYPE_GET_OBJECT and AWS_S3_META_REQUEST_TYPE_PUT_OBJECT.
-     * If not set, this defaults to 8 MiB.
+     *
+     * If not set, a dynamic default part size will be used based on the throughput target, memory_limit_in_bytes.
+     *
      * The client will adjust the part size for AWS_S3_META_REQUEST_TYPE_PUT_OBJECT if needed for service limits (max
      * number of parts per upload is 10,000, minimum upload part size is 5 MiB).
      *
@@ -875,12 +877,21 @@ struct aws_s3_meta_request_options {
      * Optional.
      * Size of parts the object will be downloaded or uploaded in, in bytes.
      * This only affects AWS_S3_META_REQUEST_TYPE_GET_OBJECT and AWS_S3_META_REQUEST_TYPE_PUT_OBJECT.
-     * If not set, the value from `aws_s3_client_config.part_size` is used, which defaults to 8MiB.
+     *
+     * If not set, the value from `aws_s3_client_config.part_size` is used, which defaults to a dynamic value based on
+     * the throughput target, memory_limit_in_bytes and the requested object size.
      *
      * The client will adjust the part size for AWS_S3_META_REQUEST_TYPE_PUT_OBJECT if needed for service limits (max
      * number of parts per upload is 10,000, minimum upload part size is 5 MiB).
      */
     uint64_t part_size;
+
+    /**
+     * Optional - EXPERIMENTAL/UNSTABLE
+     * Set this to prefer for the dynamic default part_size over the part size set for both client and meta request for
+     * the best performance under the memory constrain, especially for getting large objects.
+     */
+    bool force_dynamic_part_size;
 
     /**
      * Optional.
@@ -994,6 +1005,10 @@ struct aws_s3_meta_request_options {
      * This will be ignored for other operations.
      */
     struct aws_byte_cursor copy_source_uri;
+
+    /* When set, this will cap the number of active connections for the meta request. When 0, the client will determine
+     * it based on client side settings. (Recommended) */
+    uint32_t max_active_connections_override;
 };
 
 /* Result details of a meta request.
@@ -1390,6 +1405,17 @@ int aws_s3_request_metrics_get_request_id(
     const struct aws_s3_request_metrics *metrics,
     const struct aws_string **out_request_id);
 
+/**
+ * Get the extended request ID from aws_s3_request_metrics.
+ * If unavailable, AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised.
+ * If available, out_extended_request_id will be set to a string. Be warned this string's lifetime is tied to the
+ * metrics object.
+ **/
+AWS_S3_API
+int aws_s3_request_metrics_get_extended_request_id(
+    const struct aws_s3_request_metrics *metrics,
+    const struct aws_string **out_extended_request_id);
+
 /* Get the start time from aws_s3_request_metrics, which is when S3 client prepare the request to be sent. Always
  * available. Timestamp are from `aws_high_res_clock_get_ticks`  */
 AWS_S3_API
@@ -1563,10 +1589,14 @@ int aws_s3_request_metrics_get_ip_address(
     const struct aws_s3_request_metrics *metrics,
     const struct aws_string **out_ip_address);
 
-/* Get the id of connection that request was made from. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data
- * not available */
+/* Get the ptr address of connection that request was made from. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised
+ * if data not available */
 AWS_S3_API
-int aws_s3_request_metrics_get_connection_id(const struct aws_s3_request_metrics *metrics, size_t *out_connection_id);
+int aws_s3_request_metrics_get_connection_id(const struct aws_s3_request_metrics *metrics, size_t *out_connection_ptr);
+
+/* Get the pointer to the request that attempt was made from. Always available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_request_ptr(const struct aws_s3_request_metrics *metrics, size_t *out_request_ptr);
 
 /* Get the thread ID of the thread that request was made from. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if
  * data not available */
@@ -1603,6 +1633,89 @@ int aws_s3_request_metrics_get_error_code(const struct aws_s3_request_metrics *m
 /* Get retry attempt from request metrics. */
 AWS_S3_API
 uint32_t aws_s3_request_metrics_get_retry_attempt(const struct aws_s3_request_metrics *metrics);
+
+/* Get whether the memory for the request was allocated from the pool. Cannot fail */
+AWS_S3_API
+bool aws_s3_request_metrics_get_memory_allocated_from_pool(const struct aws_s3_request_metrics *metrics);
+
+/* Get the beginning range of this part from request metrics. */
+AWS_S3_API
+void aws_s3_request_metrics_get_part_range_start(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_part_range_start);
+
+/* Get the last byte of this part from request metrics. */
+AWS_S3_API
+void aws_s3_request_metrics_get_part_range_end(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_part_range_end);
+
+/* Get the part number from request metrics. */
+AWS_S3_API
+void aws_s3_request_metrics_get_part_number(const struct aws_s3_request_metrics *metrics, uint32_t *out_part_number);
+/* Get the request start timestamp from aws_s3_request_metrics. Always available. */
+AWS_S3_API
+void aws_s3_request_metrics_get_s3_request_first_attempt_start_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_s3_request_first_attempt_start_time);
+
+/* Get the request end timestamp. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not
+ * available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_s3_request_last_attempt_end_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_s3_request_last_attempt_end_time);
+
+/* Get the request duration. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not
+ * available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_s3_request_total_duration_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_request_duration);
+
+/* Get the connection acquire start timestamp. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not
+ * available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_conn_acquire_start_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_conn_acquire_start_time);
+
+/* Get the connection acquire end timestamp. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not
+ * available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_conn_acquire_end_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_conn_acquire_end_time);
+
+/* Get the connection acquire duration. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_conn_acquire_duration_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_conn_acquire_duration);
+
+/* Get the retry delay start timestamp. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_retry_delay_start_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_retry_delay_start_time);
+
+/* Get the retry delay end timestamp. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_retry_delay_end_timestamp_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_retry_delay_end_time);
+
+/* Get the retry delay duration. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_retry_delay_duration_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_retry_delay_duration);
+
+/* Get the service call duration. AWS_ERROR_S3_METRIC_DATA_NOT_AVAILABLE will be raised if data not available. */
+AWS_S3_API
+int aws_s3_request_metrics_get_service_call_duration_ns(
+    const struct aws_s3_request_metrics *metrics,
+    uint64_t *out_service_call_duration);
 
 AWS_EXTERN_C_END
 AWS_POP_SANE_WARNING_LEVEL

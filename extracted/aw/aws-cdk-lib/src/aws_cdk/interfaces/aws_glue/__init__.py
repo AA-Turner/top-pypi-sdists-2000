@@ -845,6 +845,51 @@ class _IIdentityCenterConfigurationRefProxy(
 typing.cast(typing.Any, IIdentityCenterConfigurationRef).__jsii_proxy_class__ = lambda : _IIdentityCenterConfigurationRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_glue.IIntegrationRef")
+class IIntegrationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a Integration.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="integrationRef")
+    def integration_ref(self) -> "IntegrationReference":
+        '''(experimental) A reference to a Integration resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IIntegrationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a Integration.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_glue.IIntegrationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="integrationRef")
+    def integration_ref(self) -> "IntegrationReference":
+        '''(experimental) A reference to a Integration resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("IntegrationReference", jsii.get(self, "integrationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IIntegrationRef).__jsii_proxy_class__ = lambda : _IIntegrationRefProxy
+
+
 @jsii.interface(
     jsii_type="aws-cdk-lib.interfaces.aws_glue.IIntegrationResourcePropertyRef"
 )
@@ -1526,6 +1571,74 @@ class IdentityCenterConfigurationReference:
 
     def __repr__(self) -> str:
         return "IdentityCenterConfigurationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_glue.IntegrationReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "integration_arn": "integrationArn",
+        "integration_name": "integrationName",
+    },
+)
+class IntegrationReference:
+    def __init__(
+        self,
+        *,
+        integration_arn: builtins.str,
+        integration_name: builtins.str,
+    ) -> None:
+        '''A reference to a Integration resource.
+
+        :param integration_arn: The IntegrationArn of the Integration resource.
+        :param integration_name: The IntegrationName of the Integration resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            
+            integration_reference = interfaces_aws_glue.IntegrationReference(
+                integration_arn="integrationArn",
+                integration_name="integrationName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__487ef973bf980b9533ab5e35911c785df93801badcd04a6ad9191c32ce95e300)
+            check_type(argname="argument integration_arn", value=integration_arn, expected_type=type_hints["integration_arn"])
+            check_type(argname="argument integration_name", value=integration_name, expected_type=type_hints["integration_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "integration_arn": integration_arn,
+            "integration_name": integration_name,
+        }
+
+    @builtins.property
+    def integration_arn(self) -> builtins.str:
+        '''The IntegrationArn of the Integration resource.'''
+        result = self._values.get("integration_arn")
+        assert result is not None, "Required property 'integration_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def integration_name(self) -> builtins.str:
+        '''The IntegrationName of the Integration resource.'''
+        result = self._values.get("integration_name")
+        assert result is not None, "Required property 'integration_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "IntegrationReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -2285,6 +2398,7 @@ __all__ = [
     "IDatabaseRef",
     "IDevEndpointRef",
     "IIdentityCenterConfigurationRef",
+    "IIntegrationRef",
     "IIntegrationResourcePropertyRef",
     "IJobRef",
     "IMLTransformRef",
@@ -2300,6 +2414,7 @@ __all__ = [
     "IUsageProfileRef",
     "IWorkflowRef",
     "IdentityCenterConfigurationReference",
+    "IntegrationReference",
     "IntegrationResourcePropertyReference",
     "JobReference",
     "MLTransformReference",
@@ -2377,6 +2492,14 @@ def _typecheckingstub__050454acd533b9c974358b1bfdec6277e66592a87a752610c62dc6b89
 def _typecheckingstub__dce890d13c4e501fd50bfd966cbe5558eac1e8b2415bc6f873c45a675fef0455(
     *,
     account_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__487ef973bf980b9533ab5e35911c785df93801badcd04a6ad9191c32ce95e300(
+    *,
+    integration_arn: builtins.str,
+    integration_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2482,5 +2605,5 @@ def _typecheckingstub__05490662a534e7ac737a01a3e54258abf2c5d6dd3a563391b841bd656
     """Type checking stubs"""
     pass
 
-for cls in [IClassifierRef, IConnectionRef, ICrawlerRef, ICustomEntityTypeRef, IDataCatalogEncryptionSettingsRef, IDataQualityRulesetRef, IDatabaseRef, IDevEndpointRef, IIdentityCenterConfigurationRef, IIntegrationResourcePropertyRef, IJobRef, IMLTransformRef, IPartitionRef, IRegistryRef, ISchemaRef, ISchemaVersionMetadataRef, ISchemaVersionRef, ISecurityConfigurationRef, ITableOptimizerRef, ITableRef, ITriggerRef, IUsageProfileRef, IWorkflowRef]:
+for cls in [IClassifierRef, IConnectionRef, ICrawlerRef, ICustomEntityTypeRef, IDataCatalogEncryptionSettingsRef, IDataQualityRulesetRef, IDatabaseRef, IDevEndpointRef, IIdentityCenterConfigurationRef, IIntegrationRef, IIntegrationResourcePropertyRef, IJobRef, IMLTransformRef, IPartitionRef, IRegistryRef, ISchemaRef, ISchemaVersionMetadataRef, ISchemaVersionRef, ISecurityConfigurationRef, ITableOptimizerRef, ITableRef, ITriggerRef, IUsageProfileRef, IWorkflowRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

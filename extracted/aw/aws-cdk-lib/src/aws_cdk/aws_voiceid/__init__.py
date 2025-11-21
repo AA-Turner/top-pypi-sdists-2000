@@ -143,6 +143,17 @@ class CfnDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_b435dbf5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__779b0ad1bd8515a352a632173cc875905cecefd7db7d4a17cfe62707438ada3d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
+
     @jsii.member(jsii_name="fromDomainId")
     @builtins.classmethod
     def from_domain_id(
@@ -469,6 +480,12 @@ def _typecheckingstub__f669b499116dab0ae384f6bbe13bc890778f766ea4106733abad20253
     server_side_encryption_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.ServerSideEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__779b0ad1bd8515a352a632173cc875905cecefd7db7d4a17cfe62707438ada3d(
+    resource: _IDomainRef_b435dbf5,
 ) -> None:
     """Type checking stubs"""
     pass

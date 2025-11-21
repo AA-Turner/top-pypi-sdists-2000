@@ -916,6 +916,17 @@ class CfnLandingZone(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLandingZone")
+    @builtins.classmethod
+    def arn_for_landing_zone(cls, resource: _ILandingZoneRef_c378ff0b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__36638b5e73ae0759a65f449689a9ef46f9b511d7843e7813f777d3775441d74e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLandingZone", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1339,6 +1350,12 @@ def _typecheckingstub__af3c2c6625c6aae1afd50bbbd83dafe3289d77c3e128938fa7a5e5c8c
     version: builtins.str,
     remediation_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__36638b5e73ae0759a65f449689a9ef46f9b511d7843e7813f777d3775441d74e(
+    resource: _ILandingZoneRef_c378ff0b,
 ) -> None:
     """Type checking stubs"""
     pass

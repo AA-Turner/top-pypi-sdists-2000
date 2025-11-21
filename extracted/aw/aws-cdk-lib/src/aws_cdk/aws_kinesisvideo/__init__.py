@@ -134,6 +134,20 @@ class CfnSignalingChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSignalingChannel")
+    @builtins.classmethod
+    def arn_for_signaling_channel(
+        cls,
+        resource: _ISignalingChannelRef_cbe8a964,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f943a12cf61d205b3e198fcb6b11456495270986d52e4c7b0e3cc5ff66520815)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSignalingChannel", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -417,7 +431,7 @@ class CfnStream(
         :param id: Construct identifier for this resource (unique in its scope).
         :param data_retention_in_hours: How long the stream retains data, in hours.
         :param device_name: The name of the device that is associated with the stream.
-        :param kms_key_id: The ID of the AWS Key Management Service ( AWS KMS ) key that Kinesis Video Streams uses to encrypt data on the stream.
+        :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -436,6 +450,17 @@ class CfnStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStream")
+    @builtins.classmethod
+    def arn_for_stream(cls, resource: _IStreamRef_ff0d232b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d38301bab4e9a780a923b10ea8c1ff4821d9241fed12ad8d638b9bf035dbb82e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStream", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -522,7 +547,7 @@ class CfnStream(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the AWS Key Management Service ( AWS KMS ) key that Kinesis Video Streams uses to encrypt data on the stream.'''
+        '''The ID of the AWS Key Management Service ( AWS  ) key that Kinesis Video Streams uses to encrypt data on the stream.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -599,7 +624,7 @@ class CfnStreamProps:
 
         :param data_retention_in_hours: How long the stream retains data, in hours.
         :param device_name: The name of the device that is associated with the stream.
-        :param kms_key_id: The ID of the AWS Key Management Service ( AWS KMS ) key that Kinesis Video Streams uses to encrypt data on the stream.
+        :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
@@ -667,7 +692,7 @@ class CfnStreamProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the AWS Key Management Service ( AWS KMS ) key that Kinesis Video Streams uses to encrypt data on the stream.
+        '''The ID of the AWS Key Management Service ( AWS  ) key that Kinesis Video Streams uses to encrypt data on the stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisvideo-stream.html#cfn-kinesisvideo-stream-kmskeyid
         '''
@@ -736,6 +761,12 @@ def _typecheckingstub__58eea5563d65f986204277ab06c42f79f4e2ffc4cdc5b476a7662b924
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f943a12cf61d205b3e198fcb6b11456495270986d52e4c7b0e3cc5ff66520815(
+    resource: _ISignalingChannelRef_cbe8a964,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__14c02801acfed3f47e58cd286b44774b56dac9699b2b4f0efbfa7cb846e9a8f0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -792,6 +823,12 @@ def _typecheckingstub__9ec46ef966c55301f1d7f90935a5a7340c3d7ee98963234b59d16d191
     media_type: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d38301bab4e9a780a923b10ea8c1ff4821d9241fed12ad8d638b9bf035dbb82e(
+    resource: _IStreamRef_ff0d232b,
 ) -> None:
     """Type checking stubs"""
     pass

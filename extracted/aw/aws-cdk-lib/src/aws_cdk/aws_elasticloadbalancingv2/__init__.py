@@ -1297,6 +1297,11 @@ from ..aws_ec2 import (
 )
 from ..aws_iam import IPrincipal as _IPrincipal_539bb2fd
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+    IVPCRef as _IVPCRef_f02a11df,
+)
 from ..interfaces.aws_elasticloadbalancingv2 import (
     IListenerCertificateRef as _IListenerCertificateRef_1cc0d9f2,
     IListenerRef as _IListenerRef_a8ced6a8,
@@ -3955,7 +3960,7 @@ class CfnListener(
         id: builtins.str,
         *,
         default_actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        load_balancer_arn: builtins.str,
+        load_balancer_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1],
         alpn_policy: typing.Optional[typing.Sequence[builtins.str]] = None,
         certificates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.CertificateProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         listener_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.ListenerAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -3995,6 +4000,17 @@ class CfnListener(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForListener")
+    @builtins.classmethod
+    def arn_for_listener(cls, resource: _IListenerRef_a8ced6a8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b32f9e25c97f61f00e538ef04d5fa27f0d651f1b719ada79f2c6a3f7f1a034a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForListener", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6122,7 +6138,7 @@ class CfnListenerProps:
         self,
         *,
         default_actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        load_balancer_arn: builtins.str,
+        load_balancer_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1],
         alpn_policy: typing.Optional[typing.Sequence[builtins.str]] = None,
         certificates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.CertificateProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         listener_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ListenerAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -6297,14 +6313,16 @@ class CfnListenerProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnListener.ActionProperty]]], result)
 
     @builtins.property
-    def load_balancer_arn(self) -> builtins.str:
+    def load_balancer_arn(
+        self,
+    ) -> typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]:
         '''The Amazon Resource Name (ARN) of the load balancer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-loadbalancerarn
         '''
         result = self._values.get("load_balancer_arn")
         assert result is not None, "Required property 'load_balancer_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1], result)
 
     @builtins.property
     def alpn_policy(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6565,7 +6583,7 @@ class CfnListenerRule(
         actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.ActionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.RuleConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         priority: jsii.Number,
-        listener_arn: typing.Optional[builtins.str] = None,
+        listener_arn: typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]] = None,
         transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListenerRule.TransformProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticLoadBalancingV2::ListenerRule``.
@@ -9137,7 +9155,7 @@ class CfnListenerRuleProps:
         actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
         conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RuleConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
         priority: jsii.Number,
-        listener_arn: typing.Optional[builtins.str] = None,
+        listener_arn: typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]] = None,
         transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnListenerRule``.
@@ -9346,13 +9364,15 @@ class CfnListenerRuleProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def listener_arn(self) -> typing.Optional[builtins.str]:
+    def listener_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]]:
         '''The Amazon Resource Name (ARN) of the listener.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listenerrule.html#cfn-elasticloadbalancingv2-listenerrule-listenerarn
         '''
         result = self._values.get("listener_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]], result)
 
     @builtins.property
     def transforms(
@@ -9442,9 +9462,9 @@ class CfnLoadBalancer(
         minimum_load_balancer_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.MinimumLoadBalancerCapacityProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         scheme: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoadBalancer.SubnetMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -9489,6 +9509,20 @@ class CfnLoadBalancer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLoadBalancer")
+    @builtins.classmethod
+    def arn_for_load_balancer(
+        cls,
+        resource: _ILoadBalancerRef_13acd8f1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__38532b8cac7bb336657c64de1390b7fd8b8427986014d4c73da1458d4f720ffc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoadBalancer", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10134,9 +10168,9 @@ class CfnLoadBalancerProps:
         minimum_load_balancer_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.MinimumLoadBalancerCapacityProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         scheme: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         type: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -10365,13 +10399,15 @@ class CfnLoadBalancerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''[Application Load Balancers and Network Load Balancers] The IDs of the security groups for the load balancer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-securitygroups
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def subnet_mappings(
@@ -10397,7 +10433,9 @@ class CfnLoadBalancerProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnLoadBalancer.SubnetMappingProperty]]]], result)
 
     @builtins.property
-    def subnets(self) -> typing.Optional[typing.List[builtins.str]]:
+    def subnets(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''The IDs of the subnets.
 
         You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings, but not both. To specify an Elastic IP address, specify subnet mappings instead of subnets.
@@ -10413,7 +10451,7 @@ class CfnLoadBalancerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-loadbalancer.html#cfn-elasticloadbalancingv2-loadbalancer-subnets
         '''
         result = self._values.get("subnets")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -10488,6 +10526,7 @@ class CfnTargetGroup(
                 key="key",
                 value="value"
             )],
+            target_control_port=123,
             target_group_attributes=[elbv2.CfnTargetGroup.TargetGroupAttributeProperty(
                 key="key",
                 value="value"
@@ -10525,11 +10564,12 @@ class CfnTargetGroup(
         protocol: typing.Optional[builtins.str] = None,
         protocol_version: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_control_port: typing.Optional[jsii.Number] = None,
         target_group_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.TargetGroupAttributeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTargetGroup.TargetDescriptionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         target_type: typing.Optional[builtins.str] = None,
         unhealthy_threshold_count: typing.Optional[jsii.Number] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Create a new ``AWS::ElasticLoadBalancingV2::TargetGroup``.
 
@@ -10549,6 +10589,7 @@ class CfnTargetGroup(
         :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
+        :param target_control_port: The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
         :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
@@ -10574,6 +10615,7 @@ class CfnTargetGroup(
             protocol=protocol,
             protocol_version=protocol_version,
             tags=tags,
+            target_control_port=target_control_port,
             target_group_attributes=target_group_attributes,
             targets=targets,
             target_type=target_type,
@@ -10582,6 +10624,17 @@ class CfnTargetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTargetGroup")
+    @builtins.classmethod
+    def arn_for_target_group(cls, resource: _ITargetGroupRef_9ed19d5e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__07fba500111e022c7be67da6de404b437c3736e8cd6eca38d13fef52aa95b59c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTargetGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10864,6 +10917,19 @@ class CfnTargetGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__65c80be0d3b8ea2ed041d794a354ab02a7e59679072f139341d1a790950529cf)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="targetControlPort")
+    def target_control_port(self) -> typing.Optional[jsii.Number]:
+        '''The port that the target control agent uses to communicate the available capacity of targets to the load balancer.'''
+        return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "targetControlPort"))
+
+    @target_control_port.setter
+    def target_control_port(self, value: typing.Optional[jsii.Number]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c2a7ca76dddd9c6010ff906f1d709b05d8b40266b1bceb08212b60a5d48bc61)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "targetControlPort", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="targetGroupAttributes")
@@ -11278,6 +11344,7 @@ class CfnTargetGroup(
         "protocol": "protocol",
         "protocol_version": "protocolVersion",
         "tags": "tags",
+        "target_control_port": "targetControlPort",
         "target_group_attributes": "targetGroupAttributes",
         "targets": "targets",
         "target_type": "targetType",
@@ -11303,11 +11370,12 @@ class CfnTargetGroupProps:
         protocol: typing.Optional[builtins.str] = None,
         protocol_version: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_control_port: typing.Optional[jsii.Number] = None,
         target_group_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetGroupAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         target_type: typing.Optional[builtins.str] = None,
         unhealthy_threshold_count: typing.Optional[jsii.Number] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTargetGroup``.
 
@@ -11325,6 +11393,7 @@ class CfnTargetGroupProps:
         :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
+        :param target_control_port: The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
         :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
@@ -11361,6 +11430,7 @@ class CfnTargetGroupProps:
                     key="key",
                     value="value"
                 )],
+                target_control_port=123,
                 target_group_attributes=[elbv2.CfnTargetGroup.TargetGroupAttributeProperty(
                     key="key",
                     value="value"
@@ -11394,6 +11464,7 @@ class CfnTargetGroupProps:
             check_type(argname="argument protocol", value=protocol, expected_type=type_hints["protocol"])
             check_type(argname="argument protocol_version", value=protocol_version, expected_type=type_hints["protocol_version"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument target_control_port", value=target_control_port, expected_type=type_hints["target_control_port"])
             check_type(argname="argument target_group_attributes", value=target_group_attributes, expected_type=type_hints["target_group_attributes"])
             check_type(argname="argument targets", value=targets, expected_type=type_hints["targets"])
             check_type(argname="argument target_type", value=target_type, expected_type=type_hints["target_type"])
@@ -11428,6 +11499,8 @@ class CfnTargetGroupProps:
             self._values["protocol_version"] = protocol_version
         if tags is not None:
             self._values["tags"] = tags
+        if target_control_port is not None:
+            self._values["target_control_port"] = target_control_port
         if target_group_attributes is not None:
             self._values["target_group_attributes"] = target_group_attributes
         if targets is not None:
@@ -11598,6 +11671,15 @@ class CfnTargetGroupProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
+    def target_control_port(self) -> typing.Optional[jsii.Number]:
+        '''The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-targetcontrolport
+        '''
+        result = self._values.get("target_control_port")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
     def target_group_attributes(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetGroupAttributeProperty]]]]:
@@ -11649,7 +11731,7 @@ class CfnTargetGroupProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def vpc_id(self) -> typing.Optional[builtins.str]:
+    def vpc_id(self) -> typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]]:
         '''The identifier of the virtual private cloud (VPC).
 
         If the target is a Lambda function, this parameter does not apply. Otherwise, this parameter is required.
@@ -11657,7 +11739,7 @@ class CfnTargetGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-vpcid
         '''
         result = self._values.get("vpc_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11737,6 +11819,17 @@ class CfnTrustStore(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTrustStore")
+    @builtins.classmethod
+    def arn_for_trust_store(cls, resource: _ITrustStoreRef_0fa03cbe) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__68e5e87be3d08234a1972242a96946c9d8968b318d01a17a2e4d689b09d5c693)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustStore", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -28676,7 +28769,7 @@ def _typecheckingstub__da6c6bab97eae93f0a1595d72a25ac890e7034cc701e7cf76b58f5c6a
     id: builtins.str,
     *,
     default_actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    load_balancer_arn: builtins.str,
+    load_balancer_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1],
     alpn_policy: typing.Optional[typing.Sequence[builtins.str]] = None,
     certificates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.CertificateProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     listener_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ListenerAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -28684,6 +28777,12 @@ def _typecheckingstub__da6c6bab97eae93f0a1595d72a25ac890e7034cc701e7cf76b58f5c6a
     port: typing.Optional[jsii.Number] = None,
     protocol: typing.Optional[builtins.str] = None,
     ssl_policy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b32f9e25c97f61f00e538ef04d5fa27f0d651f1b719ada79f2c6a3f7f1a034a(
+    resource: _IListenerRef_a8ced6a8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -28941,7 +29040,7 @@ def _typecheckingstub__a75452487efc1f762632147a4649a752cebc50169fa389176da35b232
 def _typecheckingstub__aab6d22e7b936da7d57033477b79897453525b2ac292509d47ddac8e90a84aa3(
     *,
     default_actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    load_balancer_arn: builtins.str,
+    load_balancer_arn: typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1],
     alpn_policy: typing.Optional[typing.Sequence[builtins.str]] = None,
     certificates: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.CertificateProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     listener_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.ListenerAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -28960,7 +29059,7 @@ def _typecheckingstub__ae1e13bd1e6ee2145702f187cf74339faebe22401d39b3e4507fd776f
     actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RuleConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     priority: jsii.Number,
-    listener_arn: typing.Optional[builtins.str] = None,
+    listener_arn: typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]] = None,
     transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29216,7 +29315,7 @@ def _typecheckingstub__ca75076613edf0bf6ade8ee145bc71de34aa66567d90d5721bd40f862
     actions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.ActionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.RuleConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     priority: jsii.Number,
-    listener_arn: typing.Optional[builtins.str] = None,
+    listener_arn: typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]] = None,
     transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -29235,11 +29334,17 @@ def _typecheckingstub__907e1e3e88136a6a7bdcdac293563447ed893c77b9f7b1e7154fb1749
     minimum_load_balancer_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.MinimumLoadBalancerCapacityProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     scheme: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__38532b8cac7bb336657c64de1390b7fd8b8427986014d4c73da1458d4f720ffc(
+    resource: _ILoadBalancerRef_13acd8f1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29377,9 +29482,9 @@ def _typecheckingstub__6b1eb30cea756dc45f625ec82ab8cba6ea31d24595a925a4aabceb7e6
     minimum_load_balancer_capacity: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.MinimumLoadBalancerCapacityProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     scheme: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoadBalancer.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -29404,11 +29509,18 @@ def _typecheckingstub__7aee86566cb3e5ba745d0d4e2346762fa85e2c43821ab0996eaa139c5
     protocol: typing.Optional[builtins.str] = None,
     protocol_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_control_port: typing.Optional[jsii.Number] = None,
     target_group_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetGroupAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     target_type: typing.Optional[builtins.str] = None,
     unhealthy_threshold_count: typing.Optional[jsii.Number] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07fba500111e022c7be67da6de404b437c3736e8cd6eca38d13fef52aa95b59c(
+    resource: _ITargetGroupRef_9ed19d5e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29509,6 +29621,12 @@ def _typecheckingstub__65c80be0d3b8ea2ed041d794a354ab02a7e59679072f139341d1a7909
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3c2a7ca76dddd9c6010ff906f1d709b05d8b40266b1bceb08212b60a5d48bc61(
+    value: typing.Optional[jsii.Number],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cb73ac6a2765613179f01b40aa0acd1485f4da7aad297231218b43761d098b56(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.TargetGroupAttributeProperty]]]],
 ) -> None:
@@ -29581,11 +29699,12 @@ def _typecheckingstub__5f70479f22fd69f1eb73d26d52854af23412d5ec08abc74e859ad481f
     protocol: typing.Optional[builtins.str] = None,
     protocol_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_control_port: typing.Optional[jsii.Number] = None,
     target_group_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetGroupAttributeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     target_type: typing.Optional[builtins.str] = None,
     unhealthy_threshold_count: typing.Optional[jsii.Number] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29599,6 +29718,12 @@ def _typecheckingstub__81ebb9f328787770d17d305de9af3d60f18035ef5b573f23ff9c34366
     ca_certificates_bundle_s3_object_version: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__68e5e87be3d08234a1972242a96946c9d8968b318d01a17a2e4d689b09d5c693(
+    resource: _ITrustStoreRef_0fa03cbe,
 ) -> None:
     """Type checking stubs"""
     pass

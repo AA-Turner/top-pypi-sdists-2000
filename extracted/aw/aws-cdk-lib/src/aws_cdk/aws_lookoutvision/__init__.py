@@ -115,6 +115,17 @@ class CfnProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_ebc63cfa) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__749f23ba01f7fdc53827fbcb401d225323cb8f419099c89a9c4caf4a7b7b5090)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
+
     @jsii.member(jsii_name="fromProjectArn")
     @builtins.classmethod
     def from_project_arn(
@@ -286,6 +297,12 @@ def _typecheckingstub__ae1299eb5a9daafd09ff98ba3e3d4056e110dde110eef801bc1e29615
     id: builtins.str,
     *,
     project_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__749f23ba01f7fdc53827fbcb401d225323cb8f419099c89a9c4caf4a7b7b5090(
+    resource: _IProjectRef_ebc63cfa,
 ) -> None:
     """Type checking stubs"""
     pass

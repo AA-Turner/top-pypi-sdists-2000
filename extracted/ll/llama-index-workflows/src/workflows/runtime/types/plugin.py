@@ -8,19 +8,14 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import (
-    AsyncGenerator,
-    Callable,
-    Coroutine,
-    Generic,
-    Protocol,
     TYPE_CHECKING,
+    AsyncGenerator,
+    Coroutine,
+    Protocol,
     cast,
 )
 
-
-from workflows.decorators import P, R
 from workflows.events import Event, StopEvent
-
 from workflows.runtime.types.internal_state import BrokerState
 from workflows.runtime.types.step_function import StepWorkerFunction
 from workflows.runtime.types.ticks import WorkflowTick
@@ -30,8 +25,8 @@ if TYPE_CHECKING:
 
 
 @dataclass
-class RegisteredWorkflow(Generic[P, R]):
-    workflow_function: Callable[P, R]
+class RegisteredWorkflow:
+    workflow_function: ControlLoopFunction
     steps: dict[str, StepWorkerFunction]
 
 

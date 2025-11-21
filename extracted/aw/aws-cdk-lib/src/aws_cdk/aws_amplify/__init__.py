@@ -80,6 +80,7 @@ from ..interfaces.aws_amplify import (
     IBranchRef as _IBranchRef_ed7c2f5b,
     IDomainRef as _IDomainRef_bdf20b9c,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.implements(_IInspectable_c2943556, _IAppRef_163401c8, _ITaggable_36806126)
@@ -183,7 +184,7 @@ class CfnApp(
         description: typing.Optional[builtins.str] = None,
         enable_branch_auto_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.EnvironmentVariableProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        iam_service_role: typing.Optional[builtins.str] = None,
+        iam_service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         job_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApp.JobConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         oauth_token: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
@@ -239,6 +240,17 @@ class CfnApp(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApp")
+    @builtins.classmethod
+    def arn_for_app(cls, resource: _IAppRef_163401c8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__74be0c58e8de49981a312c501f4d1c3e6215e9cbe5d40cb6c8c6f753882f2d21)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApp", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1287,7 +1299,7 @@ class CfnAppProps:
         description: typing.Optional[builtins.str] = None,
         enable_branch_auto_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        iam_service_role: typing.Optional[builtins.str] = None,
+        iam_service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         job_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.JobConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         oauth_token: typing.Optional[builtins.str] = None,
         platform: typing.Optional[builtins.str] = None,
@@ -1583,13 +1595,15 @@ class CfnAppProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnApp.EnvironmentVariableProperty]]]], result)
 
     @builtins.property
-    def iam_service_role(self) -> typing.Optional[builtins.str]:
+    def iam_service_role(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''AWS Identity and Access Management ( IAM ) service role for the Amazon Resource Name (ARN) of the Amplify app.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplify-app.html#cfn-amplify-app-iamservicerole
         '''
         result = self._values.get("iam_service_role")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def job_config(
@@ -1744,7 +1758,7 @@ class CfnBranch(
         :param id: Construct identifier for this resource (unique in its scope).
         :param app_id: The unique ID for an Amplify app.
         :param branch_name: The name for the branch.
-        :param backend: The backend for a ``Branch`` of an Amplify app. Use for a backend created from an AWS CloudFormation stack. This field is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
+        :param backend: The backend for a ``Branch`` of an Amplify app. Use for a backend created from an CloudFormation stack. This field is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
         :param basic_auth_config: The basic authorization credentials for a branch of an Amplify app. You must base64-encode the authorization credentials and provide them in the format ``user:password`` .
         :param build_spec: The build specification (build spec) for the branch.
         :param compute_role_arn: The Amazon Resource Name (ARN) of the IAM role to assign to a branch of an SSR app. The SSR Compute role allows the Amplify Hosting compute service to securely access specific AWS resources based on the role's permissions. For more information about the SSR Compute role, see `Adding an SSR Compute role <https://docs.aws.amazon.com/amplify/latest/userguide/amplify-SSR-compute-role.html>`_ in the *Amplify User Guide* .
@@ -1783,6 +1797,17 @@ class CfnBranch(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBranch")
+    @builtins.classmethod
+    def arn_for_branch(cls, resource: _IBranchRef_ed7c2f5b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d720c8b28c9e2b27ea6f02f36552adaa5fdcdebd70164adf34cd10bc3519ad0d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBranch", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1882,7 +1907,7 @@ class CfnBranch(
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBranch.BackendProperty"]]:
         '''The backend for a ``Branch`` of an Amplify app.
 
-        Use for a backend created from an AWS CloudFormation stack.
+        Use for a backend created from an CloudFormation stack.
         '''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBranch.BackendProperty"]], jsii.get(self, "backend"))
 
@@ -2109,7 +2134,7 @@ class CfnBranch(
 
             This property is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
 
-            :param stack_arn: The Amazon Resource Name (ARN) for the AWS CloudFormation stack.
+            :param stack_arn: The Amazon Resource Name (ARN) for the CloudFormation stack.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-branch-backend.html
             :exampleMetadata: fixture=_generated
@@ -2133,7 +2158,7 @@ class CfnBranch(
 
         @builtins.property
         def stack_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) for the AWS CloudFormation stack.
+            '''The Amazon Resource Name (ARN) for the CloudFormation stack.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amplify-branch-backend.html#cfn-amplify-branch-backend-stackarn
             '''
@@ -2360,7 +2385,7 @@ class CfnBranchProps:
 
         :param app_id: The unique ID for an Amplify app.
         :param branch_name: The name for the branch.
-        :param backend: The backend for a ``Branch`` of an Amplify app. Use for a backend created from an AWS CloudFormation stack. This field is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
+        :param backend: The backend for a ``Branch`` of an Amplify app. Use for a backend created from an CloudFormation stack. This field is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
         :param basic_auth_config: The basic authorization credentials for a branch of an Amplify app. You must base64-encode the authorization credentials and provide them in the format ``user:password`` .
         :param build_spec: The build specification (build spec) for the branch.
         :param compute_role_arn: The Amazon Resource Name (ARN) of the IAM role to assign to a branch of an SSR app. The SSR Compute role allows the Amplify Hosting compute service to securely access specific AWS resources based on the role's permissions. For more information about the SSR Compute role, see `Adding an SSR Compute role <https://docs.aws.amazon.com/amplify/latest/userguide/amplify-SSR-compute-role.html>`_ in the *Amplify User Guide* .
@@ -2494,7 +2519,7 @@ class CfnBranchProps:
     def backend(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBranch.BackendProperty]]:
-        '''The backend for a ``Branch`` of an Amplify app. Use for a backend created from an AWS CloudFormation stack.
+        '''The backend for a ``Branch`` of an Amplify app. Use for a backend created from an CloudFormation stack.
 
         This field is available to Amplify Gen 2 apps only. When you deploy an application with Amplify Gen 2, you provision the app's backend infrastructure using Typescript code.
 
@@ -2712,7 +2737,7 @@ class CfnDomain(
         domain_name: builtins.str,
         sub_domain_settings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.SubDomainSettingProperty", typing.Dict[builtins.str, typing.Any]]]]],
         auto_sub_domain_creation_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        auto_sub_domain_iam_role: typing.Optional[builtins.str] = None,
+        auto_sub_domain_iam_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         certificate_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.CertificateSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         enable_auto_sub_domain: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
@@ -2743,6 +2768,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_bdf20b9c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04a951034fe9df86063d796921c780405c41d1d9231395e2b92739a28f9124bd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3267,7 +3303,7 @@ class CfnDomainProps:
         domain_name: builtins.str,
         sub_domain_settings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SubDomainSettingProperty, typing.Dict[builtins.str, typing.Any]]]]],
         auto_sub_domain_creation_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-        auto_sub_domain_iam_role: typing.Optional[builtins.str] = None,
+        auto_sub_domain_iam_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         certificate_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CertificateSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         enable_auto_sub_domain: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
@@ -3375,13 +3411,15 @@ class CfnDomainProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def auto_sub_domain_iam_role(self) -> typing.Optional[builtins.str]:
+    def auto_sub_domain_iam_role(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The required AWS Identity and Access Management (IAMlong) service role for the Amazon Resource Name (ARN) for automatically creating subdomains.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-amplify-domain.html#cfn-amplify-domain-autosubdomainiamrole
         '''
         result = self._values.get("auto_sub_domain_iam_role")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def certificate_settings(
@@ -3446,12 +3484,18 @@ def _typecheckingstub__8dc8d772047a068d22a76d907b344356448c6a26d23e419ed69cc622d
     description: typing.Optional[builtins.str] = None,
     enable_branch_auto_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    iam_service_role: typing.Optional[builtins.str] = None,
+    iam_service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     job_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.JobConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     oauth_token: typing.Optional[builtins.str] = None,
     platform: typing.Optional[builtins.str] = None,
     repository: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__74be0c58e8de49981a312c501f4d1c3e6215e9cbe5d40cb6c8c6f753882f2d21(
+    resource: _IAppRef_163401c8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3648,7 +3692,7 @@ def _typecheckingstub__cfa8f09e6d42b5d6d1122d3e9214ec780302e9c3fda48d7ca044dd076
     description: typing.Optional[builtins.str] = None,
     enable_branch_auto_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     environment_variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.EnvironmentVariableProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    iam_service_role: typing.Optional[builtins.str] = None,
+    iam_service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     job_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.JobConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     oauth_token: typing.Optional[builtins.str] = None,
     platform: typing.Optional[builtins.str] = None,
@@ -3678,6 +3722,12 @@ def _typecheckingstub__859cd0a15aef1449f80ffe32589fdb895b13f3510c6905791c3eea033
     pull_request_environment_name: typing.Optional[builtins.str] = None,
     stage: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d720c8b28c9e2b27ea6f02f36552adaa5fdcdebd70164adf34cd10bc3519ad0d(
+    resource: _IBranchRef_ed7c2f5b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3844,9 +3894,15 @@ def _typecheckingstub__a92a80249ff3da7389619f6d46781e48a0d6d9fe2d6d8bc5754daa9ff
     domain_name: builtins.str,
     sub_domain_settings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SubDomainSettingProperty, typing.Dict[builtins.str, typing.Any]]]]],
     auto_sub_domain_creation_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-    auto_sub_domain_iam_role: typing.Optional[builtins.str] = None,
+    auto_sub_domain_iam_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     certificate_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CertificateSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enable_auto_sub_domain: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__04a951034fe9df86063d796921c780405c41d1d9231395e2b92739a28f9124bd(
+    resource: _IDomainRef_bdf20b9c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3936,7 +3992,7 @@ def _typecheckingstub__88c16eb1917ed2b27dcef2eed98ca7097349329b83222123ac70b435f
     domain_name: builtins.str,
     sub_domain_settings: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SubDomainSettingProperty, typing.Dict[builtins.str, typing.Any]]]]],
     auto_sub_domain_creation_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
-    auto_sub_domain_iam_role: typing.Optional[builtins.str] = None,
+    auto_sub_domain_iam_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     certificate_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CertificateSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enable_auto_sub_domain: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:

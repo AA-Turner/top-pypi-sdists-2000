@@ -94,7 +94,7 @@ class CfnApplication(
 
     .. epigraph::
 
-       This API does not support creating SAML 2.0 customer managed applications or AWS managed applications. To learn how to create an AWS managed application, see the application user guide. You can create a SAML 2.0 customer managed application in the AWS Management Console only. See `Setting up customer managed SAML 2.0 applications <https://docs.aws.amazon.com/singlesignon/latest/userguide/customermanagedapps-saml2-setup.html>`_ . For more information on these application types, see `AWS managed applications <https://docs.aws.amazon.com/singlesignon/latest/userguide/awsapps.html>`_ .
+       This API does not support creating SAML 2.0 customer managed applications or AWS managed applications. To learn how to create an AWS managed application, see the application user guide. You can create a SAML 2.0 customer managed application in the the console only. See `Setting up customer managed SAML 2.0 applications <https://docs.aws.amazon.com/singlesignon/latest/userguide/customermanagedapps-saml2-setup.html>`_ . For more information on these application types, see `AWS managed applications <https://docs.aws.amazon.com/singlesignon/latest/userguide/awsapps.html>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sso-application.html
     :cloudformationResource: AWS::SSO::Application
@@ -170,6 +170,17 @@ class CfnApplication(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_8509b5d3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b62a3935ecd6e3ff88e036d75765852f817021fc5315b773ab0a225a7069147)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1267,6 +1278,17 @@ class CfnInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForInstance")
+    @builtins.classmethod
+    def arn_for_instance(cls, resource: _IInstanceRef_1d841987) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e625ec653cac7490e6b5ddcfc4c9a7bd5f2192b48c543a615d150422c2de7b81)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstance", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2036,6 +2058,20 @@ class CfnPermissionSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPermissionSet")
+    @builtins.classmethod
+    def arn_for_permission_set(
+        cls,
+        resource: _IPermissionSetRef_367033d3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6887b5b288114eb38dbb1815ee831b5f78783288b62cfdbaed4d6264708b0c1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPermissionSet", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2670,6 +2706,12 @@ def _typecheckingstub__1882af793991a2b06f4da60775b164d8785694f90e87227b4954cfd75
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0b62a3935ecd6e3ff88e036d75765852f817021fc5315b773ab0a225a7069147(
+    resource: _IApplicationRef_8509b5d3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__756574096955e2bcef2c96538adf5308085d83bf3bd8773ab5a103afd2c88998(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2887,6 +2929,12 @@ def _typecheckingstub__b3490809ee3929963beefa80737fc3a806a477fd4b46a9ae6f32f7e0b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e625ec653cac7490e6b5ddcfc4c9a7bd5f2192b48c543a615d150422c2de7b81(
+    resource: _IInstanceRef_1d841987,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__99cda831f38994858fd7d3fa114976e29a359f4baaa292fcf2821c1bfd4929b2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3005,6 +3053,12 @@ def _typecheckingstub__29742c4712f9aeed238f180c9db8677986b9e95f63644b8358d20bbe6
     relay_state_type: typing.Optional[builtins.str] = None,
     session_duration: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b6887b5b288114eb38dbb1815ee831b5f78783288b62cfdbaed4d6264708b0c1(
+    resource: _IPermissionSetRef_367033d3,
 ) -> None:
     """Type checking stubs"""
     pass

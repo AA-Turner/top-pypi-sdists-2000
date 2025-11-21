@@ -620,12 +620,18 @@ from ..aws_iam import (
     Grant as _Grant_a7ae64f8,
     IGrantable as _IGrantable_71c4f5de,
     IResourceWithPolicy as _IResourceWithPolicy_720d64fc,
+    IResourceWithPolicyV2 as _IResourceWithPolicyV2_01035ec6,
     IRole as _IRole_235f5d8e,
     PolicyDocument as _PolicyDocument_3ac34393,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kinesis import IStreamRef as _IStreamRef_b484e253
+from ..interfaces.aws_kinesisfirehose import (
+    IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53
+)
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_lambda import IFunctionRef as _IFunctionRef_2601eb33
 from ..interfaces.aws_logs import (
     AccountPolicyReference as _AccountPolicyReference_b18a26c9,
     DeliveryDestinationReference as _DeliveryDestinationReference_ea787d4a,
@@ -1355,6 +1361,17 @@ class CfnDelivery(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDelivery")
+    @builtins.classmethod
+    def arn_for_delivery(cls, resource: _IDeliveryRef_787b083e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18f2e4ae310f8bed2ddfdcacfb25e28bddd64f21450a7e20f12bbefcc933f5f1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDelivery", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1612,6 +1629,20 @@ class CfnDeliveryDestination(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDeliveryDestination")
+    @builtins.classmethod
+    def arn_for_delivery_destination(
+        cls,
+        resource: _IDeliveryDestinationRef_74b5114a,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1dc2d64b49b4021f96d1a717ff448a774ee135fc1bfaf51186d01f063b5558cc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeliveryDestination", [resource]))
 
     @jsii.member(jsii_name="fromDeliveryDestinationArn")
     @builtins.classmethod
@@ -2269,6 +2300,20 @@ class CfnDeliverySource(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDeliverySource")
+    @builtins.classmethod
+    def arn_for_delivery_source(
+        cls,
+        resource: _IDeliverySourceRef_81c0daa5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a6a52c8b1555a5c029cfb724444ef80699a2e82e5505c06283fb1392d7e77e3c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeliverySource", [resource]))
+
     @jsii.member(jsii_name="fromDeliverySourceArn")
     @builtins.classmethod
     def from_delivery_source_arn(
@@ -2598,8 +2643,8 @@ class CfnDestination(
         id: builtins.str,
         *,
         destination_name: builtins.str,
-        role_arn: builtins.str,
-        target_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
         destination_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2626,6 +2671,17 @@ class CfnDestination(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDestination")
+    @builtins.classmethod
+    def arn_for_destination(cls, resource: _IDestinationRef_281936d4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8b060d72925d317b2ba0242d02931bd82f281d476166d42b68eace3abda470c6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDestination", [resource]))
 
     @jsii.member(jsii_name="fromDestinationArn")
     @builtins.classmethod
@@ -2807,8 +2863,8 @@ class CfnDestinationProps:
         self,
         *,
         destination_name: builtins.str,
-        role_arn: builtins.str,
-        target_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
         destination_policy: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2870,24 +2926,26 @@ class CfnDestinationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of an IAM role that permits CloudWatch Logs to send data to the specified AWS resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def target_arn(self) -> builtins.str:
+    def target_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33]:
         '''The Amazon Resource Name (ARN) of the physical target where the log events are delivered (for example, a Kinesis stream).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-destination.html#cfn-logs-destination-targetarn
         '''
         result = self._values.get("target_arn")
         assert result is not None, "Required property 'target_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33], result)
 
     @builtins.property
     def destination_policy(self) -> typing.Optional[builtins.str]:
@@ -3109,7 +3167,7 @@ class CfnIntegration(
             :param dashboard_viewer_principals: Specify the ARNs of IAM roles and IAM users who you want to grant permission to for viewing the dashboards. .. epigraph:: In addition to specifying these users here, you must also grant them the *CloudWatchOpenSearchDashboardAccess* IAM policy. For more information, see `IAM policies for users <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/OpenSearch-Dashboards-UserRoles.html>`_ .
             :param data_source_role_arn: Specify the ARN of an IAM role that CloudWatch Logs will use to create the integration. This role must have the permissions necessary to access the OpenSearch Service collection to be able to create the dashboards. For more information about the permissions needed, see `Permissions that the integration needs <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/OpenSearch-Dashboards-CreateRole.html>`_ in the CloudWatch Logs User Guide.
             :param application_arn: If you want to use an existing OpenSearch Service application for your integration with OpenSearch Service, specify it here. If you omit this, a new application will be created.
-            :param kms_key_arn: To have the vended dashboard data encrypted with AWS KMS instead of the CloudWatch Logs default encryption method, specify the ARN of the AWS KMS key that you want to use.
+            :param kms_key_arn: To have the vended dashboard data encrypted with AWS instead of the CloudWatch Logs default encryption method, specify the ARN of the AWS key that you want to use.
             :param retention_days: Specify how many days that you want the data derived by OpenSearch Service to be retained in the index that the dashboard refers to. This also sets the maximum time period that you can choose when viewing data in the dashboard. Choosing a longer time frame will incur additional costs.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-integration-opensearchresourceconfig.html
@@ -3188,7 +3246,7 @@ class CfnIntegration(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''To have the vended dashboard data encrypted with AWS KMS instead of the CloudWatch Logs default encryption method, specify the ARN of the AWS KMS key that you want to use.
+            '''To have the vended dashboard data encrypted with AWS  instead of the CloudWatch Logs default encryption method, specify the ARN of the AWS  key that you want to use.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-logs-integration-opensearchresourceconfig.html#cfn-logs-integration-opensearchresourceconfig-kmskeyarn
             '''
@@ -3447,7 +3505,7 @@ class CfnLogAnomalyDetector(
         :param detector_name: A name for this anomaly detector.
         :param evaluation_frequency: Specifies how often the anomaly detector is to run and look for anomalies. Set this value according to the frequency that the log group receives new logs. For example, if the log group receives new log events every 10 minutes, then 15 minutes might be a good setting for ``EvaluationFrequency`` .
         :param filter_pattern: You can use this parameter to limit the anomaly detection model to examine only log events that match the pattern you specify here. For more information, see `Filter and Pattern Syntax <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html>`_ .
-        :param kms_key_id: Optionally assigns a AWS KMS key to secure this anomaly detector and its findings. If a key is assigned, the anomalies found and the model used by this detector are encrypted at rest with the key. If a key is assigned to an anomaly detector, a user must have permissions for both this key and for the anomaly detector to retrieve information about the anomalies that it finds. For more information about using a AWS KMS key and to see the required IAM policy, see `Use a AWS KMS key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
+        :param kms_key_id: Optionally assigns a AWS key to secure this anomaly detector and its findings. If a key is assigned, the anomalies found and the model used by this detector are encrypted at rest with the key. If a key is assigned to an anomaly detector, a user must have permissions for both this key and for the anomaly detector to retrieve information about the anomalies that it finds. For more information about using a AWS key and to see the required IAM policy, see `Use a AWS key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
         :param log_group_arn_list: The ARN of the log group that is associated with this anomaly detector. You can specify only one log group ARN.
         '''
         if __debug__:
@@ -3611,7 +3669,7 @@ class CfnLogAnomalyDetector(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Optionally assigns a AWS KMS key to secure this anomaly detector and its findings.'''
+        '''Optionally assigns a AWS  key to secure this anomaly detector and its findings.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -3670,7 +3728,7 @@ class CfnLogAnomalyDetectorProps:
         :param detector_name: A name for this anomaly detector.
         :param evaluation_frequency: Specifies how often the anomaly detector is to run and look for anomalies. Set this value according to the frequency that the log group receives new logs. For example, if the log group receives new log events every 10 minutes, then 15 minutes might be a good setting for ``EvaluationFrequency`` .
         :param filter_pattern: You can use this parameter to limit the anomaly detection model to examine only log events that match the pattern you specify here. For more information, see `Filter and Pattern Syntax <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html>`_ .
-        :param kms_key_id: Optionally assigns a AWS KMS key to secure this anomaly detector and its findings. If a key is assigned, the anomalies found and the model used by this detector are encrypted at rest with the key. If a key is assigned to an anomaly detector, a user must have permissions for both this key and for the anomaly detector to retrieve information about the anomalies that it finds. For more information about using a AWS KMS key and to see the required IAM policy, see `Use a AWS KMS key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
+        :param kms_key_id: Optionally assigns a AWS key to secure this anomaly detector and its findings. If a key is assigned, the anomalies found and the model used by this detector are encrypted at rest with the key. If a key is assigned to an anomaly detector, a user must have permissions for both this key and for the anomaly detector to retrieve information about the anomalies that it finds. For more information about using a AWS key and to see the required IAM policy, see `Use a AWS key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
         :param log_group_arn_list: The ARN of the log group that is associated with this anomaly detector. You can specify only one log group ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loganomalydetector.html
@@ -3770,11 +3828,11 @@ class CfnLogAnomalyDetectorProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Optionally assigns a AWS KMS key to secure this anomaly detector and its findings.
+        '''Optionally assigns a AWS  key to secure this anomaly detector and its findings.
 
         If a key is assigned, the anomalies found and the model used by this detector are encrypted at rest with the key. If a key is assigned to an anomaly detector, a user must have permissions for both this key and for the anomaly detector to retrieve information about the anomalies that it finds.
 
-        For more information about using a AWS KMS key and to see the required IAM policy, see `Use a AWS KMS key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
+        For more information about using a AWS  key and to see the required IAM policy, see `Use a AWS  key with an anomaly detector <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/LogsAnomalyDetection-KMS.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loganomalydetector.html#cfn-logs-loganomalydetector-kmskeyid
         '''
@@ -3856,9 +3914,9 @@ class CfnLogGroup(
         *,
         data_protection_policy: typing.Any = None,
         field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
-        log_group_name: typing.Optional[builtins.str] = None,
+        log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         resource_policy_document: typing.Any = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3869,7 +3927,7 @@ class CfnLogGroup(
         :param id: Construct identifier for this resource (unique in its scope).
         :param data_protection_policy: Creates a data protection policy and assigns it to the log group. A data protection policy can help safeguard sensitive data that's ingested by the log group by auditing and masking the sensitive log data. When a user who does not have permission to view masked data views a log event that includes masked data, the sensitive data is replaced by asterisks.
         :param field_index_policies: Creates or updates a *field index policy* for the specified log group. Only log groups in the Standard log class support field index policies. For more information about log classes, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ . You can use field index policies to create *field indexes* on fields found in log events in the log group. Creating field indexes lowers the costs for CloudWatch Logs Insights queries that reference those field indexes, because these queries attempt to skip the processing of log events that are known to not match the indexed field. Good fields to index are fields that you often need to query for and fields that have high cardinality of values Common examples of indexes include request ID, session ID, userID, and instance IDs. For more information, see `Create field indexes to improve query performance and reduce costs <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Field-Indexing.html>`_ . Currently, this array supports only one field index policy object.
-        :param kms_key_id: The Amazon Resource Name (ARN) of the AWS KMS key to use when encrypting log data. To associate an AWS KMS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS KMS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
+        :param kms_key_id: The Amazon Resource Name (ARN) of the AWS key to use when encrypting log data. To associate an AWS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
         :param log_group_class: Specifies the log group class for this log group. There are two classes:. - The ``Standard`` log class supports all CloudWatch Logs features. - The ``Infrequent Access`` log class supports a subset of CloudWatch Logs features and incurs lower costs. For details about the features supported by each class, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ Default: - "STANDARD"
         :param log_group_name: The name of the log group. If you don't specify a name, AWS CloudFormation generates a unique ID for the log group.
         :param resource_policy_document: Creates or updates a resource policy for the specified log group that allows other services to put log events to this account. A LogGroup can have 1 resource policy.
@@ -3892,6 +3950,17 @@ class CfnLogGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLogGroup")
+    @builtins.classmethod
+    def arn_for_log_group(cls, resource: _ILogGroupRef_874d025a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bd6696d0cbbcf49223f0920866be406ad5a3840cd6fad4170c3e41ec6fd00f0f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLogGroup", [resource]))
 
     @jsii.member(jsii_name="fromLogGroupArn")
     @builtins.classmethod
@@ -4025,7 +4094,7 @@ class CfnLogGroup(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key to use when encrypting log data.'''
+        '''The Amazon Resource Name (ARN) of the AWS  key to use when encrypting log data.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -4124,9 +4193,9 @@ class CfnLogGroupProps:
         *,
         data_protection_policy: typing.Any = None,
         field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         log_group_class: typing.Optional[builtins.str] = None,
-        log_group_name: typing.Optional[builtins.str] = None,
+        log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         resource_policy_document: typing.Any = None,
         retention_in_days: typing.Optional[jsii.Number] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4135,7 +4204,7 @@ class CfnLogGroupProps:
 
         :param data_protection_policy: Creates a data protection policy and assigns it to the log group. A data protection policy can help safeguard sensitive data that's ingested by the log group by auditing and masking the sensitive log data. When a user who does not have permission to view masked data views a log event that includes masked data, the sensitive data is replaced by asterisks.
         :param field_index_policies: Creates or updates a *field index policy* for the specified log group. Only log groups in the Standard log class support field index policies. For more information about log classes, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ . You can use field index policies to create *field indexes* on fields found in log events in the log group. Creating field indexes lowers the costs for CloudWatch Logs Insights queries that reference those field indexes, because these queries attempt to skip the processing of log events that are known to not match the indexed field. Good fields to index are fields that you often need to query for and fields that have high cardinality of values Common examples of indexes include request ID, session ID, userID, and instance IDs. For more information, see `Create field indexes to improve query performance and reduce costs <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatchLogs-Field-Indexing.html>`_ . Currently, this array supports only one field index policy object.
-        :param kms_key_id: The Amazon Resource Name (ARN) of the AWS KMS key to use when encrypting log data. To associate an AWS KMS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS KMS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
+        :param kms_key_id: The Amazon Resource Name (ARN) of the AWS key to use when encrypting log data. To associate an AWS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested. If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error. Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
         :param log_group_class: Specifies the log group class for this log group. There are two classes:. - The ``Standard`` log class supports all CloudWatch Logs features. - The ``Infrequent Access`` log class supports a subset of CloudWatch Logs features and incurs lower costs. For details about the features supported by each class, see `Log classes <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch_Logs_Log_Classes.html>`_ Default: - "STANDARD"
         :param log_group_name: The name of the log group. If you don't specify a name, AWS CloudFormation generates a unique ID for the log group.
         :param resource_policy_document: Creates or updates a resource policy for the specified log group that allows other services to put log events to this account. A LogGroup can have 1 resource policy.
@@ -4226,19 +4295,21 @@ class CfnLogGroupProps:
         return typing.cast(typing.Optional[typing.Union[typing.List[typing.Any], _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key to use when encrypting log data.
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+        '''The Amazon Resource Name (ARN) of the AWS  key to use when encrypting log data.
 
-        To associate an AWS KMS key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested.
+        To associate an AWS  key with the log group, specify the ARN of that KMS key here. If you do so, ingested data is encrypted using this key. This association is stored as long as the data encrypted with the KMS key is still within CloudWatch Logs . This enables CloudWatch Logs to decrypt this data whenever it is requested.
 
         If you attempt to associate a KMS key with the log group but the KMS key doesn't exist or is deactivated, you will receive an ``InvalidParameterException`` error.
 
-        Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS KMS . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
+        Log group data is always encrypted in CloudWatch Logs . If you omit this key, the encryption does not use AWS  . For more information, see `Encrypt log data in CloudWatch Logs using AWS Key Management Service <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/encrypt-log-data-kms.html>`_
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def log_group_class(self) -> typing.Optional[builtins.str]:
@@ -4257,7 +4328,9 @@ class CfnLogGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def log_group_name(self) -> typing.Optional[builtins.str]:
+    def log_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
         '''The name of the log group.
 
         If you don't specify a name, AWS CloudFormation generates a unique ID for the log group.
@@ -4265,7 +4338,7 @@ class CfnLogGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html#cfn-logs-loggroup-loggroupname
         '''
         result = self._values.get("log_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
 
     @builtins.property
     def resource_policy_document(self) -> typing.Any:
@@ -4355,7 +4428,7 @@ class CfnLogStream(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         log_stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::LogStream``.
@@ -4455,7 +4528,7 @@ class CfnLogStreamProps:
     def __init__(
         self,
         *,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         log_stream_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnLogStream``.
@@ -4490,14 +4563,14 @@ class CfnLogStreamProps:
             self._values["log_stream_name"] = log_stream_name
 
     @builtins.property
-    def log_group_name(self) -> builtins.str:
+    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
         '''The name of the log group where the log stream is created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-logstream.html#cfn-logs-logstream-loggroupname
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
 
     @builtins.property
     def log_stream_name(self) -> typing.Optional[builtins.str]:
@@ -4575,7 +4648,7 @@ class CfnMetricFilter(
         id: builtins.str,
         *,
         filter_pattern: builtins.str,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricFilter.MetricTransformationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5018,7 +5091,7 @@ class CfnMetricFilterProps:
         self,
         *,
         filter_pattern: builtins.str,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -5104,14 +5177,14 @@ class CfnMetricFilterProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def log_group_name(self) -> builtins.str:
+    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
         '''The name of an existing log group that you want to associate with this metric filter.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-metricfilter.html#cfn-logs-metricfilter-loggroupname
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
 
     @builtins.property
     def metric_transformations(
@@ -5222,7 +5295,7 @@ class CfnQueryDefinition(
         *,
         name: builtins.str,
         query_string: builtins.str,
-        log_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
         query_language: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::QueryDefinition``.
@@ -5369,7 +5442,7 @@ class CfnQueryDefinitionProps:
         *,
         name: builtins.str,
         query_string: builtins.str,
-        log_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+        log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
         query_language: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnQueryDefinition``.
@@ -5439,13 +5512,15 @@ class CfnQueryDefinitionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def log_group_names(self) -> typing.Optional[typing.List[builtins.str]]:
+    def log_group_names(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILogGroupRef_874d025a]]]:
         '''Use this parameter if you want the query to query only certain log groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-querydefinition.html#cfn-logs-querydefinition-loggroupnames
         '''
         result = self._values.get("log_group_names")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILogGroupRef_874d025a]]], result)
 
     @builtins.property
     def query_language(self) -> typing.Optional[builtins.str]:
@@ -5712,15 +5787,15 @@ class CfnSubscriptionFilter(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        destination_arn: builtins.str,
+        destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
         filter_pattern: builtins.str,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         distribution: typing.Optional[builtins.str] = None,
         emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::Logs::SubscriptionFilter``.
 
@@ -5940,15 +6015,15 @@ class CfnSubscriptionFilterProps:
     def __init__(
         self,
         *,
-        destination_arn: builtins.str,
+        destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
         filter_pattern: builtins.str,
-        log_group_name: builtins.str,
+        log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
         apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         distribution: typing.Optional[builtins.str] = None,
         emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
         field_selection_criteria: typing.Optional[builtins.str] = None,
         filter_name: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSubscriptionFilter``.
 
@@ -6015,14 +6090,16 @@ class CfnSubscriptionFilterProps:
             self._values["role_arn"] = role_arn
 
     @builtins.property
-    def destination_arn(self) -> builtins.str:
+    def destination_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33]:
         '''The Amazon Resource Name (ARN) of the destination.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-destinationarn
         '''
         result = self._values.get("destination_arn")
         assert result is not None, "Required property 'destination_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33], result)
 
     @builtins.property
     def filter_pattern(self) -> builtins.str:
@@ -6037,7 +6114,7 @@ class CfnSubscriptionFilterProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def log_group_name(self) -> builtins.str:
+    def log_group_name(self) -> typing.Union[builtins.str, _ILogGroupRef_874d025a]:
         '''The log group to associate with the subscription filter.
 
         All log events that are uploaded to this log group are filtered and delivered to the specified AWS resource if the filter pattern matches the log events.
@@ -6046,7 +6123,7 @@ class CfnSubscriptionFilterProps:
         '''
         result = self._values.get("log_group_name")
         assert result is not None, "Required property 'log_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ILogGroupRef_874d025a], result)
 
     @builtins.property
     def apply_on_transformed_logs(
@@ -6104,7 +6181,9 @@ class CfnSubscriptionFilterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The ARN of an IAM role that grants CloudWatch Logs permissions to deliver ingested log events to the destination stream.
 
         You don't need to provide the ARN when you are working with a logical destination for cross-account delivery.
@@ -6112,7 +6191,7 @@ class CfnSubscriptionFilterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-subscriptionfilter.html#cfn-logs-subscriptionfilter-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7947,7 +8026,7 @@ class CfnTransformer(
         ) -> None:
             '''This processor converts logs into `Open Cybersecurity Schema Framework (OCSF) <https://docs.aws.amazon.com/https://ocsf.io>`_ events.
 
-            For more information about this processor including examples, see `parseToOSCF <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-parseToOCSF>`_ in the *CloudWatch Logs User Guide* .
+            For more information about this processor including examples, see `parseToOCSF <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CloudWatch-Logs-Transformation.html#CloudWatch-Logs-Transformation-parseToOCSF>`_ in the *CloudWatch Logs User Guide* .
 
             :param event_source: Specify the service or process that produces the log events that will be converted with this processor.
             :param ocsf_version: Specify which version of the OCSF schema to use for the transformed log events.
@@ -11658,7 +11737,11 @@ typing.cast(typing.Any, IFilterPattern).__jsii_proxy_class__ = lambda : _IFilter
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_logs.ILogGroup")
-class ILogGroup(_IResourceWithPolicy_720d64fc, typing_extensions.Protocol):
+class ILogGroup(
+    _IResourceWithPolicy_720d64fc,
+    _ILogGroupRef_874d025a,
+    typing_extensions.Protocol,
+):
     @builtins.property
     @jsii.member(jsii_name="logGroupArn")
     def log_group_arn(self) -> builtins.str:
@@ -11927,6 +12010,7 @@ class ILogGroup(_IResourceWithPolicy_720d64fc, typing_extensions.Protocol):
 
 class _ILogGroupProxy(
     jsii.proxy_for(_IResourceWithPolicy_720d64fc), # type: ignore[misc]
+    jsii.proxy_for(_ILogGroupRef_874d025a), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_logs.ILogGroup"
 
@@ -13486,6 +13570,12 @@ class LogGroup(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "LogGroupGrants":
+        '''Collection of grant methods for a LogGroup.'''
+        return typing.cast("LogGroupGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="logGroupArn")
     def log_group_arn(self) -> builtins.str:
         '''The ARN of this log group.'''
@@ -13497,6 +13587,12 @@ class LogGroup(
         '''The name of this log group.'''
         return typing.cast(builtins.str, jsii.get(self, "logGroupName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="logGroupRef")
+    def log_group_ref(self) -> _LogGroupReference_fcef0083:
+        '''A reference to a LogGroup resource.'''
+        return typing.cast(_LogGroupReference_fcef0083, jsii.get(self, "logGroupRef"))
+
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_logs.LogGroupClass")
 class LogGroupClass(enum.Enum):
@@ -13506,6 +13602,71 @@ class LogGroupClass(enum.Enum):
     '''Default class of logs services.'''
     INFREQUENT_ACCESS = "INFREQUENT_ACCESS"
     '''Class for reduced logs services.'''
+
+
+class LogGroupGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_logs.LogGroupGrants",
+):
+    '''Collection of grant methods for a ILogGroupRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_logs as logs
+        from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+        
+        # log_group_ref: interfaces_aws_logs.ILogGroupRef
+        
+        log_group_grants = logs.LogGroupGrants.from_log_group(log_group_ref)
+    '''
+
+    @jsii.member(jsii_name="fromLogGroup")
+    @builtins.classmethod
+    def from_log_group(cls, resource: _ILogGroupRef_874d025a) -> "LogGroupGrants":
+        '''Creates grants for LogGroupGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3293bcead504975da671f98c622a841ad2febddc84d56e8a3716c294446041b5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("LogGroupGrants", jsii.sinvoke(cls, "fromLogGroup", [resource]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Give permissions to read and filter events from this log group.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__607338f203b242ba450629a7b68c619609b6f99b75ebf09c1503cf78f54f544e)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+    @jsii.member(jsii_name="write")
+    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Give permissions to create and write to streams in this log group.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7b9c220ded57ef7105f24fef958f2bad5a42c4417f83bd42464ecc96acdf2b5)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _ILogGroupRef_874d025a:
+        return typing.cast(_ILogGroupRef_874d025a, jsii.get(self, "resource"))
+
+    @builtins.property
+    @jsii.member(jsii_name="policyResource")
+    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
+        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
 
 
 @jsii.data_type(
@@ -18350,6 +18511,7 @@ __all__ = [
     "ListToMapProperty",
     "LogGroup",
     "LogGroupClass",
+    "LogGroupGrants",
     "LogGroupProps",
     "LogRetention",
     "LogRetentionProps",
@@ -18503,6 +18665,12 @@ def _typecheckingstub__f9ab4424636fed5b3c6cadfbae9a75acc19c7a49cc86eb71fbcb77cb3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__18f2e4ae310f8bed2ddfdcacfb25e28bddd64f21450a7e20f12bbefcc933f5f1(
+    resource: _IDeliveryRef_787b083e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__99f7221e967e1cfd1a9552bf514bfffa267c72d3a082920609edd6fcf762914f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18567,6 +18735,12 @@ def _typecheckingstub__b48efa0b7b05ab2d9f1417a0b1e0cd7f28039825d1520fe16f6f8dca7
     destination_resource_arn: typing.Optional[builtins.str] = None,
     output_format: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1dc2d64b49b4021f96d1a717ff448a774ee135fc1bfaf51186d01f063b5558cc(
+    resource: _IDeliveryDestinationRef_74b5114a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18680,6 +18854,12 @@ def _typecheckingstub__5ab0297a02d5ec18fef514a89fa2743d7fb62f4e7b1fd892c1bd7ee90
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a6a52c8b1555a5c029cfb724444ef80699a2e82e5505c06283fb1392d7e77e3c(
+    resource: _IDeliverySourceRef_81c0daa5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fe3645e1e4c10cf1b0fe5b3ba9f688197a0cbd098972ea22498ac17302ca98af(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -18747,10 +18927,16 @@ def _typecheckingstub__44e37c6c2772abdacfbcd01df5c5418fca8937b435df3890a5a5cb343
     id: builtins.str,
     *,
     destination_name: builtins.str,
-    role_arn: builtins.str,
-    target_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
     destination_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8b060d72925d317b2ba0242d02931bd82f281d476166d42b68eace3abda470c6(
+    resource: _IDestinationRef_281936d4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18816,8 +19002,8 @@ def _typecheckingstub__5e2da427145601b64454ab268bb3be33f3c089ff53e25e2b9a66fd51a
 def _typecheckingstub__faf2f9f88fd096e79a2445aab3efdc3a85509df7ba06ffc305c9faf39fa77a56(
     *,
     destination_name: builtins.str,
-    role_arn: builtins.str,
-    target_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    target_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
     destination_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -18980,12 +19166,18 @@ def _typecheckingstub__8e283e76ec168d67513d106f9413697672f161b29f03fa9b13486e96b
     *,
     data_protection_policy: typing.Any = None,
     field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_group_class: typing.Optional[builtins.str] = None,
-    log_group_name: typing.Optional[builtins.str] = None,
+    log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     resource_policy_document: typing.Any = None,
     retention_in_days: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bd6696d0cbbcf49223f0920866be406ad5a3840cd6fad4170c3e41ec6fd00f0f(
+    resource: _ILogGroupRef_874d025a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19070,9 +19262,9 @@ def _typecheckingstub__1a2ba122502a64b05bea3e56f15389c84f127761b660b1d06de3ea638
     *,
     data_protection_policy: typing.Any = None,
     field_index_policies: typing.Optional[typing.Union[typing.Sequence[typing.Any], _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_group_class: typing.Optional[builtins.str] = None,
-    log_group_name: typing.Optional[builtins.str] = None,
+    log_group_name: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     resource_policy_document: typing.Any = None,
     retention_in_days: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19084,7 +19276,7 @@ def _typecheckingstub__68392ef44019b9b5ee681acb5bd13c481e1cc999bc1f1773e84c70b5a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     log_stream_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -19116,7 +19308,7 @@ def _typecheckingstub__5e3f8ff96c3dac6c45a8d31d07a3223b27eebb1e1c6aa1676d6cf0cfc
 
 def _typecheckingstub__ab2d708d8a8c684eb8753554b20ecf7de790ffc112520d594cacb903aff379ea(
     *,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     log_stream_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -19127,7 +19319,7 @@ def _typecheckingstub__aaa6a2018a5f10ec1a79f547b81a628d6f434d037b49c5975131bba2d
     id: builtins.str,
     *,
     filter_pattern: builtins.str,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -19214,7 +19406,7 @@ def _typecheckingstub__8989e36bc84de1e18d069af1bb22845cf409685cbd8a8fe22cd131474
 def _typecheckingstub__524e2e94ad4843f66081953f516426a1396490f271842ac0c5ca7c7ecb84011e(
     *,
     filter_pattern: builtins.str,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     metric_transformations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricFilter.MetricTransformationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     emit_system_field_dimensions: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -19230,7 +19422,7 @@ def _typecheckingstub__0d10075ae036bdf9f4049570cf68ab72c79ee717f007f45628b52d2ea
     *,
     name: builtins.str,
     query_string: builtins.str,
-    log_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
     query_language: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -19276,7 +19468,7 @@ def _typecheckingstub__dd7180e50961abf6b838dfc21ba186cc5b2c551eae8357613767f891a
     *,
     name: builtins.str,
     query_string: builtins.str,
-    log_group_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    log_group_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILogGroupRef_874d025a]]] = None,
     query_language: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -19328,15 +19520,15 @@ def _typecheckingstub__6c7a154450656ee0f7e524d596c7e140faad893a71a7c8b9b8a85fe73
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    destination_arn: builtins.str,
+    destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
     filter_pattern: builtins.str,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     distribution: typing.Optional[builtins.str] = None,
     emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
     field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19409,15 +19601,15 @@ def _typecheckingstub__1cdca0b99d7b39060b314b323073c0a48e25972ff085f24a455a00339
 
 def _typecheckingstub__1250ecc947a5eb57e428cd8fedeb9ae0f6da4eb03c22d674fa019a076ee8b507(
     *,
-    destination_arn: builtins.str,
+    destination_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53, _IStreamRef_b484e253, _IFunctionRef_2601eb33],
     filter_pattern: builtins.str,
-    log_group_name: builtins.str,
+    log_group_name: typing.Union[builtins.str, _ILogGroupRef_874d025a],
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     distribution: typing.Optional[builtins.str] = None,
     emit_system_fields: typing.Optional[typing.Sequence[builtins.str]] = None,
     field_selection_criteria: typing.Optional[builtins.str] = None,
     filter_name: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20186,6 +20378,24 @@ def _typecheckingstub__afd13314ef52ff283429f1992d9ab29ab14998262e884015dc1d0af12
     statistic: typing.Optional[builtins.str] = None,
     unit: typing.Optional[_Unit_61bc6f70] = None,
     visible: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3293bcead504975da671f98c622a841ad2febddc84d56e8a3716c294446041b5(
+    resource: _ILogGroupRef_874d025a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__607338f203b242ba450629a7b68c619609b6f99b75ebf09c1503cf78f54f544e(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d7b9c220ded57ef7105f24fef958f2bad5a42c4417f83bd42464ecc96acdf2b5(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

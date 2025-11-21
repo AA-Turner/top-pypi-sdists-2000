@@ -89,7 +89,7 @@ class CfnAccount(
 ):
     '''Creates an AWS account that is automatically a member of the organization whose credentials made the request.
 
-    AWS CloudFormation uses the ```CreateAccount`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_CreateAccount.html>`_ operation to create accounts. This is an asynchronous request that AWS performs in the background. Because ``CreateAccount`` operates asynchronously, it can return a successful completion message even though account initialization might still be in progress. You might need to wait a few minutes before you can successfully access the account. To check the status of the request, do one of the following:
+    CloudFormation uses the ```CreateAccount`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_CreateAccount.html>`_ operation to create accounts. This is an asynchronous request that AWS performs in the background. Because ``CreateAccount`` operates asynchronously, it can return a successful completion message even though account initialization might still be in progress. You might need to wait a few minutes before you can successfully access the account. To check the status of the request, do one of the following:
 
     - Use the ``Id`` value of the ``CreateAccountStatus`` response element from the ``CreateAccount`` operation to provide as a parameter to the ```DescribeCreateAccountStatus`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_DescribeCreateAccountStatus.html>`_ operation.
     - Check the CloudTrail log for the ``CreateAccountResult`` event. For information on using CloudTrail with AWS Organizations , see `Logging and monitoring in AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_security_incident-response.html#orgs_cloudtrail-integration>`_ in the *AWS Organizations User Guide* .
@@ -106,11 +106,11 @@ class CfnAccount(
 
     *Deleting Account resources*
 
-    The default ``DeletionPolicy`` for resource ``AWS::Organizations::Account`` is ``Retain`` . For more information about how AWS CloudFormation deletes resources, see `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ .
+    The default ``DeletionPolicy`` for resource ``AWS::Organizations::Account`` is ``Retain`` . For more information about how CloudFormation deletes resources, see `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ .
     .. epigraph::
 
        - If you include multiple accounts in a single template, you must use the ``DependsOn`` attribute on each account resource type so that the accounts are created sequentially. If you create multiple accounts at the same time, Organizations returns an error and the stack operation fails.
-       - You can't modify the following list of ``Account`` resource parameters using AWS CloudFormation updates.
+       - You can't modify the following list of ``Account`` resource parameters using CloudFormation updates.
        - AccountName
        - Email
        - RoleName
@@ -118,8 +118,8 @@ class CfnAccount(
        If you attempt to update the listed parameters, CloudFormation will attempt the update, but you will receive an error message as those updates are not supported from an Organizations management account or a `registered delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ account. Both the update and the update roll-back will fail, so you must skip the account resource update. To update parameters ``AccountName`` and ``Email`` , you must sign in to the AWS Management Console as the AWS account root user. For more information, see `Update the AWS account name, email address, or password for the root user <https://docs.aws.amazon.com/accounts/latest/reference/manage-acct-update-root-user.html>`_ in the *Account Management Reference Guide* .
 
        - When you create an account in an organization using the AWS Organizations console, API, or AWS CLI commands, we don't automatically collect the information required for the account to operate as a standalone account. That includes collecting the payment method and signing the end user license agreement (EULA). If you must remove an account from your organization later, you can do so only after you provide the missing information. For more information, see `Considerations before removing an account from an organization <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_account-before-remove.html>`_ in the *AWS Organizations User Guide* .
-       - When you create an account in an organization using AWS CloudFormation , you can't specify a value for the ``CreateAccount`` operation parameter ``IamUserAccessToBilling`` . The default value for parameter ``IamUserAccessToBilling`` is ``ALLOW`` , and IAM users and roles with the required permissions can access billing information for the new account.
-       - If you get an exception that indicates ``DescribeCreateAccountStatus returns IN_PROGRESS state before time out`` . You must check the account creation status using the ```DescribeCreateAccountStatus`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_DescribeCreateAccountStatus.html>`_ operation. If the account state returns as ``SUCCEEDED`` , you can import the account into AWS CloudFormation management using ```resource import`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import.html>`_ .
+       - When you create an account in an organization using CloudFormation , you can't specify a value for the ``CreateAccount`` operation parameter ``IamUserAccessToBilling`` . The default value for parameter ``IamUserAccessToBilling`` is ``ALLOW`` , and IAM users and roles with the required permissions can access billing information for the new account.
+       - If you get an exception that indicates ``DescribeCreateAccountStatus returns IN_PROGRESS state before time out`` . You must check the account creation status using the ```DescribeCreateAccountStatus`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_DescribeCreateAccountStatus.html>`_ operation. If the account state returns as ``SUCCEEDED`` , you can import the account into CloudFormation management using ```resource import`` <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resource-import.html>`_ .
        - If you get an exception that indicates you have exceeded your account quota for the organization, you can request an increase by using the `Service Quotas console <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ .
        - If you get an exception that indicates the operation failed because your organization is still initializing, wait one hour and then try again. If the error persists, contact `AWS Support <https://docs.aws.amazon.com/support/home#/>`_ .
        - We don't recommend that you use the ``CreateAccount`` operation to create multiple temporary accounts. You can close accounts using the ```CloseAccount`` <https://docs.aws.amazon.com/organizations/latest/APIReference/API_CloseAccount.html>`_ operation or from the AWS Organizations console in the organization's management account. For information on the requirements and process for closing an account, see `Closing a member account in your organization <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_accounts_close.html>`_ in the *AWS Organizations User Guide* .
@@ -182,6 +182,17 @@ class CfnAccount(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAccount")
+    @builtins.classmethod
+    def arn_for_account(cls, resource: _IAccountRef_ee273c41) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9ba93a038ccc85e707f22f7b3273c9b66b0d924087ed9c72e5382468c546a56a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccount", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -576,6 +587,17 @@ class CfnOrganization(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForOrganization")
+    @builtins.classmethod
+    def arn_for_organization(cls, resource: _IOrganizationRef_74d1fc09) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc87460a7b7e0ef44f3c618cd0a4730422138ef2ee6b63752435c79731d027e9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOrganization", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -813,6 +835,20 @@ class CfnOrganizationalUnit(
         props = CfnOrganizationalUnitProps(name=name, parent_id=parent_id, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOrganizationalUnit")
+    @builtins.classmethod
+    def arn_for_organizational_unit(
+        cls,
+        resource: _IOrganizationalUnitRef_1eee9aae,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__56abf8fbaba3dc526d9151677d8242a33cb1605cd3b9f168bb5f98719c4db0b5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOrganizationalUnit", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1112,6 +1148,17 @@ class CfnPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPolicy")
+    @builtins.classmethod
+    def arn_for_policy(cls, resource: _IPolicyRef_f285244f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60a099d74c38572686e6ca0eb73e2ec5789c96a4c4975024d468446bb28b8f04)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1510,6 +1557,20 @@ class CfnResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForResourcePolicy")
+    @builtins.classmethod
+    def arn_for_resource_policy(
+        cls,
+        resource: _IResourcePolicyRef_10723097,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4bdf39b3cbefe7d3bf477ad788760a83e4ba09939a7a87a3b1f60153f67418ea)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourcePolicy", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1723,6 +1784,12 @@ def _typecheckingstub__717b5f787efa43cf2d1c6b1edf32de9bd64cd50c67b6e29cf7e1d6df0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9ba93a038ccc85e707f22f7b3273c9b66b0d924087ed9c72e5382468c546a56a(
+    resource: _IAccountRef_ee273c41,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ee3ea086c724fb0935ee8a727937a17ae19b987a8ade49b1405a7787feb7e3bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1785,6 +1852,12 @@ def _typecheckingstub__450a54c6b7334fcb8f406a9a29b8e1f90a618bcbd127f2d5a6a9fa43f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fc87460a7b7e0ef44f3c618cd0a4730422138ef2ee6b63752435c79731d027e9(
+    resource: _IOrganizationRef_74d1fc09,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a0b1a88993c76738edf5e9d3584d058cabe1cfc259fb5d620589d5c23507de91(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1817,6 +1890,12 @@ def _typecheckingstub__05eb3e3a6c1c8de7f03913252600dcc42e4c1e99dbbab3f47a3fb8e4c
     name: builtins.str,
     parent_id: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__56abf8fbaba3dc526d9151677d8242a33cb1605cd3b9f168bb5f98719c4db0b5(
+    resource: _IOrganizationalUnitRef_1eee9aae,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1870,6 +1949,12 @@ def _typecheckingstub__9c8ac465f7818132d3539ff8d8e22250305dad104185434533d033da8
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__60a099d74c38572686e6ca0eb73e2ec5789c96a4c4975024d468446bb28b8f04(
+    resource: _IPolicyRef_f285244f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1940,6 +2025,12 @@ def _typecheckingstub__d9208421dfafb85e674bb3b797871f578fa0566480e15ed57d8dbc67f
     *,
     content: typing.Any,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4bdf39b3cbefe7d3bf477ad788760a83e4ba09939a7a87a3b1f60153f67418ea(
+    resource: _IResourcePolicyRef_10723097,
 ) -> None:
     """Type checking stubs"""
     pass

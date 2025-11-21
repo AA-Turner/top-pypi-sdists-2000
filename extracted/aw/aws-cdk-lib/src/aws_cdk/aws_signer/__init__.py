@@ -459,6 +459,20 @@ class CfnSigningProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSigningProfile")
+    @builtins.classmethod
+    def arn_for_signing_profile(
+        cls,
+        resource: _ISigningProfileRef_80e46916,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f88b9c5ab8f3709756f086e40d555988785e2364dbe7e70f2cd9c77e7cc59634)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSigningProfile", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1328,6 +1342,12 @@ def _typecheckingstub__d84fe196f81722ce814c09f8bd21719acd97c32e92c1de922d0f04c31
     profile_name: typing.Optional[builtins.str] = None,
     signature_validity_period: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningProfile.SignatureValidityPeriodProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f88b9c5ab8f3709756f086e40d555988785e2364dbe7e70f2cd9c77e7cc59634(
+    resource: _ISigningProfileRef_80e46916,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -528,6 +528,7 @@ from ..aws_s3 import (
     Location as _Location_0948fa7f,
 )
 from ..aws_s3_assets import AssetOptions as _AssetOptions_2aa69621
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 from ..interfaces.aws_synthetics import (
@@ -1676,7 +1677,7 @@ class CfnCanary(
         *,
         artifact_s3_location: builtins.str,
         code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
-        execution_role_arn: builtins.str,
+        execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         name: builtins.str,
         runtime_version: builtins.str,
         schedule: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCanary.ScheduleProperty", typing.Dict[builtins.str, typing.Any]]],
@@ -1748,6 +1749,17 @@ class CfnCanary(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCanary")
+    @builtins.classmethod
+    def arn_for_canary(cls, resource: _ICanaryRef_cf407e49) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01a67567b68d06f36673fc7eb4b602b0433b2b739e698b03ea67aa6a7bbfef4b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCanary", [resource]))
 
     @jsii.member(jsii_name="fromCanaryName")
     @builtins.classmethod
@@ -2854,8 +2866,8 @@ class CfnCanary(
 
             Artifact encryption functionality is available only for canaries that use Synthetics runtime version syn-nodejs-puppeteer-3.3 or later. For more information, see `Encrypting canary artifacts <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_artifact_encryption.html>`_ .
 
-            :param encryption_mode: The encryption method to use for artifacts created by this canary. Specify ``SSE_S3`` to use server-side encryption (SSE) with an Amazon S3-managed key. Specify ``SSE-KMS`` to use server-side encryption with a customer-managed AWS KMS key. If you omit this parameter, an AWS -managed AWS KMS key is used.
-            :param kms_key_arn: The ARN of the customer-managed AWS KMS key to use, if you specify ``SSE-KMS`` for ``EncryptionMode``.
+            :param encryption_mode: The encryption method to use for artifacts created by this canary. Specify ``SSE_S3`` to use server-side encryption (SSE) with an Amazon S3-managed key. Specify ``SSE-KMS`` to use server-side encryption with a customer-managed AWS key. If you omit this parameter, an AWS -managed AWS key is used.
+            :param kms_key_arn: The ARN of the customer-managed AWS key to use, if you specify ``SSE-KMS`` for ``EncryptionMode``.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-s3encryption.html
             :exampleMetadata: fixture=_generated
@@ -2885,9 +2897,9 @@ class CfnCanary(
         def encryption_mode(self) -> typing.Optional[builtins.str]:
             '''The encryption method to use for artifacts created by this canary.
 
-            Specify ``SSE_S3`` to use server-side encryption (SSE) with an Amazon S3-managed key. Specify ``SSE-KMS`` to use server-side encryption with a customer-managed AWS KMS key.
+            Specify ``SSE_S3`` to use server-side encryption (SSE) with an Amazon S3-managed key. Specify ``SSE-KMS`` to use server-side encryption with a customer-managed AWS  key.
 
-            If you omit this parameter, an AWS -managed AWS KMS key is used.
+            If you omit this parameter, an AWS -managed AWS  key is used.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-s3encryption.html#cfn-synthetics-canary-s3encryption-encryptionmode
             '''
@@ -2896,7 +2908,7 @@ class CfnCanary(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the customer-managed AWS KMS key to use, if you specify ``SSE-KMS`` for ``EncryptionMode``.
+            '''The ARN of the customer-managed AWS  key to use, if you specify ``SSE-KMS`` for ``EncryptionMode``.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-synthetics-canary-s3encryption.html#cfn-synthetics-canary-s3encryption-kmskeyarn
             '''
@@ -3274,7 +3286,7 @@ class CfnCanaryProps:
         *,
         artifact_s3_location: builtins.str,
         code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-        execution_role_arn: builtins.str,
+        execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         name: builtins.str,
         runtime_version: builtins.str,
         schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
@@ -3503,7 +3515,7 @@ class CfnCanaryProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCanary.CodeProperty], result)
 
     @builtins.property
-    def execution_role_arn(self) -> builtins.str:
+    def execution_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of the IAM role to be used to run the canary.
 
         This role must already exist, and must include ``lambda.amazonaws.com`` as a principal in the trust policy. The role must also have the following permissions:
@@ -3520,7 +3532,7 @@ class CfnCanaryProps:
         '''
         result = self._values.get("execution_role_arn")
         assert result is not None, "Required property 'execution_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -5542,7 +5554,7 @@ def _typecheckingstub__b8fcb3f48eca9399b4d1d31a5ef709e22f9fa52ad1e174b75d8313ef2
     *,
     artifact_s3_location: builtins.str,
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-    execution_role_arn: builtins.str,
+    execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     name: builtins.str,
     runtime_version: builtins.str,
     schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],
@@ -5560,6 +5572,12 @@ def _typecheckingstub__b8fcb3f48eca9399b4d1d31a5ef709e22f9fa52ad1e174b75d8313ef2
     visual_reference: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     visual_references: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VisualReferenceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.VPCConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01a67567b68d06f36673fc7eb4b602b0433b2b739e698b03ea67aa6a7bbfef4b(
+    resource: _ICanaryRef_cf407e49,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5806,7 +5824,7 @@ def _typecheckingstub__d869d56ce0d1d2e2add2f80bf39b28abbec2752c719e03194ee540bf1
     *,
     artifact_s3_location: builtins.str,
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
-    execution_role_arn: builtins.str,
+    execution_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     name: builtins.str,
     runtime_version: builtins.str,
     schedule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCanary.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]],

@@ -1732,6 +1732,20 @@ class CfnGatewayRoute(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGatewayRoute")
+    @builtins.classmethod
+    def arn_for_gateway_route(
+        cls,
+        resource: _IGatewayRouteRef_d8d24af4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eda7666004d95ec11867a30b3e831f5d36381a9e38ca8a45241b8332053b96f9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGatewayRoute", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4611,6 +4625,17 @@ class CfnMesh(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForMesh")
+    @builtins.classmethod
+    def arn_for_mesh(cls, resource: _IMeshRef_1eeeb336) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__644978ba64db4f4611b99d9dcd61521983ad70bc69bac780831115d1b57a816d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMesh", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5343,6 +5368,17 @@ class CfnRoute(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRoute")
+    @builtins.classmethod
+    def arn_for_route(cls, resource: _IRouteRef_c5013f61) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2121e5df006e0008bf0ab648ce89a4c3f10a4ecdeb37fba9ac4ab3245a787ae8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoute", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8837,6 +8873,20 @@ class CfnVirtualGateway(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVirtualGateway")
+    @builtins.classmethod
+    def arn_for_virtual_gateway(
+        cls,
+        resource: _IVirtualGatewayRef_63265943,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e079ba8e06821e44f9be4ba6de39d89558b956ab4b074d4acdce85b96ae9e3c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVirtualGateway", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12323,6 +12373,17 @@ class CfnVirtualNode(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVirtualNode")
+    @builtins.classmethod
+    def arn_for_virtual_node(cls, resource: _IVirtualNodeRef_5162bf48) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b8e24b3f65db24c0fac5a6b64a7c4037f8eaa1287301134a140adfca875d9ae6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVirtualNode", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -17154,6 +17215,20 @@ class CfnVirtualRouter(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVirtualRouter")
+    @builtins.classmethod
+    def arn_for_virtual_router(
+        cls,
+        resource: _IVirtualRouterRef_ff2b1aff,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc4a7f760935e165089894bf55177411ed74ac9c3ac3dd7f43e80547719d80c6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVirtualRouter", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17750,6 +17825,20 @@ class CfnVirtualService(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVirtualService")
+    @builtins.classmethod
+    def arn_for_virtual_service(
+        cls,
+        resource: _IVirtualServiceRef_828d7b93,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f7739369c169c9c9bc5928138d542d9f1837a8b3e1f046765826eb78c3eecb89)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVirtualService", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -23258,7 +23347,11 @@ typing.cast(typing.Any, IRoute).__jsii_proxy_class__ = lambda : _IRouteProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualGateway")
-class IVirtualGateway(_IResource_c80c4260, typing_extensions.Protocol):
+class IVirtualGateway(
+    _IResource_c80c4260,
+    _IVirtualGatewayRef_63265943,
+    typing_extensions.Protocol,
+):
     '''Interface which all Virtual Gateway based classes must implement.'''
 
     @builtins.property
@@ -23315,6 +23408,7 @@ class IVirtualGateway(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IVirtualGatewayProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IVirtualGatewayRef_63265943), # type: ignore[misc]
 ):
     '''Interface which all Virtual Gateway based classes must implement.'''
 
@@ -27369,6 +27463,12 @@ class VirtualGateway(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "VirtualGatewayGrants":
+        '''Collection of grant methods for a VirtualGateway.'''
+        return typing.cast("VirtualGatewayGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="listeners")
     def _listeners(self) -> typing.List["VirtualGatewayListenerConfig"]:
         return typing.cast(typing.List["VirtualGatewayListenerConfig"], jsii.get(self, "listeners"))
@@ -27390,6 +27490,12 @@ class VirtualGateway(
     def virtual_gateway_name(self) -> builtins.str:
         '''The name of the VirtualGateway.'''
         return typing.cast(builtins.str, jsii.get(self, "virtualGatewayName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="virtualGatewayRef")
+    def virtual_gateway_ref(self) -> _VirtualGatewayReference_29f6f326:
+        '''A reference to a VirtualGateway resource.'''
+        return typing.cast(_VirtualGatewayReference_29f6f326, jsii.get(self, "virtualGatewayRef"))
 
 
 @jsii.data_type(
@@ -27564,6 +27670,61 @@ class VirtualGatewayBaseProps:
         return "VirtualGatewayBaseProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class VirtualGatewayGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_appmesh.VirtualGatewayGrants",
+):
+    '''Collection of grant methods for a IVirtualGatewayRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_appmesh as appmesh
+        from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+        
+        # virtual_gateway_ref: interfaces_aws_appmesh.IVirtualGatewayRef
+        
+        virtual_gateway_grants = appmesh.VirtualGatewayGrants.from_virtual_gateway(virtual_gateway_ref)
+    '''
+
+    @jsii.member(jsii_name="fromVirtualGateway")
+    @builtins.classmethod
+    def from_virtual_gateway(
+        cls,
+        resource: _IVirtualGatewayRef_63265943,
+    ) -> "VirtualGatewayGrants":
+        '''Creates grants for VirtualGatewayGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55d4d33ff41b6a90fa03f27a4fee92847478cbb71aae1ad4e6201af6429a34f5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("VirtualGatewayGrants", jsii.sinvoke(cls, "fromVirtualGateway", [resource]))
+
+    @jsii.member(jsii_name="streamAggregatedResources")
+    def stream_aggregated_resources(
+        self,
+        grantee: _IGrantable_71c4f5de,
+    ) -> _Grant_a7ae64f8:
+        '''Grants the given entity ``appmesh:StreamAggregatedResources``.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__842cffde7813c7f79cac957edd6daf3b93b11b2ebec34fbb36a1b8aff765620b)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "streamAggregatedResources", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IVirtualGatewayRef_63265943:
+        return typing.cast(_IVirtualGatewayRef_63265943, jsii.get(self, "resource"))
 
 
 class VirtualGatewayListener(
@@ -28375,6 +28536,61 @@ class VirtualNodeBaseProps:
         return "VirtualNodeBaseProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class VirtualNodeGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_appmesh.VirtualNodeGrants",
+):
+    '''Collection of grant methods for a IVirtualNodeRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_appmesh as appmesh
+        from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+        
+        # virtual_node_ref: interfaces_aws_appmesh.IVirtualNodeRef
+        
+        virtual_node_grants = appmesh.VirtualNodeGrants.from_virtual_node(virtual_node_ref)
+    '''
+
+    @jsii.member(jsii_name="fromVirtualNode")
+    @builtins.classmethod
+    def from_virtual_node(
+        cls,
+        resource: _IVirtualNodeRef_5162bf48,
+    ) -> "VirtualNodeGrants":
+        '''Creates grants for VirtualNodeGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b5ea97525af5eb915a6dee865f1a5423f324780772aca0be9a31987c14d46ba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("VirtualNodeGrants", jsii.sinvoke(cls, "fromVirtualNode", [resource]))
+
+    @jsii.member(jsii_name="streamAggregatedResources")
+    def stream_aggregated_resources(
+        self,
+        grantee: _IGrantable_71c4f5de,
+    ) -> _Grant_a7ae64f8:
+        '''Grants streamAggregatedResources permissions.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__03be759d754b77024006423b70ac047304e37a47648fe5fb17b1212001250298)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "streamAggregatedResources", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IVirtualNodeRef_5162bf48:
+        return typing.cast(_IVirtualNodeRef_5162bf48, jsii.get(self, "resource"))
 
 
 class VirtualNodeListener(
@@ -30886,12 +31102,14 @@ __all__ = [
     "VirtualGateway",
     "VirtualGatewayAttributes",
     "VirtualGatewayBaseProps",
+    "VirtualGatewayGrants",
     "VirtualGatewayListener",
     "VirtualGatewayListenerConfig",
     "VirtualGatewayProps",
     "VirtualNode",
     "VirtualNodeAttributes",
     "VirtualNodeBaseProps",
+    "VirtualNodeGrants",
     "VirtualNodeListener",
     "VirtualNodeListenerConfig",
     "VirtualNodeProps",
@@ -30971,6 +31189,12 @@ def _typecheckingstub__a9ed5e29900670674d1bcefbf0be36d5889c7807e98a89b2e73166538
     gateway_route_name: typing.Optional[builtins.str] = None,
     mesh_owner: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eda7666004d95ec11867a30b3e831f5d36381a9e38ca8a45241b8332053b96f9(
+    resource: _IGatewayRouteRef_d8d24af4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31243,6 +31467,12 @@ def _typecheckingstub__65ffc4a086f699fbb67221c4a4ee330233d339976a46f138426ce0d2f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__644978ba64db4f4611b99d9dcd61521983ad70bc69bac780831115d1b57a816d(
+    resource: _IMeshRef_1eeeb336,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__54146a9a2b5648aa17f1fed8a5f9e0701e495a4b6b222fb91ca44446267bfe86(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -31314,6 +31544,12 @@ def _typecheckingstub__9b7b10a22d83fc5b88ec91baa0139a581ca4a7b54848846580d22cd32
     mesh_owner: typing.Optional[builtins.str] = None,
     route_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2121e5df006e0008bf0ab648ce89a4c3f10a4ecdeb37fba9ac4ab3245a787ae8(
+    resource: _IRouteRef_c5013f61,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31610,6 +31846,12 @@ def _typecheckingstub__0543a7feb4076ec54ae351faecebaceae2aded9f595e1ab9e06d95da4
     mesh_owner: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     virtual_gateway_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6e079ba8e06821e44f9be4ba6de39d89558b956ab4b074d4acdce85b96ae9e3c(
+    resource: _IVirtualGatewayRef_63265943,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31925,6 +32167,12 @@ def _typecheckingstub__f2cbb507210b6ffe5823dff6a0501f7d3d5555d3134a25419e94d913c
     mesh_owner: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     virtual_node_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b8e24b3f65db24c0fac5a6b64a7c4037f8eaa1287301134a140adfca875d9ae6(
+    resource: _IVirtualNodeRef_5162bf48,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32357,6 +32605,12 @@ def _typecheckingstub__2d7db94af589ae6f78bef7744184dec5795b19ce8c237e3e907dfb1fc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cc4a7f760935e165089894bf55177411ed74ac9c3ac3dd7f43e80547719d80c6(
+    resource: _IVirtualRouterRef_ff2b1aff,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__db2e6a23a74d8cd9076e69f315b35149ab410ea0d964d92d01c5713cba263249(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -32441,6 +32695,12 @@ def _typecheckingstub__c766646981f50345ec5c38962151dc5b449c184f8cac2300d54d92713
     virtual_service_name: builtins.str,
     mesh_owner: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f7739369c169c9c9bc5928138d542d9f1837a8b3e1f046765826eb78c3eecb89(
+    resource: _IVirtualServiceRef_828d7b93,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33500,6 +33760,18 @@ def _typecheckingstub__657f3fa6a191fa96aaa9c6bfabce93f54e1b22cd00515b50343068da6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__55d4d33ff41b6a90fa03f27a4fee92847478cbb71aae1ad4e6201af6429a34f5(
+    resource: _IVirtualGatewayRef_63265943,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__842cffde7813c7f79cac957edd6daf3b93b11b2ebec34fbb36a1b8aff765620b(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a0813bbd808f5e6dd58334724178ec7c8c454b536d7dce84afa56b295d4be2ff(
     scope: _constructs_77d1e7e8.Construct,
 ) -> None:
@@ -33591,6 +33863,18 @@ def _typecheckingstub__b9a4ff7b3d2e69da9413534947c31a0f3a8f6670678a20055c42f5918
     listeners: typing.Optional[typing.Sequence[VirtualNodeListener]] = None,
     service_discovery: typing.Optional[ServiceDiscovery] = None,
     virtual_node_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b5ea97525af5eb915a6dee865f1a5423f324780772aca0be9a31987c14d46ba(
+    resource: _IVirtualNodeRef_5162bf48,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03be759d754b77024006423b70ac047304e37a47648fe5fb17b1212001250298(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -483,8 +483,8 @@ class CfnWorkspace(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param bundle_id: The identifier of the bundle for the WorkSpace.
-        :param directory_id: The identifier of the AWS Directory Service directory for the WorkSpace.
-        :param user_name: The user name of the user for the WorkSpace. This user name must exist in the AWS Directory Service directory for the WorkSpace.
+        :param directory_id: The identifier of the Directory Service directory for the WorkSpace.
+        :param user_name: The user name of the user for the WorkSpace. This user name must exist in the Directory Service directory for the WorkSpace.
         :param root_volume_encryption_enabled: Indicates whether the data stored on the root volume is encrypted.
         :param tags: The tags for the WorkSpace.
         :param user_volume_encryption_enabled: Indicates whether the data stored on the user volume is encrypted.
@@ -507,6 +507,17 @@ class CfnWorkspace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkspace")
+    @builtins.classmethod
+    def arn_for_workspace(cls, resource: _IWorkspaceRef_2a5ebc43) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8d6d998e49570cc52ccb0ecfad0db07c3b31d793cd316fcd6de9bd3cde91f30e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkspace", [resource]))
 
     @jsii.member(jsii_name="fromWorkspaceId")
     @builtins.classmethod
@@ -601,7 +612,7 @@ class CfnWorkspace(
     @builtins.property
     @jsii.member(jsii_name="directoryId")
     def directory_id(self) -> builtins.str:
-        '''The identifier of the AWS Directory Service directory for the WorkSpace.'''
+        '''The identifier of the Directory Service directory for the WorkSpace.'''
         return typing.cast(builtins.str, jsii.get(self, "directoryId"))
 
     @directory_id.setter
@@ -868,8 +879,8 @@ class CfnWorkspaceProps:
         '''Properties for defining a ``CfnWorkspace``.
 
         :param bundle_id: The identifier of the bundle for the WorkSpace.
-        :param directory_id: The identifier of the AWS Directory Service directory for the WorkSpace.
-        :param user_name: The user name of the user for the WorkSpace. This user name must exist in the AWS Directory Service directory for the WorkSpace.
+        :param directory_id: The identifier of the Directory Service directory for the WorkSpace.
+        :param user_name: The user name of the user for the WorkSpace. This user name must exist in the Directory Service directory for the WorkSpace.
         :param root_volume_encryption_enabled: Indicates whether the data stored on the root volume is encrypted.
         :param tags: The tags for the WorkSpace.
         :param user_volume_encryption_enabled: Indicates whether the data stored on the user volume is encrypted.
@@ -945,7 +956,7 @@ class CfnWorkspaceProps:
 
     @builtins.property
     def directory_id(self) -> builtins.str:
-        '''The identifier of the AWS Directory Service directory for the WorkSpace.
+        '''The identifier of the Directory Service directory for the WorkSpace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-directoryid
         '''
@@ -957,7 +968,7 @@ class CfnWorkspaceProps:
     def user_name(self) -> builtins.str:
         '''The user name of the user for the WorkSpace.
 
-        This user name must exist in the AWS Directory Service directory for the WorkSpace.
+        This user name must exist in the Directory Service directory for the WorkSpace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspaces-workspace.html#cfn-workspaces-workspace-username
         '''
@@ -1123,6 +1134,20 @@ class CfnWorkspacesPool(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkspacesPool")
+    @builtins.classmethod
+    def arn_for_workspaces_pool(
+        cls,
+        resource: _IWorkspacesPoolRef_7d9266b1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2dbd5f4064559f5e78985e554d7a34aa799b2798c681d557e9855c751c0916f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkspacesPool", [resource]))
 
     @jsii.member(jsii_name="fromPoolId")
     @builtins.classmethod
@@ -1866,6 +1891,12 @@ def _typecheckingstub__ecf9321ac6e165dfc96d72b093b8636e1ff9e82acf9cea2e5176beb79
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8d6d998e49570cc52ccb0ecfad0db07c3b31d793cd316fcd6de9bd3cde91f30e(
+    resource: _IWorkspaceRef_2a5ebc43,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4d89928bc3143b40dfcbe60436eb821c87d4ca5d7e96d4ce7e5b5f26125f7d08(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1972,6 +2003,12 @@ def _typecheckingstub__2d46eb37beb6bc915a0a0c68f02dfa689a2d725a4252e6874da1ed606
     running_mode: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     timeout_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspacesPool.TimeoutSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2dbd5f4064559f5e78985e554d7a34aa799b2798c681d557e9855c751c0916f(
+    resource: _IWorkspacesPoolRef_7d9266b1,
 ) -> None:
     """Type checking stubs"""
     pass

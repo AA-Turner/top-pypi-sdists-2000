@@ -116,7 +116,7 @@ class CfnNotificationChannel(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param sns_role_name: The Amazon Resource Name (ARN) of the IAM role that allows Amazon SNS to record AWS Firewall Manager activity.
+        :param sns_role_name: The Amazon Resource Name (ARN) of the IAM role that allows Amazon to record AWS Firewall Manager activity.
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the SNS topic that collects notifications from AWS Firewall Manager .
         '''
         if __debug__:
@@ -173,7 +173,7 @@ class CfnNotificationChannel(
     @builtins.property
     @jsii.member(jsii_name="snsRoleName")
     def sns_role_name(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM role that allows Amazon SNS to record AWS Firewall Manager activity.'''
+        '''The Amazon Resource Name (ARN) of the IAM role that allows Amazon  to record AWS Firewall Manager activity.'''
         return typing.cast(builtins.str, jsii.get(self, "snsRoleName"))
 
     @sns_role_name.setter
@@ -211,7 +211,7 @@ class CfnNotificationChannelProps:
     ) -> None:
         '''Properties for defining a ``CfnNotificationChannel``.
 
-        :param sns_role_name: The Amazon Resource Name (ARN) of the IAM role that allows Amazon SNS to record AWS Firewall Manager activity.
+        :param sns_role_name: The Amazon Resource Name (ARN) of the IAM role that allows Amazon to record AWS Firewall Manager activity.
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the SNS topic that collects notifications from AWS Firewall Manager .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fms-notificationchannel.html
@@ -239,7 +239,7 @@ class CfnNotificationChannelProps:
 
     @builtins.property
     def sns_role_name(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM role that allows Amazon SNS to record AWS Firewall Manager activity.
+        '''The Amazon Resource Name (ARN) of the IAM role that allows Amazon  to record AWS Firewall Manager activity.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fms-notificationchannel.html#cfn-fms-notificationchannel-snsrolename
         '''
@@ -459,6 +459,17 @@ class CfnPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPolicy")
+    @builtins.classmethod
+    def arn_for_policy(cls, resource: _IPolicyRef_61b69924) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04831c3d313ebba8bad32171f846010edb93cd059740f75d9307402682cb79a8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2987,6 +2998,12 @@ def _typecheckingstub__a29b3b13041b0ccbd18a0c29ff5cff0adbc0e2aedc87591f1c54ec7a1
     resource_type: typing.Optional[builtins.str] = None,
     resource_type_list: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnPolicy.PolicyTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__04831c3d313ebba8bad32171f846010edb93cd059740f75d9307402682cb79a8(
+    resource: _IPolicyRef_61b69924,
 ) -> None:
     """Type checking stubs"""
     pass

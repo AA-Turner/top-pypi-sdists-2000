@@ -169,6 +169,20 @@ class CfnApplicationInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplicationInstance")
+    @builtins.classmethod
+    def arn_for_application_instance(
+        cls,
+        resource: _IApplicationInstanceRef_530e8c33,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf533fb3b1006fba9f44c5f4406218e9ea314ac7fd24c6f3e86b82405f8cd644)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplicationInstance", [resource]))
+
     @jsii.member(jsii_name="fromApplicationInstanceArn")
     @builtins.classmethod
     def from_application_instance_arn(
@@ -817,6 +831,17 @@ class CfnPackage(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPackage")
+    @builtins.classmethod
+    def arn_for_package(cls, resource: _IPackageRef_675e27b7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32b65f7208865d53ecbe99deb9c2940dacb42be95282adae7c79ebac681921bb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPackage", [resource]))
 
     @jsii.member(jsii_name="fromPackageArn")
     @builtins.classmethod
@@ -1678,6 +1703,12 @@ def _typecheckingstub__efd0ba4cd6c0b4ee9023df6f956444617b610a622dce5eb667859d9d3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cf533fb3b1006fba9f44c5f4406218e9ea314ac7fd24c6f3e86b82405f8cd644(
+    resource: _IApplicationInstanceRef_530e8c33,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a9f4f68f6afad3612ec12bf875c21240c719f76be3cb147ecb5aa8e2041ee7b3(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1789,6 +1820,12 @@ def _typecheckingstub__014b23b28acc37a82edebe15e1628f0ee03393a0354f498b25ce8519a
     package_name: builtins.str,
     storage_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackage.StorageLocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__32b65f7208865d53ecbe99deb9c2940dacb42be95282adae7c79ebac681921bb(
+    resource: _IPackageRef_675e27b7,
 ) -> None:
     """Type checking stubs"""
     pass

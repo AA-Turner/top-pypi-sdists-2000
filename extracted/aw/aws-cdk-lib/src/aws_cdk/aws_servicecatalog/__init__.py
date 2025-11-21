@@ -1027,8 +1027,7 @@ class CfnCloudFormationProduct(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''The ID of the product, such as prod-tsjbmal34qvek.
-
+        '''
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -3917,6 +3916,17 @@ class CfnPortfolio(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPortfolio")
+    @builtins.classmethod
+    def arn_for_portfolio(cls, resource: _IPortfolioRef_a19e4bd0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__73e04d572ecf8ef300e588c45280989044c443f13694792775c74e77b72b0bc2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPortfolio", [resource]))
+
     @jsii.member(jsii_name="fromPortfolioId")
     @builtins.classmethod
     def from_portfolio_id(
@@ -5612,7 +5622,7 @@ class CfnServiceActionAssociation(
         *,
         product_id: builtins.str,
         provisioning_artifact_id: builtins.str,
-        service_action_id: builtins.str,
+        service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
     ) -> None:
         '''Create a new ``AWS::ServiceCatalog::ServiceActionAssociation``.
 
@@ -5732,7 +5742,7 @@ class CfnServiceActionAssociationProps:
         *,
         product_id: builtins.str,
         provisioning_artifact_id: builtins.str,
-        service_action_id: builtins.str,
+        service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
     ) -> None:
         '''Properties for defining a ``CfnServiceActionAssociation``.
 
@@ -5791,7 +5801,9 @@ class CfnServiceActionAssociationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def service_action_id(self) -> builtins.str:
+    def service_action_id(
+        self,
+    ) -> typing.Union[builtins.str, _IServiceActionRef_ab991e2b]:
         '''The self-service action identifier.
 
         For example, ``act-fs7abcd89wxyz`` .
@@ -5800,7 +5812,7 @@ class CfnServiceActionAssociationProps:
         '''
         result = self._values.get("service_action_id")
         assert result is not None, "Required property 'service_action_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IServiceActionRef_ab991e2b], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10665,6 +10677,12 @@ def _typecheckingstub__92ae108da2b169227ca9ff5c8793d6e40826005130d9af692285850c9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__73e04d572ecf8ef300e588c45280989044c443f13694792775c74e77b72b0bc2(
+    resource: _IPortfolioRef_a19e4bd0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__44128417aff4104adae0046cf0d101d90c4fc22515494313689b7b4561643abc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -11035,7 +11053,7 @@ def _typecheckingstub__af7accef6ad60ab0630f153d8a07caeceee6f2d27b9eb2a794537a34c
     *,
     product_id: builtins.str,
     provisioning_artifact_id: builtins.str,
-    service_action_id: builtins.str,
+    service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11074,7 +11092,7 @@ def _typecheckingstub__52f50d0bb3c8980268e31b96e206f7a2c97e91453b113d44e944f886f
     *,
     product_id: builtins.str,
     provisioning_artifact_id: builtins.str,
-    service_action_id: builtins.str,
+    service_action_id: typing.Union[builtins.str, _IServiceActionRef_ab991e2b],
 ) -> None:
     """Type checking stubs"""
     pass

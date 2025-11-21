@@ -193,6 +193,17 @@ class CfnMonitor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForMonitor")
+    @builtins.classmethod
+    def arn_for_monitor(cls, resource: _IMonitorRef_a18ca427) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95e6b0e98cdf72399803a72a21c4feb817cbce92f0818cc26c17f23be2060753)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMonitor", [resource]))
+
     @jsii.member(jsii_name="fromMonitorArn")
     @builtins.classmethod
     def from_monitor_arn(
@@ -1222,6 +1233,12 @@ def _typecheckingstub__b49625d902a7236b204a8a96b68b35647ded5da14fa0241503fe8aed7
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     traffic_percentage_to_monitor: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__95e6b0e98cdf72399803a72a21c4feb817cbce92f0818cc26c17f23be2060753(
+    resource: _IMonitorRef_a18ca427,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -129,6 +129,17 @@ class CfnGraph(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGraph")
+    @builtins.classmethod
+    def arn_for_graph(cls, resource: _IGraphRef_fe0a6bfe) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__47d955a178de7e694206be3ee5a37c1d6d623109fa39bca76b64326504463449)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGraph", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -788,6 +799,12 @@ def _typecheckingstub__35c13d9bc47be944ae94949da016fdbb9358dcb215abb1da6176d7e3e
     *,
     auto_enable_members: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__47d955a178de7e694206be3ee5a37c1d6d623109fa39bca76b64326504463449(
+    resource: _IGraphRef_fe0a6bfe,
 ) -> None:
     """Type checking stubs"""
     pass

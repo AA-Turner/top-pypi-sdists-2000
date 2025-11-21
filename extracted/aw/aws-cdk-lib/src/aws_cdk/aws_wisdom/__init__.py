@@ -162,6 +162,96 @@ class CfnAIAgent(
                     locale="locale",
                     query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
                 ),
+                email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
+                    association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                        association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                            knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                    and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+        
+                                        # the properties below are optional
+                                        value="value"
+                                    )],
+                                    or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+        
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+        
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    )],
+                                    tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+        
+                                        # the properties below are optional
+                                        value="value"
+                                    )
+                                ),
+                                max_results=123,
+                                override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                            )
+                        ),
+                        association_id="associationId",
+                        association_type="associationType"
+                    )],
+                    email_generative_answer_ai_prompt_id="emailGenerativeAnswerAiPromptId",
+                    email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                    locale="locale"
+                ),
+                email_overview_ai_agent_configuration=wisdom.CfnAIAgent.EmailOverviewAIAgentConfigurationProperty(
+                    email_overview_ai_prompt_id="emailOverviewAiPromptId",
+                    locale="locale"
+                ),
+                email_response_ai_agent_configuration=wisdom.CfnAIAgent.EmailResponseAIAgentConfigurationProperty(
+                    association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                        association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                            knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                    and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+        
+                                        # the properties below are optional
+                                        value="value"
+                                    )],
+                                    or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+        
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+        
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    )],
+                                    tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+        
+                                        # the properties below are optional
+                                        value="value"
+                                    )
+                                ),
+                                max_results=123,
+                                override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                            )
+                        ),
+                        association_id="associationId",
+                        association_type="associationType"
+                    )],
+                    email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                    email_response_ai_prompt_id="emailResponseAiPromptId",
+                    locale="locale"
+                ),
                 manual_search_ai_agent_configuration=wisdom.CfnAIAgent.ManualSearchAIAgentConfigurationProperty(
                     answer_generation_ai_guardrail_id="answerGenerationAiGuardrailId",
                     answer_generation_ai_prompt_id="answerGenerationAiPromptId",
@@ -297,6 +387,17 @@ class CfnAIAgent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAIAgent")
+    @builtins.classmethod
+    def arn_for_ai_agent(cls, resource: _IAIAgentRef_e0a197e0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc0797fccc294fbb268a878f640dd3f3eb2a6826b915ed678485900c9d0fe6d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAIAgent", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -471,6 +572,9 @@ class CfnAIAgent(
         jsii_struct_bases=[],
         name_mapping={
             "answer_recommendation_ai_agent_configuration": "answerRecommendationAiAgentConfiguration",
+            "email_generative_answer_ai_agent_configuration": "emailGenerativeAnswerAiAgentConfiguration",
+            "email_overview_ai_agent_configuration": "emailOverviewAiAgentConfiguration",
+            "email_response_ai_agent_configuration": "emailResponseAiAgentConfiguration",
             "manual_search_ai_agent_configuration": "manualSearchAiAgentConfiguration",
             "self_service_ai_agent_configuration": "selfServiceAiAgentConfiguration",
         },
@@ -480,12 +584,18 @@ class CfnAIAgent(
             self,
             *,
             answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_overview_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailOverviewAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            email_response_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.EmailResponseAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             manual_search_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.ManualSearchAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             self_service_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.SelfServiceAIAgentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''A typed union that specifies the configuration based on the type of AI Agent.
 
             :param answer_recommendation_ai_agent_configuration: The configuration for AI Agents of type ``ANSWER_RECOMMENDATION`` .
+            :param email_generative_answer_ai_agent_configuration: 
+            :param email_overview_ai_agent_configuration: 
+            :param email_response_ai_agent_configuration: 
             :param manual_search_ai_agent_configuration: The configuration for AI Agents of type ``MANUAL_SEARCH`` .
             :param self_service_ai_agent_configuration: The self-service AI agent configuration.
 
@@ -543,6 +653,96 @@ class CfnAIAgent(
                         intent_labeling_generation_ai_prompt_id="intentLabelingGenerationAiPromptId",
                         locale="locale",
                         query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
+                    ),
+                    email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
+                        association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                            association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                                knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                    content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                            and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+                
+                                                # the properties below are optional
+                                                value="value"
+                                            )],
+                                            tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+                
+                                                # the properties below are optional
+                                                value="value"
+                                            )
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    ),
+                                    max_results=123,
+                                    override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                                )
+                            ),
+                            association_id="associationId",
+                            association_type="associationType"
+                        )],
+                        email_generative_answer_ai_prompt_id="emailGenerativeAnswerAiPromptId",
+                        email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                        locale="locale"
+                    ),
+                    email_overview_ai_agent_configuration=wisdom.CfnAIAgent.EmailOverviewAIAgentConfigurationProperty(
+                        email_overview_ai_prompt_id="emailOverviewAiPromptId",
+                        locale="locale"
+                    ),
+                    email_response_ai_agent_configuration=wisdom.CfnAIAgent.EmailResponseAIAgentConfigurationProperty(
+                        association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                            association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                                knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                    content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                            and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+                
+                                                # the properties below are optional
+                                                value="value"
+                                            )],
+                                            tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+                
+                                                # the properties below are optional
+                                                value="value"
+                                            )
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    ),
+                                    max_results=123,
+                                    override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                                )
+                            ),
+                            association_id="associationId",
+                            association_type="associationType"
+                        )],
+                        email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                        email_response_ai_prompt_id="emailResponseAiPromptId",
+                        locale="locale"
                     ),
                     manual_search_ai_agent_configuration=wisdom.CfnAIAgent.ManualSearchAIAgentConfigurationProperty(
                         answer_generation_ai_guardrail_id="answerGenerationAiGuardrailId",
@@ -635,11 +835,20 @@ class CfnAIAgent(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__8cb84ad0dc27ffdae65e4e739c98ea6a4e7c36340f15c21ae83a2225ff763ba3)
                 check_type(argname="argument answer_recommendation_ai_agent_configuration", value=answer_recommendation_ai_agent_configuration, expected_type=type_hints["answer_recommendation_ai_agent_configuration"])
+                check_type(argname="argument email_generative_answer_ai_agent_configuration", value=email_generative_answer_ai_agent_configuration, expected_type=type_hints["email_generative_answer_ai_agent_configuration"])
+                check_type(argname="argument email_overview_ai_agent_configuration", value=email_overview_ai_agent_configuration, expected_type=type_hints["email_overview_ai_agent_configuration"])
+                check_type(argname="argument email_response_ai_agent_configuration", value=email_response_ai_agent_configuration, expected_type=type_hints["email_response_ai_agent_configuration"])
                 check_type(argname="argument manual_search_ai_agent_configuration", value=manual_search_ai_agent_configuration, expected_type=type_hints["manual_search_ai_agent_configuration"])
                 check_type(argname="argument self_service_ai_agent_configuration", value=self_service_ai_agent_configuration, expected_type=type_hints["self_service_ai_agent_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if answer_recommendation_ai_agent_configuration is not None:
                 self._values["answer_recommendation_ai_agent_configuration"] = answer_recommendation_ai_agent_configuration
+            if email_generative_answer_ai_agent_configuration is not None:
+                self._values["email_generative_answer_ai_agent_configuration"] = email_generative_answer_ai_agent_configuration
+            if email_overview_ai_agent_configuration is not None:
+                self._values["email_overview_ai_agent_configuration"] = email_overview_ai_agent_configuration
+            if email_response_ai_agent_configuration is not None:
+                self._values["email_response_ai_agent_configuration"] = email_response_ai_agent_configuration
             if manual_search_ai_agent_configuration is not None:
                 self._values["manual_search_ai_agent_configuration"] = manual_search_ai_agent_configuration
             if self_service_ai_agent_configuration is not None:
@@ -655,6 +864,36 @@ class CfnAIAgent(
             '''
             result = self._values.get("answer_recommendation_ai_agent_configuration")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def email_generative_answer_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailgenerativeansweraiagentconfiguration
+            '''
+            result = self._values.get("email_generative_answer_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def email_overview_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailoverviewaiagentconfiguration
+            '''
+            result = self._values.get("email_overview_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailOverviewAIAgentConfigurationProperty"]], result)
+
+        @builtins.property
+        def email_response_ai_agent_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-aiagentconfiguration.html#cfn-wisdom-aiagent-aiagentconfiguration-emailresponseaiagentconfiguration
+            '''
+            result = self._values.get("email_response_ai_agent_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.EmailResponseAIAgentConfigurationProperty"]], result)
 
         @builtins.property
         def manual_search_ai_agent_configuration(
@@ -1079,6 +1318,358 @@ class CfnAIAgent(
 
         def __repr__(self) -> str:
             return "AssociationConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "association_configurations": "associationConfigurations",
+            "email_generative_answer_ai_prompt_id": "emailGenerativeAnswerAiPromptId",
+            "email_query_reformulation_ai_prompt_id": "emailQueryReformulationAiPromptId",
+            "locale": "locale",
+        },
+    )
+    class EmailGenerativeAnswerAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            email_generative_answer_ai_prompt_id: typing.Optional[builtins.str] = None,
+            email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
+            locale: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param association_configurations: 
+            :param email_generative_answer_ai_prompt_id: 
+            :param email_query_reformulation_ai_prompt_id: 
+            :param locale: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                email_generative_answer_aIAgent_configuration_property = wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
+                    association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                        association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                            knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                    and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+                
+                                        # the properties below are optional
+                                        value="value"
+                                    )],
+                                    or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    )],
+                                    tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+                
+                                        # the properties below are optional
+                                        value="value"
+                                    )
+                                ),
+                                max_results=123,
+                                override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                            )
+                        ),
+                        association_id="associationId",
+                        association_type="associationType"
+                    )],
+                    email_generative_answer_ai_prompt_id="emailGenerativeAnswerAiPromptId",
+                    email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                    locale="locale"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4676d998b596b8257caac506a87e35ec9c1ec42c5d525902ee7308851b26836c)
+                check_type(argname="argument association_configurations", value=association_configurations, expected_type=type_hints["association_configurations"])
+                check_type(argname="argument email_generative_answer_ai_prompt_id", value=email_generative_answer_ai_prompt_id, expected_type=type_hints["email_generative_answer_ai_prompt_id"])
+                check_type(argname="argument email_query_reformulation_ai_prompt_id", value=email_query_reformulation_ai_prompt_id, expected_type=type_hints["email_query_reformulation_ai_prompt_id"])
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if association_configurations is not None:
+                self._values["association_configurations"] = association_configurations
+            if email_generative_answer_ai_prompt_id is not None:
+                self._values["email_generative_answer_ai_prompt_id"] = email_generative_answer_ai_prompt_id
+            if email_query_reformulation_ai_prompt_id is not None:
+                self._values["email_query_reformulation_ai_prompt_id"] = email_query_reformulation_ai_prompt_id
+            if locale is not None:
+                self._values["locale"] = locale
+
+        @builtins.property
+        def association_configurations(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-associationconfigurations
+            '''
+            result = self._values.get("association_configurations")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+
+        @builtins.property
+        def email_generative_answer_ai_prompt_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-emailgenerativeansweraipromptid
+            '''
+            result = self._values.get("email_generative_answer_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def email_query_reformulation_ai_prompt_id(
+            self,
+        ) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-emailqueryreformulationaipromptid
+            '''
+            result = self._values.get("email_query_reformulation_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailgenerativeansweraiagentconfiguration.html#cfn-wisdom-aiagent-emailgenerativeansweraiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EmailGenerativeAnswerAIAgentConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.EmailOverviewAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "email_overview_ai_prompt_id": "emailOverviewAiPromptId",
+            "locale": "locale",
+        },
+    )
+    class EmailOverviewAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            email_overview_ai_prompt_id: typing.Optional[builtins.str] = None,
+            locale: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param email_overview_ai_prompt_id: 
+            :param locale: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                email_overview_aIAgent_configuration_property = wisdom.CfnAIAgent.EmailOverviewAIAgentConfigurationProperty(
+                    email_overview_ai_prompt_id="emailOverviewAiPromptId",
+                    locale="locale"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d8573db87755ab53a609d60912dc4cec9e1695d6d9c1bfe602371b964c90a944)
+                check_type(argname="argument email_overview_ai_prompt_id", value=email_overview_ai_prompt_id, expected_type=type_hints["email_overview_ai_prompt_id"])
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if email_overview_ai_prompt_id is not None:
+                self._values["email_overview_ai_prompt_id"] = email_overview_ai_prompt_id
+            if locale is not None:
+                self._values["locale"] = locale
+
+        @builtins.property
+        def email_overview_ai_prompt_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html#cfn-wisdom-aiagent-emailoverviewaiagentconfiguration-emailoverviewaipromptid
+            '''
+            result = self._values.get("email_overview_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailoverviewaiagentconfiguration.html#cfn-wisdom-aiagent-emailoverviewaiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EmailOverviewAIAgentConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_wisdom.CfnAIAgent.EmailResponseAIAgentConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "association_configurations": "associationConfigurations",
+            "email_query_reformulation_ai_prompt_id": "emailQueryReformulationAiPromptId",
+            "email_response_ai_prompt_id": "emailResponseAiPromptId",
+            "locale": "locale",
+        },
+    )
+    class EmailResponseAIAgentConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAIAgent.AssociationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
+            email_response_ai_prompt_id: typing.Optional[builtins.str] = None,
+            locale: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param association_configurations: 
+            :param email_query_reformulation_ai_prompt_id: 
+            :param email_response_ai_prompt_id: 
+            :param locale: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_wisdom as wisdom
+                
+                email_response_aIAgent_configuration_property = wisdom.CfnAIAgent.EmailResponseAIAgentConfigurationProperty(
+                    association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                        association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                            knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                    and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+                
+                                        # the properties below are optional
+                                        value="value"
+                                    )],
+                                    or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+                
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    )],
+                                    tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                        key="key",
+                
+                                        # the properties below are optional
+                                        value="value"
+                                    )
+                                ),
+                                max_results=123,
+                                override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                            )
+                        ),
+                        association_id="associationId",
+                        association_type="associationType"
+                    )],
+                    email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                    email_response_ai_prompt_id="emailResponseAiPromptId",
+                    locale="locale"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__022565d455be0cdec7bbe7e936a8452f3be66ca7a99ac2f8300c02d37ccf5c50)
+                check_type(argname="argument association_configurations", value=association_configurations, expected_type=type_hints["association_configurations"])
+                check_type(argname="argument email_query_reformulation_ai_prompt_id", value=email_query_reformulation_ai_prompt_id, expected_type=type_hints["email_query_reformulation_ai_prompt_id"])
+                check_type(argname="argument email_response_ai_prompt_id", value=email_response_ai_prompt_id, expected_type=type_hints["email_response_ai_prompt_id"])
+                check_type(argname="argument locale", value=locale, expected_type=type_hints["locale"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if association_configurations is not None:
+                self._values["association_configurations"] = association_configurations
+            if email_query_reformulation_ai_prompt_id is not None:
+                self._values["email_query_reformulation_ai_prompt_id"] = email_query_reformulation_ai_prompt_id
+            if email_response_ai_prompt_id is not None:
+                self._values["email_response_ai_prompt_id"] = email_response_ai_prompt_id
+            if locale is not None:
+                self._values["locale"] = locale
+
+        @builtins.property
+        def association_configurations(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-associationconfigurations
+            '''
+            result = self._values.get("association_configurations")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnAIAgent.AssociationConfigurationProperty"]]]], result)
+
+        @builtins.property
+        def email_query_reformulation_ai_prompt_id(
+            self,
+        ) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-emailqueryreformulationaipromptid
+            '''
+            result = self._values.get("email_query_reformulation_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def email_response_ai_prompt_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-emailresponseaipromptid
+            '''
+            result = self._values.get("email_response_ai_prompt_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def locale(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-wisdom-aiagent-emailresponseaiagentconfiguration.html#cfn-wisdom-aiagent-emailresponseaiagentconfiguration-locale
+            '''
+            result = self._values.get("locale")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EmailResponseAIAgentConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1857,6 +2448,96 @@ class CfnAIAgentProps:
                         locale="locale",
                         query_reformulation_ai_prompt_id="queryReformulationAiPromptId"
                     ),
+                    email_generative_answer_ai_agent_configuration=wisdom.CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty(
+                        association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                            association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                                knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                    content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+            
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                            and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+            
+                                                # the properties below are optional
+                                                value="value"
+                                            )],
+                                            tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+            
+                                                # the properties below are optional
+                                                value="value"
+                                            )
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+            
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    ),
+                                    max_results=123,
+                                    override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                                )
+                            ),
+                            association_id="associationId",
+                            association_type="associationType"
+                        )],
+                        email_generative_answer_ai_prompt_id="emailGenerativeAnswerAiPromptId",
+                        email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                        locale="locale"
+                    ),
+                    email_overview_ai_agent_configuration=wisdom.CfnAIAgent.EmailOverviewAIAgentConfigurationProperty(
+                        email_overview_ai_prompt_id="emailOverviewAiPromptId",
+                        locale="locale"
+                    ),
+                    email_response_ai_agent_configuration=wisdom.CfnAIAgent.EmailResponseAIAgentConfigurationProperty(
+                        association_configurations=[wisdom.CfnAIAgent.AssociationConfigurationProperty(
+                            association_configuration_data=wisdom.CfnAIAgent.AssociationConfigurationDataProperty(
+                                knowledge_base_association_configuration_data=wisdom.CfnAIAgent.KnowledgeBaseAssociationConfigurationDataProperty(
+                                    content_tag_filter=wisdom.CfnAIAgent.TagFilterProperty(
+                                        and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+            
+                                            # the properties below are optional
+                                            value="value"
+                                        )],
+                                        or_conditions=[wisdom.CfnAIAgent.OrConditionProperty(
+                                            and_conditions=[wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+            
+                                                # the properties below are optional
+                                                value="value"
+                                            )],
+                                            tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                                key="key",
+            
+                                                # the properties below are optional
+                                                value="value"
+                                            )
+                                        )],
+                                        tag_condition=wisdom.CfnAIAgent.TagConditionProperty(
+                                            key="key",
+            
+                                            # the properties below are optional
+                                            value="value"
+                                        )
+                                    ),
+                                    max_results=123,
+                                    override_knowledge_base_search_type="overrideKnowledgeBaseSearchType"
+                                )
+                            ),
+                            association_id="associationId",
+                            association_type="associationType"
+                        )],
+                        email_query_reformulation_ai_prompt_id="emailQueryReformulationAiPromptId",
+                        email_response_ai_prompt_id="emailResponseAiPromptId",
+                        locale="locale"
+                    ),
                     manual_search_ai_agent_configuration=wisdom.CfnAIAgent.ManualSearchAIAgentConfigurationProperty(
                         answer_generation_ai_guardrail_id="answerGenerationAiGuardrailId",
                         answer_generation_ai_prompt_id="answerGenerationAiPromptId",
@@ -2437,6 +3118,17 @@ class CfnAIGuardrail(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAIGuardrail")
+    @builtins.classmethod
+    def arn_for_ai_guardrail(cls, resource: _IAIGuardrailRef_c054fef5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce3e19763183b3be213f613adf4645df42c9d4caf97533f3405c07dfd0854583)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAIGuardrail", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4211,6 +4903,17 @@ class CfnAIPrompt(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAIPrompt")
+    @builtins.classmethod
+    def arn_for_ai_prompt(cls, resource: _IAIPromptRef_2afc9b84) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50c25933bb3956a4f4813caf693bf6d5f740ebe2fe96dd886652fca807ca97ef)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAIPrompt", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5088,6 +5791,17 @@ class CfnAssistant(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAssistant")
+    @builtins.classmethod
+    def arn_for_assistant(cls, resource: _IAssistantRef_253a4920) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dce0f53da5f5fc424711c844cc893d706155692a5b9efa44311057d2662b084b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssistant", [resource]))
+
     @jsii.member(jsii_name="fromAssistantArn")
     @builtins.classmethod
     def from_assistant_arn(
@@ -5385,6 +6099,20 @@ class CfnAssistantAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAssistantAssociation")
+    @builtins.classmethod
+    def arn_for_assistant_association(
+        cls,
+        resource: _IAssistantAssociationRef_2e883ba1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8868c31ab3402a90c163ef8b04b0b3aa35542d58f548dc48495fde4de723f26)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssistantAssociation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5960,6 +6688,20 @@ class CfnKnowledgeBase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForKnowledgeBase")
+    @builtins.classmethod
+    def arn_for_knowledge_base(
+        cls,
+        resource: _IKnowledgeBaseRef_846dfcfb,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2fd5c7fc6b1005fdc11901eda2ac8cffd6214e2d49af4b9bd2ec5efe91ff4535)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForKnowledgeBase", [resource]))
 
     @jsii.member(jsii_name="fromKnowledgeBaseArn")
     @builtins.classmethod
@@ -8093,6 +8835,20 @@ class CfnMessageTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMessageTemplate")
+    @builtins.classmethod
+    def arn_for_message_template(
+        cls,
+        resource: _IMessageTemplateRef_33cb5cda,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e258643d4d891d7652fd716ea1f4813be97517540b245a5dc42a2c9afdfdd73)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMessageTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10778,6 +11534,20 @@ class CfnMessageTemplateVersion(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForMessageTemplateVersion")
+    @builtins.classmethod
+    def arn_for_message_template_version(
+        cls,
+        resource: _IMessageTemplateVersionRef_a8d8bbb4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2d8470e8f348c4246e0613e21ccae6826d2d4c1fc022e3662b81ace10e6b494)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMessageTemplateVersion", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11039,6 +11809,20 @@ class CfnQuickResponse(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForQuickResponse")
+    @builtins.classmethod
+    def arn_for_quick_response(
+        cls,
+        resource: _IQuickResponseRef_d5eda766,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7df2261097ef9f2b56ded6b8a27913cb8f5cd1459519f5aefebd623e0b11273)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQuickResponse", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11775,6 +12559,12 @@ def _typecheckingstub__e4d43de9ccaeb31eba5b0b613ecac25531a87bb9137652388e6196070
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bc0797fccc294fbb268a878f640dd3f3eb2a6826b915ed678485900c9d0fe6d9(
+    resource: _IAIAgentRef_e0a197e0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__daf9bd162ab4eaa6b11972bcaf8372498a47b4ad8cf111130cabfae3f675d2b4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11826,6 +12616,9 @@ def _typecheckingstub__2e3ed01afbf4aa2c01303d467dcbf5c5cd3fb267902b917f3c4f5fdd0
 def _typecheckingstub__8cb84ad0dc27ffdae65e4e739c98ea6a4e7c36340f15c21ae83a2225ff763ba3(
     *,
     answer_recommendation_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AnswerRecommendationAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    email_generative_answer_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailGenerativeAnswerAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    email_overview_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailOverviewAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    email_response_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.EmailResponseAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     manual_search_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.ManualSearchAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     self_service_ai_agent_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.SelfServiceAIAgentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -11856,6 +12649,34 @@ def _typecheckingstub__2df56062b7b8c55a883d0469e63c3aad05d8079bf21171f13f4e68d2f
     association_configuration_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AssociationConfigurationDataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     association_id: typing.Optional[builtins.str] = None,
     association_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4676d998b596b8257caac506a87e35ec9c1ec42c5d525902ee7308851b26836c(
+    *,
+    association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AssociationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    email_generative_answer_ai_prompt_id: typing.Optional[builtins.str] = None,
+    email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
+    locale: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8573db87755ab53a609d60912dc4cec9e1695d6d9c1bfe602371b964c90a944(
+    *,
+    email_overview_ai_prompt_id: typing.Optional[builtins.str] = None,
+    locale: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__022565d455be0cdec7bbe7e936a8452f3be66ca7a99ac2f8300c02d37ccf5c50(
+    *,
+    association_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIAgent.AssociationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    email_query_reformulation_ai_prompt_id: typing.Optional[builtins.str] = None,
+    email_response_ai_prompt_id: typing.Optional[builtins.str] = None,
+    locale: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11991,6 +12812,12 @@ def _typecheckingstub__76ea8e26c58eaed3d156b1860dd33693ef608e81ac9c96aa849d3236d
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     topic_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailTopicPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     word_policy_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAIGuardrail.AIGuardrailWordPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce3e19763183b3be213f613adf4645df42c9d4caf97533f3405c07dfd0854583(
+    resource: _IAIGuardrailRef_c054fef5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12253,6 +13080,12 @@ def _typecheckingstub__48a265f7ec519ced4028dd8e69d5a1fe8ef89d36b11d693c968f74c8b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__50c25933bb3956a4f4813caf693bf6d5f740ebe2fe96dd886652fca807ca97ef(
+    resource: _IAIPromptRef_2afc9b84,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7567e2bb6113fabf7ae624801bcdbbfa2507650c0fcedb4572ac328601553fcc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12411,6 +13244,12 @@ def _typecheckingstub__8078b7e28a17a68ab6f3d362e7de3af6b6867207690b2b344e35797cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__dce0f53da5f5fc424711c844cc893d706155692a5b9efa44311057d2662b084b(
+    resource: _IAssistantRef_253a4920,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__33deac61df2a67d5267bbd073e8988b690ab64dcb4131aac4931f937d22cc02a(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -12484,6 +13323,12 @@ def _typecheckingstub__17f6f8491bb7be7dab63c57bf64b65f643c4fece381b02f49002f796c
     association: typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssistantAssociation.AssociationDataProperty, typing.Dict[builtins.str, typing.Any]]],
     association_type: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8868c31ab3402a90c163ef8b04b0b3aa35542d58f548dc48495fde4de723f26(
+    resource: _IAssistantAssociationRef_2e883ba1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12564,6 +13409,12 @@ def _typecheckingstub__99512a2eb8a3e47802b889aac668fc94bdc0534ee683313dac712b200
     source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.SourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vector_ingestion_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.VectorIngestionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2fd5c7fc6b1005fdc11901eda2ac8cffd6214e2d49af4b9bd2ec5efe91ff4535(
+    resource: _IKnowledgeBaseRef_846dfcfb,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12814,6 +13665,12 @@ def _typecheckingstub__4d99067595817364fbb03fa017437b616b3c32bdfb38c386a909328ac
     language: typing.Optional[builtins.str] = None,
     message_template_attachments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMessageTemplate.MessageTemplateAttachmentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e258643d4d891d7652fd716ea1f4813be97517540b245a5dc42a2c9afdfdd73(
+    resource: _IMessageTemplateRef_33cb5cda,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13085,6 +13942,12 @@ def _typecheckingstub__74fb30e95cf0983e689b729ce7c37f315a3a89ee72eba30c007615794
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c2d8470e8f348c4246e0613e21ccae6826d2d4c1fc022e3662b81ace10e6b494(
+    resource: _IMessageTemplateVersionRef_a8d8bbb4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9fdcf0b0fc316f9964e2a8f50d95ef92efe9e07b4a9d5ef74b7c3ca6257dc206(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13132,6 +13995,12 @@ def _typecheckingstub__1ea732c0aa1c75214dd603b6887da6352fe66fd3d98e2168fdc3654ff
     language: typing.Optional[builtins.str] = None,
     shortcut_key: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d7df2261097ef9f2b56ded6b8a27913cb8f5cd1459519f5aefebd623e0b11273(
+    resource: _IQuickResponseRef_d5eda766,
 ) -> None:
     """Type checking stubs"""
     pass

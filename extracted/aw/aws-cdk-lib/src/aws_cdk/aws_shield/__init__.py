@@ -99,9 +99,9 @@ class CfnDRTAccess(
 
     *Configure ``AWS::Shield::DRTAccess`` for one account*
 
-    To configure this resource through AWS CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
+    To configure this resource through CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
 
-    See example templates for Shield Advanced in AWS CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
+    See example templates for Shield Advanced in CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
 
     *Configure Shield Advanced using AWS CloudFormation and AWS Firewall Manager*
 
@@ -334,9 +334,9 @@ class CfnProactiveEngagement(
 
     *Configure ``AWS::Shield::ProactiveEngagement`` for one account*
 
-    To configure this resource through AWS CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
+    To configure this resource through CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
 
-    See example templates for Shield Advanced in AWS CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
+    See example templates for Shield Advanced in CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
 
     *Configure Shield Advanced using AWS CloudFormation and AWS Firewall Manager*
 
@@ -678,9 +678,9 @@ class CfnProtection(
 
     Use this protection to protect a single resource at a time.
 
-    To configure this Shield Advanced protection through AWS CloudFormation , you must be subscribed to Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
+    To configure this Shield Advanced protection through CloudFormation , you must be subscribed to Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
 
-    See example templates for Shield Advanced in AWS CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
+    See example templates for Shield Advanced in CloudFormation at `aws-samples/aws-shield-advanced-examples <https://docs.aws.amazon.com/https://github.com/aws-samples/aws-shield-advanced-examples>`_ .
 
     *Configure Shield Advanced using AWS CloudFormation and AWS Firewall Manager*
 
@@ -742,7 +742,7 @@ class CfnProtection(
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the protection. For example, ``My CloudFront distributions`` . .. epigraph:: If you change the name of an existing protection, Shield Advanced deletes the protection and replaces it with a new one. While this is happening, the protection isn't available on the AWS resource.
         :param resource_arn: The ARN (Amazon Resource Name) of the AWS resource that is protected.
-        :param application_layer_automatic_response_configuration: The automatic application layer DDoS mitigation settings for the protection. This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks. If you use AWS CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
+        :param application_layer_automatic_response_configuration: The automatic application layer DDoS mitigation settings for the protection. This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks. If you use CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
         :param health_check_arns: The ARN (Amazon Resource Name) of the health check to associate with the protection. Health-based detection provides improved responsiveness and accuracy in attack detection and mitigation. You can use this option with any resource type except for Route 53 hosted zones. For more information, see `Configuring health-based detection using health checks <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-health-checks.html>`_ in the *AWS Shield Advanced Developer Guide* .
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource.
         '''
@@ -759,6 +759,17 @@ class CfnProtection(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProtection")
+    @builtins.classmethod
+    def arn_for_protection(cls, resource: _IProtectionRef_fb08d716) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c18d1079cd866e8ae4d83cd9f97b9ea534cb1156d4553e06c07a3c60a6468da8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProtection", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1004,7 +1015,7 @@ class CfnProtection(
 
             This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks.
 
-            If you use AWS CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the guidance for the ``AWS::WAFv2::WebACL`` resource.
+            If you use CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the guidance for the ``AWS::WAFv2::WebACL`` resource.
 
             :param action: Specifies the action setting that Shield Advanced should use in the AWS WAF rules that it creates on behalf of the protected resource in response to DDoS attacks. You specify this as part of the configuration for the automatic application layer DDoS mitigation feature, when you enable or update automatic mitigation. Shield Advanced creates the AWS WAF rules in a Shield Advanced-managed rule group, inside the web ACL that you have associated with the resource.
             :param status: Indicates whether automatic application layer DDoS mitigation is enabled for the protection.
@@ -1084,7 +1095,7 @@ class CfnProtectionGroup(
 
     This resource grouping improves the accuracy of detection and reduces false positives.
 
-    To configure this resource through AWS CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
+    To configure this resource through CloudFormation , you must be subscribed to AWS Shield Advanced . You can subscribe through the `Shield Advanced console <https://docs.aws.amazon.com/wafv2/shieldv2#/>`_ and through the APIs. For more information, see `Subscribe to AWS Shield Advanced <https://docs.aws.amazon.com/waf/latest/developerguide/enable-ddos-prem.html>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-shield-protectiongroup.html
     :cloudformationResource: AWS::Shield::ProtectionGroup
@@ -1148,6 +1159,20 @@ class CfnProtectionGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProtectionGroup")
+    @builtins.classmethod
+    def arn_for_protection_group(
+        cls,
+        resource: _IProtectionGroupRef_d3e72ac4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5f86a71b6262ee46be314c5662c49a8230a705df05db747e5feea3463ad51112)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProtectionGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1467,7 +1492,7 @@ class CfnProtectionProps:
 
         :param name: The name of the protection. For example, ``My CloudFront distributions`` . .. epigraph:: If you change the name of an existing protection, Shield Advanced deletes the protection and replaces it with a new one. While this is happening, the protection isn't available on the AWS resource.
         :param resource_arn: The ARN (Amazon Resource Name) of the AWS resource that is protected.
-        :param application_layer_automatic_response_configuration: The automatic application layer DDoS mitigation settings for the protection. This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks. If you use AWS CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
+        :param application_layer_automatic_response_configuration: The automatic application layer DDoS mitigation settings for the protection. This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks. If you use CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
         :param health_check_arns: The ARN (Amazon Resource Name) of the health check to associate with the protection. Health-based detection provides improved responsiveness and accuracy in attack detection and mitigation. You can use this option with any resource type except for Route 53 hosted zones. For more information, see `Configuring health-based detection using health checks <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-health-checks.html>`_ in the *AWS Shield Advanced Developer Guide* .
         :param tags: Key:value pairs associated with an AWS resource. The key:value pair can be anything you define. Typically, the tag key represents a category (such as "environment") and the tag value represents a specific value within that category (such as "test," "development," or "production"). You can add up to 50 tags to each AWS resource.
 
@@ -1552,7 +1577,7 @@ class CfnProtectionProps:
 
         This configuration determines whether Shield Advanced automatically manages rules in the web ACL in order to respond to application layer events that Shield Advanced determines to be DDoS attacks.
 
-        If you use AWS CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
+        If you use CloudFormation to manage the web ACLs that you use with Shield Advanced automatic mitigation, see the additional guidance about web ACL management in the ``AWS::WAFv2::WebACL`` resource description.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-shield-protection.html#cfn-shield-protection-applicationlayerautomaticresponseconfiguration
         '''
@@ -1716,6 +1741,12 @@ def _typecheckingstub__c25ea3f87ade4afdbc73b2ca70b15ee669920a1fb5f0ed5803cfd112c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c18d1079cd866e8ae4d83cd9f97b9ea534cb1156d4553e06c07a3c60a6468da8(
+    resource: _IProtectionRef_fb08d716,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c6d6fd37913379ec3a2749bbbf52fd1927d9c61ec30884700bdad09f41bd423a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1784,6 +1815,12 @@ def _typecheckingstub__81da6ee581209a252a2406d5601c15a1be321e07fcf0aa646c27538a6
     members: typing.Optional[typing.Sequence[builtins.str]] = None,
     resource_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5f86a71b6262ee46be314c5662c49a8230a705df05db747e5feea3463ad51112(
+    resource: _IProtectionGroupRef_d3e72ac4,
 ) -> None:
     """Type checking stubs"""
     pass

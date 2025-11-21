@@ -3,9 +3,9 @@
 
 from __future__ import annotations
 
+import dataclasses
 from contextvars import ContextVar
 from dataclasses import dataclass
-import dataclasses
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -14,8 +14,8 @@ from typing import (
     Union,
 )
 
-from workflows.events import Event
 from workflows.decorators import R
+from workflows.events import Event
 
 if TYPE_CHECKING:
     pass
@@ -85,7 +85,7 @@ class Returns(Generic[R]):
     step function has completed (including errors!)
     """
 
-    return_values: list[StepFunctionResult[R, Any]]
+    return_values: list[StepFunctionResult[R]]
 
 
 class WaitingForEvent(Exception, Generic[EventType]):
@@ -177,6 +177,6 @@ StepFunctionResult = Union[
     StepWorkerFailed[R],
     AddCollectedEvent,
     DeleteCollectedEvent,
-    AddWaiter[EventType],
+    AddWaiter[Event],
     DeleteWaiter,
 ]

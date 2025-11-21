@@ -130,7 +130,12 @@ class CfnBrowserSettings(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            web_content_filtering_policy=workspacesweb.CfnBrowserSettings.WebContentFilteringPolicyProperty(
+                allowed_urls=["allowedUrls"],
+                blocked_categories=["blockedCategories"],
+                blocked_urls=["blockedUrls"]
+            )
         )
     '''
 
@@ -143,6 +148,7 @@ class CfnBrowserSettings(
         browser_policy: typing.Optional[builtins.str] = None,
         customer_managed_key: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_content_filtering_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBrowserSettings.WebContentFilteringPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::WorkSpacesWeb::BrowserSettings``.
 
@@ -152,6 +158,7 @@ class CfnBrowserSettings(
         :param browser_policy: A JSON string containing Chrome Enterprise policies that will be applied to all streaming sessions.
         :param customer_managed_key: The custom managed key of the browser settings. *Pattern* : ``^arn:[\\w+=\\/,.@-]+:kms:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:key\\/[a-zA-Z0-9-]+$``
         :param tags: The tags to add to the browser settings resource. A tag is a key-value pair.
+        :param web_content_filtering_policy: The policy that specifies which URLs end users are allowed to access or which URLs or domain categories they are restricted from accessing for enhanced security.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__bddcc45afa30e005718c5da3d3034bff6b9c0453326851818da6294dc041bb0f)
@@ -162,9 +169,24 @@ class CfnBrowserSettings(
             browser_policy=browser_policy,
             customer_managed_key=customer_managed_key,
             tags=tags,
+            web_content_filtering_policy=web_content_filtering_policy,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBrowserSettings")
+    @builtins.classmethod
+    def arn_for_browser_settings(
+        cls,
+        resource: _IBrowserSettingsRef_27fa755b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0cd7bce9b40bf1170046b3a1be7953e06014e36c4c337f11899b6dbd61b72dce)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBrowserSettings", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -288,6 +310,113 @@ class CfnBrowserSettings(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
 
+    @builtins.property
+    @jsii.member(jsii_name="webContentFilteringPolicy")
+    def web_content_filtering_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserSettings.WebContentFilteringPolicyProperty"]]:
+        '''The policy that specifies which URLs end users are allowed to access or which URLs or domain categories they are restricted from accessing for enhanced security.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserSettings.WebContentFilteringPolicyProperty"]], jsii.get(self, "webContentFilteringPolicy"))
+
+    @web_content_filtering_policy.setter
+    def web_content_filtering_policy(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBrowserSettings.WebContentFilteringPolicyProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9edd8c2ec4653712f0db91c5e95215774b30f39e3b64d48b9b1715d58038dfa5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "webContentFilteringPolicy", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_workspacesweb.CfnBrowserSettings.WebContentFilteringPolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "allowed_urls": "allowedUrls",
+            "blocked_categories": "blockedCategories",
+            "blocked_urls": "blockedUrls",
+        },
+    )
+    class WebContentFilteringPolicyProperty:
+        def __init__(
+            self,
+            *,
+            allowed_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
+            blocked_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
+            blocked_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''The policy that specifies which URLs end users are allowed to access or which URLs or domain categories they are restricted from accessing for enhanced security.
+
+            :param allowed_urls: URLs and domains that are always accessible to end users.
+            :param blocked_categories: Categories of websites that are blocked on the end user's browsers.
+            :param blocked_urls: URLs and domains that end users cannot access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-browsersettings-webcontentfilteringpolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_workspacesweb as workspacesweb
+                
+                web_content_filtering_policy_property = workspacesweb.CfnBrowserSettings.WebContentFilteringPolicyProperty(
+                    allowed_urls=["allowedUrls"],
+                    blocked_categories=["blockedCategories"],
+                    blocked_urls=["blockedUrls"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d653fef38c8440747febeeb204a9a13be6c35357662ad8ba8ddb3e8f9e2f3dc4)
+                check_type(argname="argument allowed_urls", value=allowed_urls, expected_type=type_hints["allowed_urls"])
+                check_type(argname="argument blocked_categories", value=blocked_categories, expected_type=type_hints["blocked_categories"])
+                check_type(argname="argument blocked_urls", value=blocked_urls, expected_type=type_hints["blocked_urls"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if allowed_urls is not None:
+                self._values["allowed_urls"] = allowed_urls
+            if blocked_categories is not None:
+                self._values["blocked_categories"] = blocked_categories
+            if blocked_urls is not None:
+                self._values["blocked_urls"] = blocked_urls
+
+        @builtins.property
+        def allowed_urls(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''URLs and domains that are always accessible to end users.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-browsersettings-webcontentfilteringpolicy.html#cfn-workspacesweb-browsersettings-webcontentfilteringpolicy-allowedurls
+            '''
+            result = self._values.get("allowed_urls")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def blocked_categories(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''Categories of websites that are blocked on the end user's browsers.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-browsersettings-webcontentfilteringpolicy.html#cfn-workspacesweb-browsersettings-webcontentfilteringpolicy-blockedcategories
+            '''
+            result = self._values.get("blocked_categories")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def blocked_urls(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''URLs and domains that end users cannot access.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-browsersettings-webcontentfilteringpolicy.html#cfn-workspacesweb-browsersettings-webcontentfilteringpolicy-blockedurls
+            '''
+            result = self._values.get("blocked_urls")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "WebContentFilteringPolicyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_workspacesweb.CfnBrowserSettingsProps",
@@ -297,6 +426,7 @@ class CfnBrowserSettings(
         "browser_policy": "browserPolicy",
         "customer_managed_key": "customerManagedKey",
         "tags": "tags",
+        "web_content_filtering_policy": "webContentFilteringPolicy",
     },
 )
 class CfnBrowserSettingsProps:
@@ -307,6 +437,7 @@ class CfnBrowserSettingsProps:
         browser_policy: typing.Optional[builtins.str] = None,
         customer_managed_key: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        web_content_filtering_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserSettings.WebContentFilteringPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBrowserSettings``.
 
@@ -314,6 +445,7 @@ class CfnBrowserSettingsProps:
         :param browser_policy: A JSON string containing Chrome Enterprise policies that will be applied to all streaming sessions.
         :param customer_managed_key: The custom managed key of the browser settings. *Pattern* : ``^arn:[\\w+=\\/,.@-]+:kms:[a-zA-Z0-9\\-]*:[a-zA-Z0-9]{1,12}:key\\/[a-zA-Z0-9-]+$``
         :param tags: The tags to add to the browser settings resource. A tag is a key-value pair.
+        :param web_content_filtering_policy: The policy that specifies which URLs end users are allowed to access or which URLs or domain categories they are restricted from accessing for enhanced security.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-browsersettings.html
         :exampleMetadata: fixture=_generated
@@ -333,7 +465,12 @@ class CfnBrowserSettingsProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                web_content_filtering_policy=workspacesweb.CfnBrowserSettings.WebContentFilteringPolicyProperty(
+                    allowed_urls=["allowedUrls"],
+                    blocked_categories=["blockedCategories"],
+                    blocked_urls=["blockedUrls"]
+                )
             )
         '''
         if __debug__:
@@ -342,6 +479,7 @@ class CfnBrowserSettingsProps:
             check_type(argname="argument browser_policy", value=browser_policy, expected_type=type_hints["browser_policy"])
             check_type(argname="argument customer_managed_key", value=customer_managed_key, expected_type=type_hints["customer_managed_key"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument web_content_filtering_policy", value=web_content_filtering_policy, expected_type=type_hints["web_content_filtering_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if additional_encryption_context is not None:
             self._values["additional_encryption_context"] = additional_encryption_context
@@ -351,6 +489,8 @@ class CfnBrowserSettingsProps:
             self._values["customer_managed_key"] = customer_managed_key
         if tags is not None:
             self._values["tags"] = tags
+        if web_content_filtering_policy is not None:
+            self._values["web_content_filtering_policy"] = web_content_filtering_policy
 
     @builtins.property
     def additional_encryption_context(
@@ -393,6 +533,17 @@ class CfnBrowserSettingsProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def web_content_filtering_policy(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserSettings.WebContentFilteringPolicyProperty]]:
+        '''The policy that specifies which URLs end users are allowed to access or which URLs or domain categories they are restricted from accessing for enhanced security.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-browsersettings.html#cfn-workspacesweb-browsersettings-webcontentfilteringpolicy
+        '''
+        result = self._values.get("web_content_filtering_policy")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserSettings.WebContentFilteringPolicyProperty]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -504,6 +655,20 @@ class CfnDataProtectionSettings(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataProtectionSettings")
+    @builtins.classmethod
+    def arn_for_data_protection_settings(
+        cls,
+        resource: _IDataProtectionSettingsRef_733dabd5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a72ffc98354fb298da1a3bcd91c77a674b5263e2ddb30eea174f840cbb93013c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataProtectionSettings", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1405,6 +1570,20 @@ class CfnIdentityProvider(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForIdentityProvider")
+    @builtins.classmethod
+    def arn_for_identity_provider(
+        cls,
+        resource: _IIdentityProviderRef_1989e7fb,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a342388c6d03d144babccb2dc1ae31af68aac6aee1478b9ea46fd0220f7d8753)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdentityProvider", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1776,6 +1955,20 @@ class CfnIpAccessSettings(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIpAccessSettings")
+    @builtins.classmethod
+    def arn_for_ip_access_settings(
+        cls,
+        resource: _IIpAccessSettingsRef_5ce903cc,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a137e896709b65ca73cc91a08ed302ee9dc328dde50b7f025f794547fe28487)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIpAccessSettings", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2243,6 +2436,20 @@ class CfnNetworkSettings(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForNetworkSettings")
+    @builtins.classmethod
+    def arn_for_network_settings(
+        cls,
+        resource: _INetworkSettingsRef_9fcb0139,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1fa9fead8b05790cfeddcb8c1a4b10b5df916ecc72679228f21d2620cef9cd2e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNetworkSettings", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2564,7 +2771,7 @@ class CfnPortal(
         :param ip_access_settings_arn: The ARN of the IP access settings that is associated with the web portal.
         :param max_concurrent_sessions: The maximum number of concurrent sessions for the portal.
         :param network_settings_arn: The ARN of the network settings that is associated with the web portal.
-        :param session_logger_arn: The ARN of the session logger that is assocaited with the portal.
+        :param session_logger_arn: The ARN of the session logger that is associated with the portal.
         :param tags: The tags to add to the web portal. A tag is a key-value pair.
         :param trust_store_arn: The ARN of the trust store that is associated with the web portal.
         :param user_access_logging_settings_arn: The ARN of the user access logging settings that is associated with the web portal.
@@ -2593,6 +2800,17 @@ class CfnPortal(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPortal")
+    @builtins.classmethod
+    def arn_for_portal(cls, resource: _IPortalRef_cb17b713) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df995820d4e10ff81feff7ccae3ec81ae54f1c858bf08046264368b6eb3ae0cf)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPortal", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2857,7 +3075,7 @@ class CfnPortal(
     @builtins.property
     @jsii.member(jsii_name="sessionLoggerArn")
     def session_logger_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the session logger that is assocaited with the portal.'''
+        '''The ARN of the session logger that is associated with the portal.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "sessionLoggerArn"))
 
     @session_logger_arn.setter
@@ -2976,7 +3194,7 @@ class CfnPortalProps:
         :param ip_access_settings_arn: The ARN of the IP access settings that is associated with the web portal.
         :param max_concurrent_sessions: The maximum number of concurrent sessions for the portal.
         :param network_settings_arn: The ARN of the network settings that is associated with the web portal.
-        :param session_logger_arn: The ARN of the session logger that is assocaited with the portal.
+        :param session_logger_arn: The ARN of the session logger that is associated with the portal.
         :param tags: The tags to add to the web portal. A tag is a key-value pair.
         :param trust_store_arn: The ARN of the trust store that is associated with the web portal.
         :param user_access_logging_settings_arn: The ARN of the user access logging settings that is associated with the web portal.
@@ -3168,7 +3386,7 @@ class CfnPortalProps:
 
     @builtins.property
     def session_logger_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the session logger that is assocaited with the portal.
+        '''The ARN of the session logger that is associated with the portal.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-portal.html#cfn-workspacesweb-portal-sessionloggerarn
         '''
@@ -3296,7 +3514,7 @@ class CfnSessionLogger(
         :param additional_encryption_context: The additional encryption context of the session logger.
         :param customer_managed_key: The custom managed key of the session logger.
         :param display_name: The human-readable display name.
-        :param tags: 
+        :param tags: The tags of the session logger.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5ecda6b775e0aad6e840315c150daa1cae407a534f747e34d2336449d0085a29)
@@ -3312,6 +3530,20 @@ class CfnSessionLogger(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSessionLogger")
+    @builtins.classmethod
+    def arn_for_session_logger(
+        cls,
+        resource: _ISessionLoggerRef_0b36bc89,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f65440edbc47aa7f31741ad177932773279bb07152effaa9d9cd5b0a8432706)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSessionLogger", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3470,6 +3702,7 @@ class CfnSessionLogger(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags of the session logger.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -3493,8 +3726,8 @@ class CfnSessionLogger(
         ) -> None:
             '''The filter that specifies the events to monitor.
 
-            :param all: The filter that monitors all of the available events, including any new events emitted in the future.
-            :param include: The filter that monitors only the listed set of events. New events are not auto-monitored.
+            :param all: The filter that monitors all of the available events, including any new events emitted in the future. The ``All`` and ``Include`` properties are not required, but one of them should be present. ``{}`` is a valid input.
+            :param include: The filter that monitors only the listed set of events. New events are not auto-monitored. The ``All`` and ``Include`` properties are not required, but one of them should be present.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-sessionlogger-eventfilter.html
             :exampleMetadata: fixture=_generated
@@ -3526,6 +3759,8 @@ class CfnSessionLogger(
         def all(self) -> typing.Any:
             '''The filter that monitors all of the available events, including any new events emitted in the future.
 
+            The ``All`` and ``Include`` properties are not required, but one of them should be present. ``{}`` is a valid input.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-sessionlogger-eventfilter.html#cfn-workspacesweb-sessionlogger-eventfilter-all
             '''
             result = self._values.get("all")
@@ -3535,7 +3770,7 @@ class CfnSessionLogger(
         def include(self) -> typing.Optional[typing.List[builtins.str]]:
             '''The filter that monitors only the listed set of events.
 
-            New events are not auto-monitored.
+            New events are not auto-monitored. The ``All`` and ``Include`` properties are not required, but one of them should be present.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-workspacesweb-sessionlogger-eventfilter.html#cfn-workspacesweb-sessionlogger-eventfilter-include
             '''
@@ -3775,7 +4010,7 @@ class CfnSessionLoggerProps:
         :param additional_encryption_context: The additional encryption context of the session logger.
         :param customer_managed_key: The custom managed key of the session logger.
         :param display_name: The human-readable display name.
-        :param tags: 
+        :param tags: The tags of the session logger.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-sessionlogger.html
         :exampleMetadata: fixture=_generated
@@ -3893,7 +4128,8 @@ class CfnSessionLoggerProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''The tags of the session logger.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-workspacesweb-sessionlogger.html#cfn-workspacesweb-sessionlogger-tags
         '''
         result = self._values.get("tags")
@@ -3964,6 +4200,17 @@ class CfnTrustStore(
         props = CfnTrustStoreProps(certificate_list=certificate_list, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTrustStore")
+    @builtins.classmethod
+    def arn_for_trust_store(cls, resource: _ITrustStoreRef_b3e9ed97) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27f28480da58b49065725489004b8ff212794c76cd5d9eb9932c6c69b39cbbad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustStore", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4195,6 +4442,20 @@ class CfnUserAccessLoggingSettings(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserAccessLoggingSettings")
+    @builtins.classmethod
+    def arn_for_user_access_logging_settings(
+        cls,
+        resource: _IUserAccessLoggingSettingsRef_35b44bda,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1265323eecc59e930fbc863aa5a7fd4f995580b1a4d419beff6ccf2c2dc756a6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserAccessLoggingSettings", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4493,6 +4754,20 @@ class CfnUserSettings(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserSettings")
+    @builtins.classmethod
+    def arn_for_user_settings(
+        cls,
+        resource: _IUserSettingsRef_02671625,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e1d74d12404cccea1170dca42411cf5c14e881fff98fb4a3d3b40943d23a2f2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserSettings", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5357,6 +5632,13 @@ def _typecheckingstub__bddcc45afa30e005718c5da3d3034bff6b9c0453326851818da6294dc
     browser_policy: typing.Optional[builtins.str] = None,
     customer_managed_key: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    web_content_filtering_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserSettings.WebContentFilteringPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0cd7bce9b40bf1170046b3a1be7953e06014e36c4c337f11899b6dbd61b72dce(
+    resource: _IBrowserSettingsRef_27fa755b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5397,12 +5679,28 @@ def _typecheckingstub__488a7e6081f5fbb5bf5af995cdb747f920d592e19ef88a222e5aa2f1c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9edd8c2ec4653712f0db91c5e95215774b30f39e3b64d48b9b1715d58038dfa5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnBrowserSettings.WebContentFilteringPolicyProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d653fef38c8440747febeeb204a9a13be6c35357662ad8ba8ddb3e8f9e2f3dc4(
+    *,
+    allowed_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
+    blocked_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
+    blocked_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f99c227d497f6d51d01cc19398b94784835fab55afca7c6488466bb1cc1420b3(
     *,
     additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     browser_policy: typing.Optional[builtins.str] = None,
     customer_managed_key: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    web_content_filtering_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBrowserSettings.WebContentFilteringPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5417,6 +5715,12 @@ def _typecheckingstub__851565cba0af7c67b6951a864a7d6671af0039654a56671ed86d28919
     display_name: typing.Optional[builtins.str] = None,
     inline_redaction_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProtectionSettings.InlineRedactionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a72ffc98354fb298da1a3bcd91c77a674b5263e2ddb30eea174f840cbb93013c(
+    resource: _IDataProtectionSettingsRef_733dabd5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5534,6 +5838,12 @@ def _typecheckingstub__439cd32d129b1f0a69c13fb5a494170084be122497b619a7175debec5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a342388c6d03d144babccb2dc1ae31af68aac6aee1478b9ea46fd0220f7d8753(
+    resource: _IIdentityProviderRef_1989e7fb,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ace0da6a7e7e7a968ac58e8be1ce9dcb15a96bae8fad93e7c341ff5392bed56c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5597,6 +5907,12 @@ def _typecheckingstub__4e3f00304b675ee88c29734b1fad40f8e448afe808a4226188c1c74e8
     description: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a137e896709b65ca73cc91a08ed302ee9dc328dde50b7f025f794547fe28487(
+    resource: _IIpAccessSettingsRef_5ce903cc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5681,6 +5997,12 @@ def _typecheckingstub__95a61d7b0b1452fb7a5fdde6d41bbab0a1737a4628bbe5a201c16ce50
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1fa9fead8b05790cfeddcb8c1a4b10b5df916ecc72679228f21d2620cef9cd2e(
+    resource: _INetworkSettingsRef_9fcb0139,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b18b2266ad8a399dab2a39759ddd4f261e866f9af5f84bd2281d2d5717327fc7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5746,6 +6068,12 @@ def _typecheckingstub__239c61bc87a1a693f01a28198d2d3000f7ef790e9684279e807a890b0
     trust_store_arn: typing.Optional[builtins.str] = None,
     user_access_logging_settings_arn: typing.Optional[builtins.str] = None,
     user_settings_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__df995820d4e10ff81feff7ccae3ec81ae54f1c858bf08046264368b6eb3ae0cf(
+    resource: _IPortalRef_cb17b713,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5887,6 +6215,12 @@ def _typecheckingstub__5ecda6b775e0aad6e840315c150daa1cae407a534f747e34d2336449d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7f65440edbc47aa7f31741ad177932773279bb07152effaa9d9cd5b0a8432706(
+    resource: _ISessionLoggerRef_0b36bc89,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__32c2901f06899b3e8b2aed11d0479e80af4ae3bd2497852311c46da6edf80e41(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5983,6 +6317,12 @@ def _typecheckingstub__cc9c8ead0938c5ad416a02ff1511be2c3cbf2519166e43c80e65e581f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__27f28480da58b49065725489004b8ff212794c76cd5d9eb9932c6c69b39cbbad(
+    resource: _ITrustStoreRef_b3e9ed97,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5fb3d54892745fdc13234075ce86bd3f8d4acfe9ec88a393309766bcf833012b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6021,6 +6361,12 @@ def _typecheckingstub__aad2c57d166d3f137cf451bac17a21ea9bd59a5dafc004c63b60db123
     *,
     kinesis_stream_arn: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1265323eecc59e930fbc863aa5a7fd4f995580b1a4d419beff6ccf2c2dc756a6(
+    resource: _IUserAccessLoggingSettingsRef_35b44bda,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6074,6 +6420,12 @@ def _typecheckingstub__75a973eee52af75d8440f76e110a255d358bfa0d721a06403da3f4b3d
     idle_disconnect_timeout_in_minutes: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     toolbar_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserSettings.ToolbarConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5e1d74d12404cccea1170dca42411cf5c14e881fff98fb4a3d3b40943d23a2f2(
+    resource: _IUserSettingsRef_02671625,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -2567,6 +2567,17 @@ class CfnFleet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForFleet")
+    @builtins.classmethod
+    def arn_for_fleet(cls, resource: _IFleetRef_31046017) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__351725a64ee945c3f3901b7c9bc7c0af39e64fb240aadabbe180b009ee1cfbd8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFleet", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3989,6 +4000,17 @@ class CfnProject(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_7528e639) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4757a065cd326ced481eef592bfa93a84f2b29a21d765ffe45ddbb8ba7324e59)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7983,6 +8005,17 @@ class CfnReportGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForReportGroup")
+    @builtins.classmethod
+    def arn_for_report_group(cls, resource: _IReportGroupRef_79bc7a1e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b4e844deece75476695f69a8c9e26b4397a23fdd742f330bff905e4fd5b6b1c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReportGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8528,7 +8561,7 @@ class CfnSourceCredential(
     We strongly recommend that you use AWS Secrets Manager to store your credentials. If you use Secrets Manager , you must have secrets in your secrets manager. For more information, see `Using Dynamic References to Specify Template Values <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/dynamic-references.html#dynamic-references-secretsmanager>`_ .
     .. epigraph::
 
-       For security purposes, do not use plain text in your AWS CloudFormation template to store your credentials.
+       For security purposes, do not use plain text in your CloudFormation template to store your credentials.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codebuild-sourcecredential.html
     :cloudformationResource: AWS::CodeBuild::SourceCredential
@@ -19890,6 +19923,12 @@ def _typecheckingstub__081dd1a893dcfd34d3fe760e75a2377d2c6fbce3f4d815a8e141bcdc0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__351725a64ee945c3f3901b7c9bc7c0af39e64fb240aadabbe180b009ee1cfbd8(
+    resource: _IFleetRef_31046017,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3ae84a30afb0e257609f1fc5ec2c43f32b042487dc2347a8364c9b15ae90c596(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20075,6 +20114,12 @@ def _typecheckingstub__7b09683005eb57000f0fc4ae40bb6720b934248e0cfb890644ad74d57
     triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.ProjectTriggersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     visibility: typing.Optional[builtins.str] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4757a065cd326ced481eef592bfa93a84f2b29a21d765ffe45ddbb8ba7324e59(
+    resource: _IProjectRef_7528e639,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20503,6 +20548,12 @@ def _typecheckingstub__fbb78e237fc8f2ae53a0728711202e77aa510f8c587c09103b747eaed
     delete_reports: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9b4e844deece75476695f69a8c9e26b4397a23fdd742f330bff905e4fd5b6b1c(
+    resource: _IReportGroupRef_79bc7a1e,
 ) -> None:
     """Type checking stubs"""
     pass

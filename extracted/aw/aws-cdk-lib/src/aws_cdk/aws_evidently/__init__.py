@@ -209,6 +209,17 @@ class CfnExperiment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForExperiment")
+    @builtins.classmethod
+    def arn_for_experiment(cls, resource: _IExperimentRef_4d4533a4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77db5129cf5381ec2bf6fac5ce5f7fa6719527f2fa9bbcd3b4c553dcf5024ca1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExperiment", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -700,9 +711,9 @@ class CfnExperiment(
             '''Use this structure to start and stop the experiment.
 
             :param status: To start the experiment now, specify ``START`` for this parameter. If this experiment is currently running and you want to stop it now, specify ``STOP`` .
-            :param analysis_complete_time: If you are using AWS CloudFormation to start the experiment, use this field to specify when the experiment is to end. The format is as a UNIX timestamp. For more information about this format, see `The Current Epoch Unix Timestamp <https://docs.aws.amazon.com/https://www.unixtimestamp.com/index.php>`_ .
-            :param desired_state: If you are using AWS CloudFormation to stop this experiment, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
-            :param reason: If you are using AWS CloudFormation to stop this experiment, this is an optional field that you can use to record why the experiment is being stopped or cancelled.
+            :param analysis_complete_time: If you are using CloudFormation to start the experiment, use this field to specify when the experiment is to end. The format is as a UNIX timestamp. For more information about this format, see `The Current Epoch Unix Timestamp <https://docs.aws.amazon.com/https://www.unixtimestamp.com/index.php>`_ .
+            :param desired_state: If you are using CloudFormation to stop this experiment, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
+            :param reason: If you are using CloudFormation to stop this experiment, this is an optional field that you can use to record why the experiment is being stopped or cancelled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-experiment-runningstatusobject.html
             :exampleMetadata: fixture=_generated
@@ -752,7 +763,7 @@ class CfnExperiment(
 
         @builtins.property
         def analysis_complete_time(self) -> typing.Optional[builtins.str]:
-            '''If you are using AWS CloudFormation to start the experiment, use this field to specify when the experiment is to end.
+            '''If you are using CloudFormation to start the experiment, use this field to specify when the experiment is to end.
 
             The format is as a UNIX timestamp. For more information about this format, see `The Current Epoch Unix Timestamp <https://docs.aws.amazon.com/https://www.unixtimestamp.com/index.php>`_ .
 
@@ -763,7 +774,7 @@ class CfnExperiment(
 
         @builtins.property
         def desired_state(self) -> typing.Optional[builtins.str]:
-            '''If you are using AWS CloudFormation to stop this experiment, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
+            '''If you are using CloudFormation to stop this experiment, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-experiment-runningstatusobject.html#cfn-evidently-experiment-runningstatusobject-desiredstate
             '''
@@ -772,7 +783,7 @@ class CfnExperiment(
 
         @builtins.property
         def reason(self) -> typing.Optional[builtins.str]:
-            '''If you are using AWS CloudFormation to stop this experiment, this is an optional field that you can use to record why the experiment is being stopped or cancelled.
+            '''If you are using CloudFormation to stop this experiment, this is an optional field that you can use to record why the experiment is being stopped or cancelled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-experiment-runningstatusobject.html#cfn-evidently-experiment-runningstatusobject-reason
             '''
@@ -1333,7 +1344,7 @@ class CfnFeature(
         id: builtins.str,
         *,
         name: builtins.str,
-        project: builtins.str,
+        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
         variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFeature.VariationObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         default_variation: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -1370,6 +1381,17 @@ class CfnFeature(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFeature")
+    @builtins.classmethod
+    def arn_for_feature(cls, resource: _IFeatureRef_675ff66e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d1f14b608dc595adf840bb9a0c05a8b4edb1f863d026fe9f57691047a211da51)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFeature", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1765,7 +1787,7 @@ class CfnFeatureProps:
         self,
         *,
         name: builtins.str,
-        project: builtins.str,
+        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
         variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.VariationObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
         default_variation: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
@@ -1859,14 +1881,14 @@ class CfnFeatureProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def project(self) -> builtins.str:
+    def project(self) -> typing.Union[builtins.str, _IProjectRef_8191fb70]:
         '''The name or ARN of the project that is to contain the new feature.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-feature.html#cfn-evidently-feature-project
         '''
         result = self._values.get("project")
         assert result is not None, "Required property 'project' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IProjectRef_8191fb70], result)
 
     @builtins.property
     def variations(
@@ -2043,7 +2065,7 @@ class CfnLaunch(
         *,
         groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.LaunchGroupObjectProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        project: builtins.str,
+        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
         scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.StepConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunch.ExecutionStatusObjectProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2082,6 +2104,17 @@ class CfnLaunch(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLaunch")
+    @builtins.classmethod
+    def arn_for_launch(cls, resource: _ILaunchRef_b4b50bda) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bdffeaa6b72763598284183c657b3b7d24e4870fd5fecd83045627abd8d12f7c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLaunch", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2298,8 +2331,8 @@ class CfnLaunch(
             '''Use this structure to start and stop the launch.
 
             :param status: To start the launch now, specify ``START`` for this parameter. If this launch is currently running and you want to stop it now, specify ``STOP`` .
-            :param desired_state: If you are using AWS CloudFormation to stop this launch, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment. If you omit this parameter, the default of ``COMPLETED`` is used.
-            :param reason: If you are using AWS CloudFormation to stop this launch, this is an optional field that you can use to record why the launch is being stopped or cancelled.
+            :param desired_state: If you are using CloudFormation to stop this launch, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment. If you omit this parameter, the default of ``COMPLETED`` is used.
+            :param reason: If you are using CloudFormation to stop this launch, this is an optional field that you can use to record why the launch is being stopped or cancelled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-launch-executionstatusobject.html
             :exampleMetadata: fixture=_generated
@@ -2345,7 +2378,7 @@ class CfnLaunch(
 
         @builtins.property
         def desired_state(self) -> typing.Optional[builtins.str]:
-            '''If you are using AWS CloudFormation to stop this launch, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
+            '''If you are using CloudFormation to stop this launch, specify either ``COMPLETED`` or ``CANCELLED`` here to indicate how to classify this experiment.
 
             If you omit this parameter, the default of ``COMPLETED`` is used.
 
@@ -2356,7 +2389,7 @@ class CfnLaunch(
 
         @builtins.property
         def reason(self) -> typing.Optional[builtins.str]:
-            '''If you are using AWS CloudFormation to stop this launch, this is an optional field that you can use to record why the launch is being stopped or cancelled.
+            '''If you are using CloudFormation to stop this launch, this is an optional field that you can use to record why the launch is being stopped or cancelled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-evidently-launch-executionstatusobject.html#cfn-evidently-launch-executionstatusobject-reason
             '''
@@ -2930,7 +2963,7 @@ class CfnLaunchProps:
         *,
         groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.LaunchGroupObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
-        project: builtins.str,
+        project: typing.Union[builtins.str, _IProjectRef_8191fb70],
         scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
         execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.ExecutionStatusObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3068,14 +3101,14 @@ class CfnLaunchProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def project(self) -> builtins.str:
+    def project(self) -> typing.Union[builtins.str, _IProjectRef_8191fb70]:
         '''The name or ARN of the project that you want to create the launch in.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-evidently-launch.html#cfn-evidently-launch-project
         '''
         result = self._values.get("project")
         assert result is not None, "Required property 'project' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IProjectRef_8191fb70], result)
 
     @builtins.property
     def scheduled_splits_config(
@@ -3241,6 +3274,17 @@ class CfnProject(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_8191fb70) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d868c88be9e327370ff857f5ed2598e490302c7af4c5f37152ba841240f51be2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3831,6 +3875,17 @@ class CfnSegment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSegment")
+    @builtins.classmethod
+    def arn_for_segment(cls, resource: _ISegmentRef_bba19c3b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55bf4c0a289eac46deaf7cc4e1103d54e711eb418437063be2248d853712e1d0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSegment", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4099,6 +4154,12 @@ def _typecheckingstub__734b87b8f3689149de24177947f45b4fba5a135b998ba47c50d89ce2c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__77db5129cf5381ec2bf6fac5ce5f7fa6719527f2fa9bbcd3b4c553dcf5024ca1(
+    resource: _IExperimentRef_4d4533a4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__41b97e94769ee2d783fedafec30d14cbaf6057e49b29e299b13e98dba56880e4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4254,13 +4315,19 @@ def _typecheckingstub__032b8fcb49dd9128128c244f2e15873395777d391323d4e1a7f50f408
     id: builtins.str,
     *,
     name: builtins.str,
-    project: builtins.str,
+    project: typing.Union[builtins.str, _IProjectRef_8191fb70],
     variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.VariationObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
     default_variation: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     entity_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.EntityOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     evaluation_strategy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d1f14b608dc595adf840bb9a0c05a8b4edb1f863d026fe9f57691047a211da51(
+    resource: _IFeatureRef_675ff66e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4347,7 +4414,7 @@ def _typecheckingstub__5d69f83bb962985fff0b5f289781eb2e76e626dd2982d400f93a03220
 def _typecheckingstub__4fd5d4006d379348c243366df7a4e27203488741fbadb765bad2ae169ac59650(
     *,
     name: builtins.str,
-    project: builtins.str,
+    project: typing.Union[builtins.str, _IProjectRef_8191fb70],
     variations: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeature.VariationObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
     default_variation: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
@@ -4364,13 +4431,19 @@ def _typecheckingstub__07641dd92b44cb3b2e0643d2505ef488edfd1736b97c33b89a8c38fdc
     *,
     groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.LaunchGroupObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
-    project: builtins.str,
+    project: typing.Union[builtins.str, _IProjectRef_8191fb70],
     scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
     execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.ExecutionStatusObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     metric_monitors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.MetricDefinitionObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     randomization_salt: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bdffeaa6b72763598284183c657b3b7d24e4870fd5fecd83045627abd8d12f7c(
+    resource: _ILaunchRef_b4b50bda,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4501,7 +4574,7 @@ def _typecheckingstub__20a136d1b38127f4fb34c7d6619d1b4038b0d2be6c3ce76d9f52535d1
     *,
     groups: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.LaunchGroupObjectProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
-    project: builtins.str,
+    project: typing.Union[builtins.str, _IProjectRef_8191fb70],
     scheduled_splits_config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
     execution_status: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunch.ExecutionStatusObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4521,6 +4594,12 @@ def _typecheckingstub__aff4f82edbe2ec588dd5ba5124dc949189afd4900acb296b20585139e
     data_delivery: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProject.DataDeliveryObjectProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d868c88be9e327370ff857f5ed2598e490302c7af4c5f37152ba841240f51be2(
+    resource: _IProjectRef_8191fb70,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4610,6 +4689,12 @@ def _typecheckingstub__01a413dc152997585ec36406e5b383d22c40c45e581645d850b784040
     description: typing.Optional[builtins.str] = None,
     pattern: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__55bf4c0a289eac46deaf7cc4e1103d54e711eb418437063be2248d853712e1d0(
+    resource: _ISegmentRef_bba19c3b,
 ) -> None:
     """Type checking stubs"""
     pass

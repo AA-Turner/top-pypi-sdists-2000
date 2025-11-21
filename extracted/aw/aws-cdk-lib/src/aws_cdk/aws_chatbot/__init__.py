@@ -140,6 +140,8 @@ from ..interfaces.aws_chatbot import (
     MicrosoftTeamsChannelConfigurationReference as _MicrosoftTeamsChannelConfigurationReference_1fc55dac,
     SlackChannelConfigurationReference as _SlackChannelConfigurationReference_73491fa9,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 
 
 @jsii.implements(_IInspectable_c2943556, _ICustomActionRef_2f1744a4, _ITaggableV2_4e6798f8)
@@ -230,6 +232,20 @@ class CfnCustomAction(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCustomAction")
+    @builtins.classmethod
+    def arn_for_custom_action(
+        cls,
+        resource: _ICustomActionRef_2f1744a4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f0dabfb69083d44ca1d20244065511de9c1d1848beb7133eb0588ccbe293e6a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomAction", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -797,7 +813,7 @@ class CfnMicrosoftTeamsChannelConfiguration(
 
    AWS Chatbot is now  . `Learn more <https://docs.aws.amazon.com//chatbot/latest/adminguide/service-rename.html>`_ >  > ``Type`` attribute values remain unchanged.
 
-    The ``AWS::Chatbot::MicrosoftTeamsChannelConfiguration`` resource configures a Microsoft Teams channel to allow users to use  with AWS CloudFormation templates.
+    The ``AWS::Chatbot::MicrosoftTeamsChannelConfiguration`` resource configures a Microsoft Teams channel to allow users to use  with CloudFormation templates.
 
     This resource requires some setup to be done in the  in chat applications console. To provide the required Microsoft Teams team and tenant IDs, you must perform the initial authorization flow with Microsoft Teams in the  in chat applications console, then copy and paste the IDs from the console. For more details, see steps 1-3 in `Get started with Microsoft Teams <https://docs.aws.amazon.com/chatbot/latest/adminguide/teams-setup.html#teams-client-setup>`_ in the *in chat applications Administrator Guide* .
 
@@ -887,6 +903,20 @@ class CfnMicrosoftTeamsChannelConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMicrosoftTeamsChannelConfiguration")
+    @builtins.classmethod
+    def arn_for_microsoft_teams_channel_configuration(
+        cls,
+        resource: _IMicrosoftTeamsChannelConfigurationRef_a41e777d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95da38507fe31225a8cb3b3d31adcc7ef3333f69ff76138aec769d52a6bc80dd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMicrosoftTeamsChannelConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1385,7 +1415,7 @@ class CfnSlackChannelConfiguration(
 
    AWS Chatbot is now  . `Learn more <https://docs.aws.amazon.com//chatbot/latest/adminguide/service-rename.html>`_ >  > ``Type`` attribute values remain unchanged.
 
-    The ``AWS::Chatbot::SlackChannelConfiguration`` resource configures a Slack channel to allow users to use  with AWS CloudFormation templates.
+    The ``AWS::Chatbot::SlackChannelConfiguration`` resource configures a Slack channel to allow users to use  with CloudFormation templates.
 
     This resource requires some setup to be done in the  in chat applications console. To provide the required Slack workspace ID, you must perform the initial authorization flow with Slack in the  in chat applications console, then copy and paste the workspace ID from the console. For more details, see steps 1-3 in `Tutorial: Get started with Slack <https://docs.aws.amazon.com/chatbot/latest/adminguide/slack-setup.html#slack-client-setup>`_ in the *in chat applications User Guide* .
 
@@ -1424,13 +1454,13 @@ class CfnSlackChannelConfiguration(
         id: builtins.str,
         *,
         configuration_name: builtins.str,
-        iam_role_arn: builtins.str,
+        iam_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         slack_channel_id: builtins.str,
         slack_workspace_id: builtins.str,
         customization_resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         guardrail_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
         logging_level: typing.Optional[builtins.str] = None,
-        sns_topic_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        sns_topic_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         user_role_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
@@ -1467,6 +1497,20 @@ class CfnSlackChannelConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSlackChannelConfiguration")
+    @builtins.classmethod
+    def arn_for_slack_channel_configuration(
+        cls,
+        resource: _ISlackChannelConfigurationRef_0aa1013d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1459eeddaa97796b97caf2489c64064df6b970f4951ff8d9f8e516792a85e067)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSlackChannelConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1692,13 +1736,13 @@ class CfnSlackChannelConfigurationProps:
         self,
         *,
         configuration_name: builtins.str,
-        iam_role_arn: builtins.str,
+        iam_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         slack_channel_id: builtins.str,
         slack_workspace_id: builtins.str,
         customization_resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         guardrail_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
         logging_level: typing.Optional[builtins.str] = None,
-        sns_topic_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        sns_topic_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         user_role_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
@@ -1784,7 +1828,7 @@ class CfnSlackChannelConfigurationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def iam_role_arn(self) -> builtins.str:
+    def iam_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of the IAM role that defines the permissions for  .
 
         This is a user-defined role that  will assume. This is not the service-linked role. For more information, see `IAM Policies for  in chat applications <https://docs.aws.amazon.com/chatbot/latest/adminguide/chatbot-iam-policies.html>`_ .
@@ -1793,7 +1837,7 @@ class CfnSlackChannelConfigurationProps:
         '''
         result = self._values.get("iam_role_arn")
         assert result is not None, "Required property 'iam_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def slack_channel_id(self) -> builtins.str:
@@ -1853,13 +1897,15 @@ class CfnSlackChannelConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def sns_topic_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def sns_topic_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
         '''The ARNs of the SNS topics that deliver notifications to  .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-chatbot-slackchannelconfiguration.html#cfn-chatbot-slackchannelconfiguration-snstopicarns
         '''
         result = self._values.get("sns_topic_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2631,6 +2677,12 @@ def _typecheckingstub__4840384b6e4d8bb56afed06983751f4092ececfe9720ea514abb17287
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2f0dabfb69083d44ca1d20244065511de9c1d1848beb7133eb0588ccbe293e6a(
+    resource: _ICustomActionRef_2f1744a4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__44267bc9ce7cc2f3773138acc4718fe9e74ff7aacb67eedf1ef50ff399714ce2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2726,6 +2778,12 @@ def _typecheckingstub__62f6b943071fca79376376fd20660d7b707a1026a9039a0c12c88895d
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     teams_channel_name: typing.Optional[builtins.str] = None,
     user_role_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__95da38507fe31225a8cb3b3d31adcc7ef3333f69ff76138aec769d52a6bc80dd(
+    resource: _IMicrosoftTeamsChannelConfigurationRef_a41e777d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2837,15 +2895,21 @@ def _typecheckingstub__1cb3844509a8f0685c3dc0d26d5014fa028976d66c5d0a8984e8284bb
     id: builtins.str,
     *,
     configuration_name: builtins.str,
-    iam_role_arn: builtins.str,
+    iam_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     slack_channel_id: builtins.str,
     slack_workspace_id: builtins.str,
     customization_resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     guardrail_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
     logging_level: typing.Optional[builtins.str] = None,
-    sns_topic_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    sns_topic_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_role_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1459eeddaa97796b97caf2489c64064df6b970f4951ff8d9f8e516792a85e067(
+    resource: _ISlackChannelConfigurationRef_0aa1013d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2925,13 +2989,13 @@ def _typecheckingstub__4fdcebb1f70802057ca456714a5cc7c631ffe294962d8635781dfb0f0
 def _typecheckingstub__277f742a3921d9599de6f4a85fd399fb4b6654557393ff7889e5e52f58775566(
     *,
     configuration_name: builtins.str,
-    iam_role_arn: builtins.str,
+    iam_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     slack_channel_id: builtins.str,
     slack_workspace_id: builtins.str,
     customization_resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     guardrail_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
     logging_level: typing.Optional[builtins.str] = None,
-    sns_topic_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    sns_topic_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_role_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:

@@ -1236,6 +1236,13 @@ class CfnDomain(
             domain_name="domainName",
         
             # the properties below are optional
+            data_store=customerprofiles.CfnDomain.DataStoreProperty(
+                enabled=False,
+                readiness=customerprofiles.CfnDomain.ReadinessProperty(
+                    message="message",
+                    progress_percentage=123
+                )
+            ),
             dead_letter_queue_url="deadLetterQueueUrl",
             default_encryption_key="defaultEncryptionKey",
             matching=customerprofiles.CfnDomain.MatchingProperty(
@@ -1317,6 +1324,7 @@ class CfnDomain(
         *,
         default_expiration_days: jsii.Number,
         domain_name: builtins.str,
+        data_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.DataStoreProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         dead_letter_queue_url: typing.Optional[builtins.str] = None,
         default_encryption_key: typing.Optional[builtins.str] = None,
         matching: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.MatchingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1329,6 +1337,7 @@ class CfnDomain(
         :param id: Construct identifier for this resource (unique in its scope).
         :param default_expiration_days: The default number of days until the data within the domain expires.
         :param domain_name: The unique name of the domain.
+        :param data_store: Configuration and status of the data store for the domain.
         :param dead_letter_queue_url: The URL of the SQS dead letter queue, which is used for reporting errors associated with ingesting data from third party applications. You must set up a policy on the ``DeadLetterQueue`` for the ``SendMessage`` operation to enable Amazon Connect Customer Profiles to send messages to the ``DeadLetterQueue`` .
         :param default_encryption_key: The default encryption key, which is an AWS managed key, is used when no specific type of encryption key is specified. It is used to encrypt all data before it is placed in permanent or semi-permanent storage.
         :param matching: The process of matching duplicate profiles.
@@ -1342,6 +1351,7 @@ class CfnDomain(
         props = CfnDomainProps(
             default_expiration_days=default_expiration_days,
             domain_name=domain_name,
+            data_store=data_store,
             dead_letter_queue_url=dead_letter_queue_url,
             default_encryption_key=default_encryption_key,
             matching=matching,
@@ -1350,6 +1360,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_05f5627e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be579f5475b5531cc36be176014d3fb7b28c19b561e96657ccba256cb937b531)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="fromDomainName")
     @builtins.classmethod
@@ -1410,6 +1431,15 @@ class CfnDomain(
         :cloudformationAttribute: CreatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrDataStoreReadiness")
+    def attr_data_store_readiness(self) -> _IResolvable_da3f097b:
+        '''Progress information for data store setup.
+
+        :cloudformationAttribute: DataStore.Readiness
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrDataStoreReadiness"))
 
     @builtins.property
     @jsii.member(jsii_name="attrLastUpdatedAt")
@@ -1480,6 +1510,24 @@ class CfnDomain(
             type_hints = typing.get_type_hints(_typecheckingstub__5155d94ec0a92f02d3b08cff5971632f213635d3dd2577433bbe328e9fac1d90)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "domainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="dataStore")
+    def data_store(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.DataStoreProperty"]]:
+        '''Configuration and status of the data store for the domain.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.DataStoreProperty"]], jsii.get(self, "dataStore"))
+
+    @data_store.setter
+    def data_store(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.DataStoreProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51b1b6fd1de18b8d346c70161b7cb61979e8eba7a051f991a07d629d32e2c641)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "dataStore", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="deadLetterQueueUrl")
@@ -1936,6 +1984,83 @@ class CfnDomain(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_customerprofiles.CfnDomain.DataStoreProperty",
+        jsii_struct_bases=[],
+        name_mapping={"enabled": "enabled", "readiness": "readiness"},
+    )
+    class DataStoreProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            readiness: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.ReadinessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Configuration and status of the data store for the domain.
+
+            :param enabled: Whether the data store is enabled.
+            :param readiness: Progress information for data store setup.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-datastore.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_customerprofiles as customerprofiles
+                
+                data_store_property = customerprofiles.CfnDomain.DataStoreProperty(
+                    enabled=False,
+                    readiness=customerprofiles.CfnDomain.ReadinessProperty(
+                        message="message",
+                        progress_percentage=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ed05879fa75b88d4c3657e33fd8e55e1b9c53eaf50ce42de6ac2ea3eda11bf95)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument readiness", value=readiness, expected_type=type_hints["readiness"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enabled is not None:
+                self._values["enabled"] = enabled
+            if readiness is not None:
+                self._values["readiness"] = readiness
+
+        @builtins.property
+        def enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Whether the data store is enabled.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-datastore.html#cfn-customerprofiles-domain-datastore-enabled
+            '''
+            result = self._values.get("enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def readiness(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.ReadinessProperty"]]:
+            '''Progress information for data store setup.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-datastore.html#cfn-customerprofiles-domain-datastore-readiness
+            '''
+            result = self._values.get("readiness")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.ReadinessProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DataStoreProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_customerprofiles.CfnDomain.DomainStatsProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2370,6 +2495,79 @@ class CfnDomain(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_customerprofiles.CfnDomain.ReadinessProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "message": "message",
+            "progress_percentage": "progressPercentage",
+        },
+    )
+    class ReadinessProperty:
+        def __init__(
+            self,
+            *,
+            message: typing.Optional[builtins.str] = None,
+            progress_percentage: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Progress information for data store setup.
+
+            :param message: A message describing the current progress.
+            :param progress_percentage: The percentage of progress completed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-readiness.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_customerprofiles as customerprofiles
+                
+                readiness_property = customerprofiles.CfnDomain.ReadinessProperty(
+                    message="message",
+                    progress_percentage=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__324f198fba50eb0321211a19e771046aaca0bda28a6d38c0022aed9a86f8bf24)
+                check_type(argname="argument message", value=message, expected_type=type_hints["message"])
+                check_type(argname="argument progress_percentage", value=progress_percentage, expected_type=type_hints["progress_percentage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if message is not None:
+                self._values["message"] = message
+            if progress_percentage is not None:
+                self._values["progress_percentage"] = progress_percentage
+
+        @builtins.property
+        def message(self) -> typing.Optional[builtins.str]:
+            '''A message describing the current progress.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-readiness.html#cfn-customerprofiles-domain-readiness-message
+            '''
+            result = self._values.get("message")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def progress_percentage(self) -> typing.Optional[jsii.Number]:
+            '''The percentage of progress completed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-customerprofiles-domain-readiness.html#cfn-customerprofiles-domain-readiness-progresspercentage
+            '''
+            result = self._values.get("progress_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ReadinessProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_customerprofiles.CfnDomain.RuleBasedMatchingProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2656,6 +2854,7 @@ class CfnDomain(
     name_mapping={
         "default_expiration_days": "defaultExpirationDays",
         "domain_name": "domainName",
+        "data_store": "dataStore",
         "dead_letter_queue_url": "deadLetterQueueUrl",
         "default_encryption_key": "defaultEncryptionKey",
         "matching": "matching",
@@ -2669,6 +2868,7 @@ class CfnDomainProps:
         *,
         default_expiration_days: jsii.Number,
         domain_name: builtins.str,
+        data_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DataStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         dead_letter_queue_url: typing.Optional[builtins.str] = None,
         default_encryption_key: typing.Optional[builtins.str] = None,
         matching: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.MatchingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2679,6 +2879,7 @@ class CfnDomainProps:
 
         :param default_expiration_days: The default number of days until the data within the domain expires.
         :param domain_name: The unique name of the domain.
+        :param data_store: Configuration and status of the data store for the domain.
         :param dead_letter_queue_url: The URL of the SQS dead letter queue, which is used for reporting errors associated with ingesting data from third party applications. You must set up a policy on the ``DeadLetterQueue`` for the ``SendMessage`` operation to enable Amazon Connect Customer Profiles to send messages to the ``DeadLetterQueue`` .
         :param default_encryption_key: The default encryption key, which is an AWS managed key, is used when no specific type of encryption key is specified. It is used to encrypt all data before it is placed in permanent or semi-permanent storage.
         :param matching: The process of matching duplicate profiles.
@@ -2699,6 +2900,13 @@ class CfnDomainProps:
                 domain_name="domainName",
             
                 # the properties below are optional
+                data_store=customerprofiles.CfnDomain.DataStoreProperty(
+                    enabled=False,
+                    readiness=customerprofiles.CfnDomain.ReadinessProperty(
+                        message="message",
+                        progress_percentage=123
+                    )
+                ),
                 dead_letter_queue_url="deadLetterQueueUrl",
                 default_encryption_key="defaultEncryptionKey",
                 matching=customerprofiles.CfnDomain.MatchingProperty(
@@ -2776,6 +2984,7 @@ class CfnDomainProps:
             type_hints = typing.get_type_hints(_typecheckingstub__03a55eb0b8d16e4b2b2589908d65475847a28870949386381667b6572e627f96)
             check_type(argname="argument default_expiration_days", value=default_expiration_days, expected_type=type_hints["default_expiration_days"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+            check_type(argname="argument data_store", value=data_store, expected_type=type_hints["data_store"])
             check_type(argname="argument dead_letter_queue_url", value=dead_letter_queue_url, expected_type=type_hints["dead_letter_queue_url"])
             check_type(argname="argument default_encryption_key", value=default_encryption_key, expected_type=type_hints["default_encryption_key"])
             check_type(argname="argument matching", value=matching, expected_type=type_hints["matching"])
@@ -2785,6 +2994,8 @@ class CfnDomainProps:
             "default_expiration_days": default_expiration_days,
             "domain_name": domain_name,
         }
+        if data_store is not None:
+            self._values["data_store"] = data_store
         if dead_letter_queue_url is not None:
             self._values["dead_letter_queue_url"] = dead_letter_queue_url
         if default_encryption_key is not None:
@@ -2815,6 +3026,17 @@ class CfnDomainProps:
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def data_store(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.DataStoreProperty]]:
+        '''Configuration and status of the data store for the domain.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-domain.html#cfn-customerprofiles-domain-datastore
+        '''
+        result = self._values.get("data_store")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.DataStoreProperty]], result)
 
     @builtins.property
     def dead_letter_queue_url(self) -> typing.Optional[builtins.str]:
@@ -2943,6 +3165,17 @@ class CfnEventStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEventStream")
+    @builtins.classmethod
+    def arn_for_event_stream(cls, resource: _IEventStreamRef_2336759c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__41977b51f363c143032c0ed9e9887fcad8d2a49c96031285f4df1cdfe8af298c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventStream", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7613,6 +7846,20 @@ class CfnSegmentDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSegmentDefinition")
+    @builtins.classmethod
+    def arn_for_segment_definition(
+        cls,
+        resource: _ISegmentDefinitionRef_fb9739e9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc55748b09dbe5999a8fd1fcfde799f88320a8e5324e8b6fd81a332e13f828cd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSegmentDefinition", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10578,11 +10825,18 @@ def _typecheckingstub__6cc1e612474254ea8edde86de3e08226c0c50e450782b3a99c92e87c3
     *,
     default_expiration_days: jsii.Number,
     domain_name: builtins.str,
+    data_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DataStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     dead_letter_queue_url: typing.Optional[builtins.str] = None,
     default_encryption_key: typing.Optional[builtins.str] = None,
     matching: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.MatchingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rule_based_matching: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.RuleBasedMatchingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be579f5475b5531cc36be176014d3fb7b28c19b561e96657ccba256cb937b531(
+    resource: _IDomainRef_05f5627e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10615,6 +10869,12 @@ def _typecheckingstub__3d16654417fe9cbdb9f2b4f0145b59b3328699684a9b2c7ae7f2a3ad9
 
 def _typecheckingstub__5155d94ec0a92f02d3b08cff5971632f213635d3dd2577433bbe328e9fac1d90(
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__51b1b6fd1de18b8d346c70161b7cb61979e8eba7a051f991a07d629d32e2c641(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.DataStoreProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10684,6 +10944,14 @@ def _typecheckingstub__2f3fee71d236ee85937168636cf44627d0e12e7714908fdcc02548a6e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ed05879fa75b88d4c3657e33fd8e55e1b9c53eaf50ce42de6ac2ea3eda11bf95(
+    *,
+    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    readiness: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.ReadinessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ed7393f6287227101f4cad4938dff729de652d2fea3653b0c4f8ef82477058e4(
     *,
     metering_profile_count: typing.Optional[jsii.Number] = None,
@@ -10726,6 +10994,14 @@ def _typecheckingstub__0d978c61e1b04215bb349c7460583b8296f0fc2a1f64e575731bf7ab3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__324f198fba50eb0321211a19e771046aaca0bda28a6d38c0022aed9a86f8bf24(
+    *,
+    message: typing.Optional[builtins.str] = None,
+    progress_percentage: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__63470bb7c476b2fc82a2f0bc6e61f9a94630928b1d8427c1ec5400fd3523d282(
     *,
     enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
@@ -10752,6 +11028,7 @@ def _typecheckingstub__03a55eb0b8d16e4b2b2589908d65475847a28870949386381667b6572
     *,
     default_expiration_days: jsii.Number,
     domain_name: builtins.str,
+    data_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DataStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     dead_letter_queue_url: typing.Optional[builtins.str] = None,
     default_encryption_key: typing.Optional[builtins.str] = None,
     matching: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.MatchingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10769,6 +11046,12 @@ def _typecheckingstub__ab29d0d747428994b84491cb3989a05a67bcb4cf0b84ebeba8fd19114
     event_stream_name: builtins.str,
     uri: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__41977b51f363c143032c0ed9e9887fcad8d2a49c96031285f4df1cdfe8af298c(
+    resource: _IEventStreamRef_2336759c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11351,6 +11634,12 @@ def _typecheckingstub__350e170fd13ca6586a78a39785ca961e3b7fa8982a5b03ff0799f34c2
     segment_groups: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc55748b09dbe5999a8fd1fcfde799f88320a8e5324e8b6fd81a332e13f828cd(
+    resource: _ISegmentDefinitionRef_fb9739e9,
 ) -> None:
     """Type checking stubs"""
     pass

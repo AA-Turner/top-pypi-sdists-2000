@@ -935,6 +935,51 @@ class _IGatewayRefProxy(
 typing.cast(typing.Any, IGatewayRef).__jsii_proxy_class__ = lambda : _IGatewayRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_mediaconnect.IRouterInputRef")
+class IRouterInputRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a RouterInput.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="routerInputRef")
+    def router_input_ref(self) -> "RouterInputReference":
+        '''(experimental) A reference to a RouterInput resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IRouterInputRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a RouterInput.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_mediaconnect.IRouterInputRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="routerInputRef")
+    def router_input_ref(self) -> "RouterInputReference":
+        '''(experimental) A reference to a RouterInput resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("RouterInputReference", jsii.get(self, "routerInputRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IRouterInputRef).__jsii_proxy_class__ = lambda : _IRouterInputRefProxy
+
+
 @jsii.interface(
     jsii_type="aws-cdk-lib.interfaces.aws_mediaconnect.IRouterNetworkInterfaceRef"
 )
@@ -980,6 +1025,100 @@ class _IRouterNetworkInterfaceRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IRouterNetworkInterfaceRef).__jsii_proxy_class__ = lambda : _IRouterNetworkInterfaceRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_mediaconnect.IRouterOutputRef")
+class IRouterOutputRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a RouterOutput.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="routerOutputRef")
+    def router_output_ref(self) -> "RouterOutputReference":
+        '''(experimental) A reference to a RouterOutput resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IRouterOutputRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a RouterOutput.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_mediaconnect.IRouterOutputRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="routerOutputRef")
+    def router_output_ref(self) -> "RouterOutputReference":
+        '''(experimental) A reference to a RouterOutput resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("RouterOutputReference", jsii.get(self, "routerOutputRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IRouterOutputRef).__jsii_proxy_class__ = lambda : _IRouterOutputRefProxy
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_mediaconnect.RouterInputReference",
+    jsii_struct_bases=[],
+    name_mapping={"router_input_arn": "routerInputArn"},
+)
+class RouterInputReference:
+    def __init__(self, *, router_input_arn: builtins.str) -> None:
+        '''A reference to a RouterInput resource.
+
+        :param router_input_arn: The Arn of the RouterInput resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            
+            router_input_reference = interfaces_aws_mediaconnect.RouterInputReference(
+                router_input_arn="routerInputArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ed9ce4be85dfab764f028608ee5a4495bcc6912e55aac3d482ac0f847879dd8)
+            check_type(argname="argument router_input_arn", value=router_input_arn, expected_type=type_hints["router_input_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "router_input_arn": router_input_arn,
+        }
+
+    @builtins.property
+    def router_input_arn(self) -> builtins.str:
+        '''The Arn of the RouterInput resource.'''
+        result = self._values.get("router_input_arn")
+        assert result is not None, "Required property 'router_input_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "RouterInputReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 @jsii.data_type(
@@ -1031,6 +1170,55 @@ class RouterNetworkInterfaceReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_mediaconnect.RouterOutputReference",
+    jsii_struct_bases=[],
+    name_mapping={"router_output_arn": "routerOutputArn"},
+)
+class RouterOutputReference:
+    def __init__(self, *, router_output_arn: builtins.str) -> None:
+        '''A reference to a RouterOutput resource.
+
+        :param router_output_arn: The Arn of the RouterOutput resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            
+            router_output_reference = interfaces_aws_mediaconnect.RouterOutputReference(
+                router_output_arn="routerOutputArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb1ab08a2a2f206b84e407515955ae1d24f39785cfe1e4e1df154f9ce21e292b)
+            check_type(argname="argument router_output_arn", value=router_output_arn, expected_type=type_hints["router_output_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "router_output_arn": router_output_arn,
+        }
+
+    @builtins.property
+    def router_output_arn(self) -> builtins.str:
+        '''The Arn of the RouterOutput resource.'''
+        result = self._values.get("router_output_arn")
+        assert result is not None, "Required property 'router_output_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "RouterOutputReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "BridgeOutputReference",
     "BridgeReference",
@@ -1050,8 +1238,12 @@ __all__ = [
     "IFlowSourceRef",
     "IFlowVpcInterfaceRef",
     "IGatewayRef",
+    "IRouterInputRef",
     "IRouterNetworkInterfaceRef",
+    "IRouterOutputRef",
+    "RouterInputReference",
     "RouterNetworkInterfaceReference",
+    "RouterOutputReference",
 ]
 
 publication.publish()
@@ -1122,6 +1314,13 @@ def _typecheckingstub__44fc01aa24c69700318ae11a14f4daf44e0bf09d9678be7c8ad85380d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0ed9ce4be85dfab764f028608ee5a4495bcc6912e55aac3d482ac0f847879dd8(
+    *,
+    router_input_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6402a2957d68c201351255b35b741d64087684d0195556ad2b446d5aea60393b(
     *,
     router_network_interface_arn: builtins.str,
@@ -1129,5 +1328,12 @@ def _typecheckingstub__6402a2957d68c201351255b35b741d64087684d0195556ad2b446d5ae
     """Type checking stubs"""
     pass
 
-for cls in [IBridgeOutputRef, IBridgeRef, IBridgeSourceRef, IFlowEntitlementRef, IFlowOutputRef, IFlowRef, IFlowSourceRef, IFlowVpcInterfaceRef, IGatewayRef, IRouterNetworkInterfaceRef]:
+def _typecheckingstub__eb1ab08a2a2f206b84e407515955ae1d24f39785cfe1e4e1df154f9ce21e292b(
+    *,
+    router_output_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+for cls in [IBridgeOutputRef, IBridgeRef, IBridgeSourceRef, IFlowEntitlementRef, IFlowOutputRef, IFlowRef, IFlowSourceRef, IFlowVpcInterfaceRef, IGatewayRef, IRouterInputRef, IRouterNetworkInterfaceRef, IRouterOutputRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

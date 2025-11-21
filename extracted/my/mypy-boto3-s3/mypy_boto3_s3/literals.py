@@ -25,6 +25,7 @@ else:
 __all__ = (
     "AnalyticsS3ExportFileFormatType",
     "ArchiveStatusType",
+    "BucketAbacStatusType",
     "BucketAccelerateStatusType",
     "BucketCannedACLType",
     "BucketExistsWaiterName",
@@ -116,6 +117,7 @@ __all__ = (
 
 AnalyticsS3ExportFileFormatType = Literal["CSV"]
 ArchiveStatusType = Literal["ARCHIVE_ACCESS", "DEEP_ARCHIVE_ACCESS"]
+BucketAbacStatusType = Literal["Disabled", "Enabled"]
 BucketAccelerateStatusType = Literal["Enabled", "Suspended"]
 BucketCannedACLType = Literal["authenticated-read", "private", "public-read", "public-read-write"]
 BucketExistsWaiterName = Literal["bucket_exists"]

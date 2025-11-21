@@ -492,7 +492,7 @@ class CfnResourcePolicy(
         id: builtins.str,
         *,
         resource_policy: typing.Any,
-        secret_id: builtins.str,
+        secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
         block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
         '''Create a new ``AWS::SecretsManager::ResourcePolicy``.
@@ -624,7 +624,7 @@ class CfnResourcePolicyProps:
         self,
         *,
         resource_policy: typing.Any,
-        secret_id: builtins.str,
+        secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
         block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
@@ -677,7 +677,7 @@ class CfnResourcePolicyProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def secret_id(self) -> builtins.str:
+    def secret_id(self) -> typing.Union[builtins.str, _ISecretRef_3a7b28a3]:
         '''The ARN or name of the secret to attach the resource-based policy.
 
         For an ARN, we recommend that you specify a complete ARN rather than a partial ARN.
@@ -686,7 +686,7 @@ class CfnResourcePolicyProps:
         '''
         result = self._values.get("secret_id")
         assert result is not None, "Required property 'secret_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ISecretRef_3a7b28a3], result)
 
     @builtins.property
     def block_public_policy(
@@ -733,7 +733,7 @@ class CfnRotationSchedule(
 
     .. epigraph::
 
-       For database secrets defined in the same AWS CloudFormation template as the database or service:
+       For database secrets defined in the same CloudFormation template as the database or service:
 
        - Use the `AWS::SecretsManager::SecretTargetAttachment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secrettargetattachment.html>`_ resource to populate the secret with connection details.
        - Add a ``DependsOn`` attribute to the ``RotationSchedule`` resource that uses a ``SecretTargetAttachment`` . This ensures the rotation is configured after the secret is populated with connection details. > You can define only one rotation schedule per secret.
@@ -1530,7 +1530,7 @@ class CfnSecret(
 
     For Amazon Redshift admin user credentials, see `AWS::Redshift::Cluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html>`_ .
 
-    To retrieve a secret in a CloudFormation template, use a *dynamic reference* . For more information, see `Retrieve a secret in an AWS CloudFormation resource <https://docs.aws.amazon.com/secretsmanager/latest/userguide/cfn-example_reference-secret.html>`_ .
+    To retrieve a secret in a CloudFormation template, use a *dynamic reference* . For more information, see `Retrieve a secret in an CloudFormation resource <https://docs.aws.amazon.com/secretsmanager/latest/userguide/cfn-example_reference-secret.html>`_ .
 
     For information about creating a secret in the console, see `Create a secret <https://docs.aws.amazon.com/secretsmanager/latest/userguide/manage_create-basic-secret.html>`_ . For information about creating a secret using the CLI or SDK, see `CreateSecret <https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_CreateSecret.html>`_ .
 
@@ -1583,7 +1583,7 @@ class CfnSecret(
         *,
         description: typing.Optional[builtins.str] = None,
         generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecret.GenerateSecretStringProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         name: typing.Optional[builtins.str] = None,
         replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecret.ReplicaRegionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
@@ -1595,7 +1595,7 @@ class CfnSecret(
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: The description of the secret.
         :param generate_secret_string: A structure that specifies how to generate a password to encrypt and store in the secret. To include a specific string in the secret, use ``SecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created. We recommend that you specify the maximum length and include every character type that the system you are generating a password for can support.
-        :param kms_key_id: The ARN, key ID, or alias of the AWS KMS key that Secrets Manager uses to encrypt the secret value in the secret. An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ . To use a AWS KMS key in a different account, use the key ARN or the alias ARN. If you don't specify this value, then Secrets Manager uses the key ``aws/secretsmanager`` . If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS KMS key.
+        :param kms_key_id: The ARN, key ID, or alias of the AWS key that Secrets Manager uses to encrypt the secret value in the secret. An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ . To use a AWS key in a different account, use the key ARN or the alias ARN. If you don't specify this value, then Secrets Manager uses the key ``aws/secretsmanager`` . If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS key.
         :param name: The name of the new secret. The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@- Do not end your secret name with a hyphen followed by six characters. If you do so, you risk confusion and unexpected results when searching for a secret by partial ARN. Secrets Manager automatically adds a hyphen and six random characters after the secret name at the end of the ARN.
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
@@ -1616,6 +1616,17 @@ class CfnSecret(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSecret")
+    @builtins.classmethod
+    def arn_for_secret(cls, resource: _ISecretRef_3a7b28a3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d1e41efea79b7cb0452a7a9a71c9e2529e958a1adcbc9a9dc07d533666d62816)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSecret", [resource]))
 
     @jsii.member(jsii_name="fromSecretId")
     @builtins.classmethod
@@ -1728,7 +1739,7 @@ class CfnSecret(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ARN, key ID, or alias of the AWS KMS key that Secrets Manager uses to encrypt the secret value in the secret.'''
+        '''The ARN, key ID, or alias of the AWS  key that Secrets Manager uses to encrypt the secret value in the secret.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -2125,7 +2136,7 @@ class CfnSecretProps:
         *,
         description: typing.Optional[builtins.str] = None,
         generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.GenerateSecretStringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         name: typing.Optional[builtins.str] = None,
         replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
@@ -2135,7 +2146,7 @@ class CfnSecretProps:
 
         :param description: The description of the secret.
         :param generate_secret_string: A structure that specifies how to generate a password to encrypt and store in the secret. To include a specific string in the secret, use ``SecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created. We recommend that you specify the maximum length and include every character type that the system you are generating a password for can support.
-        :param kms_key_id: The ARN, key ID, or alias of the AWS KMS key that Secrets Manager uses to encrypt the secret value in the secret. An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ . To use a AWS KMS key in a different account, use the key ARN or the alias ARN. If you don't specify this value, then Secrets Manager uses the key ``aws/secretsmanager`` . If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS KMS key.
+        :param kms_key_id: The ARN, key ID, or alias of the AWS key that Secrets Manager uses to encrypt the secret value in the secret. An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ . To use a AWS key in a different account, use the key ARN or the alias ARN. If you don't specify this value, then Secrets Manager uses the key ``aws/secretsmanager`` . If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value. If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS key.
         :param name: The name of the new secret. The secret name can contain ASCII letters, numbers, and the following characters: /_+=.@- Do not end your secret name with a hyphen followed by six characters. If you do so, you risk confusion and unexpected results when searching for a secret by partial ARN. Secrets Manager automatically adds a hyphen and six random characters after the secret name at the end of the ARN.
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
@@ -2229,21 +2240,23 @@ class CfnSecretProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSecret.GenerateSecretStringProperty]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ARN, key ID, or alias of the AWS KMS key that Secrets Manager uses to encrypt the secret value in the secret.
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+        '''The ARN, key ID, or alias of the AWS  key that Secrets Manager uses to encrypt the secret value in the secret.
 
         An alias is always prefixed by ``alias/`` , for example ``alias/aws/secretsmanager`` . For more information, see `About aliases <https://docs.aws.amazon.com/kms/latest/developerguide/alias-about.html>`_ .
 
-        To use a AWS KMS key in a different account, use the key ARN or the alias ARN.
+        To use a AWS  key in a different account, use the key ARN or the alias ARN.
 
         If you don't specify this value, then Secrets Manager uses the key ``aws/secretsmanager`` . If that key doesn't yet exist, then Secrets Manager creates it for you automatically the first time it encrypts the secret value.
 
-        If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS KMS key.
+        If the secret is in a different AWS account from the credentials calling the API, then you can't use ``aws/secretsmanager`` to encrypt the secret, and you must create and use a customer managed AWS  key.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -6384,7 +6397,7 @@ def _typecheckingstub__82c9dc2ed30dab76a3a8fb3272dfbaabcd66f53e653bb3065f88e3262
     id: builtins.str,
     *,
     resource_policy: typing.Any,
-    secret_id: builtins.str,
+    secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
     block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6423,7 +6436,7 @@ def _typecheckingstub__97e910a4dd0fff31572a19f4856d29ae4c7e5bc35ca2bec8ff207bb26
 def _typecheckingstub__402bf401489ba911958d39c7ca9c4b2e953151c4170a31191e7db45ac77e29b5(
     *,
     resource_policy: typing.Any,
-    secret_id: builtins.str,
+    secret_id: typing.Union[builtins.str, _ISecretRef_3a7b28a3],
     block_public_policy: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -6527,11 +6540,17 @@ def _typecheckingstub__85d618e732c6b1f020908289780221a8947553437136d3d13945c0f22
     *,
     description: typing.Optional[builtins.str] = None,
     generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.GenerateSecretStringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     name: typing.Optional[builtins.str] = None,
     replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     secret_string: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d1e41efea79b7cb0452a7a9a71c9e2529e958a1adcbc9a9dc07d533666d62816(
+    resource: _ISecretRef_3a7b28a3,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6626,7 +6645,7 @@ def _typecheckingstub__022fe4500a72a14309ab1a3b32c45d84b045a2044531ddfa942aeb33f
     *,
     description: typing.Optional[builtins.str] = None,
     generate_secret_string: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.GenerateSecretStringProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     name: typing.Optional[builtins.str] = None,
     replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     secret_string: typing.Optional[builtins.str] = None,

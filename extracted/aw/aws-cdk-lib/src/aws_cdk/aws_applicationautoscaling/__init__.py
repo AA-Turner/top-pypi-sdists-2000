@@ -311,6 +311,8 @@ from ..interfaces.aws_applicationautoscaling import (
     ScalableTargetReference as _ScalableTargetReference_febd2a49,
     ScalingPolicyReference as _ScalingPolicyReference_77ddf4b6,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_msk import IClusterRef as _IClusterRef_c904150a
 
 
 @jsii.data_type(
@@ -1221,10 +1223,10 @@ class CfnScalableTarget(
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-        resource_id: builtins.str,
+        resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
         scalable_dimension: builtins.str,
         service_namespace: builtins.str,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalableTarget.ScheduledActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalableTarget.SuspendedStateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1782,10 +1784,10 @@ class CfnScalableTargetProps:
         *,
         max_capacity: jsii.Number,
         min_capacity: jsii.Number,
-        resource_id: builtins.str,
+        resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
         scalable_dimension: builtins.str,
         service_namespace: builtins.str,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.ScheduledActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.SuspendedStateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1887,7 +1889,7 @@ class CfnScalableTargetProps:
         return typing.cast(jsii.Number, result)
 
     @builtins.property
-    def resource_id(self) -> builtins.str:
+    def resource_id(self) -> typing.Union[builtins.str, _IClusterRef_c904150a]:
         '''The identifier of the resource associated with the scalable target.
 
         This string consists of the resource type and unique identifier.
@@ -1917,7 +1919,7 @@ class CfnScalableTargetProps:
         '''
         result = self._values.get("resource_id")
         assert result is not None, "Required property 'resource_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IClusterRef_c904150a], result)
 
     @builtins.property
     def scalable_dimension(self) -> builtins.str:
@@ -1967,7 +1969,9 @@ class CfnScalableTargetProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''Specify the Amazon Resource Name (ARN) of an Identity and Access Management (IAM) role that allows Application Auto Scaling to modify the scalable target on your behalf.
 
         This can be either an IAM service role that Application Auto Scaling can assume to make calls to other AWS resources on your behalf, or a service-linked role for the specified service. For more information, see `How Application Auto Scaling works with IAM <https://docs.aws.amazon.com/autoscaling/application/userguide/security_iam_service-with-iam.html>`_ in the *Application Auto Scaling User Guide* .
@@ -1977,7 +1981,7 @@ class CfnScalableTargetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalabletarget.html#cfn-applicationautoscaling-scalabletarget-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def scheduled_actions(
@@ -2211,7 +2215,7 @@ class CfnScalingPolicy(
         predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
         scalable_dimension: typing.Optional[builtins.str] = None,
-        scaling_target_id: typing.Optional[builtins.str] = None,
+        scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
         service_namespace: typing.Optional[builtins.str] = None,
         step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.StepScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2247,6 +2251,20 @@ class CfnScalingPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForScalingPolicy")
+    @builtins.classmethod
+    def arn_for_scaling_policy(
+        cls,
+        resource: _IScalingPolicyRef_50de02c0,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e94aa5b5a8792b0bbd1f7970d19d372f417f892e5b20cfe2e2a93425c72d02bb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScalingPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5053,7 +5071,7 @@ class CfnScalingPolicyProps:
         predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         resource_id: typing.Optional[builtins.str] = None,
         scalable_dimension: typing.Optional[builtins.str] = None,
-        scaling_target_id: typing.Optional[builtins.str] = None,
+        scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
         service_namespace: typing.Optional[builtins.str] = None,
         step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.StepScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5374,7 +5392,9 @@ class CfnScalingPolicyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def scaling_target_id(self) -> typing.Optional[builtins.str]:
+    def scaling_target_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]]:
         '''The CloudFormation-generated ID of an Application Auto Scaling scalable target.
 
         For more information about the ID, see the Return Value section of the ``AWS::ApplicationAutoScaling::ScalableTarget`` resource.
@@ -5385,7 +5405,7 @@ class CfnScalingPolicyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html#cfn-applicationautoscaling-scalingpolicy-scalingtargetid
         '''
         result = self._values.get("scaling_target_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]], result)
 
     @builtins.property
     def service_namespace(self) -> typing.Optional[builtins.str]:
@@ -7839,10 +7859,10 @@ def _typecheckingstub__7b7828d7eb81c45c73ed70f9ac7ffe26699d8745e54d9a892440a20af
     *,
     max_capacity: jsii.Number,
     min_capacity: jsii.Number,
-    resource_id: builtins.str,
+    resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
     scalable_dimension: builtins.str,
     service_namespace: builtins.str,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.ScheduledActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.SuspendedStateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -7942,10 +7962,10 @@ def _typecheckingstub__0aca5d6a38a10d55ae89247bf02288adc86be9fd694d2a88c8aaf7d40
     *,
     max_capacity: jsii.Number,
     min_capacity: jsii.Number,
-    resource_id: builtins.str,
+    resource_id: typing.Union[builtins.str, _IClusterRef_c904150a],
     scalable_dimension: builtins.str,
     service_namespace: builtins.str,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     scheduled_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.ScheduledActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     suspended_state: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalableTarget.SuspendedStateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -7961,10 +7981,16 @@ def _typecheckingstub__1fdbd49d0d5c8d10cb6dba70c50d20e471988b2d94237a064669be24b
     predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_id: typing.Optional[builtins.str] = None,
     scalable_dimension: typing.Optional[builtins.str] = None,
-    scaling_target_id: typing.Optional[builtins.str] = None,
+    scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
     service_namespace: typing.Optional[builtins.str] = None,
     step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.StepScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e94aa5b5a8792b0bbd1f7970d19d372f417f892e5b20cfe2e2a93425c72d02bb(
+    resource: _IScalingPolicyRef_50de02c0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8245,7 +8271,7 @@ def _typecheckingstub__eabc9b9cdfb95f21a9439a9250c214148ffe31ecc08a87e6125ff826c
     predictive_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.PredictiveScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resource_id: typing.Optional[builtins.str] = None,
     scalable_dimension: typing.Optional[builtins.str] = None,
-    scaling_target_id: typing.Optional[builtins.str] = None,
+    scaling_target_id: typing.Optional[typing.Union[builtins.str, _IScalableTargetRef_c773595e]] = None,
     service_namespace: typing.Optional[builtins.str] = None,
     step_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.StepScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_tracking_scaling_policy_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.TargetTrackingScalingPolicyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

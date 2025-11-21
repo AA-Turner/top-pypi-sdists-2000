@@ -179,6 +179,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_f88446ed) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7b42f16ecbbfeacf4cebf72ced2a17f07f5a84908315be11f343c633d7813dc0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1033,6 +1044,20 @@ class CfnDataIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataIntegration")
+    @builtins.classmethod
+    def arn_for_data_integration(
+        cls,
+        resource: _IDataIntegrationRef_c5e65586,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cb0b9759bd2023f505f2c40dfbb3c1e7f83592a8fd9f1b8910eeb66076b8cde4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataIntegration", [resource]))
+
     @jsii.member(jsii_name="fromDataIntegrationArn")
     @builtins.classmethod
     def from_data_integration_arn(
@@ -1689,6 +1714,20 @@ class CfnEventIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEventIntegration")
+    @builtins.classmethod
+    def arn_for_event_integration(
+        cls,
+        resource: _IEventIntegrationRef_d2c58e8f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a57514c5cab014194710e855520d84000c60bde7bdbcf3b9586223f3cb9d5ae1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventIntegration", [resource]))
+
     @jsii.member(jsii_name="fromEventIntegrationArn")
     @builtins.classmethod
     def from_event_integration_arn(
@@ -2073,6 +2112,12 @@ def _typecheckingstub__2c1bbb1e03e672595eb80bdb7dcb70bb6e71fccf39633133ee8a5b86b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7b42f16ecbbfeacf4cebf72ced2a17f07f5a84908315be11f343c633d7813dc0(
+    resource: _IApplicationRef_f88446ed,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2397143274609e6f7787d10c8effb0139785b91de02a335ac411b9f6e4478fb6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2214,6 +2259,12 @@ def _typecheckingstub__07830c24dc09b0662b03583ee4edbdbaeb4fabf95d85c4f4ed965ea9d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cb0b9759bd2023f505f2c40dfbb3c1e7f83592a8fd9f1b8910eeb66076b8cde4(
+    resource: _IDataIntegrationRef_c5e65586,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70d05e99699021c14d7f2458d9284b6643ee07c8bf98a6d7251ec619c575c220(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2330,6 +2381,12 @@ def _typecheckingstub__7f4a16fc332806342706d2878c9a173a25d599659c9ec58d0c31e1ae7
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a57514c5cab014194710e855520d84000c60bde7bdbcf3b9586223f3cb9d5ae1(
+    resource: _IEventIntegrationRef_d2c58e8f,
 ) -> None:
     """Type checking stubs"""
     pass

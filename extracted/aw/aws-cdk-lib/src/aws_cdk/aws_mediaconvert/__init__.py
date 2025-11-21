@@ -84,7 +84,7 @@ class CfnJobTemplate(
 ):
     '''The AWS::MediaConvert::JobTemplate resource is an AWS Elemental MediaConvert resource type that you can use to generate transcoding jobs.
 
-    When you declare this entity in your AWS CloudFormation template, you pass in your transcoding job settings in JSON or YAML format. This settings specification must be formed in a particular way that conforms to AWS Elemental MediaConvert job validation. For more information about creating a job template model for the ``SettingsJson`` property, see the Remarks section later in this topic.
+    When you declare this entity in your CloudFormation template, you pass in your transcoding job settings in JSON or YAML format. This settings specification must be formed in a particular way that conforms to AWS Elemental MediaConvert job validation. For more information about creating a job template model for the ``SettingsJson`` property, see the Remarks section later in this topic.
 
     For information about job templates, see `Working with AWS Elemental MediaConvert Job Templates <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-job-templates.html>`_ in the ** .
 
@@ -172,6 +172,17 @@ class CfnJobTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForJobTemplate")
+    @builtins.classmethod
+    def arn_for_job_template(cls, resource: _IJobTemplateRef_427db06b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d56f628bc50defd3c895e5ef7b41a1bff57cf0d2d4793131956d13c4cd10603)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -816,7 +827,7 @@ class CfnPreset(
 ):
     '''The AWS::MediaConvert::Preset resource is an AWS Elemental MediaConvert resource type that you can use to specify encoding settings for a single output in a transcoding job.
 
-    When you declare this entity in your AWS CloudFormation template, you pass in your transcoding job settings in JSON or YAML format. This settings specification must be formed in a particular way that conforms to AWS Elemental MediaConvert job validation. For more information about creating an output preset model for the ``SettingsJson`` property, see the Remarks section later in this topic.
+    When you declare this entity in your CloudFormation template, you pass in your transcoding job settings in JSON or YAML format. This settings specification must be formed in a particular way that conforms to AWS Elemental MediaConvert job validation. For more information about creating an output preset model for the ``SettingsJson`` property, see the Remarks section later in this topic.
 
     For more information about output MediaConvert presets, see `Working with AWS Elemental MediaConvert Output Presets <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-presets.html>`_ in the ** .
 
@@ -878,6 +889,17 @@ class CfnPreset(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPreset")
+    @builtins.classmethod
+    def arn_for_preset(cls, resource: _IPresetRef_e69b176f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b2167b00fe5ac49cfe022a479389e7426bccc0b9b2d60c4347501e6fc7cf0598)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPreset", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1203,7 +1225,7 @@ class CfnQueue(
         :param concurrent_jobs: Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, specify the number of jobs you can process concurrently in your reservation plan instead.
         :param description: Optional. A description of the queue that you are creating.
         :param name: The name of the queue that you are creating.
-        :param pricing_plan: When you use AWS CloudFormation , you can create only on-demand queues. Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your AWS CloudFormation template. To create a reserved queue, use the AWS Elemental MediaConvert console at https://console.aws.amazon.com/mediaconvert to set up a contract. For more information, see `Working with AWS Elemental MediaConvert Queues <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html>`_ in the ** .
+        :param pricing_plan: When you use CloudFormation , you can create only on-demand queues. Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your CloudFormation template. To create a reserved queue, use the AWS Elemental MediaConvert console at https://console.aws.amazon.com/mediaconvert to set up a contract. For more information, see `Working with AWS Elemental MediaConvert Queues <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html>`_ in the ** .
         :param status: Initial state of the queue. Queues can be either ACTIVE or PAUSED. If you create a paused queue, then jobs that you send to that queue won't begin.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
@@ -1221,6 +1243,17 @@ class CfnQueue(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForQueue")
+    @builtins.classmethod
+    def arn_for_queue(cls, resource: _IQueueRef_ef5dbb18) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7f8d877fb1ae486c5c8540a8f28e337951176af9d4b7bd7598fe14b7db2d1c7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1337,7 +1370,7 @@ class CfnQueue(
     @builtins.property
     @jsii.member(jsii_name="pricingPlan")
     def pricing_plan(self) -> typing.Optional[builtins.str]:
-        '''When you use AWS CloudFormation , you can create only on-demand queues.'''
+        '''When you use CloudFormation , you can create only on-demand queues.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "pricingPlan"))
 
     @pricing_plan.setter
@@ -1402,7 +1435,7 @@ class CfnQueueProps:
         :param concurrent_jobs: Specify the maximum number of jobs your queue can process concurrently. For on-demand queues, the value you enter is constrained by your service quotas for Maximum concurrent jobs, per on-demand queue and Maximum concurrent jobs, per account. For reserved queues, specify the number of jobs you can process concurrently in your reservation plan instead.
         :param description: Optional. A description of the queue that you are creating.
         :param name: The name of the queue that you are creating.
-        :param pricing_plan: When you use AWS CloudFormation , you can create only on-demand queues. Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your AWS CloudFormation template. To create a reserved queue, use the AWS Elemental MediaConvert console at https://console.aws.amazon.com/mediaconvert to set up a contract. For more information, see `Working with AWS Elemental MediaConvert Queues <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html>`_ in the ** .
+        :param pricing_plan: When you use CloudFormation , you can create only on-demand queues. Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your CloudFormation template. To create a reserved queue, use the AWS Elemental MediaConvert console at https://console.aws.amazon.com/mediaconvert to set up a contract. For more information, see `Working with AWS Elemental MediaConvert Queues <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html>`_ in the ** .
         :param status: Initial state of the queue. Queues can be either ACTIVE or PAUSED. If you create a paused queue, then jobs that you send to that queue won't begin.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
@@ -1481,9 +1514,9 @@ class CfnQueueProps:
 
     @builtins.property
     def pricing_plan(self) -> typing.Optional[builtins.str]:
-        '''When you use AWS CloudFormation , you can create only on-demand queues.
+        '''When you use CloudFormation , you can create only on-demand queues.
 
-        Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your AWS CloudFormation template.
+        Therefore, always set ``PricingPlan`` to the value "ON_DEMAND" when declaring an AWS::MediaConvert::Queue in your CloudFormation template.
 
         To create a reserved queue, use the AWS Elemental MediaConvert console at https://console.aws.amazon.com/mediaconvert to set up a contract. For more information, see `Working with AWS Elemental MediaConvert Queues <https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html>`_ in the ** .
 
@@ -1551,6 +1584,12 @@ def _typecheckingstub__6069a4448c0af7d940ed2037ac3ca32f293c46dc85314fc300ccf64aa
     queue: typing.Optional[builtins.str] = None,
     status_update_interval: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d56f628bc50defd3c895e5ef7b41a1bff57cf0d2d4793131956d13c4cd10603(
+    resource: _IJobTemplateRef_427db06b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1672,6 +1711,12 @@ def _typecheckingstub__c7e9a02a55f71ce4dc1d1bd91234e42ae8b4f331a5204d9de2337abf4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b2167b00fe5ac49cfe022a479389e7426bccc0b9b2d60c4347501e6fc7cf0598(
+    resource: _IPresetRef_e69b176f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cfdd12e2c70eaa4ee51ce8c0175f9e9a23741111e6220d5d757029b1f4107fa5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1735,6 +1780,12 @@ def _typecheckingstub__ce85d095c93254b82e67ee70a5cae96a78ca7b1fbb86f6494f48602d8
     pricing_plan: typing.Optional[builtins.str] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7f8d877fb1ae486c5c8540a8f28e337951176af9d4b7bd7598fe14b7db2d1c7(
+    resource: _IQueueRef_ef5dbb18,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1017,6 +1017,17 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCertificate")
+    @builtins.classmethod
+    def arn_for_certificate(cls, resource: _ICertificateRef_1878d79b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__263afa57a98fb4b01e4f59aef3b2fc7273885bdf051ae65bfd7b734db0113b48)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCertificate", [resource]))
+
     @jsii.member(jsii_name="fromCertificateId")
     @builtins.classmethod
     def from_certificate_id(
@@ -2847,6 +2858,12 @@ def _typecheckingstub__6f094b3f6a318b9501162c46d45eaf42466c16a9c333dd4021dc90258
     subject_alternative_names: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     validation_method: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__263afa57a98fb4b01e4f59aef3b2fc7273885bdf051ae65bfd7b734db0113b48(
+    resource: _ICertificateRef_1878d79b,
 ) -> None:
     """Type checking stubs"""
     pass

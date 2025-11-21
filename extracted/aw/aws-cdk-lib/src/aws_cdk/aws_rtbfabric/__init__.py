@@ -77,6 +77,11 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+    IVPCRef as _IVPCRef_f02a11df,
+)
 from ..interfaces.aws_rtbfabric import (
     IInboundExternalLinkRef as _IInboundExternalLinkRef_087c1bc6,
     ILinkRef as _ILinkRef_1c71e733,
@@ -168,6 +173,20 @@ class CfnInboundExternalLink(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInboundExternalLink")
+    @builtins.classmethod
+    def arn_for_inbound_external_link(
+        cls,
+        resource: _IInboundExternalLinkRef_087c1bc6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e45579c24ba39e7cbd88d8a1dcb187104127b5c4c031b298b39214f40fb1a36e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInboundExternalLink", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -936,6 +955,17 @@ class CfnLink(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLink")
+    @builtins.classmethod
+    def arn_for_link(cls, resource: _ILinkRef_1c71e733) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8441d9ec3f0e33dc15a6b6f9feae93734b736d627e3b8c39efcec62db2104c90)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLink", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2553,9 +2583,9 @@ class CfnRequesterGateway(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2582,6 +2612,20 @@ class CfnRequesterGateway(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRequesterGateway")
+    @builtins.classmethod
+    def arn_for_requester_gateway(
+        cls,
+        resource: _IRequesterGatewayRef_d92bcdf1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bfb862aae5f5ac5590b2e30cf6f7bd41dd788937fd184bc1afb6341c0375ea45)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRequesterGateway", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2775,9 +2819,9 @@ class CfnRequesterGatewayProps:
     def __init__(
         self,
         *,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2829,34 +2873,38 @@ class CfnRequesterGatewayProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def security_group_ids(self) -> typing.List[builtins.str]:
+    def security_group_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
         '''The unique identifiers of the security groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
         assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The unique identifiers of the subnets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
-    def vpc_id(self) -> builtins.str:
+    def vpc_id(self) -> typing.Union[builtins.str, _IVPCRef_f02a11df]:
         '''The unique identifier of the Virtual Private Cloud (VPC).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-requestergateway.html#cfn-rtbfabric-requestergateway-vpcid
         '''
         result = self._values.get("vpc_id")
         assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IVPCRef_f02a11df], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2951,9 +2999,9 @@ class CfnResponderGateway(
         *,
         port: jsii.Number,
         protocol: builtins.str,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
         description: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResponderGateway.ManagedEndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2993,6 +3041,20 @@ class CfnResponderGateway(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResponderGateway")
+    @builtins.classmethod
+    def arn_for_responder_gateway(
+        cls,
+        resource: _IResponderGatewayRef_2bdaa070,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d03c637f67985067e0671715031f91341dab89c06faa85ff0ef8ac5fda7755ad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResponderGateway", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3601,9 +3663,9 @@ class CfnResponderGatewayProps:
         *,
         port: jsii.Number,
         protocol: builtins.str,
-        security_group_ids: typing.Sequence[builtins.str],
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
+        security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
         description: typing.Optional[builtins.str] = None,
         domain_name: typing.Optional[builtins.str] = None,
         managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3716,34 +3778,38 @@ class CfnResponderGatewayProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.List[builtins.str]:
+    def security_group_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
         '''The unique identifiers of the security groups.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
         assert result is not None, "Required property 'security_group_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The unique identifiers of the subnets.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
-    def vpc_id(self) -> builtins.str:
+    def vpc_id(self) -> typing.Union[builtins.str, _IVPCRef_f02a11df]:
         '''The unique identifier of the Virtual Private Cloud (VPC).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-respondergateway.html#cfn-rtbfabric-respondergateway-vpcid
         '''
         result = self._values.get("vpc_id")
         assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IVPCRef_f02a11df], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -3827,6 +3893,12 @@ def _typecheckingstub__1a5afae55006ef90edfe40aa8e5117e329b49d245830f9f3781bf45c5
     link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnInboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
     link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e45579c24ba39e7cbd88d8a1dcb187104127b5c4c031b298b39214f40fb1a36e(
+    resource: _IInboundExternalLinkRef_087c1bc6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3928,6 +4000,12 @@ def _typecheckingstub__33e403b84fbb081fd16a0097272c1b774ceb7dfcf2ef00e8d7edb2e0f
     link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     module_configuration_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLink.ModuleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8441d9ec3f0e33dc15a6b6f9feae93734b736d627e3b8c39efcec62db2104c90(
+    resource: _ILinkRef_1c71e733,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4118,11 +4196,17 @@ def _typecheckingstub__f422ad74a878dd27ca273fe5fdb545d09c78a5ac256926db3df20c37e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
+    security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bfb862aae5f5ac5590b2e30cf6f7bd41dd788937fd184bc1afb6341c0375ea45(
+    resource: _IRequesterGatewayRef_d92bcdf1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4171,9 +4255,9 @@ def _typecheckingstub__49d27ee86984f1ea979cd85d326d12ed9f60279e658da842a417dc4a2
 
 def _typecheckingstub__e861505bd65d62c115117db14bdc56cdccfb7c596f849bc81dadfc3f63484f16(
     *,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
+    security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -4186,14 +4270,20 @@ def _typecheckingstub__cb840846f651123d9a88e886198c38a19418b49d00a405569125e9b5f
     *,
     port: jsii.Number,
     protocol: builtins.str,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
+    security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
     description: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
     managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trust_store_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.TrustStoreConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d03c637f67985067e0671715031f91341dab89c06faa85ff0ef8ac5fda7755ad(
+    resource: _IResponderGatewayRef_2bdaa070,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4309,9 +4399,9 @@ def _typecheckingstub__c9eb5e991b472975a887a9142289f690ca12906379267bff2fae6a074
     *,
     port: jsii.Number,
     protocol: builtins.str,
-    security_group_ids: typing.Sequence[builtins.str],
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
+    security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
     description: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
     managed_endpoint_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponderGateway.ManagedEndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

@@ -173,6 +173,20 @@ class CfnCisScanConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCisScanConfiguration")
+    @builtins.classmethod
+    def arn_for_cis_scan_configuration(
+        cls,
+        resource: _ICisScanConfigurationRef_8f6555b3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__17bb5d9e0d4a2d165ecc0f9d6c045ff79fb5bd35d06a65c705104aaf297f5690)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCisScanConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1039,6 +1053,20 @@ class CfnCodeSecurityIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCodeSecurityIntegration")
+    @builtins.classmethod
+    def arn_for_code_security_integration(
+        cls,
+        resource: _ICodeSecurityIntegrationRef_b418c2a5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ca7e2752a7e90b087558c274f5098a9e8bc7c5d74e989dc2358c5a144c1d57e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSecurityIntegration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1772,6 +1800,20 @@ class CfnCodeSecurityScanConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCodeSecurityScanConfiguration")
+    @builtins.classmethod
+    def arn_for_code_security_scan_configuration(
+        cls,
+        resource: _ICodeSecurityScanConfigurationRef_4a00a90e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e4e2ba232f61f3996b58dc5cfd25237fcbd03e5685907e35ac8cd5f40d55260b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSecurityScanConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2603,6 +2645,17 @@ class CfnFilter(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFilter")
+    @builtins.classmethod
+    def arn_for_filter(cls, resource: _IFilterRef_37875571) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__704d307380b328e752813838e45cc7632f81ee6e606de43e80cdab6fbc9f46bb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFilter", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4616,6 +4669,12 @@ def _typecheckingstub__ee74cd979e0690afc5238694387a2bb443783c172f8af7544b4b5c468
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__17bb5d9e0d4a2d165ecc0f9d6c045ff79fb5bd35d06a65c705104aaf297f5690(
+    resource: _ICisScanConfigurationRef_8f6555b3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c340cf5a8052b5b5d1021305af92e23dcb4f62645a1014b0a49bb031d376ee8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4731,6 +4790,12 @@ def _typecheckingstub__80799b4356912cf375014b9f868e52ed37e885f4e1f3c1ddd85598a23
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6ca7e2752a7e90b087558c274f5098a9e8bc7c5d74e989dc2358c5a144c1d57e(
+    resource: _ICodeSecurityIntegrationRef_b418c2a5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d2b41111bd2e5e5f072f8545fffa3c791a4d0e501f547576454bf1a1f74205d6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4835,6 +4900,12 @@ def _typecheckingstub__1f8087fd99eb325ae09773df4a6c219dda10efe85e43341cb1f5b576a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e4e2ba232f61f3996b58dc5cfd25237fcbd03e5685907e35ac8cd5f40d55260b(
+    resource: _ICodeSecurityScanConfigurationRef_4a00a90e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ecb6f2f1a541e759bd4ebb9f175ef2898e08b44a5a2f74698a104ebf563f6050(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4928,6 +4999,12 @@ def _typecheckingstub__76aaac8f8d755716225a5dd2d4902f3e7ec007381fa82a2d163553362
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__704d307380b328e752813838e45cc7632f81ee6e606de43e80cdab6fbc9f46bb(
+    resource: _IFilterRef_37875571,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -66,6 +66,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_nimblestudio import (
     ILaunchProfileRef as _ILaunchProfileRef_9b6fe344,
     IStreamingImageRef as _IStreamingImageRef_efa672a8,
@@ -1515,10 +1516,10 @@ class CfnStudio(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        admin_role_arn: builtins.str,
+        admin_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         display_name: builtins.str,
         studio_name: builtins.str,
-        user_role_arn: builtins.str,
+        user_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         studio_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStudio.StudioEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -1547,6 +1548,17 @@ class CfnStudio(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStudio")
+    @builtins.classmethod
+    def arn_for_studio(cls, resource: _IStudioRef_cc59155f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f19a65c47c164688e94fe242ad61ddc47a6e542f479946219753ac26cb7ecbd3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStudio", [resource]))
 
     @jsii.member(jsii_name="fromStudioId")
     @builtins.classmethod
@@ -3049,10 +3061,10 @@ class CfnStudioProps:
     def __init__(
         self,
         *,
-        admin_role_arn: builtins.str,
+        admin_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         display_name: builtins.str,
         studio_name: builtins.str,
-        user_role_arn: builtins.str,
+        user_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         studio_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStudio.StudioEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     ) -> None:
@@ -3112,13 +3124,13 @@ class CfnStudioProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def admin_role_arn(self) -> builtins.str:
+    def admin_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-adminrolearn
         '''
         result = self._values.get("admin_role_arn")
         assert result is not None, "Required property 'admin_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def display_name(self) -> builtins.str:
@@ -3139,13 +3151,13 @@ class CfnStudioProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_role_arn(self) -> builtins.str:
+    def user_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-nimblestudio-studio.html#cfn-nimblestudio-studio-userrolearn
         '''
         result = self._values.get("user_role_arn")
         assert result is not None, "Required property 'user_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def studio_encryption_configuration(
@@ -3407,12 +3419,18 @@ def _typecheckingstub__45420baa577c3a8eb786b8d20404bcbc5573494502885eb1f55a89702
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    admin_role_arn: builtins.str,
+    admin_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     display_name: builtins.str,
     studio_name: builtins.str,
-    user_role_arn: builtins.str,
+    user_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     studio_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStudio.StudioEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f19a65c47c164688e94fe242ad61ddc47a6e542f479946219753ac26cb7ecbd3(
+    resource: _IStudioRef_cc59155f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3660,10 +3678,10 @@ def _typecheckingstub__452974fbd84550efbe28df9f5e4cb6049d1527391e07a1544107fc2f0
 
 def _typecheckingstub__adecf8657a6c6a9dbaea94911b353618ab8a0000478c99ec27d8a488e0e2469e(
     *,
-    admin_role_arn: builtins.str,
+    admin_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     display_name: builtins.str,
     studio_name: builtins.str,
-    user_role_arn: builtins.str,
+    user_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     studio_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStudio.StudioEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:

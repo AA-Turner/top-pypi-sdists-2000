@@ -178,6 +178,17 @@ class CfnRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForRule")
+    @builtins.classmethod
+    def arn_for_rule(cls, resource: _IRuleRef_4e521f27) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7da27deaca2198440ed34a5309980243bc9e8578e620ae1d2780c39a98dee670)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -840,6 +851,12 @@ def _typecheckingstub__38111a34066818ca2f172524180ec7dec02ce564c681ac0c87097b023
     resource_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7da27deaca2198440ed34a5309980243bc9e8578e620ae1d2780c39a98dee670(
+    resource: _IRuleRef_4e521f27,
 ) -> None:
     """Type checking stubs"""
     pass

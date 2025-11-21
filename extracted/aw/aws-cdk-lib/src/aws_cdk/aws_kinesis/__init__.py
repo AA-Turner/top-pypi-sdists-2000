@@ -447,7 +447,7 @@ class CfnResourcePolicy(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        resource_arn: builtins.str,
+        resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
         resource_policy: typing.Any,
     ) -> None:
         '''Create a new ``AWS::Kinesis::ResourcePolicy``.
@@ -544,7 +544,7 @@ class CfnResourcePolicyProps:
     def __init__(
         self,
         *,
-        resource_arn: builtins.str,
+        resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
         resource_policy: typing.Any,
     ) -> None:
         '''Properties for defining a ``CfnResourcePolicy``.
@@ -578,14 +578,16 @@ class CfnResourcePolicyProps:
         }
 
     @builtins.property
-    def resource_arn(self) -> builtins.str:
+    def resource_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad]:
         '''Returns the Amazon Resource Name (ARN) of the resource-based policy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesis-resourcepolicy.html#cfn-kinesis-resourcepolicy-resourcearn
         '''
         result = self._values.get("resource_arn")
         assert result is not None, "Required property 'resource_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad], result)
 
     @builtins.property
     def resource_policy(self) -> typing.Any:
@@ -696,6 +698,17 @@ class CfnStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStream")
+    @builtins.classmethod
+    def arn_for_stream(cls, resource: _IStreamRef_b484e253) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1be18e6676a8f818665548c6e6fb25d69de171f74d328fd47682424cdf479211)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStream", [resource]))
 
     @jsii.member(jsii_name="fromStreamArn")
     @builtins.classmethod
@@ -6007,7 +6020,7 @@ def _typecheckingstub__d637108cee3cd0781f4431aaf5dbbdcd6254ef22d3f2922cee25b64d4
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    resource_arn: builtins.str,
+    resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
     resource_policy: typing.Any,
 ) -> None:
     """Type checking stubs"""
@@ -6039,7 +6052,7 @@ def _typecheckingstub__9ce115deea862b93afa1f5f701216876983abcfa93ac3ace697573677
 
 def _typecheckingstub__dc9d3035df5ffd3d2e91ef2e5c2b108309a10ae013584b2ef5c2d3bdde4567bc(
     *,
-    resource_arn: builtins.str,
+    resource_arn: typing.Union[builtins.str, _IStreamRef_b484e253, _IStreamConsumerRef_62f6b6ad],
     resource_policy: typing.Any,
 ) -> None:
     """Type checking stubs"""
@@ -6058,6 +6071,12 @@ def _typecheckingstub__b956aa40f3e4f7ebba018fbc1caa3788147e52190c5c7131c5c035b04
     stream_mode_details: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamModeDetailsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     warm_throughput_mi_bps: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1be18e6676a8f818665548c6e6fb25d69de171f74d328fd47682424cdf479211(
+    resource: _IStreamRef_b484e253,
 ) -> None:
     """Type checking stubs"""
     pass

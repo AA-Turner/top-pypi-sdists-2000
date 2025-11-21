@@ -68,6 +68,11 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+    IVPCRef as _IVPCRef_f02a11df,
+)
 from ..interfaces.aws_emr import (
     ClusterReference as _ClusterReference_090aa1e1,
     IClusterRef as _IClusterRef_bdda5e5c,
@@ -86,6 +91,11 @@ from ..interfaces.aws_emr import (
     StudioSessionMappingReference as _StudioSessionMappingReference_88a23d15,
     WALWorkspaceReference as _WALWorkspaceReference_4058c36e,
 )
+from ..interfaces.aws_iam import (
+    IManagedPolicyRef as _IManagedPolicyRef_a7a65687, IRoleRef as _IRoleRef_8400221f
+)
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IClusterRef_bdda5e5c, _ITaggable_36806126)
@@ -209,6 +219,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_bdda5e5c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ab2709723877d7011eafccda10941b963db87bb16d93e9b593904ed03178f54a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="fromClusterId")
     @builtins.classmethod
@@ -10481,22 +10502,22 @@ class CfnStudio(
         id: builtins.str,
         *,
         auth_mode: builtins.str,
-        default_s3_location: builtins.str,
-        engine_security_group_id: builtins.str,
+        default_s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        engine_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
         name: builtins.str,
-        service_role: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
-        workspace_security_group_id: builtins.str,
+        service_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        workspace_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
         description: typing.Optional[builtins.str] = None,
-        encryption_key_arn: typing.Optional[builtins.str] = None,
+        encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         idc_instance_arn: typing.Optional[builtins.str] = None,
         idc_user_assignment: typing.Optional[builtins.str] = None,
         idp_auth_url: typing.Optional[builtins.str] = None,
         idp_relay_state_parameter_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         trusted_identity_propagation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        user_role: typing.Optional[builtins.str] = None,
+        user_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::EMR::Studio``.
 
@@ -10511,7 +10532,7 @@ class CfnStudio(
         :param vpc_id: The ID of the Amazon Virtual Private Cloud (Amazon VPC) to associate with the Studio.
         :param workspace_security_group_id: The ID of the Workspace security group associated with the Amazon EMR Studio. The Workspace security group allows outbound network traffic to resources in the Engine security group and to the internet.
         :param description: A detailed description of the Amazon EMR Studio.
-        :param encryption_key_arn: The AWS KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
+        :param encryption_key_arn: The AWS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
         :param idc_instance_arn: The ARN of the IAM Identity Center instance the Studio application belongs to.
         :param idc_user_assignment: Indicates whether the Studio has ``REQUIRED`` or ``OPTIONAL`` IAM Identity Center user assignment. If the value is set to ``REQUIRED`` , users must be explicitly assigned to the Studio application to access the Studio.
         :param idp_auth_url: Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.
@@ -10545,6 +10566,17 @@ class CfnStudio(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStudio")
+    @builtins.classmethod
+    def arn_for_studio(cls, resource: _IStudioRef_7dcfa17b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ba1f95282f86f0bfc8656dfc6fc176c08b9b3190538cb0cae082156213a5bbdb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStudio", [resource]))
 
     @jsii.member(jsii_name="fromStudioArn")
     @builtins.classmethod
@@ -10788,7 +10820,7 @@ class CfnStudio(
     @builtins.property
     @jsii.member(jsii_name="encryptionKeyArn")
     def encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.'''
+        '''The AWS  key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "encryptionKeyArn"))
 
     @encryption_key_arn.setter
@@ -10926,22 +10958,22 @@ class CfnStudioProps:
         self,
         *,
         auth_mode: builtins.str,
-        default_s3_location: builtins.str,
-        engine_security_group_id: builtins.str,
+        default_s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        engine_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
         name: builtins.str,
-        service_role: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
-        vpc_id: builtins.str,
-        workspace_security_group_id: builtins.str,
+        service_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+        vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+        workspace_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
         description: typing.Optional[builtins.str] = None,
-        encryption_key_arn: typing.Optional[builtins.str] = None,
+        encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         idc_instance_arn: typing.Optional[builtins.str] = None,
         idc_user_assignment: typing.Optional[builtins.str] = None,
         idp_auth_url: typing.Optional[builtins.str] = None,
         idp_relay_state_parameter_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         trusted_identity_propagation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        user_role: typing.Optional[builtins.str] = None,
+        user_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStudio``.
 
@@ -10954,7 +10986,7 @@ class CfnStudioProps:
         :param vpc_id: The ID of the Amazon Virtual Private Cloud (Amazon VPC) to associate with the Studio.
         :param workspace_security_group_id: The ID of the Workspace security group associated with the Amazon EMR Studio. The Workspace security group allows outbound network traffic to resources in the Engine security group and to the internet.
         :param description: A detailed description of the Amazon EMR Studio.
-        :param encryption_key_arn: The AWS KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
+        :param encryption_key_arn: The AWS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
         :param idc_instance_arn: The ARN of the IAM Identity Center instance the Studio application belongs to.
         :param idc_user_assignment: Indicates whether the Studio has ``REQUIRED`` or ``OPTIONAL`` IAM Identity Center user assignment. If the value is set to ``REQUIRED`` , users must be explicitly assigned to the Studio application to access the Studio.
         :param idp_auth_url: Your identity provider's authentication endpoint. Amazon EMR Studio redirects federated users to this endpoint for authentication when logging in to a Studio with the Studio URL.
@@ -11056,17 +11088,19 @@ class CfnStudioProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def default_s3_location(self) -> builtins.str:
+    def default_s3_location(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''The Amazon S3 location to back up EMR Studio Workspaces and notebook files.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studio.html#cfn-emr-studio-defaults3location
         '''
         result = self._values.get("default_s3_location")
         assert result is not None, "Required property 'default_s3_location' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
-    def engine_security_group_id(self) -> builtins.str:
+    def engine_security_group_id(
+        self,
+    ) -> typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]:
         '''The ID of the Amazon EMR Studio Engine security group.
 
         The Engine security group allows inbound network traffic from the Workspace security group, and it must be in the same VPC specified by ``VpcId`` .
@@ -11075,7 +11109,7 @@ class CfnStudioProps:
         '''
         result = self._values.get("engine_security_group_id")
         assert result is not None, "Required property 'engine_security_group_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -11088,7 +11122,7 @@ class CfnStudioProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def service_role(self) -> builtins.str:
+    def service_role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role that will be assumed by the Amazon EMR Studio.
 
         The service role provides a way for Amazon EMR Studio to interoperate with other AWS services.
@@ -11097,10 +11131,12 @@ class CfnStudioProps:
         '''
         result = self._values.get("service_role")
         assert result is not None, "Required property 'service_role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''A list of subnet IDs to associate with the Amazon EMR Studio.
 
         A Studio can have a maximum of 5 subnets. The subnets must belong to the VPC specified by ``VpcId`` . Studio users can create a Workspace in any of the specified subnets.
@@ -11109,20 +11145,22 @@ class CfnStudioProps:
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
-    def vpc_id(self) -> builtins.str:
+    def vpc_id(self) -> typing.Union[builtins.str, _IVPCRef_f02a11df]:
         '''The ID of the Amazon Virtual Private Cloud (Amazon VPC) to associate with the Studio.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studio.html#cfn-emr-studio-vpcid
         '''
         result = self._values.get("vpc_id")
         assert result is not None, "Required property 'vpc_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IVPCRef_f02a11df], result)
 
     @builtins.property
-    def workspace_security_group_id(self) -> builtins.str:
+    def workspace_security_group_id(
+        self,
+    ) -> typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]:
         '''The ID of the Workspace security group associated with the Amazon EMR Studio.
 
         The Workspace security group allows outbound network traffic to resources in the Engine security group and to the internet.
@@ -11131,7 +11169,7 @@ class CfnStudioProps:
         '''
         result = self._values.get("workspace_security_group_id")
         assert result is not None, "Required property 'workspace_security_group_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -11143,13 +11181,15 @@ class CfnStudioProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
+    def encryption_key_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
+        '''The AWS  key identifier (ARN) used to encrypt Amazon EMR Studio workspace and notebook files when backed up to Amazon S3.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studio.html#cfn-emr-studio-encryptionkeyarn
         '''
         result = self._values.get("encryption_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def idc_instance_arn(self) -> typing.Optional[builtins.str]:
@@ -11216,7 +11256,9 @@ class CfnStudioProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def user_role(self) -> typing.Optional[builtins.str]:
+    def user_role(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the IAM user role that will be assumed by users and groups logged in to a Studio.
 
         The permissions attached to this IAM role can be scoped down for each user or group using session policies. You only need to specify ``UserRole`` when you set ``AuthMode`` to ``SSO`` .
@@ -11224,7 +11266,7 @@ class CfnStudioProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studio.html#cfn-emr-studio-userrole
         '''
         result = self._values.get("user_role")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11271,8 +11313,8 @@ class CfnStudioSessionMapping(
         *,
         identity_name: builtins.str,
         identity_type: builtins.str,
-        session_policy_arn: builtins.str,
-        studio_id: builtins.str,
+        session_policy_arn: typing.Union[builtins.str, _IManagedPolicyRef_a7a65687],
+        studio_id: typing.Union[builtins.str, _IStudioRef_7dcfa17b],
     ) -> None:
         '''Create a new ``AWS::EMR::StudioSessionMapping``.
 
@@ -11406,8 +11448,8 @@ class CfnStudioSessionMappingProps:
         *,
         identity_name: builtins.str,
         identity_type: builtins.str,
-        session_policy_arn: builtins.str,
-        studio_id: builtins.str,
+        session_policy_arn: typing.Union[builtins.str, _IManagedPolicyRef_a7a65687],
+        studio_id: typing.Union[builtins.str, _IStudioRef_7dcfa17b],
     ) -> None:
         '''Properties for defining a ``CfnStudioSessionMapping``.
 
@@ -11468,7 +11510,9 @@ class CfnStudioSessionMappingProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def session_policy_arn(self) -> builtins.str:
+    def session_policy_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IManagedPolicyRef_a7a65687]:
         '''The Amazon Resource Name (ARN) for the session policy that will be applied to the user or group.
 
         Session policies refine Studio user permissions without the need to use multiple IAM user roles. For more information, see `Create an EMR Studio user role with session policies <https://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-studio-user-role.html>`_ in the *Amazon EMR Management Guide* .
@@ -11477,17 +11521,17 @@ class CfnStudioSessionMappingProps:
         '''
         result = self._values.get("session_policy_arn")
         assert result is not None, "Required property 'session_policy_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IManagedPolicyRef_a7a65687], result)
 
     @builtins.property
-    def studio_id(self) -> builtins.str:
+    def studio_id(self) -> typing.Union[builtins.str, _IStudioRef_7dcfa17b]:
         '''The ID of the Amazon EMR Studio to which the user or group will be mapped.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-emr-studiosessionmapping.html#cfn-emr-studiosessionmapping-studioid
         '''
         result = self._values.get("studio_id")
         assert result is not None, "Required property 'studio_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IStudioRef_7dcfa17b], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11751,6 +11795,12 @@ def _typecheckingstub__078ec582504b982aedaecb6e8181c3cf53ae51c1b43cd59a31f8379e1
     steps: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.StepConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     visible_to_all_users: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ab2709723877d7011eafccda10941b963db87bb16d93e9b593904ed03178f54a(
+    resource: _IClusterRef_bdda5e5c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12854,22 +12904,28 @@ def _typecheckingstub__9e5fa63dd56ed829e4898f84009809f50f4125ac18a4dd04d19284202
     id: builtins.str,
     *,
     auth_mode: builtins.str,
-    default_s3_location: builtins.str,
-    engine_security_group_id: builtins.str,
+    default_s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+    engine_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
     name: builtins.str,
-    service_role: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
-    workspace_security_group_id: builtins.str,
+    service_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+    workspace_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
     description: typing.Optional[builtins.str] = None,
-    encryption_key_arn: typing.Optional[builtins.str] = None,
+    encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     idc_instance_arn: typing.Optional[builtins.str] = None,
     idc_user_assignment: typing.Optional[builtins.str] = None,
     idp_auth_url: typing.Optional[builtins.str] = None,
     idp_relay_state_parameter_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trusted_identity_propagation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    user_role: typing.Optional[builtins.str] = None,
+    user_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ba1f95282f86f0bfc8656dfc6fc176c08b9b3190538cb0cae082156213a5bbdb(
+    resource: _IStudioRef_7dcfa17b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13007,22 +13063,22 @@ def _typecheckingstub__4497b6d90d344f7cce9a12d862f813109f2ee695a175caef4ea9fba74
 def _typecheckingstub__e54f46221565a48807a50ddbb87f328aa43352455931a5089f5484c2263b30f4(
     *,
     auth_mode: builtins.str,
-    default_s3_location: builtins.str,
-    engine_security_group_id: builtins.str,
+    default_s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
+    engine_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
     name: builtins.str,
-    service_role: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
-    vpc_id: builtins.str,
-    workspace_security_group_id: builtins.str,
+    service_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
+    vpc_id: typing.Union[builtins.str, _IVPCRef_f02a11df],
+    workspace_security_group_id: typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18],
     description: typing.Optional[builtins.str] = None,
-    encryption_key_arn: typing.Optional[builtins.str] = None,
+    encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     idc_instance_arn: typing.Optional[builtins.str] = None,
     idc_user_assignment: typing.Optional[builtins.str] = None,
     idp_auth_url: typing.Optional[builtins.str] = None,
     idp_relay_state_parameter_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     trusted_identity_propagation_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    user_role: typing.Optional[builtins.str] = None,
+    user_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13033,8 +13089,8 @@ def _typecheckingstub__3e47b505b0a4a624d7bbc7e6f0b97d1cb4bc72a6ca97f9fba72f1fd63
     *,
     identity_name: builtins.str,
     identity_type: builtins.str,
-    session_policy_arn: builtins.str,
-    studio_id: builtins.str,
+    session_policy_arn: typing.Union[builtins.str, _IManagedPolicyRef_a7a65687],
+    studio_id: typing.Union[builtins.str, _IStudioRef_7dcfa17b],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13079,8 +13135,8 @@ def _typecheckingstub__a27468aac05a78cc17d6ec5e8f062d7c22a5b3bf56f44d8c6c90edc8a
     *,
     identity_name: builtins.str,
     identity_type: builtins.str,
-    session_policy_arn: builtins.str,
-    studio_id: builtins.str,
+    session_policy_arn: typing.Union[builtins.str, _IManagedPolicyRef_a7a65687],
+    studio_id: typing.Union[builtins.str, _IStudioRef_7dcfa17b],
 ) -> None:
     """Type checking stubs"""
     pass

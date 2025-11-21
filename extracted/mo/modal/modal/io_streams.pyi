@@ -127,7 +127,7 @@ def _stdio_stream_from_command_router(
     """Stream raw bytes from the router client."""
     ...
 
-class _BytesStreamReaderThroughCommandRouter(typing.Generic[T]):
+class _BytesStreamReaderThroughCommandRouter:
     """StreamReader implementation that will read directly from the worker that
     hosts the sandbox.
 
@@ -139,12 +139,12 @@ class _BytesStreamReaderThroughCommandRouter(typing.Generic[T]):
 
     @property
     def file_descriptor(self) -> int: ...
-    async def read(self) -> T: ...
-    def __aiter__(self) -> collections.abc.AsyncIterator[T]: ...
-    async def __anext__(self) -> T: ...
+    async def read(self) -> bytes: ...
+    def __aiter__(self) -> collections.abc.AsyncIterator[bytes]: ...
+    async def __anext__(self) -> bytes: ...
     async def aclose(self): ...
 
-class _TextStreamReaderThroughCommandRouter(typing.Generic[T]):
+class _TextStreamReaderThroughCommandRouter:
     """StreamReader implementation that will read directly from the worker
     that hosts the sandbox.
 
@@ -156,6 +156,29 @@ class _TextStreamReaderThroughCommandRouter(typing.Generic[T]):
 
     @property
     def file_descriptor(self) -> int: ...
+    async def read(self) -> str: ...
+    def __aiter__(self) -> collections.abc.AsyncIterator[str]: ...
+    async def __anext__(self) -> str: ...
+    async def aclose(self): ...
+
+class _StdoutPrintingStreamReaderThroughCommandRouter(typing.Generic[T]):
+    """StreamReader implementation for StreamType.STDOUT when using the task command router.
+
+    This mirrors the behavior from the server-backed implementation: the stream is printed to
+    the local stdout immediately and is not readable via StreamReader methods.
+    """
+
+    _reader: typing.Union[_TextStreamReaderThroughCommandRouter, _BytesStreamReaderThroughCommandRouter]
+
+    def __init__(
+        self, reader: typing.Union[_TextStreamReaderThroughCommandRouter, _BytesStreamReaderThroughCommandRouter]
+    ) -> None:
+        """Initialize self.  See help(type(self)) for accurate signature."""
+        ...
+
+    @property
+    def file_descriptor(self) -> int: ...
+    def _start_printing_task(self) -> None: ...
     async def read(self) -> T: ...
     def __aiter__(self) -> collections.abc.AsyncIterator[T]: ...
     async def __anext__(self) -> T: ...
@@ -189,6 +212,7 @@ class _StreamReader(typing.Generic[T]):
         _DevnullStreamReader,
         _TextStreamReaderThroughCommandRouter,
         _BytesStreamReaderThroughCommandRouter,
+        _StdoutPrintingStreamReaderThroughCommandRouter,
     ]
 
     def __init__(
@@ -357,6 +381,7 @@ class StreamReader(typing.Generic[T]):
         _DevnullStreamReader,
         _TextStreamReaderThroughCommandRouter,
         _BytesStreamReaderThroughCommandRouter,
+        _StdoutPrintingStreamReaderThroughCommandRouter,
     ]
 
     def __init__(

@@ -182,6 +182,20 @@ class CfnAnnotationStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAnnotationStore")
+    @builtins.classmethod
+    def arn_for_annotation_store(
+        cls,
+        resource: _IAnnotationStoreRef_c33c98b4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d081c3f84956f6e383e1daee886fd75ec67836196a107b0828cceab885d95c55)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnnotationStore", [resource]))
+
     @jsii.member(jsii_name="fromAnnotationStoreName")
     @builtins.classmethod
     def from_annotation_store_name(
@@ -955,6 +969,20 @@ class CfnReferenceStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForReferenceStore")
+    @builtins.classmethod
+    def arn_for_reference_store(
+        cls,
+        resource: _IReferenceStoreRef_e44b493e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__183bf8595aa4fa216452da5239ca1639a58401e756cb23717c36ec75daa0a396)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReferenceStore", [resource]))
+
     @jsii.member(jsii_name="fromReferenceStoreArn")
     @builtins.classmethod
     def from_reference_store_arn(
@@ -1393,6 +1421,17 @@ class CfnRunGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForRunGroup")
+    @builtins.classmethod
+    def arn_for_run_group(cls, resource: _IRunGroupRef_937b5363) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db1a82ee01daefb6257f7e73e38ab5b5e98e001181ab9869f5d6dd18e3cc3993)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRunGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1777,6 +1816,20 @@ class CfnSequenceStore(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSequenceStore")
+    @builtins.classmethod
+    def arn_for_sequence_store(
+        cls,
+        resource: _ISequenceStoreRef_d8ce7b6b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9a735aaa47b911b08cfd5af5019bd48d4f4d14bcdffa2fef80322b11f850d47)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSequenceStore", [resource]))
 
     @jsii.member(jsii_name="fromSequenceStoreArn")
     @builtins.classmethod
@@ -2414,6 +2467,20 @@ class CfnVariantStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVariantStore")
+    @builtins.classmethod
+    def arn_for_variant_store(
+        cls,
+        resource: _IVariantStoreRef_49e3cae7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b7a9767f78947b0511605022e00727fbf04af579b424576a2d6c01b31b28ba8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVariantStore", [resource]))
+
     @jsii.member(jsii_name="fromVariantStoreName")
     @builtins.classmethod
     def from_variant_store_name(
@@ -3034,6 +3101,17 @@ class CfnWorkflow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkflow")
+    @builtins.classmethod
+    def arn_for_workflow(cls, resource: _IWorkflowRef_c34b3fa1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67df20aaeaafc046258133711462983b03f7d276f5db7702f3acf0f303341182)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkflow", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4430,6 +4508,20 @@ class CfnWorkflowVersion(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWorkflowVersion")
+    @builtins.classmethod
+    def arn_for_workflow_version(
+        cls,
+        resource: _IWorkflowVersionRef_8e877e7d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ba9428a8b7901e336eeab6247d137358ee9bc60145cd3f57cd9d69410752a02c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkflowVersion", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5713,6 +5805,12 @@ def _typecheckingstub__ba5dcb906702f10b4a247a16c504ec605912264b052a73f0ae664d93b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d081c3f84956f6e383e1daee886fd75ec67836196a107b0828cceab885d95c55(
+    resource: _IAnnotationStoreRef_c33c98b4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ea8d23b9f77f5d9216bba34b2f07ff06220a6053227128a855b380a90746d1fe(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5831,6 +5929,12 @@ def _typecheckingstub__e38c503967033ff76d3e45880727cc62a1df749cb0aac8298f6d06d14
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__183bf8595aa4fa216452da5239ca1639a58401e756cb23717c36ec75daa0a396(
+    resource: _IReferenceStoreRef_e44b493e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__03eab96b33743423157434263c495ecf4bb597bb49fcadef0690e503e3540689(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5915,6 +6019,12 @@ def _typecheckingstub__5d92bdf2175b79063decd2ff3bbf2745e423b61fa98f3bf6b832b7632
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__db1a82ee01daefb6257f7e73e38ab5b5e98e001181ab9869f5d6dd18e3cc3993(
+    resource: _IRunGroupRef_937b5363,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__34a9f76d09fa73ea3c0c86debaea039d1ecfeb5a751151276cc0002d8d2737c1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5988,6 +6098,12 @@ def _typecheckingstub__a589aadb7c598845d5e4c6ef138fe8cbeb7253209ba9eb0e5e590611e
     s3_access_policy: typing.Any = None,
     sse_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSequenceStore.SseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9a735aaa47b911b08cfd5af5019bd48d4f4d14bcdffa2fef80322b11f850d47(
+    resource: _ISequenceStoreRef_d8ce7b6b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6110,6 +6226,12 @@ def _typecheckingstub__6d38872c12590b13122bc23c110efd40d1aa8369a37e1015fcc0ee252
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9b7a9767f78947b0511605022e00727fbf04af579b424576a2d6c01b31b28ba8(
+    resource: _IVariantStoreRef_49e3cae7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2f419b3d012ad3960d3cb7ca202c16de7716902d7708b8a5f93c80ecc69b0794(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -6208,6 +6330,12 @@ def _typecheckingstub__b2d05cb293836959a925b22dbe1861bc4457d2d510bd3a480ae858ea9
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67df20aaeaafc046258133711462983b03f7d276f5db7702f3acf0f303341182(
+    resource: _IWorkflowRef_c34b3fa1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6431,6 +6559,12 @@ def _typecheckingstub__f9bbd83c3821b6d01e1b0445c2a66c0e7c312d81583ae6cf8dbe78c8d
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     workflow_bucket_owner_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ba9428a8b7901e336eeab6247d137358ee9bc60145cd3f57cd9d69410752a02c(
+    resource: _IWorkflowVersionRef_8e877e7d,
 ) -> None:
     """Type checking stubs"""
     pass

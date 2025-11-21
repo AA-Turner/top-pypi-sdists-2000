@@ -148,6 +148,17 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessPoint")
+    @builtins.classmethod
+    def arn_for_access_point(cls, resource: _IAccessPointRef_1158a8a6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5024754f1020877e5d7bc79bb98cad9071bd2de119278c887463fd8b2e400408)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPoint", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -510,6 +521,17 @@ class CfnBucket(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBucket")
+    @builtins.classmethod
+    def arn_for_bucket(cls, resource: _IBucketRef_62ebb6b0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2dc84a900357dde5bcaa86038e026e2384165d779d2ced9520555ab0054f7d51)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBucket", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1559,6 +1581,17 @@ class CfnEndpoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEndpoint")
+    @builtins.classmethod
+    def arn_for_endpoint(cls, resource: _IEndpointRef_7b579f8b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95bed78dc72ee84baee97501aaa19f3bbb322152990584a2b393bea7b615ca27)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEndpoint", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2040,6 +2073,12 @@ def _typecheckingstub__49ce0f4ffe62c399adc97a97059924fb12bb82ce4aee91b030e12a91c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5024754f1020877e5d7bc79bb98cad9071bd2de119278c887463fd8b2e400408(
+    resource: _IAccessPointRef_1158a8a6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7779eb15d81bd813ec5d30e13c9aedb76154b61675e7d4bc65e58f9db6ddce79(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2101,6 +2140,12 @@ def _typecheckingstub__bf1d42fbcf6bb5a0f5e890280a2441a347ecd7dab8da3eb19e1350f3c
     outpost_id: builtins.str,
     lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2dc84a900357dde5bcaa86038e026e2384165d779d2ced9520555ab0054f7d51(
+    resource: _IBucketRef_62ebb6b0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2254,6 +2299,12 @@ def _typecheckingstub__318ea1d78b8b7ecc9087263403bda92a5fe62c88a967ba59a389878a9
     access_type: typing.Optional[builtins.str] = None,
     customer_owned_ipv4_pool: typing.Optional[builtins.str] = None,
     failed_reason: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.FailedReasonProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__95bed78dc72ee84baee97501aaa19f3bbb322152990584a2b393bea7b615ca27(
+    resource: _IEndpointRef_7b579f8b,
 ) -> None:
     """Type checking stubs"""
     pass

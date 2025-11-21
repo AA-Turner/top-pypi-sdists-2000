@@ -164,6 +164,20 @@ class CfnFHIRDatastore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForFHIRDatastore")
+    @builtins.classmethod
+    def arn_for_fhir_datastore(
+        cls,
+        resource: _IFHIRDatastoreRef_e4faecab,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3f0cb1aa981e44d9252c4ccb23e5e4300e3380368e5dead8a05fb5dd9f413b00)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFHIRDatastore", [resource]))
+
     @jsii.member(jsii_name="fromDatastoreId")
     @builtins.classmethod
     def from_datastore_id(
@@ -968,6 +982,12 @@ def _typecheckingstub__5a84066c5df4c48a34d687987d48edfe8b65e8bda26e4da5f30db9c93
     preload_data_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFHIRDatastore.PreloadDataConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sse_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFHIRDatastore.SseConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f0cb1aa981e44d9252c4ccb23e5e4300e3380368e5dead8a05fb5dd9f413b00(
+    resource: _IFHIRDatastoreRef_e4faecab,
 ) -> None:
     """Type checking stubs"""
     pass

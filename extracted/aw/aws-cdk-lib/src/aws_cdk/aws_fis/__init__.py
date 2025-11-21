@@ -72,6 +72,7 @@ from ..interfaces.aws_fis import (
     ITargetAccountConfigurationRef as _ITargetAccountConfigurationRef_ae0c9823,
     TargetAccountConfigurationReference as _TargetAccountConfigurationReference_684997f0,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.implements(_IInspectable_c2943556, _IExperimentTemplateRef_6e2c390d, _ITaggable_36806126)
@@ -190,7 +191,7 @@ class CfnExperimentTemplate(
         id: builtins.str,
         *,
         description: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateStopConditionProperty", typing.Dict[builtins.str, typing.Any]]]]],
         targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateTargetProperty", typing.Dict[builtins.str, typing.Any]]]]],
         actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnExperimentTemplate.ExperimentTemplateActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1564,7 +1565,7 @@ class CfnExperimentTemplateProps:
         self,
         *,
         description: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateStopConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
         targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateTargetProperty, typing.Dict[builtins.str, typing.Any]]]]],
         actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1716,14 +1717,14 @@ class CfnExperimentTemplateProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fis-experimenttemplate.html#cfn-fis-experimenttemplate-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def stop_conditions(
@@ -2095,7 +2096,7 @@ def _typecheckingstub__18c9c3e4d1ff3bcad4812197927f55bc4b8c438403e1429c7b277b86b
     id: builtins.str,
     *,
     description: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateStopConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateTargetProperty, typing.Dict[builtins.str, typing.Any]]]]],
     actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2286,7 +2287,7 @@ def _typecheckingstub__94e2a85f47a19c24ea52374ddc1307a7e2773efaaed7df0fb35093e38
 def _typecheckingstub__03c2530c6ad2cb6b023e7f311ea85dbbb8733b3040e35cf25da12302d6cee7e1(
     *,
     description: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stop_conditions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateStopConditionProperty, typing.Dict[builtins.str, typing.Any]]]]],
     targets: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateTargetProperty, typing.Dict[builtins.str, typing.Any]]]]],
     actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnExperimentTemplate.ExperimentTemplateActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

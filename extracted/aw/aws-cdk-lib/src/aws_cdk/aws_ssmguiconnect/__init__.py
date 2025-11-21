@@ -221,7 +221,7 @@ class CfnPreferences(
 
             This includes details such as which S3 bucket recordings are stored in.
 
-            :param kms_key_arn: The ARN of a AWS KMS key that is used to encrypt data while it is being processed by the service. This key must exist in the same AWS Region as the node you start an RDP connection to.
+            :param kms_key_arn: The ARN of a AWS key that is used to encrypt data while it is being processed by the service. This key must exist in the same AWS Region as the node you start an RDP connection to.
             :param recording_destinations: Determines where recordings of RDP connections are stored.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmguiconnect-preferences-connectionrecordingpreferences.html
@@ -254,7 +254,7 @@ class CfnPreferences(
 
         @builtins.property
         def kms_key_arn(self) -> builtins.str:
-            '''The ARN of a AWS KMS key that is used to encrypt data while it is being processed by the service.
+            '''The ARN of a AWS  key that is used to encrypt data while it is being processed by the service.
 
             This key must exist in the same AWS Region as the node you start an RDP connection to.
 

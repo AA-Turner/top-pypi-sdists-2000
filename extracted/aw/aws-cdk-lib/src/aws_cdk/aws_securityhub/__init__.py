@@ -159,6 +159,20 @@ class CfnAggregatorV2(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAggregatorV2")
+    @builtins.classmethod
+    def arn_for_aggregator_v2(
+        cls,
+        resource: _IAggregatorV2Ref_af56713f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e30b2a8d7dc08f62e43f5e732a4013867d7680a04dcd38b523cd5007e6d7bea3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAggregatorV2", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5367,6 +5381,20 @@ class CfnConfigurationPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConfigurationPolicy")
+    @builtins.classmethod
+    def arn_for_configuration_policy(
+        cls,
+        resource: _IConfigurationPolicyRef_c5d7ee65,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__923287bc977720747daa4900f68dcdbfb16fc0ef4c69bd36b4b538b2a4c74f81)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfigurationPolicy", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6582,7 +6610,7 @@ class CfnFindingAggregator(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param region_linking_mode: Indicates whether to aggregate findings from all of the available Regions in the current partition. Also determines whether to automatically aggregate findings from new Regions as Security Hub supports them and you opt into them. The selected option also determines how to use the Regions provided in the Regions list. In AWS CloudFormation , the options for this property are as follows: - ``ALL_REGIONS`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``ALL_REGIONS_EXCEPT_SPECIFIED`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled, except for the Regions listed in the ``Regions`` parameter. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``SPECIFIED_REGIONS`` - Indicates to aggregate findings only from the Regions listed in the ``Regions`` parameter. Security Hub does not automatically aggregate findings from new Regions.
+        :param region_linking_mode: Indicates whether to aggregate findings from all of the available Regions in the current partition. Also determines whether to automatically aggregate findings from new Regions as Security Hub supports them and you opt into them. The selected option also determines how to use the Regions provided in the Regions list. In CloudFormation , the options for this property are as follows: - ``ALL_REGIONS`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``ALL_REGIONS_EXCEPT_SPECIFIED`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled, except for the Regions listed in the ``Regions`` parameter. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``SPECIFIED_REGIONS`` - Indicates to aggregate findings only from the Regions listed in the ``Regions`` parameter. Security Hub does not automatically aggregate findings from new Regions.
         :param regions: If ``RegionLinkingMode`` is ``ALL_REGIONS_EXCEPT_SPECIFIED`` , then this is a space-separated list of Regions that do not aggregate findings to the aggregation Region. If ``RegionLinkingMode`` is ``SPECIFIED_REGIONS`` , then this is a space-separated list of Regions that do aggregate findings to the aggregation Region.
         '''
         if __debug__:
@@ -6594,6 +6622,20 @@ class CfnFindingAggregator(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFindingAggregator")
+    @builtins.classmethod
+    def arn_for_finding_aggregator(
+        cls,
+        resource: _IFindingAggregatorRef_bdf7f80f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1689acc52198b67269335d0044a22dcedcbc5588c036f8bc790f63130a4a751)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFindingAggregator", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6699,7 +6741,7 @@ class CfnFindingAggregatorProps:
     ) -> None:
         '''Properties for defining a ``CfnFindingAggregator``.
 
-        :param region_linking_mode: Indicates whether to aggregate findings from all of the available Regions in the current partition. Also determines whether to automatically aggregate findings from new Regions as Security Hub supports them and you opt into them. The selected option also determines how to use the Regions provided in the Regions list. In AWS CloudFormation , the options for this property are as follows: - ``ALL_REGIONS`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``ALL_REGIONS_EXCEPT_SPECIFIED`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled, except for the Regions listed in the ``Regions`` parameter. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``SPECIFIED_REGIONS`` - Indicates to aggregate findings only from the Regions listed in the ``Regions`` parameter. Security Hub does not automatically aggregate findings from new Regions.
+        :param region_linking_mode: Indicates whether to aggregate findings from all of the available Regions in the current partition. Also determines whether to automatically aggregate findings from new Regions as Security Hub supports them and you opt into them. The selected option also determines how to use the Regions provided in the Regions list. In CloudFormation , the options for this property are as follows: - ``ALL_REGIONS`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``ALL_REGIONS_EXCEPT_SPECIFIED`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled, except for the Regions listed in the ``Regions`` parameter. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them. - ``SPECIFIED_REGIONS`` - Indicates to aggregate findings only from the Regions listed in the ``Regions`` parameter. Security Hub does not automatically aggregate findings from new Regions.
         :param regions: If ``RegionLinkingMode`` is ``ALL_REGIONS_EXCEPT_SPECIFIED`` , then this is a space-separated list of Regions that do not aggregate findings to the aggregation Region. If ``RegionLinkingMode`` is ``SPECIFIED_REGIONS`` , then this is a space-separated list of Regions that do aggregate findings to the aggregation Region.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-findingaggregator.html
@@ -6736,7 +6778,7 @@ class CfnFindingAggregatorProps:
 
         The selected option also determines how to use the Regions provided in the Regions list.
 
-        In AWS CloudFormation , the options for this property are as follows:
+        In CloudFormation , the options for this property are as follows:
 
         - ``ALL_REGIONS`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them.
         - ``ALL_REGIONS_EXCEPT_SPECIFIED`` - Indicates to aggregate findings from all of the Regions where Security Hub is enabled, except for the Regions listed in the ``Regions`` parameter. When you choose this option, Security Hub also automatically aggregates findings from new Regions as Security Hub supports them and you opt into them.
@@ -6785,7 +6827,7 @@ class CfnHub(
 
     When you use this resource to enable Security Hub , new controls are automatically enabled for your enabled standards. To disable automatic enablement of new controls, set the ``AutoEnableControls`` property to ``false`` .
 
-    You must create an ``AWS::SecurityHub::Hub`` resource for an account before you can create other types of Security Hub resources for the account through AWS CloudFormation . Use a `DependsOn attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ , such as ``"DependsOn": "Hub"`` , to ensure that you've created an ``AWS::SecurityHub::Hub`` resource before creating other Security Hub resources for an account.
+    You must create an ``AWS::SecurityHub::Hub`` resource for an account before you can create other types of Security Hub resources for the account through CloudFormation . Use a `DependsOn attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ , such as ``"DependsOn": "Hub"`` , to ensure that you've created an ``AWS::SecurityHub::Hub`` resource before creating other Security Hub resources for an account.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-hub.html
     :cloudformationResource: AWS::SecurityHub::Hub
@@ -7142,6 +7184,17 @@ class CfnHubV2(
         props = CfnHubV2Props(tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForHubV2")
+    @builtins.classmethod
+    def arn_for_hub_v2(cls, resource: _IHubV2Ref_e1cb746c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e2c4bc4ccce61b977e28f157247a65b3b9cd766f9c8e193ebd12704e32f4b9b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHubV2", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7805,6 +7858,17 @@ class CfnInsight(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInsight")
+    @builtins.classmethod
+    def arn_for_insight(cls, resource: _IInsightRef_f81a9d16) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__62de97fc70d1be7f469aa7c259156a4a540e85dc3d9563b9ea203021edd34a8f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInsight", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12067,6 +12131,20 @@ class CfnProductSubscription(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProductSubscription")
+    @builtins.classmethod
+    def arn_for_product_subscription(
+        cls,
+        resource: _IProductSubscriptionRef_9d6dd87b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__604706086b841a30f70504af3320c8ee4d765ac56b89034720409395182f5a16)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProductSubscription", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13112,6 +13190,12 @@ def _typecheckingstub__a48a2a082be753c7ff9a23ae8720fc6090537bc7754b3949c569c91cc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e30b2a8d7dc08f62e43f5e732a4013867d7680a04dcd38b523cd5007e6d7bea3(
+    resource: _IAggregatorV2Ref_af56713f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__faa540694e43a0e61feeb3f53848b1f6e9494b6ed7da21b25aac134881132c39(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13616,6 +13700,12 @@ def _typecheckingstub__e2cee5cf3fe5ba0b354ff30ea357f97d4a69893bed692305ae2919f00
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__923287bc977720747daa4900f68dcdbfb16fc0ef4c69bd36b4b538b2a4c74f81(
+    resource: _IConfigurationPolicyRef_c5d7ee65,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7db746216d4af7625aa0207d7a7c29b228b046ca193581d4486931471769f9e7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13761,6 +13851,12 @@ def _typecheckingstub__def955d28b5fec6358172b72efd12a764fe7f7be8d0ea9076bc99608e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f1689acc52198b67269335d0044a22dcedcbc5588c036f8bc790f63130a4a751(
+    resource: _IFindingAggregatorRef_bdf7f80f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a7329a558d2c83a1557a17b5d0d96aa45bb0f3f54c5f2f90a5cb6c75ff90bf2b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13860,6 +13956,12 @@ def _typecheckingstub__8a938d6f02e5cc9357e7ae741d101719d29a8539be57e63f7148a9441
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3e2c4bc4ccce61b977e28f157247a65b3b9cd766f9c8e193ebd12704e32f4b9b(
+    resource: _IHubV2Ref_e1cb746c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e1dac3a23d94b8e2be0be6ae5d6d56142199c92d98f138b490e9a4036d9897ed(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -13892,6 +13994,12 @@ def _typecheckingstub__d671d628902c96b28f2d378ea3f0a99fe19e13873725f86dd92bbe36b
     filters: typing.Union[_IResolvable_da3f097b, typing.Union[CfnInsight.AwsSecurityFindingFiltersProperty, typing.Dict[builtins.str, typing.Any]]],
     group_by_attribute: builtins.str,
     name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__62de97fc70d1be7f469aa7c259156a4a540e85dc3d9563b9ea203021edd34a8f(
+    resource: _IInsightRef_f81a9d16,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14214,6 +14322,12 @@ def _typecheckingstub__45ff00dc1d7d1ca799678f5a142f5b951b1d37a1f101efd45167c0d18
     id: builtins.str,
     *,
     product_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__604706086b841a30f70504af3320c8ee4d765ac56b89034720409395182f5a16(
+    resource: _IProductSubscriptionRef_9d6dd87b,
 ) -> None:
     """Type checking stubs"""
     pass

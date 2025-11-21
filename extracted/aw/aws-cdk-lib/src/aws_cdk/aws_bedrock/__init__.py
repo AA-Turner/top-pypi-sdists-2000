@@ -289,7 +289,7 @@ class CfnAgent(
         :param agent_collaborators: List of Agent Collaborators.
         :param agent_resource_role_arn: The Amazon Resource Name (ARN) of the IAM role with permissions to invoke API operations on the agent.
         :param auto_prepare: Specifies whether to automatically update the ``DRAFT`` version of the agent after making changes to the agent. The ``DRAFT`` version can be continually iterated upon during internal development. By default, this value is ``false`` . Default: - false
-        :param customer_encryption_key_arn: The Amazon Resource Name (ARN) of the AWS KMS key that encrypts the agent.
+        :param customer_encryption_key_arn: The Amazon Resource Name (ARN) of the AWS key that encrypts the agent.
         :param custom_orchestration: Contains custom orchestration configurations for the agent.
         :param description: The description of the agent.
         :param foundation_model: The foundation model used for orchestration by the agent.
@@ -332,6 +332,17 @@ class CfnAgent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAgent")
+    @builtins.classmethod
+    def arn_for_agent(cls, resource: _IAgentRef_2a2c2847) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a2f189a2893f4fbfcd2a5939b53e5696e30138832121b600f92d67de34c954d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgent", [resource]))
 
     @jsii.member(jsii_name="fromAgentArn")
     @builtins.classmethod
@@ -607,7 +618,7 @@ class CfnAgent(
     @builtins.property
     @jsii.member(jsii_name="customerEncryptionKeyArn")
     def customer_encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key that encrypts the agent.'''
+        '''The Amazon Resource Name (ARN) of the AWS  key that encrypts the agent.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "customerEncryptionKeyArn"))
 
     @customer_encryption_key_arn.setter
@@ -2657,6 +2668,17 @@ class CfnAgentAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAgentAlias")
+    @builtins.classmethod
+    def arn_for_agent_alias(cls, resource: _IAgentAliasRef_f109a3c8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f5a7a57c18d857b135c37e748d534520c65305ca9394fc4a0cc16a8064acd56)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgentAlias", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3182,7 +3204,7 @@ class CfnAgentProps:
         :param agent_collaborators: List of Agent Collaborators.
         :param agent_resource_role_arn: The Amazon Resource Name (ARN) of the IAM role with permissions to invoke API operations on the agent.
         :param auto_prepare: Specifies whether to automatically update the ``DRAFT`` version of the agent after making changes to the agent. The ``DRAFT`` version can be continually iterated upon during internal development. By default, this value is ``false`` . Default: - false
-        :param customer_encryption_key_arn: The Amazon Resource Name (ARN) of the AWS KMS key that encrypts the agent.
+        :param customer_encryption_key_arn: The Amazon Resource Name (ARN) of the AWS key that encrypts the agent.
         :param custom_orchestration: Contains custom orchestration configurations for the agent.
         :param description: The description of the agent.
         :param foundation_model: The foundation model used for orchestration by the agent.
@@ -3453,7 +3475,7 @@ class CfnAgentProps:
 
     @builtins.property
     def customer_encryption_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key that encrypts the agent.
+        '''The Amazon Resource Name (ARN) of the AWS  key that encrypts the agent.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-agent.html#cfn-bedrock-agent-customerencryptionkeyarn
         '''
@@ -5428,7 +5450,7 @@ class CfnBlueprint(
         :param schema: The blueprint's schema.
         :param type: The blueprint's type.
         :param kms_encryption_context: Name-value pairs to include as an encryption context.
-        :param kms_key_id: The AWS KMS key to use for encryption.
+        :param kms_key_id: The AWS key to use for encryption.
         :param tags: List of Tags.
         '''
         if __debug__:
@@ -5445,6 +5467,17 @@ class CfnBlueprint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBlueprint")
+    @builtins.classmethod
+    def arn_for_blueprint(cls, resource: _IBlueprintRef_062266d7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f73e8f1dd4b9da26354215676bca854b4b93e671405b82a83d42c2642e17c24)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBlueprint", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5589,7 +5622,7 @@ class CfnBlueprint(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key to use for encryption.'''
+        '''The AWS  key to use for encryption.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -5642,7 +5675,7 @@ class CfnBlueprintProps:
         :param schema: The blueprint's schema.
         :param type: The blueprint's type.
         :param kms_encryption_context: Name-value pairs to include as an encryption context.
-        :param kms_key_id: The AWS KMS key to use for encryption.
+        :param kms_key_id: The AWS key to use for encryption.
         :param tags: List of Tags.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-blueprint.html
@@ -5735,7 +5768,7 @@ class CfnBlueprintProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key to use for encryption.
+        '''The AWS  key to use for encryption.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-blueprint.html#cfn-bedrock-blueprint-kmskeyid
         '''
@@ -5800,6 +5833,11 @@ class CfnDataAutomationProject(
             kms_key_id="kmsKeyId",
             override_configuration=bedrock.CfnDataAutomationProject.OverrideConfigurationProperty(
                 audio=bedrock.CfnDataAutomationProject.AudioOverrideConfigurationProperty(
+                    language_configuration=bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty(
+                        generative_output_language="generativeOutputLanguage",
+                        identify_multiple_languages=False,
+                        input_languages=["inputLanguages"]
+                    ),
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
                     )
@@ -5944,8 +5982,8 @@ class CfnDataAutomationProject(
         :param id: Construct identifier for this resource (unique in its scope).
         :param project_name: The project's name.
         :param custom_output_configuration: Blueprints to apply to objects processed by the project.
-        :param kms_encryption_context: The AWS KMS encryption context to use for encryption.
-        :param kms_key_id: The AWS KMS key to use for encryption.
+        :param kms_encryption_context: The AWS encryption context to use for encryption.
+        :param kms_key_id: The AWS key to use for encryption.
         :param override_configuration: Additional settings for the project.
         :param project_description: The project's description.
         :param standard_output_configuration: The project's standard output configuration.
@@ -6096,7 +6134,7 @@ class CfnDataAutomationProject(
     def kms_encryption_context(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''The AWS KMS encryption context to use for encryption.'''
+        '''The AWS  encryption context to use for encryption.'''
         return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "kmsEncryptionContext"))
 
     @kms_encryption_context.setter
@@ -6112,7 +6150,7 @@ class CfnDataAutomationProject(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key to use for encryption.'''
+        '''The AWS  key to use for encryption.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -6354,18 +6392,110 @@ class CfnDataAutomationProject(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "generative_output_language": "generativeOutputLanguage",
+            "identify_multiple_languages": "identifyMultipleLanguages",
+            "input_languages": "inputLanguages",
+        },
+    )
+    class AudioLanguageConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            generative_output_language: typing.Optional[builtins.str] = None,
+            identify_multiple_languages: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            input_languages: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param generative_output_language: 
+            :param identify_multiple_languages: 
+            :param input_languages: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                audio_language_configuration_property = bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty(
+                    generative_output_language="generativeOutputLanguage",
+                    identify_multiple_languages=False,
+                    input_languages=["inputLanguages"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b893d8d1125cd90938f2aada5e73851350087c1b573e40b73f2877b3e391e85c)
+                check_type(argname="argument generative_output_language", value=generative_output_language, expected_type=type_hints["generative_output_language"])
+                check_type(argname="argument identify_multiple_languages", value=identify_multiple_languages, expected_type=type_hints["identify_multiple_languages"])
+                check_type(argname="argument input_languages", value=input_languages, expected_type=type_hints["input_languages"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if generative_output_language is not None:
+                self._values["generative_output_language"] = generative_output_language
+            if identify_multiple_languages is not None:
+                self._values["identify_multiple_languages"] = identify_multiple_languages
+            if input_languages is not None:
+                self._values["input_languages"] = input_languages
+
+        @builtins.property
+        def generative_output_language(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-generativeoutputlanguage
+            '''
+            result = self._values.get("generative_output_language")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def identify_multiple_languages(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-identifymultiplelanguages
+            '''
+            result = self._values.get("identify_multiple_languages")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def input_languages(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-inputlanguages
+            '''
+            result = self._values.get("input_languages")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AudioLanguageConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.AudioOverrideConfigurationProperty",
         jsii_struct_bases=[],
-        name_mapping={"modality_processing": "modalityProcessing"},
+        name_mapping={
+            "language_configuration": "languageConfiguration",
+            "modality_processing": "modalityProcessing",
+        },
     )
     class AudioOverrideConfigurationProperty:
         def __init__(
             self,
             *,
+            language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.AudioLanguageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ModalityProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Sets whether your project will process audio or not.
 
+            :param language_configuration: 
             :param modality_processing: Sets modality processing for audio files. All modalities are enabled by default.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiooverrideconfiguration.html
@@ -6378,6 +6508,11 @@ class CfnDataAutomationProject(
                 from aws_cdk import aws_bedrock as bedrock
                 
                 audio_override_configuration_property = bedrock.CfnDataAutomationProject.AudioOverrideConfigurationProperty(
+                    language_configuration=bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty(
+                        generative_output_language="generativeOutputLanguage",
+                        identify_multiple_languages=False,
+                        input_languages=["inputLanguages"]
+                    ),
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
                     )
@@ -6385,10 +6520,23 @@ class CfnDataAutomationProject(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__9fa0ddf34ba99d172292ec01a5b59e05e41939ae214f174146b2d694461955ce)
+                check_type(argname="argument language_configuration", value=language_configuration, expected_type=type_hints["language_configuration"])
                 check_type(argname="argument modality_processing", value=modality_processing, expected_type=type_hints["modality_processing"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if language_configuration is not None:
+                self._values["language_configuration"] = language_configuration
             if modality_processing is not None:
                 self._values["modality_processing"] = modality_processing
+
+        @builtins.property
+        def language_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioLanguageConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiooverrideconfiguration.html#cfn-bedrock-dataautomationproject-audiooverrideconfiguration-languageconfiguration
+            '''
+            result = self._values.get("language_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioLanguageConfigurationProperty"]], result)
 
         @builtins.property
         def modality_processing(
@@ -8117,6 +8265,11 @@ class CfnDataAutomationProject(
                 
                 override_configuration_property = bedrock.CfnDataAutomationProject.OverrideConfigurationProperty(
                     audio=bedrock.CfnDataAutomationProject.AudioOverrideConfigurationProperty(
+                        language_configuration=bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty(
+                            generative_output_language="generativeOutputLanguage",
+                            identify_multiple_languages=False,
+                            input_languages=["inputLanguages"]
+                        ),
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
                         )
@@ -9085,8 +9238,8 @@ class CfnDataAutomationProjectProps:
 
         :param project_name: The project's name.
         :param custom_output_configuration: Blueprints to apply to objects processed by the project.
-        :param kms_encryption_context: The AWS KMS encryption context to use for encryption.
-        :param kms_key_id: The AWS KMS key to use for encryption.
+        :param kms_encryption_context: The AWS encryption context to use for encryption.
+        :param kms_key_id: The AWS key to use for encryption.
         :param override_configuration: Additional settings for the project.
         :param project_description: The project's description.
         :param standard_output_configuration: The project's standard output configuration.
@@ -9120,6 +9273,11 @@ class CfnDataAutomationProjectProps:
                 kms_key_id="kmsKeyId",
                 override_configuration=bedrock.CfnDataAutomationProject.OverrideConfigurationProperty(
                     audio=bedrock.CfnDataAutomationProject.AudioOverrideConfigurationProperty(
+                        language_configuration=bedrock.CfnDataAutomationProject.AudioLanguageConfigurationProperty(
+                            generative_output_language="generativeOutputLanguage",
+                            identify_multiple_languages=False,
+                            input_languages=["inputLanguages"]
+                        ),
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
                         )
@@ -9296,7 +9454,7 @@ class CfnDataAutomationProjectProps:
     def kms_encryption_context(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''The AWS KMS encryption context to use for encryption.
+        '''The AWS  encryption context to use for encryption.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-dataautomationproject.html#cfn-bedrock-dataautomationproject-kmsencryptioncontext
         '''
@@ -9305,7 +9463,7 @@ class CfnDataAutomationProjectProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key to use for encryption.
+        '''The AWS  key to use for encryption.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-dataautomationproject.html#cfn-bedrock-dataautomationproject-kmskeyid
         '''
@@ -12256,7 +12414,7 @@ class CfnDataSource(
         ) -> None:
             '''Contains the configuration for server-side encryption.
 
-            :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS KMS key used to encrypt the resource.
+            :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS key used to encrypt the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-datasource-serversideencryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -12280,7 +12438,7 @@ class CfnDataSource(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) of the AWS KMS key used to encrypt the resource.
+            '''The Amazon Resource Name (ARN) of the AWS  key used to encrypt the resource.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-datasource-serversideencryptionconfiguration.html#cfn-bedrock-datasource-serversideencryptionconfiguration-kmskeyarn
             '''
@@ -14095,6 +14253,17 @@ class CfnFlow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFlow")
+    @builtins.classmethod
+    def arn_for_flow(cls, resource: _IFlowRef_4a25536f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ff66779d2dfd122efe176e747b536fcdfd4689f07da4d53effbe341316c4bf6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFlow", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -19214,6 +19383,17 @@ class CfnFlowAlias(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFlowAlias")
+    @builtins.classmethod
+    def arn_for_flow_alias(cls, resource: _IFlowAliasRef_5cc02e64) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ec64c06e97c95892db95f8ef7cf10b0302051a934d51862b483e4f0f3b2b365f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFlowAlias", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -25061,7 +25241,7 @@ class CfnGuardrail(
         :param contextual_grounding_policy_config: Contextual grounding policy config for a guardrail.
         :param cross_region_config: The system-defined guardrail profile that you're using with your guardrail. Guardrail profiles define the destination AWS Regions where guardrail inference requests can be automatically routed. Using guardrail profiles helps maintain guardrail performance and reliability when demand increases. For more information, see the `Amazon Bedrock User Guide <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region.html>`_ .
         :param description: A description of the guardrail.
-        :param kms_key_arn: The ARN of the AWS KMS key that you use to encrypt the guardrail.
+        :param kms_key_arn: The ARN of the AWS key that you use to encrypt the guardrail.
         :param sensitive_information_policy_config: The sensitive information policy to configure for the guardrail.
         :param tags: The tags that you want to attach to the guardrail.
         :param topic_policy_config: The topic policies to configure for the guardrail.
@@ -25088,6 +25268,17 @@ class CfnGuardrail(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGuardrail")
+    @builtins.classmethod
+    def arn_for_guardrail(cls, resource: _IGuardrailRef_04d23b5d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60af45ef6b3242fa76096bbc9eb133091becf67fc95dde166bea1f7266c76854)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGuardrail", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -25341,7 +25532,7 @@ class CfnGuardrail(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS KMS key that you use to encrypt the guardrail.'''
+        '''The ARN of the AWS  key that you use to encrypt the guardrail.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -27437,7 +27628,7 @@ class CfnGuardrailProps:
         :param contextual_grounding_policy_config: Contextual grounding policy config for a guardrail.
         :param cross_region_config: The system-defined guardrail profile that you're using with your guardrail. Guardrail profiles define the destination AWS Regions where guardrail inference requests can be automatically routed. Using guardrail profiles helps maintain guardrail performance and reliability when demand increases. For more information, see the `Amazon Bedrock User Guide <https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-cross-region.html>`_ .
         :param description: A description of the guardrail.
-        :param kms_key_arn: The ARN of the AWS KMS key that you use to encrypt the guardrail.
+        :param kms_key_arn: The ARN of the AWS key that you use to encrypt the guardrail.
         :param sensitive_information_policy_config: The sensitive information policy to configure for the guardrail.
         :param tags: The tags that you want to attach to the guardrail.
         :param topic_policy_config: The topic policies to configure for the guardrail.
@@ -27595,7 +27786,7 @@ class CfnGuardrailProps:
 
     @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The ARN of the AWS KMS key that you use to encrypt the guardrail.
+        '''The ARN of the AWS  key that you use to encrypt the guardrail.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-guardrail.html#cfn-bedrock-guardrail-kmskeyarn
         '''
@@ -28431,7 +28622,7 @@ class CfnKnowledgeBase(
 
     .. epigraph::
 
-       Redis Enterprise Cloud vector stores are currently unsupported in AWS CloudFormation .
+       Redis Enterprise Cloud vector stores are currently unsupported in CloudFormation .
 
     For more information about using knowledge bases in Amazon Bedrock , see `Knowledge base for Amazon Bedrock <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html>`_ .
 
@@ -28663,6 +28854,20 @@ class CfnKnowledgeBase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForKnowledgeBase")
+    @builtins.classmethod
+    def arn_for_knowledge_base(
+        cls,
+        resource: _IKnowledgeBaseRef_39cf0b05,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f73c2788796226a2f0ca28b60c8d149faa9d2008f6b068358ac472ed8bb6f88)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForKnowledgeBase", [resource]))
 
     @jsii.member(jsii_name="fromKnowledgeBaseArn")
     @builtins.classmethod
@@ -33000,6 +33205,17 @@ class CfnPrompt(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPrompt")
+    @builtins.classmethod
+    def arn_for_prompt(cls, resource: _IPromptRef_d944f83a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7831cb1ffc0e6dbdadfd10ad5ba0ed3e4ca529ee3b5843268fcd1c5faade814)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPrompt", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -35456,6 +35672,20 @@ class CfnPromptVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPromptVersion")
+    @builtins.classmethod
+    def arn_for_prompt_version(
+        cls,
+        resource: _IPromptVersionRef_1640675e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2faef03a034ec476723dd4f396012ea2e87ed21349103336025f780d29c2c57)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPromptVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -38848,6 +39078,12 @@ def _typecheckingstub__facaad57ffe16da42f099d2b7997f3e6fd3b9eba46fd226d8fb5afe28
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a2f189a2893f4fbfcd2a5939b53e5696e30138832121b600f92d67de34c954d9(
+    resource: _IAgentRef_2a2c2847,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a50c386b00c38807392130c7c2e5f13011cfa631c2e224873413c4088fe704e9(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -39166,6 +39402,12 @@ def _typecheckingstub__9a8230a990c5fac91dc09e3de4211aa6f82fce95537f199a7987ca92f
     description: typing.Optional[builtins.str] = None,
     routing_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAgentAlias.AgentAliasRoutingConfigurationListItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4f5a7a57c18d857b135c37e748d534520c65305ca9394fc4a0cc16a8064acd56(
+    resource: _IAgentAliasRef_f109a3c8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -39520,6 +39762,12 @@ def _typecheckingstub__f30fc18d24fb84f6af985d23602089a0bfe10014de2e42af131b5519f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1f73e8f1dd4b9da26354215676bca854b4b93e671405b82a83d42c2642e17c24(
+    resource: _IBlueprintRef_062266d7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cf5677a55c9a6605bcaccfa49e6f04c371f839de14216f93f87064deb0c6dc78(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -39672,8 +39920,18 @@ def _typecheckingstub__8259388fe308ef50a8381c8a690422dc9a617fc5ee0ec19395a6049b9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b893d8d1125cd90938f2aada5e73851350087c1b573e40b73f2877b3e391e85c(
+    *,
+    generative_output_language: typing.Optional[builtins.str] = None,
+    identify_multiple_languages: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    input_languages: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9fa0ddf34ba99d172292ec01a5b59e05e41939ae214f174146b2d694461955ce(
     *,
+    language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.AudioLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ModalityProcessingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -40387,6 +40645,12 @@ def _typecheckingstub__de6f163cc9336f6925ec17d7466e0c9a53cd276d201d3e7dcf092e2b1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5ff66779d2dfd122efe176e747b536fcdfd4689f07da4d53effbe341316c4bf6(
+    resource: _IFlowRef_4a25536f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__afbbfbf59fe4fd85bdd0a9b41f5eeb9b87a60af4b54c39839fc10611790dfef5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -40846,6 +41110,12 @@ def _typecheckingstub__8b7067d1caa5036e605a7c1234a4af2231017746b6c462a8b7014db38
     concurrency_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowAlias.FlowAliasConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ec64c06e97c95892db95f8ef7cf10b0302051a934d51862b483e4f0f3b2b365f(
+    resource: _IFlowAliasRef_5cc02e64,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -41364,6 +41634,12 @@ def _typecheckingstub__2043b4e3280827dde584095cdad9778bf2076242696d52ba5a39dc96c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60af45ef6b3242fa76096bbc9eb133091becf67fc95dde166bea1f7266c76854(
+    resource: _IGuardrailRef_04d23b5d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e92a00856c8ad560cb684783884ef636d036b3706e64c243b469db70f7b1d651(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -41768,6 +42044,12 @@ def _typecheckingstub__6ef81b8dcbedbd76b5a39a6fd5a967ba49aa887b63aad45e2bc246c96
     description: typing.Optional[builtins.str] = None,
     storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.StorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f73c2788796226a2f0ca28b60c8d149faa9d2008f6b068358ac472ed8bb6f88(
+    resource: _IKnowledgeBaseRef_39cf0b05,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -42179,6 +42461,12 @@ def _typecheckingstub__e18e8d261c1253349028836b748c30587b9e8fbccc990fd9e707a1079
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d7831cb1ffc0e6dbdadfd10ad5ba0ed3e4ca529ee3b5843268fcd1c5faade814(
+    resource: _IPromptRef_d944f83a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c04944833d8bd658ac406e3b61f49c60c6392232525145e61f08fab94e36355d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -42422,6 +42710,12 @@ def _typecheckingstub__655fee944eb77092f564ba8ce6cc99b8af558f5e4f24168d280a8d548
     prompt_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2faef03a034ec476723dd4f396012ea2e87ed21349103336025f780d29c2c57(
+    resource: _IPromptVersionRef_1640675e,
 ) -> None:
     """Type checking stubs"""
     pass

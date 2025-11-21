@@ -308,6 +308,20 @@ class CfnLifecyclePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLifecyclePolicy")
+    @builtins.classmethod
+    def arn_for_lifecycle_policy(
+        cls,
+        resource: _ILifecyclePolicyRef_4d3577bf,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__830703e41406e6c71f5b9c1c3b14fc45cadeaae13ef088ba35c359cad091de68)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLifecyclePolicy", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3780,6 +3794,12 @@ def _typecheckingstub__2602533fbe79433bf8a3cb4984e0ec983ab5d121243f4d319dfc6038c
     retain_interval: typing.Optional[jsii.Number] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__830703e41406e6c71f5b9c1c3b14fc45cadeaae13ef088ba35c359cad091de68(
+    resource: _ILifecyclePolicyRef_4d3577bf,
 ) -> None:
     """Type checking stubs"""
     pass

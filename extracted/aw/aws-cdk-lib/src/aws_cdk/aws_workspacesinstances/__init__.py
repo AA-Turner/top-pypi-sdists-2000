@@ -1036,6 +1036,20 @@ class CfnWorkspaceInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWorkspaceInstance")
+    @builtins.classmethod
+    def arn_for_workspace_instance(
+        cls,
+        resource: _IWorkspaceInstanceRef_d89b0013,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a1ea8882e89ffc2261ea6b131c65e629f4af8376628c86f0c3bac10ab09cc324)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkspaceInstance", [resource]))
+
     @jsii.member(jsii_name="fromWorkspaceInstanceId")
     @builtins.classmethod
     def from_workspace_instance_id(
@@ -3686,6 +3700,12 @@ def _typecheckingstub__fe297a4f0279d14c1f9c904fa95a44f828762333773f7e3a7c9943d3b
     *,
     managed_instance: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspaceInstance.ManagedInstanceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a1ea8882e89ffc2261ea6b131c65e629f4af8376628c86f0c3bac10ab09cc324(
+    resource: _IWorkspaceInstanceRef_d89b0013,
 ) -> None:
     """Type checking stubs"""
     pass

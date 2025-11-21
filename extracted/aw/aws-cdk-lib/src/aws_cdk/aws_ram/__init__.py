@@ -142,6 +142,17 @@ class CfnPermission(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPermission")
+    @builtins.classmethod
+    def arn_for_permission(cls, resource: _IPermissionRef_0711eda0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd9650545c65b77576c422e40dcbb81abb763828b97edf304b5a8786a7902334)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPermission", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -484,6 +495,20 @@ class CfnResourceShare(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceShare")
+    @builtins.classmethod
+    def arn_for_resource_share(
+        cls,
+        resource: _IResourceShareRef_43a2a79e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2465c7da6b1c48b2189a3540bb11f2d7763d8b628f6f5095ae15b4b34de4c14e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceShare", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -841,6 +866,12 @@ def _typecheckingstub__4e6fe3eae2e441449bee4fa9cdbdbd3fa3faa77d6312d1d0b6173f4ab
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fd9650545c65b77576c422e40dcbb81abb763828b97edf304b5a8786a7902334(
+    resource: _IPermissionRef_0711eda0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d951b94e05f47918844ee4c94dafebba369732ccc302f7ad923dca32b5000fc7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -898,6 +929,12 @@ def _typecheckingstub__1fea9cca1996f068f8dde2c34bf4c41d370ee8638f9da1d855f8b0022
     resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     sources: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2465c7da6b1c48b2189a3540bb11f2d7763d8b628f6f5095ae15b4b34de4c14e(
+    resource: _IResourceShareRef_43a2a79e,
 ) -> None:
     """Type checking stubs"""
     pass

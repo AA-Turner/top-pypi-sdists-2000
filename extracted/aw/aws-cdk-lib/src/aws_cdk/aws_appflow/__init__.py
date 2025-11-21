@@ -75,6 +75,7 @@ from ..interfaces.aws_appflow import (
     IConnectorRef as _IConnectorRef_e928136a,
     IFlowRef as _IFlowRef_30332276,
 )
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
 @jsii.implements(_IInspectable_c2943556, _IConnectorRef_e928136a)
@@ -142,6 +143,17 @@ class CfnConnector(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConnector")
+    @builtins.classmethod
+    def arn_for_connector(cls, resource: _IConnectorRef_e928136a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fd37f1b55711c84a51d3dcba7c81632cb2e65659facb11c9ec6dc179cc53aea5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnector", [resource]))
 
     @jsii.member(jsii_name="fromConnectorArn")
     @builtins.classmethod
@@ -417,7 +429,7 @@ class CfnConnectorProfile(
     This includes the provided name, credentials ARN, connection-mode, and so on. The fields that are common to all types of connector profiles are explicitly specified under the ``Properties`` field. The rest of the connector-specific properties are specified under ``Properties/ConnectorProfileConfig`` .
     .. epigraph::
 
-       If you want to use AWS CloudFormation to create a connector profile for connectors that implement OAuth (such as Salesforce, Slack, Zendesk, and Google Analytics), you must fetch the access and refresh tokens. You can do this by implementing your own UI for OAuth, or by retrieving the tokens from elsewhere. Alternatively, you can use the Amazon AppFlow console to create the connector profile, and then use that connector profile in the flow creation CloudFormation template.
+       If you want to use CloudFormation to create a connector profile for connectors that implement OAuth (such as Salesforce, Slack, Zendesk, and Google Analytics), you must fetch the access and refresh tokens. You can do this by implementing your own UI for OAuth, or by retrieving the tokens from elsewhere. Alternatively, you can use the Amazon AppFlow console to create the connector profile, and then use that connector profile in the flow creation CloudFormation template.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appflow-connectorprofile.html
     :cloudformationResource: AWS::AppFlow::ConnectorProfile
@@ -732,6 +744,20 @@ class CfnConnectorProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConnectorProfile")
+    @builtins.classmethod
+    def arn_for_connector_profile(
+        cls,
+        resource: _IConnectorProfileRef_b117e5a6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4203bc76f5c36650272ec66f214076acd51b3c7a25adfc8ccd7790b1b01f33a3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnectorProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6247,7 +6273,7 @@ class CfnFlow(
 
     .. epigraph::
 
-       If you want to use AWS CloudFormation to create a connector profile for connectors that implement OAuth (such as Salesforce, Slack, Zendesk, and Google Analytics), you must fetch the access and refresh tokens. You can do this by implementing your own UI for OAuth, or by retrieving the tokens from elsewhere. Alternatively, you can use the Amazon AppFlow console to create the connector profile, and then use that connector profile in the flow creation CloudFormation template.
+       If you want to use CloudFormation to create a connector profile for connectors that implement OAuth (such as Salesforce, Slack, Zendesk, and Google Analytics), you must fetch the access and refresh tokens. You can do this by implementing your own UI for OAuth, or by retrieving the tokens from elsewhere. Alternatively, you can use the Amazon AppFlow console to create the connector profile, and then use that connector profile in the flow creation CloudFormation template.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appflow-flow.html
     :cloudformationResource: AWS::AppFlow::Flow
@@ -6587,7 +6613,7 @@ class CfnFlow(
         trigger_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.TriggerConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         flow_status: typing.Optional[builtins.str] = None,
-        kms_arn: typing.Optional[builtins.str] = None,
+        kms_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         metadata_catalog_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFlow.MetadataCatalogConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -6624,6 +6650,17 @@ class CfnFlow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFlow")
+    @builtins.classmethod
+    def arn_for_flow(cls, resource: _IFlowRef_30332276) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a850f4e419216149cf2ecdf4451a2fad36294d9b0793614c509dd359a9475deb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFlow", [resource]))
 
     @jsii.member(jsii_name="fromFlowArn")
     @builtins.classmethod
@@ -12360,7 +12397,7 @@ class CfnFlowProps:
         trigger_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.TriggerConfigProperty, typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
         flow_status: typing.Optional[builtins.str] = None,
-        kms_arn: typing.Optional[builtins.str] = None,
+        kms_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         metadata_catalog_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.MetadataCatalogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -12815,7 +12852,7 @@ class CfnFlowProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_arn(self) -> typing.Optional[builtins.str]:
+    def kms_arn(self) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ARN (Amazon Resource Name) of the Key Management Service (KMS) key you provide for encryption.
 
         This is required if you do not want to use the Amazon AppFlow-managed KMS key. If you don't provide anything here, Amazon AppFlow uses the Amazon AppFlow-managed KMS key.
@@ -12823,7 +12860,7 @@ class CfnFlowProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appflow-flow.html#cfn-appflow-flow-kmsarn
         '''
         result = self._values.get("kms_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def metadata_catalog_config(
@@ -12878,6 +12915,12 @@ def _typecheckingstub__6bcd4af5099c6e263b309786f40e217a7b9534ca68e65e020a22b5811
     connector_provisioning_type: builtins.str,
     connector_label: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fd37f1b55711c84a51d3dcba7c81632cb2e65659facb11c9ec6dc179cc53aea5(
+    resource: _IConnectorRef_e928136a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12958,6 +13001,12 @@ def _typecheckingstub__6fdda7d6a6b65c327fe887afce3342c78cebf6c60dd8655f2dcd7b828
     connector_label: typing.Optional[builtins.str] = None,
     connector_profile_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorProfile.ConnectorProfileConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4203bc76f5c36650272ec66f214076acd51b3c7a25adfc8ccd7790b1b01f33a3(
+    resource: _IConnectorProfileRef_b117e5a6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -13453,9 +13502,15 @@ def _typecheckingstub__76b6ef95e5f4f4d7b82746abb1435c9e6f43a91ed656c1dd9c1a02064
     trigger_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.TriggerConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
     flow_status: typing.Optional[builtins.str] = None,
-    kms_arn: typing.Optional[builtins.str] = None,
+    kms_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     metadata_catalog_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.MetadataCatalogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a850f4e419216149cf2ecdf4451a2fad36294d9b0793614c509dd359a9475deb(
+    resource: _IFlowRef_30332276,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14023,7 +14078,7 @@ def _typecheckingstub__85045c56f5ed71ad46fec6374ddad0e03a173028630204629542088fb
     trigger_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.TriggerConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
     flow_status: typing.Optional[builtins.str] = None,
-    kms_arn: typing.Optional[builtins.str] = None,
+    kms_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     metadata_catalog_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlow.MetadataCatalogConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

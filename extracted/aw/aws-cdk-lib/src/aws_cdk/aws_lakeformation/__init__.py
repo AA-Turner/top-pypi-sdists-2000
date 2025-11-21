@@ -795,6 +795,7 @@ class CfnDataLakeSettings(
         external_data_filtering_allow_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataLakeSettings.DataLakePrincipalProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mutation_type: typing.Optional[builtins.str] = None,
         parameters: typing.Any = None,
+        read_only_admins: typing.Any = None,
         trusted_resource_owners: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::LakeFormation::DataLakeSettings``.
@@ -810,6 +811,7 @@ class CfnDataLakeSettings(
         :param external_data_filtering_allow_list: A list of the account IDs of AWS accounts with Amazon EMR clusters or third-party engines that are allwed to perform data filtering.
         :param mutation_type: Specifies whether the data lake settings are updated by adding new values to the current settings ( ``APPEND`` ) or by replacing the current settings with new settings ( ``REPLACE`` ). .. epigraph:: If you choose ``REPLACE`` , your current data lake settings will be replaced with the new values in your template.
         :param parameters: A key-value map that provides an additional configuration on your data lake. ``CrossAccountVersion`` is the key you can configure in the ``Parameters`` field. Accepted values for the ``CrossAccountVersion`` key are 1, 2, 3, and 4.
+        :param read_only_admins: 
         :param trusted_resource_owners: An array of UTF-8 strings. A list of the resource-owning account IDs that the caller's account can use to share their user access details (user ARNs). The user ARNs can be logged in the resource owner's CloudTrail log. You may want to specify this property when you are in a high-trust boundary, such as the same team or company.
         '''
         if __debug__:
@@ -826,6 +828,7 @@ class CfnDataLakeSettings(
             external_data_filtering_allow_list=external_data_filtering_allow_list,
             mutation_type=mutation_type,
             parameters=parameters,
+            read_only_admins=read_only_admins,
             trusted_resource_owners=trusted_resource_owners,
         )
 
@@ -1033,6 +1036,18 @@ class CfnDataLakeSettings(
         jsii.set(self, "parameters", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="readOnlyAdmins")
+    def read_only_admins(self) -> typing.Any:
+        return typing.cast(typing.Any, jsii.get(self, "readOnlyAdmins"))
+
+    @read_only_admins.setter
+    def read_only_admins(self, value: typing.Any) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96372dbbf1b8d27bf02f12216956eed437c5cc030db0064f219c54947065469f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "readOnlyAdmins", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="trustedResourceOwners")
     def trusted_resource_owners(self) -> typing.Optional[typing.List[builtins.str]]:
         '''An array of UTF-8 strings.'''
@@ -1189,6 +1204,7 @@ class CfnDataLakeSettings(
         "external_data_filtering_allow_list": "externalDataFilteringAllowList",
         "mutation_type": "mutationType",
         "parameters": "parameters",
+        "read_only_admins": "readOnlyAdmins",
         "trusted_resource_owners": "trustedResourceOwners",
     },
 )
@@ -1205,6 +1221,7 @@ class CfnDataLakeSettingsProps:
         external_data_filtering_allow_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLakeSettings.DataLakePrincipalProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mutation_type: typing.Optional[builtins.str] = None,
         parameters: typing.Any = None,
+        read_only_admins: typing.Any = None,
         trusted_resource_owners: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataLakeSettings``.
@@ -1218,6 +1235,7 @@ class CfnDataLakeSettingsProps:
         :param external_data_filtering_allow_list: A list of the account IDs of AWS accounts with Amazon EMR clusters or third-party engines that are allwed to perform data filtering.
         :param mutation_type: Specifies whether the data lake settings are updated by adding new values to the current settings ( ``APPEND`` ) or by replacing the current settings with new settings ( ``REPLACE`` ). .. epigraph:: If you choose ``REPLACE`` , your current data lake settings will be replaced with the new values in your template.
         :param parameters: A key-value map that provides an additional configuration on your data lake. ``CrossAccountVersion`` is the key you can configure in the ``Parameters`` field. Accepted values for the ``CrossAccountVersion`` key are 1, 2, 3, and 4.
+        :param read_only_admins: 
         :param trusted_resource_owners: An array of UTF-8 strings. A list of the resource-owning account IDs that the caller's account can use to share their user access details (user ARNs). The user ARNs can be logged in the resource owner's CloudTrail log. You may want to specify this property when you are in a high-trust boundary, such as the same team or company.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lakeformation-datalakesettings.html
@@ -1306,6 +1324,7 @@ class CfnDataLakeSettingsProps:
             check_type(argname="argument external_data_filtering_allow_list", value=external_data_filtering_allow_list, expected_type=type_hints["external_data_filtering_allow_list"])
             check_type(argname="argument mutation_type", value=mutation_type, expected_type=type_hints["mutation_type"])
             check_type(argname="argument parameters", value=parameters, expected_type=type_hints["parameters"])
+            check_type(argname="argument read_only_admins", value=read_only_admins, expected_type=type_hints["read_only_admins"])
             check_type(argname="argument trusted_resource_owners", value=trusted_resource_owners, expected_type=type_hints["trusted_resource_owners"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if admins is not None:
@@ -1326,6 +1345,8 @@ class CfnDataLakeSettingsProps:
             self._values["mutation_type"] = mutation_type
         if parameters is not None:
             self._values["parameters"] = parameters
+        if read_only_admins is not None:
+            self._values["read_only_admins"] = read_only_admins
         if trusted_resource_owners is not None:
             self._values["trusted_resource_owners"] = trusted_resource_owners
 
@@ -1452,6 +1473,14 @@ class CfnDataLakeSettingsProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lakeformation-datalakesettings.html#cfn-lakeformation-datalakesettings-parameters
         '''
         result = self._values.get("parameters")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def read_only_admins(self) -> typing.Any:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lakeformation-datalakesettings.html#cfn-lakeformation-datalakesettings-readonlyadmins
+        '''
+        result = self._values.get("read_only_admins")
         return typing.cast(typing.Any, result)
 
     @builtins.property
@@ -5808,6 +5837,7 @@ def _typecheckingstub__f70f29826d8a7fc5611588cb6eeb3680ada51f8de62dc227827dff9f5
     external_data_filtering_allow_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLakeSettings.DataLakePrincipalProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mutation_type: typing.Optional[builtins.str] = None,
     parameters: typing.Any = None,
+    read_only_admins: typing.Any = None,
     trusted_resource_owners: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -5879,6 +5909,12 @@ def _typecheckingstub__52aab4b55f0c39756a432c91d3eeabd5eb70c011e8f466df712c0d115
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__96372dbbf1b8d27bf02f12216956eed437c5cc030db0064f219c54947065469f(
+    value: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__674387b8d4744b1214561eb77053527136809ff4a2e9cd1a69f2ab7af63d2bce(
     value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
@@ -5911,6 +5947,7 @@ def _typecheckingstub__dce55f2e750b8b606563ee8be454eb95ace369e90671114b454db63f0
     external_data_filtering_allow_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataLakeSettings.DataLakePrincipalProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mutation_type: typing.Optional[builtins.str] = None,
     parameters: typing.Any = None,
+    read_only_admins: typing.Any = None,
     trusted_resource_owners: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""

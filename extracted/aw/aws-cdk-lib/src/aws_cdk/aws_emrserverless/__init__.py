@@ -265,6 +265,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_cc4bb3a0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ce970918a3946e4d95f017779bd9af0f899f3b15d0c01d7810161a59a73ecdb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="fromApplicationArn")
     @builtins.classmethod
     def from_application_arn(
@@ -2655,6 +2666,12 @@ def _typecheckingstub__73910249d55cbd2983a3ea1bb4666acedb0e3e84df9686bbdeecd191b
     scheduler_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.SchedulerConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     worker_type_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.WorkerTypeSpecificationInputProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ce970918a3946e4d95f017779bd9af0f899f3b15d0c01d7810161a59a73ecdb(
+    resource: _IApplicationRef_cc4bb3a0,
 ) -> None:
     """Type checking stubs"""
     pass

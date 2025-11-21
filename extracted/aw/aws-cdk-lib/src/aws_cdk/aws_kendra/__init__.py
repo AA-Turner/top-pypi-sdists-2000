@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kendra import (
     DataSourceReference as _DataSourceReference_9b52a083,
     FaqReference as _FaqReference_599fc0ba,
@@ -537,14 +538,14 @@ class CfnDataSource(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        index_id: builtins.str,
+        index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
         name: builtins.str,
         type: builtins.str,
         custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.CustomDocumentEnrichmentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.DataSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         schedule: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -581,6 +582,17 @@ class CfnDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataSource")
+    @builtins.classmethod
+    def arn_for_data_source(cls, resource: _IDataSourceRef_e4576e45) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cecd44107fb412b912352bf5f8e93a0b4afba36afec0970f2587fd99aa87e179)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataSource", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7273,7 +7285,7 @@ class CfnDataSource(
 
             WorkDocs connector is available in Oregon, North Virginia, Sydney, Singapore and Ireland regions.
 
-            :param organization_id: The identifier of the directory corresponding to your WorkDocs site repository. You can find the organization ID in the `AWS Directory Service <https://docs.aws.amazon.com/directoryservicev2/>`_ by going to *Active Directory* , then *Directories* . Your WorkDocs site directory has an ID, which is the organization ID. You can also set up a new WorkDocs directory in the AWS Directory Service console and enable a WorkDocs site for the directory in the WorkDocs console.
+            :param organization_id: The identifier of the directory corresponding to your WorkDocs site repository. You can find the organization ID in the `Directory Service <https://docs.aws.amazon.com/directoryservicev2/>`_ by going to *Active Directory* , then *Directories* . Your WorkDocs site directory has an ID, which is the organization ID. You can also set up a new WorkDocs directory in the Directory Service console and enable a WorkDocs site for the directory in the WorkDocs console.
             :param crawl_comments: ``TRUE`` to include comments on documents in your index. Including comments in your index means each comment is a document that can be searched on. The default is set to ``FALSE`` .
             :param exclusion_patterns: A list of regular expression patterns to exclude certain files in your WorkDocs site repository. Files that match the patterns are excluded from the index. Files that don’t match the patterns are included in the index. If a file matches both an inclusion and exclusion pattern, the exclusion pattern takes precedence and the file isn't included in the index.
             :param field_mappings: A list of ``DataSourceToIndexFieldMapping`` objects that map WorkDocs data source attributes or field names to Amazon Kendra index field names. To create custom fields, use the ``UpdateIndex`` API before you map to WorkDocs fields. For more information, see `Mapping data source fields <https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html>`_ . The WorkDocs data source field names must exist in your WorkDocs custom metadata.
@@ -7332,7 +7344,7 @@ class CfnDataSource(
         def organization_id(self) -> builtins.str:
             '''The identifier of the directory corresponding to your WorkDocs site repository.
 
-            You can find the organization ID in the `AWS Directory Service <https://docs.aws.amazon.com/directoryservicev2/>`_ by going to *Active Directory* , then *Directories* . Your WorkDocs site directory has an ID, which is the organization ID. You can also set up a new WorkDocs directory in the AWS Directory Service console and enable a WorkDocs site for the directory in the WorkDocs console.
+            You can find the organization ID in the `Directory Service <https://docs.aws.amazon.com/directoryservicev2/>`_ by going to *Active Directory* , then *Directories* . Your WorkDocs site directory has an ID, which is the organization ID. You can also set up a new WorkDocs directory in the Directory Service console and enable a WorkDocs site for the directory in the WorkDocs console.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kendra-datasource-workdocsconfiguration.html#cfn-kendra-datasource-workdocsconfiguration-organizationid
             '''
@@ -7435,14 +7447,14 @@ class CfnDataSourceProps:
     def __init__(
         self,
         *,
-        index_id: builtins.str,
+        index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
         name: builtins.str,
         type: builtins.str,
         custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.CustomDocumentEnrichmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         language_code: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         schedule: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -7932,14 +7944,14 @@ class CfnDataSourceProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def index_id(self) -> builtins.str:
+    def index_id(self) -> typing.Union[builtins.str, _IIndexRef_a3487225]:
         '''The identifier of the index you want to use with the data source connector.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-indexid
         '''
         result = self._values.get("index_id")
         assert result is not None, "Required property 'index_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IIndexRef_a3487225], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -8010,7 +8022,9 @@ class CfnDataSourceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of a role with permission to access the data source.
 
         You can't specify the ``RoleArn`` parameter when the ``Type`` parameter is set to ``CUSTOM`` .
@@ -8020,7 +8034,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kendra-datasource.html#cfn-kendra-datasource-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def schedule(self) -> typing.Optional[builtins.str]:
@@ -8137,6 +8151,17 @@ class CfnFaq(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFaq")
+    @builtins.classmethod
+    def arn_for_faq(cls, resource: _IFaqRef_218eeb4a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cb899a31bad23555be3f5b460dbbb7c9a8143a8e2c53b5313b89217b69fcd38f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFaq", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8660,7 +8685,7 @@ class CfnIndex(
         *,
         edition: builtins.str,
         name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.CapacityUnitsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIndex.DocumentMetadataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -8702,6 +8727,17 @@ class CfnIndex(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIndex")
+    @builtins.classmethod
+    def arn_for_index(cls, resource: _IIndexRef_a3487225) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b8bfdcf4a547fbad7ce60599a240f866ae0a0d184273b93ae279540ac7dc5eb2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIndex", [resource]))
 
     @jsii.member(jsii_name="fromIndexArn")
     @builtins.classmethod
@@ -9913,7 +9949,7 @@ class CfnIndexProps:
         *,
         edition: builtins.str,
         name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.DocumentMetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -10057,7 +10093,7 @@ class CfnIndexProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''An IAM role that gives Amazon Kendra permissions to access your Amazon CloudWatch logs and metrics.
 
         This is also the role used when you use the `BatchPutDocument <https://docs.aws.amazon.com/kendra/latest/dg/BatchPutDocument.html>`_ operation to index documents from an Amazon S3 bucket.
@@ -10066,7 +10102,7 @@ class CfnIndexProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def capacity_units(
@@ -10182,16 +10218,22 @@ def _typecheckingstub__db7b870c602f215572ec4f7667cd46c2ae4e2c6035e16924c08cf6d68
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    index_id: builtins.str,
+    index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
     name: builtins.str,
     type: builtins.str,
     custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.CustomDocumentEnrichmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     language_code: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     schedule: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cecd44107fb412b912352bf5f8e93a0b4afba36afec0970f2587fd99aa87e179(
+    resource: _IDataSourceRef_e4576e45,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10769,14 +10811,14 @@ def _typecheckingstub__c81f941a7e6027762047ba2a4dca2a80cd0266333586cd6278af4d285
 
 def _typecheckingstub__9542f7b6e1451dc9177bf24b7be378edc74ce522d3fa3c567f3674a5f145a654(
     *,
-    index_id: builtins.str,
+    index_id: typing.Union[builtins.str, _IIndexRef_a3487225],
     name: builtins.str,
     type: builtins.str,
     custom_document_enrichment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.CustomDocumentEnrichmentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     data_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     language_code: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     schedule: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -10795,6 +10837,12 @@ def _typecheckingstub__da52634bf448f13a8dfdf111b1193f46a241ac941af460a15585386c0
     file_format: typing.Optional[builtins.str] = None,
     language_code: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cb899a31bad23555be3f5b460dbbb7c9a8143a8e2c53b5313b89217b69fcd38f(
+    resource: _IFaqRef_218eeb4a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10887,7 +10935,7 @@ def _typecheckingstub__5f1204970a88ec523311382503badf4dde293efe7a39dfb0456e12407
     *,
     edition: builtins.str,
     name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.DocumentMetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -10895,6 +10943,12 @@ def _typecheckingstub__5f1204970a88ec523311382503badf4dde293efe7a39dfb0456e12407
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_context_policy: typing.Optional[builtins.str] = None,
     user_token_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.UserTokenConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b8bfdcf4a547fbad7ce60599a240f866ae0a0d184273b93ae279540ac7dc5eb2(
+    resource: _IIndexRef_a3487225,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11074,7 +11128,7 @@ def _typecheckingstub__8ce90bfc8458d52938a1a8558591d2e8ee975572889b24651808cc701
     *,
     edition: builtins.str,
     name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     document_metadata_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIndex.DocumentMetadataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

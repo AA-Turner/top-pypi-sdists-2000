@@ -70,6 +70,8 @@ from ..interfaces.aws_docdbelastic import (
     ClusterReference as _ClusterReference_042c3bbe,
     IClusterRef as _IClusterRef_64376282,
 )
+from ..interfaces.aws_ec2 import ISecurityGroupRef as _ISecurityGroupRef_efa4ff18
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
 @jsii.implements(_IInspectable_c2943556, _IClusterRef_64376282, _ITaggable_36806126)
@@ -125,13 +127,13 @@ class CfnCluster(
         shard_count: jsii.Number,
         admin_user_password: typing.Optional[builtins.str] = None,
         backup_retention_period: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         shard_instance_count: typing.Optional[jsii.Number] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::DocDBElastic::Cluster``.
 
@@ -174,6 +176,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_64376282) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ad99c1df984ce505659106e561bbbe55552ea239411e8a258f1fb028637e1d8d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -462,13 +475,13 @@ class CfnClusterProps:
         shard_count: jsii.Number,
         admin_user_password: typing.Optional[builtins.str] = None,
         backup_retention_period: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         shard_instance_count: typing.Optional[jsii.Number] = None,
         subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -655,7 +668,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The KMS key identifier to use to encrypt the new elastic cluster.
 
         The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a cluster using the same Amazon account that owns this KMS encryption key, you can use the KMS key alias instead of the ARN as the KMS encryption key.
@@ -665,7 +680,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdbelastic-cluster.html#cfn-docdbelastic-cluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def preferred_backup_window(self) -> typing.Optional[builtins.str]:
@@ -723,13 +738,15 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of EC2 VPC security groups to associate with the new elastic cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdbelastic-cluster.html#cfn-docdbelastic-cluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -761,13 +778,19 @@ def _typecheckingstub__d18e65300a117432acf21688bd5e6ea35e026a31a5e4e4867ff7ee2d8
     shard_count: jsii.Number,
     admin_user_password: typing.Optional[builtins.str] = None,
     backup_retention_period: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     shard_instance_count: typing.Optional[jsii.Number] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ad99c1df984ce505659106e561bbbe55552ea239411e8a258f1fb028637e1d8d(
+    resource: _IClusterRef_64376282,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -877,13 +900,13 @@ def _typecheckingstub__2b5fe934af328fd508365294b2de9cfcaa71e04fad229d22243ec4156
     shard_count: jsii.Number,
     admin_user_password: typing.Optional[builtins.str] = None,
     backup_retention_period: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     shard_instance_count: typing.Optional[jsii.Number] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

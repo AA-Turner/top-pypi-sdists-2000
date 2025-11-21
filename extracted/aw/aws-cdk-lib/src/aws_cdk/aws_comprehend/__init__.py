@@ -176,7 +176,7 @@ class CfnDocumentClassifier(
         :param input_data_config: Specifies the format and location of the input data for the job.
         :param language_code: The language of the input documents. You can specify any of the languages supported by Amazon Comprehend. All documents must be in the same language.
         :param mode: Indicates the mode in which the classifier will be trained. The classifier can be trained in multi-class (single-label) mode or multi-label mode. Multi-class mode identifies a single class label for each document and multi-label mode identifies one or more class labels for each document. Multiple labels for an individual document are separated by a delimiter. The default delimiter between labels is a pipe (|).
-        :param model_kms_key_id: ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
+        :param model_kms_key_id: ID for the AWS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
         :param model_policy: The resource-based policy to attach to your custom document classifier model. You can use this policy to allow another AWS account to import your custom model. Provide your policy as a JSON body that you enter as a UTF-8 encoded string without line breaks. To provide valid JSON, enclose the attribute names and values in double quotes. If the JSON body is also enclosed in double quotes, then you must escape the double quotes that are inside the policy: ``"{\\"attribute\\": \\"value\\", \\"attribute\\": [\\"value\\"]}"`` To avoid escaping quotes, you can use single quotes to enclose the policy and double quotes to enclose the JSON names and values: ``'{"attribute": "value", "attribute": ["value"]}'``
         :param output_data_config: Provides output results configuration parameters for custom classifier jobs.
         :param tags: Tags to associate with the document classifier. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department.
@@ -204,6 +204,20 @@ class CfnDocumentClassifier(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDocumentClassifier")
+    @builtins.classmethod
+    def arn_for_document_classifier(
+        cls,
+        resource: _IDocumentClassifierRef_5d01dd5d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8861fae2b32651569828bac3a0b746b70bf5bbd74ac6ec3b50984c7179e69ec7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDocumentClassifier", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -334,7 +348,7 @@ class CfnDocumentClassifier(
     @builtins.property
     @jsii.member(jsii_name="modelKmsKeyId")
     def model_kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models.'''
+        '''ID for the AWS  key that Amazon Comprehend uses to encrypt trained custom models.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "modelKmsKeyId"))
 
     @model_kms_key_id.setter
@@ -1151,7 +1165,7 @@ class CfnDocumentClassifierProps:
         :param input_data_config: Specifies the format and location of the input data for the job.
         :param language_code: The language of the input documents. You can specify any of the languages supported by Amazon Comprehend. All documents must be in the same language.
         :param mode: Indicates the mode in which the classifier will be trained. The classifier can be trained in multi-class (single-label) mode or multi-label mode. Multi-class mode identifies a single class label for each document and multi-label mode identifies one or more class labels for each document. Multiple labels for an individual document are separated by a delimiter. The default delimiter between labels is a pipe (|).
-        :param model_kms_key_id: ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
+        :param model_kms_key_id: ID for the AWS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
         :param model_policy: The resource-based policy to attach to your custom document classifier model. You can use this policy to allow another AWS account to import your custom model. Provide your policy as a JSON body that you enter as a UTF-8 encoded string without line breaks. To provide valid JSON, enclose the attribute names and values in double quotes. If the JSON body is also enclosed in double quotes, then you must escape the double quotes that are inside the policy: ``"{\\"attribute\\": \\"value\\", \\"attribute\\": [\\"value\\"]}"`` To avoid escaping quotes, you can use single quotes to enclose the policy and double quotes to enclose the JSON names and values: ``'{"attribute": "value", "attribute": ["value"]}'``
         :param output_data_config: Provides output results configuration parameters for custom classifier jobs.
         :param tags: Tags to associate with the document classifier. A tag is a key-value pair that adds as a metadata to a resource used by Amazon Comprehend. For example, a tag with "Sales" as the key might be added to a resource to indicate its use by the sales department.
@@ -1314,7 +1328,7 @@ class CfnDocumentClassifierProps:
 
     @builtins.property
     def model_kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models.
+        '''ID for the AWS  key that Amazon Comprehend uses to encrypt trained custom models.
 
         The ModelKmsKeyId can be either of the following formats:
 
@@ -1529,6 +1543,17 @@ class CfnFlywheel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForFlywheel")
+    @builtins.classmethod
+    def arn_for_flywheel(cls, resource: _IFlywheelRef_9ce9ef1d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3665716c52bae99c75a845a5ea08fb4248f243804d4db7dd1693d473af221750)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFlywheel", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1720,9 +1745,9 @@ class CfnFlywheel(
         ) -> None:
             '''Data security configuration.
 
-            :param data_lake_kms_key_id: ID for the AWS KMS key that Amazon Comprehend uses to encrypt the data in the data lake.
-            :param model_kms_key_id: ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
-            :param volume_kms_key_id: ID for the AWS KMS key that Amazon Comprehend uses to encrypt the volume.
+            :param data_lake_kms_key_id: ID for the AWS key that Amazon Comprehend uses to encrypt the data in the data lake.
+            :param model_kms_key_id: ID for the AWS key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: - KMS Key ID: ``"1234abcd-12ab-34cd-56ef-1234567890ab"`` - Amazon Resource Name (ARN) of a KMS Key: ``"arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab"``
+            :param volume_kms_key_id: ID for the AWS key that Amazon Comprehend uses to encrypt the volume.
             :param vpc_config: Configuration parameters for an optional private Virtual Private Cloud (VPC) containing the resources you are using for the job. For more information, see `Amazon VPC <https://docs.aws.amazon.com/vpc/latest/userguide/what-is-amazon-vpc.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-datasecurityconfig.html
@@ -1762,7 +1787,7 @@ class CfnFlywheel(
 
         @builtins.property
         def data_lake_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''ID for the AWS KMS key that Amazon Comprehend uses to encrypt the data in the data lake.
+            '''ID for the AWS  key that Amazon Comprehend uses to encrypt the data in the data lake.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-datasecurityconfig.html#cfn-comprehend-flywheel-datasecurityconfig-datalakekmskeyid
             '''
@@ -1771,7 +1796,7 @@ class CfnFlywheel(
 
         @builtins.property
         def model_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''ID for the AWS KMS key that Amazon Comprehend uses to encrypt trained custom models.
+            '''ID for the AWS  key that Amazon Comprehend uses to encrypt trained custom models.
 
             The ModelKmsKeyId can be either of the following formats:
 
@@ -1785,7 +1810,7 @@ class CfnFlywheel(
 
         @builtins.property
         def volume_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''ID for the AWS KMS key that Amazon Comprehend uses to encrypt the volume.
+            '''ID for the AWS  key that Amazon Comprehend uses to encrypt the volume.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-comprehend-flywheel-datasecurityconfig.html#cfn-comprehend-flywheel-datasecurityconfig-volumekmskeyid
             '''
@@ -2419,6 +2444,12 @@ def _typecheckingstub__0da43afef06b62227e1171021a9a7ce43e2e481fa3c1ff8263e87fc9d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8861fae2b32651569828bac3a0b746b70bf5bbd74ac6ec3b50984c7179e69ec7(
+    resource: _IDocumentClassifierRef_5d01dd5d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__92e2c4b33fb017d2bc9b1ee4c697a9167f78647f346ac5244d2bc0fd757caafc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2589,6 +2620,12 @@ def _typecheckingstub__08326dbba3b3e1fbd1b7c33b09deb1212a1a2d4d763f2b2c49693b85d
     model_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     task_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlywheel.TaskConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3665716c52bae99c75a845a5ea08fb4248f243804d4db7dd1693d473af221750(
+    resource: _IFlywheelRef_9ce9ef1d,
 ) -> None:
     """Type checking stubs"""
     pass

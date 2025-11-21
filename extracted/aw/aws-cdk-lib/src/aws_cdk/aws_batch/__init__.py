@@ -855,6 +855,7 @@ from ..interfaces.aws_batch import (
     ServiceEnvironmentReference as _ServiceEnvironmentReference_9a7dc7ee,
 )
 from ..interfaces.aws_ec2 import IPlacementGroupRef as _IPlacementGroupRef_5d6e601f
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_batch.Action")
@@ -1078,7 +1079,7 @@ class CfnComputeEnvironment(
         context: typing.Optional[builtins.str] = None,
         eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnComputeEnvironment.EksConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         replace_compute_environment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        service_role: typing.Optional[builtins.str] = None,
+        service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         unmanagedv_cpus: typing.Optional[jsii.Number] = None,
@@ -1119,6 +1120,20 @@ class CfnComputeEnvironment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForComputeEnvironment")
+    @builtins.classmethod
+    def arn_for_compute_environment(
+        cls,
+        resource: _IComputeEnvironmentRef_eab02155,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb3b490bb4fcc1b9d85b55dbe5085e7c71599a0e576261a94b5409053474982d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComputeEnvironment", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1395,7 +1410,7 @@ class CfnComputeEnvironment(
 
             :param maxv_cpus: The maximum number of Amazon EC2 vCPUs that an environment can reach. .. epigraph:: With ``BEST_FIT_PROGRESSIVE`` , ``SPOT_CAPACITY_OPTIMIZED`` and ``SPOT_PRICE_CAPACITY_OPTIMIZED`` (recommended) strategies using On-Demand or Spot Instances, and the ``BEST_FIT`` strategy using Spot Instances, AWS Batch might need to exceed ``maxvCpus`` to meet your capacity requirements. In this event, AWS Batch never exceeds ``maxvCpus`` by more than a single instance.
             :param subnets: The VPC subnets where the compute resources are launched. Fargate compute resources can contain up to 16 subnets. For Fargate compute resources, providing an empty list will be handled as if this parameter wasn't specified and no change is made. For Amazon EC2 compute resources, providing an empty list removes the VPC subnets from the compute resource. For more information, see `VPCs and subnets <https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Subnets.html>`_ in the *Amazon VPC User Guide* . When updating a compute environment, changing the VPC subnets requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* . .. epigraph:: AWS Batch on Amazon EC2 and AWS Batch on Amazon EKS support Local Zones. For more information, see `Local Zones <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html#concepts-local-zones>`_ in the *Amazon EC2 User Guide for Linux Instances* , `Amazon EKS and AWS Local Zones <https://docs.aws.amazon.com/eks/latest/userguide/local-zones.html>`_ in the *Amazon EKS User Guide* and `Amazon ECS clusters in Local Zones, Wavelength Zones, and AWS Outposts <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-regions-zones.html#clusters-local-zones>`_ in the *Amazon ECS Developer Guide* . AWS Batch on Fargate doesn't currently support Local Zones.
-            :param type: The type of compute environment: ``EC2`` , ``SPOT`` , ``FARGATE`` , or ``FARGATE_SPOT`` . For more information, see `Compute environments <https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html>`_ in the *AWS Batch User Guide* . If you choose ``SPOT`` , you must also specify an Amazon EC2 Spot Fleet role with the ``spotIamFleetRole`` parameter. For more information, see `Amazon EC2 spot fleet role <https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html>`_ in the *AWS Batch User Guide* . When updating compute environment, changing the type of a compute environment requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* . When updating the type of a compute environment, changing between ``EC2`` and ``SPOT`` or between ``FARGATE`` and ``FARGATE_SPOT`` will initiate an infrastructure update, but if you switch between ``EC2`` and ``FARGATE`` , AWS CloudFormation will create a new compute environment.
+            :param type: The type of compute environment: ``EC2`` , ``SPOT`` , ``FARGATE`` , or ``FARGATE_SPOT`` . For more information, see `Compute environments <https://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html>`_ in the *AWS Batch User Guide* . If you choose ``SPOT`` , you must also specify an Amazon EC2 Spot Fleet role with the ``spotIamFleetRole`` parameter. For more information, see `Amazon EC2 spot fleet role <https://docs.aws.amazon.com/batch/latest/userguide/spot_fleet_IAM_role.html>`_ in the *AWS Batch User Guide* . When updating compute environment, changing the type of a compute environment requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* . When updating the type of a compute environment, changing between ``EC2`` and ``SPOT`` or between ``FARGATE`` and ``FARGATE_SPOT`` will initiate an infrastructure update, but if you switch between ``EC2`` and ``FARGATE`` , CloudFormation will create a new compute environment.
             :param allocation_strategy: The allocation strategy to use for the compute resource if not enough instances of the best fitting instance type can be allocated. This might be because of availability of the instance type in the Region or `Amazon EC2 service limits <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html>`_ . For more information, see `Allocation strategies <https://docs.aws.amazon.com/batch/latest/userguide/allocation-strategies.html>`_ in the *AWS Batch User Guide* . When updating a compute environment, changing the allocation strategy requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* . ``BEST_FIT`` is not supported when updating a compute environment. .. epigraph:: This parameter isn't applicable to jobs that are running on Fargate resources, and shouldn't be specified. - **BEST_FIT (default)** - AWS Batch selects an instance type that best fits the needs of the jobs with a preference for the lowest-cost instance type. If additional instances of the selected instance type aren't available, AWS Batch waits for the additional instances to be available. If there aren't enough instances available, or if the user is reaching `Amazon EC2 service limits <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-resource-limits.html>`_ then additional jobs aren't run until the currently running jobs have completed. This allocation strategy keeps costs lower but can limit scaling. If you are using Spot Fleets with ``BEST_FIT`` then the Spot Fleet IAM role must be specified. - **BEST_FIT_PROGRESSIVE** - AWS Batch will select additional instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types with a lower cost per unit vCPU. If additional instances of the previously selected instance types aren't available, AWS Batch will select new instance types. - **SPOT_CAPACITY_OPTIMIZED** - AWS Batch will select one or more instance types that are large enough to meet the requirements of the jobs in the queue, with a preference for instance types that are less likely to be interrupted. This allocation strategy is only available for Spot Instance compute resources. - **SPOT_PRICE_CAPACITY_OPTIMIZED** - The price and capacity optimized allocation strategy looks at both price and capacity to select the Spot Instance pools that are the least likely to be interrupted and have the lowest possible price. This allocation strategy is only available for Spot Instance compute resources. .. epigraph:: We recommend that you use ``SPOT_PRICE_CAPACITY_OPTIMIZED`` rather than ``SPOT_CAPACITY_OPTIMIZED`` in most instances. With ``BEST_FIT_PROGRESSIVE`` , ``SPOT_CAPACITY_OPTIMIZED`` , and ``SPOT_PRICE_CAPACITY_OPTIMIZED`` allocation strategies using On-Demand or Spot Instances, and the ``BEST_FIT`` strategy using Spot Instances, AWS Batch might need to go above ``maxvCpus`` to meet your capacity requirements. In this event, AWS Batch never exceeds ``maxvCpus`` by more than a single instance.
             :param bid_percentage: The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, the Spot price must be less than 20% of the current On-Demand price for that Amazon EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. For most use cases, we recommend leaving this field empty. When updating a compute environment, changing the bid percentage requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* . .. epigraph:: This parameter isn't applicable to jobs that are running on Fargate resources. Don't specify it.
             :param desiredv_cpus: The desired number of vCPUS in the compute environment. AWS Batch modifies this value between the minimum and maximum values based on job queue demand. .. epigraph:: This parameter isn't applicable to jobs that are running on Fargate resources. Don't specify it. > AWS Batch doesn't support changing the desired number of vCPUs of an existing compute environment. Don't specify this parameter for compute environments using Amazon EKS clusters. > When you update the ``desiredvCpus`` setting, the value must be between the ``minvCpus`` and ``maxvCpus`` values. Additionally, the updated ``desiredvCpus`` value must be greater than or equal to the current ``desiredvCpus`` value. For more information, see `Troubleshooting AWS Batch <https://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#error-desired-vcpus-update>`_ in the *AWS Batch User Guide* .
@@ -1563,7 +1578,7 @@ class CfnComputeEnvironment(
 
             When updating compute environment, changing the type of a compute environment requires an infrastructure update of the compute environment. For more information, see `Updating compute environments <https://docs.aws.amazon.com/batch/latest/userguide/updating-compute-environments.html>`_ in the *AWS Batch User Guide* .
 
-            When updating the type of a compute environment, changing between ``EC2`` and ``SPOT`` or between ``FARGATE`` and ``FARGATE_SPOT`` will initiate an infrastructure update, but if you switch between ``EC2`` and ``FARGATE`` , AWS CloudFormation will create a new compute environment.
+            When updating the type of a compute environment, changing between ``EC2`` and ``SPOT`` or between ``FARGATE`` and ``FARGATE_SPOT`` will initiate an infrastructure update, but if you switch between ``EC2`` and ``FARGATE`` , CloudFormation will create a new compute environment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-batch-computeenvironment-computeresources.html#cfn-batch-computeenvironment-computeresources-type
             '''
@@ -2489,7 +2504,7 @@ class CfnComputeEnvironmentProps:
         context: typing.Optional[builtins.str] = None,
         eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeEnvironment.EksConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         replace_compute_environment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        service_role: typing.Optional[builtins.str] = None,
+        service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         unmanagedv_cpus: typing.Optional[jsii.Number] = None,
@@ -2700,7 +2715,9 @@ class CfnComputeEnvironmentProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def service_role(self) -> typing.Optional[builtins.str]:
+    def service_role(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The full Amazon Resource Name (ARN) of the IAM role that allows AWS Batch to make calls to other AWS services on your behalf.
 
         For more information, see `AWS Batch service IAM role <https://docs.aws.amazon.com/batch/latest/userguide/service_IAM_role.html>`_ in the *AWS Batch User Guide* .
@@ -2716,7 +2733,7 @@ class CfnComputeEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-computeenvironment.html#cfn-batch-computeenvironment-servicerole
         '''
         result = self._values.get("service_role")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def state(self) -> typing.Optional[builtins.str]:
@@ -2849,6 +2866,20 @@ class CfnConsumableResource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConsumableResource")
+    @builtins.classmethod
+    def arn_for_consumable_resource(
+        cls,
+        resource: _IConsumableResourceRef_114da7c5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9344359f298ebe3815a35760fd4401e3253ebe8584dd475f3a7ada5fd2e68f30)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConsumableResource", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3191,6 +3222,20 @@ class CfnJobDefinition(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForJobDefinition")
+    @builtins.classmethod
+    def arn_for_job_definition(
+        cls,
+        resource: _IJobDefinitionRef_ae0cae56,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6a7771f6bacf9a95870b88b75bad5dc2e0b21b9d2915228ca74533275287a864)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobDefinition", [resource]))
 
     @jsii.member(jsii_name="fromJobDefinitionArn")
     @builtins.classmethod
@@ -10853,7 +10898,7 @@ class CfnJobQueue(
         job_queue_name: typing.Optional[builtins.str] = None,
         job_queue_type: typing.Optional[builtins.str] = None,
         job_state_time_limit_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobQueue.JobStateTimeLimitActionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scheduling_policy_arn: typing.Optional[builtins.str] = None,
+        scheduling_policy_arn: typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]] = None,
         service_environment_order: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJobQueue.ServiceEnvironmentOrderProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -10889,6 +10934,17 @@ class CfnJobQueue(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForJobQueue")
+    @builtins.classmethod
+    def arn_for_job_queue(cls, resource: _IJobQueueRef_2f1c7bda) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a029cd1d3832f571ebf1a3f24ce22febf550b1d6548db1dd0808e6c32ac5729)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobQueue", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11371,7 +11427,7 @@ class CfnJobQueueProps:
         job_queue_name: typing.Optional[builtins.str] = None,
         job_queue_type: typing.Optional[builtins.str] = None,
         job_state_time_limit_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.JobStateTimeLimitActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        scheduling_policy_arn: typing.Optional[builtins.str] = None,
+        scheduling_policy_arn: typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]] = None,
         service_environment_order: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.ServiceEnvironmentOrderProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         state: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -11519,7 +11575,9 @@ class CfnJobQueueProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnJobQueue.JobStateTimeLimitActionProperty]]]], result)
 
     @builtins.property
-    def scheduling_policy_arn(self) -> typing.Optional[builtins.str]:
+    def scheduling_policy_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]]:
         '''The Amazon Resource Name (ARN) of the scheduling policy.
 
         The format is ``aws: *Partition* :batch: *Region* : *Account* :scheduling-policy/ *Name*`` . For example, ``aws:aws:batch:us-west-2:123456789012:scheduling-policy/MySchedulingPolicy`` .
@@ -11527,7 +11585,7 @@ class CfnJobQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-batch-jobqueue.html#cfn-batch-jobqueue-schedulingpolicyarn
         '''
         result = self._values.get("scheduling_policy_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]], result)
 
     @builtins.property
     def service_environment_order(
@@ -11638,6 +11696,20 @@ class CfnSchedulingPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSchedulingPolicy")
+    @builtins.classmethod
+    def arn_for_scheduling_policy(
+        cls,
+        resource: _ISchedulingPolicyRef_a7864c7c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e92fb1542d5caa28a7d38a21e58855fca7fbb749d20f15530ffc6d8220cba811)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchedulingPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12111,6 +12183,20 @@ class CfnServiceEnvironment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceEnvironment")
+    @builtins.classmethod
+    def arn_for_service_environment(
+        cls,
+        resource: _IServiceEnvironmentRef_5865fef4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86d18b432a22879bebcbfd66d812fbe5f417419ffab245783ffe0733221859b6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceEnvironment", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -26003,11 +26089,17 @@ def _typecheckingstub__b3892141757a3fffc40366f3b0a3472c965c97710a96f3bb61a3618dd
     context: typing.Optional[builtins.str] = None,
     eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeEnvironment.EksConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     replace_compute_environment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    service_role: typing.Optional[builtins.str] = None,
+    service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     unmanagedv_cpus: typing.Optional[jsii.Number] = None,
     update_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeEnvironment.UpdatePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb3b490bb4fcc1b9d85b55dbe5085e7c71599a0e576261a94b5409053474982d(
+    resource: _IComputeEnvironmentRef_eab02155,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26169,7 +26261,7 @@ def _typecheckingstub__a81ed1de03c840384ae49a0a4dbeb244507d2327c304fc093af8d7209
     context: typing.Optional[builtins.str] = None,
     eks_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeEnvironment.EksConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     replace_compute_environment: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    service_role: typing.Optional[builtins.str] = None,
+    service_role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     unmanagedv_cpus: typing.Optional[jsii.Number] = None,
@@ -26186,6 +26278,12 @@ def _typecheckingstub__5c99b0cde97c1da7fcdbc520729f9e431c6aa0879ca2c3f310f91017c
     total_quantity: jsii.Number,
     consumable_resource_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9344359f298ebe3815a35760fd4401e3253ebe8584dd475f3a7ada5fd2e68f30(
+    resource: _IConsumableResourceRef_114da7c5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26255,6 +26353,12 @@ def _typecheckingstub__37959c68856ab28ea1a57515db976bc2215806d52c75f6166834df6ae
     scheduling_priority: typing.Optional[jsii.Number] = None,
     tags: typing.Any = None,
     timeout: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobDefinition.TimeoutProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6a7771f6bacf9a95870b88b75bad5dc2e0b21b9d2915228ca74533275287a864(
+    resource: _IJobDefinitionRef_ae0cae56,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26887,10 +26991,16 @@ def _typecheckingstub__6480ab252bc515b2cdb6dc0c833877438fd473fd39eadf6b8a064969a
     job_queue_name: typing.Optional[builtins.str] = None,
     job_queue_type: typing.Optional[builtins.str] = None,
     job_state_time_limit_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.JobStateTimeLimitActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    scheduling_policy_arn: typing.Optional[builtins.str] = None,
+    scheduling_policy_arn: typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]] = None,
     service_environment_order: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.ServiceEnvironmentOrderProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a029cd1d3832f571ebf1a3f24ce22febf550b1d6548db1dd0808e6c32ac5729(
+    resource: _IJobQueueRef_2f1c7bda,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26994,7 +27104,7 @@ def _typecheckingstub__009d6d384b1b723169e64875095e05fe852ae3931adf5ba2004d22475
     job_queue_name: typing.Optional[builtins.str] = None,
     job_queue_type: typing.Optional[builtins.str] = None,
     job_state_time_limit_actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.JobStateTimeLimitActionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    scheduling_policy_arn: typing.Optional[builtins.str] = None,
+    scheduling_policy_arn: typing.Optional[typing.Union[builtins.str, _ISchedulingPolicyRef_a7864c7c]] = None,
     service_environment_order: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJobQueue.ServiceEnvironmentOrderProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -27009,6 +27119,12 @@ def _typecheckingstub__31a21a4a6536b3efab619619ed719e6b0662b5c83fe7a1dc489b27f0b
     fairshare_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSchedulingPolicy.FairsharePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e92fb1542d5caa28a7d38a21e58855fca7fbb749d20f15530ffc6d8220cba811(
+    resource: _ISchedulingPolicyRef_a7864c7c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27078,6 +27194,12 @@ def _typecheckingstub__a6f9de8dd6d91e1ef3541444262c3bd9eba874d47c3dbe2b368127e55
     service_environment_name: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__86d18b432a22879bebcbfd66d812fbe5f417419ffab245783ffe0733221859b6(
+    resource: _IServiceEnvironmentRef_5865fef4,
 ) -> None:
     """Type checking stubs"""
     pass

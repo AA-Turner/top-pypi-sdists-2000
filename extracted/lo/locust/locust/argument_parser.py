@@ -79,6 +79,7 @@ class LocustArgumentParser(configargparse.ArgumentParser):
             include_in_web_ui: If True (default), the argument will show in the UI.
             is_secret: If True (default is False) and include_in_web_ui is True, the argument will show in the UI with a password masked text input.
             is_required: If True (default is False) and include_in_web_ui is True, the argument will show in the UI as a required form field.
+            is_multiple: If True (default is False) and include_in_web_ui is True, the argument will show in the UI as a multiple select form field.
 
         Returns:
             argparse.Action: the new argparse action
@@ -86,10 +87,12 @@ class LocustArgumentParser(configargparse.ArgumentParser):
         include_in_web_ui = kwargs.pop("include_in_web_ui", True)
         is_secret = kwargs.pop("is_secret", False)
         is_required = kwargs.pop("is_required", False)
+        is_multiple = kwargs.pop("is_multiple", False)
         action = super().add_argument(*args, **kwargs)
         action.include_in_web_ui = include_in_web_ui
         action.is_secret = is_secret
         action.is_required = is_required
+        action.is_multiple = is_multiple
         return action
 
     @property
@@ -110,6 +113,14 @@ class LocustArgumentParser(configargparse.ArgumentParser):
             a.dest: a
             for a in self._actions
             if a.dest in self.args_included_in_web_ui and hasattr(a, "is_required") and a.is_required
+        }
+
+    @property
+    def multiple_args_included_in_web_ui(self) -> dict[str, configargparse.Action]:
+        return {
+            a.dest: a
+            for a in self._actions
+            if a.dest in self.args_included_in_web_ui and hasattr(a, "is_multiple") and a.is_multiple
         }
 
 
@@ -865,6 +876,12 @@ Typically ONLY these options (and --locustfile) need to be specified on workers,
         type=str,
         help="Set a profile to group the testruns together",
     )
+    other_group.add_argument(
+        "--otel",
+        action="store_true",
+        help="Instrument the Locust test run with OpenTelemetry.",
+        env_var="LOCUST_ENABLE_OPENTELEMETRY",
+    )
 
     user_classes_group = parser.add_argument_group("User classes")
     user_classes_group.add_argument(
@@ -909,6 +926,7 @@ class UIExtraArgOptions(NamedTuple):
     is_secret: bool
     is_required: bool
     help_text: str
+    is_multiple: bool
     choices: list[str] | None = None
 
 
@@ -925,6 +943,7 @@ def ui_extra_args_dict(args=None) -> dict[str, dict[str, Any]]:
             is_secret=k in parser.secret_args_included_in_web_ui,
             is_required=k in parser.required_args_included_in_web_ui,
             help_text=parser.args_included_in_web_ui[k].help,
+            is_multiple=k in parser.multiple_args_included_in_web_ui,
             choices=parser.args_included_in_web_ui[k].choices,
         )._asdict()
         for k, v in all_args.items()

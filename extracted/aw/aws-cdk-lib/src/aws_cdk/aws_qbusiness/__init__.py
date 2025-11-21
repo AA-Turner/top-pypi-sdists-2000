@@ -190,7 +190,7 @@ class CfnApplication(
         :param auto_subscription_configuration: Subscription configuration information for an Amazon Q Business application using IAM identity federation for user management.
         :param client_ids_for_oidc: The OIDC client ID for a Amazon Q Business application.
         :param description: A description for the Amazon Q Business application.
-        :param encryption_configuration: Provides the identifier of the AWS KMS key used to encrypt data indexed by Amazon Q Business. Amazon Q Business doesn't support asymmetric keys.
+        :param encryption_configuration: Provides the identifier of the AWS key used to encrypt data indexed by Amazon Q Business. Amazon Q Business doesn't support asymmetric keys.
         :param iam_identity_provider_arn: The Amazon Resource Name (ARN) of an identity provider being used by an Amazon Q Business application.
         :param identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance you are either creating for—or connecting to—your Amazon Q Business application. *Required* : ``Yes``
         :param identity_type: The authentication type being used by a Amazon Q Business application.
@@ -222,6 +222,17 @@ class CfnApplication(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_3d9bfeca) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4693a69897b7ec5d61299b26eb574a127f23add711d75a53a48b66b87836adc2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
     @jsii.member(jsii_name="fromApplicationArn")
     @builtins.classmethod
@@ -451,7 +462,7 @@ class CfnApplication(
     def encryption_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.EncryptionConfigurationProperty"]]:
-        '''Provides the identifier of the AWS KMS key used to encrypt data indexed by Amazon Q Business.'''
+        '''Provides the identifier of the AWS  key used to encrypt data indexed by Amazon Q Business.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnApplication.EncryptionConfigurationProperty"]], jsii.get(self, "encryptionConfiguration"))
 
     @encryption_configuration.setter
@@ -723,11 +734,11 @@ class CfnApplication(
     )
     class EncryptionConfigurationProperty:
         def __init__(self, *, kms_key_id: typing.Optional[builtins.str] = None) -> None:
-            '''Provides the identifier of the AWS KMS key used to encrypt data indexed by Amazon Q Business.
+            '''Provides the identifier of the AWS  key used to encrypt data indexed by Amazon Q Business.
 
             Amazon Q Business doesn't support asymmetric keys.
 
-            :param kms_key_id: The identifier of the AWS KMS key. Amazon Q Business doesn't support asymmetric keys.
+            :param kms_key_id: The identifier of the AWS key. Amazon Q Business doesn't support asymmetric keys.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-qbusiness-application-encryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -751,7 +762,7 @@ class CfnApplication(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The identifier of the AWS KMS key.
+            '''The identifier of the AWS  key.
 
             Amazon Q Business doesn't support asymmetric keys.
 
@@ -980,7 +991,7 @@ class CfnApplicationProps:
         :param auto_subscription_configuration: Subscription configuration information for an Amazon Q Business application using IAM identity federation for user management.
         :param client_ids_for_oidc: The OIDC client ID for a Amazon Q Business application.
         :param description: A description for the Amazon Q Business application.
-        :param encryption_configuration: Provides the identifier of the AWS KMS key used to encrypt data indexed by Amazon Q Business. Amazon Q Business doesn't support asymmetric keys.
+        :param encryption_configuration: Provides the identifier of the AWS key used to encrypt data indexed by Amazon Q Business. Amazon Q Business doesn't support asymmetric keys.
         :param iam_identity_provider_arn: The Amazon Resource Name (ARN) of an identity provider being used by an Amazon Q Business application.
         :param identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance you are either creating for—or connecting to—your Amazon Q Business application. *Required* : ``Yes``
         :param identity_type: The authentication type being used by a Amazon Q Business application.
@@ -1136,7 +1147,7 @@ class CfnApplicationProps:
     def encryption_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnApplication.EncryptionConfigurationProperty]]:
-        '''Provides the identifier of the AWS KMS key used to encrypt data indexed by Amazon Q Business.
+        '''Provides the identifier of the AWS  key used to encrypt data indexed by Amazon Q Business.
 
         Amazon Q Business doesn't support asymmetric keys.
 
@@ -1402,6 +1413,20 @@ class CfnDataAccessor(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataAccessor")
+    @builtins.classmethod
+    def arn_for_data_accessor(
+        cls,
+        resource: _IDataAccessorRef_78efaa5d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a90a2bcf1801807604e5526319ddb53db1a9d06f86ca7cb5919fe052940756cd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataAccessor", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2934,7 +2959,7 @@ class CfnDataSource(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param application_id: The identifier of the Amazon Q Business application the data source will be attached to.
-        :param configuration: Use this property to specify a JSON or YAML schema with configuration properties specific to your data source connector to connect your data source repository to Amazon Q Business . You must use the JSON or YAML schema provided by Amazon Q . The following links have the configuration properties and schemas for AWS CloudFormation for the following connectors: - `Amazon Simple Storage Service <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/s3-cfn.html>`_ - `Amazon Q Web Crawler <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/web-crawler-cfn.html>`_ Similarly, you can find configuration templates and properties for your specific data source using the following steps: - Navigate to the `Supported connectors <https://docs.aws.amazon.com/amazonq/latest/business-use-dg/connectors-list.html>`_ page in the Amazon Q Business User Guide, and select the data source connector of your choice. - Then, from that specific data source connector's page, choose the topic containing *Using AWS CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
+        :param configuration: Use this property to specify a JSON or YAML schema with configuration properties specific to your data source connector to connect your data source repository to Amazon Q Business . You must use the JSON or YAML schema provided by Amazon Q . The following links have the configuration properties and schemas for AWS CloudFormation for the following connectors: - `Amazon Simple Storage Service <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/s3-cfn.html>`_ - `Amazon Q Web Crawler <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/web-crawler-cfn.html>`_ Similarly, you can find configuration templates and properties for your specific data source using the following steps: - Navigate to the `Supported connectors <https://docs.aws.amazon.com/amazonq/latest/business-use-dg/connectors-list.html>`_ page in the Amazon Q Business User Guide, and select the data source connector of your choice. - Then, from that specific data source connector's page, choose the topic containing *Using CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
         :param display_name: The name of the Amazon Q Business data source.
         :param index_id: The identifier of the index the data source is attached to.
         :param description: A description for the data source connector.
@@ -2964,6 +2989,17 @@ class CfnDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataSource")
+    @builtins.classmethod
+    def arn_for_data_source(cls, resource: _IDataSourceRef_6971c570) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b3996a29a59b7f7b07d54f63a1328269d187fc55ea1fcfd2d90e84ac418f123)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataSource", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4343,7 +4379,7 @@ class CfnDataSourceProps:
         '''Properties for defining a ``CfnDataSource``.
 
         :param application_id: The identifier of the Amazon Q Business application the data source will be attached to.
-        :param configuration: Use this property to specify a JSON or YAML schema with configuration properties specific to your data source connector to connect your data source repository to Amazon Q Business . You must use the JSON or YAML schema provided by Amazon Q . The following links have the configuration properties and schemas for AWS CloudFormation for the following connectors: - `Amazon Simple Storage Service <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/s3-cfn.html>`_ - `Amazon Q Web Crawler <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/web-crawler-cfn.html>`_ Similarly, you can find configuration templates and properties for your specific data source using the following steps: - Navigate to the `Supported connectors <https://docs.aws.amazon.com/amazonq/latest/business-use-dg/connectors-list.html>`_ page in the Amazon Q Business User Guide, and select the data source connector of your choice. - Then, from that specific data source connector's page, choose the topic containing *Using AWS CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
+        :param configuration: Use this property to specify a JSON or YAML schema with configuration properties specific to your data source connector to connect your data source repository to Amazon Q Business . You must use the JSON or YAML schema provided by Amazon Q . The following links have the configuration properties and schemas for AWS CloudFormation for the following connectors: - `Amazon Simple Storage Service <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/s3-cfn.html>`_ - `Amazon Q Web Crawler <https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/web-crawler-cfn.html>`_ Similarly, you can find configuration templates and properties for your specific data source using the following steps: - Navigate to the `Supported connectors <https://docs.aws.amazon.com/amazonq/latest/business-use-dg/connectors-list.html>`_ page in the Amazon Q Business User Guide, and select the data source connector of your choice. - Then, from that specific data source connector's page, choose the topic containing *Using CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
         :param display_name: The name of the Amazon Q Business data source.
         :param index_id: The identifier of the index the data source is attached to.
         :param description: A description for the data source connector.
@@ -4517,7 +4553,7 @@ class CfnDataSourceProps:
         Similarly, you can find configuration templates and properties for your specific data source using the following steps:
 
         - Navigate to the `Supported connectors <https://docs.aws.amazon.com/amazonq/latest/business-use-dg/connectors-list.html>`_ page in the Amazon Q Business User Guide, and select the data source connector of your choice.
-        - Then, from that specific data source connector's page, choose the topic containing *Using AWS CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
+        - Then, from that specific data source connector's page, choose the topic containing *Using CloudFormation* to find the schemas for your data source connector, including configuration parameter descriptions and examples.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-qbusiness-datasource.html#cfn-qbusiness-datasource-configuration
         '''
@@ -4723,6 +4759,17 @@ class CfnIndex(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIndex")
+    @builtins.classmethod
+    def arn_for_index(cls, resource: _IIndexRef_f140f6cd) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a5809a747e6f0736321505a873b53465f9ff74a1dc258e7ce041ae004f009855)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIndex", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5884,6 +5931,17 @@ class CfnPlugin(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPlugin")
+    @builtins.classmethod
+    def arn_for_plugin(cls, resource: _IPluginRef_68a8bf0a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8a5263d91f36bbe0c29b3fcdf29615ea37d1677b2ac9b016d4d8a9bff0d88674)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPlugin", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6902,6 +6960,17 @@ class CfnRetriever(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForRetriever")
+    @builtins.classmethod
+    def arn_for_retriever(cls, resource: _IRetrieverRef_e52248d3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9c3bbc34110c8efbb4a4cfc121aa5676a08321b826a01107d8a4b8e1d80ddf3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRetriever", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7525,6 +7594,20 @@ class CfnWebExperience(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWebExperience")
+    @builtins.classmethod
+    def arn_for_web_experience(
+        cls,
+        resource: _IWebExperienceRef_8c51af85,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa6c8e48fae67f0e1e2eddd087488f4cd8ffe89e36f24f7c8ccce293587f10dc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWebExperience", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8048,7 +8131,7 @@ class CfnWebExperience(
             '''Information about the OIDC-compliant identity provider (IdP) used to authenticate end users of an Amazon Q Business web experience.
 
             :param secrets_arn: The Amazon Resource Name (ARN) of a Secrets Manager secret containing the OIDC client secret.
-            :param secrets_role: An IAM role with permissions to access AWS KMS to decrypt the Secrets Manager secret containing your OIDC client secret.
+            :param secrets_role: An IAM role with permissions to access AWS to decrypt the Secrets Manager secret containing your OIDC client secret.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-qbusiness-webexperience-openidconnectproviderconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -8085,7 +8168,7 @@ class CfnWebExperience(
 
         @builtins.property
         def secrets_role(self) -> builtins.str:
-            '''An IAM role with permissions to access AWS KMS to decrypt the Secrets Manager secret containing your OIDC client secret.
+            '''An IAM role with permissions to access AWS  to decrypt the Secrets Manager secret containing your OIDC client secret.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-qbusiness-webexperience-openidconnectproviderconfiguration.html#cfn-qbusiness-webexperience-openidconnectproviderconfiguration-secretsrole
             '''
@@ -8457,6 +8540,12 @@ def _typecheckingstub__e2c95edfee8896187b03149b15ce3604b3a59bfb3b08abd73c5672b7c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4693a69897b7ec5d61299b26eb574a127f23add711d75a53a48b66b87836adc2(
+    resource: _IApplicationRef_3d9bfeca,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7588037e663dbdf7e96cc384972e8ccf5a8f2b0ce464c77da36d747c5af4230b(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8646,6 +8735,12 @@ def _typecheckingstub__32b7ecf69912e25edcd2354b3e0497931ea6bf042b1aabc881c8677d2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a90a2bcf1801807604e5526319ddb53db1a9d06f86ca7cb5919fe052940756cd(
+    resource: _IDataAccessorRef_78efaa5d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ff90302eca1e0f24b3ab926881bc0099a551d74c3a71debb214f222b63ff0ee4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8793,6 +8888,12 @@ def _typecheckingstub__44090f525589bca757ae88a29adc87bbfc36c3149c7964dfd32c2ce59
     sync_schedule: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.DataSourceVpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b3996a29a59b7f7b07d54f63a1328269d187fc55ea1fcfd2d90e84ac418f123(
+    resource: _IDataSourceRef_6971c570,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9001,6 +9102,12 @@ def _typecheckingstub__c457625f955b1ba56d35bffbcea827abe87347b80fd33090422ef2a80
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a5809a747e6f0736321505a873b53465f9ff74a1dc258e7ce041ae004f009855(
+    resource: _IIndexRef_f140f6cd,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fc39e6b7456662ae032c4446b1ba1e83f54ae382ca6aabc48cbb69fac624aef4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9190,6 +9297,12 @@ def _typecheckingstub__65b6fb8d65ff428790a22d304932f2713710d70a9f6d789d819489f81
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8a5263d91f36bbe0c29b3fcdf29615ea37d1677b2ac9b016d4d8a9bff0d88674(
+    resource: _IPluginRef_68a8bf0a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fec924728d6923b494037839fb41ee39d956abff0dc273347be667ed27df77ff(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9330,6 +9443,12 @@ def _typecheckingstub__793749362ec6ccd890aa9273b100a2ba004492449f0dba0ea4eb49095
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a9c3bbc34110c8efbb4a4cfc121aa5676a08321b826a01107d8a4b8e1d80ddf3(
+    resource: _IRetrieverRef_e52248d3,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__013b1c812aa4f36fb41a3e6e2da02553a56882a0b9e6a92ca26d883a232dfb06(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9427,6 +9546,12 @@ def _typecheckingstub__357871375e43a0ed6fbb398668ece13df26dff3afca5c98268a56fffd
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     title: typing.Optional[builtins.str] = None,
     welcome_message: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa6c8e48fae67f0e1e2eddd087488f4cd8ffe89e36f24f7c8ccce293587f10dc(
+    resource: _IWebExperienceRef_8c51af85,
 ) -> None:
     """Type checking stubs"""
     pass

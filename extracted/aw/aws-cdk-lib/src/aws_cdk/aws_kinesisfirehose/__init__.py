@@ -872,6 +872,7 @@ from ..aws_kms import IKey as _IKey_5f11635f
 from ..aws_lambda import IFunction as _IFunction_6adb0ab8
 from ..aws_logs import ILogGroup as _ILogGroup_3c4fa718
 from ..aws_s3 import IBucket as _IBucket_42e086fd
+from ..interfaces.aws_kinesis import IStreamRef as _IStreamRef_b484e253
 from ..interfaces.aws_kinesisfirehose import (
     DeliveryStreamReference as _DeliveryStreamReference_9f72be94,
     IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53,
@@ -971,7 +972,7 @@ class CfnDeliveryStream(
         amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DatabaseSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_name: typing.Optional[builtins.str] = None,
+        delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
         delivery_stream_type: typing.Optional[builtins.str] = None,
         direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.DirectPutSourceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1035,6 +1036,20 @@ class CfnDeliveryStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDeliveryStream")
+    @builtins.classmethod
+    def arn_for_delivery_stream(
+        cls,
+        resource: _IDeliveryStreamRef_678f5e53,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92d2e4c7b4d61086c8848ff7664a5d602580230deefd3781014745a487e357e3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeliveryStream", [resource]))
 
     @jsii.member(jsii_name="fromDeliveryStreamArn")
     @builtins.classmethod
@@ -9592,7 +9607,7 @@ class CfnDeliveryStreamProps:
         amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DatabaseSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        delivery_stream_name: typing.Optional[builtins.str] = None,
+        delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
         delivery_stream_type: typing.Optional[builtins.str] = None,
         direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DirectPutSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9760,13 +9775,15 @@ class CfnDeliveryStreamProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty]], result)
 
     @builtins.property
-    def delivery_stream_name(self) -> typing.Optional[builtins.str]:
+    def delivery_stream_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]]:
         '''The name of the Firehose stream.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisfirehose-deliverystream.html#cfn-kinesisfirehose-deliverystream-deliverystreamname
         '''
         result = self._values.get("delivery_stream_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]], result)
 
     @builtins.property
     def delivery_stream_type(self) -> typing.Optional[builtins.str]:
@@ -11012,6 +11029,58 @@ class DeliveryStreamAttributes:
         )
 
 
+class DeliveryStreamGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_kinesisfirehose.DeliveryStreamGrants",
+):
+    '''Collection of grant methods for a IDeliveryStreamRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_kinesisfirehose as kinesisfirehose
+        from aws_cdk.interfaces import aws_kinesisfirehose as interfaces_aws_kinesisfirehose
+        
+        # delivery_stream_ref: interfaces_aws_kinesisfirehose.IDeliveryStreamRef
+        
+        delivery_stream_grants = kinesisfirehose.DeliveryStreamGrants.from_delivery_stream(delivery_stream_ref)
+    '''
+
+    @jsii.member(jsii_name="fromDeliveryStream")
+    @builtins.classmethod
+    def from_delivery_stream(
+        cls,
+        resource: _IDeliveryStreamRef_678f5e53,
+    ) -> "DeliveryStreamGrants":
+        '''Creates grants for DeliveryStreamGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e32ddc623c6c3aa08dd0aeb089ffef45a2403ab8f504c9c8b20868b2996cda90)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("DeliveryStreamGrants", jsii.sinvoke(cls, "fromDeliveryStream", [resource]))
+
+    @jsii.member(jsii_name="putRecords")
+    def put_records(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant the ``grantee`` identity permissions to perform ``actions``.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa345bb640d0870a907b276f1424fd4b22587d7238a01bbddaad6ab4852c4b45)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "putRecords", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IDeliveryStreamRef_678f5e53:
+        return typing.cast(_IDeliveryStreamRef_678f5e53, jsii.get(self, "resource"))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_kinesisfirehose.DeliveryStreamProps",
     jsii_struct_bases=[],
@@ -11725,6 +11794,7 @@ class IDeliveryStream(
     _IResource_c80c4260,
     _IGrantable_71c4f5de,
     _IConnectable_10015a05,
+    _IDeliveryStreamRef_678f5e53,
     typing_extensions.Protocol,
 ):
     '''Represents an Amazon Data Firehose delivery stream.'''
@@ -11991,6 +12061,7 @@ class _IDeliveryStreamProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_IGrantable_71c4f5de), # type: ignore[misc]
     jsii.proxy_for(_IConnectable_10015a05), # type: ignore[misc]
+    jsii.proxy_for(_IDeliveryStreamRef_678f5e53), # type: ignore[misc]
 ):
     '''Represents an Amazon Data Firehose delivery stream.'''
 
@@ -15055,10 +15126,22 @@ class DeliveryStream(
         return typing.cast(builtins.str, jsii.get(self, "deliveryStreamName"))
 
     @builtins.property
+    @jsii.member(jsii_name="deliveryStreamRef")
+    def delivery_stream_ref(self) -> _DeliveryStreamReference_9f72be94:
+        '''A reference to a DeliveryStream resource.'''
+        return typing.cast(_DeliveryStreamReference_9f72be94, jsii.get(self, "deliveryStreamRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="grantPrincipal")
     def grant_principal(self) -> _IPrincipal_539bb2fd:
         '''The principal to grant permissions to.'''
         return typing.cast(_IPrincipal_539bb2fd, jsii.get(self, "grantPrincipal"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> DeliveryStreamGrants:
+        '''Collection of grant methods for a DeliveryStream.'''
+        return typing.cast(DeliveryStreamGrants, jsii.get(self, "grants"))
 
 
 @jsii.implements(ILoggingConfig)
@@ -15219,6 +15302,7 @@ __all__ = [
     "DecompressionProcessorOptions",
     "DeliveryStream",
     "DeliveryStreamAttributes",
+    "DeliveryStreamGrants",
     "DeliveryStreamProps",
     "DestinationBindOptions",
     "DestinationConfig",
@@ -15268,7 +15352,7 @@ def _typecheckingstub__b3cd824a2680c7d043cac684bd1be9ca77e94201f1ba00785d60a50ff
     amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DatabaseSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    delivery_stream_name: typing.Optional[builtins.str] = None,
+    delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
     delivery_stream_type: typing.Optional[builtins.str] = None,
     direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DirectPutSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -15282,6 +15366,12 @@ def _typecheckingstub__b3cd824a2680c7d043cac684bd1be9ca77e94201f1ba00785d60a50ff
     snowflake_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SnowflakeDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     splunk_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.SplunkDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92d2e4c7b4d61086c8848ff7664a5d602580230deefd3781014745a487e357e3(
+    resource: _IDeliveryStreamRef_678f5e53,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16082,7 +16172,7 @@ def _typecheckingstub__4f4e310bf0ff2c76f9c126ea4431fb25b9b53c8ba7e0c0eacc1c934de
     amazonopensearchservice_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.AmazonopensearchserviceDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     database_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DatabaseSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     delivery_stream_encryption_configuration_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DeliveryStreamEncryptionConfigurationInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    delivery_stream_name: typing.Optional[builtins.str] = None,
+    delivery_stream_name: typing.Optional[typing.Union[builtins.str, _IStreamRef_b484e253]] = None,
     delivery_stream_type: typing.Optional[builtins.str] = None,
     direct_put_source_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.DirectPutSourceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     elasticsearch_destination_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeliveryStream.ElasticsearchDestinationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -16197,6 +16287,18 @@ def _typecheckingstub__045ad458e5c2129dfab9cbc14581304a5f9f38f34ef8d143791a7e6ee
     delivery_stream_arn: typing.Optional[builtins.str] = None,
     delivery_stream_name: typing.Optional[builtins.str] = None,
     role: typing.Optional[_IRole_235f5d8e] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e32ddc623c6c3aa08dd0aeb089ffef45a2403ab8f504c9c8b20868b2996cda90(
+    resource: _IDeliveryStreamRef_678f5e53,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa345bb640d0870a907b276f1424fd4b22587d7238a01bbddaad6ab4852c4b45(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

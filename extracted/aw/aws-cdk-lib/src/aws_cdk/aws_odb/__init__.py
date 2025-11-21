@@ -209,6 +209,20 @@ class CfnCloudAutonomousVmCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCloudAutonomousVmCluster")
+    @builtins.classmethod
+    def arn_for_cloud_autonomous_vm_cluster(
+        cls,
+        resource: _ICloudAutonomousVmClusterRef_ec2012b7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86063b64a76451e09f7cc3c098d3a20d6095c5fd75becc743f4fb325ff458295)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudAutonomousVmCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1320,6 +1334,20 @@ class CfnCloudExadataInfrastructure(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCloudExadataInfrastructure")
+    @builtins.classmethod
+    def arn_for_cloud_exadata_infrastructure(
+        cls,
+        resource: _ICloudExadataInfrastructureRef_15dfbe1b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9e784e2b60bf0ded6072c21a14696c9c37eb9b5ed869eb536dd419a555a8a4d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudExadataInfrastructure", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2369,6 +2397,20 @@ class CfnCloudVmCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCloudVmCluster")
+    @builtins.classmethod
+    def arn_for_cloud_vm_cluster(
+        cls,
+        resource: _ICloudVmClusterRef_d11cd0d7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ec1bb67eb1f8034aed766424720d834a10f73711ca4897fbf09bccd8e66a312)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudVmCluster", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3783,6 +3825,17 @@ class CfnOdbNetwork(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForOdbNetwork")
+    @builtins.classmethod
+    def arn_for_odb_network(cls, resource: _IOdbNetworkRef_1a4a3229) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef0a50d37ee472fef04a96ce46352bd7892bc747ded64016afb5aa480b74841f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOdbNetwork", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4855,6 +4908,20 @@ class CfnOdbPeeringConnection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForOdbPeeringConnection")
+    @builtins.classmethod
+    def arn_for_odb_peering_connection(
+        cls,
+        resource: _IOdbPeeringConnectionRef_894341c3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__71634217fabaa9fdeeb3b6936b0b0dbfb0fa7bf82bc155a002f7a1a5d503784d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOdbPeeringConnection", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5141,6 +5208,12 @@ def _typecheckingstub__d5f3b11bad526801ca3c7c4e0e6c7dadf7c59ded4c26290e2160449d6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__86063b64a76451e09f7cc3c098d3a20d6095c5fd75becc743f4fb325ff458295(
+    resource: _ICloudAutonomousVmClusterRef_ec2012b7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__84a4f6b25bd9fc71f4af4608dc8d871a48a14e3aa106d9234cbf4fe28cb2b58f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5302,6 +5375,12 @@ def _typecheckingstub__fd782f736e7ad827f171e15d160c54071c1fbef5443d136721533cbfd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a9e784e2b60bf0ded6072c21a14696c9c37eb9b5ed869eb536dd419a555a8a4d(
+    resource: _ICloudExadataInfrastructureRef_15dfbe1b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4f2b53aab94ecf4f8defcc0e14b676f19557d80b7dd0f9ff46a17b7649889a87(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5444,6 +5523,12 @@ def _typecheckingstub__54a24296108cf4d367a887b0b65dc2c9163c185183c8fde1522a8cb32
     system_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     time_zone: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5ec1bb67eb1f8034aed766424720d834a10f73711ca4897fbf09bccd8e66a312(
+    resource: _ICloudVmClusterRef_d11cd0d7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5664,6 +5749,12 @@ def _typecheckingstub__9fb7fc690c89d5ce8f5abecb60ad841f57c0a476f500c817c386b57c3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ef0a50d37ee472fef04a96ce46352bd7892bc747ded64016afb5aa480b74841f(
+    resource: _IOdbNetworkRef_1a4a3229,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e2bd65fc6165cb531de2b171a21a41aaf44e19b81b1e54c00c7b0bb7dbc5feab(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5821,6 +5912,12 @@ def _typecheckingstub__cf0303fdbabd342a7442eedc20c217c961164af3d96d803130ec699ce
     odb_network_id: typing.Optional[builtins.str] = None,
     peer_network_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__71634217fabaa9fdeeb3b6936b0b0dbfb0fa7bf82bc155a002f7a1a5d503784d(
+    resource: _IOdbPeeringConnectionRef_894341c3,
 ) -> None:
     """Type checking stubs"""
     pass

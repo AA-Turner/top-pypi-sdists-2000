@@ -75,6 +75,10 @@ from .. import (
     TreeInspector as _TreeInspector_488e0dd5,
 )
 from ..aws_iam import Grant as _Grant_a7ae64f8, IGrantable as _IGrantable_71c4f5de
+from ..interfaces.aws_ec2 import (
+    ISubnetRef as _ISubnetRef_ac31e361, IVPCRef as _IVPCRef_f02a11df
+)
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_sagemaker import (
     AppImageConfigReference as _AppImageConfigReference_2a067584,
     AppReference as _AppReference_924b93e1,
@@ -228,6 +232,17 @@ class CfnApp(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApp")
+    @builtins.classmethod
+    def arn_for_app(cls, resource: _IAppRef_610d7c48) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21ea55d319d92146dfe8d0a01d5cab2fa39debc0e7f677eb91d808d28b518c21)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApp", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -615,6 +630,20 @@ class CfnAppImageConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAppImageConfig")
+    @builtins.classmethod
+    def arn_for_app_image_config(
+        cls,
+        resource: _IAppImageConfigRef_b2c6e856,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78d84a4a16312fafc19635f01b853d416fa49eb5346ab31b41f7f8715c7b3825)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAppImageConfig", [resource]))
 
     @jsii.member(jsii_name="fromAppImageConfigArn")
     @builtins.classmethod
@@ -1872,6 +1901,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_762062dd) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d2116ab8a92974df5327140752973c1f11a61774a7f9a96c953b749324257571)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4663,7 +4703,7 @@ class CfnDataQualityJobDefinition(
         data_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataQualityJobDefinition.DataQualityJobInputProperty", typing.Dict[builtins.str, typing.Any]]],
         data_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataQualityJobDefinition.MonitoringOutputConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         job_resources: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataQualityJobDefinition.MonitoringResourcesProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         data_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataQualityJobDefinition.DataQualityBaselineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
@@ -5977,7 +6017,7 @@ class CfnDataQualityJobDefinition(
             '''The output configuration for monitoring jobs.
 
             :param monitoring_outputs: Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.
-            :param kms_key_id: The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            :param kms_key_id: The AWS Key Management Service ( AWS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-dataqualityjobdefinition-monitoringoutputconfig.html
             :exampleMetadata: fixture=_generated
@@ -6029,7 +6069,7 @@ class CfnDataQualityJobDefinition(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            '''The AWS Key Management Service ( AWS  ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-dataqualityjobdefinition-monitoringoutputconfig.html#cfn-sagemaker-dataqualityjobdefinition-monitoringoutputconfig-kmskeyid
             '''
@@ -6593,7 +6633,7 @@ class CfnDataQualityJobDefinitionProps:
         data_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
         data_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
         job_resources: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringResourcesProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         data_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
@@ -6805,14 +6845,14 @@ class CfnDataQualityJobDefinitionProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDataQualityJobDefinition.MonitoringResourcesProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-dataqualityjobdefinition.html#cfn-sagemaker-dataqualityjobdefinition-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def data_quality_baseline_config(
@@ -7183,7 +7223,7 @@ class CfnDeviceFleet(
         *,
         device_fleet_name: builtins.str,
         output_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeviceFleet.EdgeOutputConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -7210,6 +7250,17 @@ class CfnDeviceFleet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDeviceFleet")
+    @builtins.classmethod
+    def arn_for_device_fleet(cls, resource: _IDeviceFleetRef_010fc39f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__29cdf3d04b3e6340bb34958531bf570917fe99d2faa1aa15518f20162d50f41a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeviceFleet", [resource]))
 
     @jsii.member(jsii_name="fromDeviceFleetName")
     @builtins.classmethod
@@ -7445,7 +7496,7 @@ class CfnDeviceFleetProps:
         *,
         device_fleet_name: builtins.str,
         output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceFleet.EdgeOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -7524,14 +7575,14 @@ class CfnDeviceFleetProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnDeviceFleet.EdgeOutputConfigProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) that has access to AWS Internet of Things (IoT).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-devicefleet.html#cfn-sagemaker-devicefleet-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8008,10 +8059,10 @@ class CfnDomain(
         default_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.DefaultSpaceSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.DomainSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tag_propagation: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Create a new ``AWS::SageMaker::Domain``.
 
@@ -8050,6 +8101,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_a90a3909) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ea09e83ae2e322c516d254f24bf372c001665fea3574f0f04a2b218695eabd7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="fromDomainArn")
     @builtins.classmethod
@@ -10168,7 +10230,7 @@ class CfnDomain(
             '''The KernelGateway app settings.
 
             :param custom_images: A list of custom SageMaker AI images that are configured to run as a KernelGateway app. The maximum number of custom images are as follows. - On a domain level: 200 - On a space level: 5 - On a user profile level: 5
-            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
             :param lifecycle_config_arns: The Amazon Resource Name (ARN) of the Lifecycle Configurations attached to the the user profile or domain. .. epigraph:: To remove a Lifecycle Config, you must set ``LifecycleConfigArns`` to an empty list.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-kernelgatewayappsettings.html
@@ -10235,7 +10297,7 @@ class CfnDomain(
 
             .. epigraph::
 
-               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-domain-kernelgatewayappsettings.html#cfn-sagemaker-domain-kernelgatewayappsettings-defaultresourcespec
             '''
@@ -11613,10 +11675,10 @@ class CfnDomainProps:
         default_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DefaultSpaceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DomainSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tag_propagation: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDomain``.
 
@@ -12066,7 +12128,9 @@ class CfnDomainProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def subnet_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''The VPC subnets that Studio uses for communication.
 
         *Length Constraints* : Maximum length of 32.
@@ -12078,7 +12142,7 @@ class CfnDomainProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-domain.html#cfn-sagemaker-domain-subnetids
         '''
         result = self._values.get("subnet_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     @builtins.property
     def tag_propagation(self) -> typing.Optional[builtins.str]:
@@ -12105,7 +12169,7 @@ class CfnDomainProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def vpc_id(self) -> typing.Optional[builtins.str]:
+    def vpc_id(self) -> typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]]:
         '''The ID of the Amazon Virtual Private Cloud (Amazon VPC) that Studio uses for communication.
 
         *Length Constraints* : Maximum length of 32.
@@ -12115,7 +12179,7 @@ class CfnDomainProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-domain.html#cfn-sagemaker-domain-vpcid
         '''
         result = self._values.get("vpc_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12247,6 +12311,17 @@ class CfnEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEndpoint")
+    @builtins.classmethod
+    def arn_for_endpoint(cls, resource: _IEndpointRef_c74991a4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7301eac565140b12cc5fac8b49940605f54b84b6344607f7f3aa76d711de913e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEndpoint", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16445,7 +16520,7 @@ class CfnFeatureGroup(
         description: typing.Optional[builtins.str] = None,
         offline_store_config: typing.Any = None,
         online_store_config: typing.Any = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         throughput_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFeatureGroup.ThroughputConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -16482,6 +16557,20 @@ class CfnFeatureGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFeatureGroup")
+    @builtins.classmethod
+    def arn_for_feature_group(
+        cls,
+        resource: _IFeatureGroupRef_61b2741d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d3a37f6bd57760f57e0aedaf480d9d8479f1ad53bd5c6bd56797dc301622a30)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFeatureGroup", [resource]))
 
     @jsii.member(jsii_name="fromFeatureGroupName")
     @builtins.classmethod
@@ -17494,7 +17583,7 @@ class CfnFeatureGroupProps:
         description: typing.Optional[builtins.str] = None,
         offline_store_config: typing.Any = None,
         online_store_config: typing.Any = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         throughput_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeatureGroup.ThroughputConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -17659,13 +17748,15 @@ class CfnFeatureGroupProps:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the IAM execution role used to create the feature group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-featuregroup.html#cfn-sagemaker-featuregroup-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -17771,6 +17862,17 @@ class CfnImage(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForImage")
+    @builtins.classmethod
+    def arn_for_image(cls, resource: _IImageRef_ade04127) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__68c8cec179e0ac6f95edef046f27c01482498bafff222dd0520b31bdb52770d5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImage", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18140,6 +18242,20 @@ class CfnImageVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForImageVersion")
+    @builtins.classmethod
+    def arn_for_image_version(
+        cls,
+        resource: _IImageVersionRef_eb63b8d2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d4b8f15075a03ccb1147a91f41f5df48e7d68dce62726eb1e331ff1bb5484ad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImageVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18727,6 +18843,20 @@ class CfnInferenceComponent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInferenceComponent")
+    @builtins.classmethod
+    def arn_for_inference_component(
+        cls,
+        resource: _IInferenceComponentRef_ebf71f07,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b111aae77aae1e79f72d87ee8f7e3896ba3edde1bc05d21df694c7d0a486085)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInferenceComponent", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -20371,6 +20501,20 @@ class CfnInferenceExperiment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInferenceExperiment")
+    @builtins.classmethod
+    def arn_for_inference_experiment(
+        cls,
+        resource: _IInferenceExperimentRef_ae1a2c8c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ccc1f1703cf450bfe6d93ca2bf6d8900cd8eff2c5392c3339a91873ff86cee4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInferenceExperiment", [resource]))
 
     @jsii.member(jsii_name="fromInferenceExperimentArn")
     @builtins.classmethod
@@ -23657,7 +23801,7 @@ class CfnModelBiasJobDefinition(
         model_bias_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelBiasJobDefinition.ModelBiasAppSpecificationProperty", typing.Dict[builtins.str, typing.Any]]],
         model_bias_job_input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelBiasJobDefinition.ModelBiasJobInputProperty", typing.Dict[builtins.str, typing.Any]]],
         model_bias_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelBiasJobDefinition.MonitoringOutputConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_bias_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelBiasJobDefinition.ModelBiasBaselineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -25148,7 +25292,7 @@ class CfnModelBiasJobDefinition(
             '''The output configuration for monitoring jobs.
 
             :param monitoring_outputs: Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.
-            :param kms_key_id: The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            :param kms_key_id: The AWS Key Management Service ( AWS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelbiasjobdefinition-monitoringoutputconfig.html
             :exampleMetadata: fixture=_generated
@@ -25200,7 +25344,7 @@ class CfnModelBiasJobDefinition(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            '''The AWS Key Management Service ( AWS  ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelbiasjobdefinition-monitoringoutputconfig.html#cfn-sagemaker-modelbiasjobdefinition-monitoringoutputconfig-kmskeyid
             '''
@@ -25713,7 +25857,7 @@ class CfnModelBiasJobDefinitionProps:
         model_bias_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
         model_bias_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
         model_bias_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_bias_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -25932,14 +26076,14 @@ class CfnModelBiasJobDefinitionProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnModelBiasJobDefinition.MonitoringOutputConfigProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelbiasjobdefinition.html#cfn-sagemaker-modelbiasjobdefinition-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def endpoint_name(self) -> typing.Optional[builtins.str]:
@@ -26233,6 +26377,17 @@ class CfnModelCard(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForModelCard")
+    @builtins.classmethod
+    def arn_for_model_card(cls, resource: _IModelCardRef_94b5bd5a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f25b7557aa9779f8658705a319f4851ada93c91a568442e7e70468af877f9429)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForModelCard", [resource]))
 
     @jsii.member(jsii_name="fromModelCardArn")
     @builtins.classmethod
@@ -29642,7 +29797,7 @@ class CfnModelExplainabilityJobDefinition(
         model_explainability_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelExplainabilityJobDefinition.ModelExplainabilityAppSpecificationProperty", typing.Dict[builtins.str, typing.Any]]],
         model_explainability_job_input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelExplainabilityJobDefinition.ModelExplainabilityJobInputProperty", typing.Dict[builtins.str, typing.Any]]],
         model_explainability_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelExplainabilityJobDefinition.MonitoringOutputConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_explainability_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelExplainabilityJobDefinition.ModelExplainabilityBaselineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -30948,7 +31103,7 @@ class CfnModelExplainabilityJobDefinition(
             '''The output configuration for monitoring jobs.
 
             :param monitoring_outputs: Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.
-            :param kms_key_id: The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            :param kms_key_id: The AWS Key Management Service ( AWS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelexplainabilityjobdefinition-monitoringoutputconfig.html
             :exampleMetadata: fixture=_generated
@@ -31000,7 +31155,7 @@ class CfnModelExplainabilityJobDefinition(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            '''The AWS Key Management Service ( AWS  ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelexplainabilityjobdefinition-monitoringoutputconfig.html#cfn-sagemaker-modelexplainabilityjobdefinition-monitoringoutputconfig-kmskeyid
             '''
@@ -31513,7 +31668,7 @@ class CfnModelExplainabilityJobDefinitionProps:
         model_explainability_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
         model_explainability_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
         model_explainability_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_explainability_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -31721,14 +31876,14 @@ class CfnModelExplainabilityJobDefinitionProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnModelExplainabilityJobDefinition.MonitoringOutputConfigProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelexplainabilityjobdefinition.html#cfn-sagemaker-modelexplainabilityjobdefinition-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def endpoint_name(self) -> typing.Optional[builtins.str]:
@@ -32280,6 +32435,20 @@ class CfnModelPackage(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForModelPackage")
+    @builtins.classmethod
+    def arn_for_model_package(
+        cls,
+        resource: _IModelPackageRef_3b67e314,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__527ba7e6df4b13b3ff720fdffc1fdd2bf10294233e8d09e89fca13ec4f196bba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForModelPackage", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -36529,6 +36698,20 @@ class CfnModelPackageGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForModelPackageGroup")
+    @builtins.classmethod
+    def arn_for_model_package_group(
+        cls,
+        resource: _IModelPackageGroupRef_48cbef2c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a94b97b1be2a1134bbaa2417e059d8e36f800000d5701052ccce3d0fc40eb4a5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForModelPackageGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -38019,7 +38202,7 @@ class CfnModelQualityJobDefinition(
         model_quality_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelQualityJobDefinition.ModelQualityAppSpecificationProperty", typing.Dict[builtins.str, typing.Any]]],
         model_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelQualityJobDefinition.ModelQualityJobInputProperty", typing.Dict[builtins.str, typing.Any]]],
         model_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelQualityJobDefinition.MonitoringOutputConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnModelQualityJobDefinition.ModelQualityBaselineConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -39546,7 +39729,7 @@ class CfnModelQualityJobDefinition(
             '''The output configuration for monitoring jobs.
 
             :param monitoring_outputs: Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.
-            :param kms_key_id: The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            :param kms_key_id: The AWS Key Management Service ( AWS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelqualityjobdefinition-monitoringoutputconfig.html
             :exampleMetadata: fixture=_generated
@@ -39598,7 +39781,7 @@ class CfnModelQualityJobDefinition(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            '''The AWS Key Management Service ( AWS  ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-modelqualityjobdefinition-monitoringoutputconfig.html#cfn-sagemaker-modelqualityjobdefinition-monitoringoutputconfig-kmskeyid
             '''
@@ -40111,7 +40294,7 @@ class CfnModelQualityJobDefinitionProps:
         model_quality_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
         model_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
         model_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         endpoint_name: typing.Optional[builtins.str] = None,
         job_definition_name: typing.Optional[builtins.str] = None,
         model_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -40334,14 +40517,14 @@ class CfnModelQualityJobDefinitionProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnModelQualityJobDefinition.MonitoringOutputConfigProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role that Amazon SageMaker can assume to perform tasks on your behalf.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-modelqualityjobdefinition.html#cfn-sagemaker-modelqualityjobdefinition-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def endpoint_name(self) -> typing.Optional[builtins.str]:
@@ -40601,6 +40784,20 @@ class CfnMonitoringSchedule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMonitoringSchedule")
+    @builtins.classmethod
+    def arn_for_monitoring_schedule(
+        cls,
+        resource: _IMonitoringScheduleRef_a00f25b6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b06e9d531bb0ac2ad5d59e5d9c55ae009a7eb063020693d1ed71d7338cf330b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMonitoringSchedule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -42216,7 +42413,7 @@ class CfnMonitoringSchedule(
             '''The output configuration for monitoring jobs.
 
             :param monitoring_outputs: Monitoring outputs for monitoring jobs. This is where the output of the periodic monitoring jobs is uploaded.
-            :param kms_key_id: The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            :param kms_key_id: The AWS Key Management Service ( AWS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-monitoringschedule-monitoringoutputconfig.html
             :exampleMetadata: fixture=_generated
@@ -42268,7 +42465,7 @@ class CfnMonitoringSchedule(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS Key Management Service ( AWS KMS ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
+            '''The AWS Key Management Service ( AWS  ) key that Amazon SageMaker AI uses to encrypt the model artifacts at rest using Amazon S3 server-side encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-monitoringschedule-monitoringoutputconfig.html#cfn-sagemaker-monitoringschedule-monitoringoutputconfig-kmskeyid
             '''
@@ -44606,7 +44803,9 @@ class CfnPartnerApp(
                     "arguments_key": "arguments"
                 }
             ),
+            app_version="appVersion",
             client_token="clientToken",
+            enable_auto_minor_version_upgrade=False,
             enable_iam_session_based_identity=False,
             kms_key_id="kmsKeyId",
             maintenance_config=sagemaker.CfnPartnerApp.PartnerAppMaintenanceConfigProperty(
@@ -44630,7 +44829,9 @@ class CfnPartnerApp(
         tier: builtins.str,
         type: builtins.str,
         application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPartnerApp.PartnerAppConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        app_version: typing.Optional[builtins.str] = None,
         client_token: typing.Optional[builtins.str] = None,
+        enable_auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         enable_iam_session_based_identity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         maintenance_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPartnerApp.PartnerAppMaintenanceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -44646,7 +44847,9 @@ class CfnPartnerApp(
         :param tier: Specifies the tier or level of the Partner AI App. The tier size impacts the speed and capabilities of the application. For more information, see `Set up Partner AI Apps <https://docs.aws.amazon.com/sagemaker/latest/dg/partner-app-onboard.html>`_ .
         :param type: Specifies the type of Partner AI App being created.
         :param application_config: Configuration settings for the Partner AI App.
+        :param app_version: The version of the PartnerApp.
         :param client_token: (deprecated) The client token for the PartnerApp.
+        :param enable_auto_minor_version_upgrade: Enables automatic minor version upgrades for the PartnerApp.
         :param enable_iam_session_based_identity: Enables IAM Session based Identity for PartnerApp.
         :param kms_key_id: The AWS KMS customer managed key used to encrypt the data associated with the PartnerApp.
         :param maintenance_config: A collection of settings that specify the maintenance schedule for the PartnerApp.
@@ -44663,7 +44866,9 @@ class CfnPartnerApp(
             tier=tier,
             type=type,
             application_config=application_config,
+            app_version=app_version,
             client_token=client_token,
+            enable_auto_minor_version_upgrade=enable_auto_minor_version_upgrade,
             enable_iam_session_based_identity=enable_iam_session_based_identity,
             kms_key_id=kms_key_id,
             maintenance_config=maintenance_config,
@@ -44671,6 +44876,17 @@ class CfnPartnerApp(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPartnerApp")
+    @builtins.classmethod
+    def arn_for_partner_app(cls, resource: _IPartnerAppRef_14ae5979) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__410cabdd6831f6f5b11b0a37265da7cf8404511e69590f9d9c902b85a8b8c331)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPartnerApp", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -44719,6 +44935,15 @@ class CfnPartnerApp(
         :cloudformationAttribute: BaseUrl
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrBaseUrl"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCurrentVersionEolDate")
+    def attr_current_version_eol_date(self) -> builtins.str:
+        '''The end-of-life date for the current version of the PartnerApp.
+
+        :cloudformationAttribute: CurrentVersionEolDate
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCurrentVersionEolDate"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
@@ -44821,6 +45046,19 @@ class CfnPartnerApp(
         jsii.set(self, "applicationConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="appVersion")
+    def app_version(self) -> typing.Optional[builtins.str]:
+        '''The version of the PartnerApp.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "appVersion"))
+
+    @app_version.setter
+    def app_version(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2440ca3b894a56319bb66f2d7a8d02f07f46548ed3ae7b397d8c384b19e57ef8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "appVersion", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="clientToken")
     def client_token(self) -> typing.Optional[builtins.str]:
         '''(deprecated) The client token for the PartnerApp.
@@ -44837,6 +45075,24 @@ class CfnPartnerApp(
             type_hints = typing.get_type_hints(_typecheckingstub__1c8ec66eb18a5bb742143efcf194c774280f9b65cafeedbdbcab6fd897143208)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "clientToken", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="enableAutoMinorVersionUpgrade")
+    def enable_auto_minor_version_upgrade(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Enables automatic minor version upgrades for the PartnerApp.'''
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "enableAutoMinorVersionUpgrade"))
+
+    @enable_auto_minor_version_upgrade.setter
+    def enable_auto_minor_version_upgrade(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d67d82d455f7431c575f848ac5341ba572a6853a3dc605de85b02d900cb8abbe)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "enableAutoMinorVersionUpgrade", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="enableIamSessionBasedIdentity")
@@ -45037,7 +45293,9 @@ class CfnPartnerApp(
         "tier": "tier",
         "type": "type",
         "application_config": "applicationConfig",
+        "app_version": "appVersion",
         "client_token": "clientToken",
+        "enable_auto_minor_version_upgrade": "enableAutoMinorVersionUpgrade",
         "enable_iam_session_based_identity": "enableIamSessionBasedIdentity",
         "kms_key_id": "kmsKeyId",
         "maintenance_config": "maintenanceConfig",
@@ -45054,7 +45312,9 @@ class CfnPartnerAppProps:
         tier: builtins.str,
         type: builtins.str,
         application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        app_version: typing.Optional[builtins.str] = None,
         client_token: typing.Optional[builtins.str] = None,
+        enable_auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         enable_iam_session_based_identity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         kms_key_id: typing.Optional[builtins.str] = None,
         maintenance_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppMaintenanceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -45068,7 +45328,9 @@ class CfnPartnerAppProps:
         :param tier: Specifies the tier or level of the Partner AI App. The tier size impacts the speed and capabilities of the application. For more information, see `Set up Partner AI Apps <https://docs.aws.amazon.com/sagemaker/latest/dg/partner-app-onboard.html>`_ .
         :param type: Specifies the type of Partner AI App being created.
         :param application_config: Configuration settings for the Partner AI App.
+        :param app_version: The version of the PartnerApp.
         :param client_token: (deprecated) The client token for the PartnerApp.
+        :param enable_auto_minor_version_upgrade: Enables automatic minor version upgrades for the PartnerApp.
         :param enable_iam_session_based_identity: Enables IAM Session based Identity for PartnerApp.
         :param kms_key_id: The AWS KMS customer managed key used to encrypt the data associated with the PartnerApp.
         :param maintenance_config: A collection of settings that specify the maintenance schedule for the PartnerApp.
@@ -45097,7 +45359,9 @@ class CfnPartnerAppProps:
                         "arguments_key": "arguments"
                     }
                 ),
+                app_version="appVersion",
                 client_token="clientToken",
+                enable_auto_minor_version_upgrade=False,
                 enable_iam_session_based_identity=False,
                 kms_key_id="kmsKeyId",
                 maintenance_config=sagemaker.CfnPartnerApp.PartnerAppMaintenanceConfigProperty(
@@ -45117,7 +45381,9 @@ class CfnPartnerAppProps:
             check_type(argname="argument tier", value=tier, expected_type=type_hints["tier"])
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
             check_type(argname="argument application_config", value=application_config, expected_type=type_hints["application_config"])
+            check_type(argname="argument app_version", value=app_version, expected_type=type_hints["app_version"])
             check_type(argname="argument client_token", value=client_token, expected_type=type_hints["client_token"])
+            check_type(argname="argument enable_auto_minor_version_upgrade", value=enable_auto_minor_version_upgrade, expected_type=type_hints["enable_auto_minor_version_upgrade"])
             check_type(argname="argument enable_iam_session_based_identity", value=enable_iam_session_based_identity, expected_type=type_hints["enable_iam_session_based_identity"])
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument maintenance_config", value=maintenance_config, expected_type=type_hints["maintenance_config"])
@@ -45131,8 +45397,12 @@ class CfnPartnerAppProps:
         }
         if application_config is not None:
             self._values["application_config"] = application_config
+        if app_version is not None:
+            self._values["app_version"] = app_version
         if client_token is not None:
             self._values["client_token"] = client_token
+        if enable_auto_minor_version_upgrade is not None:
+            self._values["enable_auto_minor_version_upgrade"] = enable_auto_minor_version_upgrade
         if enable_iam_session_based_identity is not None:
             self._values["enable_iam_session_based_identity"] = enable_iam_session_based_identity
         if kms_key_id is not None:
@@ -45208,6 +45478,15 @@ class CfnPartnerAppProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnPartnerApp.PartnerAppConfigProperty]], result)
 
     @builtins.property
+    def app_version(self) -> typing.Optional[builtins.str]:
+        '''The version of the PartnerApp.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-partnerapp.html#cfn-sagemaker-partnerapp-appversion
+        '''
+        result = self._values.get("app_version")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def client_token(self) -> typing.Optional[builtins.str]:
         '''(deprecated) The client token for the PartnerApp.
 
@@ -45218,6 +45497,17 @@ class CfnPartnerAppProps:
         '''
         result = self._values.get("client_token")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def enable_auto_minor_version_upgrade(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Enables automatic minor version upgrades for the PartnerApp.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-partnerapp.html#cfn-sagemaker-partnerapp-enableautominorversionupgrade
+        '''
+        result = self._values.get("enable_auto_minor_version_upgrade")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def enable_iam_session_based_identity(
@@ -45317,7 +45607,7 @@ class CfnPipeline(
         *,
         pipeline_definition: typing.Any,
         pipeline_name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         parallelism_configuration: typing.Any = None,
         pipeline_description: typing.Optional[builtins.str] = None,
         pipeline_display_name: typing.Optional[builtins.str] = None,
@@ -45350,6 +45640,17 @@ class CfnPipeline(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPipeline")
+    @builtins.classmethod
+    def arn_for_pipeline(cls, resource: _IPipelineRef_682fe738) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e9935ff29e2c79fcee6334c3ee6a64883c307de54ae3b09dd2db0955c3c5930)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPipeline", [resource]))
 
     @jsii.member(jsii_name="fromPipelineName")
     @builtins.classmethod
@@ -45785,7 +46086,7 @@ class CfnPipelineProps:
         *,
         pipeline_definition: typing.Any,
         pipeline_name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         parallelism_configuration: typing.Any = None,
         pipeline_description: typing.Optional[builtins.str] = None,
         pipeline_display_name: typing.Optional[builtins.str] = None,
@@ -45874,14 +46175,14 @@ class CfnPipelineProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role used to execute the pipeline.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-pipeline.html#cfn-sagemaker-pipeline-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def parallelism_configuration(self) -> typing.Any:
@@ -46124,6 +46425,20 @@ class CfnProcessingJob(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProcessingJob")
+    @builtins.classmethod
+    def arn_for_processing_job(
+        cls,
+        resource: _IProcessingJobRef_4bfce5ad,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__00f7cb29546aafd14d1309842bfe159d234a4fad4f1065b1bea28a4398f1b1d5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProcessingJob", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -48711,6 +49026,17 @@ class CfnProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_29c812de) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ddbf1e674e1b4398c0b04d5219be9481ad28fe0905535abfac1ec6ae5287e73)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -49722,6 +50048,17 @@ class CfnSpace(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSpace")
+    @builtins.classmethod
+    def arn_for_space(cls, resource: _ISpaceRef_3a0c11c7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2d657f0432cb0439f5cc9cb1be3ade9875ae939840298351197a7fe716039592)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSpace", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -50419,7 +50756,7 @@ class CfnSpace(
             '''The KernelGateway app settings.
 
             :param custom_images: A list of custom SageMaker AI images that are configured to run as a KernelGateway app. The maximum number of custom images are as follows. - On a domain level: 200 - On a space level: 5 - On a user profile level: 5
-            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
             :param lifecycle_config_arns: The Amazon Resource Name (ARN) of the Lifecycle Configurations attached to the the user profile or domain. .. epigraph:: To remove a Lifecycle Config, you must set ``LifecycleConfigArns`` to an empty list.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-space-kernelgatewayappsettings.html
@@ -50486,7 +50823,7 @@ class CfnSpace(
 
             .. epigraph::
 
-               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-space-kernelgatewayappsettings.html#cfn-sagemaker-space-kernelgatewayappsettings-defaultresourcespec
             '''
@@ -51738,6 +52075,20 @@ class CfnStudioLifecycleConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForStudioLifecycleConfig")
+    @builtins.classmethod
+    def arn_for_studio_lifecycle_config(
+        cls,
+        resource: _IStudioLifecycleConfigRef_a51ab77f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf7afd747e554c3dd5b31ab489356aad431dbe9264fc388ac921fb0e1f701737)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStudioLifecycleConfig", [resource]))
+
     @jsii.member(jsii_name="fromStudioLifecycleConfigArn")
     @builtins.classmethod
     def from_studio_lifecycle_config_arn(
@@ -52178,7 +52529,7 @@ class CfnUserProfile(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        domain_id: builtins.str,
+        domain_id: typing.Union[builtins.str, _IDomainRef_a90a3909],
         user_profile_name: builtins.str,
         single_sign_on_user_identifier: typing.Optional[builtins.str] = None,
         single_sign_on_user_value: typing.Optional[builtins.str] = None,
@@ -52210,6 +52561,17 @@ class CfnUserProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserProfile")
+    @builtins.classmethod
+    def arn_for_user_profile(cls, resource: _IUserProfileRef_da0bb896) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__279bfc6eed1bed1da32b776d082a1f55aed3dca16f7b32b4e5fae032d9add082)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -53632,7 +53994,7 @@ class CfnUserProfile(
             '''The KernelGateway app settings.
 
             :param custom_images: A list of custom SageMaker AI images that are configured to run as a KernelGateway app. The maximum number of custom images are as follows. - On a domain level: 200 - On a space level: 5 - On a user profile level: 5
-            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+            :param default_resource_spec: The default instance type and the Amazon Resource Name (ARN) of the default SageMaker AI image used by the KernelGateway app. .. epigraph:: The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
             :param lifecycle_config_arns: The Amazon Resource Name (ARN) of the Lifecycle Configurations attached to the the user profile or domain. .. epigraph:: To remove a Lifecycle Config, you must set ``LifecycleConfigArns`` to an empty list.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-kernelgatewayappsettings.html
@@ -53699,7 +54061,7 @@ class CfnUserProfile(
 
             .. epigraph::
 
-               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or AWS CloudFormation and the instance type parameter value is not passed.
+               The Amazon SageMaker AI Studio UI does not use the default instance type value set here. The default instance type set here is used when Apps are created using the AWS CLI or CloudFormation and the instance type parameter value is not passed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-userprofile-kernelgatewayappsettings.html#cfn-sagemaker-userprofile-kernelgatewayappsettings-defaultresourcespec
             '''
@@ -54663,7 +55025,7 @@ class CfnUserProfileProps:
     def __init__(
         self,
         *,
-        domain_id: builtins.str,
+        domain_id: typing.Union[builtins.str, _IDomainRef_a90a3909],
         user_profile_name: builtins.str,
         single_sign_on_user_identifier: typing.Optional[builtins.str] = None,
         single_sign_on_user_value: typing.Optional[builtins.str] = None,
@@ -54854,14 +55216,14 @@ class CfnUserProfileProps:
             self._values["user_settings"] = user_settings
 
     @builtins.property
-    def domain_id(self) -> builtins.str:
+    def domain_id(self) -> typing.Union[builtins.str, _IDomainRef_a90a3909]:
         '''The domain ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sagemaker-userprofile.html#cfn-sagemaker-userprofile-domainid
         '''
         result = self._values.get("domain_id")
         assert result is not None, "Required property 'domain_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDomainRef_a90a3909], result)
 
     @builtins.property
     def user_profile_name(self) -> builtins.str:
@@ -55850,6 +56212,12 @@ def _typecheckingstub__da207547ea530dc451bd8f33c6174b52ddcb5c9c348d4df84894bf6a2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21ea55d319d92146dfe8d0a01d5cab2fa39debc0e7f677eb91d808d28b518c21(
+    resource: _IAppRef_610d7c48,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__76b99b25d5846497c07368fb764a277782458a65eed58ef9398494227f100421(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -55923,6 +56291,12 @@ def _typecheckingstub__a5bddad57cf4d60d052f199fa18e6d92660d1097d0ea8d783dbde99f9
     jupyter_lab_app_image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppImageConfig.JupyterLabAppImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kernel_gateway_image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppImageConfig.KernelGatewayImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78d84a4a16312fafc19635f01b853d416fa49eb5346ab31b41f7f8715c7b3825(
+    resource: _IAppImageConfigRef_b2c6e856,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -56080,6 +56454,12 @@ def _typecheckingstub__b1441bbec1bb60460bda62b43765e140885fbb36e13b090ded31c919b
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     tiered_storage_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.TieredStorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2116ab8a92974df5327140752973c1f11a61774a7f9a96c953b749324257571(
+    resource: _IClusterRef_762062dd,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -56399,7 +56779,7 @@ def _typecheckingstub__738872af4917cc4a9c82bf05685c5bae3f1ac28542f97be97fe1f36cb
     data_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     data_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     job_resources: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringResourcesProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     data_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
@@ -56648,7 +57028,7 @@ def _typecheckingstub__9c5a27da69d6cdc76cfa83b348321ea97cb5023c0191ac16e8ba03f2a
     data_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     data_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     job_resources: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.MonitoringResourcesProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     data_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityJobDefinition.DataQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
@@ -56715,9 +57095,15 @@ def _typecheckingstub__e5c11192822cf6a7274bcacd8c8147149a9111d09d2701f9547a16c89
     *,
     device_fleet_name: builtins.str,
     output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceFleet.EdgeOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__29cdf3d04b3e6340bb34958531bf570917fe99d2faa1aa15518f20162d50f41a(
+    resource: _IDeviceFleetRef_010fc39f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -56784,7 +57170,7 @@ def _typecheckingstub__d2dc3d0951ad79f71353b3ad32783516a322539ca7717d79ffa74bab3
     *,
     device_fleet_name: builtins.str,
     output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeviceFleet.EdgeOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -56812,10 +57198,16 @@ def _typecheckingstub__6a98e719c58aab3299db52c4086bfb65ee6438882423af805478e9ea3
     default_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DefaultSpaceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DomainSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tag_propagation: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ea09e83ae2e322c516d254f24bf372c001665fea3574f0f04a2b218695eabd7(
+    resource: _IDomainRef_a90a3909,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -57191,10 +57583,10 @@ def _typecheckingstub__d70b90cbf9af0f3b53a18e5f11f7de868ef5fe3e6110bb229fd135001
     default_space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DefaultSpaceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.DomainSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tag_propagation: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -57210,6 +57602,12 @@ def _typecheckingstub__25a1b782521c912d49f8881f9136b81a31874db7423cbc69dd4d59230
     retain_all_variant_properties: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     retain_deployment_config: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7301eac565140b12cc5fac8b49940605f54b84b6344607f7f3aa76d711de913e(
+    resource: _IEndpointRef_c74991a4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -57657,9 +58055,15 @@ def _typecheckingstub__4102c01580236aeaa8183dc09f0ab2d908ee3b4650df43ce2419ef038
     description: typing.Optional[builtins.str] = None,
     offline_store_config: typing.Any = None,
     online_store_config: typing.Any = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     throughput_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeatureGroup.ThroughputConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d3a37f6bd57760f57e0aedaf480d9d8479f1ad53bd5c6bd56797dc301622a30(
+    resource: _IFeatureGroupRef_61b2741d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -57822,7 +58226,7 @@ def _typecheckingstub__bb1e9da53f754dd8978f06cdc95c9101b0ef89f3b1a689ab0a1e92eac
     description: typing.Optional[builtins.str] = None,
     offline_store_config: typing.Any = None,
     online_store_config: typing.Any = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     throughput_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFeatureGroup.ThroughputConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -57838,6 +58242,12 @@ def _typecheckingstub__dde982bdab4dea21946725303bd84c1eb61267733b6351eb23c00f7d0
     image_description: typing.Optional[builtins.str] = None,
     image_display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__68c8cec179e0ac6f95edef046f27c01482498bafff222dd0520b31bdb52770d5(
+    resource: _IImageRef_ade04127,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -57910,6 +58320,12 @@ def _typecheckingstub__1ad8c361f2876657ea1cf0f0f9f7356de06575f95ad80d7a587da1909
     programming_lang: typing.Optional[builtins.str] = None,
     release_notes: typing.Optional[builtins.str] = None,
     vendor_guidance: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d4b8f15075a03ccb1147a91f41f5df48e7d68dce62726eb1e331ff1bb5484ad(
+    resource: _IImageVersionRef_eb63b8d2,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -58021,6 +58437,12 @@ def _typecheckingstub__3f4e5766b29b94468be54bb573abdb408c06e9ece9272100939b3c018
     runtime_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInferenceComponent.InferenceComponentRuntimeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     variant_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b111aae77aae1e79f72d87ee8f7e3896ba3edde1bc05d21df694c7d0a486085(
+    resource: _IInferenceComponentRef_ebf71f07,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -58213,6 +58635,12 @@ def _typecheckingstub__43a6aafd6835d00baa8d211b8e504c33f5e79820719546466a90ba8cc
     shadow_mode_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInferenceExperiment.ShadowModeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status_reason: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ccc1f1703cf450bfe6d93ca2bf6d8900cd8eff2c5392c3339a91873ff86cee4(
+    resource: _IInferenceExperimentRef_ae1a2c8c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -58676,7 +59104,7 @@ def _typecheckingstub__5872e9629433c78a4806d9db53eb11d5daed20c7d3e8e4499c965f545
     model_bias_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_bias_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_bias_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_bias_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -58932,7 +59360,7 @@ def _typecheckingstub__3161ba72dcb53b69d61217bc71ca77ee8b6119cd05c9055b38545e88d
     model_bias_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_bias_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_bias_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_bias_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelBiasJobDefinition.ModelBiasBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -58954,6 +59382,12 @@ def _typecheckingstub__a592fe664bd5fc9b01b1e64fc0f6cea3e28e6bcee51c6b1db5790b485
     last_modified_by: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelCard.UserContextProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     security_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelCard.SecurityConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f25b7557aa9779f8658705a319f4851ada93c91a568442e7e70468af877f9429(
+    resource: _IModelCardRef_94b5bd5a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -59275,7 +59709,7 @@ def _typecheckingstub__954f804ffa3bf5dd33695ee00ecfe5ce08b7adb2e74010525ccd32a9a
     model_explainability_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_explainability_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_explainability_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_explainability_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -59517,7 +59951,7 @@ def _typecheckingstub__362e56df80f87db6e76a20cfa99a7869ba12eb909ceb3dc9c80aa0c6f
     model_explainability_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_explainability_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_explainability_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_explainability_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelExplainabilityJobDefinition.ModelExplainabilityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -59559,6 +59993,12 @@ def _typecheckingstub__dd16b0de7cecf20a90c23d8d97096e81424f40b485b97eeee13cb706d
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     task: typing.Optional[builtins.str] = None,
     validation_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelPackage.ValidationSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__527ba7e6df4b13b3ff720fdffc1fdd2bf10294233e8d09e89fca13ec4f196bba(
+    resource: _IModelPackageRef_3b67e314,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -60052,6 +60492,12 @@ def _typecheckingstub__746607cd1f1d8be2c0e4762ebd80bdfab4d2d86299bd55c14b011cbec
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a94b97b1be2a1134bbaa2417e059d8e36f800000d5701052ccce3d0fc40eb4a5(
+    resource: _IModelPackageGroupRef_48cbef2c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8ce67476f97f7f11bbbe25ff1a7e5f540c17f1614cfa9671655bdc488c4309ba(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -60153,7 +60599,7 @@ def _typecheckingstub__42e31b56fc0144a98a714f239264ddf7afe0fd9daf080a15f45b25860
     model_quality_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -60411,7 +60857,7 @@ def _typecheckingstub__0f10e098db055e6a84ca2addf51239dd57eff36806af7627bac7fe001
     model_quality_app_specification: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityAppSpecificationProperty, typing.Dict[builtins.str, typing.Any]]],
     model_quality_job_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityJobInputProperty, typing.Dict[builtins.str, typing.Any]]],
     model_quality_job_output_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.MonitoringOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     endpoint_name: typing.Optional[builtins.str] = None,
     job_definition_name: typing.Optional[builtins.str] = None,
     model_quality_baseline_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnModelQualityJobDefinition.ModelQualityBaselineConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -60433,6 +60879,12 @@ def _typecheckingstub__ca5a38a8da7fe54fa09469575d3375d9a6aa233ff46d22e0e0de6efca
     last_monitoring_execution_summary: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMonitoringSchedule.MonitoringExecutionSummaryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     monitoring_schedule_status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b06e9d531bb0ac2ad5d59e5d9c55ae009a7eb063020693d1ed71d7338cf330b(
+    resource: _IMonitoringScheduleRef_a00f25b6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -60932,11 +61384,19 @@ def _typecheckingstub__149fe137328534a718f6ce551ee72371d9e2f7ac901d129321d3ff327
     tier: builtins.str,
     type: builtins.str,
     application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    app_version: typing.Optional[builtins.str] = None,
     client_token: typing.Optional[builtins.str] = None,
+    enable_auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     enable_iam_session_based_identity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     maintenance_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppMaintenanceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__410cabdd6831f6f5b11b0a37265da7cf8404511e69590f9d9c902b85a8b8c331(
+    resource: _IPartnerAppRef_14ae5979,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -60989,8 +61449,20 @@ def _typecheckingstub__072cf8573e1e4a9e81dc0f2f111b6f8f9ed3db5ae1bc22a2c26f7a594
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2440ca3b894a56319bb66f2d7a8d02f07f46548ed3ae7b397d8c384b19e57ef8(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c8ec66eb18a5bb742143efcf194c774280f9b65cafeedbdbcab6fd897143208(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d67d82d455f7431c575f848ac5341ba572a6853a3dc605de85b02d900cb8abbe(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -61042,7 +61514,9 @@ def _typecheckingstub__23a26f35e63e4c1c82a8885f138a3f6006822c6ecbf7284a7c2ccafae
     tier: builtins.str,
     type: builtins.str,
     application_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    app_version: typing.Optional[builtins.str] = None,
     client_token: typing.Optional[builtins.str] = None,
+    enable_auto_minor_version_upgrade: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     enable_iam_session_based_identity: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     maintenance_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPartnerApp.PartnerAppMaintenanceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -61057,11 +61531,17 @@ def _typecheckingstub__1ad401effd23b8166514a4ae8c124006c7f366e8a04330e88afe117ee
     *,
     pipeline_definition: typing.Any,
     pipeline_name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     parallelism_configuration: typing.Any = None,
     pipeline_description: typing.Optional[builtins.str] = None,
     pipeline_display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e9935ff29e2c79fcee6334c3ee6a64883c307de54ae3b09dd2db0955c3c5930(
+    resource: _IPipelineRef_682fe738,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -61157,7 +61637,7 @@ def _typecheckingstub__ee8df4c15293c04f73c46e2e5fee2d90e75d42f64c79bb1242363ef89
     *,
     pipeline_definition: typing.Any,
     pipeline_name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     parallelism_configuration: typing.Any = None,
     pipeline_description: typing.Optional[builtins.str] = None,
     pipeline_display_name: typing.Optional[builtins.str] = None,
@@ -61181,6 +61661,12 @@ def _typecheckingstub__f5caa0fb2646fa1f3ce1e3bdbe163fb26bd7b3e5aa7475ce61a509e9a
     processing_output_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProcessingJob.ProcessingOutputConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stopping_condition: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProcessingJob.StoppingConditionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__00f7cb29546aafd14d1309842bfe159d234a4fad4f1065b1bea28a4398f1b1d5(
+    resource: _IProcessingJobRef_4bfce5ad,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -61450,6 +61936,12 @@ def _typecheckingstub__36d90c8a4de3ec6cd6aac98e8b78ab8d07ed4eaab37e59bd5a481048e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7ddbf1e674e1b4398c0b04d5219be9481ad28fe0905535abfac1ec6ae5287e73(
+    resource: _IProjectRef_29c812de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__76feecc969b22f7c1e87382ee8f1456390c3a5f1d0adff82d216a4528e0d8b63(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -61572,6 +62064,12 @@ def _typecheckingstub__f4cf36c039bdacba2a059b01ad6ca85e87e6d521f09ca1f75b0131027
     space_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSpace.SpaceSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     space_sharing_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSpace.SpaceSharingSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2d657f0432cb0439f5cc9cb1be3ade9875ae939840298351197a7fe716039592(
+    resource: _ISpaceRef_3a0c11c7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -61802,6 +62300,12 @@ def _typecheckingstub__781a43111dd6adef34feca5cebbdb6b17f5e2425b368d8e007d51d833
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cf7afd747e554c3dd5b31ab489356aad431dbe9264fc388ac921fb0e1f701737(
+    resource: _IStudioLifecycleConfigRef_a51ab77f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__10214bc61c1bf03d0dcb6e2229e6820733cc171738c897e7008426f7daf51256(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -61868,12 +62372,18 @@ def _typecheckingstub__beda07bea319cc25c84f5e77bce363c97996e606a26b7a70b22536955
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    domain_id: builtins.str,
+    domain_id: typing.Union[builtins.str, _IDomainRef_a90a3909],
     user_profile_name: builtins.str,
     single_sign_on_user_identifier: typing.Optional[builtins.str] = None,
     single_sign_on_user_value: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserProfile.UserSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__279bfc6eed1bed1da32b776d082a1f55aed3dca16f7b32b4e5fae032d9add082(
+    resource: _IUserProfileRef_da0bb896,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -62123,7 +62633,7 @@ def _typecheckingstub__e97db7f3b3126b5a3d5c763d4d08621d63d98712c98017d6bda1493a9
 
 def _typecheckingstub__59e94811af563857fc7e4ba10de1c5e364f6af3d8c1863c0c3396d72a47b9c99(
     *,
-    domain_id: builtins.str,
+    domain_id: typing.Union[builtins.str, _IDomainRef_a90a3909],
     user_profile_name: builtins.str,
     single_sign_on_user_identifier: typing.Optional[builtins.str] = None,
     single_sign_on_user_value: typing.Optional[builtins.str] = None,

@@ -76,7 +76,7 @@ class CfnSimulation(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_simspaceweaver.CfnSimulation",
 ):
-    '''Use the ``AWS::SimSpaceWeaver::Simulation`` resource to specify a simulation that AWS CloudFormation starts in the AWS Cloud , in your AWS account .
+    '''Use the ``AWS::SimSpaceWeaver::Simulation`` resource to specify a simulation that CloudFormation starts in the AWS Cloud , in your AWS account .
 
     In the resource properties section of your template, provide the name of an existing IAM role configured with the proper permissions, and the name of an existing Amazon S3 bucket. Your account must have permissions to read the Amazon S3 bucket. The Amazon S3 bucket must contain a valid schema. The schema must refer to simulation assets that are already uploaded to the AWS Cloud . For more information, see the `detailed tutorial <https://docs.aws.amazon.com/simspaceweaver/latest/userguide/getting-started_detailed.html>`_ in the *AWS SimSpace Weaver User Guide* .
 
@@ -143,6 +143,17 @@ class CfnSimulation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSimulation")
+    @builtins.classmethod
+    def arn_for_simulation(cls, resource: _ISimulationRef_91d712eb) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8adc9ed4305b9c3eb4265eda59f6afceb6078f409c1b7facf0d5ebf4a1a7f912)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSimulation", [resource]))
 
     @jsii.member(jsii_name="fromSimulationName")
     @builtins.classmethod
@@ -533,6 +544,12 @@ def _typecheckingstub__49a18eff4f0bb5a69b0bd9ec4308865d3a99b9833d34d09dc1d10808b
     maximum_duration: typing.Optional[builtins.str] = None,
     schema_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulation.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snapshot_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSimulation.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8adc9ed4305b9c3eb4265eda59f6afceb6078f409c1b7facf0d5ebf4a1a7f912(
+    resource: _ISimulationRef_91d712eb,
 ) -> None:
     """Type checking stubs"""
     pass

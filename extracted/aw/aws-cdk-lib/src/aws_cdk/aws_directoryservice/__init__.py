@@ -78,9 +78,9 @@ class CfnMicrosoftAD(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_directoryservice.CfnMicrosoftAD",
 ):
-    '''The ``AWS::DirectoryService::MicrosoftAD`` resource specifies a Microsoft Active Directory in AWS so that your directory users and groups can access the AWS Management Console and AWS applications using their existing credentials.
+    '''The ``AWS::DirectoryService::MicrosoftAD`` resource specifies a Microsoft Active Directory in AWS so that your directory users and groups can access the the console and AWS applications using their existing credentials.
 
-    For more information, see `AWS Managed Microsoft AD <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html>`_ in the *AWS Directory Service Admin Guide* .
+    For more information, see `AWS Managed Microsoft AD <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html>`_ in the *Directory Service Admin Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html
     :cloudformationResource: AWS::DirectoryService::MicrosoftAD
@@ -126,11 +126,11 @@ class CfnMicrosoftAD(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The fully qualified domain name for the AWS Managed Microsoft AD directory, such as ``corp.example.com`` . This name will resolve inside your VPC only. It does not need to be publicly resolvable.
-        :param password: The password for the default administrative user named ``Admin`` . If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        :param password: The password for the default administrative user named ``Admin`` . If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
         :param vpc_settings: Specifies the VPC settings of the Microsoft AD directory server in AWS .
-        :param create_alias: Specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, AWS CloudFormation does not create an alias. .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
+        :param create_alias: Specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, CloudFormation does not create an alias. .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
         :param edition: AWS Managed Microsoft AD is available in two editions: ``Standard`` and ``Enterprise`` . ``Enterprise`` is the default.
-        :param enable_sso: Whether to enable single sign-on for a Microsoft Active Directory in AWS . Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, AWS CloudFormation disables single sign-on by default.
+        :param enable_sso: Whether to enable single sign-on for a Microsoft Active Directory in AWS . Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, CloudFormation disables single sign-on by default.
         :param short_name: The NetBIOS name for your domain, such as ``CORP`` . If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, ``CORP`` for the directory DNS ``corp.example.com`` .
         '''
         if __debug__:
@@ -341,7 +341,7 @@ class CfnMicrosoftAD(
         ) -> None:
             '''Contains VPC information for the `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ or `CreateMicrosoftAD <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateMicrosoftAD.html>`_ operation.
 
-            :param subnet_ids: The identifiers of the subnets for the directory servers. The two subnets must be in different Availability Zones. AWS Directory Service specifies a directory server and a DNS server in each of these subnets.
+            :param subnet_ids: The identifiers of the subnets for the directory servers. The two subnets must be in different Availability Zones. Directory Service specifies a directory server and a DNS server in each of these subnets.
             :param vpc_id: The identifier of the VPC in which to create the directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-directoryservice-microsoftad-vpcsettings.html
@@ -371,7 +371,7 @@ class CfnMicrosoftAD(
         def subnet_ids(self) -> typing.List[builtins.str]:
             '''The identifiers of the subnets for the directory servers.
 
-            The two subnets must be in different Availability Zones. AWS Directory Service specifies a directory server and a DNS server in each of these subnets.
+            The two subnets must be in different Availability Zones. Directory Service specifies a directory server and a DNS server in each of these subnets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-directoryservice-microsoftad-vpcsettings.html#cfn-directoryservice-microsoftad-vpcsettings-subnetids
             '''
@@ -429,11 +429,11 @@ class CfnMicrosoftADProps:
         '''Properties for defining a ``CfnMicrosoftAD``.
 
         :param name: The fully qualified domain name for the AWS Managed Microsoft AD directory, such as ``corp.example.com`` . This name will resolve inside your VPC only. It does not need to be publicly resolvable.
-        :param password: The password for the default administrative user named ``Admin`` . If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        :param password: The password for the default administrative user named ``Admin`` . If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
         :param vpc_settings: Specifies the VPC settings of the Microsoft AD directory server in AWS .
-        :param create_alias: Specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, AWS CloudFormation does not create an alias. .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
+        :param create_alias: Specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, CloudFormation does not create an alias. .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
         :param edition: AWS Managed Microsoft AD is available in two editions: ``Standard`` and ``Enterprise`` . ``Enterprise`` is the default.
-        :param enable_sso: Whether to enable single sign-on for a Microsoft Active Directory in AWS . Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, AWS CloudFormation disables single sign-on by default.
+        :param enable_sso: Whether to enable single sign-on for a Microsoft Active Directory in AWS . Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, CloudFormation disables single sign-on by default.
         :param short_name: The NetBIOS name for your domain, such as ``CORP`` . If you don't specify a NetBIOS name, it will default to the first part of your directory DNS. For example, ``CORP`` for the directory DNS ``corp.example.com`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html
@@ -497,7 +497,7 @@ class CfnMicrosoftADProps:
     def password(self) -> builtins.str:
         '''The password for the default administrative user named ``Admin`` .
 
-        If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html#cfn-directoryservice-microsoftad-password
         '''
@@ -523,7 +523,7 @@ class CfnMicrosoftADProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Specifies an alias for a directory and assigns the alias to the directory.
 
-        The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, AWS CloudFormation does not create an alias.
+        The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, CloudFormation does not create an alias.
         .. epigraph::
 
            After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
@@ -550,7 +550,7 @@ class CfnMicrosoftADProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Whether to enable single sign-on for a Microsoft Active Directory in AWS .
 
-        Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, AWS CloudFormation disables single sign-on by default.
+        Single sign-on allows users in your directory to access certain AWS services from a computer joined to the directory without having to enter their credentials separately. If you don't specify a value, CloudFormation disables single sign-on by default.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-microsoftad.html#cfn-directoryservice-microsoftad-enablesso
         '''
@@ -586,9 +586,9 @@ class CfnSimpleAD(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_directoryservice.CfnSimpleAD",
 ):
-    '''The ``AWS::DirectoryService::SimpleAD`` resource specifies an AWS Directory Service Simple Active Directory ( Simple AD ) in AWS so that your directory users and groups can access the AWS Management Console and AWS applications using their existing credentials.
+    '''The ``AWS::DirectoryService::SimpleAD`` resource specifies an Directory Service Simple Active Directory ( Simple AD ) in AWS so that your directory users and groups can access the the console and AWS applications using their existing credentials.
 
-    Simple AD is a Microsoft Active Directory–compatible directory. For more information, see `Simple Active Directory <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html>`_ in the *AWS Directory Service Admin Guide* .
+    Simple AD is a Microsoft Active Directory–compatible directory. For more information, see `Simple Active Directory <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html>`_ in the *Directory Service Admin Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html
     :cloudformationResource: AWS::DirectoryService::SimpleAD
@@ -636,12 +636,12 @@ class CfnSimpleAD(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The fully qualified name for the directory, such as ``corp.example.com`` .
-        :param size: The size of the directory. For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *AWS Directory Service API Reference* .
+        :param size: The size of the directory. For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *Directory Service API Reference* .
         :param vpc_settings: A `DirectoryVpcSettings <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_DirectoryVpcSettings.html>`_ object that contains additional information for the operation.
         :param create_alias: If set to ``true`` , specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, this property is set to ``false`` . .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
         :param description: A description for the directory.
-        :param enable_sso: Whether to enable single sign-on for a directory. If you don't specify a value, AWS CloudFormation disables single sign-on by default.
-        :param password: The password for the directory administrator. The directory creation process creates a directory administrator account with the user name ``Administrator`` and this password. If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        :param enable_sso: Whether to enable single sign-on for a directory. If you don't specify a value, CloudFormation disables single sign-on by default.
+        :param password: The password for the directory administrator. The directory creation process creates a directory administrator account with the user name ``Administrator`` and this password. If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
         :param short_name: The NetBIOS name of the directory, such as ``CORP`` .
         '''
         if __debug__:
@@ -660,6 +660,17 @@ class CfnSimpleAD(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSimpleAD")
+    @builtins.classmethod
+    def arn_for_simple_ad(cls, resource: _ISimpleADRef_73ed9e5f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__175ac855db0e53f34ccb5ceefd1d2062c5b688b3adf79d2e5f025ed325fedd35)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSimpleAD", [resource]))
 
     @jsii.member(jsii_name="fromDirectoryId")
     @builtins.classmethod
@@ -895,7 +906,7 @@ class CfnSimpleAD(
         ) -> None:
             '''Contains VPC information for the `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ or `CreateMicrosoftAD <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateMicrosoftAD.html>`_ operation.
 
-            :param subnet_ids: The identifiers of the subnets for the directory servers. The two subnets must be in different Availability Zones. AWS Directory Service specifies a directory server and a DNS server in each of these subnets.
+            :param subnet_ids: The identifiers of the subnets for the directory servers. The two subnets must be in different Availability Zones. Directory Service specifies a directory server and a DNS server in each of these subnets.
             :param vpc_id: The identifier of the VPC in which to create the directory.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-directoryservice-simplead-vpcsettings.html
@@ -925,7 +936,7 @@ class CfnSimpleAD(
         def subnet_ids(self) -> typing.List[builtins.str]:
             '''The identifiers of the subnets for the directory servers.
 
-            The two subnets must be in different Availability Zones. AWS Directory Service specifies a directory server and a DNS server in each of these subnets.
+            The two subnets must be in different Availability Zones. Directory Service specifies a directory server and a DNS server in each of these subnets.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-directoryservice-simplead-vpcsettings.html#cfn-directoryservice-simplead-vpcsettings-subnetids
             '''
@@ -985,12 +996,12 @@ class CfnSimpleADProps:
         '''Properties for defining a ``CfnSimpleAD``.
 
         :param name: The fully qualified name for the directory, such as ``corp.example.com`` .
-        :param size: The size of the directory. For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *AWS Directory Service API Reference* .
+        :param size: The size of the directory. For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *Directory Service API Reference* .
         :param vpc_settings: A `DirectoryVpcSettings <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_DirectoryVpcSettings.html>`_ object that contains additional information for the operation.
         :param create_alias: If set to ``true`` , specifies an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as ``http://<alias>.awsapps.com`` . By default, this property is set to ``false`` . .. epigraph:: After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.
         :param description: A description for the directory.
-        :param enable_sso: Whether to enable single sign-on for a directory. If you don't specify a value, AWS CloudFormation disables single sign-on by default.
-        :param password: The password for the directory administrator. The directory creation process creates a directory administrator account with the user name ``Administrator`` and this password. If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        :param enable_sso: Whether to enable single sign-on for a directory. If you don't specify a value, CloudFormation disables single sign-on by default.
+        :param password: The password for the directory administrator. The directory creation process creates a directory administrator account with the user name ``Administrator`` and this password. If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
         :param short_name: The NetBIOS name of the directory, such as ``CORP`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html
@@ -1058,7 +1069,7 @@ class CfnSimpleADProps:
     def size(self) -> builtins.str:
         '''The size of the directory.
 
-        For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *AWS Directory Service API Reference* .
+        For valid values, see `CreateDirectory <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_CreateDirectory.html>`_ in the *Directory Service API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-size
         '''
@@ -1109,7 +1120,7 @@ class CfnSimpleADProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Whether to enable single sign-on for a directory.
 
-        If you don't specify a value, AWS CloudFormation disables single sign-on by default.
+        If you don't specify a value, CloudFormation disables single sign-on by default.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-enablesso
         '''
@@ -1122,7 +1133,7 @@ class CfnSimpleADProps:
 
         The directory creation process creates a directory administrator account with the user name ``Administrator`` and this password.
 
-        If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *AWS Directory Service API Reference* .
+        If you need to change the password for the administrator account, see the `ResetUserPassword <https://docs.aws.amazon.com/directoryservice/latest/devguide/API_ResetUserPassword.html>`_ API call in the *Directory Service API Reference* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-directoryservice-simplead.html#cfn-directoryservice-simplead-password
         '''
@@ -1261,6 +1272,12 @@ def _typecheckingstub__40820ee1ed03f2cd4befa65e6404c1024999677e0624ca5450f4b1f92
     enable_sso: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     password: typing.Optional[builtins.str] = None,
     short_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__175ac855db0e53f34ccb5ceefd1d2062c5b688b3adf79d2e5f025ed325fedd35(
+    resource: _ISimpleADRef_73ed9e5f,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -945,6 +945,22 @@ from ..interfaces.aws_autoscaling import (
     ScheduledActionReference as _ScheduledActionReference_554a95fb,
     WarmPoolReference as _WarmPoolReference_d06989e8,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
+from ..interfaces.aws_elasticloadbalancing import (
+    ILoadBalancerRef as _ILoadBalancerRef_6a68b4e1
+)
+from ..interfaces.aws_elasticloadbalancingv2 import (
+    ITargetGroupRef as _ITargetGroupRef_9ed19d5e
+)
+from ..interfaces.aws_iam import (
+    IInstanceProfileRef as _IInstanceProfileRef_d6832c90,
+    IRoleRef as _IRoleRef_8400221f,
+)
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
+from ..interfaces.aws_sqs import IQueueRef as _IQueueRef_fa8b2198
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_autoscaling.AdditionalHealthCheckType")
@@ -2448,7 +2464,7 @@ class BlockDeviceVolume(
         :param encrypted: Specifies whether the EBS volume is encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption Default: false
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
         '''
         if __debug__:
@@ -2482,7 +2498,7 @@ class BlockDeviceVolume(
         :param volume_size: The volume size, in Gibibytes (GiB). If you specify volumeSize, it must be equal or greater than the size of the snapshot. Default: - The snapshot size
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
         '''
         if __debug__:
@@ -2798,10 +2814,10 @@ class CfnAutoScalingGroup(
         health_check_type: typing.Optional[builtins.str] = None,
         instance_id: typing.Optional[builtins.str] = None,
         instance_maintenance_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.InstanceMaintenancePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        launch_configuration_name: typing.Optional[builtins.str] = None,
+        launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
         launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.LaunchTemplateSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.LifecycleHookSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+        load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
         max_instance_lifetime: typing.Optional[jsii.Number] = None,
         metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.MetricsCollectionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.MixedInstancesPolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2809,13 +2825,13 @@ class CfnAutoScalingGroup(
         notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.NotificationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         placement_group: typing.Optional[builtins.str] = None,
-        service_linked_role_arn: typing.Optional[builtins.str] = None,
+        service_linked_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         skip_zonal_shift_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnAutoScalingGroup.TagPropertyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        target_group_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]] = None,
         termination_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
         traffic_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAutoScalingGroup.TrafficSourceIdentifierProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        vpc_zone_identifier: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_zone_identifier: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     ) -> None:
         '''Create a new ``AWS::AutoScaling::AutoScalingGroup``.
 
@@ -6798,10 +6814,10 @@ class CfnAutoScalingGroupProps:
         health_check_type: typing.Optional[builtins.str] = None,
         instance_id: typing.Optional[builtins.str] = None,
         instance_maintenance_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.InstanceMaintenancePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        launch_configuration_name: typing.Optional[builtins.str] = None,
+        launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
         launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LifecycleHookSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+        load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
         max_instance_lifetime: typing.Optional[jsii.Number] = None,
         metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MetricsCollectionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MixedInstancesPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6809,13 +6825,13 @@ class CfnAutoScalingGroupProps:
         notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         notification_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         placement_group: typing.Optional[builtins.str] = None,
-        service_linked_role_arn: typing.Optional[builtins.str] = None,
+        service_linked_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         skip_zonal_shift_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[CfnAutoScalingGroup.TagPropertyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        target_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        target_group_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]] = None,
         termination_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
         traffic_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.TrafficSourceIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        vpc_zone_identifier: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_zone_identifier: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAutoScalingGroup``.
 
@@ -7377,7 +7393,9 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAutoScalingGroup.InstanceMaintenancePolicyProperty]], result)
 
     @builtins.property
-    def launch_configuration_name(self) -> typing.Optional[builtins.str]:
+    def launch_configuration_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]]:
         '''The name of the launch configuration to use to launch instances.
 
         Required only if you don't specify ``LaunchTemplate`` , ``MixedInstancesPolicy`` , or ``InstanceId`` .
@@ -7385,7 +7403,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-launchconfigurationname
         '''
         result = self._values.get("launch_configuration_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]], result)
 
     @builtins.property
     def launch_template(
@@ -7414,7 +7432,9 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAutoScalingGroup.LifecycleHookSpecificationProperty]]]], result)
 
     @builtins.property
-    def load_balancer_names(self) -> typing.Optional[typing.List[builtins.str]]:
+    def load_balancer_names(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]]:
         '''A list of Classic Load Balancers associated with this Auto Scaling group.
 
         For Application Load Balancers, Network Load Balancers, and Gateway Load Balancers, specify the ``TargetGroupARNs`` property instead.
@@ -7422,7 +7442,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-loadbalancernames
         '''
         result = self._values.get("load_balancer_names")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]], result)
 
     @builtins.property
     def max_instance_lifetime(self) -> typing.Optional[jsii.Number]:
@@ -7516,7 +7536,9 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_linked_role_arn(self) -> typing.Optional[builtins.str]:
+    def service_linked_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS service on your behalf.
 
         By default, Amazon EC2 Auto Scaling uses a service-linked role named ``AWSServiceRoleForAutoScaling`` , which it creates if it does not exist. For more information, see `Service-linked roles <https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
@@ -7524,7 +7546,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-servicelinkedrolearn
         '''
         result = self._values.get("service_linked_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def skip_zonal_shift_validation(
@@ -7550,7 +7572,9 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[typing.List[CfnAutoScalingGroup.TagPropertyProperty]], result)
 
     @builtins.property
-    def target_group_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def target_group_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]]:
         '''The Amazon Resource Names (ARN) of the Elastic Load Balancing target groups to associate with the Auto Scaling group.
 
         Instances are registered as targets with the target groups. The target groups receive incoming traffic and route requests to one or more registered targets. For more information, see `Use Elastic Load Balancing to distribute traffic across the instances in your Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
@@ -7558,7 +7582,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-targetgrouparns
         '''
         result = self._values.get("target_group_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]], result)
 
     @builtins.property
     def termination_policies(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -7585,7 +7609,9 @@ class CfnAutoScalingGroupProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnAutoScalingGroup.TrafficSourceIdentifierProperty]]]], result)
 
     @builtins.property
-    def vpc_zone_identifier(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_zone_identifier(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''A list of subnet IDs for a virtual private cloud (VPC) where instances in the Auto Scaling group can be created.
 
         If this resource specifies public subnets and is also in a VPC that is defined in the same stack template, you must use the `DependsOn attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ to declare a dependency on the `VPC-gateway attachment <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-vpc-gateway-attachment.html>`_ .
@@ -7598,7 +7624,7 @@ class CfnAutoScalingGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-autoscalinggroup.html#cfn-autoscaling-autoscalinggroup-vpczoneidentifier
         '''
         result = self._values.get("vpc_zone_identifier")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7693,7 +7719,7 @@ class CfnLaunchConfiguration(
         classic_link_vpc_id: typing.Optional[builtins.str] = None,
         classic_link_vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        iam_instance_profile: typing.Optional[builtins.str] = None,
+        iam_instance_profile: typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]] = None,
         instance_id: typing.Optional[builtins.str] = None,
         instance_monitoring: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         kernel_id: typing.Optional[builtins.str] = None,
@@ -7702,7 +7728,7 @@ class CfnLaunchConfiguration(
         metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLaunchConfiguration.MetadataOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         placement_tenancy: typing.Optional[builtins.str] = None,
         ram_disk_id: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         spot_price: typing.Optional[builtins.str] = None,
         user_data: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -8545,7 +8571,7 @@ class CfnLaunchConfigurationProps:
         classic_link_vpc_id: typing.Optional[builtins.str] = None,
         classic_link_vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        iam_instance_profile: typing.Optional[builtins.str] = None,
+        iam_instance_profile: typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]] = None,
         instance_id: typing.Optional[builtins.str] = None,
         instance_monitoring: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         kernel_id: typing.Optional[builtins.str] = None,
@@ -8554,7 +8580,7 @@ class CfnLaunchConfigurationProps:
         metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunchConfiguration.MetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         placement_tenancy: typing.Optional[builtins.str] = None,
         ram_disk_id: typing.Optional[builtins.str] = None,
-        security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         spot_price: typing.Optional[builtins.str] = None,
         user_data: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -8786,7 +8812,9 @@ class CfnLaunchConfigurationProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def iam_instance_profile(self) -> typing.Optional[builtins.str]:
+    def iam_instance_profile(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]]:
         '''The name or the Amazon Resource Name (ARN) of the instance profile associated with the IAM role for the instance.
 
         The instance profile contains the IAM role. For more information, see `IAM role for applications that run on Amazon EC2 instances <https://docs.aws.amazon.com/autoscaling/ec2/userguide/us-iam-role.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
@@ -8794,7 +8822,7 @@ class CfnLaunchConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html#cfn-autoscaling-launchconfiguration-iaminstanceprofile
         '''
         result = self._values.get("iam_instance_profile")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]], result)
 
     @builtins.property
     def instance_id(self) -> typing.Optional[builtins.str]:
@@ -8900,7 +8928,9 @@ class CfnLaunchConfigurationProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list that contains the security groups to assign to the instances in the Auto Scaling group.
 
         The list can contain both the IDs of existing security groups and references to `SecurityGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html>`_ resources created in the template.
@@ -8910,7 +8940,7 @@ class CfnLaunchConfigurationProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html#cfn-autoscaling-launchconfiguration-securitygroups
         '''
         result = self._values.get("security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def spot_price(self) -> typing.Optional[builtins.str]:
@@ -8994,14 +9024,14 @@ class CfnLifecycleHook(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         lifecycle_transition: builtins.str,
         default_result: typing.Optional[builtins.str] = None,
         heartbeat_timeout: typing.Optional[jsii.Number] = None,
         lifecycle_hook_name: typing.Optional[builtins.str] = None,
         notification_metadata: typing.Optional[builtins.str] = None,
-        notification_target_arn: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        notification_target_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::AutoScaling::LifecycleHook``.
 
@@ -9200,14 +9230,14 @@ class CfnLifecycleHookProps:
     def __init__(
         self,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         lifecycle_transition: builtins.str,
         default_result: typing.Optional[builtins.str] = None,
         heartbeat_timeout: typing.Optional[jsii.Number] = None,
         lifecycle_hook_name: typing.Optional[builtins.str] = None,
         notification_metadata: typing.Optional[builtins.str] = None,
-        notification_target_arn: typing.Optional[builtins.str] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        notification_target_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnLifecycleHook``.
 
@@ -9270,14 +9300,16 @@ class CfnLifecycleHookProps:
             self._values["role_arn"] = role_arn
 
     @builtins.property
-    def auto_scaling_group_name(self) -> builtins.str:
+    def auto_scaling_group_name(
+        self,
+    ) -> typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183]:
         '''The name of the Auto Scaling group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-lifecyclehook.html#cfn-autoscaling-lifecyclehook-autoscalinggroupname
         '''
         result = self._values.get("auto_scaling_group_name")
         assert result is not None, "Required property 'auto_scaling_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183], result)
 
     @builtins.property
     def lifecycle_transition(self) -> builtins.str:
@@ -9335,7 +9367,9 @@ class CfnLifecycleHookProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def notification_target_arn(self) -> typing.Optional[builtins.str]:
+    def notification_target_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]]:
         '''The Amazon Resource Name (ARN) of the notification target that Amazon EC2 Auto Scaling sends notifications to when an instance is in a wait state for the lifecycle hook.
 
         You can specify an Amazon SNS topic or an Amazon SQS queue.
@@ -9343,10 +9377,12 @@ class CfnLifecycleHookProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-lifecyclehook.html#cfn-autoscaling-lifecyclehook-notificationtargetarn
         '''
         result = self._values.get("notification_target_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.
 
         For information about creating this role, see `Prepare to add a lifecycle hook to your Auto Scaling group <https://docs.aws.amazon.com/autoscaling/ec2/userguide/prepare-for-lifecycle-notifications.html>`_ in the *Amazon EC2 Auto Scaling User Guide* .
@@ -9356,7 +9392,7 @@ class CfnLifecycleHookProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-lifecyclehook.html#cfn-autoscaling-lifecyclehook-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9574,7 +9610,7 @@ class CfnScalingPolicy(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         adjustment_type: typing.Optional[builtins.str] = None,
         cooldown: typing.Optional[builtins.str] = None,
         estimated_instance_warmup: typing.Optional[jsii.Number] = None,
@@ -9621,6 +9657,20 @@ class CfnScalingPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForScalingPolicy")
+    @builtins.classmethod
+    def arn_for_scaling_policy(
+        cls,
+        resource: _IScalingPolicyRef_fcca0de5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__73b6cc04b132e188b1685254181901ce522dcda6da5f77ce913be1496395a902)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScalingPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12273,7 +12323,7 @@ class CfnScalingPolicyProps:
     def __init__(
         self,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         adjustment_type: typing.Optional[builtins.str] = None,
         cooldown: typing.Optional[builtins.str] = None,
         estimated_instance_warmup: typing.Optional[jsii.Number] = None,
@@ -12524,14 +12574,16 @@ class CfnScalingPolicyProps:
             self._values["target_tracking_configuration"] = target_tracking_configuration
 
     @builtins.property
-    def auto_scaling_group_name(self) -> builtins.str:
+    def auto_scaling_group_name(
+        self,
+    ) -> typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183]:
         '''The name of the Auto Scaling group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-scalingpolicy.html#cfn-autoscaling-scalingpolicy-autoscalinggroupname
         '''
         result = self._values.get("auto_scaling_group_name")
         assert result is not None, "Required property 'auto_scaling_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183], result)
 
     @builtins.property
     def adjustment_type(self) -> typing.Optional[builtins.str]:
@@ -12736,7 +12788,7 @@ class CfnScheduledAction(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         desired_capacity: typing.Optional[jsii.Number] = None,
         end_time: typing.Optional[builtins.str] = None,
         max_size: typing.Optional[jsii.Number] = None,
@@ -12948,7 +13000,7 @@ class CfnScheduledActionProps:
     def __init__(
         self,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         desired_capacity: typing.Optional[jsii.Number] = None,
         end_time: typing.Optional[builtins.str] = None,
         max_size: typing.Optional[jsii.Number] = None,
@@ -13019,14 +13071,16 @@ class CfnScheduledActionProps:
             self._values["time_zone"] = time_zone
 
     @builtins.property
-    def auto_scaling_group_name(self) -> builtins.str:
+    def auto_scaling_group_name(
+        self,
+    ) -> typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183]:
         '''The name of the Auto Scaling group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-scheduledaction.html#cfn-autoscaling-scheduledaction-autoscalinggroupname
         '''
         result = self._values.get("auto_scaling_group_name")
         assert result is not None, "Required property 'auto_scaling_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183], result)
 
     @builtins.property
     def desired_capacity(self) -> typing.Optional[jsii.Number]:
@@ -13167,7 +13221,7 @@ class CfnWarmPool(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         instance_reuse_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWarmPool.InstanceReusePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
@@ -13383,7 +13437,7 @@ class CfnWarmPoolProps:
     def __init__(
         self,
         *,
-        auto_scaling_group_name: builtins.str,
+        auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
         instance_reuse_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWarmPool.InstanceReusePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
         min_size: typing.Optional[jsii.Number] = None,
@@ -13438,14 +13492,16 @@ class CfnWarmPoolProps:
             self._values["pool_state"] = pool_state
 
     @builtins.property
-    def auto_scaling_group_name(self) -> builtins.str:
+    def auto_scaling_group_name(
+        self,
+    ) -> typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183]:
         '''The name of the Auto Scaling group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-warmpool.html#cfn-autoscaling-warmpool-autoscalinggroupname
         '''
         result = self._values.get("auto_scaling_group_name")
         assert result is not None, "Required property 'auto_scaling_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183], result)
 
     @builtins.property
     def instance_reuse_policy(
@@ -14440,7 +14496,7 @@ class EbsDeviceOptionsBase:
 
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
 
         :exampleMetadata: fixture=_generated
@@ -14501,7 +14557,7 @@ class EbsDeviceOptionsBase:
 
     @builtins.property
     def throughput(self) -> typing.Optional[jsii.Number]:
-        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000.
+        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000.
 
         :default: - 125 MiB/s. Only valid on gp3 volumes.
 
@@ -14558,7 +14614,7 @@ class EbsDeviceSnapshotOptions(EbsDeviceOptionsBase):
 
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
         :param volume_size: The volume size, in Gibibytes (GiB). If you specify volumeSize, it must be equal or greater than the size of the snapshot. Default: - The snapshot size
 
@@ -14624,7 +14680,7 @@ class EbsDeviceSnapshotOptions(EbsDeviceOptionsBase):
 
     @builtins.property
     def throughput(self) -> typing.Optional[jsii.Number]:
-        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000.
+        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000.
 
         :default: - 125 MiB/s. Only valid on gp3 volumes.
 
@@ -21156,7 +21212,7 @@ class EbsDeviceOptions(EbsDeviceOptionsBase):
 
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
         :param encrypted: Specifies whether the EBS volume is encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption Default: false
 
@@ -21229,7 +21285,7 @@ class EbsDeviceOptions(EbsDeviceOptionsBase):
 
     @builtins.property
     def throughput(self) -> typing.Optional[jsii.Number]:
-        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000.
+        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000.
 
         :default: - 125 MiB/s. Only valid on gp3 volumes.
 
@@ -21301,7 +21357,7 @@ class EbsDeviceProps(EbsDeviceSnapshotOptions):
 
         :param delete_on_termination: Indicates whether to delete the volume when the instance is terminated. Default: - true for Amazon EC2 Auto Scaling, false otherwise (e.g. EBS)
         :param iops: The number of I/O operations per second (IOPS) to provision for the volume. Must only be set for ``volumeType``: ``EbsDeviceVolumeType.IO1`` The maximum ratio of IOPS to volume size (in GiB) is 50:1, so for 5,000 provisioned IOPS, you need at least 100 GiB storage on the volume. Default: - none, required for ``EbsDeviceVolumeType.IO1``
-        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000. Default: - 125 MiB/s. Only valid on gp3 volumes.
+        :param throughput: The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000. Default: - 125 MiB/s. Only valid on gp3 volumes.
         :param volume_type: The EBS volume type. Default: ``EbsDeviceVolumeType.GP2``
         :param volume_size: The volume size, in Gibibytes (GiB). If you specify volumeSize, it must be equal or greater than the size of the snapshot. Default: - The snapshot size
         :param snapshot_id: The snapshot ID of the volume to use. Default: - No snapshot will be used
@@ -21372,7 +21428,7 @@ class EbsDeviceProps(EbsDeviceSnapshotOptions):
 
     @builtins.property
     def throughput(self) -> typing.Optional[jsii.Number]:
-        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 1000.
+        '''The throughput that the volume supports, in MiB/s Takes a minimum of 125 and maximum of 2000.
 
         :default: - 125 MiB/s. Only valid on gp3 volumes.
 
@@ -21695,10 +21751,10 @@ def _typecheckingstub__d8ba2cee6007161ce4ac8e6f271353563746b8194e9da3c4517351b35
     health_check_type: typing.Optional[builtins.str] = None,
     instance_id: typing.Optional[builtins.str] = None,
     instance_maintenance_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.InstanceMaintenancePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    launch_configuration_name: typing.Optional[builtins.str] = None,
+    launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
     launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LifecycleHookSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
     max_instance_lifetime: typing.Optional[jsii.Number] = None,
     metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MetricsCollectionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MixedInstancesPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -21706,13 +21762,13 @@ def _typecheckingstub__d8ba2cee6007161ce4ac8e6f271353563746b8194e9da3c4517351b35
     notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     notification_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     placement_group: typing.Optional[builtins.str] = None,
-    service_linked_role_arn: typing.Optional[builtins.str] = None,
+    service_linked_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     skip_zonal_shift_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnAutoScalingGroup.TagPropertyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    target_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    target_group_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]] = None,
     termination_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
     traffic_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.TrafficSourceIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    vpc_zone_identifier: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_zone_identifier: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22214,10 +22270,10 @@ def _typecheckingstub__63de692030eb0bc729681a791501e2edd744cab3141e27cc9c9c8def2
     health_check_type: typing.Optional[builtins.str] = None,
     instance_id: typing.Optional[builtins.str] = None,
     instance_maintenance_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.InstanceMaintenancePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    launch_configuration_name: typing.Optional[builtins.str] = None,
+    launch_configuration_name: typing.Optional[typing.Union[builtins.str, _ILaunchConfigurationRef_9c2fc9c2]] = None,
     launch_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LaunchTemplateSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     lifecycle_hook_specification_list: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.LifecycleHookSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    load_balancer_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    load_balancer_names: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_6a68b4e1]]] = None,
     max_instance_lifetime: typing.Optional[jsii.Number] = None,
     metrics_collection: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MetricsCollectionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     mixed_instances_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.MixedInstancesPolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -22225,13 +22281,13 @@ def _typecheckingstub__63de692030eb0bc729681a791501e2edd744cab3141e27cc9c9c8def2
     notification_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     notification_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.NotificationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     placement_group: typing.Optional[builtins.str] = None,
-    service_linked_role_arn: typing.Optional[builtins.str] = None,
+    service_linked_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     skip_zonal_shift_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnAutoScalingGroup.TagPropertyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    target_group_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    target_group_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITargetGroupRef_9ed19d5e]]] = None,
     termination_policies: typing.Optional[typing.Sequence[builtins.str]] = None,
     traffic_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAutoScalingGroup.TrafficSourceIdentifierProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    vpc_zone_identifier: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_zone_identifier: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22247,7 +22303,7 @@ def _typecheckingstub__c1b7dfa85ece494c51470fc8949ac83f44a43e14933517668759ff3c3
     classic_link_vpc_id: typing.Optional[builtins.str] = None,
     classic_link_vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    iam_instance_profile: typing.Optional[builtins.str] = None,
+    iam_instance_profile: typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]] = None,
     instance_id: typing.Optional[builtins.str] = None,
     instance_monitoring: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     kernel_id: typing.Optional[builtins.str] = None,
@@ -22256,7 +22312,7 @@ def _typecheckingstub__c1b7dfa85ece494c51470fc8949ac83f44a43e14933517668759ff3c3
     metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunchConfiguration.MetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     placement_tenancy: typing.Optional[builtins.str] = None,
     ram_disk_id: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     spot_price: typing.Optional[builtins.str] = None,
     user_data: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -22430,7 +22486,7 @@ def _typecheckingstub__437aca81a1a333c2908320df15fa11c3acd609bc0ca76c62d631e3efe
     classic_link_vpc_id: typing.Optional[builtins.str] = None,
     classic_link_vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     ebs_optimized: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    iam_instance_profile: typing.Optional[builtins.str] = None,
+    iam_instance_profile: typing.Optional[typing.Union[builtins.str, _IInstanceProfileRef_d6832c90]] = None,
     instance_id: typing.Optional[builtins.str] = None,
     instance_monitoring: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     kernel_id: typing.Optional[builtins.str] = None,
@@ -22439,7 +22495,7 @@ def _typecheckingstub__437aca81a1a333c2908320df15fa11c3acd609bc0ca76c62d631e3efe
     metadata_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLaunchConfiguration.MetadataOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     placement_tenancy: typing.Optional[builtins.str] = None,
     ram_disk_id: typing.Optional[builtins.str] = None,
-    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     spot_price: typing.Optional[builtins.str] = None,
     user_data: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -22450,14 +22506,14 @@ def _typecheckingstub__dabd61d8a949732e25b3952a106099c905072c82cee5882a062635906
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     lifecycle_transition: builtins.str,
     default_result: typing.Optional[builtins.str] = None,
     heartbeat_timeout: typing.Optional[jsii.Number] = None,
     lifecycle_hook_name: typing.Optional[builtins.str] = None,
     notification_metadata: typing.Optional[builtins.str] = None,
-    notification_target_arn: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    notification_target_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22524,14 +22580,14 @@ def _typecheckingstub__b3efe05ccb204a2f5b10e050508641230c374dcfa8454a54ed2b9fa3d
 
 def _typecheckingstub__55ab7935babae2422463a7df532373822bd3f50d204a6ecf63bb4ac285894a64(
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     lifecycle_transition: builtins.str,
     default_result: typing.Optional[builtins.str] = None,
     heartbeat_timeout: typing.Optional[jsii.Number] = None,
     lifecycle_hook_name: typing.Optional[builtins.str] = None,
     notification_metadata: typing.Optional[builtins.str] = None,
-    notification_target_arn: typing.Optional[builtins.str] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    notification_target_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88, _IQueueRef_fa8b2198]] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22540,7 +22596,7 @@ def _typecheckingstub__fe327b42a12b9ac1620a18cf03d5ab48d4b5a074b39f9d0b743895a53
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     adjustment_type: typing.Optional[builtins.str] = None,
     cooldown: typing.Optional[builtins.str] = None,
     estimated_instance_warmup: typing.Optional[jsii.Number] = None,
@@ -22551,6 +22607,12 @@ def _typecheckingstub__fe327b42a12b9ac1620a18cf03d5ab48d4b5a074b39f9d0b743895a53
     scaling_adjustment: typing.Optional[jsii.Number] = None,
     step_adjustments: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.StepAdjustmentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     target_tracking_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPolicy.TargetTrackingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__73b6cc04b132e188b1685254181901ce522dcda6da5f77ce913be1496395a902(
+    resource: _IScalingPolicyRef_fcca0de5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22803,7 +22865,7 @@ def _typecheckingstub__75bb120fe0d7723abf802e828deb5b42b75d441e35d1a2974ff03b0a0
 
 def _typecheckingstub__fa1549144f025fb75ca19967d6520b5eaada79209726c0ec131f1146e087fc7d(
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     adjustment_type: typing.Optional[builtins.str] = None,
     cooldown: typing.Optional[builtins.str] = None,
     estimated_instance_warmup: typing.Optional[jsii.Number] = None,
@@ -22822,7 +22884,7 @@ def _typecheckingstub__74bd532ea628d3cbc35d12b83c73435431c2df43d44c4873521366de3
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     desired_capacity: typing.Optional[jsii.Number] = None,
     end_time: typing.Optional[builtins.str] = None,
     max_size: typing.Optional[jsii.Number] = None,
@@ -22896,7 +22958,7 @@ def _typecheckingstub__8a8884960cdb0544ac67e0139227014617c99358bb79d7312ecf1d7ab
 
 def _typecheckingstub__8337f4190404f5d486535d4fb3527dc3a0756a9c610753786846ddda210ebb1b(
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     desired_capacity: typing.Optional[jsii.Number] = None,
     end_time: typing.Optional[builtins.str] = None,
     max_size: typing.Optional[jsii.Number] = None,
@@ -22912,7 +22974,7 @@ def _typecheckingstub__11b655705f40e648d013ae07051251b8272b9b017ab829c80340f5640
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     instance_reuse_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWarmPool.InstanceReusePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
     min_size: typing.Optional[jsii.Number] = None,
@@ -22972,7 +23034,7 @@ def _typecheckingstub__53e0e158b9df1836e1187a74efd57221a6a3d593283d041862ad0fad1
 
 def _typecheckingstub__648cf8c58fe1c3cd5125c280b61fa42684c7000ce58e8cff5213ddb0d0547be0(
     *,
-    auto_scaling_group_name: builtins.str,
+    auto_scaling_group_name: typing.Union[builtins.str, _IAutoScalingGroupRef_2f9e9183],
     instance_reuse_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWarmPool.InstanceReusePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_group_prepared_capacity: typing.Optional[jsii.Number] = None,
     min_size: typing.Optional[jsii.Number] = None,

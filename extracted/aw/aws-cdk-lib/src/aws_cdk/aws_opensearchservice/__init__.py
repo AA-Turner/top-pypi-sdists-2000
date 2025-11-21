@@ -1033,6 +1033,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_3664810d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__322cb6fb73e5eb5873a4fb2838c44691f6a54118d1b70841067679f204578f57)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1654,6 +1665,11 @@ class CfnDomain(
                     subject_key="subjectKey"
                 )
             ),
+            aiml_options=opensearchservice.CfnDomain.AIMLOptionsProperty(
+                s3_vectors_engine=opensearchservice.CfnDomain.S3VectorsEngineProperty(
+                    enabled=False
+                )
+            ),
             cluster_config=opensearchservice.CfnDomain.ClusterConfigProperty(
                 cold_storage_options=opensearchservice.CfnDomain.ColdStorageOptionsProperty(
                     enabled=False
@@ -1760,6 +1776,7 @@ class CfnDomain(
         access_policies: typing.Any = None,
         advanced_options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         advanced_security_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.AdvancedSecurityOptionsInputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        aiml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.AIMLOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cluster_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.ClusterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cognito_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.CognitoOptionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_arn: typing.Optional[builtins.str] = None,
@@ -1786,13 +1803,14 @@ class CfnDomain(
         :param access_policies: An AWS Identity and Access Management ( IAM ) policy document that specifies who can access the OpenSearch Service domain and their permissions. For more information, see `Configuring access policies <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#ac-creating>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param advanced_options: Additional options to specify for the OpenSearch Service domain. For more information, see `AdvancedOptions <https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_CreateDomain.html#API_CreateDomain_RequestBody>`_ in the OpenSearch Service API reference.
         :param advanced_security_options: Specifies options for fine-grained access control and SAML authentication. If you specify advanced security options, you must also enable node-to-node encryption ( `NodeToNodeEncryptionOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-nodetonodeencryptionoptions.html>`_ ) and encryption at rest ( `EncryptionAtRestOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-encryptionatrestoptions.html>`_ ). You must also enable ``EnforceHTTPS`` within `DomainEndpointOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-domainendpointoptions.html>`_ , which requires HTTPS for all traffic to the domain.
+        :param aiml_options: 
         :param cluster_config: Container for the cluster configuration of a domain.
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
         :param domain_endpoint_options: Specifies additional options for the domain endpoint, such as whether to require HTTPS for all traffic or whether to use a custom endpoint rather than the default endpoint.
-        :param domain_name: A name for the OpenSearch Service domain. The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Required when creating a new domain. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param domain_name: A name for the OpenSearch Service domain. The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Required when creating a new domain. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param ebs_options: The configurations of Amazon Elastic Block Store (Amazon EBS) volumes that are attached to data nodes in the OpenSearch Service domain. For more information, see `EBS volume size limits <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html#ebsresource>`_ in the *Amazon OpenSearch Service Developer Guide* .
-        :param encryption_at_rest_options: Whether the domain should encrypt data at rest, and if so, the AWS KMS key to use. See `Encryption of data at rest for Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html>`_ . If no encryption at rest options were initially specified in the template, updating this property by adding it causes no interruption. However, if you change this property after it's already been set within a template, the domain is deleted and recreated in order to modify the property.
+        :param encryption_at_rest_options: Whether the domain should encrypt data at rest, and if so, the AWS key to use. See `Encryption of data at rest for Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html>`_ . If no encryption at rest options were initially specified in the template, updating this property by adding it causes no interruption. However, if you change this property after it's already been set within a template, the domain is deleted and recreated in order to modify the property.
         :param engine_version: The version of OpenSearch to use. The value must be in the format ``OpenSearch_X.Y`` or ``Elasticsearch_X.Y`` . If not specified, the latest version of OpenSearch is used. For information about the versions that OpenSearch Service supports, see `Supported versions of OpenSearch and Elasticsearch <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version>`_ in the *Amazon OpenSearch Service Developer Guide* . If you set the `EnableVersionUpgrade <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-upgradeopensearchdomain>`_ update policy to ``true`` , you can update ``EngineVersion`` without interruption. When ``EnableVersionUpgrade`` is set to ``false`` , or is not specified, updating ``EngineVersion`` results in `replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ .
         :param identity_center_options: Configuration options for controlling IAM Identity Center integration within a domain.
         :param ip_address_type: Choose either dual stack or IPv4 as your IP address type. Dual stack allows you to share domain resources across IPv4 and IPv6 address types, and is the recommended option. If you set your IP address type to dual stack, you can't change your address type later.
@@ -1813,6 +1831,7 @@ class CfnDomain(
             access_policies=access_policies,
             advanced_options=advanced_options,
             advanced_security_options=advanced_security_options,
+            aiml_options=aiml_options,
             cluster_config=cluster_config,
             cognito_options=cognito_options,
             domain_arn=domain_arn,
@@ -1834,6 +1853,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_76d6bc00) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d175f3a7353e79d8542c1e609de1b5d7e6a378ef82167bc6256507b89b56c777)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="fromDomainArn")
     @builtins.classmethod
@@ -2129,6 +2159,23 @@ class CfnDomain(
         jsii.set(self, "advancedSecurityOptions", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="aimlOptions")
+    def aiml_options(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.AIMLOptionsProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.AIMLOptionsProperty"]], jsii.get(self, "aimlOptions"))
+
+    @aiml_options.setter
+    def aiml_options(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.AIMLOptionsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__809f26ae46117bca5e245e0d9e88b91751a9fe6f8137586a0925a3b568e6a6bb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "aimlOptions", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="clusterConfig")
     def cluster_config(
         self,
@@ -2230,7 +2277,7 @@ class CfnDomain(
     def encryption_at_rest_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.EncryptionAtRestOptionsProperty"]]:
-        '''Whether the domain should encrypt data at rest, and if so, the AWS KMS key to use.'''
+        '''Whether the domain should encrypt data at rest, and if so, the AWS  key to use.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.EncryptionAtRestOptionsProperty"]], jsii.get(self, "encryptionAtRestOptions"))
 
     @encryption_at_rest_options.setter
@@ -2424,6 +2471,63 @@ class CfnDomain(
             type_hints = typing.get_type_hints(_typecheckingstub__b93b8c5b5730096cbd511fb71c9b9508cb307bcbfee46f7a0c11da785c33d2e8)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "vpcOptions", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_opensearchservice.CfnDomain.AIMLOptionsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"s3_vectors_engine": "s3VectorsEngine"},
+    )
+    class AIMLOptionsProperty:
+        def __init__(
+            self,
+            *,
+            s3_vectors_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDomain.S3VectorsEngineProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param s3_vectors_engine: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-aimloptions.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_opensearchservice as opensearchservice
+                
+                a_iMLOptions_property = opensearchservice.CfnDomain.AIMLOptionsProperty(
+                    s3_vectors_engine=opensearchservice.CfnDomain.S3VectorsEngineProperty(
+                        enabled=False
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f6e2730be5967c32ad70360eac8e050daf2a8098d3b0fa821a64eb173126426f)
+                check_type(argname="argument s3_vectors_engine", value=s3_vectors_engine, expected_type=type_hints["s3_vectors_engine"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if s3_vectors_engine is not None:
+                self._values["s3_vectors_engine"] = s3_vectors_engine
+
+        @builtins.property
+        def s3_vectors_engine(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.S3VectorsEngineProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-aimloptions.html#cfn-opensearchservice-domain-aimloptions-s3vectorsengine
+            '''
+            result = self._values.get("s3_vectors_engine")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.S3VectorsEngineProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AIMLOptionsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_opensearchservice.CfnDomain.AdvancedSecurityOptionsInputProperty",
@@ -4397,6 +4501,61 @@ class CfnDomain(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_opensearchservice.CfnDomain.S3VectorsEngineProperty",
+        jsii_struct_bases=[],
+        name_mapping={"enabled": "enabled"},
+    )
+    class S3VectorsEngineProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+        ) -> None:
+            '''
+            :param enabled: Whether to enable S3 vectors engine.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-s3vectorsengine.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_opensearchservice as opensearchservice
+                
+                s3_vectors_engine_property = opensearchservice.CfnDomain.S3VectorsEngineProperty(
+                    enabled=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0c5cacbc71e186563dfacc47a3e5812e0f2818862efee38451bcc544e4431878)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "enabled": enabled,
+            }
+
+        @builtins.property
+        def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+            '''Whether to enable S3 vectors engine.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-s3vectorsengine.html#cfn-opensearchservice-domain-s3vectorsengine-enabled
+            '''
+            result = self._values.get("enabled")
+            assert result is not None, "Required property 'enabled' is missing"
+            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3VectorsEngineProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_opensearchservice.CfnDomain.SAMLOptionsProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -5085,6 +5244,7 @@ class CfnDomain(
         "access_policies": "accessPolicies",
         "advanced_options": "advancedOptions",
         "advanced_security_options": "advancedSecurityOptions",
+        "aiml_options": "aimlOptions",
         "cluster_config": "clusterConfig",
         "cognito_options": "cognitoOptions",
         "domain_arn": "domainArn",
@@ -5112,6 +5272,7 @@ class CfnDomainProps:
         access_policies: typing.Any = None,
         advanced_options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         advanced_security_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AdvancedSecurityOptionsInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        aiml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AIMLOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         cluster_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.ClusterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         cognito_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CognitoOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         domain_arn: typing.Optional[builtins.str] = None,
@@ -5136,13 +5297,14 @@ class CfnDomainProps:
         :param access_policies: An AWS Identity and Access Management ( IAM ) policy document that specifies who can access the OpenSearch Service domain and their permissions. For more information, see `Configuring access policies <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#ac-creating>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param advanced_options: Additional options to specify for the OpenSearch Service domain. For more information, see `AdvancedOptions <https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_CreateDomain.html#API_CreateDomain_RequestBody>`_ in the OpenSearch Service API reference.
         :param advanced_security_options: Specifies options for fine-grained access control and SAML authentication. If you specify advanced security options, you must also enable node-to-node encryption ( `NodeToNodeEncryptionOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-nodetonodeencryptionoptions.html>`_ ) and encryption at rest ( `EncryptionAtRestOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-encryptionatrestoptions.html>`_ ). You must also enable ``EnforceHTTPS`` within `DomainEndpointOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-domainendpointoptions.html>`_ , which requires HTTPS for all traffic to the domain.
+        :param aiml_options: 
         :param cluster_config: Container for the cluster configuration of a domain.
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
         :param domain_endpoint_options: Specifies additional options for the domain endpoint, such as whether to require HTTPS for all traffic or whether to use a custom endpoint rather than the default endpoint.
-        :param domain_name: A name for the OpenSearch Service domain. The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Required when creating a new domain. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param domain_name: A name for the OpenSearch Service domain. The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Required when creating a new domain. .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param ebs_options: The configurations of Amazon Elastic Block Store (Amazon EBS) volumes that are attached to data nodes in the OpenSearch Service domain. For more information, see `EBS volume size limits <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html#ebsresource>`_ in the *Amazon OpenSearch Service Developer Guide* .
-        :param encryption_at_rest_options: Whether the domain should encrypt data at rest, and if so, the AWS KMS key to use. See `Encryption of data at rest for Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html>`_ . If no encryption at rest options were initially specified in the template, updating this property by adding it causes no interruption. However, if you change this property after it's already been set within a template, the domain is deleted and recreated in order to modify the property.
+        :param encryption_at_rest_options: Whether the domain should encrypt data at rest, and if so, the AWS key to use. See `Encryption of data at rest for Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html>`_ . If no encryption at rest options were initially specified in the template, updating this property by adding it causes no interruption. However, if you change this property after it's already been set within a template, the domain is deleted and recreated in order to modify the property.
         :param engine_version: The version of OpenSearch to use. The value must be in the format ``OpenSearch_X.Y`` or ``Elasticsearch_X.Y`` . If not specified, the latest version of OpenSearch is used. For information about the versions that OpenSearch Service supports, see `Supported versions of OpenSearch and Elasticsearch <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version>`_ in the *Amazon OpenSearch Service Developer Guide* . If you set the `EnableVersionUpgrade <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-upgradeopensearchdomain>`_ update policy to ``true`` , you can update ``EngineVersion`` without interruption. When ``EnableVersionUpgrade`` is set to ``false`` , or is not specified, updating ``EngineVersion`` results in `replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ .
         :param identity_center_options: Configuration options for controlling IAM Identity Center integration within a domain.
         :param ip_address_type: Choose either dual stack or IPv4 as your IP address type. Dual stack allows you to share domain resources across IPv4 and IPv6 address types, and is the recommended option. If you set your IP address type to dual stack, you can't change your address type later.
@@ -5203,6 +5365,11 @@ class CfnDomainProps:
                         roles_key="rolesKey",
                         session_timeout_minutes=123,
                         subject_key="subjectKey"
+                    )
+                ),
+                aiml_options=opensearchservice.CfnDomain.AIMLOptionsProperty(
+                    s3_vectors_engine=opensearchservice.CfnDomain.S3VectorsEngineProperty(
+                        enabled=False
                     )
                 ),
                 cluster_config=opensearchservice.CfnDomain.ClusterConfigProperty(
@@ -5307,6 +5474,7 @@ class CfnDomainProps:
             check_type(argname="argument access_policies", value=access_policies, expected_type=type_hints["access_policies"])
             check_type(argname="argument advanced_options", value=advanced_options, expected_type=type_hints["advanced_options"])
             check_type(argname="argument advanced_security_options", value=advanced_security_options, expected_type=type_hints["advanced_security_options"])
+            check_type(argname="argument aiml_options", value=aiml_options, expected_type=type_hints["aiml_options"])
             check_type(argname="argument cluster_config", value=cluster_config, expected_type=type_hints["cluster_config"])
             check_type(argname="argument cognito_options", value=cognito_options, expected_type=type_hints["cognito_options"])
             check_type(argname="argument domain_arn", value=domain_arn, expected_type=type_hints["domain_arn"])
@@ -5332,6 +5500,8 @@ class CfnDomainProps:
             self._values["advanced_options"] = advanced_options
         if advanced_security_options is not None:
             self._values["advanced_security_options"] = advanced_security_options
+        if aiml_options is not None:
+            self._values["aiml_options"] = aiml_options
         if cluster_config is not None:
             self._values["cluster_config"] = cluster_config
         if cognito_options is not None:
@@ -5407,6 +5577,16 @@ class CfnDomainProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AdvancedSecurityOptionsInputProperty]], result)
 
     @builtins.property
+    def aiml_options(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AIMLOptionsProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-aimloptions
+        '''
+        result = self._values.get("aiml_options")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AIMLOptionsProperty]], result)
+
+    @builtins.property
     def cluster_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.ClusterConfigProperty]]:
@@ -5451,7 +5631,7 @@ class CfnDomainProps:
     def domain_name(self) -> typing.Optional[builtins.str]:
         '''A name for the OpenSearch Service domain.
 
-        The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        The name must have a minimum length of 3 and a maximum length of 28. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
 
         Required when creating a new domain.
         .. epigraph::
@@ -5480,7 +5660,7 @@ class CfnDomainProps:
     def encryption_at_rest_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.EncryptionAtRestOptionsProperty]]:
-        '''Whether the domain should encrypt data at rest, and if so, the AWS KMS key to use.
+        '''Whether the domain should encrypt data at rest, and if so, the AWS  key to use.
 
         See `Encryption of data at rest for Amazon OpenSearch Service <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/encryption-at-rest.html>`_ .
 
@@ -5864,6 +6044,77 @@ class DomainAttributes:
         return "DomainAttributes(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class DomainGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_opensearchservice.DomainGrants",
+):
+    '''Collection of grant methods for a IDomainRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_opensearchservice as opensearchservice
+        from aws_cdk.interfaces import aws_opensearchservice as interfaces_aws_opensearchservice
+        
+        # domain_ref: interfaces_aws_opensearchservice.IDomainRef
+        
+        domain_grants = opensearchservice.DomainGrants.from_domain(domain_ref)
+    '''
+
+    @jsii.member(jsii_name="fromDomain")
+    @builtins.classmethod
+    def from_domain(cls, resource: _IDomainRef_76d6bc00) -> "DomainGrants":
+        '''Creates grants for DomainGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c05b5e6c2622e28136ae7e0c800f7b7b2c849b94600b2728e8bbb4999895fc64)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("DomainGrants", jsii.sinvoke(cls, "fromDomain", [resource]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant read permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__23f73381edb9e1295bad38d862ffb702564626613f8014c5394723564fd83f8d)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+    @jsii.member(jsii_name="readWrite")
+    def read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant read/write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__72c8b5e09a1ef1856f94ea228cf21efa5b6349e341956ca81b5123aaac97e76e)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWrite", [grantee]))
+
+    @jsii.member(jsii_name="write")
+    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8012ae6fae980a13fe28041ecc0ef8a9a469764946d61279a2b8887aa7aca6e6)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IDomainRef_76d6bc00:
+        return typing.cast(_IDomainRef_76d6bc00, jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -6919,7 +7170,7 @@ class EngineVersion(
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_opensearchservice.IDomain")
-class IDomain(_IResource_c80c4260, typing_extensions.Protocol):
+class IDomain(_IResource_c80c4260, _IDomainRef_76d6bc00, typing_extensions.Protocol):
     '''An interface that represents an Amazon OpenSearch Service domain - either created with the CDK, or an existing one.'''
 
     @builtins.property
@@ -7639,6 +7890,7 @@ class IDomain(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDomainProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDomainRef_76d6bc00), # type: ignore[misc]
 ):
     '''An interface that represents an Amazon OpenSearch Service domain - either created with the CDK, or an existing one.'''
 
@@ -10551,6 +10803,18 @@ class Domain(
         return typing.cast(builtins.str, jsii.get(self, "domainName"))
 
     @builtins.property
+    @jsii.member(jsii_name="domainRef")
+    def domain_ref(self) -> _DomainReference_37396432:
+        '''A reference to a Domain resource.'''
+        return typing.cast(_DomainReference_37396432, jsii.get(self, "domainRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> DomainGrants:
+        '''Collection of grant methods for a Domain.'''
+        return typing.cast(DomainGrants, jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="appLogGroup")
     def app_log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
         '''Log group that application logs are logged to.
@@ -10604,6 +10868,7 @@ __all__ = [
     "CustomEndpointOptions",
     "Domain",
     "DomainAttributes",
+    "DomainGrants",
     "DomainProps",
     "EbsOptions",
     "EncryptionAtRestOptions",
@@ -10657,6 +10922,12 @@ def _typecheckingstub__9ac25677906ac058ff21dd4dd3fa4bc5649dbf0708d3cec14da66245b
     endpoint: typing.Optional[builtins.str] = None,
     iam_identity_center_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.IamIdentityCenterOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__322cb6fb73e5eb5873a4fb2838c44691f6a54118d1b70841067679f204578f57(
+    resource: _IApplicationRef_3664810d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10753,6 +11024,7 @@ def _typecheckingstub__6fcd2545392b3f48f314c640881e38e167b5936f1165d2eb1ce21766d
     access_policies: typing.Any = None,
     advanced_options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     advanced_security_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AdvancedSecurityOptionsInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    aiml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AIMLOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cluster_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.ClusterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cognito_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CognitoOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain_arn: typing.Optional[builtins.str] = None,
@@ -10771,6 +11043,12 @@ def _typecheckingstub__6fcd2545392b3f48f314c640881e38e167b5936f1165d2eb1ce21766d
     software_update_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SoftwareUpdateOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.VPCOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d175f3a7353e79d8542c1e609de1b5d7e6a378ef82167bc6256507b89b56c777(
+    resource: _IDomainRef_76d6bc00,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10817,6 +11095,12 @@ def _typecheckingstub__4a8bbf96e0583433dd9f44c7bc58405687275c5e3102497c3de859747
 
 def _typecheckingstub__228f471e13ce4e3daa56e3913f7b610971afccf6ec06adc08af42a85ad0abde9(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AdvancedSecurityOptionsInputProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__809f26ae46117bca5e245e0d9e88b91751a9fe6f8137586a0925a3b568e6a6bb(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AIMLOptionsProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10925,6 +11209,13 @@ def _typecheckingstub__492b192acd9acaa788b5501251071046e08d3e3cb47dc8fe653c58c58
 
 def _typecheckingstub__b93b8c5b5730096cbd511fb71c9b9508cb307bcbfee46f7a0c11da785c33d2e8(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.VPCOptionsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6e2730be5967c32ad70360eac8e050daf2a8098d3b0fa821a64eb173126426f(
+    *,
+    s3_vectors_engine: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.S3VectorsEngineProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11104,6 +11395,13 @@ def _typecheckingstub__30d779e62b9e7bc4d33e575c2c20d7da26b34d1299cff8c0f1810cd48
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0c5cacbc71e186563dfacc47a3e5812e0f2818862efee38451bcc544e4431878(
+    *,
+    enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b5e21e3867bc5223d95d43002facac59aeb4bf08a5eb92c2adf7498d4b99a166(
     *,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11173,6 +11471,7 @@ def _typecheckingstub__4a3bbf8db74762f8d49d2ee572e0b31eef8650964dd0e8a168a5fe2d6
     access_policies: typing.Any = None,
     advanced_options: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     advanced_security_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AdvancedSecurityOptionsInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    aiml_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.AIMLOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cluster_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.ClusterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cognito_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.CognitoOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain_arn: typing.Optional[builtins.str] = None,
@@ -11217,6 +11516,30 @@ def _typecheckingstub__b64144592f37187baf13886dda52519ca86792e6e9026929555296059
     *,
     domain_arn: builtins.str,
     domain_endpoint: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c05b5e6c2622e28136ae7e0c800f7b7b2c849b94600b2728e8bbb4999895fc64(
+    resource: _IDomainRef_76d6bc00,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__23f73381edb9e1295bad38d862ffb702564626613f8014c5394723564fd83f8d(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__72c8b5e09a1ef1856f94ea228cf21efa5b6349e341956ca81b5123aaac97e76e(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8012ae6fae980a13fe28041ecc0ef8a9a469764946d61279a2b8887aa7aca6e6(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

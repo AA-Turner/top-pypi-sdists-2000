@@ -84,7 +84,7 @@ class CfnInferenceScheduler(
     Scheduling an inference is setting up a continuous real-time inference plan to analyze new measurement data. When setting up the schedule, you provide an Amazon S3 bucket location for the input data, assign it a delimiter between separate entries in the data, set an offset delay if desired, and set the frequency of inferencing. You must also provide an Amazon S3 bucket location for the output data.
     .. epigraph::
 
-       Updating some properties below (for example, InferenceSchedulerName and ServerSideKmsKeyId) triggers a resource replacement, which requires a new model. To replace such a property using AWS CloudFormation , but without creating a completely new stack, you must replace ModelName. If you need to replace the property, but want to use the same model, delete the current stack and create a new one with the updated properties.
+       Updating some properties below (for example, InferenceSchedulerName and ServerSideKmsKeyId) triggers a resource replacement, which requires a new model. To replace such a property using CloudFormation , but without creating a completely new stack, you must replace ModelName. If you need to replace the property, but want to use the same model, delete the current stack and create a new one with the updated properties.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutequipment-inferencescheduler.html
     :cloudformationResource: AWS::LookoutEquipment::InferenceScheduler
@@ -143,7 +143,7 @@ class CfnInferenceScheduler(
         :param role_arn: The Amazon Resource Name (ARN) of a role with permission to access the data source being used for the inference.
         :param data_delay_offset_in_minutes: A period of time (in minutes) by which inference on the data is delayed after the data starts. For instance, if an offset delay time of five minutes was selected, inference will not begin on the data until the first data measurement after the five minute mark. For example, if five minutes is selected, the inference scheduler will wake up at the configured frequency with the additional five minute delay time to check the customer S3 bucket. The customer can upload data at the same frequency and they don't need to stop and restart the scheduler when uploading new data.
         :param inference_scheduler_name: The name of the inference scheduler.
-        :param server_side_kms_key_id: Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by Amazon Lookout for Equipment .
+        :param server_side_kms_key_id: Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by .
         :param tags: Any tags associated with the inference scheduler. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
         if __debug__:
@@ -163,6 +163,20 @@ class CfnInferenceScheduler(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInferenceScheduler")
+    @builtins.classmethod
+    def arn_for_inference_scheduler(
+        cls,
+        resource: _IInferenceSchedulerRef_ff214e3d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d594f91a9fa8232ca01fb5bcb3f8410a2ccc44f0e52c1d53510222a8d27c1b6c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInferenceScheduler", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -314,7 +328,7 @@ class CfnInferenceScheduler(
     @builtins.property
     @jsii.member(jsii_name="serverSideKmsKeyId")
     def server_side_kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by Amazon Lookout for Equipment .'''
+        '''Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by  .'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "serverSideKmsKeyId"))
 
     @server_side_kms_key_id.setter
@@ -778,7 +792,7 @@ class CfnInferenceSchedulerProps:
         :param role_arn: The Amazon Resource Name (ARN) of a role with permission to access the data source being used for the inference.
         :param data_delay_offset_in_minutes: A period of time (in minutes) by which inference on the data is delayed after the data starts. For instance, if an offset delay time of five minutes was selected, inference will not begin on the data until the first data measurement after the five minute mark. For example, if five minutes is selected, the inference scheduler will wake up at the configured frequency with the additional five minute delay time to check the customer S3 bucket. The customer can upload data at the same frequency and they don't need to stop and restart the scheduler when uploading new data.
         :param inference_scheduler_name: The name of the inference scheduler.
-        :param server_side_kms_key_id: Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by Amazon Lookout for Equipment .
+        :param server_side_kms_key_id: Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by .
         :param tags: Any tags associated with the inference scheduler. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutequipment-inferencescheduler.html
@@ -911,7 +925,7 @@ class CfnInferenceSchedulerProps:
 
     @builtins.property
     def server_side_kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by Amazon Lookout for Equipment .
+        '''Provides the identifier of the AWS KMS key used to encrypt inference scheduler data by  .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lookoutequipment-inferencescheduler.html#cfn-lookoutequipment-inferencescheduler-serversidekmskeyid
         '''
@@ -961,6 +975,12 @@ def _typecheckingstub__28ccba613c6dd6bc7182eb74423ae99fe0414b38931a2a99663f06223
     inference_scheduler_name: typing.Optional[builtins.str] = None,
     server_side_kms_key_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d594f91a9fa8232ca01fb5bcb3f8410a2ccc44f0e52c1d53510222a8d27c1b6c(
+    resource: _IInferenceSchedulerRef_ff214e3d,
 ) -> None:
     """Type checking stubs"""
     pass

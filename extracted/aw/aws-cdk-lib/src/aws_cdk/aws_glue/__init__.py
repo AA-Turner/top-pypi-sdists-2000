@@ -91,6 +91,7 @@ from ..interfaces.aws_glue import (
     IDatabaseRef as _IDatabaseRef_df838168,
     IDevEndpointRef as _IDevEndpointRef_5bb61de4,
     IIdentityCenterConfigurationRef as _IIdentityCenterConfigurationRef_df86a5c7,
+    IIntegrationRef as _IIntegrationRef_48550f23,
     IIntegrationResourcePropertyRef as _IIntegrationResourcePropertyRef_68a80746,
     IJobRef as _IJobRef_b119043c,
     IMLTransformRef as _IMLTransformRef_9f131017,
@@ -106,6 +107,7 @@ from ..interfaces.aws_glue import (
     IUsageProfileRef as _IUsageProfileRef_7fb2f866,
     IWorkflowRef as _IWorkflowRef_130478b3,
     IdentityCenterConfigurationReference as _IdentityCenterConfigurationReference_b5f056de,
+    IntegrationReference as _IntegrationReference_b0eb6d71,
     IntegrationResourcePropertyReference as _IntegrationResourcePropertyReference_0fbb76f4,
     JobReference as _JobReference_d005117a,
     MLTransformReference as _MLTransformReference_ea7fd169,
@@ -121,6 +123,8 @@ from ..interfaces.aws_glue import (
     UsageProfileReference as _UsageProfileReference_1becbb69,
     WorkflowReference as _WorkflowReference_c2d065d8,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IClassifierRef_580996de)
@@ -2523,12 +2527,12 @@ class CfnCrawler(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         targets: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCrawler.TargetsProperty", typing.Dict[builtins.str, typing.Any]]],
         classifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
         configuration: typing.Optional[builtins.str] = None,
         crawler_security_configuration: typing.Optional[builtins.str] = None,
-        database_name: typing.Optional[builtins.str] = None,
+        database_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         description: typing.Optional[builtins.str] = None,
         lake_formation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCrawler.LakeFormationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
@@ -2579,6 +2583,17 @@ class CfnCrawler(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCrawler")
+    @builtins.classmethod
+    def arn_for_crawler(cls, resource: _ICrawlerRef_51dfa641) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef7ecf26f259f7d0a5f37ed3632e5826e64efd010474b289c9c5122b8a2ce439)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCrawler", [resource]))
 
     @jsii.member(jsii_name="fromCrawlerName")
     @builtins.classmethod
@@ -4271,12 +4286,12 @@ class CfnCrawlerProps:
     def __init__(
         self,
         *,
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         targets: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.TargetsProperty, typing.Dict[builtins.str, typing.Any]]],
         classifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
         configuration: typing.Optional[builtins.str] = None,
         crawler_security_configuration: typing.Optional[builtins.str] = None,
-        database_name: typing.Optional[builtins.str] = None,
+        database_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         description: typing.Optional[builtins.str] = None,
         lake_formation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.LakeFormationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
@@ -4438,14 +4453,14 @@ class CfnCrawlerProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def role(self) -> builtins.str:
+    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of an IAM role that's used to access customer resources, such as Amazon Simple Storage Service (Amazon S3) data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-crawler.html#cfn-glue-crawler-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def targets(
@@ -4489,13 +4504,15 @@ class CfnCrawlerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def database_name(self) -> typing.Optional[builtins.str]:
+    def database_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
         '''The name of the database in which the crawler's output is stored.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-crawler.html#cfn-glue-crawler-databasename
         '''
         result = self._values.get("database_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -4654,6 +4671,20 @@ class CfnCustomEntityType(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCustomEntityType")
+    @builtins.classmethod
+    def arn_for_custom_entity_type(
+        cls,
+        resource: _ICustomEntityTypeRef_223f7f71,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__684f0c85ee93e13950ced1eae5386aef388174a928fbf705f9a660cf46f34891)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomEntityType", [resource]))
 
     @jsii.member(jsii_name="fromCustomEntityTypeId")
     @builtins.classmethod
@@ -5061,11 +5092,11 @@ class CfnDataCatalogEncryptionSettings(
 
             You can enable catalog encryption or only password encryption.
 
-            When a ``CreationConnection`` request arrives containing a password, the Data Catalog first encrypts the password using your AWS KMS key. It then encrypts the whole connection object again if catalog encryption is also enabled.
+            When a ``CreationConnection`` request arrives containing a password, the Data Catalog first encrypts the password using your AWS  key. It then encrypts the whole connection object again if catalog encryption is also enabled.
 
-            This encryption requires that you set AWS KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only administrators to have decrypt permission on the password key.
+            This encryption requires that you set AWS  key permissions to enable or restrict access on the password key according to your security requirements. For example, you might want only administrators to have decrypt permission on the password key.
 
-            :param kms_key_id: An AWS KMS key that is used to encrypt the connection password. If connection password protection is enabled, the caller of ``CreateConnection`` and ``UpdateConnection`` needs at least ``kms:Encrypt`` permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog. You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.
+            :param kms_key_id: An AWS key that is used to encrypt the connection password. If connection password protection is enabled, the caller of ``CreateConnection`` and ``UpdateConnection`` needs at least ``kms:Encrypt`` permission on the specified AWS key, to encrypt passwords before storing them in the Data Catalog. You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.
             :param return_connection_password_encrypted: When the ``ReturnConnectionPasswordEncrypted`` flag is set to "true", passwords remain encrypted in the responses of ``GetConnection`` and ``GetConnections`` . This encryption takes effect independently from catalog encryption.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-datacatalogencryptionsettings-connectionpasswordencryption.html
@@ -5094,9 +5125,9 @@ class CfnDataCatalogEncryptionSettings(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''An AWS KMS key that is used to encrypt the connection password.
+            '''An AWS  key that is used to encrypt the connection password.
 
-            If connection password protection is enabled, the caller of ``CreateConnection`` and ``UpdateConnection`` needs at least ``kms:Encrypt`` permission on the specified AWS KMS key, to encrypt passwords before storing them in the Data Catalog. You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.
+            If connection password protection is enabled, the caller of ``CreateConnection`` and ``UpdateConnection`` needs at least ``kms:Encrypt`` permission on the specified AWS  key, to encrypt passwords before storing them in the Data Catalog. You can set the decrypt permission to enable or restrict access on the password key according to your security requirements.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-datacatalogencryptionsettings-connectionpasswordencryption.html#cfn-glue-datacatalogencryptionsettings-connectionpasswordencryption-kmskeyid
             '''
@@ -5234,7 +5265,7 @@ class CfnDataCatalogEncryptionSettings(
 
             :param catalog_encryption_mode: The encryption-at-rest mode for encrypting Data Catalog data.
             :param catalog_encryption_service_role: The role that AWS Glue assumes to encrypt and decrypt the Data Catalog objects on the caller's behalf.
-            :param sse_aws_kms_key_id: The ID of the AWS KMS key to use for encryption at rest.
+            :param sse_aws_kms_key_id: The ID of the AWS key to use for encryption at rest.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-datacatalogencryptionsettings-encryptionatrest.html
             :exampleMetadata: fixture=_generated
@@ -5284,7 +5315,7 @@ class CfnDataCatalogEncryptionSettings(
 
         @builtins.property
         def sse_aws_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The ID of the AWS KMS key to use for encryption at rest.
+            '''The ID of the AWS  key to use for encryption at rest.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-datacatalogencryptionsettings-encryptionatrest.html#cfn-glue-datacatalogencryptionsettings-encryptionatrest-sseawskmskeyid
             '''
@@ -5898,6 +5929,17 @@ class CfnDatabase(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDatabase")
+    @builtins.classmethod
+    def arn_for_database(cls, resource: _IDatabaseRef_df838168) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60145b379d88c95208aa63c8049f48c31de8d86b37a9ff9ce51504c12e4c3037)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatabase", [resource]))
 
     @jsii.member(jsii_name="fromDatabaseName")
     @builtins.classmethod
@@ -7542,6 +7584,607 @@ class CfnIdentityCenterConfigurationProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IIntegrationRef_48550f23, _ITaggableV2_4e6798f8)
+class CfnIntegration(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_glue.CfnIntegration",
+):
+    '''Resource Type definition for AWS::Glue::Integration.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html
+    :cloudformationResource: AWS::Glue::Integration
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_glue as glue
+        
+        cfn_integration = glue.CfnIntegration(self, "MyCfnIntegration",
+            integration_name="integrationName",
+            source_arn="sourceArn",
+            target_arn="targetArn",
+        
+            # the properties below are optional
+            additional_encryption_context={
+                "additional_encryption_context_key": "additionalEncryptionContext"
+            },
+            data_filter="dataFilter",
+            description="description",
+            integration_config=glue.CfnIntegration.IntegrationConfigProperty(
+                continuous_sync=False,
+                refresh_interval="refreshInterval",
+                source_properties={
+                    "source_properties_key": "sourceProperties"
+                }
+            ),
+            kms_key_id="kmsKeyId",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        integration_name: builtins.str,
+        source_arn: builtins.str,
+        target_arn: builtins.str,
+        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        data_filter: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        integration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIntegration.IntegrationConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_id: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::Glue::Integration``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param integration_name: The name of the integration.
+        :param source_arn: The Amazon Resource Name (ARN) of the database to use as the source for replication.
+        :param target_arn: The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
+        :param additional_encryption_context: An optional set of non-secret key value pairs that contains additional contextual information about the data.
+        :param data_filter: 
+        :param description: 
+        :param integration_config: The configuration settings for the integration.
+        :param kms_key_id: An KMS key identifier for the key to use to encrypt the integration. If you don't specify an encryption key, the default AWS owned KMS key is used.
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ffac55aa81a7816fe9e423f20ae65fe96d6eaefe8319323ace391abf446c0dcf)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnIntegrationProps(
+            integration_name=integration_name,
+            source_arn=source_arn,
+            target_arn=target_arn,
+            additional_encryption_context=additional_encryption_context,
+            data_filter=data_filter,
+            description=description,
+            integration_config=integration_config,
+            kms_key_id=kms_key_id,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIntegration")
+    @builtins.classmethod
+    def arn_for_integration(cls, resource: _IIntegrationRef_48550f23) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05ee051a200babfe5d577ec1bf7748b915f9cfa0c6738ebcc762a74938b16d43)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIntegration", [resource]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9d34e79df61bdba3dbb9ca64e2b43f7e77124293849287b12b9d1b205c1d148a)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f6c74117f8aa3cd67cebd82121f3cfbd3fcee0caaeb051300e54fcd80fb57315)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreateTime")
+    def attr_create_time(self) -> builtins.str:
+        '''The time (UTC) when the integration was created.
+
+        :cloudformationAttribute: CreateTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreateTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrIntegrationArn")
+    def attr_integration_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the integration.
+
+        :cloudformationAttribute: IntegrationArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrIntegrationArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''The status of the integration.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="integrationRef")
+    def integration_ref(self) -> _IntegrationReference_b0eb6d71:
+        '''A reference to a Integration resource.'''
+        return typing.cast(_IntegrationReference_b0eb6d71, jsii.get(self, "integrationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="integrationName")
+    def integration_name(self) -> builtins.str:
+        '''The name of the integration.'''
+        return typing.cast(builtins.str, jsii.get(self, "integrationName"))
+
+    @integration_name.setter
+    def integration_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__643e3cec1aee9c9959573cd25d7253380039975516e0cd02c22d0aaa1416a5da)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "integrationName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="sourceArn")
+    def source_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the database to use as the source for replication.'''
+        return typing.cast(builtins.str, jsii.get(self, "sourceArn"))
+
+    @source_arn.setter
+    def source_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__203009e7b44bd371947d2df52a76ebb65a0e75e4519457f092d61fae16e1558c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "sourceArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="targetArn")
+    def target_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.'''
+        return typing.cast(builtins.str, jsii.get(self, "targetArn"))
+
+    @target_arn.setter
+    def target_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6c90f32c3f4f977a6c57cf8067a12daa7ad826587da3931729e9041d1a82ac54)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "targetArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="additionalEncryptionContext")
+    def additional_encryption_context(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        '''An optional set of non-secret key value pairs that contains additional contextual information about the data.'''
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "additionalEncryptionContext"))
+
+    @additional_encryption_context.setter
+    def additional_encryption_context(
+        self,
+        value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fdae8fbf29465d3e784572b0b0cd509bd4b86fda352738668b16d2cf5b55debb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "additionalEncryptionContext", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="dataFilter")
+    def data_filter(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "dataFilter"))
+
+    @data_filter.setter
+    def data_filter(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e6fc38a301367c0bd33ec41333fe34c29fb2bc13b33b4872915e96c4c446a0b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "dataFilter", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02f68eb589806024cf6558e9d9c52500e808e07f53cad82e268299a7b71ecfc5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="integrationConfig")
+    def integration_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.IntegrationConfigProperty"]]:
+        '''The configuration settings for the integration.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.IntegrationConfigProperty"]], jsii.get(self, "integrationConfig"))
+
+    @integration_config.setter
+    def integration_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.IntegrationConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4dbf5a510456205584127e9adcabcf0f812c320df4fc8ff15b36f9891c041516)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "integrationConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="kmsKeyId")
+    def kms_key_id(self) -> typing.Optional[builtins.str]:
+        '''An KMS key identifier for the key to use to encrypt the integration.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
+
+    @kms_key_id.setter
+    def kms_key_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__40e829913e77772c633a950691bf68e1b2e14a80ca3de8be90fcc6b289af09db)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "kmsKeyId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d21e737c27f37b8649fc58b0a27833e7ffaca7ff69309386efeba15146eff8f3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_glue.CfnIntegration.IntegrationConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "continuous_sync": "continuousSync",
+            "refresh_interval": "refreshInterval",
+            "source_properties": "sourceProperties",
+        },
+    )
+    class IntegrationConfigProperty:
+        def __init__(
+            self,
+            *,
+            continuous_sync: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            refresh_interval: typing.Optional[builtins.str] = None,
+            source_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''The configuration settings for the integration.
+
+            :param continuous_sync: Enables continuous synchronization for on-demand data extractions.
+            :param refresh_interval: Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur.
+            :param source_properties: A collection of key-value pairs that specify additional properties for the integration source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_glue as glue
+                
+                integration_config_property = glue.CfnIntegration.IntegrationConfigProperty(
+                    continuous_sync=False,
+                    refresh_interval="refreshInterval",
+                    source_properties={
+                        "source_properties_key": "sourceProperties"
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ae6c9dc8f813a3c3ee04db5d799231103e9e919054c51c98409891045e83393a)
+                check_type(argname="argument continuous_sync", value=continuous_sync, expected_type=type_hints["continuous_sync"])
+                check_type(argname="argument refresh_interval", value=refresh_interval, expected_type=type_hints["refresh_interval"])
+                check_type(argname="argument source_properties", value=source_properties, expected_type=type_hints["source_properties"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if continuous_sync is not None:
+                self._values["continuous_sync"] = continuous_sync
+            if refresh_interval is not None:
+                self._values["refresh_interval"] = refresh_interval
+            if source_properties is not None:
+                self._values["source_properties"] = source_properties
+
+        @builtins.property
+        def continuous_sync(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Enables continuous synchronization for on-demand data extractions.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-continuoussync
+            '''
+            result = self._values.get("continuous_sync")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def refresh_interval(self) -> typing.Optional[builtins.str]:
+            '''Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-refreshinterval
+            '''
+            result = self._values.get("refresh_interval")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def source_properties(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''A collection of key-value pairs that specify additional properties for the integration source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-sourceproperties
+            '''
+            result = self._values.get("source_properties")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IntegrationConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_glue.CfnIntegrationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "integration_name": "integrationName",
+        "source_arn": "sourceArn",
+        "target_arn": "targetArn",
+        "additional_encryption_context": "additionalEncryptionContext",
+        "data_filter": "dataFilter",
+        "description": "description",
+        "integration_config": "integrationConfig",
+        "kms_key_id": "kmsKeyId",
+        "tags": "tags",
+    },
+)
+class CfnIntegrationProps:
+    def __init__(
+        self,
+        *,
+        integration_name: builtins.str,
+        source_arn: builtins.str,
+        target_arn: builtins.str,
+        additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        data_filter: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        integration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegration.IntegrationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_id: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnIntegration``.
+
+        :param integration_name: The name of the integration.
+        :param source_arn: The Amazon Resource Name (ARN) of the database to use as the source for replication.
+        :param target_arn: The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
+        :param additional_encryption_context: An optional set of non-secret key value pairs that contains additional contextual information about the data.
+        :param data_filter: 
+        :param description: 
+        :param integration_config: The configuration settings for the integration.
+        :param kms_key_id: An KMS key identifier for the key to use to encrypt the integration. If you don't specify an encryption key, the default AWS owned KMS key is used.
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_glue as glue
+            
+            cfn_integration_props = glue.CfnIntegrationProps(
+                integration_name="integrationName",
+                source_arn="sourceArn",
+                target_arn="targetArn",
+            
+                # the properties below are optional
+                additional_encryption_context={
+                    "additional_encryption_context_key": "additionalEncryptionContext"
+                },
+                data_filter="dataFilter",
+                description="description",
+                integration_config=glue.CfnIntegration.IntegrationConfigProperty(
+                    continuous_sync=False,
+                    refresh_interval="refreshInterval",
+                    source_properties={
+                        "source_properties_key": "sourceProperties"
+                    }
+                ),
+                kms_key_id="kmsKeyId",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f2b8d3a13e1abba572bec8e698443ba48d21c666cf9f1433d71d840efb4bb92)
+            check_type(argname="argument integration_name", value=integration_name, expected_type=type_hints["integration_name"])
+            check_type(argname="argument source_arn", value=source_arn, expected_type=type_hints["source_arn"])
+            check_type(argname="argument target_arn", value=target_arn, expected_type=type_hints["target_arn"])
+            check_type(argname="argument additional_encryption_context", value=additional_encryption_context, expected_type=type_hints["additional_encryption_context"])
+            check_type(argname="argument data_filter", value=data_filter, expected_type=type_hints["data_filter"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument integration_config", value=integration_config, expected_type=type_hints["integration_config"])
+            check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "integration_name": integration_name,
+            "source_arn": source_arn,
+            "target_arn": target_arn,
+        }
+        if additional_encryption_context is not None:
+            self._values["additional_encryption_context"] = additional_encryption_context
+        if data_filter is not None:
+            self._values["data_filter"] = data_filter
+        if description is not None:
+            self._values["description"] = description
+        if integration_config is not None:
+            self._values["integration_config"] = integration_config
+        if kms_key_id is not None:
+            self._values["kms_key_id"] = kms_key_id
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def integration_name(self) -> builtins.str:
+        '''The name of the integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-integrationname
+        '''
+        result = self._values.get("integration_name")
+        assert result is not None, "Required property 'integration_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def source_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the database to use as the source for replication.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-sourcearn
+        '''
+        result = self._values.get("source_arn")
+        assert result is not None, "Required property 'source_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def target_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-targetarn
+        '''
+        result = self._values.get("target_arn")
+        assert result is not None, "Required property 'target_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def additional_encryption_context(
+        self,
+    ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+        '''An optional set of non-secret key value pairs that contains additional contextual information about the data.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-additionalencryptioncontext
+        '''
+        result = self._values.get("additional_encryption_context")
+        return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def data_filter(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-datafilter
+        '''
+        result = self._values.get("data_filter")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def integration_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIntegration.IntegrationConfigProperty]]:
+        '''The configuration settings for the integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-integrationconfig
+        '''
+        result = self._values.get("integration_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIntegration.IntegrationConfigProperty]], result)
+
+    @builtins.property
+    def kms_key_id(self) -> typing.Optional[builtins.str]:
+        '''An KMS key identifier for the key to use to encrypt the integration.
+
+        If you don't specify an encryption key, the default AWS owned KMS key is used.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-kmskeyid
+        '''
+        result = self._values.get("kms_key_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnIntegrationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IIntegrationResourcePropertyRef_68a80746, _ITaggableV2_4e6798f8)
 class CfnIntegrationResourceProperty(
     _CfnResource_9df397a6,
@@ -8090,7 +8733,7 @@ class CfnJob(
         id: builtins.str,
         *,
         command: typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.JobCommandProperty", typing.Dict[builtins.str, typing.Any]]],
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         allocated_capacity: typing.Optional[jsii.Number] = None,
         connections: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnJob.ConnectionsListProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         default_arguments: typing.Any = None,
@@ -8172,6 +8815,17 @@ class CfnJob(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForJob")
+    @builtins.classmethod
+    def arn_for_job(cls, resource: _IJobRef_b119043c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__62cf40741824dc8417352c3a1af24cc3711d4afd84d9d9b00790c7c468eb0bd2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJob", [resource]))
 
     @jsii.member(jsii_name="fromJobName")
     @builtins.classmethod
@@ -8884,7 +9538,7 @@ class CfnJobProps:
         self,
         *,
         command: typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.JobCommandProperty, typing.Dict[builtins.str, typing.Any]]],
-        role: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
         allocated_capacity: typing.Optional[jsii.Number] = None,
         connections: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.ConnectionsListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         default_arguments: typing.Any = None,
@@ -9068,14 +9722,14 @@ class CfnJobProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnJob.JobCommandProperty], result)
 
     @builtins.property
-    def role(self) -> builtins.str:
+    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The name or Amazon Resource Name (ARN) of the IAM role associated with this job.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-job.html#cfn-glue-job-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def allocated_capacity(self) -> typing.Optional[jsii.Number]:
@@ -12043,6 +12697,17 @@ class CfnRegistry(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForRegistry")
+    @builtins.classmethod
+    def arn_for_registry(cls, resource: _IRegistryRef_fee99a35) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0af7bd3f3a558a8449061cab98ea1758e8ecdd7b6ecc0799e16d4103d61890d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRegistry", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12332,6 +12997,17 @@ class CfnSchema(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSchema")
+    @builtins.classmethod
+    def arn_for_schema(cls, resource: _ISchemaRef_48c52337) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b17688ef1cd21a5514bb4f028167cbcad4edaf17c4781f868d5484a9a339230)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchema", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13110,7 +13786,7 @@ class CfnSchemaVersionMetadata(
         id: builtins.str,
         *,
         key: builtins.str,
-        schema_version_id: builtins.str,
+        schema_version_id: typing.Union[builtins.str, _ISchemaVersionRef_fe82c194],
         value: builtins.str,
     ) -> None:
         '''Create a new ``AWS::Glue::SchemaVersionMetadata``.
@@ -13226,7 +13902,7 @@ class CfnSchemaVersionMetadataProps:
         self,
         *,
         key: builtins.str,
-        schema_version_id: builtins.str,
+        schema_version_id: typing.Union[builtins.str, _ISchemaVersionRef_fe82c194],
         value: builtins.str,
     ) -> None:
         '''Properties for defining a ``CfnSchemaVersionMetadata``.
@@ -13272,14 +13948,16 @@ class CfnSchemaVersionMetadataProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def schema_version_id(self) -> builtins.str:
+    def schema_version_id(
+        self,
+    ) -> typing.Union[builtins.str, _ISchemaVersionRef_fe82c194]:
         '''The version number of the schema.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-schemaversionmetadata.html#cfn-glue-schemaversionmetadata-schemaversionid
         '''
         result = self._values.get("schema_version_id")
         assert result is not None, "Required property 'schema_version_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ISchemaVersionRef_fe82c194], result)
 
     @builtins.property
     def value(self) -> builtins.str:
@@ -16623,6 +17301,17 @@ class CfnTrigger(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTrigger")
+    @builtins.classmethod
+    def arn_for_trigger(cls, resource: _ITriggerRef_d85f5014) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c1e7d71fe26b85b9db6e86ecf8f89762f67320720cdddf9e9a22a989abfc26a1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrigger", [resource]))
+
     @jsii.member(jsii_name="fromTriggerName")
     @builtins.classmethod
     def from_trigger_name(
@@ -18421,6 +19110,8 @@ __all__ = [
     "CfnDevEndpointProps",
     "CfnIdentityCenterConfiguration",
     "CfnIdentityCenterConfigurationProps",
+    "CfnIntegration",
+    "CfnIntegrationProps",
     "CfnIntegrationResourceProperty",
     "CfnIntegrationResourcePropertyProps",
     "CfnJob",
@@ -18684,12 +19375,12 @@ def _typecheckingstub__ff9e598239ccebeecff8b5e3f5f0458f9de0c5c407db27837fb3122ad
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     targets: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.TargetsProperty, typing.Dict[builtins.str, typing.Any]]],
     classifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
     configuration: typing.Optional[builtins.str] = None,
     crawler_security_configuration: typing.Optional[builtins.str] = None,
-    database_name: typing.Optional[builtins.str] = None,
+    database_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     description: typing.Optional[builtins.str] = None,
     lake_formation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.LakeFormationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
@@ -18698,6 +19389,12 @@ def _typecheckingstub__ff9e598239ccebeecff8b5e3f5f0458f9de0c5c407db27837fb3122ad
     schema_change_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.SchemaChangePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     table_prefix: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ef7ecf26f259f7d0a5f37ed3632e5826e64efd010474b289c9c5122b8a2ce439(
+    resource: _ICrawlerRef_51dfa641,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18932,12 +19629,12 @@ def _typecheckingstub__fe7a457ca9245ce0e51373e4e1d8daf444f9da978c352bc8529931e53
 
 def _typecheckingstub__51125dcaf0f55fdaefa50d6b9c05a6e431008538b8ab24abc0fbe126f61c382c(
     *,
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     targets: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.TargetsProperty, typing.Dict[builtins.str, typing.Any]]],
     classifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
     configuration: typing.Optional[builtins.str] = None,
     crawler_security_configuration: typing.Optional[builtins.str] = None,
-    database_name: typing.Optional[builtins.str] = None,
+    database_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     description: typing.Optional[builtins.str] = None,
     lake_formation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCrawler.LakeFormationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
@@ -18958,6 +19655,12 @@ def _typecheckingstub__513b5382e12edfa036d553799dc23a98aa5ab82a6014b0bf9734336e4
     name: typing.Optional[builtins.str] = None,
     regex_string: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__684f0c85ee93e13950ced1eae5386aef388174a928fbf705f9a660cf46f34891(
+    resource: _ICustomEntityTypeRef_223f7f71,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19172,6 +19875,12 @@ def _typecheckingstub__7145103c869df1a981612b4445af4fee59059eebaa09d55e36fa9961b
     catalog_id: builtins.str,
     database_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDatabase.DatabaseInputProperty, typing.Dict[builtins.str, typing.Any]]],
     database_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__60145b379d88c95208aa63c8049f48c31de8d86b37a9ff9ce51504c12e4c3037(
+    resource: _IDatabaseRef_df838168,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19464,6 +20173,119 @@ def _typecheckingstub__e9676290832d30752d09c04286f6d9bddb63caf93405e528187213aa5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ffac55aa81a7816fe9e423f20ae65fe96d6eaefe8319323ace391abf446c0dcf(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    integration_name: builtins.str,
+    source_arn: builtins.str,
+    target_arn: builtins.str,
+    additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    data_filter: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    integration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegration.IntegrationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    kms_key_id: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05ee051a200babfe5d577ec1bf7748b915f9cfa0c6738ebcc762a74938b16d43(
+    resource: _IIntegrationRef_48550f23,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9d34e79df61bdba3dbb9ca64e2b43f7e77124293849287b12b9d1b205c1d148a(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6c74117f8aa3cd67cebd82121f3cfbd3fcee0caaeb051300e54fcd80fb57315(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__643e3cec1aee9c9959573cd25d7253380039975516e0cd02c22d0aaa1416a5da(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__203009e7b44bd371947d2df52a76ebb65a0e75e4519457f092d61fae16e1558c(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c90f32c3f4f977a6c57cf8067a12daa7ad826587da3931729e9041d1a82ac54(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fdae8fbf29465d3e784572b0b0cd509bd4b86fda352738668b16d2cf5b55debb(
+    value: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6e6fc38a301367c0bd33ec41333fe34c29fb2bc13b33b4872915e96c4c446a0b(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__02f68eb589806024cf6558e9d9c52500e808e07f53cad82e268299a7b71ecfc5(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4dbf5a510456205584127e9adcabcf0f812c320df4fc8ff15b36f9891c041516(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIntegration.IntegrationConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__40e829913e77772c633a950691bf68e1b2e14a80ca3de8be90fcc6b289af09db(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d21e737c27f37b8649fc58b0a27833e7ffaca7ff69309386efeba15146eff8f3(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ae6c9dc8f813a3c3ee04db5d799231103e9e919054c51c98409891045e83393a(
+    *,
+    continuous_sync: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    refresh_interval: typing.Optional[builtins.str] = None,
+    source_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7f2b8d3a13e1abba572bec8e698443ba48d21c666cf9f1433d71d840efb4bb92(
+    *,
+    integration_name: builtins.str,
+    source_arn: builtins.str,
+    target_arn: builtins.str,
+    additional_encryption_context: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    data_filter: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    integration_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegration.IntegrationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    kms_key_id: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ae17c734cde2f5daac3730b0666a9bbab9b5da447b629240e30963ab9c7f08f1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -19544,7 +20366,7 @@ def _typecheckingstub__2bea698eff4ea1d2bc08b1ab842f318f77ba719c0241a0959453e2698
     id: builtins.str,
     *,
     command: typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.JobCommandProperty, typing.Dict[builtins.str, typing.Any]]],
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     allocated_capacity: typing.Optional[jsii.Number] = None,
     connections: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.ConnectionsListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     default_arguments: typing.Any = None,
@@ -19566,6 +20388,12 @@ def _typecheckingstub__2bea698eff4ea1d2bc08b1ab842f318f77ba719c0241a0959453e2698
     tags: typing.Any = None,
     timeout: typing.Optional[jsii.Number] = None,
     worker_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__62cf40741824dc8417352c3a1af24cc3711d4afd84d9d9b00790c7c468eb0bd2(
+    resource: _IJobRef_b119043c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19762,7 +20590,7 @@ def _typecheckingstub__0d87f46f82fb4abde6f1cc1fdfc015cb65e4bb0f311eb52da272f4e48
 def _typecheckingstub__1b5bd8295520fa719be46f80478ae155292fb66f6fc3016eb114b6fabf6050df(
     *,
     command: typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.JobCommandProperty, typing.Dict[builtins.str, typing.Any]]],
-    role: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
     allocated_capacity: typing.Optional[jsii.Number] = None,
     connections: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnJob.ConnectionsListProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     default_arguments: typing.Any = None,
@@ -20119,6 +20947,12 @@ def _typecheckingstub__5de9a299a2bf41c1ad28fbb79cc31782da6bbeccfd6ad8c09014110de
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0af7bd3f3a558a8449061cab98ea1758e8ecdd7b6ecc0799e16d4103d61890d9(
+    resource: _IRegistryRef_fee99a35,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bc8a013f30adcd1edf09a70d6cb3498fabc5c2275ef048bccad07b556f68c139(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20170,6 +21004,12 @@ def _typecheckingstub__6c24fd21e2dfff4073f4fd8235eb4e6907b6a19fef52a7e12e6cc3279
     registry: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSchema.RegistryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     schema_definition: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b17688ef1cd21a5514bb4f028167cbcad4edaf17c4781f868d5484a9a339230(
+    resource: _ISchemaRef_48c52337,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20312,7 +21152,7 @@ def _typecheckingstub__0a9a3e2496aeeeaf0a9f2c36f1a1d9a7ad7e6c6e6875c4024e3b0fdc4
     id: builtins.str,
     *,
     key: builtins.str,
-    schema_version_id: builtins.str,
+    schema_version_id: typing.Union[builtins.str, _ISchemaVersionRef_fe82c194],
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -20351,7 +21191,7 @@ def _typecheckingstub__70216207f8d7da97cc8c8430c3dd8593322988412423bfad46412dc2c
 def _typecheckingstub__d673339819d7914956c800afb9c521310733b754757fa3b69916588124f4856c(
     *,
     key: builtins.str,
-    schema_version_id: builtins.str,
+    schema_version_id: typing.Union[builtins.str, _ISchemaVersionRef_fe82c194],
     value: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -20741,6 +21581,12 @@ def _typecheckingstub__8db15edfea6b1fa74e017c6bb7603bed442e4f78f4c3c138f4dcc562c
     start_on_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Any = None,
     workflow_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c1e7d71fe26b85b9db6e86ecf8f89762f67320720cdddf9e9a22a989abfc26a1(
+    resource: _ITriggerRef_d85f5014,
 ) -> None:
     """Type checking stubs"""
     pass

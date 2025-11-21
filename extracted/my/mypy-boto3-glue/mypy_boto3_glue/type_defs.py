@@ -74,6 +74,7 @@ from .literals import (
     FilterOperationType,
     FilterOperatorType,
     FilterValueTypeType,
+    FunctionTypeType,
     GlueRecordTypeType,
     HudiTargetCompressionTypeType,
     IcebergNullOrderType,
@@ -3270,6 +3271,7 @@ GetUserDefinedFunctionsRequestTypeDef = TypedDict(
         "Pattern": str,
         "CatalogId": NotRequired[str],
         "DatabaseName": NotRequired[str],
+        "FunctionType": NotRequired[FunctionTypeType],
         "NextToken": NotRequired[str],
         "MaxResults": NotRequired[int],
     },
@@ -5737,6 +5739,7 @@ GetUserDefinedFunctionsRequestPaginateTypeDef = TypedDict(
         "Pattern": str,
         "CatalogId": NotRequired[str],
         "DatabaseName": NotRequired[str],
+        "FunctionType": NotRequired[FunctionTypeType],
         "PaginationConfig": NotRequired[PaginatorConfigTypeDef],
     },
 )
@@ -6322,6 +6325,7 @@ class UserDefinedFunctionInputTypeDef(TypedDict):
     FunctionName: NotRequired[str]
     ClassName: NotRequired[str]
     OwnerName: NotRequired[str]
+    FunctionType: NotRequired[FunctionTypeType]
     OwnerType: NotRequired[PrincipalTypeType]
     ResourceUris: NotRequired[Sequence[ResourceUriTypeDef]]
 
@@ -6331,6 +6335,7 @@ class UserDefinedFunctionTypeDef(TypedDict):
     DatabaseName: NotRequired[str]
     ClassName: NotRequired[str]
     OwnerName: NotRequired[str]
+    FunctionType: NotRequired[FunctionTypeType]
     OwnerType: NotRequired[PrincipalTypeType]
     CreateTime: NotRequired[datetime]
     ResourceUris: NotRequired[list[ResourceUriTypeDef]]

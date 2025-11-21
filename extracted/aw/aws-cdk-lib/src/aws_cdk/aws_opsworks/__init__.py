@@ -4552,10 +4552,10 @@ class CfnStack(
         :param default_root_device_type: The default root device type. This value is the default for all instances in the stack, but you can override it when you create an instance. The default option is ``instance-store`` . For more information, see `Storage for the Root Device <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device>`_ .
         :param default_ssh_key_name: A default Amazon EC2 key pair name. The default value is none. If you specify a key pair name, OpsWorks installs the public key on the instance and you can use the private key with an SSH client to log in to the instance. For more information, see `Using SSH to Communicate with an Instance <https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-ssh.html>`_ and `Managing SSH Access <https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html>`_ . You can override this setting by specifying a different key pair, or no key pair, when you `create an instance <https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html>`_ .
         :param default_subnet_id: The stack's default subnet ID. All instances are launched into this subnet unless you specify another subnet ID when you create the instance. This parameter is required if you specify a value for the ``VpcId`` parameter. If you also specify a value for ``DefaultAvailabilityZone`` , the subnet must be in that zone.
-        :param ecs_cluster_arn: The Amazon Resource Name (ARN) of the Amazon Elastic Container Service ( Amazon ECS ) cluster to register with the OpsWorks stack. .. epigraph:: If you specify a cluster that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the cluster.
-        :param elastic_ips: A list of Elastic IP addresses to register with the OpsWorks stack. .. epigraph:: If you specify an IP address that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the IP address.
+        :param ecs_cluster_arn: The Amazon Resource Name (ARN) of the ( Amazon ECS ) cluster to register with the OpsWorks stack. .. epigraph:: If you specify a cluster that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the cluster.
+        :param elastic_ips: A list of Elastic IP addresses to register with the OpsWorks stack. .. epigraph:: If you specify an IP address that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the IP address.
         :param hostname_theme: The stack's host name theme, with spaces replaced by underscores. The theme is used to generate host names for the stack's instances. By default, ``HostnameTheme`` is set to ``Layer_Dependent`` , which creates host names by appending integers to the layer's short name. The other themes are: - ``Baked_Goods`` - ``Clouds`` - ``Europe_Cities`` - ``Fruits`` - ``Greek_Deities_and_Titans`` - ``Legendary_creatures_from_Japan`` - ``Planets_and_Moons`` - ``Roman_Deities`` - ``Scottish_Islands`` - ``US_Cities`` - ``Wild_Cats`` To obtain a generated host name, call ``GetHostNameSuggestion`` , which returns a host name based on the current theme.
-        :param rds_db_instances: The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack. .. epigraph:: If you specify a database instance that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the database instance.
+        :param rds_db_instances: The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack. .. epigraph:: If you specify a database instance that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the database instance.
         :param source_stack_id: If you're cloning an OpsWorks stack, the stack ID of the source OpsWorks stack to clone.
         :param tags: A map that contains tag keys and tag values that are attached to a stack or layer. - The key cannot be empty. - The key can be a maximum of 127 characters, and can contain only Unicode letters, numbers, or separators, or the following special characters: ``+ - = . _ : /`` - The value can be a maximum 255 characters, and contain only Unicode letters, numbers, or separators, or the following special characters: ``+ - = . _ : /`` - Leading and trailing white spaces are trimmed from both the key and value. - A maximum of 40 tags is allowed for any resource.
         :param use_custom_cookbooks: Whether the stack uses custom cookbooks.
@@ -4595,6 +4595,17 @@ class CfnStack(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStack")
+    @builtins.classmethod
+    def arn_for_stack(cls, resource: _IStackRef_2db8adee) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__015ca0f7b5228e7bd36cf5418d26e409a55fab7ddc33200ce3aa93de6c06b43e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStack", [resource]))
 
     @jsii.member(jsii_name="fromStackId")
     @builtins.classmethod
@@ -4911,7 +4922,7 @@ class CfnStack(
     @builtins.property
     @jsii.member(jsii_name="ecsClusterArn")
     def ecs_cluster_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the Amazon Elastic Container Service ( Amazon ECS ) cluster to register with the OpsWorks stack.'''
+        '''The Amazon Resource Name (ARN) of the  ( Amazon ECS ) cluster to register with the OpsWorks stack.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "ecsClusterArn"))
 
     @ecs_cluster_arn.setter
@@ -5587,10 +5598,10 @@ class CfnStackProps:
         :param default_root_device_type: The default root device type. This value is the default for all instances in the stack, but you can override it when you create an instance. The default option is ``instance-store`` . For more information, see `Storage for the Root Device <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ComponentsAMIs.html#storage-for-the-root-device>`_ .
         :param default_ssh_key_name: A default Amazon EC2 key pair name. The default value is none. If you specify a key pair name, OpsWorks installs the public key on the instance and you can use the private key with an SSH client to log in to the instance. For more information, see `Using SSH to Communicate with an Instance <https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-ssh.html>`_ and `Managing SSH Access <https://docs.aws.amazon.com/opsworks/latest/userguide/security-ssh-access.html>`_ . You can override this setting by specifying a different key pair, or no key pair, when you `create an instance <https://docs.aws.amazon.com/opsworks/latest/userguide/workinginstances-add.html>`_ .
         :param default_subnet_id: The stack's default subnet ID. All instances are launched into this subnet unless you specify another subnet ID when you create the instance. This parameter is required if you specify a value for the ``VpcId`` parameter. If you also specify a value for ``DefaultAvailabilityZone`` , the subnet must be in that zone.
-        :param ecs_cluster_arn: The Amazon Resource Name (ARN) of the Amazon Elastic Container Service ( Amazon ECS ) cluster to register with the OpsWorks stack. .. epigraph:: If you specify a cluster that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the cluster.
-        :param elastic_ips: A list of Elastic IP addresses to register with the OpsWorks stack. .. epigraph:: If you specify an IP address that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the IP address.
+        :param ecs_cluster_arn: The Amazon Resource Name (ARN) of the ( Amazon ECS ) cluster to register with the OpsWorks stack. .. epigraph:: If you specify a cluster that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the cluster.
+        :param elastic_ips: A list of Elastic IP addresses to register with the OpsWorks stack. .. epigraph:: If you specify an IP address that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the IP address.
         :param hostname_theme: The stack's host name theme, with spaces replaced by underscores. The theme is used to generate host names for the stack's instances. By default, ``HostnameTheme`` is set to ``Layer_Dependent`` , which creates host names by appending integers to the layer's short name. The other themes are: - ``Baked_Goods`` - ``Clouds`` - ``Europe_Cities`` - ``Fruits`` - ``Greek_Deities_and_Titans`` - ``Legendary_creatures_from_Japan`` - ``Planets_and_Moons`` - ``Roman_Deities`` - ``Scottish_Islands`` - ``US_Cities`` - ``Wild_Cats`` To obtain a generated host name, call ``GetHostNameSuggestion`` , which returns a host name based on the current theme.
-        :param rds_db_instances: The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack. .. epigraph:: If you specify a database instance that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the database instance.
+        :param rds_db_instances: The Amazon Relational Database Service ( Amazon RDS ) database instance to register with the OpsWorks stack. .. epigraph:: If you specify a database instance that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the database instance.
         :param source_stack_id: If you're cloning an OpsWorks stack, the stack ID of the source OpsWorks stack to clone.
         :param tags: A map that contains tag keys and tag values that are attached to a stack or layer. - The key cannot be empty. - The key can be a maximum of 127 characters, and can contain only Unicode letters, numbers, or separators, or the following special characters: ``+ - = . _ : /`` - The value can be a maximum 255 characters, and contain only Unicode letters, numbers, or separators, or the following special characters: ``+ - = . _ : /`` - Leading and trailing white spaces are trimmed from both the key and value. - A maximum of 40 tags is allowed for any resource.
         :param use_custom_cookbooks: Whether the stack uses custom cookbooks.
@@ -5944,11 +5955,11 @@ class CfnStackProps:
 
     @builtins.property
     def ecs_cluster_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the Amazon Elastic Container Service ( Amazon ECS ) cluster to register with the OpsWorks stack.
+        '''The Amazon Resource Name (ARN) of the  ( Amazon ECS ) cluster to register with the OpsWorks stack.
 
         .. epigraph::
 
-           If you specify a cluster that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the cluster.
+           If you specify a cluster that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-ecsclusterarn
         '''
@@ -5963,7 +5974,7 @@ class CfnStackProps:
 
         .. epigraph::
 
-           If you specify an IP address that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the IP address.
+           If you specify an IP address that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the IP address.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-elasticips
         '''
@@ -6003,7 +6014,7 @@ class CfnStackProps:
 
         .. epigraph::
 
-           If you specify a database instance that's registered with another OpsWorks stack, AWS CloudFormation deregisters the existing association before registering the database instance.
+           If you specify a database instance that's registered with another OpsWorks stack, CloudFormation deregisters the existing association before registering the database instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opsworks-stack.html#cfn-opsworks-stack-rdsdbinstances
         '''
@@ -7379,6 +7390,12 @@ def _typecheckingstub__6bf36f6bd552e246cec8163081581d4887e2e1838c2af0dfdfec5a942
     use_custom_cookbooks: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_opsworks_security_groups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     vpc_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__015ca0f7b5228e7bd36cf5418d26e409a55fab7ddc33200ce3aa93de6c06b43e(
+    resource: _IStackRef_2db8adee,
 ) -> None:
     """Type checking stubs"""
     pass

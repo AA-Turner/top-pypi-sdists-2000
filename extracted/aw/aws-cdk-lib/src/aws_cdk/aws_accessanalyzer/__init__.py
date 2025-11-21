@@ -175,6 +175,17 @@ class CfnAnalyzer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAnalyzer")
+    @builtins.classmethod
+    def arn_for_analyzer(cls, resource: _IAnalyzerRef_1291bb9b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61ec779a70b941ebfd142eebb3f2c2c7b922bc054919f407e18196f4cdfbdc15)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnalyzer", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1280,6 +1291,12 @@ def _typecheckingstub__4d078d0b17e4dff80691cd25737bc9c648722f68955725da002d3ab5d
     analyzer_name: typing.Optional[builtins.str] = None,
     archive_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnalyzer.ArchiveRuleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__61ec779a70b941ebfd142eebb3f2c2c7b922bc054919f407e18196f4cdfbdc15(
+    resource: _IAnalyzerRef_1291bb9b,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -170,6 +170,20 @@ class CfnEnvironmentEC2(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEnvironmentEC2")
+    @builtins.classmethod
+    def arn_for_environment_ec2(
+        cls,
+        resource: _IEnvironmentEC2Ref_cc598673,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea0a984348b4497a06bfd797080466465d37de9cd3db0d85c6de0b4584f03d45)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironmentEC2", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -715,6 +729,12 @@ def _typecheckingstub__f20e60d53a3580dabcd8f88a1195a515fcbefe92a9ea846ab6ed1b1bc
     repositories: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironmentEC2.RepositoryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     subnet_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ea0a984348b4497a06bfd797080466465d37de9cd3db0d85c6de0b4584f03d45(
+    resource: _IEnvironmentEC2Ref_cc598673,
 ) -> None:
     """Type checking stubs"""
     pass

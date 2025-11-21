@@ -1085,6 +1085,8 @@ from ..aws_events import (
 from ..aws_iam import (
     AddToResourcePolicyResult as _AddToResourcePolicyResult_1d0a53ad,
     Grant as _Grant_a7ae64f8,
+    GrantOnKeyResult as _GrantOnKeyResult_35320c49,
+    IEncryptedResource as _IEncryptedResource_8e9bf351,
     IGrantable as _IGrantable_71c4f5de,
     IRole as _IRole_235f5d8e,
     PolicyDocument as _PolicyDocument_3ac34393,
@@ -1695,6 +1697,195 @@ class BucketEncryption(enum.Enum):
 
     If ``encryptionKey`` is specified, this key will be used, otherwise, one will be defined.
     '''
+
+
+class BucketGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_s3.BucketGrants",
+):
+    '''Collection of grant methods for a Bucket.'''
+
+    @jsii.member(jsii_name="delete")
+    def delete(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Any = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grants s3:DeleteObject* permission to an IAM principal for objects in this bucket.
+
+        :param grantee: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11d7400ccfb8d4d5f7ec9276b0edca70f359f477433e0d3a39cfcb08008b3d2a)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "delete", [grantee, objects_key_pattern]))
+
+    @jsii.member(jsii_name="publicAccess")
+    def public_access(
+        self,
+        key_prefix: typing.Optional[builtins.str] = None,
+        *allowed_actions: builtins.str,
+    ) -> _Grant_a7ae64f8:
+        '''Allows unrestricted access to objects from this bucket.
+
+        IMPORTANT: This permission allows anyone to perform actions on S3 objects
+        in this bucket, which is useful for when you configure your bucket as a
+        website and want everyone to be able to read objects in the bucket without
+        needing to authenticate.
+
+        Without arguments, this method will grant read ("s3:GetObject") access to
+        all objects ("*") in the bucket.
+
+        The method returns the ``iam.Grant`` object, which can then be modified
+        as needed. For example, you can add a condition that will restrict access only
+        to an IPv4 range like this::
+
+           const grant = bucket.grantPublicAccess();
+           grant.resourceStatement!.addCondition(‘IpAddress’, { “aws:SourceIp”: “54.240.143.0/24” });
+
+        Note that if this ``IBucket`` refers to an existing bucket, possibly not
+        managed by CloudFormation, this method will have no effect, since it's
+        impossible to modify the policy of an existing bucket.
+
+        :param key_prefix: the prefix of S3 object keys (e.g. ``home/*``). Default is "*".
+        :param allowed_actions: the set of S3 actions to allow. Default is "s3:GetObject".
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__117eb920ea26bda5e0c8f686cc133779efe8c851a18712512cd8f0f9ce9bd92c)
+            check_type(argname="argument key_prefix", value=key_prefix, expected_type=type_hints["key_prefix"])
+            check_type(argname="argument allowed_actions", value=allowed_actions, expected_type=typing.Tuple[type_hints["allowed_actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "publicAccess", [key_prefix, *allowed_actions]))
+
+    @jsii.member(jsii_name="put")
+    def put(
+        self,
+        identity: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Any = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grants s3:PutObject* and s3:Abort* permissions for this bucket to an IAM principal.
+
+        If encryption is used, permission to use the key to encrypt the contents
+        of written files will also be granted to the same principal.
+
+        :param identity: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e7a4b5a230722710396cc04a43d5a04e62e6ffa748c6f9beacff54106f876a7)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "put", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="putAcl")
+    def put_acl(
+        self,
+        identity: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Optional[builtins.str] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grants s3:PutObjectAcl and s3:PutObjectVersionAcl permissions for this bucket to an IAM principal.
+
+        If encryption is used, permission to use the key to encrypt the contents
+        of written files will also be granted to the same principal.
+
+        :param identity: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a6445ab898b51c76409cd44d73e5816795021e384b7758c9c562f2862bc2df01)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "putAcl", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="read")
+    def read(
+        self,
+        identity: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Any = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant read permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+        If encryption is used, permission to use the key to decrypt the contents
+        of the bucket will also be granted to the same principal.
+
+        :param identity: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21eb44760cb9bff89b6abdffb1fb087e8a2da7a5c4e1f15ffd697e49f4ca7359)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="readWrite")
+    def read_write(
+        self,
+        identity: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Any = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant read and write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+        If encryption is used, permission to use the key to decrypt the contents
+        of the bucket will also be granted to the same principal.
+
+        :param identity: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6179d913d30bdad8ba49186c9196fd91b5f81a915d2547064d92bf90ebf9e6d)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWrite", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="replicationPermission")
+    def replication_permission(
+        self,
+        identity: _IGrantable_71c4f5de,
+        *,
+        destinations: typing.Sequence[typing.Union["GrantReplicationPermissionDestinationProps", typing.Dict[builtins.str, typing.Any]]],
+        source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant replication permission to a principal. This method allows the principal to perform replication operations on this bucket.
+
+        Note that when calling this function for source or destination buckets that support KMS encryption,
+        you need to specify the KMS key for encryption and the KMS key for decryption, respectively.
+
+        :param identity: The principal to grant replication permission to.
+        :param destinations: The destination buckets for replication. Specify the KMS key to use for encryption if a destination bucket needs to be encrypted with a customer-managed KMS key. One or more destination buckets are required if replication configuration is enabled (i.e., ``replicationRole`` is specified). Default: - empty array (valid only if the ``replicationRole`` property is NOT specified)
+        :param source_decryption_key: The KMS key used to decrypt objects in the source bucket for replication. **Required if** the source bucket is encrypted with a customer-managed KMS key. Default: - it's assumed the source bucket is not encrypted with a customer-managed KMS key.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__98ea74e1f8d8bbab947246fff9ff51129715f88ee431255d783691bfdbb3a94e)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+        props = GrantReplicationPermissionProps(
+            destinations=destinations, source_decryption_key=source_decryption_key
+        )
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "replicationPermission", [identity, props]))
+
+    @jsii.member(jsii_name="write")
+    def write(
+        self,
+        identity: _IGrantable_71c4f5de,
+        objects_key_pattern: typing.Any = None,
+        allowed_action_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant write permissions for this bucket and it's contents to an IAM principal (Role/Group/User).
+
+        If encryption is used, permission to use the key to decrypt the contents
+        of the bucket will also be granted to the same principal.
+
+        :param identity: The principal.
+        :param objects_key_pattern: Restrict the permission to a certain key pattern (default '*'). Parameter type is ``any`` but ``string`` should be passed in.
+        :param allowed_action_patterns: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8036bd98ba3263f6c17863f11d2cc9735cec8d3b5279097e259af615fc7f1974)
+            check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
+            check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
+            check_type(argname="argument allowed_action_patterns", value=allowed_action_patterns, expected_type=type_hints["allowed_action_patterns"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [identity, objects_key_pattern, allowed_action_patterns]))
 
 
 @jsii.data_type(
@@ -2852,6 +3043,17 @@ class CfnAccessGrant(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessGrant")
+    @builtins.classmethod
+    def arn_for_access_grant(cls, resource: _IAccessGrantRef_0e7c5209) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__204b41ae80249c465266434f62d45e9bd8affac47fcd91e498603e976d47850d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrant", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3413,6 +3615,20 @@ class CfnAccessGrantsInstance(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessGrantsInstance")
+    @builtins.classmethod
+    def arn_for_access_grants_instance(
+        cls,
+        resource: _IAccessGrantsInstanceRef_94e5b823,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d48ab47020c4b3aeaa4bb9ba048e6a5c71c99843bfad32e5b38c62ade329af36)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrantsInstance", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3652,6 +3868,20 @@ class CfnAccessGrantsLocation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAccessGrantsLocation")
+    @builtins.classmethod
+    def arn_for_access_grants_location(
+        cls,
+        resource: _IAccessGrantsLocationRef_5ae01054,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__628705b0b711bedb05117fcf88733d4f17a2ce0f677d182bb909ea1aa6f2bf28)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrantsLocation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3910,7 +4140,7 @@ class CfnAccessPoint(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        bucket: builtins.str,
+        bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
         bucket_account_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         policy: typing.Any = None,
@@ -3945,6 +4175,17 @@ class CfnAccessPoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAccessPoint")
+    @builtins.classmethod
+    def arn_for_access_point(cls, resource: _IAccessPointRef_02282fed) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3a1b9bcf23a4bf3360eb22145d11feee9ad59b79f1f21439ccac200aa727faca)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPoint", [resource]))
 
     @jsii.member(jsii_name="fromAccessPointArn")
     @builtins.classmethod
@@ -4380,7 +4621,7 @@ class CfnAccessPointProps:
     def __init__(
         self,
         *,
-        bucket: builtins.str,
+        bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
         bucket_account_id: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
         policy: typing.Any = None,
@@ -4457,14 +4698,14 @@ class CfnAccessPointProps:
             self._values["vpc_configuration"] = vpc_configuration
 
     @builtins.property
-    def bucket(self) -> builtins.str:
+    def bucket(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''The name of the bucket associated with this access point.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-accesspoint.html#cfn-s3-accesspoint-bucket
         '''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
     def bucket_account_id(self) -> typing.Optional[builtins.str]:
@@ -4659,6 +4900,17 @@ class CfnBucket(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBucket")
+    @builtins.classmethod
+    def arn_for_bucket(cls, resource: _IBucketRef_3debe44e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e41430f6a7f4f8d5b1edd291391f55a6391316d8608c753a6f62f315284d957)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBucket", [resource]))
 
     @jsii.member(jsii_name="fromBucketArn")
     @builtins.classmethod
@@ -6219,7 +6471,7 @@ class CfnBucket(
 
             .. epigraph::
 
-               If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS KMS resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
+               If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS  resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
 
             :param replica_kms_key_id: Specifies the ID (Key ARN or Alias ARN) of the customer managed AWS KMS key stored in AWS Key Management Service (KMS) for the destination bucket. Amazon S3 uses this key to encrypt replica objects. Amazon S3 only supports symmetric encryption KMS keys. For more information, see `Asymmetric keys in AWS KMS <https://docs.aws.amazon.com//kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* .
 
@@ -7613,8 +7865,8 @@ class CfnBucket(
         ) -> None:
             '''The encryption settings for an S3 Metadata journal table or inventory table configuration.
 
-            :param sse_algorithm: The encryption type specified for a metadata table. To specify server-side encryption with AWS Key Management Service ( AWS KMS ) keys (SSE-KMS), use the ``aws:kms`` value. To specify server-side encryption with Amazon S3 managed keys (SSE-S3), use the ``AES256`` value.
-            :param kms_key_arn: If server-side encryption with AWS Key Management Service ( AWS KMS ) keys (SSE-KMS) is specified, you must also specify the KMS key Amazon Resource Name (ARN). You must specify a customer-managed KMS key that's located in the same Region as the general purpose bucket that corresponds to the metadata table configuration.
+            :param sse_algorithm: The encryption type specified for a metadata table. To specify server-side encryption with AWS Key Management Service ( AWS ) keys (SSE-KMS), use the ``aws:kms`` value. To specify server-side encryption with Amazon S3 managed keys (SSE-S3), use the ``AES256`` value.
+            :param kms_key_arn: If server-side encryption with AWS Key Management Service ( AWS ) keys (SSE-KMS) is specified, you must also specify the KMS key Amazon Resource Name (ARN). You must specify a customer-managed KMS key that's located in the same Region as the general purpose bucket that corresponds to the metadata table configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-metadatatableencryptionconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -7646,7 +7898,7 @@ class CfnBucket(
         def sse_algorithm(self) -> builtins.str:
             '''The encryption type specified for a metadata table.
 
-            To specify server-side encryption with AWS Key Management Service ( AWS KMS ) keys (SSE-KMS), use the ``aws:kms`` value. To specify server-side encryption with Amazon S3 managed keys (SSE-S3), use the ``AES256`` value.
+            To specify server-side encryption with AWS Key Management Service ( AWS  ) keys (SSE-KMS), use the ``aws:kms`` value. To specify server-side encryption with Amazon S3 managed keys (SSE-S3), use the ``AES256`` value.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-metadatatableencryptionconfiguration.html#cfn-s3-bucket-metadatatableencryptionconfiguration-ssealgorithm
             '''
@@ -7656,7 +7908,7 @@ class CfnBucket(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''If server-side encryption with AWS Key Management Service ( AWS KMS ) keys (SSE-KMS) is specified, you must also specify the KMS key Amazon Resource Name (ARN).
+            '''If server-side encryption with AWS Key Management Service ( AWS  ) keys (SSE-KMS) is specified, you must also specify the KMS key Amazon Resource Name (ARN).
 
             You must specify a customer-managed KMS key that's located in the same Region as the general purpose bucket that corresponds to the metadata table configuration.
 
@@ -10869,7 +11121,7 @@ class CfnBucket(
                - *Directory buckets* - For directory buckets, there are only two supported options for server-side encryption: SSE-S3 and SSE-KMS.
 
             :param sse_algorithm: Server-side encryption algorithm to use for the default encryption. .. epigraph:: For directory buckets, there are only two supported values for server-side encryption: ``AES256`` and ``aws:kms`` .
-            :param kms_master_key_id: AWS Key Management Service (KMS) customer managed key ID to use for the default encryption. .. epigraph:: - *General purpose buckets* - This parameter is allowed if and only if ``SSEAlgorithm`` is set to ``aws:kms`` or ``aws:kms:dsse`` . - *Directory buckets* - This parameter is allowed if and only if ``SSEAlgorithm`` is set to ``aws:kms`` . You can specify the key ID, key alias, or the Amazon Resource Name (ARN) of the KMS key. - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Key Alias: ``alias/alias-name`` If you are using encryption with cross-account or AWS service operations, you must use a fully qualified KMS key ARN. For more information, see `Using encryption for cross-account operations <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy>`_ . .. epigraph:: - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS KMS resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating a VPC flow log. - *Directory buckets* - When you specify an `AWS KMS customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported. > Amazon S3 only supports symmetric encryption KMS keys. For more information, see `Asymmetric keys in AWS KMS <https://docs.aws.amazon.com//kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* .
+            :param kms_master_key_id: AWS Key Management Service (KMS) customer managed key ID to use for the default encryption. .. epigraph:: - *General purpose buckets* - This parameter is allowed if and only if ``SSEAlgorithm`` is set to ``aws:kms`` or ``aws:kms:dsse`` . - *Directory buckets* - This parameter is allowed if and only if ``SSEAlgorithm`` is set to ``aws:kms`` . You can specify the key ID, key alias, or the Amazon Resource Name (ARN) of the KMS key. - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Key Alias: ``alias/alias-name`` If you are using encryption with cross-account or AWS service operations, you must use a fully qualified KMS key ARN. For more information, see `Using encryption for cross-account operations <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy>`_ . .. epigraph:: - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating a VPC flow log. - *Directory buckets* - When you specify an `AWS customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported. > Amazon S3 only supports symmetric encryption KMS keys. For more information, see `Asymmetric keys in AWS KMS <https://docs.aws.amazon.com//kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-serversideencryptionbydefault.html
             :exampleMetadata: fixture=_generated
@@ -10929,8 +11181,8 @@ class CfnBucket(
             If you are using encryption with cross-account or AWS service operations, you must use a fully qualified KMS key ARN. For more information, see `Using encryption for cross-account operations <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-encryption.html#bucket-encryption-update-bucket-policy>`_ .
             .. epigraph::
 
-               - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS KMS resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating a VPC flow log.
-               - *Directory buckets* - When you specify an `AWS KMS customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported. > Amazon S3 only supports symmetric encryption KMS keys. For more information, see `Asymmetric keys in AWS KMS <https://docs.aws.amazon.com//kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* .
+               - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS  resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner. Also, if you use a key ID, you can run into a LogDestination undeliverable error when creating a VPC flow log.
+               - *Directory buckets* - When you specify an `AWS  customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported. > Amazon S3 only supports symmetric encryption KMS keys. For more information, see `Asymmetric keys in AWS KMS <https://docs.aws.amazon.com//kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-serversideencryptionbydefault.html#cfn-s3-bucket-serversideencryptionbydefault-kmsmasterkeyid
             '''
@@ -10967,8 +11219,8 @@ class CfnBucket(
 
             .. epigraph::
 
-               - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS KMS resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
-               - *Directory buckets* - When you specify an `AWS KMS customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.
+               - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS  resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
+               - *Directory buckets* - When you specify an `AWS  customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.
 
             :param bucket_key_enabled: Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the ``BucketKeyEnabled`` element to ``true`` causes Amazon S3 to use an S3 Bucket Key. By default, S3 Bucket Key is not enabled. For more information, see `Amazon S3 Bucket Keys <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html>`_ in the *Amazon S3 User Guide* .
             :param server_side_encryption_by_default: Specifies the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.
@@ -11932,7 +12184,7 @@ class CfnBucketPolicy(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        bucket: builtins.str,
+        bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
         policy_document: typing.Any,
     ) -> None:
         '''Create a new ``AWS::S3::BucketPolicy``.
@@ -12024,7 +12276,12 @@ class CfnBucketPolicy(
     name_mapping={"bucket": "bucket", "policy_document": "policyDocument"},
 )
 class CfnBucketPolicyProps:
-    def __init__(self, *, bucket: builtins.str, policy_document: typing.Any) -> None:
+    def __init__(
+        self,
+        *,
+        bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
+        policy_document: typing.Any,
+    ) -> None:
         '''Properties for defining a ``CfnBucketPolicy``.
 
         :param bucket: The name of the Amazon S3 bucket to which the policy applies.
@@ -12076,14 +12333,14 @@ class CfnBucketPolicyProps:
         }
 
     @builtins.property
-    def bucket(self) -> builtins.str:
+    def bucket(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''The name of the Amazon S3 bucket to which the policy applies.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-bucketpolicy.html#cfn-s3-bucketpolicy-bucket
         '''
         result = self._values.get("bucket")
         assert result is not None, "Required property 'bucket' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
     def policy_document(self) -> typing.Any:
@@ -14802,7 +15059,7 @@ class CfnStorageLens(
         def __init__(self, *, key_id: builtins.str) -> None:
             '''Specifies the use of server-side encryption using an AWS Key Management Service key (SSE-KMS) to encrypt the delivered S3 Storage Lens metrics export file.
 
-            :param key_id: Specifies the Amazon Resource Name (ARN) of the customer managed AWS KMS key to use for encrypting the S3 Storage Lens metrics export file. Amazon S3 only supports symmetric encryption keys. For more information, see `Special-purpose keys <https://docs.aws.amazon.com/kms/latest/developerguide/key-types.html>`_ in the *AWS Key Management Service Developer Guide* .
+            :param key_id: Specifies the Amazon Resource Name (ARN) of the customer managed AWS key to use for encrypting the S3 Storage Lens metrics export file. Amazon S3 only supports symmetric encryption keys. For more information, see `Special-purpose keys <https://docs.aws.amazon.com/kms/latest/developerguide/key-types.html>`_ in the *AWS Key Management Service Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-ssekms.html
             :exampleMetadata: fixture=_generated
@@ -14826,7 +15083,7 @@ class CfnStorageLens(
 
         @builtins.property
         def key_id(self) -> builtins.str:
-            '''Specifies the Amazon Resource Name (ARN) of the customer managed AWS KMS key to use for encrypting the S3 Storage Lens metrics export file.
+            '''Specifies the Amazon Resource Name (ARN) of the customer managed AWS  key to use for encrypting the S3 Storage Lens metrics export file.
 
             Amazon S3 only supports symmetric encryption keys. For more information, see `Special-purpose keys <https://docs.aws.amazon.com/kms/latest/developerguide/key-types.html>`_ in the *AWS Key Management Service Developer Guide* .
 
@@ -15434,6 +15691,20 @@ class CfnStorageLensGroup(
         props = CfnStorageLensGroupProps(filter=filter, name=name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStorageLensGroup")
+    @builtins.classmethod
+    def arn_for_storage_lens_group(
+        cls,
+        resource: _IStorageLensGroupRef_aa787427,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f6e64d684374bbfc08b1d982d0696a6a6ba9f142027c9cdda0119b949034ce1b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStorageLensGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -21085,7 +21356,7 @@ class VirtualHostedStyleUrlOptions:
         )
 
 
-@jsii.implements(IBucket)
+@jsii.implements(IBucket, _IEncryptedResource_8e9bf351)
 class BucketBase(
     _Resource_45bc6135,
     metaclass=jsii.JSIIAbstractClass,
@@ -21309,6 +21580,23 @@ class BucketBase(
             check_type(argname="argument identity", value=identity, expected_type=type_hints["identity"])
             check_type(argname="argument objects_key_pattern", value=objects_key_pattern, expected_type=type_hints["objects_key_pattern"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelete", [identity, objects_key_pattern]))
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11d5804d4000bc3036133cac047645f3b474f7829ad252744bc205531bd87c8f)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPublicAccess")
     def grant_public_access(
@@ -21791,15 +22079,28 @@ class BucketBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> BucketGrants:
+        '''Collection of grant methods for a Bucket.'''
+        return typing.cast(BucketGrants, jsii.get(self, "grants"))
+
+    @grants.setter
+    def grants(self, value: BucketGrants) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ea4d94f0db896ea19b4ab8ca5f5f2c6ddcec5adfcad9fa644cc43e2151cc883)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "grants", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="disallowPublicAccess")
     @abc.abstractmethod
-    def _disallow_public_access(self) -> typing.Optional[builtins.bool]:
+    def disallow_public_access(self) -> typing.Optional[builtins.bool]:
         '''Whether to disallow public access.'''
         ...
 
-    @_disallow_public_access.setter
+    @disallow_public_access.setter
     @abc.abstractmethod
-    def _disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
+    def disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
         ...
 
     @builtins.property
@@ -21948,14 +22249,14 @@ class _BucketBaseProxy(
 
     @builtins.property
     @jsii.member(jsii_name="disallowPublicAccess")
-    def _disallow_public_access(self) -> typing.Optional[builtins.bool]:
+    def disallow_public_access(self) -> typing.Optional[builtins.bool]:
         '''Whether to disallow public access.'''
         return typing.cast(typing.Optional[builtins.bool], jsii.get(self, "disallowPublicAccess"))
 
-    @_disallow_public_access.setter
-    def _disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
+    @disallow_public_access.setter
+    def disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__e09f0f11401862e34b246bbedc7f76234ab2424a7a05160418c68ebc32d26912)
+            type_hints = typing.get_type_hints(_typecheckingstub__d9657f1a34a745a18591b2f86f8f3ed8d545796887ed40cbb110d2d4185b271f)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "disallowPublicAccess", value) # pyright: ignore[reportArgumentType]
 
@@ -22482,14 +22783,14 @@ class Bucket(
 
     @builtins.property
     @jsii.member(jsii_name="disallowPublicAccess")
-    def _disallow_public_access(self) -> typing.Optional[builtins.bool]:
+    def disallow_public_access(self) -> typing.Optional[builtins.bool]:
         '''Whether to disallow public access.'''
         return typing.cast(typing.Optional[builtins.bool], jsii.get(self, "disallowPublicAccess"))
 
-    @_disallow_public_access.setter
-    def _disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
+    @disallow_public_access.setter
+    def disallow_public_access(self, value: typing.Optional[builtins.bool]) -> None:
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9c28a6c819a753d85a34d358b6f42613072c93deab766ea0a865ed09f7a51085)
+            type_hints = typing.get_type_hints(_typecheckingstub__dd9e9efe4667251e4a1f73b152936397291f061e7c5ce0d711ede0b8e6430837)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "disallowPublicAccess", value) # pyright: ignore[reportArgumentType]
 
@@ -22532,6 +22833,7 @@ __all__ = [
     "BucketAttributes",
     "BucketBase",
     "BucketEncryption",
+    "BucketGrants",
     "BucketMetrics",
     "BucketNotificationDestinationConfig",
     "BucketNotificationDestinationType",
@@ -22651,6 +22953,65 @@ def _typecheckingstub__59c6740ee33c114a2242cf5d785c7eb7be508681dd83101b211e8bfd4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__11d7400ccfb8d4d5f7ec9276b0edca70f359f477433e0d3a39cfcb08008b3d2a(
+    grantee: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__117eb920ea26bda5e0c8f686cc133779efe8c851a18712512cd8f0f9ce9bd92c(
+    key_prefix: typing.Optional[builtins.str] = None,
+    *allowed_actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e7a4b5a230722710396cc04a43d5a04e62e6ffa748c6f9beacff54106f876a7(
+    identity: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a6445ab898b51c76409cd44d73e5816795021e384b7758c9c562f2862bc2df01(
+    identity: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__21eb44760cb9bff89b6abdffb1fb087e8a2da7a5c4e1f15ffd697e49f4ca7359(
+    identity: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b6179d913d30bdad8ba49186c9196fd91b5f81a915d2547064d92bf90ebf9e6d(
+    identity: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__98ea74e1f8d8bbab947246fff9ff51129715f88ee431255d783691bfdbb3a94e(
+    identity: _IGrantable_71c4f5de,
+    *,
+    destinations: typing.Sequence[typing.Union[GrantReplicationPermissionDestinationProps, typing.Dict[builtins.str, typing.Any]]],
+    source_decryption_key: typing.Optional[_IKey_5f11635f] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8036bd98ba3263f6c17863f11d2cc9735cec8d3b5279097e259af615fc7f1974(
+    identity: _IGrantable_71c4f5de,
+    objects_key_pattern: typing.Any = None,
+    allowed_action_patterns: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__33afeeeb8d9814674512df049bac16b3aebc350e6a6e65b752c209452484af6d(
     *,
     id: builtins.str,
@@ -22756,6 +23117,12 @@ def _typecheckingstub__0c23d93eac657da1a9a3e6ba778bbbff475d78d7d70f4f5347376a894
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__204b41ae80249c465266434f62d45e9bd8affac47fcd91e498603e976d47850d(
+    resource: _IAccessGrantRef_0e7c5209,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9d47a991c259c8d2afd0c0c0ef78e8304661612ca2130b52828a158e13fcfd9d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -22848,6 +23215,12 @@ def _typecheckingstub__9cd8a2d092322325cf4878b4c57abd47b0898523b929d6cd7eb4198d0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d48ab47020c4b3aeaa4bb9ba048e6a5c71c99843bfad32e5b38c62ade329af36(
+    resource: _IAccessGrantsInstanceRef_94e5b823,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__db93fe2056b72f84bb647319bf62aedb8c01b722b768420b7e005427cc4a733b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -22887,6 +23260,12 @@ def _typecheckingstub__f63f8766c3f622205e3ea04592d9dbd1cdfdf34d2e6b1aca405f1b211
     iam_role_arn: builtins.str,
     location_scope: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__628705b0b711bedb05117fcf88733d4f17a2ce0f677d182bb909ea1aa6f2bf28(
+    resource: _IAccessGrantsLocationRef_5ae01054,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22934,13 +23313,19 @@ def _typecheckingstub__effa13924691e4b61b906bb0dc0bd5da8dfc4d4cbd167af0fe9491358
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    bucket: builtins.str,
+    bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     bucket_account_id: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     policy: typing.Any = None,
     public_access_block_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.PublicAccessBlockConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAccessPoint.VpcConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3a1b9bcf23a4bf3360eb22145d11feee9ad59b79f1f21439ccac200aa727faca(
+    resource: _IAccessPointRef_02282fed,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23034,7 +23419,7 @@ def _typecheckingstub__3b2d60f9f612c992c225d3af9b49ef360fcb52f3f07a5403ebcac8b8d
 
 def _typecheckingstub__78747b8f8c95f80def774b788cce8b1ff46ec71c89a1b75527040106602da5b3(
     *,
-    bucket: builtins.str,
+    bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     bucket_account_id: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
     policy: typing.Any = None,
@@ -23071,6 +23456,12 @@ def _typecheckingstub__0cfa39e37f5fa17b8234ce2f712ef5cf3bf2c262914967924c19a67f6
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     versioning_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.VersioningConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     website_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.WebsiteConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e41430f6a7f4f8d5b1edd291391f55a6391316d8608c753a6f62f315284d957(
+    resource: _IBucketRef_3debe44e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23815,7 +24206,7 @@ def _typecheckingstub__4d7a647b76d681d6945040112939ad2fc3521b6706dc0d728ccbce234
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    bucket: builtins.str,
+    bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     policy_document: typing.Any,
 ) -> None:
     """Type checking stubs"""
@@ -23847,7 +24238,7 @@ def _typecheckingstub__0e8fd92f949a743ee76326cb0c265c3f249d88130ab93dbd4233f7336
 
 def _typecheckingstub__4e45362293c11bec4f214faabdb065f61ae05bd217411f39deaf7c82ac79ccf0(
     *,
-    bucket: builtins.str,
+    bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     policy_document: typing.Any,
 ) -> None:
     """Type checking stubs"""
@@ -24200,6 +24591,12 @@ def _typecheckingstub__d64075e64ca7d5441379005c284a2dbeaa875c1179c381f83dfaf9176
     filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLensGroup.FilterProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6e64d684374bbfc08b1d982d0696a6a6ba9f142027c9cdda0119b949034ce1b(
+    resource: _IStorageLensGroupRef_aa787427,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24790,6 +25187,13 @@ def _typecheckingstub__08e8739a28b32240e416f0ce6011968de9545cf8087f087ae352f700d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__11d5804d4000bc3036133cac047645f3b474f7829ad252744bc205531bd87c8f(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__12af4a53ddaa264eb3127baa8d04978909636a69d2ee5977b1827f9bb69818a6(
     key_prefix: typing.Optional[builtins.str] = None,
     *allowed_actions: builtins.str,
@@ -24909,6 +25313,12 @@ def _typecheckingstub__3e8522eebb64e091c996febc69696b36913bb45860295379a91f01890
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4ea4d94f0db896ea19b4ab8ca5f5f2c6ddcec5adfcad9fa644cc43e2151cc883(
+    value: BucketGrants,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__379a88b5f70f3d0bcea4ef03e8d2e7c8d8bf62a080e3ea71e8d2c12af42fb5c2(
     value: typing.Optional[_IRole_235f5d8e],
 ) -> None:
@@ -24933,7 +25343,7 @@ def _typecheckingstub__0582098f8e3dd726fbdc6c6a107c1357209a1393b57d66b13cdfdd987
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__e09f0f11401862e34b246bbedc7f76234ab2424a7a05160418c68ebc32d26912(
+def _typecheckingstub__d9657f1a34a745a18591b2f86f8f3ed8d545796887ed40cbb110d2d4185b271f(
     value: typing.Optional[builtins.bool],
 ) -> None:
     """Type checking stubs"""
@@ -25048,7 +25458,7 @@ def _typecheckingstub__10798637aab1875b3bf2e274b42cec4e14584bbf542724bbdf98ab697
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__9c28a6c819a753d85a34d358b6f42613072c93deab766ea0a865ed09f7a51085(
+def _typecheckingstub__dd9e9efe4667251e4a1f73b152936397291f061e7c5ce0d711ede0b8e6430837(
     value: typing.Optional[builtins.bool],
 ) -> None:
     """Type checking stubs"""

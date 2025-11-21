@@ -173,6 +173,17 @@ class CfnDataset(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataset")
+    @builtins.classmethod
+    def arn_for_dataset(cls, resource: _IDatasetRef_db535d84) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95361899622ebaf0651dfbb90421650a250f61c1028c12a01b5e4994ca1ae816)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataset", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -548,6 +559,20 @@ class CfnDatasetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDatasetGroup")
+    @builtins.classmethod
+    def arn_for_dataset_group(
+        cls,
+        resource: _IDatasetGroupRef_6f468c87,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cd1374573f2703a0dba035e3e058b5fb9b6f9de16bf397157476471a33b32aeb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatasetGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -971,6 +996,17 @@ class CfnSchema(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSchema")
+    @builtins.classmethod
+    def arn_for_schema(cls, resource: _ISchemaRef_5dff9e57) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6043bfbee226e4215008c6d7e551282a4cb60788eef594dbba2e760453bd42e7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchema", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1242,6 +1278,17 @@ class CfnSolution(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSolution")
+    @builtins.classmethod
+    def arn_for_solution(cls, resource: _ISolutionRef_a5db870c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__76575902bdcb1c43ec15577429f36282161b32dbc7497a5037f92202facef882)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSolution", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2467,6 +2514,12 @@ def _typecheckingstub__8515dadec60af65aa740f35c8bee6bc85dafa7634c6b2270232bfa824
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__95361899622ebaf0651dfbb90421650a250f61c1028c12a01b5e4994ca1ae816(
+    resource: _IDatasetRef_db535d84,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ccbc61bfda7b82706a4bcf79fd5c92ea9ecab41d2ce92088c0f4792b980823a1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2539,6 +2592,12 @@ def _typecheckingstub__ca6485605ba6ab1dd805c944eddbfe77e62953abd16f2d5983bbfb3aa
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cd1374573f2703a0dba035e3e058b5fb9b6f9de16bf397157476471a33b32aeb(
+    resource: _IDatasetGroupRef_6f468c87,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__53e4c19bb006c2768929356ecd14cfe304a8014a04d11f94be61d3d7527fd927(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2607,6 +2666,12 @@ def _typecheckingstub__b3e6ed202aec99faa9e93f3070998170cf57a57c87cb52aa42c8c64b4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6043bfbee226e4215008c6d7e551282a4cb60788eef594dbba2e760453bd42e7(
+    resource: _ISchemaRef_5dff9e57,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__54a74a8f66268c6c8277034ca68e794b56a9921e785dfb1020072d7639c5b791(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2657,6 +2722,12 @@ def _typecheckingstub__8d1a4b804c91e293dd01c8eb3bb351f1bf260d574f5446a5af1fd4af6
     perform_hpo: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     recipe_arn: typing.Optional[builtins.str] = None,
     solution_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSolution.SolutionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__76575902bdcb1c43ec15577429f36282161b32dbc7497a5037f92202facef882(
+    resource: _ISolutionRef_a5db870c,
 ) -> None:
     """Type checking stubs"""
     pass

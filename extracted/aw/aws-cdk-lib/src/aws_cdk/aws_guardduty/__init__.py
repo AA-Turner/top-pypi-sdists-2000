@@ -186,6 +186,17 @@ class CfnDetector(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDetector")
+    @builtins.classmethod
+    def arn_for_detector(cls, resource: _IDetectorRef_92be1dc2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc91a04cfa4830531c94866398ae59096ff5fd0864eeab7d22e7595652d1b985)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDetector", [resource]))
+
     @jsii.member(jsii_name="fromDetectorId")
     @builtins.classmethod
     def from_detector_id(
@@ -2479,6 +2490,20 @@ class CfnMalwareProtectionPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMalwareProtectionPlan")
+    @builtins.classmethod
+    def arn_for_malware_protection_plan(
+        cls,
+        resource: _IMalwareProtectionPlanRef_3cd61995,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3427234c3a3dacd83592a6e6ea16638a4a9853c24b99cfaf9254ce3e7574956)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMalwareProtectionPlan", [resource]))
 
     @jsii.member(jsii_name="fromMalwareProtectionPlanArn")
     @builtins.classmethod
@@ -5732,6 +5757,12 @@ def _typecheckingstub__d4374e73b5cd2e2814bd72eb21f29547df6146e023d23ee6d5c8c8cdb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bc91a04cfa4830531c94866398ae59096ff5fd0864eeab7d22e7595652d1b985(
+    resource: _IDetectorRef_92be1dc2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3c713ff5c3d63d8b0298c515dac65b7f9b853cb55d0ab5db4ed3060bd60413f3(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -6060,6 +6091,12 @@ def _typecheckingstub__00ef930fce1d868abb00d70b721805e86a6ec1fb82c9df9f9974877a5
     role: builtins.str,
     actions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMalwareProtectionPlan.CFNActionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnMalwareProtectionPlan.TagItemProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a3427234c3a3dacd83592a6e6ea16638a4a9853c24b99cfaf9254ce3e7574956(
+    resource: _IMalwareProtectionPlanRef_3cd61995,
 ) -> None:
     """Type checking stubs"""
     pass

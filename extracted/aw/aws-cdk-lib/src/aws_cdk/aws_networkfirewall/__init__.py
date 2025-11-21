@@ -68,6 +68,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import IVPCRef as _IVPCRef_f02a11df
 from ..interfaces.aws_networkfirewall import (
     FirewallPolicyReference as _FirewallPolicyReference_590b2e0a,
     FirewallReference as _FirewallReference_2bf55714,
@@ -139,7 +140,7 @@ class CfnFirewall(
         id: builtins.str,
         *,
         firewall_name: builtins.str,
-        firewall_policy_arn: builtins.str,
+        firewall_policy_arn: typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d],
         availability_zone_change_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         availability_zone_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFirewall.AvailabilityZoneMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         delete_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -150,7 +151,7 @@ class CfnFirewall(
         subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFirewall.SubnetMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         transit_gateway_id: typing.Optional[builtins.str] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Create a new ``AWS::NetworkFirewall::Firewall``.
 
@@ -191,6 +192,17 @@ class CfnFirewall(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFirewall")
+    @builtins.classmethod
+    def arn_for_firewall(cls, resource: _IFirewallRef_31769805) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3252673ecebe9bca28767dd02ff4a5ad2fb6170a07b406430e73fc49c64efab0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFirewall", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -727,6 +739,20 @@ class CfnFirewallPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFirewallPolicy")
+    @builtins.classmethod
+    def arn_for_firewall_policy(
+        cls,
+        resource: _IFirewallPolicyRef_bd446a4d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d12ff2b086a41a0ec64e7d9e6c1464a059dde59324c1c1a4954acc2a2414366)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFirewallPolicy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2133,7 +2159,7 @@ class CfnFirewallProps:
         self,
         *,
         firewall_name: builtins.str,
-        firewall_policy_arn: builtins.str,
+        firewall_policy_arn: typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d],
         availability_zone_change_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         availability_zone_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.AvailabilityZoneMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         delete_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -2144,7 +2170,7 @@ class CfnFirewallProps:
         subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         transit_gateway_id: typing.Optional[builtins.str] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
+        vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
     ) -> None:
         '''Properties for defining a ``CfnFirewall``.
 
@@ -2254,7 +2280,9 @@ class CfnFirewallProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def firewall_policy_arn(self) -> builtins.str:
+    def firewall_policy_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d]:
         '''The Amazon Resource Name (ARN) of the firewall policy.
 
         The relationship of firewall to firewall policy is many to one. Each firewall requires one firewall policy association, and you can use the same firewall policy for multiple firewalls.
@@ -2263,7 +2291,7 @@ class CfnFirewallProps:
         '''
         result = self._values.get("firewall_policy_arn")
         assert result is not None, "Required property 'firewall_policy_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d], result)
 
     @builtins.property
     def availability_zone_change_protection(
@@ -2388,7 +2416,7 @@ class CfnFirewallProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vpc_id(self) -> typing.Optional[builtins.str]:
+    def vpc_id(self) -> typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]]:
         '''The unique identifier of the VPC where the firewall is in use.
 
         You can't change the VPC of a firewall after you create the firewall.
@@ -2396,7 +2424,7 @@ class CfnFirewallProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-networkfirewall-firewall.html#cfn-networkfirewall-firewall-vpcid
         '''
         result = self._values.get("vpc_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2461,7 +2489,7 @@ class CfnLoggingConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        firewall_arn: builtins.str,
+        firewall_arn: typing.Union[builtins.str, _IFirewallRef_31769805],
         logging_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnLoggingConfiguration.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         enable_monitoring_dashboard: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         firewall_name: typing.Optional[builtins.str] = None,
@@ -2791,7 +2819,7 @@ class CfnLoggingConfigurationProps:
     def __init__(
         self,
         *,
-        firewall_arn: builtins.str,
+        firewall_arn: typing.Union[builtins.str, _IFirewallRef_31769805],
         logging_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
         enable_monitoring_dashboard: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         firewall_name: typing.Optional[builtins.str] = None,
@@ -2845,7 +2873,7 @@ class CfnLoggingConfigurationProps:
             self._values["firewall_name"] = firewall_name
 
     @builtins.property
-    def firewall_arn(self) -> builtins.str:
+    def firewall_arn(self) -> typing.Union[builtins.str, _IFirewallRef_31769805]:
         '''The Amazon Resource Name (ARN) of the firewallthat the logging configuration is associated with.
 
         You can't change the firewall specification after you create the logging configuration.
@@ -2854,7 +2882,7 @@ class CfnLoggingConfigurationProps:
         '''
         result = self._values.get("firewall_arn")
         assert result is not None, "Required property 'firewall_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IFirewallRef_31769805], result)
 
     @builtins.property
     def logging_configuration(
@@ -3070,6 +3098,17 @@ class CfnRuleGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRuleGroup")
+    @builtins.classmethod
+    def arn_for_rule_group(cls, resource: _IRuleGroupRef_f1ee71d3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3a5e06632968de4da79bd8acd3035e3d3daac0ba055d7028fb6a1629eba907e9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRuleGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5928,6 +5967,20 @@ class CfnTLSInspectionConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTLSInspectionConfiguration")
+    @builtins.classmethod
+    def arn_for_tls_inspection_configuration(
+        cls,
+        resource: _ITLSInspectionConfigurationRef_6d0a6d9c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__577f13e28f22a4321eff945e18ae9bb096b27aeab0cde6ea6860dfce636d516f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTLSInspectionConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6299,7 +6352,7 @@ class CfnTLSInspectionConfiguration(
 
                If a server certificate that's associated with your `TLSInspectionConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-networkfirewall-tlsinspectionconfiguration.html>`_ is revoked, deleted, or expired it can result in client-side TLS errors.
 
-            :param certificate_authority_arn: The Amazon Resource Name (ARN) of the imported certificate authority (CA) certificate within Certificate Manager (ACM) to use for outbound SSL/TLS inspection. The following limitations apply: - You can use CA certificates that you imported into ACM, but you can't generate CA certificates with ACM. - You can't use certificates issued by AWS Private Certificate Authority . For more information about configuring certificates for outbound inspection, see `Using SSL/TLS certificates with TLS inspection configurations <https://docs.aws.amazon.com/network-firewall/latest/developerguide/tls-inspection-certificate-requirements.html>`_ in the *AWS Network Firewall Developer Guide* . For information about working with certificates in ACM, see `Importing certificates <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *Certificate Manager User Guide* .
+            :param certificate_authority_arn: The Amazon Resource Name (ARN) of the imported certificate authority (CA) certificate within Certificate Manager (ACM) to use for outbound SSL/TLS inspection. The following limitations apply: - You can use CA certificates that you imported into ACM, but you can't generate CA certificates with ACM. - You can't use certificates issued by Private Certificate Authority . For more information about configuring certificates for outbound inspection, see `Using SSL/TLS certificates with TLS inspection configurations <https://docs.aws.amazon.com/network-firewall/latest/developerguide/tls-inspection-certificate-requirements.html>`_ in the *AWS Network Firewall Developer Guide* . For information about working with certificates in ACM, see `Importing certificates <https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html>`_ in the *Certificate Manager User Guide* .
             :param check_certificate_revocation_status: When enabled, Network Firewall checks if the server certificate presented by the server in the SSL/TLS connection has a revoked or unkown status. If the certificate has an unknown or revoked status, you must specify the actions that Network Firewall takes on outbound traffic. To check the certificate revocation status, you must also specify a ``CertificateAuthorityArn`` in `ServerCertificateConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-resource-networkfirewall-servercertificateconfiguration.html>`_ .
             :param scopes: A list of scopes.
             :param server_certificates: The list of server certificates to use for inbound SSL/TLS inspection.
@@ -6364,7 +6417,7 @@ class CfnTLSInspectionConfiguration(
             The following limitations apply:
 
             - You can use CA certificates that you imported into ACM, but you can't generate CA certificates with ACM.
-            - You can't use certificates issued by AWS Private Certificate Authority .
+            - You can't use certificates issued by Private Certificate Authority .
 
             For more information about configuring certificates for outbound inspection, see `Using SSL/TLS certificates with TLS inspection configurations <https://docs.aws.amazon.com/network-firewall/latest/developerguide/tls-inspection-certificate-requirements.html>`_ in the *AWS Network Firewall Developer Guide* .
 
@@ -6959,6 +7012,20 @@ class CfnVpcEndpointAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVpcEndpointAssociation")
+    @builtins.classmethod
+    def arn_for_vpc_endpoint_association(
+        cls,
+        resource: _IVpcEndpointAssociationRef_bd0818d9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d522fde1292b053eef24550ea8d4748d9dc28877a627fad44aa8e34efc2c8b18)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcEndpointAssociation", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7340,7 +7407,7 @@ def _typecheckingstub__8735e4ce7e79159823190ad059af802b7721b71930c6b4b8805c4676b
     id: builtins.str,
     *,
     firewall_name: builtins.str,
-    firewall_policy_arn: builtins.str,
+    firewall_policy_arn: typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d],
     availability_zone_change_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     availability_zone_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.AvailabilityZoneMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     delete_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -7351,7 +7418,13 @@ def _typecheckingstub__8735e4ce7e79159823190ad059af802b7721b71930c6b4b8805c4676b
     subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     transit_gateway_id: typing.Optional[builtins.str] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3252673ecebe9bca28767dd02ff4a5ad2fb6170a07b406430e73fc49c64efab0(
+    resource: _IFirewallRef_31769805,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7469,6 +7542,12 @@ def _typecheckingstub__d88babb6ad6946bc506d4761908231f5bd58eca8a4b6bc16dfccccad3
     firewall_policy_name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d12ff2b086a41a0ec64e7d9e6c1464a059dde59324c1c1a4954acc2a2414366(
+    resource: _IFirewallPolicyRef_bd446a4d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7622,7 +7701,7 @@ def _typecheckingstub__fb2c62703239bb4479e4595613edad2d44e170db98c687d725b8c824f
 def _typecheckingstub__8d4108d5c35b1608da0d36c8bb60f52501d3b0634ca4324342a71c57bc238e99(
     *,
     firewall_name: builtins.str,
-    firewall_policy_arn: builtins.str,
+    firewall_policy_arn: typing.Union[builtins.str, _IFirewallPolicyRef_bd446a4d],
     availability_zone_change_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     availability_zone_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.AvailabilityZoneMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     delete_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -7633,7 +7712,7 @@ def _typecheckingstub__8d4108d5c35b1608da0d36c8bb60f52501d3b0634ca4324342a71c57b
     subnet_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFirewall.SubnetMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     transit_gateway_id: typing.Optional[builtins.str] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
+    vpc_id: typing.Optional[typing.Union[builtins.str, _IVPCRef_f02a11df]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7642,7 +7721,7 @@ def _typecheckingstub__71487a7865ce1877156cecd1cb83afa7ffd5f6428fa2611a7537c9ccf
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    firewall_arn: builtins.str,
+    firewall_arn: typing.Union[builtins.str, _IFirewallRef_31769805],
     logging_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     enable_monitoring_dashboard: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     firewall_name: typing.Optional[builtins.str] = None,
@@ -7704,7 +7783,7 @@ def _typecheckingstub__7694cf2d5082b8064a259b791a222ad012a1f7bcab308d321c9d4c780
 
 def _typecheckingstub__7dab36772798ea19c1d2e2f1e86d2099a88806994c157c7bd4e0d62178ab9369(
     *,
-    firewall_arn: builtins.str,
+    firewall_arn: typing.Union[builtins.str, _IFirewallRef_31769805],
     logging_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnLoggingConfiguration.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     enable_monitoring_dashboard: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     firewall_name: typing.Optional[builtins.str] = None,
@@ -7723,6 +7802,12 @@ def _typecheckingstub__2f1d19cebb2e7dfe2bb3a674253e22bfdb540bd48dc9cd243370420d8
     rule_group: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuleGroup.RuleGroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     summary_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRuleGroup.SummaryConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3a5e06632968de4da79bd8acd3035e3d3daac0ba055d7028fb6a1629eba907e9(
+    resource: _IRuleGroupRef_f1ee71d3,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8002,6 +8087,12 @@ def _typecheckingstub__ec764b679fc98c8fe3aa11d807ebebdd11b5c6a99f92f8eb7c03b663e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__577f13e28f22a4321eff945e18ae9bb096b27aeab0cde6ea6860dfce636d516f(
+    resource: _ITLSInspectionConfigurationRef_6d0a6d9c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8fffc8d2cddb56be0caa1d022a327faef26e9d6137d82bda779515250e3fcff9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8115,6 +8206,12 @@ def _typecheckingstub__0573bf1b4145f0cb77953642be7dcead4ba79ff19313c048d55d52f50
     vpc_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d522fde1292b053eef24550ea8d4748d9dc28877a627fad44aa8e34efc2c8b18(
+    resource: _IVpcEndpointAssociationRef_bd0818d9,
 ) -> None:
     """Type checking stubs"""
     pass

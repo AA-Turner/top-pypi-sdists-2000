@@ -186,6 +186,17 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_6a4f1a29) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9f30ee10a84923167efcee2b8e1e518005532c0ce7a5332fd89071e657258ed)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1391,6 +1402,12 @@ def _typecheckingstub__324ad6077b574145119496cf9145399149504cf843373d16080bbfc26
     sse_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SSESpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f9f30ee10a84923167efcee2b8e1e518005532c0ce7a5332fd89071e657258ed(
+    resource: _IClusterRef_6a4f1a29,
 ) -> None:
     """Type checking stubs"""
     pass

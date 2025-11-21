@@ -96,6 +96,7 @@ from ...aws_lambda import (
     SourceAccessConfiguration as _SourceAccessConfiguration_1926ff89,
     StartingPosition as _StartingPosition_c0a4852c,
     SystemLogLevel as _SystemLogLevel_aea49dc2,
+    TenancyConfig as _TenancyConfig_9e2f75ea,
     Tracing as _Tracing_9fe8e2bb,
     VersionOptions as _VersionOptions_981bb3c0,
     VersionWeight as _VersionWeight_64df085b,
@@ -203,6 +204,7 @@ class EdgeFunction(
         snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
+        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -261,6 +263,7 @@ class EdgeFunction(
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -321,6 +324,7 @@ class EdgeFunction(
             snap_start=snap_start,
             system_log_level=system_log_level,
             system_log_level_v2=system_log_level_v2,
+            tenancy_config=tenancy_config,
             timeout=timeout,
             tracing=tracing,
             vpc=vpc,
@@ -1070,6 +1074,7 @@ class EdgeFunction(
         "snap_start": "snapStart",
         "system_log_level": "systemLogLevel",
         "system_log_level_v2": "systemLogLevelV2",
+        "tenancy_config": "tenancyConfig",
         "timeout": "timeout",
         "tracing": "tracing",
         "vpc": "vpc",
@@ -1130,6 +1135,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
         system_log_level: typing.Optional[builtins.str] = None,
         system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
+        tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
         vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -1187,6 +1193,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :param snap_start: Enable SnapStart for Lambda Function. SnapStart is currently supported for Java 11, Java 17, Python 3.12, Python 3.13, and .NET 8 runtime Default: - No snapstart
         :param system_log_level: (deprecated) Sets the system log level for the function. Default: "INFO"
         :param system_log_level_v2: Sets the system log level for the function. Default: SystemLogLevel.INFO
+        :param tenancy_config: The tenancy configuration for the function. Default: - Tenant isolation is not enabled
         :param timeout: The function execution time (in seconds) after which Lambda terminates the function. Because the execution time affects cost, set this value based on the function's expected execution time. Default: Duration.seconds(3)
         :param tracing: Enable AWS X-Ray Tracing for Lambda Function. Default: Tracing.Disabled
         :param vpc: VPC network to place Lambda network interfaces. Specify this if the Lambda function needs to access resources in a VPC. This is required when ``vpcSubnets`` is specified. Default: - Function is not placed within a VPC.
@@ -1275,6 +1282,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             check_type(argname="argument snap_start", value=snap_start, expected_type=type_hints["snap_start"])
             check_type(argname="argument system_log_level", value=system_log_level, expected_type=type_hints["system_log_level"])
             check_type(argname="argument system_log_level_v2", value=system_log_level_v2, expected_type=type_hints["system_log_level_v2"])
+            check_type(argname="argument tenancy_config", value=tenancy_config, expected_type=type_hints["tenancy_config"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument tracing", value=tracing, expected_type=type_hints["tracing"])
             check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
@@ -1380,6 +1388,8 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             self._values["system_log_level"] = system_log_level
         if system_log_level_v2 is not None:
             self._values["system_log_level_v2"] = system_log_level_v2
+        if tenancy_config is not None:
+            self._values["tenancy_config"] = tenancy_config
         if timeout is not None:
             self._values["timeout"] = timeout
         if tracing is not None:
@@ -1964,6 +1974,15 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         return typing.cast(typing.Optional[_SystemLogLevel_aea49dc2], result)
 
     @builtins.property
+    def tenancy_config(self) -> typing.Optional[_TenancyConfig_9e2f75ea]:
+        '''The tenancy configuration for the function.
+
+        :default: - Tenant isolation is not enabled
+        '''
+        result = self._values.get("tenancy_config")
+        return typing.cast(typing.Optional[_TenancyConfig_9e2f75ea], result)
+
+    @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
         '''The function execution time (in seconds) after which Lambda terminates the function.
 
@@ -2132,6 +2151,7 @@ def _typecheckingstub__b2f96e5632f259adb036f7aba2bbc7c19fd9840c647d67a10a8135cb3
     snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
+    tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,
@@ -2315,6 +2335,7 @@ def _typecheckingstub__709cdcb05c7a5fc7f7bcd1d72557097c39c5c534076a00b6b8db807bd
     snap_start: typing.Optional[_SnapStartConf_2ffaa769] = None,
     system_log_level: typing.Optional[builtins.str] = None,
     system_log_level_v2: typing.Optional[_SystemLogLevel_aea49dc2] = None,
+    tenancy_config: typing.Optional[_TenancyConfig_9e2f75ea] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     tracing: typing.Optional[_Tracing_9fe8e2bb] = None,
     vpc: typing.Optional[_IVpc_f30d5663] = None,

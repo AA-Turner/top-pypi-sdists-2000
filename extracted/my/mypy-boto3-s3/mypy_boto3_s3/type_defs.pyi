@@ -8,9 +8,9 @@ Copyright 2025 Vlad Emelianov
 Usage::
 
     ```python
-    from mypy_boto3_s3.type_defs import AbortIncompleteMultipartUploadTypeDef
+    from mypy_boto3_s3.type_defs import AbacStatusTypeDef
 
-    data: AbortIncompleteMultipartUploadTypeDef = ...
+    data: AbacStatusTypeDef = ...
     ```
 """
 
@@ -28,6 +28,7 @@ from botocore.response import StreamingBody
 
 from .literals import (
     ArchiveStatusType,
+    BucketAbacStatusType,
     BucketAccelerateStatusType,
     BucketCannedACLType,
     BucketLocationConstraintType,
@@ -93,6 +94,7 @@ else:
     from typing_extensions import Literal, NotRequired, TypedDict
 
 __all__ = (
+    "AbacStatusTypeDef",
     "AbortIncompleteMultipartUploadTypeDef",
     "AbortMultipartUploadOutputTypeDef",
     "AbortMultipartUploadRequestMultipartUploadAbortTypeDef",
@@ -214,6 +216,8 @@ __all__ = (
     "ExistingObjectReplicationTypeDef",
     "FileobjTypeDef",
     "FilterRuleTypeDef",
+    "GetBucketAbacOutputTypeDef",
+    "GetBucketAbacRequestTypeDef",
     "GetBucketAccelerateConfigurationOutputTypeDef",
     "GetBucketAccelerateConfigurationRequestTypeDef",
     "GetBucketAclOutputTypeDef",
@@ -427,6 +431,7 @@ __all__ = (
     "ProgressEventTypeDef",
     "ProgressTypeDef",
     "PublicAccessBlockConfigurationTypeDef",
+    "PutBucketAbacRequestTypeDef",
     "PutBucketAccelerateConfigurationRequestTypeDef",
     "PutBucketAclRequestBucketAclPutTypeDef",
     "PutBucketAclRequestTypeDef",
@@ -569,6 +574,9 @@ __all__ = (
     "WebsiteConfigurationTypeDef",
     "WriteGetObjectResponseRequestTypeDef",
 )
+
+class AbacStatusTypeDef(TypedDict):
+    Status: NotRequired[BucketAbacStatusType]
 
 class AbortIncompleteMultipartUploadTypeDef(TypedDict):
     DaysAfterInitiation: NotRequired[int]
@@ -919,6 +927,10 @@ class ExistingObjectReplicationTypeDef(TypedDict):
 class FilterRuleTypeDef(TypedDict):
     Name: NotRequired[FilterRuleNameType]
     Value: NotRequired[str]
+
+class GetBucketAbacRequestTypeDef(TypedDict):
+    Bucket: str
+    ExpectedBucketOwner: NotRequired[str]
 
 class GetBucketAccelerateConfigurationRequestTypeDef(TypedDict):
     Bucket: str
@@ -1425,6 +1437,13 @@ class TopicConfigurationDeprecatedTypeDef(TypedDict):
     Event: NotRequired[EventType]
     Topic: NotRequired[str]
 
+class PutBucketAbacRequestTypeDef(TypedDict):
+    Bucket: str
+    AbacStatus: AbacStatusTypeDef
+    ContentMD5: NotRequired[str]
+    ChecksumAlgorithm: NotRequired[ChecksumAlgorithmType]
+    ExpectedBucketOwner: NotRequired[str]
+
 class AbortMultipartUploadOutputTypeDef(TypedDict):
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1481,6 +1500,10 @@ class DeleteObjectTaggingOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class EmptyResponseMetadataTypeDef(TypedDict):
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetBucketAbacOutputTypeDef(TypedDict):
+    AbacStatus: AbacStatusTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetBucketAccelerateConfigurationOutputTypeDef(TypedDict):

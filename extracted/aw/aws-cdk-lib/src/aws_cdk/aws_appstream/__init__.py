@@ -208,6 +208,17 @@ class CfnAppBlock(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAppBlock")
+    @builtins.classmethod
+    def arn_for_app_block(cls, resource: _IAppBlockRef_a928bdd4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b50790417a1a0d423b8012eb5878e3bf1bc26c79466c76e0b28ab98bc47f9fe5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAppBlock", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -679,6 +690,20 @@ class CfnAppBlockBuilder(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAppBlockBuilder")
+    @builtins.classmethod
+    def arn_for_app_block_builder(
+        cls,
+        resource: _IAppBlockBuilderRef_173a2da9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__53383eb29aaba27bb32b51f143e95bbfdd4a4869abfb2efb3e282c34dc499e19)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAppBlockBuilder", [resource]))
 
     @jsii.member(jsii_name="fromAppBlockBuilderArn")
     @builtins.classmethod
@@ -1644,6 +1669,17 @@ class CfnApplication(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_eb705613) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ac80330d053a68f6c7b2e2cee9bb9315321854ba4248ed34d62c7cf8345e67e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3518,6 +3554,7 @@ class CfnFleet(
         max_sessions_per_instance: typing.Optional[jsii.Number] = None,
         max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
         platform: typing.Optional[builtins.str] = None,
+        root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VolumeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_view: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3545,6 +3582,7 @@ class CfnFleet(
         :param max_sessions_per_instance: Max number of user sessions on an instance. This is applicable only for multi-session fleets.
         :param max_user_duration_in_seconds: The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. Specify a value between 600 and 432000.
         :param platform: The platform of the fleet. Platform is a required setting for Elastic fleets, and is not used for other fleet types.
+        :param root_volume_config: 
         :param session_script_s3_location: The S3 location of the session scripts configuration zip file. This only applies to Elastic fleets.
         :param stream_view: The WorkSpaces Applications view that is displayed to your users when they stream from the fleet. When ``APP`` is specified, only the windows of applications opened by users display. When ``DESKTOP`` is specified, the standard desktop that is provided by the operating system displays. The default value is ``APP`` .
         :param tags: An array of key-value pairs.
@@ -3573,6 +3611,7 @@ class CfnFleet(
             max_sessions_per_instance=max_sessions_per_instance,
             max_user_duration_in_seconds=max_user_duration_in_seconds,
             platform=platform,
+            root_volume_config=root_volume_config,
             session_script_s3_location=session_script_s3_location,
             stream_view=stream_view,
             tags=tags,
@@ -3883,6 +3922,23 @@ class CfnFleet(
         jsii.set(self, "platform", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="rootVolumeConfig")
+    def root_volume_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]], jsii.get(self, "rootVolumeConfig"))
+
+    @root_volume_config.setter
+    def root_volume_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VolumeConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0e41397488d10b80b4c28cd6fa62ad914bacfa0a84df2e76b525606e175363f1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "rootVolumeConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="sessionScriptS3Location")
     def session_script_s3_location(
         self,
@@ -4179,6 +4235,59 @@ class CfnFleet(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_appstream.CfnFleet.VolumeConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"volume_size_in_gb": "volumeSizeInGb"},
+    )
+    class VolumeConfigProperty:
+        def __init__(
+            self,
+            *,
+            volume_size_in_gb: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param volume_size_in_gb: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-fleet-volumeconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_appstream as appstream
+                
+                volume_config_property = appstream.CfnFleet.VolumeConfigProperty(
+                    volume_size_in_gb=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__96a383a1c7e20c58cb6f3d52a4d06d42385bb6b50e144547de7d9358e6b4f3d7)
+                check_type(argname="argument volume_size_in_gb", value=volume_size_in_gb, expected_type=type_hints["volume_size_in_gb"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if volume_size_in_gb is not None:
+                self._values["volume_size_in_gb"] = volume_size_in_gb
+
+        @builtins.property
+        def volume_size_in_gb(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-appstream-fleet-volumeconfig.html#cfn-appstream-fleet-volumeconfig-volumesizeingb
+            '''
+            result = self._values.get("volume_size_in_gb")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "VolumeConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_appstream.CfnFleet.VpcConfigProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -4275,6 +4384,7 @@ class CfnFleet(
         "max_sessions_per_instance": "maxSessionsPerInstance",
         "max_user_duration_in_seconds": "maxUserDurationInSeconds",
         "platform": "platform",
+        "root_volume_config": "rootVolumeConfig",
         "session_script_s3_location": "sessionScriptS3Location",
         "stream_view": "streamView",
         "tags": "tags",
@@ -4303,6 +4413,7 @@ class CfnFleetProps:
         max_sessions_per_instance: typing.Optional[jsii.Number] = None,
         max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
         platform: typing.Optional[builtins.str] = None,
+        root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VolumeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         stream_view: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4328,6 +4439,7 @@ class CfnFleetProps:
         :param max_sessions_per_instance: Max number of user sessions on an instance. This is applicable only for multi-session fleets.
         :param max_user_duration_in_seconds: The maximum amount of time that a streaming session can remain active, in seconds. If users are still connected to a streaming instance five minutes before this limit is reached, they are prompted to save any open documents before being disconnected. After this time elapses, the instance is terminated and replaced by a new instance. Specify a value between 600 and 432000.
         :param platform: The platform of the fleet. Platform is a required setting for Elastic fleets, and is not used for other fleet types.
+        :param root_volume_config: 
         :param session_script_s3_location: The S3 location of the session scripts configuration zip file. This only applies to Elastic fleets.
         :param stream_view: The WorkSpaces Applications view that is displayed to your users when they stream from the fleet. When ``APP`` is specified, only the windows of applications opened by users display. When ``DESKTOP`` is specified, the standard desktop that is provided by the operating system displays. The default value is ``APP`` .
         :param tags: An array of key-value pairs.
@@ -4370,6 +4482,7 @@ class CfnFleetProps:
             check_type(argname="argument max_sessions_per_instance", value=max_sessions_per_instance, expected_type=type_hints["max_sessions_per_instance"])
             check_type(argname="argument max_user_duration_in_seconds", value=max_user_duration_in_seconds, expected_type=type_hints["max_user_duration_in_seconds"])
             check_type(argname="argument platform", value=platform, expected_type=type_hints["platform"])
+            check_type(argname="argument root_volume_config", value=root_volume_config, expected_type=type_hints["root_volume_config"])
             check_type(argname="argument session_script_s3_location", value=session_script_s3_location, expected_type=type_hints["session_script_s3_location"])
             check_type(argname="argument stream_view", value=stream_view, expected_type=type_hints["stream_view"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
@@ -4409,6 +4522,8 @@ class CfnFleetProps:
             self._values["max_user_duration_in_seconds"] = max_user_duration_in_seconds
         if platform is not None:
             self._values["platform"] = platform
+        if root_volume_config is not None:
+            self._values["root_volume_config"] = root_volume_config
         if session_script_s3_location is not None:
             self._values["session_script_s3_location"] = session_script_s3_location
         if stream_view is not None:
@@ -4672,6 +4787,16 @@ class CfnFleetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def root_volume_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VolumeConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appstream-fleet.html#cfn-appstream-fleet-rootvolumeconfig
+        '''
+        result = self._values.get("root_volume_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VolumeConfigProperty]], result)
+
+    @builtins.property
     def session_script_s3_location(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.S3LocationProperty]]:
@@ -4851,6 +4976,20 @@ class CfnImageBuilder(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForImageBuilder")
+    @builtins.classmethod
+    def arn_for_image_builder(
+        cls,
+        resource: _IImageBuilderRef_0aae8b7e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f985c25be027509101f29d8a7ec3e0df5605ae21cc549acc6632bae33a369483)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForImageBuilder", [resource]))
 
     @jsii.member(jsii_name="fromImageBuilderName")
     @builtins.classmethod
@@ -7628,6 +7767,12 @@ def _typecheckingstub__41cea9e42ea830db5b0d999c409efe33186557a7bb3be96abafb06fba
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b50790417a1a0d423b8012eb5878e3bf1bc26c79466c76e0b28ab98bc47f9fe5(
+    resource: _IAppBlockRef_a928bdd4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5ef0c832915a964995aef2c59ffa4492185116744601f84186bb724561d2bf7e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7721,6 +7866,12 @@ def _typecheckingstub__f2dbe872e5cba24425b73eff2bd90d7b1c6af7a2b3b47d455ff4683fb
     enable_default_internet_access: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     iam_role_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__53383eb29aaba27bb32b51f143e95bbfdd4a4869abfb2efb3e282c34dc499e19(
+    resource: _IAppBlockBuilderRef_173a2da9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7882,6 +8033,12 @@ def _typecheckingstub__e9009fa37c2ae00864d9c32d96617498f6fbd69d6e961b9ed0d57b66e
     launch_parameters: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     working_directory: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ac80330d053a68f6c7b2e2cee9bb9315321854ba4248ed34d62c7cf8345e67e(
+    resource: _IApplicationRef_eb705613,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8257,6 +8414,7 @@ def _typecheckingstub__043ee41cbba03b784a0f77c0a2cc8efea9ae9147537890e0795e72954
     max_sessions_per_instance: typing.Optional[jsii.Number] = None,
     max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
     platform: typing.Optional[builtins.str] = None,
+    root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VolumeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stream_view: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8380,6 +8538,12 @@ def _typecheckingstub__e9129dd496d9b4790cdd5f195fbd566cf9b4924df5068de89d89903c2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0e41397488d10b80b4c28cd6fa62ad914bacfa0a84df2e76b525606e175363f1(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.VolumeConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__79935e15ee3dfe1dba785d906ccdd9a4e5895f1d61d25026dbdddf01558f5be8(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFleet.S3LocationProperty]],
 ) -> None:
@@ -8434,6 +8598,13 @@ def _typecheckingstub__aad58c387c2ce79f6cc90043caf5f503d6456bb90cde093dde2788eca
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__96a383a1c7e20c58cb6f3d52a4d06d42385bb6b50e144547de7d9358e6b4f3d7(
+    *,
+    volume_size_in_gb: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b84008983de6a1ed7aa5257a44cfb82723e58267dad7890bb77001fd73009f6d(
     *,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
@@ -8461,6 +8632,7 @@ def _typecheckingstub__2c1696e8b6f6c109609fff783812cdcaafc37e209e10ad5c9f177ee96
     max_sessions_per_instance: typing.Optional[jsii.Number] = None,
     max_user_duration_in_seconds: typing.Optional[jsii.Number] = None,
     platform: typing.Optional[builtins.str] = None,
+    root_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.VolumeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     session_script_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFleet.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     stream_view: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8487,6 +8659,12 @@ def _typecheckingstub__25dccb4354e677f39c5c97fd983d6a76f7631b1133ab64219d2975708
     image_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnImageBuilder.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f985c25be027509101f29d8a7ec3e0df5605ae21cc549acc6632bae33a369483(
+    resource: _IImageBuilderRef_0aae8b7e,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -375,7 +375,7 @@ https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-mgmt
 
 Secondary indexes allow efficient access to data with attributes other than the `primaryKey`. DynamoDB supports two types of secondary indexes:
 
-* Global secondary index - An index with a `partitionKey` and a `sortKey` that can be different from those on the base table. A `globalSecondaryIndex` is considered "global" because queries on the index can span all of the data in the base table, across all partitions. A `globalSecondaryIndex` is stored in its own partition space away from the base table and scales separately from the base table.
+* Global secondary index - An index with partition key(s) and optional sort key(s) that can be different from those on the base table. A `globalSecondaryIndex` is considered "global" because queries on the index can span all of the data in the base table, across all partitions. A `globalSecondaryIndex` is stored in its own partition space away from the base table and scales separately from the base table.
 * Local secondary index - An index that has the same `partitionKey` as the base table, but a different `sortKey`. A `localSecondaryIndex` is "local" in the sense that every partition of a `localSecondaryIndex` is scoped to a base table partition that has the same `partitionKey` value.
 
 Further reading:
@@ -396,7 +396,37 @@ table = dynamodb.TableV2(self, "Table",
 )
 ```
 
-Alternatively, you can add a `globalSecondaryIndex` using the `addGlobalSecondaryIndex` method:
+#### Compound Keys
+
+Global secondary indexes support compound keys, allowing you to specify multiple partition keys and/or multiple sort keys. This enables more flexible query patterns for complex data models.
+
+**Key Constraints:**
+
+* You can specify up to **4 partition keys** per global secondary index
+* You can specify up to **4 sort keys** per global secondary index
+* Use **either** `partitionKey` (singular) **or** `partitionKeys` (plural), but not both
+* Use **either** `sortKey` (singular) **or** `sortKeys` (plural), but not both
+* At least one partition key must be specified (either `partitionKey` or `partitionKeys`)
+* For multiple keys, you **must** use the plural parameters (`partitionKeys` and/or `sortKeys`)
+* **Keys cannot be added or modified after index creation** - attempting to add additional keys to an existing index will result in an error
+
+**Example with compound partition and sort keys:**
+
+```python
+table = dynamodb.TableV2(self, "Table",
+    partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
+    global_secondary_indexes=[dynamodb.GlobalSecondaryIndexPropsV2(
+        index_name="compound-gsi",
+        partition_keys=[dynamodb.Attribute(name="gsi_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="gsi_pk2", type=dynamodb.AttributeType.NUMBER)
+        ],
+        sort_keys=[dynamodb.Attribute(name="gsi_sk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="gsi_sk2", type=dynamodb.AttributeType.BINARY)
+        ]
+    )
+    ]
+)
+```
+
+You can also add a `globalSecondaryIndex` using the `addGlobalSecondaryIndex` method:
 
 ```python
 table = dynamodb.TableV2(self, "Table",
@@ -411,6 +441,14 @@ table = dynamodb.TableV2(self, "Table",
 table.add_global_secondary_index(
     index_name="gsi2",
     partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
+)
+
+# Add a GSI with compound keys
+table.add_global_secondary_index(
+    index_name="compound-gsi2",
+    partition_keys=[dynamodb.Attribute(name="compound_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="compound_pk2", type=dynamodb.AttributeType.NUMBER)
+    ],
+    sort_key=dynamodb.Attribute(name="sk", type=dynamodb.AttributeType.STRING)
 )
 ```
 
@@ -1168,8 +1206,11 @@ from ..aws_cloudwatch import (
 from ..aws_iam import (
     AddToResourcePolicyResult as _AddToResourcePolicyResult_1d0a53ad,
     Grant as _Grant_a7ae64f8,
+    GrantOnKeyResult as _GrantOnKeyResult_35320c49,
+    IEncryptedResource as _IEncryptedResource_8e9bf351,
     IGrantable as _IGrantable_71c4f5de,
     IResourceWithPolicy as _IResourceWithPolicy_720d64fc,
+    IResourceWithPolicyV2 as _IResourceWithPolicyV2_01035ec6,
     PolicyDocument as _PolicyDocument_3ac34393,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
@@ -1941,6 +1982,17 @@ class CfnGlobalTable(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGlobalTable")
+    @builtins.classmethod
+    def arn_for_global_table(cls, resource: _IGlobalTableRef_596046fc) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5341f33362e1892a20f08e2750095e7cb8141f740353b59e8d2bc807afc226c1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGlobalTable", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3543,7 +3595,7 @@ class CfnGlobalTable(
 
             The key can be specified via ARN, key ID, or alias. The key must be created in the same region as the replica.
 
-            :param kms_master_key_id: The AWS KMS key that should be used for the AWS KMS encryption. To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
+            :param kms_master_key_id: The AWS key that should be used for the AWS encryption. To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-replicassespecification.html
             :exampleMetadata: fixture=_generated
@@ -3567,7 +3619,7 @@ class CfnGlobalTable(
 
         @builtins.property
         def kms_master_key_id(self) -> builtins.str:
-            '''The AWS KMS key that should be used for the AWS KMS encryption.
+            '''The AWS  key that should be used for the AWS  encryption.
 
             To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
 
@@ -4109,8 +4161,8 @@ class CfnGlobalTable(
         ) -> None:
             '''Represents the settings used to enable server-side encryption.
 
-            :param sse_enabled: Indicates whether server-side encryption is performed using an AWS managed key or an AWS owned key. If enabled (true), server-side encryption type is set to KMS and an AWS managed key is used ( AWS KMS charges apply). If disabled (false) or not specified,server-side encryption is set to an AWS owned key. If you choose to use KMS encryption, you can also use customer managed KMS keys by specifying them in the ``ReplicaSpecification.SSESpecification`` object. You cannot mix AWS managed and customer managed KMS keys.
-            :param sse_type: Server-side encryption type. The only supported value is:. - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS KMS ( AWS KMS charges apply).
+            :param sse_enabled: Indicates whether server-side encryption is performed using an AWS managed key or an AWS owned key. If enabled (true), server-side encryption type is set to KMS and an AWS managed key is used ( AWS charges apply). If disabled (false) or not specified,server-side encryption is set to an AWS owned key. If you choose to use KMS encryption, you can also use customer managed KMS keys by specifying them in the ``ReplicaSpecification.SSESpecification`` object. You cannot mix AWS managed and customer managed KMS keys.
+            :param sse_type: Server-side encryption type. The only supported value is:. - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS ( AWS charges apply).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-ssespecification.html
             :exampleMetadata: fixture=_generated
@@ -4142,7 +4194,7 @@ class CfnGlobalTable(
         def sse_enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
             '''Indicates whether server-side encryption is performed using an AWS managed key or an AWS owned key.
 
-            If enabled (true), server-side encryption type is set to KMS and an AWS managed key is used ( AWS KMS charges apply). If disabled (false) or not specified,server-side encryption is set to an AWS owned key. If you choose to use KMS encryption, you can also use customer managed KMS keys by specifying them in the ``ReplicaSpecification.SSESpecification`` object. You cannot mix AWS managed and customer managed KMS keys.
+            If enabled (true), server-side encryption type is set to KMS and an AWS managed key is used ( AWS  charges apply). If disabled (false) or not specified,server-side encryption is set to an AWS owned key. If you choose to use KMS encryption, you can also use customer managed KMS keys by specifying them in the ``ReplicaSpecification.SSESpecification`` object. You cannot mix AWS managed and customer managed KMS keys.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-ssespecification.html#cfn-dynamodb-globaltable-ssespecification-sseenabled
             '''
@@ -4154,7 +4206,7 @@ class CfnGlobalTable(
         def sse_type(self) -> typing.Optional[builtins.str]:
             '''Server-side encryption type. The only supported value is:.
 
-            - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS KMS ( AWS KMS charges apply).
+            - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS  ( AWS  charges apply).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-globaltable-ssespecification.html#cfn-dynamodb-globaltable-ssespecification-ssetype
             '''
@@ -5408,6 +5460,17 @@ class CfnTable(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTable")
+    @builtins.classmethod
+    def arn_for_table(cls, resource: _ITableRef_4478f0ad) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__83472c4f9a2fab337714885b9a762df45951a610129d9a9356fd4d5d5bad74d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTable", [resource]))
 
     @jsii.member(jsii_name="fromTableArn")
     @builtins.classmethod
@@ -7269,9 +7332,9 @@ class CfnTable(
         ) -> None:
             '''Represents the settings used to enable server-side encryption.
 
-            :param sse_enabled: Indicates whether server-side encryption is done using an AWS managed key or an AWS owned key. If enabled (true), server-side encryption type is set to ``KMS`` and an AWS managed key is used ( AWS KMS charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned key.
-            :param kms_master_key_id: The AWS KMS key that should be used for the AWS KMS encryption. To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
-            :param sse_type: Server-side encryption type. The only supported value is:. - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS KMS ( AWS KMS charges apply).
+            :param sse_enabled: Indicates whether server-side encryption is done using an AWS managed key or an AWS owned key. If enabled (true), server-side encryption type is set to ``KMS`` and an AWS managed key is used ( AWS charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned key.
+            :param kms_master_key_id: The AWS key that should be used for the AWS encryption. To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
+            :param sse_type: Server-side encryption type. The only supported value is:. - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS ( AWS charges apply).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-ssespecification.html
             :exampleMetadata: fixture=_generated
@@ -7307,7 +7370,7 @@ class CfnTable(
         def sse_enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
             '''Indicates whether server-side encryption is done using an AWS managed key or an AWS owned key.
 
-            If enabled (true), server-side encryption type is set to ``KMS`` and an AWS managed key is used ( AWS KMS charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned key.
+            If enabled (true), server-side encryption type is set to ``KMS`` and an AWS managed key is used ( AWS  charges apply). If disabled (false) or not specified, server-side encryption is set to AWS owned key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-ssespecification.html#cfn-dynamodb-table-ssespecification-sseenabled
             '''
@@ -7317,7 +7380,7 @@ class CfnTable(
 
         @builtins.property
         def kms_master_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS KMS key that should be used for the AWS KMS encryption.
+            '''The AWS  key that should be used for the AWS  encryption.
 
             To specify a key, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB key ``alias/aws/dynamodb`` .
 
@@ -7330,7 +7393,7 @@ class CfnTable(
         def sse_type(self) -> typing.Optional[builtins.str]:
             '''Server-side encryption type. The only supported value is:.
 
-            - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS KMS ( AWS KMS charges apply).
+            - ``KMS`` - Server-side encryption that uses AWS Key Management Service . The key is stored in your account and is managed by AWS  ( AWS  charges apply).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dynamodb-table-ssespecification.html#cfn-dynamodb-table-ssespecification-ssetype
             '''
@@ -9920,6 +9983,84 @@ typing.cast(typing.Any, InputFormat).__jsii_proxy_class__ = lambda : _InputForma
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_dynamodb.KeySchema",
+    jsii_struct_bases=[],
+    name_mapping={"partition_keys": "partitionKeys", "sort_keys": "sortKeys"},
+)
+class KeySchema:
+    def __init__(
+        self,
+        *,
+        partition_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
+        sort_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
+    ) -> None:
+        '''A description of a key schema of an LSI, GSI or Table.
+
+        :param partition_keys: Partition key definition. This array has at least one, but potentially multiple entries. Together, they form the partition key.
+        :param sort_keys: Sort key definition. This array has zero or more entries. Together, they form the sort key.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_dynamodb as dynamodb
+            
+            key_schema = dynamodb.KeySchema(
+                partition_keys=[dynamodb.Attribute(
+                    name="name",
+                    type=dynamodb.AttributeType.BINARY
+                )],
+                sort_keys=[dynamodb.Attribute(
+                    name="name",
+                    type=dynamodb.AttributeType.BINARY
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__339e8f1bc41636ad7a89a12b227459aa9e8c3c9d0cafe1ac6256544b0be24258)
+            check_type(argname="argument partition_keys", value=partition_keys, expected_type=type_hints["partition_keys"])
+            check_type(argname="argument sort_keys", value=sort_keys, expected_type=type_hints["sort_keys"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "partition_keys": partition_keys,
+            "sort_keys": sort_keys,
+        }
+
+    @builtins.property
+    def partition_keys(self) -> typing.List[Attribute]:
+        '''Partition key definition.
+
+        This array has at least one, but potentially multiple entries.  Together,
+        they form the partition key.
+        '''
+        result = self._values.get("partition_keys")
+        assert result is not None, "Required property 'partition_keys' is missing"
+        return typing.cast(typing.List[Attribute], result)
+
+    @builtins.property
+    def sort_keys(self) -> typing.List[Attribute]:
+        '''Sort key definition.
+
+        This array has zero or more entries. Together, they form the sort key.
+        '''
+        result = self._values.get("sort_keys")
+        assert result is not None, "Required property 'sort_keys' is missing"
+        return typing.cast(typing.List[Attribute], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "KeySchema(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.aws_dynamodb.MaxThroughputProps",
     jsii_struct_bases=[],
     name_mapping={
@@ -10324,13 +10465,13 @@ class SchemaOptions:
     def __init__(
         self,
         *,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Represents the table schema attributes.
 
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
 
         :exampleMetadata: fixture=_generated
 
@@ -10345,8 +10486,6 @@ class SchemaOptions:
                     name="name",
                     type=dynamodb.AttributeType.BINARY
                 ),
-            
-                # the properties below are optional
                 sort_key=dynamodb.Attribute(
                     name="name",
                     type=dynamodb.AttributeType.BINARY
@@ -10361,24 +10500,34 @@ class SchemaOptions:
             type_hints = typing.get_type_hints(_typecheckingstub__ae885b0601bee5232ae05125b2ee5b619940bdfbed94bb77a05353dccbec9e84)
             check_type(argname="argument partition_key", value=partition_key, expected_type=type_hints["partition_key"])
             check_type(argname="argument sort_key", value=sort_key, expected_type=type_hints["sort_key"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "partition_key": partition_key,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if partition_key is not None:
+            self._values["partition_key"] = partition_key
         if sort_key is not None:
             self._values["sort_key"] = sort_key
 
     @builtins.property
-    def partition_key(self) -> Attribute:
-        '''Partition key attribute definition.'''
+    def partition_key(self) -> typing.Optional[Attribute]:
+        '''Partition key attribute definition.
+
+        If a single field forms the partition key, you can use this field.  Use the
+        ``partitionKeys`` field if the partition key is a compound key (consists of
+        multiple fields).
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
         result = self._values.get("partition_key")
-        assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast(typing.Optional[Attribute], result)
 
     @builtins.property
     def sort_key(self) -> typing.Optional[Attribute]:
         '''Sort key attribute definition.
 
-        :default: no sort key
+        If a single field forms the sort key, you can use this field.  Use the
+        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        fields).
+
+        :default: - no sort key
         '''
         result = self._values.get("sort_key")
         return typing.cast(typing.Optional[Attribute], result)
@@ -10480,6 +10629,193 @@ class SecondaryIndexProps:
 
     def __repr__(self) -> str:
         return "SecondaryIndexProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+class StreamGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_dynamodb.StreamGrants",
+):
+    '''A set of permissions to grant on a Table Stream.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_dynamodb as dynamodb
+        from aws_cdk import aws_kms as kms
+        from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+        
+        # key: kms.Key
+        # table_ref: interfaces_aws_dynamodb.ITableRef
+        
+        stream_grants = dynamodb.StreamGrants(
+            table=table_ref,
+            table_stream_arn="tableStreamArn",
+        
+            # the properties below are optional
+            encryption_key=key
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        table: _ITableRef_4478f0ad,
+        table_stream_arn: builtins.str,
+        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> None:
+        '''
+        :param table: The table this stream is for.
+        :param table_stream_arn: The ARN of the Stream.
+        :param encryption_key: The encryption key of the table. Required permissions will be added to the key as well. Default: - No key
+        '''
+        props = StreamGrantsProps(
+            table=table,
+            table_stream_arn=table_stream_arn,
+            encryption_key=encryption_key,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="actions")
+    def actions(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _Grant_a7ae64f8:
+        '''Adds an IAM policy statement associated with this table's stream to an IAM principal's policy.
+
+        If ``encryptionKey`` is present, appropriate grants to the key needs to be added
+        separately using the ``table.encryptionKey.grant*`` methods.
+
+        :param grantee: The principal (no-op if undefined).
+        :param actions: The set of actions to allow (i.e. "dynamodb:DescribeStream", "dynamodb:GetRecords", ...).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86101d3f0287f68991c02f6c20a0754d64904c99b1cb38be4ccd0bbc474dbab0)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "actions", [grantee, *actions]))
+
+    @jsii.member(jsii_name="list")
+    def list(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM Principal to list streams attached to current dynamodb table.
+
+        :param grantee: The principal (no-op if undefined).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0bdba1228d2493dddfb0b5dfbceb197a9690e4c90874407cb08a3c60e81e489c)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "list", [grantee]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM principal all stream data read operations for this table's stream: DescribeStream, GetRecords, GetShardIterator, ListStreams.
+
+        Appropriate grants will also be added to the customer-managed KMS key
+        if one was configured.
+
+        :param grantee: The principal to grant access to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01b8ff1aba3f9dd3ce7997b6402e6cc41ec1d0cf91555c4a83dab59b0375b804)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_dynamodb.StreamGrantsProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "table": "table",
+        "table_stream_arn": "tableStreamArn",
+        "encryption_key": "encryptionKey",
+    },
+)
+class StreamGrantsProps:
+    def __init__(
+        self,
+        *,
+        table: _ITableRef_4478f0ad,
+        table_stream_arn: builtins.str,
+        encryption_key: typing.Optional[_IKey_5f11635f] = None,
+    ) -> None:
+        '''Construction properties for StreamGrants.
+
+        :param table: The table this stream is for.
+        :param table_stream_arn: The ARN of the Stream.
+        :param encryption_key: The encryption key of the table. Required permissions will be added to the key as well. Default: - No key
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_dynamodb as dynamodb
+            from aws_cdk import aws_kms as kms
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            
+            # key: kms.Key
+            # table_ref: interfaces_aws_dynamodb.ITableRef
+            
+            stream_grants_props = dynamodb.StreamGrantsProps(
+                table=table_ref,
+                table_stream_arn="tableStreamArn",
+            
+                # the properties below are optional
+                encryption_key=key
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7a6d760e3ed3b3e82fd5e28804a7ae7cd94c4ebaafc4a6ab3eb0a090aac614bf)
+            check_type(argname="argument table", value=table, expected_type=type_hints["table"])
+            check_type(argname="argument table_stream_arn", value=table_stream_arn, expected_type=type_hints["table_stream_arn"])
+            check_type(argname="argument encryption_key", value=encryption_key, expected_type=type_hints["encryption_key"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "table": table,
+            "table_stream_arn": table_stream_arn,
+        }
+        if encryption_key is not None:
+            self._values["encryption_key"] = encryption_key
+
+    @builtins.property
+    def table(self) -> _ITableRef_4478f0ad:
+        '''The table this stream is for.'''
+        result = self._values.get("table")
+        assert result is not None, "Required property 'table' is missing"
+        return typing.cast(_ITableRef_4478f0ad, result)
+
+    @builtins.property
+    def table_stream_arn(self) -> builtins.str:
+        '''The ARN of the Stream.'''
+        result = self._values.get("table_stream_arn")
+        assert result is not None, "Required property 'table_stream_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
+        '''The encryption key of the table.
+
+        Required permissions will be added to the key as well.
+
+        :default: - No key
+        '''
+        result = self._values.get("encryption_key")
+        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "StreamGrantsProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -11178,7 +11514,7 @@ class TableAttributesV2:
         )
 
 
-@jsii.implements(ITable, _IResourceWithPolicy_720d64fc)
+@jsii.implements(ITable, _ITableRef_4478f0ad, _IResourceWithPolicy_720d64fc, _IEncryptedResource_8e9bf351)
 class TableBase(
     _Resource_45bc6135,
     metaclass=jsii.JSIIAbstractClass,
@@ -11260,6 +11596,23 @@ class TableBase(
             type_hints = typing.get_type_hints(_typecheckingstub__e97fcb5dff02c5a258c5d607074ab3d37182a2524e41f9575dbd34f5bddd553f)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantFullAccess", [grantee]))
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c47709cbc47672ad2e5764a22d5e15738380d62396d6d6a6fe3c7c88dbe2cc04)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantReadData")
     def grant_read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
@@ -11951,6 +12304,12 @@ class TableBase(
         return typing.cast(_Metric_e396a4dc, jsii.invoke(self, "metricUserErrors", [props]))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "TableGrants":
+        '''Grant a predefined set of permissions on this Table.'''
+        return typing.cast("TableGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="hasIndex")
     @abc.abstractmethod
     def _has_index(self) -> builtins.bool:
@@ -11959,7 +12318,21 @@ class TableBase(
     @builtins.property
     @jsii.member(jsii_name="regionalArns")
     def _regional_arns(self) -> typing.List[builtins.str]:
+        '''
+        :deprecated: This member is still filled but it is not read
+
+        :stability: deprecated
+        '''
         return typing.cast(typing.List[builtins.str], jsii.get(self, "regionalArns"))
+
+    @builtins.property
+    @jsii.member(jsii_name="streamGrants")
+    def stream_grants(self) -> StreamGrants:
+        '''Grant a predefined set of permissions on this Table's Stream, if present.
+
+        Will throw if the Table has not been configured for streaming.
+        '''
+        return typing.cast(StreamGrants, jsii.get(self, "streamGrants"))
 
     @builtins.property
     @jsii.member(jsii_name="tableArn")
@@ -11982,10 +12355,23 @@ class TableBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="tableRef")
+    def table_ref(self) -> _TableReference_642dbaf9:
+        '''A reference to a Table resource.'''
+        return typing.cast(_TableReference_642dbaf9, jsii.get(self, "tableRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="encryptionKey")
     @abc.abstractmethod
     def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="regions")
+    @abc.abstractmethod
+    def regions(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Additional regions other than the main one that this table is replicated to.'''
         ...
 
     @builtins.property
@@ -12060,6 +12446,12 @@ class _TableBaseProxy(
     def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
         return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+
+    @builtins.property
+    @jsii.member(jsii_name="regions")
+    def regions(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Additional regions other than the main one that this table is replicated to.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "regions"))
 
     @builtins.property
     @jsii.member(jsii_name="tableStreamArn")
@@ -13175,6 +13567,272 @@ class _TableEncryptionV2Proxy(TableEncryptionV2):
 typing.cast(typing.Any, TableEncryptionV2).__jsii_proxy_class__ = lambda : _TableEncryptionV2Proxy
 
 
+class TableGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_dynamodb.TableGrants",
+):
+    '''A set of permissions to grant on a Table.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_dynamodb as dynamodb
+        from aws_cdk import aws_iam as iam
+        from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+        
+        # encrypted_resource: iam.IEncryptedResource
+        # resource_with_policy_v2: iam.IResourceWithPolicyV2
+        # table_ref: interfaces_aws_dynamodb.ITableRef
+        
+        table_grants = dynamodb.TableGrants(
+            table=table_ref,
+        
+            # the properties below are optional
+            encrypted_resource=encrypted_resource,
+            has_index=False,
+            policy_resource=resource_with_policy_v2,
+            regions=["regions"]
+        )
+    '''
+
+    def __init__(
+        self,
+        *,
+        table: _ITableRef_4478f0ad,
+        encrypted_resource: typing.Optional[_IEncryptedResource_8e9bf351] = None,
+        has_index: typing.Optional[builtins.bool] = None,
+        policy_resource: typing.Optional[_IResourceWithPolicyV2_01035ec6] = None,
+        regions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''
+        :param table: The table to grant permissions on.
+        :param encrypted_resource: The encrypted resource on which actions will be allowed. Default: - No permission is added to the KMS key, even if it exists
+        :param has_index: Whether this table has indexes. If so, permissions are granted on all table indexes as well. Default: false
+        :param policy_resource: The resource with policy on which actions will be allowed. Default: - No resource policy is created
+        :param regions: Additional regions other than the main one that this table is replicated to. Default: - No regions
+        '''
+        props = TableGrantsProps(
+            table=table,
+            encrypted_resource=encrypted_resource,
+            has_index=has_index,
+            policy_resource=policy_resource,
+            regions=regions,
+        )
+
+        jsii.create(self.__class__, self, [props])
+
+    @jsii.member(jsii_name="actions")
+    def actions(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _Grant_a7ae64f8:
+        '''Adds an IAM policy statement associated with this table to an IAM principal's policy.
+
+        If ``encryptionKey`` is present, appropriate grants to the key needs to be added
+        separately using the ``table.encryptionKey.grant*`` methods.
+
+        :param grantee: The principal (no-op if undefined).
+        :param actions: The set of actions to allow (i.e. "dynamodb:PutItem", "dynamodb:GetItem", ...).
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d339dc811423411a2156ea2385fb10952440a923804b6266277865c54dec04c)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "actions", [grantee, *actions]))
+
+    @jsii.member(jsii_name="fullAccess")
+    def full_access(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits all DynamoDB operations ("dynamodb:*") to an IAM principal.
+
+        Appropriate grants will also be added to the customer-managed KMS key
+        if one was configured.
+
+        :param grantee: The principal to grant access to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8209d22b6b16878519d0c5c26e15333f972b2616be79096021721c67b66a8968)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "fullAccess", [grantee]))
+
+    @jsii.member(jsii_name="readData")
+    def read_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM principal all data read operations from this table: BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan, DescribeTable.
+
+        Appropriate grants will also be added to the customer-managed KMS key
+        if one was configured.
+
+        :param grantee: The principal to grant access to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6c9c1a85fb738d4c8207a98c3da430616ec8b930c7a222722c3880f7e1c96c5e)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readData", [grantee]))
+
+    @jsii.member(jsii_name="readWriteData")
+    def read_write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM principal to all data read/write operations to this table.
+
+        BatchGetItem, GetRecords, GetShardIterator, Query, GetItem, Scan,
+        BatchWriteItem, PutItem, UpdateItem, DeleteItem, DescribeTable
+
+        Appropriate grants will also be added to the customer-managed KMS key
+        if one was configured.
+
+        :param grantee: The principal to grant access to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4184f792e842150aa560b761ea606add307e9e3aeb3ec9385d46abe654fbce6e)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWriteData", [grantee]))
+
+    @jsii.member(jsii_name="writeData")
+    def write_data(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits an IAM principal all data write operations to this table: BatchWriteItem, PutItem, UpdateItem, DeleteItem, DescribeTable.
+
+        Appropriate grants will also be added to the customer-managed KMS key
+        if one was configured.
+
+        :param grantee: The principal to grant access to.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ceb76b87b50120af36678b706fd047c95ddee4ef26415e89dc6db0167e3aae2)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "writeData", [grantee]))
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_dynamodb.TableGrantsProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "table": "table",
+        "encrypted_resource": "encryptedResource",
+        "has_index": "hasIndex",
+        "policy_resource": "policyResource",
+        "regions": "regions",
+    },
+)
+class TableGrantsProps:
+    def __init__(
+        self,
+        *,
+        table: _ITableRef_4478f0ad,
+        encrypted_resource: typing.Optional[_IEncryptedResource_8e9bf351] = None,
+        has_index: typing.Optional[builtins.bool] = None,
+        policy_resource: typing.Optional[_IResourceWithPolicyV2_01035ec6] = None,
+        regions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Construction properties for TableGrants.
+
+        :param table: The table to grant permissions on.
+        :param encrypted_resource: The encrypted resource on which actions will be allowed. Default: - No permission is added to the KMS key, even if it exists
+        :param has_index: Whether this table has indexes. If so, permissions are granted on all table indexes as well. Default: false
+        :param policy_resource: The resource with policy on which actions will be allowed. Default: - No resource policy is created
+        :param regions: Additional regions other than the main one that this table is replicated to. Default: - No regions
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_dynamodb as dynamodb
+            from aws_cdk import aws_iam as iam
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            
+            # encrypted_resource: iam.IEncryptedResource
+            # resource_with_policy_v2: iam.IResourceWithPolicyV2
+            # table_ref: interfaces_aws_dynamodb.ITableRef
+            
+            table_grants_props = dynamodb.TableGrantsProps(
+                table=table_ref,
+            
+                # the properties below are optional
+                encrypted_resource=encrypted_resource,
+                has_index=False,
+                policy_resource=resource_with_policy_v2,
+                regions=["regions"]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b7b91af4754571e791b9b69fda24dee2aac6826634f64d23b1b3aefca293c2f6)
+            check_type(argname="argument table", value=table, expected_type=type_hints["table"])
+            check_type(argname="argument encrypted_resource", value=encrypted_resource, expected_type=type_hints["encrypted_resource"])
+            check_type(argname="argument has_index", value=has_index, expected_type=type_hints["has_index"])
+            check_type(argname="argument policy_resource", value=policy_resource, expected_type=type_hints["policy_resource"])
+            check_type(argname="argument regions", value=regions, expected_type=type_hints["regions"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "table": table,
+        }
+        if encrypted_resource is not None:
+            self._values["encrypted_resource"] = encrypted_resource
+        if has_index is not None:
+            self._values["has_index"] = has_index
+        if policy_resource is not None:
+            self._values["policy_resource"] = policy_resource
+        if regions is not None:
+            self._values["regions"] = regions
+
+    @builtins.property
+    def table(self) -> _ITableRef_4478f0ad:
+        '''The table to grant permissions on.'''
+        result = self._values.get("table")
+        assert result is not None, "Required property 'table' is missing"
+        return typing.cast(_ITableRef_4478f0ad, result)
+
+    @builtins.property
+    def encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
+        '''The encrypted resource on which actions will be allowed.
+
+        :default: - No permission is added to the KMS key, even if it exists
+        '''
+        result = self._values.get("encrypted_resource")
+        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], result)
+
+    @builtins.property
+    def has_index(self) -> typing.Optional[builtins.bool]:
+        '''Whether this table has indexes.
+
+        If so, permissions are granted on all table indexes as well.
+
+        :default: false
+        '''
+        result = self._values.get("has_index")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    @builtins.property
+    def policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
+        '''The resource with policy on which actions will be allowed.
+
+        :default: - No resource policy is created
+        '''
+        result = self._values.get("policy_resource")
+        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], result)
+
+    @builtins.property
+    def regions(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Additional regions other than the main one that this table is replicated to.
+
+        :default: - No regions
+        '''
+        result = self._values.get("regions")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TableGrantsProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_dynamodb.TableOptions",
     jsii_struct_bases=[SchemaOptions],
@@ -13210,7 +13868,7 @@ class TableOptions(SchemaOptions):
     def __init__(
         self,
         *,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         billing_mode: typing.Optional[BillingMode] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
@@ -13240,8 +13898,8 @@ class TableOptions(SchemaOptions):
 
         Use ``TableProps`` for all table properties
 
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
         :param billing_mode: Specify how you are charged for read and write throughput and how you manage capacity. Default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
@@ -13284,12 +13942,6 @@ class TableOptions(SchemaOptions):
             # policy_document: iam.PolicyDocument
             
             table_options = dynamodb.TableOptions(
-                partition_key=dynamodb.Attribute(
-                    name="name",
-                    type=dynamodb.AttributeType.BINARY
-                ),
-            
-                # the properties below are optional
                 billing_mode=dynamodb.BillingMode.PAY_PER_REQUEST,
                 contributor_insights_enabled=False,
                 contributor_insights_specification=dynamodb.ContributorInsightsSpecification(
@@ -13312,6 +13964,10 @@ class TableOptions(SchemaOptions):
                 ),
                 max_read_request_units=123,
                 max_write_request_units=123,
+                partition_key=dynamodb.Attribute(
+                    name="name",
+                    type=dynamodb.AttributeType.BINARY
+                ),
                 point_in_time_recovery=False,
                 point_in_time_recovery_specification=dynamodb.PointInTimeRecoverySpecification(
                     point_in_time_recovery_enabled=False,
@@ -13379,9 +14035,9 @@ class TableOptions(SchemaOptions):
             check_type(argname="argument wait_for_replication_to_finish", value=wait_for_replication_to_finish, expected_type=type_hints["wait_for_replication_to_finish"])
             check_type(argname="argument warm_throughput", value=warm_throughput, expected_type=type_hints["warm_throughput"])
             check_type(argname="argument write_capacity", value=write_capacity, expected_type=type_hints["write_capacity"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "partition_key": partition_key,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if partition_key is not None:
+            self._values["partition_key"] = partition_key
         if sort_key is not None:
             self._values["sort_key"] = sort_key
         if billing_mode is not None:
@@ -13432,17 +14088,27 @@ class TableOptions(SchemaOptions):
             self._values["write_capacity"] = write_capacity
 
     @builtins.property
-    def partition_key(self) -> Attribute:
-        '''Partition key attribute definition.'''
+    def partition_key(self) -> typing.Optional[Attribute]:
+        '''Partition key attribute definition.
+
+        If a single field forms the partition key, you can use this field.  Use the
+        ``partitionKeys`` field if the partition key is a compound key (consists of
+        multiple fields).
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
         result = self._values.get("partition_key")
-        assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast(typing.Optional[Attribute], result)
 
     @builtins.property
     def sort_key(self) -> typing.Optional[Attribute]:
         '''Sort key attribute definition.
 
-        :default: no sort key
+        If a single field forms the sort key, you can use this field.  Use the
+        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        fields).
+
+        :default: - no sort key
         '''
         result = self._values.get("sort_key")
         return typing.cast(typing.Optional[Attribute], result)
@@ -13998,7 +14664,7 @@ class TableProps(TableOptions):
     def __init__(
         self,
         *,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         billing_mode: typing.Optional[BillingMode] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
@@ -14029,8 +14695,8 @@ class TableProps(TableOptions):
     ) -> None:
         '''Properties for a DynamoDB Table.
 
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
         :param billing_mode: Specify how you are charged for read and write throughput and how you manage capacity. Default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
@@ -14126,9 +14792,9 @@ class TableProps(TableOptions):
             check_type(argname="argument kinesis_precision_timestamp", value=kinesis_precision_timestamp, expected_type=type_hints["kinesis_precision_timestamp"])
             check_type(argname="argument kinesis_stream", value=kinesis_stream, expected_type=type_hints["kinesis_stream"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
-        self._values: typing.Dict[builtins.str, typing.Any] = {
-            "partition_key": partition_key,
-        }
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if partition_key is not None:
+            self._values["partition_key"] = partition_key
         if sort_key is not None:
             self._values["sort_key"] = sort_key
         if billing_mode is not None:
@@ -14185,17 +14851,27 @@ class TableProps(TableOptions):
             self._values["table_name"] = table_name
 
     @builtins.property
-    def partition_key(self) -> Attribute:
-        '''Partition key attribute definition.'''
+    def partition_key(self) -> typing.Optional[Attribute]:
+        '''Partition key attribute definition.
+
+        If a single field forms the partition key, you can use this field.  Use the
+        ``partitionKeys`` field if the partition key is a compound key (consists of
+        multiple fields).
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
         result = self._values.get("partition_key")
-        assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast(typing.Optional[Attribute], result)
 
     @builtins.property
     def sort_key(self) -> typing.Optional[Attribute]:
         '''Sort key attribute definition.
 
-        :default: no sort key
+        If a single field forms the sort key, you can use this field.  Use the
+        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        fields).
+
+        :default: - no sort key
         '''
         result = self._values.get("sort_key")
         return typing.cast(typing.Optional[Attribute], result)
@@ -14617,9 +15293,8 @@ class TablePropsV2(TableOptionsV2):
             mrsc_table = dynamodb.TableV2(stack, "MRSCTable",
                 partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
                 multi_region_consistency=dynamodb.MultiRegionConsistency.STRONG,
-                replicas=[dynamodb.ReplicaTableProps(region="us-east-1")
-                ],
-                witness_region="us-east-2"
+                replicas=[dynamodb.ReplicaTableProps(region="us-east-1"), dynamodb.ReplicaTableProps(region="us-east-2")
+                ]
             )
         '''
         if isinstance(contributor_insights_specification, dict):
@@ -15163,11 +15838,13 @@ class TableV2(
     def add_global_secondary_index(
         self,
         *,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[Capacity] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput: typing.Optional[typing.Union["WarmThroughput", typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[Capacity] = None,
         index_name: builtins.str,
@@ -15178,11 +15855,13 @@ class TableV2(
 
         Note: Global secondary indexes will be inherited by all replica tables.
 
-        :param partition_key: Partition key attribute definition.
         :param max_read_request_units: The maximum read request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
         :param max_write_request_units: The maximum write request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
-        :param sort_key: Sort key attribute definition. Default: - no sort key
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
         :param index_name: The name of the secondary index.
@@ -15190,11 +15869,13 @@ class TableV2(
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
         '''
         props = GlobalSecondaryIndexPropsV2(
-            partition_key=partition_key,
             max_read_request_units=max_read_request_units,
             max_write_request_units=max_write_request_units,
+            partition_key=partition_key,
+            partition_keys=partition_keys,
             read_capacity=read_capacity,
             sort_key=sort_key,
+            sort_keys=sort_keys,
             warm_throughput=warm_throughput,
             write_capacity=write_capacity,
             index_name=index_name,
@@ -15692,7 +16373,9 @@ class WarmThroughput:
         "contributor_insights_specification": "contributorInsightsSpecification",
         "max_read_request_units": "maxReadRequestUnits",
         "max_write_request_units": "maxWriteRequestUnits",
+        "partition_keys": "partitionKeys",
         "read_capacity": "readCapacity",
+        "sort_keys": "sortKeys",
         "warm_throughput": "warmThroughput",
         "write_capacity": "writeCapacity",
     },
@@ -15704,13 +16387,15 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
         projection_type: typing.Optional[ProjectionType] = None,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         contributor_insights_enabled: typing.Optional[builtins.bool] = None,
         contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
     ) -> None:
@@ -15719,13 +16404,15 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :param index_name: The name of the secondary index.
         :param non_key_attributes: The non-key attributes that are projected into the secondary index. Default: - No additional attributes
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled for the specified global secondary index. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
         :param max_read_request_units: The maximum read request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
         :param max_write_request_units: The maximum write request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
+        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
+        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
 
@@ -15766,17 +16453,20 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
             check_type(argname="argument contributor_insights_specification", value=contributor_insights_specification, expected_type=type_hints["contributor_insights_specification"])
             check_type(argname="argument max_read_request_units", value=max_read_request_units, expected_type=type_hints["max_read_request_units"])
             check_type(argname="argument max_write_request_units", value=max_write_request_units, expected_type=type_hints["max_write_request_units"])
+            check_type(argname="argument partition_keys", value=partition_keys, expected_type=type_hints["partition_keys"])
             check_type(argname="argument read_capacity", value=read_capacity, expected_type=type_hints["read_capacity"])
+            check_type(argname="argument sort_keys", value=sort_keys, expected_type=type_hints["sort_keys"])
             check_type(argname="argument warm_throughput", value=warm_throughput, expected_type=type_hints["warm_throughput"])
             check_type(argname="argument write_capacity", value=write_capacity, expected_type=type_hints["write_capacity"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "index_name": index_name,
-            "partition_key": partition_key,
         }
         if non_key_attributes is not None:
             self._values["non_key_attributes"] = non_key_attributes
         if projection_type is not None:
             self._values["projection_type"] = projection_type
+        if partition_key is not None:
+            self._values["partition_key"] = partition_key
         if sort_key is not None:
             self._values["sort_key"] = sort_key
         if contributor_insights_enabled is not None:
@@ -15787,8 +16477,12 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
             self._values["max_read_request_units"] = max_read_request_units
         if max_write_request_units is not None:
             self._values["max_write_request_units"] = max_write_request_units
+        if partition_keys is not None:
+            self._values["partition_keys"] = partition_keys
         if read_capacity is not None:
             self._values["read_capacity"] = read_capacity
+        if sort_keys is not None:
+            self._values["sort_keys"] = sort_keys
         if warm_throughput is not None:
             self._values["warm_throughput"] = warm_throughput
         if write_capacity is not None:
@@ -15820,17 +16514,27 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         return typing.cast(typing.Optional[ProjectionType], result)
 
     @builtins.property
-    def partition_key(self) -> Attribute:
-        '''Partition key attribute definition.'''
+    def partition_key(self) -> typing.Optional[Attribute]:
+        '''Partition key attribute definition.
+
+        If a single field forms the partition key, you can use this field.  Use the
+        ``partitionKeys`` field if the partition key is a compound key (consists of
+        multiple fields).
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
         result = self._values.get("partition_key")
-        assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
+        return typing.cast(typing.Optional[Attribute], result)
 
     @builtins.property
     def sort_key(self) -> typing.Optional[Attribute]:
         '''Sort key attribute definition.
 
-        :default: no sort key
+        If a single field forms the sort key, you can use this field.  Use the
+        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        fields).
+
+        :default: - no sort key
         '''
         result = self._values.get("sort_key")
         return typing.cast(typing.Optional[Attribute], result)
@@ -15882,6 +16586,28 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
+    def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
+        '''Compound partition key.
+
+        If a single field forms the partition key, you can use either
+        ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly
+        one of these must be specified.
+
+        You must use ``partitionKeys`` field if the partition key is a compound key
+        (consists of multiple fields).
+
+        NOTE: although the name of this field makes it sound like it creates
+        multiple keys, it does not. It defines a single key that consists of
+        of multiple fields.
+
+        The order of fields is not important.
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
+        result = self._values.get("partition_keys")
+        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+
+    @builtins.property
     def read_capacity(self) -> typing.Optional[jsii.Number]:
         '''The read capacity for the global secondary index.
 
@@ -15891,6 +16617,28 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         '''
         result = self._values.get("read_capacity")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
+        '''Compound sort key.
+
+        If a single field forms the sort key, you can use either
+        ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these
+        may be specified.
+
+        You must use ``sortKeys`` field if the sort key is a compound key
+        (consists of multiple fields).
+
+        NOTE: although the name of this field makes it sound like it creates
+        multiple keys, it does not. It defines a single key that consists of
+        of multiple fields at the same time.
+
+        NOTE: The order of fields is important!
+
+        :default: - no sort key
+        '''
+        result = self._values.get("sort_keys")
+        return typing.cast(typing.Optional[typing.List[Attribute]], result)
 
     @builtins.property
     def warm_throughput(self) -> typing.Optional[WarmThroughput]:
@@ -15931,11 +16679,13 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         "index_name": "indexName",
         "non_key_attributes": "nonKeyAttributes",
         "projection_type": "projectionType",
-        "partition_key": "partitionKey",
         "max_read_request_units": "maxReadRequestUnits",
         "max_write_request_units": "maxWriteRequestUnits",
+        "partition_key": "partitionKey",
+        "partition_keys": "partitionKeys",
         "read_capacity": "readCapacity",
         "sort_key": "sortKey",
+        "sort_keys": "sortKeys",
         "warm_throughput": "warmThroughput",
         "write_capacity": "writeCapacity",
     },
@@ -15947,11 +16697,13 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
         projection_type: typing.Optional[ProjectionType] = None,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[Capacity] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[Capacity] = None,
     ) -> None:
@@ -15960,11 +16712,13 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :param index_name: The name of the secondary index.
         :param non_key_attributes: The non-key attributes that are projected into the secondary index. Default: - No additional attributes
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
-        :param partition_key: Partition key attribute definition.
         :param max_read_request_units: The maximum read request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
         :param max_write_request_units: The maximum write request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
-        :param sort_key: Sort key attribute definition. Default: - no sort key
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
 
@@ -15985,6 +16739,14 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
                 index_name="gsi2",
                 partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
             )
+            
+            # Add a GSI with compound keys
+            table.add_global_secondary_index(
+                index_name="compound-gsi2",
+                partition_keys=[dynamodb.Attribute(name="compound_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="compound_pk2", type=dynamodb.AttributeType.NUMBER)
+                ],
+                sort_key=dynamodb.Attribute(name="sk", type=dynamodb.AttributeType.STRING)
+            )
         '''
         if isinstance(partition_key, dict):
             partition_key = Attribute(**partition_key)
@@ -15997,16 +16759,17 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
             check_type(argname="argument non_key_attributes", value=non_key_attributes, expected_type=type_hints["non_key_attributes"])
             check_type(argname="argument projection_type", value=projection_type, expected_type=type_hints["projection_type"])
-            check_type(argname="argument partition_key", value=partition_key, expected_type=type_hints["partition_key"])
             check_type(argname="argument max_read_request_units", value=max_read_request_units, expected_type=type_hints["max_read_request_units"])
             check_type(argname="argument max_write_request_units", value=max_write_request_units, expected_type=type_hints["max_write_request_units"])
+            check_type(argname="argument partition_key", value=partition_key, expected_type=type_hints["partition_key"])
+            check_type(argname="argument partition_keys", value=partition_keys, expected_type=type_hints["partition_keys"])
             check_type(argname="argument read_capacity", value=read_capacity, expected_type=type_hints["read_capacity"])
             check_type(argname="argument sort_key", value=sort_key, expected_type=type_hints["sort_key"])
+            check_type(argname="argument sort_keys", value=sort_keys, expected_type=type_hints["sort_keys"])
             check_type(argname="argument warm_throughput", value=warm_throughput, expected_type=type_hints["warm_throughput"])
             check_type(argname="argument write_capacity", value=write_capacity, expected_type=type_hints["write_capacity"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "index_name": index_name,
-            "partition_key": partition_key,
         }
         if non_key_attributes is not None:
             self._values["non_key_attributes"] = non_key_attributes
@@ -16016,10 +16779,16 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
             self._values["max_read_request_units"] = max_read_request_units
         if max_write_request_units is not None:
             self._values["max_write_request_units"] = max_write_request_units
+        if partition_key is not None:
+            self._values["partition_key"] = partition_key
+        if partition_keys is not None:
+            self._values["partition_keys"] = partition_keys
         if read_capacity is not None:
             self._values["read_capacity"] = read_capacity
         if sort_key is not None:
             self._values["sort_key"] = sort_key
+        if sort_keys is not None:
+            self._values["sort_keys"] = sort_keys
         if warm_throughput is not None:
             self._values["warm_throughput"] = warm_throughput
         if write_capacity is not None:
@@ -16051,13 +16820,6 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         return typing.cast(typing.Optional[ProjectionType], result)
 
     @builtins.property
-    def partition_key(self) -> Attribute:
-        '''Partition key attribute definition.'''
-        result = self._values.get("partition_key")
-        assert result is not None, "Required property 'partition_key' is missing"
-        return typing.cast(Attribute, result)
-
-    @builtins.property
     def max_read_request_units(self) -> typing.Optional[jsii.Number]:
         '''The maximum read request units.
 
@@ -16080,6 +16842,41 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
+    def partition_key(self) -> typing.Optional[Attribute]:
+        '''Partition key attribute definition.
+
+        If a single field forms the partition key, you can use this field.  Use the
+        ``partitionKeys`` field if the partition key is a compound key (consists of
+        multiple fields).
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
+        result = self._values.get("partition_key")
+        return typing.cast(typing.Optional[Attribute], result)
+
+    @builtins.property
+    def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
+        '''Compound partition key.
+
+        If a single field forms the partition key, you can use either
+        ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly
+        one of these must be specified.
+
+        You must use ``partitionKeys`` field if the partition key is a compound key
+        (consists of multiple fields).
+
+        NOTE: although the name of this field makes it sound like it creates
+        multiple keys, it does not. It defines a single key that consists of
+        of multiple fields.
+
+        The order of fields is not important.
+
+        :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        '''
+        result = self._values.get("partition_keys")
+        return typing.cast(typing.Optional[typing.List[Attribute]], result)
+
+    @builtins.property
     def read_capacity(self) -> typing.Optional[Capacity]:
         '''The read capacity.
 
@@ -16094,10 +16891,36 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
     def sort_key(self) -> typing.Optional[Attribute]:
         '''Sort key attribute definition.
 
+        If a single field forms the sort key, you can use this field.  Use the
+        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        fields).
+
         :default: - no sort key
         '''
         result = self._values.get("sort_key")
         return typing.cast(typing.Optional[Attribute], result)
+
+    @builtins.property
+    def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
+        '''Compound sort key.
+
+        If a single field forms the sort key, you can use either
+        ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these
+        may be specified.
+
+        You must use ``sortKeys`` field if the sort key is a compound key
+        (consists of multiple fields).
+
+        NOTE: although the name of this field makes it sound like it creates
+        multiple keys, it does not. It defines a single key that consists of
+        of multiple fields at the same time.
+
+        NOTE: The order of fields is important!
+
+        :default: - no sort key
+        '''
+        result = self._values.get("sort_keys")
+        return typing.cast(typing.Optional[typing.List[Attribute]], result)
 
     @builtins.property
     def warm_throughput(self) -> typing.Optional[WarmThroughput]:
@@ -16862,7 +17685,7 @@ class Table(
         wait_for_replication_to_finish: typing.Optional[builtins.bool] = None,
         warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''
@@ -16894,8 +17717,8 @@ class Table(
         :param wait_for_replication_to_finish: [WARNING: Use this flag with caution, misusing this flag may cause deleting existing replicas, refer to the detailed documentation for more information] Indicates whether CloudFormation stack waits for replication to finish. If set to false, the CloudFormation resource will mark the resource as created and replication will be completed asynchronously. This property is ignored if replicationRegions property is not set. WARNING: DO NOT UNSET this property if adding/removing multiple replicationRegions in one deployment, as CloudFormation only supports one region replication at a time. CDK overcomes this limitation by waiting for replication to finish before starting new replicationRegion. If the custom resource which handles replication has a physical resource ID with the format ``region`` instead of ``tablename-region`` (this would happen if the custom resource hasn't received an event since v1.91.0), DO NOT SET this property to false without making a change to the table name. This will cause the existing replicas to be deleted. Default: true
         :param warm_throughput: Specify values to pre-warm you DynamoDB Table Warm Throughput feature is not available for Global Table replicas using the ``Table`` construct. To enable Warm Throughput, use the ``TableV2`` construct instead. Default: - warm throughput is not configured
         :param write_capacity: The write capacity for the table. Careful if you add Global Secondary Indexes, as those will share the table's provisioned throughput. Can only be provided if billingMode is Provisioned. Default: 5
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b92f0ed514f00b57a2a41d754e55fe495d22b05b0ad4711b80ce004570089cd7)
@@ -17027,13 +17850,15 @@ class Table(
         contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
         max_read_request_units: typing.Optional[jsii.Number] = None,
         max_write_request_units: typing.Optional[jsii.Number] = None,
+        partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         read_capacity: typing.Optional[jsii.Number] = None,
+        sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
         warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
         write_capacity: typing.Optional[jsii.Number] = None,
         index_name: builtins.str,
         non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
         projection_type: typing.Optional[ProjectionType] = None,
-        partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+        partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
         sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     ) -> None:
         '''Add a global secondary index of table.
@@ -17042,21 +17867,25 @@ class Table(
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
         :param max_read_request_units: The maximum read request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
         :param max_write_request_units: The maximum write request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
+        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
+        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
         :param index_name: The name of the secondary index.
         :param non_key_attributes: The non-key attributes that are projected into the secondary index. Default: - No additional attributes
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
-        :param partition_key: Partition key attribute definition.
-        :param sort_key: Sort key attribute definition. Default: no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
         '''
         props = GlobalSecondaryIndexProps(
             contributor_insights_enabled=contributor_insights_enabled,
             contributor_insights_specification=contributor_insights_specification,
             max_read_request_units=max_read_request_units,
             max_write_request_units=max_write_request_units,
+            partition_keys=partition_keys,
             read_capacity=read_capacity,
+            sort_keys=sort_keys,
             warm_throughput=warm_throughput,
             write_capacity=write_capacity,
             index_name=index_name,
@@ -17203,6 +18032,23 @@ class Table(
 
     @jsii.member(jsii_name="schema")
     def schema(self, index_name: typing.Optional[builtins.str] = None) -> SchemaOptions:
+        '''(deprecated) Get schema attributes of table or index.
+
+        :param index_name: -
+
+        :return: Schema of table or index.
+
+        :deprecated: - use ``schemaV2()`` instead
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9bf5dafcde17b7b65610795b8d251399ace67acb6de4e8ea9af3afe7b588b341)
+            check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
+        return typing.cast(SchemaOptions, jsii.invoke(self, "schema", [index_name]))
+
+    @jsii.member(jsii_name="schemaV2")
+    def schema_v2(self, index_name: typing.Optional[builtins.str] = None) -> KeySchema:
         '''Get schema attributes of table or index.
 
         :param index_name: -
@@ -17210,9 +18056,9 @@ class Table(
         :return: Schema of table or index.
         '''
         if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__9bf5dafcde17b7b65610795b8d251399ace67acb6de4e8ea9af3afe7b588b341)
+            type_hints = typing.get_type_hints(_typecheckingstub__ce60713843c9ba98c49e78d227cb9f0c137cbed88da3487ae831559f68e684fb)
             check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
-        return typing.cast(SchemaOptions, jsii.invoke(self, "schema", [index_name]))
+        return typing.cast(KeySchema, jsii.invoke(self, "schemaV2", [index_name]))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
@@ -17249,6 +18095,12 @@ class Table(
     def encryption_key(self) -> typing.Optional[_IKey_5f11635f]:
         '''KMS encryption key, if this table uses a customer-managed encryption key.'''
         return typing.cast(typing.Optional[_IKey_5f11635f], jsii.get(self, "encryptionKey"))
+
+    @builtins.property
+    @jsii.member(jsii_name="regions")
+    def regions(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Additional regions other than the main one that this table is replicated to.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "regions"))
 
     @builtins.property
     @jsii.member(jsii_name="tableStreamArn")
@@ -17303,6 +18155,7 @@ __all__ = [
     "ImportSourceSpecification",
     "InputCompressionType",
     "InputFormat",
+    "KeySchema",
     "LocalSecondaryIndexProps",
     "MaxThroughputProps",
     "MultiRegionConsistency",
@@ -17314,6 +18167,8 @@ __all__ = [
     "ReplicaTableProps",
     "SchemaOptions",
     "SecondaryIndexProps",
+    "StreamGrants",
+    "StreamGrantsProps",
     "StreamViewType",
     "SystemErrorsForOperationsMetricOptions",
     "Table",
@@ -17324,6 +18179,8 @@ __all__ = [
     "TableClass",
     "TableEncryption",
     "TableEncryptionV2",
+    "TableGrants",
+    "TableGrantsProps",
     "TableOptions",
     "TableOptionsV2",
     "TableProps",
@@ -17379,6 +18236,12 @@ def _typecheckingstub__751414def1994180982879a700bdaa6afcf528def91a672904946db1b
     warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     write_on_demand_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WriteOnDemandThroughputSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     write_provisioned_throughput_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGlobalTable.WriteProvisionedThroughputSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5341f33362e1892a20f08e2750095e7cb8141f740353b59e8d2bc807afc226c1(
+    resource: _IGlobalTableRef_596046fc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17736,6 +18599,12 @@ def _typecheckingstub__9c4a83992df200bfde2ccfe129994eeacab105432a2509473861feb73
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     time_to_live_specification: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.TimeToLiveSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__83472c4f9a2fab337714885b9a762df45951a610129d9a9356fd4d5d5bad74d9(
+    resource: _ITableRef_4478f0ad,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18191,6 +19060,14 @@ def _typecheckingstub__085db855741db88e396eec35bbd4cd5d6e9c4cc7ae855a18cfe091ce2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__339e8f1bc41636ad7a89a12b227459aa9e8c3c9d0cafe1ac6256544b0be24258(
+    *,
+    partition_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
+    sort_keys: typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__be7ea0183d8be6420b32efcd6b8d4ab24e05bd813b7c0abb65a713b53d61464f(
     *,
     max_read_request_units: typing.Optional[jsii.Number] = None,
@@ -18219,7 +19096,7 @@ def _typecheckingstub__eaa3a170e1978a5997011b8319bcd83bf34642dac50e342aad0705ee2
 
 def _typecheckingstub__ae885b0601bee5232ae05125b2ee5b619940bdfbed94bb77a05353dccbec9e84(
     *,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -18230,6 +19107,34 @@ def _typecheckingstub__8b588165e3e4a81282a9d314d39e2bb7d5e1e3e45b099a1827fc506d0
     index_name: builtins.str,
     non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
     projection_type: typing.Optional[ProjectionType] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__86101d3f0287f68991c02f6c20a0754d64904c99b1cb38be4ccd0bbc474dbab0(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0bdba1228d2493dddfb0b5dfbceb197a9690e4c90874407cb08a3c60e81e489c(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01b8ff1aba3f9dd3ce7997b6402e6cc41ec1d0cf91555c4a83dab59b0375b804(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7a6d760e3ed3b3e82fd5e28804a7ae7cd94c4ebaafc4a6ab3eb0a090aac614bf(
+    *,
+    table: _ITableRef_4478f0ad,
+    table_stream_arn: builtins.str,
+    encryption_key: typing.Optional[_IKey_5f11635f] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18301,6 +19206,13 @@ def _typecheckingstub__ad55d8fd00d859ce3132dc1316888fe9f09c2a3381b167ac699e89edb
 
 def _typecheckingstub__e97fcb5dff02c5a258c5d607074ab3d37182a2524e41f9575dbd34f5bddd553f(
     grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c47709cbc47672ad2e5764a22d5e15738380d62396d6d6a6fe3c7c88dbe2cc04(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18512,9 +19424,51 @@ def _typecheckingstub__1cd9eda3b1990473e69185ec48d3b90ce15de00745ae210b41792833c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0d339dc811423411a2156ea2385fb10952440a923804b6266277865c54dec04c(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8209d22b6b16878519d0c5c26e15333f972b2616be79096021721c67b66a8968(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c9c1a85fb738d4c8207a98c3da430616ec8b930c7a222722c3880f7e1c96c5e(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4184f792e842150aa560b761ea606add307e9e3aeb3ec9385d46abe654fbce6e(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5ceb76b87b50120af36678b706fd047c95ddee4ef26415e89dc6db0167e3aae2(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7b91af4754571e791b9b69fda24dee2aac6826634f64d23b1b3aefca293c2f6(
+    *,
+    table: _ITableRef_4478f0ad,
+    encrypted_resource: typing.Optional[_IEncryptedResource_8e9bf351] = None,
+    has_index: typing.Optional[builtins.bool] = None,
+    policy_resource: typing.Optional[_IResourceWithPolicyV2_01035ec6] = None,
+    regions: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__dadf5733fac70178ab246582a0b777b8c203659229753a8396594d751c99cb52(
     *,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     billing_mode: typing.Optional[BillingMode] = None,
     contributor_insights_enabled: typing.Optional[builtins.bool] = None,
@@ -18560,7 +19514,7 @@ def _typecheckingstub__1b65ee3c8ef5c3b632f4d1fad233252caadaa5f607c0fd92f49b64933
 
 def _typecheckingstub__00475a5e14af8c4c7049089f69b3d29ad81bc91e7e1f0a5a5b7b794a54003a08(
     *,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     billing_mode: typing.Optional[BillingMode] = None,
     contributor_insights_enabled: typing.Optional[builtins.bool] = None,
@@ -18734,13 +19688,15 @@ def _typecheckingstub__7f586bf63a567e16bde337be791f392306be66abca1c4abb791989fb9
     index_name: builtins.str,
     non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
     projection_type: typing.Optional[ProjectionType] = None,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     contributor_insights_enabled: typing.Optional[builtins.bool] = None,
     contributor_insights_specification: typing.Optional[typing.Union[ContributorInsightsSpecification, typing.Dict[builtins.str, typing.Any]]] = None,
     max_read_request_units: typing.Optional[jsii.Number] = None,
     max_write_request_units: typing.Optional[jsii.Number] = None,
+    partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
     read_capacity: typing.Optional[jsii.Number] = None,
+    sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
     warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
     write_capacity: typing.Optional[jsii.Number] = None,
 ) -> None:
@@ -18752,11 +19708,13 @@ def _typecheckingstub__4d662ce35086830139f09f255840ae92cf556a93d47e96653c908cc7a
     index_name: builtins.str,
     non_key_attributes: typing.Optional[typing.Sequence[builtins.str]] = None,
     projection_type: typing.Optional[ProjectionType] = None,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
     max_read_request_units: typing.Optional[jsii.Number] = None,
     max_write_request_units: typing.Optional[jsii.Number] = None,
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+    partition_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
     read_capacity: typing.Optional[Capacity] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
+    sort_keys: typing.Optional[typing.Sequence[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]]] = None,
     warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
     write_capacity: typing.Optional[Capacity] = None,
 ) -> None:
@@ -18841,7 +19799,7 @@ def _typecheckingstub__b92f0ed514f00b57a2a41d754e55fe495d22b05b0ad4711b80ce00457
     wait_for_replication_to_finish: typing.Optional[builtins.bool] = None,
     warm_throughput: typing.Optional[typing.Union[WarmThroughput, typing.Dict[builtins.str, typing.Any]]] = None,
     write_capacity: typing.Optional[jsii.Number] = None,
-    partition_key: typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]],
+    partition_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
     sort_key: typing.Optional[typing.Union[Attribute, typing.Dict[builtins.str, typing.Any]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -18903,6 +19861,12 @@ def _typecheckingstub__ff4d27b3b12f718479a73e39b5b6888caef3aaeb50ed193df868a85f9
     pass
 
 def _typecheckingstub__9bf5dafcde17b7b65610795b8d251399ace67acb6de4e8ea9af3afe7b588b341(
+    index_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce60713843c9ba98c49e78d227cb9f0c137cbed88da3487ae831559f68e684fb(
     index_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""

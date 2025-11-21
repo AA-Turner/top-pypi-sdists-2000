@@ -1158,6 +1158,7 @@ class CfnFileSystem(
                 preferred_subnet_id="preferredSubnetId",
                 self_managed_active_directory_configuration=fsx.CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty(
                     dns_ips=["dnsIps"],
+                    domain_join_service_account_secret="domainJoinServiceAccountSecret",
                     domain_name="domainName",
                     file_system_administrators_group="fileSystemAdministratorsGroup",
                     organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -1197,7 +1198,7 @@ class CfnFileSystem(
         :param subnet_ids: Specifies the IDs of the subnets that the file system will be accessible from. For Windows and ONTAP ``MULTI_AZ_1`` deployment types,provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the ``WindowsConfiguration > PreferredSubnetID`` or ``OntapConfiguration > PreferredSubnetID`` properties. For more information about Multi-AZ file system configuration, see `Availability and durability: Single-AZ and Multi-AZ file systems <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html>`_ in the *Amazon FSx for Windows User Guide* and `Availability and durability <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/high-availability-multiAZ.html>`_ in the *Amazon FSx for ONTAP User Guide* . For Windows ``SINGLE_AZ_1`` and ``SINGLE_AZ_2`` and all Lustre deployment types, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.
         :param backup_id: The ID of the file system backup that you are using to create a file system. For more information, see `CreateFileSystemFromBackup <https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemFromBackup.html>`_ .
         :param file_system_type_version: For FSx for Lustre file systems, sets the Lustre version for the file system that you're creating. Valid values are ``2.10`` , ``2.12`` , and ``2.15`` : - ``2.10`` is supported by the Scratch and Persistent_1 Lustre deployment types. - ``2.12`` is supported by all Lustre deployment types, except for ``PERSISTENT_2`` with a metadata configuration mode. - ``2.15`` is supported by all Lustre deployment types and is recommended for all new file systems. Default value is ``2.10`` , except for the following deployments: - Default value is ``2.12`` when ``DeploymentType`` is set to ``PERSISTENT_2`` without a metadata configuration mode. - Default value is ``2.15`` when ``DeploymentType`` is set to ``PERSISTENT_2`` with a metadata configuration mode.
-        :param kms_key_id: The ID of the AWS Key Management Service ( AWS KMS ) key used to encrypt Amazon FSx file system data. Used as follows with Amazon FSx file system types: - Amazon FSx for Lustre ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types only. ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS KMS key for your account. - Amazon FSx for NetApp ONTAP - Amazon FSx for OpenZFS - Amazon FSx for Windows File Server If this ID isn't specified, the Amazon FSx-managed key for your account is used. For more information, see `Encrypt <https://docs.aws.amazon.com//kms/latest/APIReference/API_Encrypt.html>`_ in the *AWS Key Management Service API Reference* .
+        :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key used to encrypt Amazon FSx file system data. Used as follows with Amazon FSx file system types: - Amazon FSx for Lustre ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types only. ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS key for your account. - Amazon FSx for NetApp ONTAP - Amazon FSx for OpenZFS - Amazon FSx for Windows File Server If this ID isn't specified, the Amazon FSx-managed key for your account is used. For more information, see `Encrypt <https://docs.aws.amazon.com//kms/latest/APIReference/API_Encrypt.html>`_ in the *AWS Key Management Service API Reference* .
         :param lustre_configuration: The Lustre configuration for the file system being created. This configuration is required if the ``FileSystemType`` is set to ``LUSTRE`` . .. epigraph:: The following parameters are not supported when creating Lustre file systems with a data repository association. - ``AutoImportPolicy`` - ``ExportPath`` - ``ImportedChunkSize`` - ``ImportPath``
         :param network_type: The network type of the file system.
         :param ontap_configuration: The ONTAP configuration properties of the FSx for ONTAP file system that you are creating. This configuration is required if the ``FileSystemType`` is set to ``ONTAP`` .
@@ -1387,7 +1388,7 @@ class CfnFileSystem(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the AWS Key Management Service ( AWS KMS ) key used to encrypt Amazon FSx file system data.'''
+        '''The ID of the AWS Key Management Service ( AWS  ) key used to encrypt Amazon FSx file system data.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -2442,7 +2443,7 @@ class CfnFileSystem(
             :param fsx_admin_password: The ONTAP administrative password for the ``fsxadmin`` user with which you administer your file system using the NetApp ONTAP CLI and REST API.
             :param ha_pairs: Specifies how many high-availability (HA) pairs of file servers will power your file system. First-generation file systems are powered by 1 HA pair. Second-generation multi-AZ file systems are powered by 1 HA pair. Second generation single-AZ file systems are powered by up to 12 HA pairs. The default value is 1. The value of this property affects the values of ``StorageCapacity`` , ``Iops`` , and ``ThroughputCapacity`` . For more information, see `High-availability (HA) pairs <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/administering-file-systems.html#HA-pairs>`_ in the FSx for ONTAP user guide. Block storage protocol support (iSCSI and NVMe over TCP) is disabled on file systems with more than 6 HA pairs. For more information, see `Using block storage protocols <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/supported-fsx-clients.html#using-block-storage>`_ . Amazon FSx responds with an HTTP status code 400 (Bad Request) for the following conditions: - The value of ``HAPairs`` is less than 1 or greater than 12. - The value of ``HAPairs`` is greater than 1 and the value of ``DeploymentType`` is ``SINGLE_AZ_1`` , ``MULTI_AZ_1`` , or ``MULTI_AZ_2`` .
             :param preferred_subnet_id: Required when ``DeploymentType`` is set to ``MULTI_AZ_1`` or ``MULTI_AZ_2`` . This specifies the subnet in which you want the preferred file server to be located.
-            :param route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table. .. epigraph:: Amazon FSx manages these route tables for Multi-AZ file systems using tag-based authentication. These route tables are tagged with ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` . When creating FSx for ONTAP Multi-AZ file systems using AWS CloudFormation we recommend that you add the ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` tag manually.
+            :param route_table_ids: (Multi-AZ only) Specifies the route tables in which Amazon FSx creates the rules for routing traffic to the correct file server. You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table. .. epigraph:: Amazon FSx manages these route tables for Multi-AZ file systems using tag-based authentication. These route tables are tagged with ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` . When creating FSx for ONTAP Multi-AZ file systems using CloudFormation we recommend that you add the ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` tag manually.
             :param throughput_capacity: Sets the throughput capacity for the file system that you're creating in megabytes per second (MBps). For more information, see `Managing throughput capacity <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-throughput-capacity.html>`_ in the FSx for ONTAP User Guide. Amazon FSx responds with an HTTP status code 400 (Bad Request) for the following conditions: - The value of ``ThroughputCapacity`` and ``ThroughputCapacityPerHAPair`` are not the same value. - The value of ``ThroughputCapacity`` when divided by the value of ``HAPairs`` is outside of the valid range for ``ThroughputCapacity`` .
             :param throughput_capacity_per_ha_pair: Use to choose the throughput capacity per HA pair, rather than the total throughput for the file system. You can define either the ``ThroughputCapacityPerHAPair`` or the ``ThroughputCapacity`` when creating a file system, but not both. This field and ``ThroughputCapacity`` are the same for file systems powered by one HA pair. - For ``SINGLE_AZ_1`` and ``MULTI_AZ_1`` file systems, valid values are 128, 256, 512, 1024, 2048, or 4096 MBps. - For ``SINGLE_AZ_2`` , valid values are 1536, 3072, or 6144 MBps. - For ``MULTI_AZ_2`` , valid values are 384, 768, 1536, 3072, or 6144 MBps. Amazon FSx responds with an HTTP status code 400 (Bad Request) for the following conditions: - The value of ``ThroughputCapacity`` and ``ThroughputCapacityPerHAPair`` are not the same value for file systems with one HA pair. - The value of deployment type is ``SINGLE_AZ_2`` and ``ThroughputCapacity`` / ``ThroughputCapacityPerHAPair`` is not a valid HA pair (a value between 1 and 12). - The value of ``ThroughputCapacityPerHAPair`` is not a valid value.
             :param weekly_maintenance_start_time: The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone, where d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday. For example, ``1:05:00`` specifies maintenance at 5 AM Monday.
@@ -2632,7 +2633,7 @@ class CfnFileSystem(
             You should specify all virtual private cloud (VPC) route tables associated with the subnets in which your clients are located. By default, Amazon FSx selects your VPC's default route table.
             .. epigraph::
 
-               Amazon FSx manages these route tables for Multi-AZ file systems using tag-based authentication. These route tables are tagged with ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` . When creating FSx for ONTAP Multi-AZ file systems using AWS CloudFormation we recommend that you add the ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` tag manually.
+               Amazon FSx manages these route tables for Multi-AZ file systems using tag-based authentication. These route tables are tagged with ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` . When creating FSx for ONTAP Multi-AZ file systems using CloudFormation we recommend that you add the ``Key: AmazonFSx; Value: ManagedByAmazonFSx`` tag manually.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-ontapconfiguration.html#cfn-fsx-filesystem-ontapconfiguration-routetableids
             '''
@@ -3302,6 +3303,7 @@ class CfnFileSystem(
         jsii_struct_bases=[],
         name_mapping={
             "dns_ips": "dnsIps",
+            "domain_join_service_account_secret": "domainJoinServiceAccountSecret",
             "domain_name": "domainName",
             "file_system_administrators_group": "fileSystemAdministratorsGroup",
             "organizational_unit_distinguished_name": "organizationalUnitDistinguishedName",
@@ -3314,6 +3316,7 @@ class CfnFileSystem(
             self,
             *,
             dns_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
+            domain_join_service_account_secret: typing.Optional[builtins.str] = None,
             domain_name: typing.Optional[builtins.str] = None,
             file_system_administrators_group: typing.Optional[builtins.str] = None,
             organizational_unit_distinguished_name: typing.Optional[builtins.str] = None,
@@ -3325,6 +3328,7 @@ class CfnFileSystem(
             For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-managed-AD.html>`_ or `Managing FSx for ONTAP SVMs <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-svms.html>`_ .
 
             :param dns_ips: A list of up to three IP addresses of DNS servers or domain controllers in the self-managed AD directory.
+            :param domain_join_service_account_secret: 
             :param domain_name: The fully qualified domain name of the self-managed AD directory, such as ``corp.example.com`` .
             :param file_system_administrators_group: (Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.
             :param organizational_unit_distinguished_name: (Optional) The fully qualified distinguished name of the organizational unit within your self-managed AD directory. Amazon FSx only accepts OU as the direct parent of the file system. An example is ``OU=FSx,DC=yourdomain,DC=corp,DC=com`` . To learn more, see `RFC 2253 <https://docs.aws.amazon.com/https://tools.ietf.org/html/rfc2253>`_ . If none is provided, the FSx file system is created in the default location of your self-managed AD directory. .. epigraph:: Only Organizational Unit (OU) objects can be the direct parent of the file system that you're creating.
@@ -3342,6 +3346,7 @@ class CfnFileSystem(
                 
                 self_managed_active_directory_configuration_property = fsx.CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty(
                     dns_ips=["dnsIps"],
+                    domain_join_service_account_secret="domainJoinServiceAccountSecret",
                     domain_name="domainName",
                     file_system_administrators_group="fileSystemAdministratorsGroup",
                     organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -3352,6 +3357,7 @@ class CfnFileSystem(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__05cd77bf3248987e2b91bad0b37d9b1e7816e83c864af316676794a924b2ef9a)
                 check_type(argname="argument dns_ips", value=dns_ips, expected_type=type_hints["dns_ips"])
+                check_type(argname="argument domain_join_service_account_secret", value=domain_join_service_account_secret, expected_type=type_hints["domain_join_service_account_secret"])
                 check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
                 check_type(argname="argument file_system_administrators_group", value=file_system_administrators_group, expected_type=type_hints["file_system_administrators_group"])
                 check_type(argname="argument organizational_unit_distinguished_name", value=organizational_unit_distinguished_name, expected_type=type_hints["organizational_unit_distinguished_name"])
@@ -3360,6 +3366,8 @@ class CfnFileSystem(
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if dns_ips is not None:
                 self._values["dns_ips"] = dns_ips
+            if domain_join_service_account_secret is not None:
+                self._values["domain_join_service_account_secret"] = domain_join_service_account_secret
             if domain_name is not None:
                 self._values["domain_name"] = domain_name
             if file_system_administrators_group is not None:
@@ -3379,6 +3387,14 @@ class CfnFileSystem(
             '''
             result = self._values.get("dns_ips")
             return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def domain_join_service_account_secret(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-selfmanagedactivedirectoryconfiguration.html#cfn-fsx-filesystem-selfmanagedactivedirectoryconfiguration-domainjoinserviceaccountsecret
+            '''
+            result = self._values.get("domain_join_service_account_secret")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def domain_name(self) -> typing.Optional[builtins.str]:
@@ -3621,6 +3637,7 @@ class CfnFileSystem(
                     preferred_subnet_id="preferredSubnetId",
                     self_managed_active_directory_configuration=fsx.CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty(
                         dns_ips=["dnsIps"],
+                        domain_join_service_account_secret="domainJoinServiceAccountSecret",
                         domain_name="domainName",
                         file_system_administrators_group="fileSystemAdministratorsGroup",
                         organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -3881,7 +3898,7 @@ class CfnFileSystemProps:
         :param subnet_ids: Specifies the IDs of the subnets that the file system will be accessible from. For Windows and ONTAP ``MULTI_AZ_1`` deployment types,provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the ``WindowsConfiguration > PreferredSubnetID`` or ``OntapConfiguration > PreferredSubnetID`` properties. For more information about Multi-AZ file system configuration, see `Availability and durability: Single-AZ and Multi-AZ file systems <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html>`_ in the *Amazon FSx for Windows User Guide* and `Availability and durability <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/high-availability-multiAZ.html>`_ in the *Amazon FSx for ONTAP User Guide* . For Windows ``SINGLE_AZ_1`` and ``SINGLE_AZ_2`` and all Lustre deployment types, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.
         :param backup_id: The ID of the file system backup that you are using to create a file system. For more information, see `CreateFileSystemFromBackup <https://docs.aws.amazon.com/fsx/latest/APIReference/API_CreateFileSystemFromBackup.html>`_ .
         :param file_system_type_version: For FSx for Lustre file systems, sets the Lustre version for the file system that you're creating. Valid values are ``2.10`` , ``2.12`` , and ``2.15`` : - ``2.10`` is supported by the Scratch and Persistent_1 Lustre deployment types. - ``2.12`` is supported by all Lustre deployment types, except for ``PERSISTENT_2`` with a metadata configuration mode. - ``2.15`` is supported by all Lustre deployment types and is recommended for all new file systems. Default value is ``2.10`` , except for the following deployments: - Default value is ``2.12`` when ``DeploymentType`` is set to ``PERSISTENT_2`` without a metadata configuration mode. - Default value is ``2.15`` when ``DeploymentType`` is set to ``PERSISTENT_2`` with a metadata configuration mode.
-        :param kms_key_id: The ID of the AWS Key Management Service ( AWS KMS ) key used to encrypt Amazon FSx file system data. Used as follows with Amazon FSx file system types: - Amazon FSx for Lustre ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types only. ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS KMS key for your account. - Amazon FSx for NetApp ONTAP - Amazon FSx for OpenZFS - Amazon FSx for Windows File Server If this ID isn't specified, the Amazon FSx-managed key for your account is used. For more information, see `Encrypt <https://docs.aws.amazon.com//kms/latest/APIReference/API_Encrypt.html>`_ in the *AWS Key Management Service API Reference* .
+        :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key used to encrypt Amazon FSx file system data. Used as follows with Amazon FSx file system types: - Amazon FSx for Lustre ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types only. ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS key for your account. - Amazon FSx for NetApp ONTAP - Amazon FSx for OpenZFS - Amazon FSx for Windows File Server If this ID isn't specified, the Amazon FSx-managed key for your account is used. For more information, see `Encrypt <https://docs.aws.amazon.com//kms/latest/APIReference/API_Encrypt.html>`_ in the *AWS Key Management Service API Reference* .
         :param lustre_configuration: The Lustre configuration for the file system being created. This configuration is required if the ``FileSystemType`` is set to ``LUSTRE`` . .. epigraph:: The following parameters are not supported when creating Lustre file systems with a data repository association. - ``AutoImportPolicy`` - ``ExportPath`` - ``ImportedChunkSize`` - ``ImportPath``
         :param network_type: The network type of the file system.
         :param ontap_configuration: The ONTAP configuration properties of the FSx for ONTAP file system that you are creating. This configuration is required if the ``FileSystemType`` is set to ``ONTAP`` .
@@ -4026,6 +4043,7 @@ class CfnFileSystemProps:
                     preferred_subnet_id="preferredSubnetId",
                     self_managed_active_directory_configuration=fsx.CfnFileSystem.SelfManagedActiveDirectoryConfigurationProperty(
                         dns_ips=["dnsIps"],
+                        domain_join_service_account_secret="domainJoinServiceAccountSecret",
                         domain_name="domainName",
                         file_system_administrators_group="fileSystemAdministratorsGroup",
                         organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -4138,13 +4156,13 @@ class CfnFileSystemProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The ID of the AWS Key Management Service ( AWS KMS ) key used to encrypt Amazon FSx file system data.
+        '''The ID of the AWS Key Management Service ( AWS  ) key used to encrypt Amazon FSx file system data.
 
         Used as follows with Amazon FSx file system types:
 
         - Amazon FSx for Lustre ``PERSISTENT_1`` and ``PERSISTENT_2`` deployment types only.
 
-        ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS KMS key for your account.
+        ``SCRATCH_1`` and ``SCRATCH_2`` types are encrypted using the Amazon FSx service AWS  key for your account.
 
         - Amazon FSx for NetApp ONTAP
         - Amazon FSx for OpenZFS
@@ -5406,6 +5424,7 @@ class CfnStorageVirtualMachine(
                 net_bios_name="netBiosName",
                 self_managed_active_directory_configuration=fsx.CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty(
                     dns_ips=["dnsIps"],
+                    domain_join_service_account_secret="domainJoinServiceAccountSecret",
                     domain_name="domainName",
                     file_system_administrators_group="fileSystemAdministratorsGroup",
                     organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -5661,6 +5680,7 @@ class CfnStorageVirtualMachine(
                     net_bios_name="netBiosName",
                     self_managed_active_directory_configuration=fsx.CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty(
                         dns_ips=["dnsIps"],
+                        domain_join_service_account_secret="domainJoinServiceAccountSecret",
                         domain_name="domainName",
                         file_system_administrators_group="fileSystemAdministratorsGroup",
                         organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -5715,6 +5735,7 @@ class CfnStorageVirtualMachine(
         jsii_struct_bases=[],
         name_mapping={
             "dns_ips": "dnsIps",
+            "domain_join_service_account_secret": "domainJoinServiceAccountSecret",
             "domain_name": "domainName",
             "file_system_administrators_group": "fileSystemAdministratorsGroup",
             "organizational_unit_distinguished_name": "organizationalUnitDistinguishedName",
@@ -5727,6 +5748,7 @@ class CfnStorageVirtualMachine(
             self,
             *,
             dns_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
+            domain_join_service_account_secret: typing.Optional[builtins.str] = None,
             domain_name: typing.Optional[builtins.str] = None,
             file_system_administrators_group: typing.Optional[builtins.str] = None,
             organizational_unit_distinguished_name: typing.Optional[builtins.str] = None,
@@ -5736,6 +5758,7 @@ class CfnStorageVirtualMachine(
             '''The configuration that Amazon FSx uses to join the ONTAP storage virtual machine (SVM) to your self-managed (including on-premises) Microsoft Active Directory directory.
 
             :param dns_ips: A list of up to three IP addresses of DNS servers or domain controllers in the self-managed AD directory.
+            :param domain_join_service_account_secret: 
             :param domain_name: The fully qualified domain name of the self-managed AD directory, such as ``corp.example.com`` .
             :param file_system_administrators_group: (Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.
             :param organizational_unit_distinguished_name: (Optional) The fully qualified distinguished name of the organizational unit within your self-managed AD directory. Amazon FSx only accepts OU as the direct parent of the file system. An example is ``OU=FSx,DC=yourdomain,DC=corp,DC=com`` . To learn more, see `RFC 2253 <https://docs.aws.amazon.com/https://tools.ietf.org/html/rfc2253>`_ . If none is provided, the FSx file system is created in the default location of your self-managed AD directory. .. epigraph:: Only Organizational Unit (OU) objects can be the direct parent of the file system that you're creating.
@@ -5753,6 +5776,7 @@ class CfnStorageVirtualMachine(
                 
                 self_managed_active_directory_configuration_property = fsx.CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty(
                     dns_ips=["dnsIps"],
+                    domain_join_service_account_secret="domainJoinServiceAccountSecret",
                     domain_name="domainName",
                     file_system_administrators_group="fileSystemAdministratorsGroup",
                     organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -5763,6 +5787,7 @@ class CfnStorageVirtualMachine(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__c8bb380fdb7ba1ca5c077052d19123ba2eb29d1e66aacb824878cb799542936c)
                 check_type(argname="argument dns_ips", value=dns_ips, expected_type=type_hints["dns_ips"])
+                check_type(argname="argument domain_join_service_account_secret", value=domain_join_service_account_secret, expected_type=type_hints["domain_join_service_account_secret"])
                 check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
                 check_type(argname="argument file_system_administrators_group", value=file_system_administrators_group, expected_type=type_hints["file_system_administrators_group"])
                 check_type(argname="argument organizational_unit_distinguished_name", value=organizational_unit_distinguished_name, expected_type=type_hints["organizational_unit_distinguished_name"])
@@ -5771,6 +5796,8 @@ class CfnStorageVirtualMachine(
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if dns_ips is not None:
                 self._values["dns_ips"] = dns_ips
+            if domain_join_service_account_secret is not None:
+                self._values["domain_join_service_account_secret"] = domain_join_service_account_secret
             if domain_name is not None:
                 self._values["domain_name"] = domain_name
             if file_system_administrators_group is not None:
@@ -5790,6 +5817,14 @@ class CfnStorageVirtualMachine(
             '''
             result = self._values.get("dns_ips")
             return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def domain_join_service_account_secret(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-storagevirtualmachine-selfmanagedactivedirectoryconfiguration.html#cfn-fsx-storagevirtualmachine-selfmanagedactivedirectoryconfiguration-domainjoinserviceaccountsecret
+            '''
+            result = self._values.get("domain_join_service_account_secret")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def domain_name(self) -> typing.Optional[builtins.str]:
@@ -5909,6 +5944,7 @@ class CfnStorageVirtualMachineProps:
                     net_bios_name="netBiosName",
                     self_managed_active_directory_configuration=fsx.CfnStorageVirtualMachine.SelfManagedActiveDirectoryConfigurationProperty(
                         dns_ips=["dnsIps"],
+                        domain_join_service_account_secret="domainJoinServiceAccountSecret",
                         domain_name="domainName",
                         file_system_administrators_group="fileSystemAdministratorsGroup",
                         organizational_unit_distinguished_name="organizationalUnitDistinguishedName",
@@ -9990,6 +10026,7 @@ def _typecheckingstub__7c2a873402766c6577ffe7568330e8c952efaedecdfd993af4793d2ea
 def _typecheckingstub__05cd77bf3248987e2b91bad0b37d9b1e7816e83c864af316676794a924b2ef9a(
     *,
     dns_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
+    domain_join_service_account_secret: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
     file_system_administrators_group: typing.Optional[builtins.str] = None,
     organizational_unit_distinguished_name: typing.Optional[builtins.str] = None,
@@ -10276,6 +10313,7 @@ def _typecheckingstub__004395de3c18e64bb2e0a0809b7f0ebf750cd4ce948a172a9f8ad61dc
 def _typecheckingstub__c8bb380fdb7ba1ca5c077052d19123ba2eb29d1e66aacb824878cb799542936c(
     *,
     dns_ips: typing.Optional[typing.Sequence[builtins.str]] = None,
+    domain_join_service_account_secret: typing.Optional[builtins.str] = None,
     domain_name: typing.Optional[builtins.str] = None,
     file_system_administrators_group: typing.Optional[builtins.str] = None,
     organizational_unit_distinguished_name: typing.Optional[builtins.str] = None,

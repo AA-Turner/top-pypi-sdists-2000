@@ -1768,7 +1768,7 @@ class CfnBackupPlan(
 
     Each rule in a backup plan is a separate scheduled task and can back up a different selection of AWS resources.
 
-    For a sample AWS CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
+    For a sample CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-backupplan.html
     :cloudformationResource: AWS::Backup::BackupPlan
@@ -1856,6 +1856,17 @@ class CfnBackupPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBackupPlan")
+    @builtins.classmethod
+    def arn_for_backup_plan(cls, resource: _IBackupPlanRef_754776b5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d90318e05f298e9e32d25d69776de891d8d1f9fdc6587cd780d823a2ffc981d8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBackupPlan", [resource]))
 
     @jsii.member(jsii_name="fromBackupPlanArn")
     @builtins.classmethod
@@ -2869,7 +2880,7 @@ class CfnBackupSelection(
 ):
     '''Specifies a set of resources to assign to a backup plan.
 
-    For a sample AWS CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
+    For a sample CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-backupselection.html
     :cloudformationResource: AWS::Backup::BackupSelection
@@ -2907,7 +2918,7 @@ class CfnBackupSelection(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        backup_plan_id: builtins.str,
+        backup_plan_id: typing.Union[builtins.str, _IBackupPlanRef_754776b5],
         backup_selection: typing.Union[_IResolvable_da3f097b, typing.Union["CfnBackupSelection.BackupSelectionResourceTypeProperty", typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Create a new ``AWS::Backup::BackupSelection``.
@@ -3515,7 +3526,7 @@ class CfnBackupSelectionProps:
     def __init__(
         self,
         *,
-        backup_plan_id: builtins.str,
+        backup_plan_id: typing.Union[builtins.str, _IBackupPlanRef_754776b5],
         backup_selection: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupSelection.BackupSelectionResourceTypeProperty, typing.Dict[builtins.str, typing.Any]]],
     ) -> None:
         '''Properties for defining a ``CfnBackupSelection``.
@@ -3562,14 +3573,14 @@ class CfnBackupSelectionProps:
         }
 
     @builtins.property
-    def backup_plan_id(self) -> builtins.str:
+    def backup_plan_id(self) -> typing.Union[builtins.str, _IBackupPlanRef_754776b5]:
         '''Uniquely identifies a backup plan.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-backupselection.html#cfn-backup-backupselection-backupplanid
         '''
         result = self._values.get("backup_plan_id")
         assert result is not None, "Required property 'backup_plan_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBackupPlanRef_754776b5], result)
 
     @builtins.property
     def backup_selection(
@@ -3609,7 +3620,7 @@ class CfnBackupVault(
 
     Do not include sensitive data, such as passport numbers, in the name of a backup vault.
 
-    For a sample AWS CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
+    For a sample CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-backupvault.html
     :cloudformationResource: AWS::Backup::BackupVault
@@ -3654,7 +3665,7 @@ class CfnBackupVault(
         backup_vault_name: builtins.str,
         access_policy: typing.Any = None,
         backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        encryption_key_arn: typing.Optional[builtins.str] = None,
+        encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         lock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBackupVault.LockConfigurationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBackupVault.NotificationObjectTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -3683,6 +3694,17 @@ class CfnBackupVault(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBackupVault")
+    @builtins.classmethod
+    def arn_for_backup_vault(cls, resource: _IBackupVaultRef_c038ce00) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ed92c2782108e3ac41b002f013a5190852956a16215b7e5e56ca133e9e72884)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBackupVault", [resource]))
 
     @jsii.member(jsii_name="fromBackupVaultArn")
     @builtins.classmethod
@@ -4098,7 +4120,7 @@ class CfnBackupVaultProps:
         backup_vault_name: builtins.str,
         access_policy: typing.Any = None,
         backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-        encryption_key_arn: typing.Optional[builtins.str] = None,
+        encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         lock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.LockConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -4199,7 +4221,9 @@ class CfnBackupVaultProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
-    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
+    def encryption_key_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''A server-side encryption key you can specify to encrypt your backups from services that support full AWS Backup management;
 
         for example, ``arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` . If you specify a key, you must specify its ARN, not its alias. If you do not specify a key, AWS Backup creates a KMS key for you by default.
@@ -4209,7 +4233,7 @@ class CfnBackupVaultProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-backupvault.html#cfn-backup-backupvault-encryptionkeyarn
         '''
         result = self._values.get("encryption_key_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def lock_configuration(
@@ -4255,7 +4279,7 @@ class CfnFramework(
 
     A framework is a collection of controls that you can use to evaluate your backup practices. By using pre-built customizable controls to define your policies, you can evaluate whether your backup practices comply with your policies and which resources are not yet in compliance.
 
-    For a sample AWS CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/bam-cfn-integration.html#bam-cfn-frameworks-template>`_ .
+    For a sample CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/bam-cfn-integration.html#bam-cfn-frameworks-template>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-framework.html
     :cloudformationResource: AWS::Backup::Framework
@@ -4322,6 +4346,17 @@ class CfnFramework(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFramework")
+    @builtins.classmethod
+    def arn_for_framework(cls, resource: _IFrameworkRef_dcbb25ea) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b50aa25a1cc9ba34b4868b9a50fe018bfd4cc98076a84c277bf66f3e1da5f09)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFramework", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4921,6 +4956,7 @@ class CfnLogicallyAirGappedBackupVault(
             backup_vault_tags={
                 "backup_vault_tags_key": "backupVaultTags"
             },
+            encryption_key_arn="encryptionKeyArn",
             mpa_approval_team_arn="mpaApprovalTeamArn",
             notifications=backup.CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty(
                 backup_vault_events=["backupVaultEvents"],
@@ -4939,6 +4975,7 @@ class CfnLogicallyAirGappedBackupVault(
         min_retention_days: jsii.Number,
         access_policy: typing.Any = None,
         backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        encryption_key_arn: typing.Optional[builtins.str] = None,
         mpa_approval_team_arn: typing.Optional[builtins.str] = None,
         notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -4951,6 +4988,7 @@ class CfnLogicallyAirGappedBackupVault(
         :param min_retention_days: This setting specifies the minimum retention period that the vault retains its recovery points. The minimum value accepted is 7 days.
         :param access_policy: The backup vault access policy document in JSON format.
         :param backup_vault_tags: The tags to assign to the vault.
+        :param encryption_key_arn: The server-side encryption key that is used to protect your backups; for example, ``arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` .
         :param mpa_approval_team_arn: 
         :param notifications: Returns event notifications for the specified backup vault.
         '''
@@ -4964,11 +5002,26 @@ class CfnLogicallyAirGappedBackupVault(
             min_retention_days=min_retention_days,
             access_policy=access_policy,
             backup_vault_tags=backup_vault_tags,
+            encryption_key_arn=encryption_key_arn,
             mpa_approval_team_arn=mpa_approval_team_arn,
             notifications=notifications,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForLogicallyAirGappedBackupVault")
+    @builtins.classmethod
+    def arn_for_logically_air_gapped_backup_vault(
+        cls,
+        resource: _ILogicallyAirGappedBackupVaultRef_94a8f212,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__994d018be638a33f2eb32bb0e85f369b451e5bfae2907913519d7f9f54738a54)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLogicallyAirGappedBackupVault", [resource]))
 
     @jsii.member(jsii_name="fromBackupVaultName")
     @builtins.classmethod
@@ -5029,15 +5082,6 @@ class CfnLogicallyAirGappedBackupVault(
         :cloudformationAttribute: BackupVaultArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrBackupVaultArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="attrEncryptionKeyArn")
-    def attr_encryption_key_arn(self) -> builtins.str:
-        '''The ARN of the server-side encryption key.
-
-        :cloudformationAttribute: EncryptionKeyArn
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "attrEncryptionKeyArn"))
 
     @builtins.property
     @jsii.member(jsii_name="attrVaultState")
@@ -5149,6 +5193,19 @@ class CfnLogicallyAirGappedBackupVault(
             type_hints = typing.get_type_hints(_typecheckingstub__27388048f12fa4b0d6686a7b40795dea7b4219e2f388afdfc5733f7043eef9a5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "backupVaultTags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="encryptionKeyArn")
+    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The server-side encryption key that is used to protect your backups;'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "encryptionKeyArn"))
+
+    @encryption_key_arn.setter
+    def encryption_key_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf0845b96f64c861986d9628b54d60700d109b971dc10dd34707fb3e98629c96)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "encryptionKeyArn", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="mpaApprovalTeamArn")
@@ -5265,6 +5322,7 @@ class CfnLogicallyAirGappedBackupVault(
         "min_retention_days": "minRetentionDays",
         "access_policy": "accessPolicy",
         "backup_vault_tags": "backupVaultTags",
+        "encryption_key_arn": "encryptionKeyArn",
         "mpa_approval_team_arn": "mpaApprovalTeamArn",
         "notifications": "notifications",
     },
@@ -5278,6 +5336,7 @@ class CfnLogicallyAirGappedBackupVaultProps:
         min_retention_days: jsii.Number,
         access_policy: typing.Any = None,
         backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        encryption_key_arn: typing.Optional[builtins.str] = None,
         mpa_approval_team_arn: typing.Optional[builtins.str] = None,
         notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -5288,6 +5347,7 @@ class CfnLogicallyAirGappedBackupVaultProps:
         :param min_retention_days: This setting specifies the minimum retention period that the vault retains its recovery points. The minimum value accepted is 7 days.
         :param access_policy: The backup vault access policy document in JSON format.
         :param backup_vault_tags: The tags to assign to the vault.
+        :param encryption_key_arn: The server-side encryption key that is used to protect your backups; for example, ``arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` .
         :param mpa_approval_team_arn: 
         :param notifications: Returns event notifications for the specified backup vault.
 
@@ -5312,6 +5372,7 @@ class CfnLogicallyAirGappedBackupVaultProps:
                 backup_vault_tags={
                     "backup_vault_tags_key": "backupVaultTags"
                 },
+                encryption_key_arn="encryptionKeyArn",
                 mpa_approval_team_arn="mpaApprovalTeamArn",
                 notifications=backup.CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty(
                     backup_vault_events=["backupVaultEvents"],
@@ -5326,6 +5387,7 @@ class CfnLogicallyAirGappedBackupVaultProps:
             check_type(argname="argument min_retention_days", value=min_retention_days, expected_type=type_hints["min_retention_days"])
             check_type(argname="argument access_policy", value=access_policy, expected_type=type_hints["access_policy"])
             check_type(argname="argument backup_vault_tags", value=backup_vault_tags, expected_type=type_hints["backup_vault_tags"])
+            check_type(argname="argument encryption_key_arn", value=encryption_key_arn, expected_type=type_hints["encryption_key_arn"])
             check_type(argname="argument mpa_approval_team_arn", value=mpa_approval_team_arn, expected_type=type_hints["mpa_approval_team_arn"])
             check_type(argname="argument notifications", value=notifications, expected_type=type_hints["notifications"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -5337,6 +5399,8 @@ class CfnLogicallyAirGappedBackupVaultProps:
             self._values["access_policy"] = access_policy
         if backup_vault_tags is not None:
             self._values["backup_vault_tags"] = backup_vault_tags
+        if encryption_key_arn is not None:
+            self._values["encryption_key_arn"] = encryption_key_arn
         if mpa_approval_team_arn is not None:
             self._values["mpa_approval_team_arn"] = mpa_approval_team_arn
         if notifications is not None:
@@ -5397,6 +5461,17 @@ class CfnLogicallyAirGappedBackupVaultProps:
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
 
     @builtins.property
+    def encryption_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The server-side encryption key that is used to protect your backups;
+
+        for example, ``arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` .
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-logicallyairgappedbackupvault.html#cfn-backup-logicallyairgappedbackupvault-encryptionkeyarn
+        '''
+        result = self._values.get("encryption_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def mpa_approval_team_arn(self) -> typing.Optional[builtins.str]:
         '''
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-logicallyairgappedbackupvault.html#cfn-backup-logicallyairgappedbackupvault-mpaapprovalteamarn
@@ -5439,7 +5514,7 @@ class CfnReportPlan(
 
     If you call ``CreateReportPlan`` with a plan that already exists, you receive an ``AlreadyExistsException`` exception.
 
-    For a sample AWS CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
+    For a sample CloudFormation template, see the `AWS Backup Developer Guide <https://docs.aws.amazon.com/aws-backup/latest/devguide/assigning-resources.html#assigning-resources-cfn>`_ .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-backup-reportplan.html
     :cloudformationResource: AWS::Backup::ReportPlan
@@ -5502,6 +5577,17 @@ class CfnReportPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForReportPlan")
+    @builtins.classmethod
+    def arn_for_report_plan(cls, resource: _IReportPlanRef_2eb6ea89) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__81ff19c28848fcb20b39db086fd0082e4e3c62072d87a29282066c70b97788c7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReportPlan", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6074,6 +6160,20 @@ class CfnRestoreTestingPlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRestoreTestingPlan")
+    @builtins.classmethod
+    def arn_for_restore_testing_plan(
+        cls,
+        resource: _IRestoreTestingPlanRef_3850185f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7990b6debf547b5294197ae934069cb15deeef3fa415291836f77df56e14749c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRestoreTestingPlan", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8082,6 +8182,12 @@ def _typecheckingstub__8250888ac08b345ef300cc4ce53cc267858e31401cdc7b6a427c98f5b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d90318e05f298e9e32d25d69776de891d8d1f9fdc6587cd780d823a2ffc981d8(
+    resource: _IBackupPlanRef_754776b5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__19a621581dc951af9f595672bab4c44806829db988a9a543e73c82aa211347cc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8192,7 +8298,7 @@ def _typecheckingstub__436ffdeb945f1d3144a7bb788e19b389a62e6e70ce5e213a46bb8c9ea
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    backup_plan_id: builtins.str,
+    backup_plan_id: typing.Union[builtins.str, _IBackupPlanRef_754776b5],
     backup_selection: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupSelection.BackupSelectionResourceTypeProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
@@ -8263,7 +8369,7 @@ def _typecheckingstub__d4989780545fff72ed41947c50d0e49cf85d2cf412bc84422f8757131
 
 def _typecheckingstub__62d83c7c1dd04eb3d32a7eb1179b31577aa76122fb844fd17ddef00d8ef261c9(
     *,
-    backup_plan_id: builtins.str,
+    backup_plan_id: typing.Union[builtins.str, _IBackupPlanRef_754776b5],
     backup_selection: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupSelection.BackupSelectionResourceTypeProperty, typing.Dict[builtins.str, typing.Any]]],
 ) -> None:
     """Type checking stubs"""
@@ -8276,9 +8382,15 @@ def _typecheckingstub__91f579bea882f82608d503a3e561568131d8e8e6d825c152c63d59622
     backup_vault_name: builtins.str,
     access_policy: typing.Any = None,
     backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    encryption_key_arn: typing.Optional[builtins.str] = None,
+    encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     lock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.LockConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ed92c2782108e3ac41b002f013a5190852956a16215b7e5e56ca133e9e72884(
+    resource: _IBackupVaultRef_c038ce00,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8369,7 +8481,7 @@ def _typecheckingstub__a8f4cc95a208ae1aaf01a8bfd7ead0ecbd6d7559786be34f0a6087355
     backup_vault_name: builtins.str,
     access_policy: typing.Any = None,
     backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
-    encryption_key_arn: typing.Optional[builtins.str] = None,
+    encryption_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     lock_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.LockConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -8384,6 +8496,12 @@ def _typecheckingstub__762b6f2cf173ed987e2f05e55b691e4e8e14552591e05b26b7f7f4e08
     framework_description: typing.Optional[builtins.str] = None,
     framework_name: typing.Optional[builtins.str] = None,
     framework_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b50aa25a1cc9ba34b4868b9a50fe018bfd4cc98076a84c277bf66f3e1da5f09(
+    resource: _IFrameworkRef_dcbb25ea,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8469,8 +8587,15 @@ def _typecheckingstub__f46c2d817c43abec9e204fc8a7211b43dd15b93e11a637e67a9711664
     min_retention_days: jsii.Number,
     access_policy: typing.Any = None,
     backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    encryption_key_arn: typing.Optional[builtins.str] = None,
     mpa_approval_team_arn: typing.Optional[builtins.str] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__994d018be638a33f2eb32bb0e85f369b451e5bfae2907913519d7f9f54738a54(
+    resource: _ILogicallyAirGappedBackupVaultRef_94a8f212,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8525,6 +8650,12 @@ def _typecheckingstub__27388048f12fa4b0d6686a7b40795dea7b4219e2f388afdfc5733f704
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cf0845b96f64c861986d9628b54d60700d109b971dc10dd34707fb3e98629c96(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d69a75a0b7ce93d33d99d99ea46c6bed385bc4618297cfeb5204520844045d0e(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -8552,6 +8683,7 @@ def _typecheckingstub__5a3b99abcf3e8ad32b3307410738488461421bb759c6f2f630a99abc5
     min_retention_days: jsii.Number,
     access_policy: typing.Any = None,
     backup_vault_tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    encryption_key_arn: typing.Optional[builtins.str] = None,
     mpa_approval_team_arn: typing.Optional[builtins.str] = None,
     notifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnLogicallyAirGappedBackupVault.NotificationObjectTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -8567,6 +8699,12 @@ def _typecheckingstub__5c6528de906751786b24f01244334abf14ddb763be763a416a6d4f3c8
     report_plan_description: typing.Optional[builtins.str] = None,
     report_plan_name: typing.Optional[builtins.str] = None,
     report_plan_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__81ff19c28848fcb20b39db086fd0082e4e3c62072d87a29282066c70b97788c7(
+    resource: _IReportPlanRef_2eb6ea89,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8654,6 +8792,12 @@ def _typecheckingstub__ce1d12683247bbd0bcd185e807f3b41b4b53ee7cfd847d57ecbf875d4
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_window_hours: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7990b6debf547b5294197ae934069cb15deeef3fa415291836f77df56e14749c(
+    resource: _IRestoreTestingPlanRef_3850185f,
 ) -> None:
     """Type checking stubs"""
     pass

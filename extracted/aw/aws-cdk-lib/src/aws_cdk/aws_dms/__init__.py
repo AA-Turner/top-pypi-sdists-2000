@@ -148,6 +148,17 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCertificate")
+    @builtins.classmethod
+    def arn_for_certificate(cls, resource: _ICertificateRef_4762cd8c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__800ce2b9498d1aaa5d3738e8f5421864b7bdeee9fa9fe90b522738ed60f48aa1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCertificate", [resource]))
+
     @jsii.member(jsii_name="fromCertificateId")
     @builtins.classmethod
     def from_certificate_id(
@@ -439,6 +450,20 @@ class CfnDataMigration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataMigration")
+    @builtins.classmethod
+    def arn_for_data_migration(
+        cls,
+        resource: _IDataMigrationRef_bc862062,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1481a7eabb0cb35a8c2460d0e2166bd3b023395fd96d56f5cea081a1fe0e68f9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataMigration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1154,7 +1179,7 @@ class CfnDataProvider(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param engine: The type of database engine for the data provider. Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` and ``docdb`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
+        :param engine: The type of database engine for the data provider. Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` , ``docdb`` , and ``sybase`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
         :param data_provider_identifier: The identifier of the data provider. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen, or contain two consecutive hyphens.
         :param data_provider_name: The name of the data provider.
         :param description: A description of the data provider. Descriptions can have up to 31 characters. A description can contain only ASCII letters, digits, and hyphens ('-'). Also, it can't end with a hyphen or contain two consecutive hyphens, and can only begin with a letter.
@@ -1177,6 +1202,20 @@ class CfnDataProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataProvider")
+    @builtins.classmethod
+    def arn_for_data_provider(
+        cls,
+        resource: _IDataProviderRef_5ca5bf2b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__253f79c3455dbb70b109cf4129286b5cc12c3fcbaeb2eb329df3b6595880439e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataProvider", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2988,7 +3027,7 @@ class CfnDataProviderProps:
     ) -> None:
         '''Properties for defining a ``CfnDataProvider``.
 
-        :param engine: The type of database engine for the data provider. Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` and ``docdb`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
+        :param engine: The type of database engine for the data provider. Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` , ``docdb`` , and ``sybase`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
         :param data_provider_identifier: The identifier of the data provider. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen, or contain two consecutive hyphens.
         :param data_provider_name: The name of the data provider.
         :param description: A description of the data provider. Descriptions can have up to 31 characters. A description can contain only ASCII letters, digits, and hyphens ('-'). Also, it can't end with a hyphen or contain two consecutive hyphens, and can only begin with a letter.
@@ -3142,7 +3181,7 @@ class CfnDataProviderProps:
     def engine(self) -> builtins.str:
         '''The type of database engine for the data provider.
 
-        Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` and ``docdb`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
+        Valid values include ``"aurora"`` , ``"aurora-postgresql"`` , ``"mysql"`` , ``"oracle"`` , ``"postgres"`` , ``"sqlserver"`` , ``redshift`` , ``mariadb`` , ``mongodb`` , ``db2`` , ``db2-zos`` , ``docdb`` , and ``sybase`` . A value of ``"aurora"`` represents Amazon Aurora MySQL-Compatible Edition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-dataprovider.html#cfn-dms-dataprovider-engine
         '''
@@ -3590,7 +3629,7 @@ class CfnEndpoint(
         :param ibm_db2_settings: Settings in JSON format for the source IBM Db2 LUW endpoint. For information about other available settings, see `Extra connection attributes when using Db2 LUW as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.DB2.html#CHAP_Source.DB2.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
         :param kafka_settings: Settings in JSON format for the target Apache Kafka endpoint. For more information about other available settings, see `Using object mapping to migrate data to a Kafka topic <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html#CHAP_Target.Kafka.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
         :param kinesis_settings: Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams. For more information about other available settings, see `Using object mapping to migrate data to a Kinesis data stream <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
-        :param kms_key_id: An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        :param kms_key_id: An AWS key identifier that is used to encrypt the connection parameters for the endpoint. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
         :param microsoft_sql_server_settings: Settings in JSON format for the source and target Microsoft SQL Server endpoint. For information about other available settings, see `Extra connection attributes when using SQL Server as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SQLServer.html#CHAP_Source.SQLServer.ConnectionAttrib>`_ and `Extra connection attributes when using SQL Server as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SQLServer.html#CHAP_Target.SQLServer.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
         :param mongo_db_settings: Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see `Using MongoDB as a target for AWS Database Migration Service <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html#CHAP_Source.MongoDB.Configuration>`_ in the *AWS Database Migration Service User Guide* .
         :param my_sql_settings: Settings in JSON format for the source and target MySQL endpoint. For information about other available settings, see `Extra connection attributes when using MySQL as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html#CHAP_Source.MySQL.ConnectionAttrib>`_ and `Extra connection attributes when using a MySQL-compatible database as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.MySQL.html#CHAP_Target.MySQL.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -3648,6 +3687,17 @@ class CfnEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEndpoint")
+    @builtins.classmethod
+    def arn_for_endpoint(cls, resource: _IEndpointRef_132726f5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7761f93304ac33cd495a90c1f5a99370e3abac6729cef125359cded810a0032d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEndpoint", [resource]))
 
     @jsii.member(jsii_name="fromEndpointId")
     @builtins.classmethod
@@ -3941,7 +3991,7 @@ class CfnEndpoint(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.'''
+        '''An AWS  key identifier that is used to encrypt the connection parameters for the endpoint.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -7964,7 +8014,7 @@ class CfnEndpoint(
             :param replace_invalid_chars: A list of characters that you want to replace. Use with ``ReplaceChars`` .
             :param secrets_manager_access_role_arn: The full Amazon Resource Name (ARN) of the IAM role that specifies AWS DMS as the trusted entity and grants the required permissions to access the value in ``SecretsManagerSecret`` . The role must allow the ``iam:PassRole`` action. ``SecretsManagerSecret`` has the value of the AWS Secrets Manager secret that allows access to the Amazon Redshift endpoint. .. epigraph:: You can specify one of two sets of values for these permissions. You can specify the values for this setting and ``SecretsManagerSecretId`` . Or you can specify clear-text values for ``UserName`` , ``Password`` , ``ServerName`` , and ``Port`` . You can't specify both. For more information on creating this ``SecretsManagerSecret`` , the corresponding ``SecretsManagerAccessRoleArn`` , and the ``SecretsManagerSecretId`` that is required to access it, see `Using secrets to access AWS Database Migration Service resources <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#security-iam-secretsmanager>`_ in the *AWS Database Migration Service User Guide* .
             :param secrets_manager_secret_id: The full ARN, partial ARN, or display name of the ``SecretsManagerSecret`` that contains the Amazon Redshift endpoint connection details.
-            :param server_side_encryption_kms_key_id: The AWS KMS key ID. If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide this key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.
+            :param server_side_encryption_kms_key_id: The AWS key ID. If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide this key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.
             :param service_access_role_arn: The Amazon Resource Name (ARN) of the IAM role that has access to the Amazon Redshift service. The role must allow the ``iam:PassRole`` action.
             :param time_format: The time format that you want to use. Valid values are ``auto`` (case-sensitive), ``'timeformat_string'`` , ``'epochsecs'`` , or ``'epochmillisecs'`` . It defaults to 10. Using ``auto`` recognizes most strings, even some that aren't supported when you use a time format string. If your date and time values use formats different from each other, set this parameter to ``auto`` .
             :param trim_blanks: A value that specifies to remove the trailing white space characters from a VARCHAR string. This parameter applies only to columns with a VARCHAR data type. Choose ``true`` to remove unneeded white space. The default is ``false`` .
@@ -8337,7 +8387,7 @@ class CfnEndpoint(
 
         @builtins.property
         def server_side_encryption_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The AWS KMS key ID.
+            '''The AWS  key ID.
 
             If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide this key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.
 
@@ -8549,7 +8599,7 @@ class CfnEndpoint(
             :param preserve_transactions: If this setting is set to ``true`` , AWS DMS saves the transaction order for a change data capture (CDC) load on the Amazon S3 target specified by ```CdcPath`` <https://docs.aws.amazon.com/dms/latest/APIReference/API_S3Settings.html#DMS-Type-S3Settings-CdcPath>`_ . For more information, see `Capturing data changes (CDC) including transaction order on the S3 target <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.EndpointSettings.CdcPath>`_ . .. epigraph:: This setting is supported in AWS DMS versions 3.4.2 and later.
             :param rfc4180: For an S3 source, when this value is set to ``true`` or ``y`` , each leading double quotation mark has to be followed by an ending double quotation mark. This formatting complies with RFC 4180. When this value is set to ``false`` or ``n`` , string literals are copied to the target as is. In this case, a delimiter (row or column) signals the end of the field. Thus, you can't use a delimiter as part of the string, because it signals the end of the value. For an S3 target, an optional parameter used to set behavior to comply with RFC 4180 for data migrated to Amazon S3 using .csv file format only. When this value is set to ``true`` or ``y`` using Amazon S3 as a target, if the data has quotation marks or newline characters in it, AWS DMS encloses the entire column with an additional pair of double quotation marks ("). Every quotation mark within the data is repeated twice. The default value is ``true`` . Valid values include ``true`` , ``false`` , ``y`` , and ``n`` .
             :param row_group_length: The number of rows in a row group. A smaller row group size provides faster reads. But as the number of row groups grows, the slower writes become. This parameter defaults to 10,000 rows. This number is used for .parquet file format only. If you choose a value larger than the maximum, ``RowGroupLength`` is set to the max row group length in bytes (64 * 1024 * 1024).
-            :param server_side_encryption_kms_key_id: If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide the AWS KMS key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key. Here is a CLI example: ``aws dms create-endpoint --endpoint-identifier *value* --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn= *value* ,BucketFolder= *value* ,BucketName= *value* ,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId= *value*``
+            :param server_side_encryption_kms_key_id: If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide the AWS key ID. The key that you use needs an attached policy that enables IAM user permissions and allows use of the key. Here is a CLI example: ``aws dms create-endpoint --endpoint-identifier *value* --endpoint-type target --engine-name s3 --s3-settings ServiceAccessRoleArn= *value* ,BucketFolder= *value* ,BucketName= *value* ,EncryptionMode=SSE_KMS,ServerSideEncryptionKmsKeyId= *value*``
             :param service_access_role_arn: A required parameter that specifies the Amazon Resource Name (ARN) used by the service to access the IAM role. The role must allow the ``iam:PassRole`` action. It enables AWS DMS to read and write objects from an S3 bucket.
             :param timestamp_column_name: A value that when nonblank causes AWS DMS to add a column with timestamp information to the endpoint data for an Amazon S3 target. .. epigraph:: AWS DMS supports the ``TimestampColumnName`` parameter in versions 3.1.4 and later. AWS DMS includes an additional ``STRING`` column in the .csv or .parquet object files of your migrated data when you set ``TimestampColumnName`` to a nonblank value. For a full load, each row of this timestamp column contains a timestamp for when the data was transferred from the source to the target by DMS. For a change data capture (CDC) load, each row of the timestamp column contains the timestamp for the commit of that row in the source database. The string format for this timestamp column value is ``yyyy-MM-dd HH:mm:ss.SSSSSS`` . By default, the precision of this value is in microseconds. For a CDC load, the rounding of the precision depends on the commit timestamp supported by DMS for the source database. When the ``AddColumnName`` parameter is set to ``true`` , DMS also includes a name for the timestamp column that you set with ``TimestampColumnName`` .
             :param use_csv_no_sup_value: This setting applies if the S3 output files during a change data capture (CDC) load are written in .csv format. If this setting is set to ``true`` for columns not included in the supplemental log, AWS DMS uses the value specified by ```CsvNoSupValue`` <https://docs.aws.amazon.com/dms/latest/APIReference/API_S3Settings.html#DMS-Type-S3Settings-CsvNoSupValue>`_ . If this setting isn't set or is set to ``false`` , AWS DMS uses the null value for these columns. .. epigraph:: This setting is supported in AWS DMS versions 3.4.1 and later.
@@ -9226,7 +9276,7 @@ class CfnEndpoint(
 
         @builtins.property
         def server_side_encryption_kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide the AWS KMS key ID.
+            '''If you are using ``SSE_KMS`` for the ``EncryptionMode`` , provide the AWS  key ID.
 
             The key that you use needs an attached policy that enables IAM user permissions and allows use of the key.
 
@@ -9483,7 +9533,7 @@ class CfnEndpointProps:
         :param ibm_db2_settings: Settings in JSON format for the source IBM Db2 LUW endpoint. For information about other available settings, see `Extra connection attributes when using Db2 LUW as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.DB2.html#CHAP_Source.DB2.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
         :param kafka_settings: Settings in JSON format for the target Apache Kafka endpoint. For more information about other available settings, see `Using object mapping to migrate data to a Kafka topic <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html#CHAP_Target.Kafka.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
         :param kinesis_settings: Settings in JSON format for the target endpoint for Amazon Kinesis Data Streams. For more information about other available settings, see `Using object mapping to migrate data to a Kinesis data stream <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping>`_ in the *AWS Database Migration Service User Guide* .
-        :param kms_key_id: An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        :param kms_key_id: An AWS key identifier that is used to encrypt the connection parameters for the endpoint. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
         :param microsoft_sql_server_settings: Settings in JSON format for the source and target Microsoft SQL Server endpoint. For information about other available settings, see `Extra connection attributes when using SQL Server as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.SQLServer.html#CHAP_Source.SQLServer.ConnectionAttrib>`_ and `Extra connection attributes when using SQL Server as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.SQLServer.html#CHAP_Target.SQLServer.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
         :param mongo_db_settings: Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see `Using MongoDB as a target for AWS Database Migration Service <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html#CHAP_Source.MongoDB.Configuration>`_ in the *AWS Database Migration Service User Guide* .
         :param my_sql_settings: Settings in JSON format for the source and target MySQL endpoint. For information about other available settings, see `Extra connection attributes when using MySQL as a source for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MySQL.html#CHAP_Source.MySQL.ConnectionAttrib>`_ and `Extra connection attributes when using a MySQL-compatible database as a target for AWS DMS <https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.MySQL.html#CHAP_Target.MySQL.ConnectionAttrib>`_ in the *AWS Database Migration Service User Guide* .
@@ -10055,11 +10105,11 @@ class CfnEndpointProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An AWS KMS key identifier that is used to encrypt the connection parameters for the endpoint.
+        '''An AWS  key identifier that is used to encrypt the connection parameters for the endpoint.
 
         If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key.
 
-        AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        AWS  creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-endpoint.html#cfn-dms-endpoint-kmskeyid
         '''
@@ -10333,7 +10383,7 @@ class CfnEventSubscription(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.
-        :param enabled: Indicates whether to activate the subscription. If you don't specify this property, AWS CloudFormation activates the subscription.
+        :param enabled: Indicates whether to activate the subscription. If you don't specify this property, CloudFormation activates the subscription.
         :param event_categories: A list of event categories for a source type that you want to subscribe to. If you don't specify this property, you are notified about all event categories. For more information, see `Working with Events and Notifications <https://docs.aws.amazon.com//dms/latest/userguide/CHAP_Events.html>`_ in the *AWS DMS User Guide* .
         :param source_ids: A list of identifiers for which AWS DMS provides notification events. If you don't specify a value, notifications are provided for all sources. If you specify multiple values, they must be of the same type. For example, if you specify a database instance ID, then all of the other values must be database instance IDs.
         :param source_type: The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to ``replication-instance`` . If this value isn't specified, all events are returned. *Valid values* : ``replication-instance`` | ``replication-task``
@@ -10539,7 +10589,7 @@ class CfnEventSubscriptionProps:
         '''Properties for defining a ``CfnEventSubscription``.
 
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.
-        :param enabled: Indicates whether to activate the subscription. If you don't specify this property, AWS CloudFormation activates the subscription.
+        :param enabled: Indicates whether to activate the subscription. If you don't specify this property, CloudFormation activates the subscription.
         :param event_categories: A list of event categories for a source type that you want to subscribe to. If you don't specify this property, you are notified about all event categories. For more information, see `Working with Events and Notifications <https://docs.aws.amazon.com//dms/latest/userguide/CHAP_Events.html>`_ in the *AWS DMS User Guide* .
         :param source_ids: A list of identifiers for which AWS DMS provides notification events. If you don't specify a value, notifications are provided for all sources. If you specify multiple values, they must be of the same type. For example, if you specify a database instance ID, then all of the other values must be database instance IDs.
         :param source_type: The type of AWS DMS resource that generates the events. For example, if you want to be notified of events generated by a replication instance, you set this parameter to ``replication-instance`` . If this value isn't specified, all events are returned. *Valid values* : ``replication-instance`` | ``replication-task``
@@ -10613,7 +10663,7 @@ class CfnEventSubscriptionProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Indicates whether to activate the subscription.
 
-        If you don't specify this property, AWS CloudFormation activates the subscription.
+        If you don't specify this property, CloudFormation activates the subscription.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-eventsubscription.html#cfn-dms-eventsubscription-enabled
         '''
@@ -10748,7 +10798,7 @@ class CfnInstanceProfile(
         :param description: A description of the instance profile. Descriptions can have up to 31 characters. A description can contain only ASCII letters, digits, and hyphens ('-'). Also, it can't end with a hyphen or contain two consecutive hyphens, and can only begin with a letter.
         :param instance_profile_identifier: The identifier of the instance profile. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen, or contain two consecutive hyphens.
         :param instance_profile_name: The user-friendly name for the instance profile.
-        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the connection parameters for the instance profile. If you don't specify a value for the ``KmsKeyArn`` parameter, then AWS DMS uses an AWS owned encryption key to encrypt your resources.
+        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS key that is used to encrypt the connection parameters for the instance profile. If you don't specify a value for the ``KmsKeyArn`` parameter, then AWS DMS uses an AWS owned encryption key to encrypt your resources.
         :param network_type: Specifies the network type for the instance profile. A value of ``IPV4`` represents an instance profile with IPv4 network type and only supports IPv4 addressing. A value of ``IPV6`` represents an instance profile with IPv6 network type and only supports IPv6 addressing. A value of ``DUAL`` represents an instance profile with dual network type that supports IPv4 and IPv6 addressing.
         :param publicly_accessible: Specifies the accessibility options for the instance profile. A value of ``true`` represents an instance profile with a public IP address. A value of ``false`` represents an instance profile with a private IP address. The default value is ``true`` . Default: - false
         :param subnet_group_identifier: The identifier of the subnet group that is associated with the instance profile.
@@ -10773,6 +10823,20 @@ class CfnInstanceProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInstanceProfile")
+    @builtins.classmethod
+    def arn_for_instance_profile(
+        cls,
+        resource: _IInstanceProfileRef_2a55b923,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6042cf3eff9219b73a1e171a3fe14407370f871c46b0951c79ad7871a2cde28)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstanceProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10894,7 +10958,7 @@ class CfnInstanceProfile(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the connection parameters for the instance profile.'''
+        '''The Amazon Resource Name (ARN) of the AWS  key that is used to encrypt the connection parameters for the instance profile.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -11015,7 +11079,7 @@ class CfnInstanceProfileProps:
         :param description: A description of the instance profile. Descriptions can have up to 31 characters. A description can contain only ASCII letters, digits, and hyphens ('-'). Also, it can't end with a hyphen or contain two consecutive hyphens, and can only begin with a letter.
         :param instance_profile_identifier: The identifier of the instance profile. Identifiers must begin with a letter and must contain only ASCII letters, digits, and hyphens. They can't end with a hyphen, or contain two consecutive hyphens.
         :param instance_profile_name: The user-friendly name for the instance profile.
-        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the connection parameters for the instance profile. If you don't specify a value for the ``KmsKeyArn`` parameter, then AWS DMS uses an AWS owned encryption key to encrypt your resources.
+        :param kms_key_arn: The Amazon Resource Name (ARN) of the AWS key that is used to encrypt the connection parameters for the instance profile. If you don't specify a value for the ``KmsKeyArn`` parameter, then AWS DMS uses an AWS owned encryption key to encrypt your resources.
         :param network_type: Specifies the network type for the instance profile. A value of ``IPV4`` represents an instance profile with IPv4 network type and only supports IPv4 addressing. A value of ``IPV6`` represents an instance profile with IPv6 network type and only supports IPv6 addressing. A value of ``DUAL`` represents an instance profile with dual network type that supports IPv4 and IPv6 addressing.
         :param publicly_accessible: Specifies the accessibility options for the instance profile. A value of ``true`` represents an instance profile with a public IP address. A value of ``false`` represents an instance profile with a private IP address. The default value is ``true`` . Default: - false
         :param subnet_group_identifier: The identifier of the subnet group that is associated with the instance profile.
@@ -11123,7 +11187,7 @@ class CfnInstanceProfileProps:
 
     @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the connection parameters for the instance profile.
+        '''The Amazon Resource Name (ARN) of the AWS  key that is used to encrypt the connection parameters for the instance profile.
 
         If you don't specify a value for the ``KmsKeyArn`` parameter, then AWS DMS uses an AWS owned encryption key to encrypt your resources.
 
@@ -11306,6 +11370,20 @@ class CfnMigrationProject(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMigrationProject")
+    @builtins.classmethod
+    def arn_for_migration_project(
+        cls,
+        resource: _IMigrationProjectRef_e8e0eb77,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d06eca9226ce1c87fd546d8b6a2a0d7e6b90110fa7c24cd46f6c3fcb60882f2e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMigrationProject", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12105,6 +12183,20 @@ class CfnReplicationConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForReplicationConfig")
+    @builtins.classmethod
+    def arn_for_replication_config(
+        cls,
+        resource: _IReplicationConfigRef_cd698554,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f55a18d485b80c43fb3a15f9c7c1e177b1ff817d5b9d857a2ebf6a31b2eea6d4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReplicationConfig", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12330,7 +12422,7 @@ class CfnReplicationConfig(
             :param max_capacity_units: Specifies the maximum value of the AWS DMS capacity units (DCUs) for which a given AWS DMS Serverless replication can be provisioned. A single DCU is 2GB of RAM, with 1 DCU as the minimum value allowed. The list of valid DCU values includes 1, 2, 4, 8, 16, 32, 64, 128, 192, 256, and 384. So, the maximum value that you can specify for AWS DMS Serverless is 384. The ``MaxCapacityUnits`` parameter is the only DCU parameter you are required to specify.
             :param availability_zone: The Availability Zone where the AWS DMS Serverless replication using this configuration will run. The default value is a random, system-chosen Availability Zone in the configuration's AWS Region , for example, ``"us-west-2"`` . You can't set this parameter if the ``MultiAZ`` parameter is set to ``true`` .
             :param dns_name_servers: A list of custom DNS name servers supported for the AWS DMS Serverless replication to access your source or target database. This list overrides the default name servers supported by the AWS DMS Serverless replication. You can specify a comma-separated list of internet addresses for up to four DNS name servers. For example: ``"1.1.1.1,2.2.2.2,3.3.3.3,4.4.4.4"``
-            :param kms_key_id: An AWS Key Management Service ( AWS KMS ) key Amazon Resource Name (ARN) that is used to encrypt the data during AWS DMS Serverless replication. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your Amazon Web Services account. Your AWS account has a different default encryption key for each AWS Region .
+            :param kms_key_id: An AWS Key Management Service ( AWS ) key Amazon Resource Name (ARN) that is used to encrypt the data during AWS DMS Serverless replication. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS creates the default encryption key for your Amazon Web Services account. Your AWS account has a different default encryption key for each AWS Region .
             :param min_capacity_units: Specifies the minimum value of the AWS DMS capacity units (DCUs) for which a given AWS DMS Serverless replication can be provisioned. A single DCU is 2GB of RAM, with 1 DCU as the minimum value allowed. The list of valid DCU values includes 1, 2, 4, 8, 16, 32, 64, 128, 192, 256, and 384. So, the minimum DCU value that you can specify for AWS DMS Serverless is 1. If you don't set this value, AWS DMS sets this parameter to the minimum DCU value allowed, 1. If there is no current source activity, AWS DMS scales down your replication until it reaches the value specified in ``MinCapacityUnits`` .
             :param multi_az: Specifies whether the AWS DMS Serverless replication is a Multi-AZ deployment. You can't set the ``AvailabilityZone`` parameter if the ``MultiAZ`` parameter is set to ``true`` .
             :param preferred_maintenance_window: The weekly time range during which system maintenance can occur for the AWS DMS Serverless replication, in Universal Coordinated Time (UTC). The format is ``ddd:hh24:mi-ddd:hh24:mi`` . The default is a 30-minute window selected at random from an 8-hour block of time per AWS Region . This maintenance occurs on a random day of the week. Valid values for days of the week include ``Mon`` , ``Tue`` , ``Wed`` , ``Thu`` , ``Fri`` , ``Sat`` , and ``Sun`` . Constraints include a minimum 30-minute window.
@@ -12427,11 +12519,11 @@ class CfnReplicationConfig(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''An AWS Key Management Service ( AWS KMS ) key Amazon Resource Name (ARN) that is used to encrypt the data during AWS DMS Serverless replication.
+            '''An AWS Key Management Service ( AWS  ) key Amazon Resource Name (ARN) that is used to encrypt the data during AWS DMS Serverless replication.
 
             If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key.
 
-            AWS KMS creates the default encryption key for your Amazon Web Services account. Your AWS account has a different default encryption key for each AWS Region .
+            AWS  creates the default encryption key for your Amazon Web Services account. Your AWS account has a different default encryption key for each AWS Region .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dms-replicationconfig-computeconfig.html#cfn-dms-replicationconfig-computeconfig-kmskeyid
             '''
@@ -12833,7 +12925,7 @@ class CfnReplicationInstance(
         :param availability_zone: The Availability Zone that the replication instance will be created in. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region , for example ``us-east-1d`` .
         :param dns_name_servers: A list of custom DNS name servers supported for the replication instance to access your on-premise source or target database. This list overrides the default name servers supported by the replication instance. You can specify a comma-separated list of internet addresses for up to four on-premise DNS name servers. For example: ``"1.1.1.1,2.2.2.2,3.3.3.3,4.4.4.4"``
         :param engine_version: The engine version number of the replication instance. If an engine version number is not specified when a replication instance is created, the default is the latest engine version available.
-        :param kms_key_id: An AWS KMS key identifier that is used to encrypt the data on the replication instance. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        :param kms_key_id: An AWS key identifier that is used to encrypt the data on the replication instance. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
         :param multi_az: Specifies whether the replication instance is a Multi-AZ deployment. You can't set the ``AvailabilityZone`` parameter if the Multi-AZ parameter is set to ``true`` .
         :param network_type: The type of IP address protocol used by a replication instance, such as IPv4 only or Dual-stack that supports both IPv4 and IPv6 addressing. IPv6 only is not yet supported.
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in UTC. *Format* : ``ddd:hh24:mi-ddd:hh24:mi`` *Default* : A 30-minute window selected at random from an 8-hour block of time per AWS Region , occurring on a random day of the week. *Valid days* ( ``ddd`` ): ``Mon`` | ``Tue`` | ``Wed`` | ``Thu`` | ``Fri`` | ``Sat`` | ``Sun`` *Constraints* : Minimum 30-minute window.
@@ -13047,7 +13139,7 @@ class CfnReplicationInstance(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An AWS KMS key identifier that is used to encrypt the data on the replication instance.'''
+        '''An AWS  key identifier that is used to encrypt the data on the replication instance.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -13254,7 +13346,7 @@ class CfnReplicationInstanceProps:
         :param availability_zone: The Availability Zone that the replication instance will be created in. The default value is a random, system-chosen Availability Zone in the endpoint's AWS Region , for example ``us-east-1d`` .
         :param dns_name_servers: A list of custom DNS name servers supported for the replication instance to access your on-premise source or target database. This list overrides the default name servers supported by the replication instance. You can specify a comma-separated list of internet addresses for up to four on-premise DNS name servers. For example: ``"1.1.1.1,2.2.2.2,3.3.3.3,4.4.4.4"``
         :param engine_version: The engine version number of the replication instance. If an engine version number is not specified when a replication instance is created, the default is the latest engine version available.
-        :param kms_key_id: An AWS KMS key identifier that is used to encrypt the data on the replication instance. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        :param kms_key_id: An AWS key identifier that is used to encrypt the data on the replication instance. If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
         :param multi_az: Specifies whether the replication instance is a Multi-AZ deployment. You can't set the ``AvailabilityZone`` parameter if the Multi-AZ parameter is set to ``true`` .
         :param network_type: The type of IP address protocol used by a replication instance, such as IPv4 only or Dual-stack that supports both IPv4 and IPv6 addressing. IPv6 only is not yet supported.
         :param preferred_maintenance_window: The weekly time range during which system maintenance can occur, in UTC. *Format* : ``ddd:hh24:mi-ddd:hh24:mi`` *Default* : A 30-minute window selected at random from an 8-hour block of time per AWS Region , occurring on a random day of the week. *Valid days* ( ``ddd`` ): ``Mon`` | ``Tue`` | ``Wed`` | ``Thu`` | ``Fri`` | ``Sat`` | ``Sun`` *Constraints* : Minimum 30-minute window.
@@ -13440,11 +13532,11 @@ class CfnReplicationInstanceProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An AWS KMS key identifier that is used to encrypt the data on the replication instance.
+        '''An AWS  key identifier that is used to encrypt the data on the replication instance.
 
         If you don't specify a value for the ``KmsKeyId`` parameter, AWS DMS uses your default encryption key.
 
-        AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
+        AWS  creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Region .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationinstance.html#cfn-dms-replicationinstance-kmskeyid
         '''
@@ -13626,7 +13718,7 @@ class CfnReplicationSubnetGroup(
         :param id: Construct identifier for this resource (unique in its scope).
         :param replication_subnet_group_description: The description for the subnet group.
         :param subnet_ids: One or more subnet IDs to be assigned to the subnet group.
-        :param replication_subnet_group_identifier: The identifier for the replication subnet group. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the identifier.
+        :param replication_subnet_group_identifier: The identifier for the replication subnet group. If you don't specify a name, CloudFormation generates a unique ID and uses that ID for the identifier.
         :param tags: One or more tags to be assigned to the subnet group.
         '''
         if __debug__:
@@ -13776,7 +13868,7 @@ class CfnReplicationSubnetGroupProps:
 
         :param replication_subnet_group_description: The description for the subnet group.
         :param subnet_ids: One or more subnet IDs to be assigned to the subnet group.
-        :param replication_subnet_group_identifier: The identifier for the replication subnet group. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the identifier.
+        :param replication_subnet_group_identifier: The identifier for the replication subnet group. If you don't specify a name, CloudFormation generates a unique ID and uses that ID for the identifier.
         :param tags: One or more tags to be assigned to the subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationsubnetgroup.html
@@ -13839,7 +13931,7 @@ class CfnReplicationSubnetGroupProps:
     def replication_subnet_group_identifier(self) -> typing.Optional[builtins.str]:
         '''The identifier for the replication subnet group.
 
-        If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the identifier.
+        If you don't specify a name, CloudFormation generates a unique ID and uses that ID for the identifier.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dms-replicationsubnetgroup.html#cfn-dms-replicationsubnetgroup-replicationsubnetgroupidentifier
         '''
@@ -14522,6 +14614,12 @@ def _typecheckingstub__f7c4a44b8a3c02f3f6ada86310479fa26dc0b32d4fba95316eb3faa44
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__800ce2b9498d1aaa5d3738e8f5421864b7bdeee9fa9fe90b522738ed60f48aa1(
+    resource: _ICertificateRef_4762cd8c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__54c58e4c61ec8f4fec86aeebbf242c64f4df21097435a1de2fa86d057deacae4(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -14581,6 +14679,12 @@ def _typecheckingstub__64c0e21ad134546b496f96ef4ca0fab25a87ff24faf22f3329fac7bda
     data_migration_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataMigration.DataMigrationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source_data_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataMigration.SourceDataSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1481a7eabb0cb35a8c2460d0e2166bd3b023395fd96d56f5cea081a1fe0e68f9(
+    resource: _IDataMigrationRef_bc862062,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14689,6 +14793,12 @@ def _typecheckingstub__cf28699baa8f0b678c6576c66e1c53e33b16d9f9cc37b854d4edbc95b
     exact_settings: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataProvider.SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__253f79c3455dbb70b109cf4129286b5cc12c3fcbaeb2eb329df3b6595880439e(
+    resource: _IDataProviderRef_5ca5bf2b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14925,6 +15035,12 @@ def _typecheckingstub__738d71cd2300575c2c6537801f3dede195e2179cefcdceb9d0410340f
     sybase_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpoint.SybaseSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     username: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7761f93304ac33cd495a90c1f5a99370e3abac6729cef125359cded810a0032d(
+    resource: _IEndpointRef_132726f5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15607,6 +15723,12 @@ def _typecheckingstub__0c72f2ad0340026b7e11a2dcfa2f16a6cc0dd6393207ad4c41449ed94
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b6042cf3eff9219b73a1e171a3fe14407370f871c46b0951c79ad7871a2cde28(
+    resource: _IInstanceProfileRef_2a55b923,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8342c573d42f8c324d79b2e95f84d87e6e369d07fdb8d38ff3910d46a7fdbc9b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -15711,6 +15833,12 @@ def _typecheckingstub__02169f44825ddf8b21ca2acf1c203831f0a34ba053b5b8f4fea59ef92
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_data_provider_descriptors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMigrationProject.DataProviderDescriptorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     transformation_rules: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d06eca9226ce1c87fd546d8b6a2a0d7e6b90110fa7c24cd46f6c3fcb60882f2e(
+    resource: _IMigrationProjectRef_e8e0eb77,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15850,6 +15978,12 @@ def _typecheckingstub__94680f790d4726b7c801a80c1413457134b08ba7f03ece13365f54d8f
     resource_identifier: typing.Optional[builtins.str] = None,
     supplemental_settings: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f55a18d485b80c43fb3a15f9c7c1e177b1ff817d5b9d857a2ebf6a31b2eea6d4(
+    resource: _IReplicationConfigRef_cd698554,
 ) -> None:
     """Type checking stubs"""
     pass

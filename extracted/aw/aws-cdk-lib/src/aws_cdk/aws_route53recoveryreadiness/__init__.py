@@ -140,6 +140,17 @@ class CfnCell(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCell")
+    @builtins.classmethod
+    def arn_for_cell(cls, resource: _ICellRef_a44b0425) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5904b606289a5ac3dfc427dba4339ab94fac01f3408a07a926189174c40178fd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCell", [resource]))
+
     @jsii.member(jsii_name="fromCellArn")
     @builtins.classmethod
     def from_cell_arn(
@@ -443,6 +454,20 @@ class CfnReadinessCheck(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForReadinessCheck")
+    @builtins.classmethod
+    def arn_for_readiness_check(
+        cls,
+        resource: _IReadinessCheckRef_2d346bec,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f42d9d24beaeccdd9523268be378da54d3376100630c543c7ada666140b3c223)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReadinessCheck", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -692,6 +717,20 @@ class CfnRecoveryGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRecoveryGroup")
+    @builtins.classmethod
+    def arn_for_recovery_group(
+        cls,
+        resource: _IRecoveryGroupRef_84a1f4af,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f0f8a4bbf8f100f73e669ea95426cc00474e1a28da067e8574cf2c7fe5704a1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRecoveryGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -971,6 +1010,17 @@ class CfnResourceSet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceSet")
+    @builtins.classmethod
+    def arn_for_resource_set(cls, resource: _IResourceSetRef_34f28033) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e64fa1a54e3f8f7945f2a17681431c7136bd122095dde6054409a615b0bcb4f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceSet", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1706,6 +1756,12 @@ def _typecheckingstub__13c868895ca08bff854c8fe7678338e1867e993f867d49908046cd6a1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5904b606289a5ac3dfc427dba4339ab94fac01f3408a07a926189174c40178fd(
+    resource: _ICellRef_a44b0425,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6384526a3a16df29e41d1e0c5d9c81ec2669c9b7911801fdf4022e3a8b4f4956(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1772,6 +1828,12 @@ def _typecheckingstub__0bfbc5fa46ba2840c24892c634f80e8275ce2c76eb60922ee3c04a4b3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f42d9d24beaeccdd9523268be378da54d3376100630c543c7ada666140b3c223(
+    resource: _IReadinessCheckRef_2d346bec,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5dc7ffe6a29dd5f6e715a9726b09f80833380e0fbe980f5834be46b1ccd41b66(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1818,6 +1880,12 @@ def _typecheckingstub__99277ba24eed449052f2cdf23737421f1433215fdc3cfd730a4385c70
     cells: typing.Optional[typing.Sequence[builtins.str]] = None,
     recovery_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7f0f8a4bbf8f100f73e669ea95426cc00474e1a28da067e8574cf2c7fe5704a1(
+    resource: _IRecoveryGroupRef_84a1f4af,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1869,6 +1937,12 @@ def _typecheckingstub__cf6ebc0a9f935f88e0a23244138eb8cafe24b7630a5d785402d235485
     resource_set_type: builtins.str,
     resource_set_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5e64fa1a54e3f8f7945f2a17681431c7136bd122095dde6054409a615b0bcb4f(
+    resource: _IResourceSetRef_34f28033,
 ) -> None:
     """Type checking stubs"""
     pass

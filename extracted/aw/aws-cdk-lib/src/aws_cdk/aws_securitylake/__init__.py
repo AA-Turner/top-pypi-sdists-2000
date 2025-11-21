@@ -446,6 +446,17 @@ class CfnDataLake(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataLake")
+    @builtins.classmethod
+    def arn_for_data_lake(cls, resource: _IDataLakeRef_2b208ad6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9a7165b457a7a100ea2afe6d1c4c8819663060d984885c1b310a99d19965f857)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataLake", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1174,6 +1185,17 @@ class CfnSubscriber(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSubscriber")
+    @builtins.classmethod
+    def arn_for_subscriber(cls, resource: _ISubscriberRef_18c8415b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb1e39b86f0c2e430280f3b243b42c56acbea92145d0f3c12bb3d93736e3b515)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSubscriber", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2397,6 +2419,12 @@ def _typecheckingstub__ff487a50882ee11f396717fb970b445f3274af88108d1c1d390543dfb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9a7165b457a7a100ea2afe6d1c4c8819663060d984885c1b310a99d19965f857(
+    resource: _IDataLakeRef_2b208ad6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0d7a1c25528114b19a22f7fe9e5b4213f46c37e16f22245bc3dc38ad34fc7ef6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2499,6 +2527,12 @@ def _typecheckingstub__7cfdc1f6a6f3c553e914b6e8b917c7abd1db0a1142db24f189c29526a
     subscriber_name: builtins.str,
     subscriber_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb1e39b86f0c2e430280f3b243b42c56acbea92145d0f3c12bb3d93736e3b515(
+    resource: _ISubscriberRef_18c8415b,
 ) -> None:
     """Type checking stubs"""
     pass

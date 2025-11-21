@@ -73,6 +73,14 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    IEIPRef as _IEIPRef_60d698bd,
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+    IVPCRef as _IVPCRef_f02a11df,
+)
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_redshift import (
     ClusterParameterGroupReference as _ClusterParameterGroupReference_a53380a4,
     ClusterReference as _ClusterReference_5953359c,
@@ -95,6 +103,7 @@ from ..interfaces.aws_redshift import (
     IntegrationReference as _IntegrationReference_5a0a4ae7,
     ScheduledActionReference as _ScheduledActionReference_57ba8aae,
 )
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 
 
 @jsii.implements(_IInspectable_c2943556, _IClusterRef_635abd9d, _ITaggable_36806126)
@@ -205,28 +214,28 @@ class CfnCluster(
         availability_zone_relocation_status: typing.Optional[builtins.str] = None,
         classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         cluster_identifier: typing.Optional[builtins.str] = None,
-        cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-        cluster_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        cluster_subnet_group_name: typing.Optional[builtins.str] = None,
+        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
+        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
+        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
         cluster_version: typing.Optional[builtins.str] = None,
         defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         defer_maintenance_duration: typing.Optional[jsii.Number] = None,
         defer_maintenance_end_time: typing.Optional[builtins.str] = None,
         defer_maintenance_start_time: typing.Optional[builtins.str] = None,
         destination_region: typing.Optional[builtins.str] = None,
-        elastic_ip: typing.Optional[builtins.str] = None,
+        elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
         encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
         hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-        iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.LoggingPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         maintenance_track_name: typing.Optional[builtins.str] = None,
         manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        master_password_secret_kms_key_id: typing.Optional[builtins.str] = None,
+        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         namespace_resource_policy: typing.Any = None,
@@ -244,7 +253,7 @@ class CfnCluster(
         snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::Cluster``.
 
@@ -1509,6 +1518,20 @@ class CfnClusterParameterGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForClusterParameterGroup")
+    @builtins.classmethod
+    def arn_for_cluster_parameter_group(
+        cls,
+        resource: _IClusterParameterGroupRef_daa0f332,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea38799ab30cd9c2507371a51b5c9d00383209b119dc58579f842fdf9f0f8295)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForClusterParameterGroup", [resource]))
+
     @jsii.member(jsii_name="fromParameterGroupName")
     @builtins.classmethod
     def from_parameter_group_name(
@@ -1940,28 +1963,28 @@ class CfnClusterProps:
         availability_zone_relocation_status: typing.Optional[builtins.str] = None,
         classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         cluster_identifier: typing.Optional[builtins.str] = None,
-        cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-        cluster_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-        cluster_subnet_group_name: typing.Optional[builtins.str] = None,
+        cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
+        cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
+        cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
         cluster_version: typing.Optional[builtins.str] = None,
         defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         defer_maintenance_duration: typing.Optional[jsii.Number] = None,
         defer_maintenance_end_time: typing.Optional[builtins.str] = None,
         defer_maintenance_start_time: typing.Optional[builtins.str] = None,
         destination_region: typing.Optional[builtins.str] = None,
-        elastic_ip: typing.Optional[builtins.str] = None,
+        elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
         encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
         hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-        iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         maintenance_track_name: typing.Optional[builtins.str] = None,
         manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        master_password_secret_kms_key_id: typing.Optional[builtins.str] = None,
+        master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         master_user_password: typing.Optional[builtins.str] = None,
         multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         namespace_resource_policy: typing.Any = None,
@@ -1979,7 +2002,7 @@ class CfnClusterProps:
         snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
         snapshot_identifier: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCluster``.
 
@@ -2454,7 +2477,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def cluster_parameter_group_name(self) -> typing.Optional[builtins.str]:
+    def cluster_parameter_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]]:
         '''The name of the parameter group to be associated with this cluster.
 
         Default: The default Amazon Redshift cluster parameter group. For information about the default parameter group, go to `Working with Amazon Redshift Parameter Groups <https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html>`_
@@ -2468,10 +2493,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clusterparametergroupname
         '''
         result = self._values.get("cluster_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]], result)
 
     @builtins.property
-    def cluster_security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def cluster_security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]]:
         '''A list of security groups to be associated with this cluster.
 
         Default: The default cluster security group for Amazon Redshift.
@@ -2479,10 +2506,12 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersecuritygroups
         '''
         result = self._values.get("cluster_security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]], result)
 
     @builtins.property
-    def cluster_subnet_group_name(self) -> typing.Optional[builtins.str]:
+    def cluster_subnet_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]]:
         '''The name of a cluster subnet group to be associated with this cluster.
 
         If this parameter is not provided the resulting cluster will be deployed outside virtual private cloud (VPC).
@@ -2490,7 +2519,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-clustersubnetgroupname
         '''
         result = self._values.get("cluster_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]], result)
 
     @builtins.property
     def cluster_version(self) -> typing.Optional[builtins.str]:
@@ -2557,7 +2586,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def elastic_ip(self) -> typing.Optional[builtins.str]:
+    def elastic_ip(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]]:
         '''The Elastic IP (EIP) address for the cluster.
 
         Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. Don't specify the Elastic IP address for a publicly accessible cluster with availability zone relocation turned on. For more information about provisioning clusters in EC2-VPC, go to `Supported Platforms to Launch Your Cluster <https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms>`_ in the Amazon Redshift Cluster Management Guide.
@@ -2565,7 +2596,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-elasticip
         '''
         result = self._values.get("elastic_ip")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]], result)
 
     @builtins.property
     def encrypted(
@@ -2629,7 +2660,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def iam_roles(self) -> typing.Optional[typing.List[builtins.str]]:
+    def iam_roles(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]]:
         '''A list of AWS Identity and Access Management (IAM) roles that can be used by the cluster to access other AWS services.
 
         You must supply the IAM roles in their Amazon Resource Name (ARN) format.
@@ -2639,16 +2672,18 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-iamroles
         '''
         result = self._values.get("iam_roles")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def logging_properties(
@@ -2699,7 +2734,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def master_password_secret_kms_key_id(self) -> typing.Optional[builtins.str]:
+    def master_password_secret_kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ID of the AWS Key Management Service (KMS) key used to encrypt and store the cluster's admin credentials secret.
 
         You can only use this parameter if ``ManageMasterPassword`` is true.
@@ -2707,7 +2744,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-masterpasswordsecretkmskeyid
         '''
         result = self._values.get("master_password_secret_kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def master_user_password(self) -> typing.Optional[builtins.str]:
@@ -2934,7 +2971,9 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.
 
         Default: The default VPC security group is associated with the cluster.
@@ -2942,7 +2981,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html#cfn-redshift-cluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3499,7 +3538,7 @@ class CfnClusterSubnetGroup(
         id: builtins.str,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::ClusterSubnetGroup``.
@@ -3630,7 +3669,7 @@ class CfnClusterSubnetGroupProps:
         self,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterSubnetGroup``.
@@ -3682,7 +3721,9 @@ class CfnClusterSubnetGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''An array of VPC subnet IDs.
 
         A maximum of 20 subnets can be modified in a single request.
@@ -3691,7 +3732,7 @@ class CfnClusterSubnetGroupProps:
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -3752,8 +3793,8 @@ class CfnEndpointAccess(
         *,
         cluster_identifier: builtins.str,
         endpoint_name: builtins.str,
-        subnet_group_name: builtins.str,
-        vpc_security_group_ids: typing.Sequence[builtins.str],
+        subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
+        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
         resource_owner: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::EndpointAccess``.
@@ -4260,8 +4301,8 @@ class CfnEndpointAccessProps:
         *,
         cluster_identifier: builtins.str,
         endpoint_name: builtins.str,
-        subnet_group_name: builtins.str,
-        vpc_security_group_ids: typing.Sequence[builtins.str],
+        subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
+        vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
         resource_owner: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpointAccess``.
@@ -4328,24 +4369,28 @@ class CfnEndpointAccessProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_group_name(self) -> builtins.str:
+    def subnet_group_name(
+        self,
+    ) -> typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]:
         '''The subnet group name where Amazon Redshift chooses to deploy the endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointaccess.html#cfn-redshift-endpointaccess-subnetgroupname
         '''
         result = self._values.get("subnet_group_name")
         assert result is not None, "Required property 'subnet_group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.List[builtins.str]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]:
         '''The security group that defines the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointaccess.html#cfn-redshift-endpointaccess-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
         assert result is not None, "Required property 'vpc_security_group_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]], result)
 
     @builtins.property
     def resource_owner(self) -> typing.Optional[builtins.str]:
@@ -4404,7 +4449,7 @@ class CfnEndpointAuthorization(
         account: builtins.str,
         cluster_identifier: builtins.str,
         force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
     ) -> None:
         '''Create a new ``AWS::Redshift::EndpointAuthorization``.
 
@@ -4616,7 +4661,7 @@ class CfnEndpointAuthorizationProps:
         account: builtins.str,
         cluster_identifier: builtins.str,
         force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEndpointAuthorization``.
 
@@ -4694,13 +4739,15 @@ class CfnEndpointAuthorizationProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def vpc_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IVPCRef_f02a11df]]]:
         '''The virtual private cloud (VPC) identifiers to grant access to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-endpointauthorization.html#cfn-redshift-endpointauthorization-vpcids
         '''
         result = self._values.get("vpc_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IVPCRef_f02a11df]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4758,7 +4805,7 @@ class CfnEventSubscription(
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         severity: typing.Optional[builtins.str] = None,
-        sns_topic_arn: typing.Optional[builtins.str] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5036,7 +5083,7 @@ class CfnEventSubscriptionProps:
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
         severity: typing.Optional[builtins.str] = None,
-        sns_topic_arn: typing.Optional[builtins.str] = None,
+        sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
         source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
         source_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5158,7 +5205,9 @@ class CfnEventSubscriptionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def sns_topic_arn(self) -> typing.Optional[builtins.str]:
+    def sns_topic_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]]:
         '''The Amazon Resource Name (ARN) of the Amazon SNS topic used to transmit the event notifications.
 
         The ARN is created by Amazon SNS when you create a topic and subscribe to it.
@@ -5166,7 +5215,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-eventsubscription.html#cfn-redshift-eventsubscription-snstopicarn
         '''
         result = self._values.get("sns_topic_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]], result)
 
     @builtins.property
     def source_ids(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -5289,6 +5338,17 @@ class CfnIntegration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIntegration")
+    @builtins.classmethod
+    def arn_for_integration(cls, resource: _IIntegrationRef_8879a683) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c2c48280791381e3f99f0ff1421d99c3f092be4adc1852d4e93aa800feee25d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIntegration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6461,28 +6521,28 @@ def _typecheckingstub__f6d25f70797e3ae67b635ec776926582ff0be975c8173c4af217f7f6e
     availability_zone_relocation_status: typing.Optional[builtins.str] = None,
     classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     cluster_identifier: typing.Optional[builtins.str] = None,
-    cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-    cluster_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-    cluster_subnet_group_name: typing.Optional[builtins.str] = None,
+    cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
+    cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
+    cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
     cluster_version: typing.Optional[builtins.str] = None,
     defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     defer_maintenance_duration: typing.Optional[jsii.Number] = None,
     defer_maintenance_end_time: typing.Optional[builtins.str] = None,
     defer_maintenance_start_time: typing.Optional[builtins.str] = None,
     destination_region: typing.Optional[builtins.str] = None,
-    elastic_ip: typing.Optional[builtins.str] = None,
+    elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
     encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
     hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-    iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maintenance_track_name: typing.Optional[builtins.str] = None,
     manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-    master_password_secret_kms_key_id: typing.Optional[builtins.str] = None,
+    master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     namespace_resource_policy: typing.Any = None,
@@ -6500,7 +6560,7 @@ def _typecheckingstub__f6d25f70797e3ae67b635ec776926582ff0be975c8173c4af217f7f6e
     snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
     snapshot_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6860,6 +6920,12 @@ def _typecheckingstub__a4414ca463de61620f73bf7c02eb829639136d7dcc505964ba4d9e961
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ea38799ab30cd9c2507371a51b5c9d00383209b119dc58579f842fdf9f0f8295(
+    resource: _IClusterParameterGroupRef_daa0f332,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a4fcc0dd642456f37020bcfe38fd9cfd482cbd79750adda84ea8706f1e6df408(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -6943,28 +7009,28 @@ def _typecheckingstub__88d0d566c2d2524449f4cc4b794952814b68b5dcd5494f1bcdf5b417e
     availability_zone_relocation_status: typing.Optional[builtins.str] = None,
     classic: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     cluster_identifier: typing.Optional[builtins.str] = None,
-    cluster_parameter_group_name: typing.Optional[builtins.str] = None,
-    cluster_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
-    cluster_subnet_group_name: typing.Optional[builtins.str] = None,
+    cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IClusterParameterGroupRef_daa0f332]] = None,
+    cluster_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18, _IClusterSecurityGroupRef_b934aac2]]] = None,
+    cluster_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341]] = None,
     cluster_version: typing.Optional[builtins.str] = None,
     defer_maintenance: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     defer_maintenance_duration: typing.Optional[jsii.Number] = None,
     defer_maintenance_end_time: typing.Optional[builtins.str] = None,
     defer_maintenance_start_time: typing.Optional[builtins.str] = None,
     destination_region: typing.Optional[builtins.str] = None,
-    elastic_ip: typing.Optional[builtins.str] = None,
+    elastic_ip: typing.Optional[typing.Union[builtins.str, _IEIPRef_60d698bd]] = None,
     encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enhanced_vpc_routing: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     hsm_client_certificate_identifier: typing.Optional[builtins.str] = None,
     hsm_configuration_identifier: typing.Optional[builtins.str] = None,
-    iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     logging_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.LoggingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maintenance_track_name: typing.Optional[builtins.str] = None,
     manage_master_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     manual_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-    master_password_secret_kms_key_id: typing.Optional[builtins.str] = None,
+    master_password_secret_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     master_user_password: typing.Optional[builtins.str] = None,
     multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     namespace_resource_policy: typing.Any = None,
@@ -6982,7 +7048,7 @@ def _typecheckingstub__88d0d566c2d2524449f4cc4b794952814b68b5dcd5494f1bcdf5b417e
     snapshot_copy_retention_period: typing.Optional[jsii.Number] = None,
     snapshot_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7092,7 +7158,7 @@ def _typecheckingstub__586021bde6b1b8994209ba685b5235bc28948707297a01dceac93f542
     id: builtins.str,
     *,
     description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -7131,7 +7197,7 @@ def _typecheckingstub__d0234790a32423c903d2d0b04af30d14f6232a9d29765580ce78154e1
 def _typecheckingstub__a7629b191964d0b486283403d34c774eed1fd92a00727981a023ae6012064b43(
     *,
     description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -7143,8 +7209,8 @@ def _typecheckingstub__adead910756274e2bd16ee0b3769d492024abb4cf55d5583a9333d89a
     *,
     cluster_identifier: builtins.str,
     endpoint_name: builtins.str,
-    subnet_group_name: builtins.str,
-    vpc_security_group_ids: typing.Sequence[builtins.str],
+    subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
+    vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
     resource_owner: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -7223,8 +7289,8 @@ def _typecheckingstub__cb4208897e368488438ba6d463b7b2649df77c181ed9a0aabd7edf470
     *,
     cluster_identifier: builtins.str,
     endpoint_name: builtins.str,
-    subnet_group_name: builtins.str,
-    vpc_security_group_ids: typing.Sequence[builtins.str],
+    subnet_group_name: typing.Union[builtins.str, _IClusterSubnetGroupRef_ee5ee341],
+    vpc_security_group_ids: typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]],
     resource_owner: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -7237,7 +7303,7 @@ def _typecheckingstub__a697bf6f03512c68c5e0bbce590548dfbef060e4ff37182e32221fef8
     account: builtins.str,
     cluster_identifier: builtins.str,
     force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7283,7 +7349,7 @@ def _typecheckingstub__ea42c43e99e9da3eea3440151d10e74f104e3b13161b1b46186517cdf
     account: builtins.str,
     cluster_identifier: builtins.str,
     force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IVPCRef_f02a11df]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7296,7 +7362,7 @@ def _typecheckingstub__f2321a5fed3334265b97838abad90fad948fa6670da0259ba7e0d24e8
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
     severity: typing.Optional[builtins.str] = None,
-    sns_topic_arn: typing.Optional[builtins.str] = None,
+    sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
     source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     source_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7370,7 +7436,7 @@ def _typecheckingstub__882750ef34f06482c6644922124100661565513fabbad49eed142788c
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
     severity: typing.Optional[builtins.str] = None,
-    sns_topic_arn: typing.Optional[builtins.str] = None,
+    sns_topic_arn: typing.Optional[typing.Union[builtins.str, _ITopicRef_29aa9a88]] = None,
     source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     source_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7388,6 +7454,12 @@ def _typecheckingstub__195f43b15319a462222fa2f5a73df1bdd50a48d85ec97165e527a5a95
     integration_name: typing.Optional[builtins.str] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8c2c48280791381e3f99f0ff1421d99c3f092be4adc1852d4e93aa800feee25d(
+    resource: _IIntegrationRef_8879a683,
 ) -> None:
     """Type checking stubs"""
     pass

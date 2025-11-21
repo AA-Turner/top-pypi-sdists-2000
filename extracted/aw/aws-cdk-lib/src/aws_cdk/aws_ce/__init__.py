@@ -562,7 +562,7 @@ class CfnAnomalySubscription(
         id: builtins.str,
         *,
         frequency: builtins.str,
-        monitor_arn_list: typing.Sequence[builtins.str],
+        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
         subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAnomalySubscription.SubscriberProperty", typing.Dict[builtins.str, typing.Any]]]]],
         subscription_name: builtins.str,
         resource_tags: typing.Optional[typing.Sequence[typing.Union["CfnAnomalySubscription.ResourceTagProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -940,7 +940,7 @@ class CfnAnomalySubscriptionProps:
         self,
         *,
         frequency: builtins.str,
-        monitor_arn_list: typing.Sequence[builtins.str],
+        monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
         subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalySubscription.SubscriberProperty, typing.Dict[builtins.str, typing.Any]]]]],
         subscription_name: builtins.str,
         resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalySubscription.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1022,14 +1022,16 @@ class CfnAnomalySubscriptionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def monitor_arn_list(self) -> typing.List[builtins.str]:
+    def monitor_arn_list(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]]:
         '''A list of cost anomaly monitors.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalysubscription.html#cfn-ce-anomalysubscription-monitorarnlist
         '''
         result = self._values.get("monitor_arn_list")
         assert result is not None, "Required property 'monitor_arn_list' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]], result)
 
     @builtins.property
     def subscribers(
@@ -1176,6 +1178,20 @@ class CfnCostCategory(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCostCategory")
+    @builtins.classmethod
+    def arn_for_cost_category(
+        cls,
+        resource: _ICostCategoryRef_65c8e6b4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__30de2325a48578df08a56854195b68d4e79d2e1eb2d3d4efa49d73fb657ebd12)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCostCategory", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1634,7 +1650,7 @@ def _typecheckingstub__0a7fbd046e3b9f6f7efea32f7eb528d813f3ccf81de7e59ec417de1ea
     id: builtins.str,
     *,
     frequency: builtins.str,
-    monitor_arn_list: typing.Sequence[builtins.str],
+    monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
     subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalySubscription.SubscriberProperty, typing.Dict[builtins.str, typing.Any]]]]],
     subscription_name: builtins.str,
     resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalySubscription.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1718,7 +1734,7 @@ def _typecheckingstub__94192f14eef4d01fe40ae59ec5600ceee6ddb3486c0056d9f68639a55
 def _typecheckingstub__ecbba42bf6256357cc87f360e68887f3b891e586d17671e12b6514517d7b303c(
     *,
     frequency: builtins.str,
-    monitor_arn_list: typing.Sequence[builtins.str],
+    monitor_arn_list: typing.Sequence[typing.Union[builtins.str, _IAnomalyMonitorRef_5865dcc9]],
     subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalySubscription.SubscriberProperty, typing.Dict[builtins.str, typing.Any]]]]],
     subscription_name: builtins.str,
     resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalySubscription.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1738,6 +1754,12 @@ def _typecheckingstub__0d86a2b59e53c629c2de8bd291387500a9799712ca28f9459ef98f5dd
     default_value: typing.Optional[builtins.str] = None,
     split_charge_rules: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnCostCategory.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__30de2325a48578df08a56854195b68d4e79d2e1eb2d3d4efa49d73fb657ebd12(
+    resource: _ICostCategoryRef_65c8e6b4,
 ) -> None:
     """Type checking stubs"""
     pass

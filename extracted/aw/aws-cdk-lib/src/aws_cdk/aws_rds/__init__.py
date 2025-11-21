@@ -1433,7 +1433,7 @@ cluster = rds.DatabaseCluster(self, "Database",
     ),
     writer=rds.ClusterInstance.provisioned("writer"),
     vpc=vpc,
-    cloudwatch_logs_exports=["error", "general", "slowquery", "audit"],  # Export all available MySQL-based logs
+    cloudwatch_logs_exports=["error", "general", "slowquery", "audit", "instance", "iam-db-auth-error"],  # Export all available MySQL-based logs
     cloudwatch_logs_retention=logs.RetentionDays.THREE_MONTHS,  # Optional - default is to never expire logs
     cloudwatch_logs_retention_role=my_logs_publishing_role
 )
@@ -2036,6 +2036,10 @@ from ..aws_secretsmanager import (
     SecretRotation as _SecretRotation_38c354d9,
     SecretRotationApplication as _SecretRotationApplication_bfbcd452,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_rds import (
@@ -2072,6 +2076,7 @@ from ..interfaces.aws_rds import (
     IntegrationReference as _IntegrationReference_8c79ace1,
     OptionGroupReference as _OptionGroupReference_cac44454,
 )
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_rds.AuroraCapacityUnit")
@@ -5656,9 +5661,9 @@ class CfnDBCluster(
         database_name: typing.Optional[builtins.str] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_cluster_instance_class: typing.Optional[builtins.str] = None,
-        db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]] = None,
         db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
         db_system_id: typing.Optional[builtins.str] = None,
         delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -5673,9 +5678,9 @@ class CfnDBCluster(
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_mode: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        global_cluster_identifier: typing.Optional[builtins.str] = None,
+        global_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]] = None,
         iops: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
@@ -5704,7 +5709,7 @@ class CfnDBCluster(
         storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::RDS::DBCluster``.
 
@@ -5841,6 +5846,17 @@ class CfnDBCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDBCluster")
+    @builtins.classmethod
+    def arn_for_db_cluster(cls, resource: _IDBClusterRef_ebf419fe) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5098bc78c7b0d482f1be724f415c25bcc2fd2a79a6b07b31c611cbb0e20059cb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDBCluster", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7929,9 +7945,9 @@ class CfnDBClusterProps:
         database_name: typing.Optional[builtins.str] = None,
         db_cluster_identifier: typing.Optional[builtins.str] = None,
         db_cluster_instance_class: typing.Optional[builtins.str] = None,
-        db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]] = None,
         db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
         db_system_id: typing.Optional[builtins.str] = None,
         delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -7946,9 +7962,9 @@ class CfnDBClusterProps:
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_mode: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
-        global_cluster_identifier: typing.Optional[builtins.str] = None,
+        global_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]] = None,
         iops: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         master_user_authentication_type: typing.Optional[builtins.str] = None,
         master_username: typing.Optional[builtins.str] = None,
@@ -7977,7 +7993,7 @@ class CfnDBClusterProps:
         storage_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBCluster``.
 
@@ -8508,7 +8524,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def db_cluster_parameter_group_name(self) -> typing.Optional[builtins.str]:
+    def db_cluster_parameter_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]]:
         '''The name of the DB cluster parameter group to associate with this DB cluster.
 
         .. epigraph::
@@ -8526,7 +8544,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-dbclusterparametergroupname
         '''
         result = self._values.get("db_cluster_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]], result)
 
     @builtins.property
     def db_instance_parameter_group_name(self) -> typing.Optional[builtins.str]:
@@ -8551,7 +8569,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
+    def db_subnet_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]]:
         '''A DB subnet group that you want to associate with this DB cluster.
 
         If you are restoring a DB cluster to a point in time with ``RestoreType`` set to ``copy-on-write`` , and don't specify a DB subnet group name, then the DB cluster is restored with a default DB subnet group.
@@ -8561,7 +8581,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-dbsubnetgroupname
         '''
         result = self._values.get("db_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]], result)
 
     @builtins.property
     def db_system_id(self) -> typing.Optional[builtins.str]:
@@ -8821,7 +8841,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def global_cluster_identifier(self) -> typing.Optional[builtins.str]:
+    def global_cluster_identifier(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]]:
         '''If you are configuring an Aurora global database cluster and want your Aurora DB cluster to be a secondary member in the global database cluster, specify the global cluster ID of the global database cluster.
 
         To define the primary database cluster of the global cluster, use the `AWS::RDS::GlobalCluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-globalcluster.html>`_ resource.
@@ -8838,7 +8860,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-globalclusteridentifier
         '''
         result = self._values.get("global_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]], result)
 
     @builtins.property
     def iops(self) -> typing.Optional[jsii.Number]:
@@ -8860,7 +8882,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The Amazon Resource Name (ARN) of the AWS KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
 
         If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
@@ -8874,7 +8898,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def manage_master_user_password(
@@ -9385,7 +9409,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of EC2 VPC security groups to associate with this DB cluster.
 
         If you plan to update the resource, don't specify VPC security groups in a shared VPC.
@@ -9395,7 +9421,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbcluster.html#cfn-rds-dbcluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9511,15 +9537,15 @@ class CfnDBInstance(
         copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         custom_iam_instance_profile: typing.Optional[builtins.str] = None,
         database_insights_mode: typing.Optional[builtins.str] = None,
-        db_cluster_identifier: typing.Optional[builtins.str] = None,
+        db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
         db_cluster_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_instance_class: typing.Optional[builtins.str] = None,
         db_instance_identifier: typing.Optional[builtins.str] = None,
         db_name: typing.Optional[builtins.str] = None,
-        db_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]] = None,
         db_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
         db_system_id: typing.Optional[builtins.str] = None,
         dedicated_log_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -9537,7 +9563,7 @@ class CfnDBInstance(
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         iops: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         license_model: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         master_user_authentication_type: typing.Optional[builtins.str] = None,
@@ -9546,12 +9572,12 @@ class CfnDBInstance(
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBInstance.MasterUserSecretProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_allocated_storage: typing.Optional[jsii.Number] = None,
         monitoring_interval: typing.Optional[jsii.Number] = None,
-        monitoring_role_arn: typing.Optional[builtins.str] = None,
+        monitoring_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         nchar_character_set_name: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
         option_group_name: typing.Optional[builtins.str] = None,
-        performance_insights_kms_key_id: typing.Optional[builtins.str] = None,
+        performance_insights_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         performance_insights_retention_period: typing.Optional[jsii.Number] = None,
         port: typing.Optional[builtins.str] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
@@ -9563,7 +9589,7 @@ class CfnDBInstance(
         restore_time: typing.Optional[builtins.str] = None,
         source_db_cluster_identifier: typing.Optional[builtins.str] = None,
         source_db_instance_automated_backups_arn: typing.Optional[builtins.str] = None,
-        source_db_instance_identifier: typing.Optional[builtins.str] = None,
+        source_db_instance_identifier: typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]] = None,
         source_dbi_resource_id: typing.Optional[builtins.str] = None,
         source_region: typing.Optional[builtins.str] = None,
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -9575,7 +9601,7 @@ class CfnDBInstance(
         timezone: typing.Optional[builtins.str] = None,
         use_default_processor_features: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::RDS::DBInstance``.
 
@@ -9754,6 +9780,17 @@ class CfnDBInstance(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDBInstance")
+    @builtins.classmethod
+    def arn_for_db_instance(cls, resource: _IDBInstanceRef_10d60cd7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fae47f14e3c545dfc8eda19102c731e3e252f44d48736f8e0f1307258624d960)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDBInstance", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11900,15 +11937,15 @@ class CfnDBInstanceProps:
         copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         custom_iam_instance_profile: typing.Optional[builtins.str] = None,
         database_insights_mode: typing.Optional[builtins.str] = None,
-        db_cluster_identifier: typing.Optional[builtins.str] = None,
+        db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
         db_cluster_snapshot_identifier: typing.Optional[builtins.str] = None,
         db_instance_class: typing.Optional[builtins.str] = None,
         db_instance_identifier: typing.Optional[builtins.str] = None,
         db_name: typing.Optional[builtins.str] = None,
-        db_parameter_group_name: typing.Optional[builtins.str] = None,
+        db_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]] = None,
         db_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
         db_snapshot_identifier: typing.Optional[builtins.str] = None,
-        db_subnet_group_name: typing.Optional[builtins.str] = None,
+        db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
         db_system_id: typing.Optional[builtins.str] = None,
         dedicated_log_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11926,7 +11963,7 @@ class CfnDBInstanceProps:
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         iops: typing.Optional[jsii.Number] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         license_model: typing.Optional[builtins.str] = None,
         manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         master_user_authentication_type: typing.Optional[builtins.str] = None,
@@ -11935,12 +11972,12 @@ class CfnDBInstanceProps:
         master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         max_allocated_storage: typing.Optional[jsii.Number] = None,
         monitoring_interval: typing.Optional[jsii.Number] = None,
-        monitoring_role_arn: typing.Optional[builtins.str] = None,
+        monitoring_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         nchar_character_set_name: typing.Optional[builtins.str] = None,
         network_type: typing.Optional[builtins.str] = None,
         option_group_name: typing.Optional[builtins.str] = None,
-        performance_insights_kms_key_id: typing.Optional[builtins.str] = None,
+        performance_insights_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         performance_insights_retention_period: typing.Optional[jsii.Number] = None,
         port: typing.Optional[builtins.str] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
@@ -11952,7 +11989,7 @@ class CfnDBInstanceProps:
         restore_time: typing.Optional[builtins.str] = None,
         source_db_cluster_identifier: typing.Optional[builtins.str] = None,
         source_db_instance_automated_backups_arn: typing.Optional[builtins.str] = None,
-        source_db_instance_identifier: typing.Optional[builtins.str] = None,
+        source_db_instance_identifier: typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]] = None,
         source_dbi_resource_id: typing.Optional[builtins.str] = None,
         source_region: typing.Optional[builtins.str] = None,
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11964,7 +12001,7 @@ class CfnDBInstanceProps:
         timezone: typing.Optional[builtins.str] = None,
         use_default_processor_features: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBInstance``.
 
@@ -12730,7 +12767,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+    def db_cluster_identifier(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]:
         '''The identifier of the DB cluster that this DB instance will belong to.
 
         This setting doesn't apply to RDS Custom DB instances.
@@ -12738,7 +12777,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-dbclusteridentifier
         '''
         result = self._values.get("db_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]], result)
 
     @builtins.property
     def db_cluster_snapshot_identifier(self) -> typing.Optional[builtins.str]:
@@ -12854,7 +12893,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def db_parameter_group_name(self) -> typing.Optional[builtins.str]:
+    def db_parameter_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]]:
         '''The name of an existing DB parameter group or a reference to an `AWS::RDS::DBParameterGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbparametergroup.html>`_ resource created in the template.
 
         To list all of the available DB parameter group names, use the following command:
@@ -12869,7 +12910,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-dbparametergroupname
         '''
         result = self._values.get("db_parameter_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]], result)
 
     @builtins.property
     def db_security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -12946,7 +12987,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
+    def db_subnet_group_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]]:
         '''A DB subnet group to associate with the DB instance.
 
         If you update this value, the new subnet group must be a subnet group in a new VPC.
@@ -12960,7 +13003,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-dbsubnetgroupname
         '''
         result = self._values.get("db_subnet_group_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]], result)
 
     @builtins.property
     def db_system_id(self) -> typing.Optional[builtins.str]:
@@ -13298,7 +13341,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ARN of the AWS KMS key that's used to encrypt the DB instance, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
 
         If you enable the StorageEncrypted property but don't specify this property, AWS CloudFormation uses the default KMS key. If you specify this property, you must set the StorageEncrypted property to true.
@@ -13320,7 +13365,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def license_model(self) -> typing.Optional[builtins.str]:
@@ -13533,7 +13578,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def monitoring_role_arn(self) -> typing.Optional[builtins.str]:
+    def monitoring_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to Amazon CloudWatch Logs.
 
         For example, ``arn:aws:iam:123456789012:role/emaccess`` . For information on creating a monitoring role, see `Setting Up and Enabling Enhanced Monitoring <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_Monitoring.OS.html#USER_Monitoring.OS.Enabling>`_ in the *Amazon RDS User Guide* .
@@ -13545,7 +13592,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-monitoringrolearn
         '''
         result = self._values.get("monitoring_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def multi_az(
@@ -13603,7 +13650,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def performance_insights_kms_key_id(self) -> typing.Optional[builtins.str]:
+    def performance_insights_kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The AWS KMS key identifier for encryption of Performance Insights data.
 
         The KMS key identifier is the key ARN, key ID, alias ARN, or alias name for the KMS key.
@@ -13615,7 +13664,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-performanceinsightskmskeyid
         '''
         result = self._values.get("performance_insights_kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def performance_insights_retention_period(self) -> typing.Optional[jsii.Number]:
@@ -13817,7 +13866,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def source_db_instance_identifier(self) -> typing.Optional[builtins.str]:
+    def source_db_instance_identifier(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]]:
         '''If you want to create a read replica DB instance, specify the ID of the source DB instance.
 
         Each DB instance can have a limited number of read replicas. For more information, see `Working with Read Replicas <https://docs.aws.amazon.com/AmazonRDS/latest/DeveloperGuide/USER_ReadRepl.html>`_ in the *Amazon RDS User Guide* .
@@ -13839,7 +13890,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-sourcedbinstanceidentifier
         '''
         result = self._values.get("source_db_instance_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]], result)
 
     @builtins.property
     def source_dbi_resource_id(self) -> typing.Optional[builtins.str]:
@@ -13985,7 +14036,9 @@ class CfnDBInstanceProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def vpc_security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_groups(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of the VPC security group IDs to assign to the DB instance.
 
         The list can include both the physical IDs of existing VPC security groups and references to `AWS::EC2::SecurityGroup <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ec2-security-group.html>`_ resources created in the template.
@@ -14010,7 +14063,7 @@ class CfnDBInstanceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbinstance.html#cfn-rds-dbinstance-vpcsecuritygroups
         '''
         result = self._values.get("vpc_security_groups")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -14466,8 +14519,8 @@ class CfnDBProxy(
         *,
         db_proxy_name: builtins.str,
         engine_family: builtins.str,
-        role_arn: builtins.str,
-        vpc_subnet_ids: typing.Sequence[builtins.str],
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxy.AuthFormatProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         default_auth_scheme: typing.Optional[builtins.str] = None,
@@ -14476,7 +14529,7 @@ class CfnDBProxy(
         require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxy.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_connection_network_type: typing.Optional[builtins.str] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::RDS::DBProxy``.
 
@@ -14517,6 +14570,17 @@ class CfnDBProxy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDBProxy")
+    @builtins.classmethod
+    def arn_for_db_proxy(cls, resource: _IDBProxyRef_97300f25) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__58e33036b3f03ed8bb722d0fc8105c1cb863fcb09ee223666562ca50465d941d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDBProxy", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15034,11 +15098,11 @@ class CfnDBProxyEndpoint(
         *,
         db_proxy_endpoint_name: builtins.str,
         db_proxy_name: builtins.str,
-        vpc_subnet_ids: typing.Sequence[builtins.str],
+        vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         endpoint_network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union["CfnDBProxyEndpoint.TagFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role: typing.Optional[builtins.str] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::RDS::DBProxyEndpoint``.
 
@@ -15067,6 +15131,20 @@ class CfnDBProxyEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDBProxyEndpoint")
+    @builtins.classmethod
+    def arn_for_db_proxy_endpoint(
+        cls,
+        resource: _IDBProxyEndpointRef_9d4fe7d8,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b35f1589a49fca024358d1ce42a4a5dd5d415698a216f2c33e748199fa7e1bfc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDBProxyEndpoint", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15350,11 +15428,11 @@ class CfnDBProxyEndpointProps:
         *,
         db_proxy_endpoint_name: builtins.str,
         db_proxy_name: builtins.str,
-        vpc_subnet_ids: typing.Sequence[builtins.str],
+        vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         endpoint_network_type: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxyEndpoint.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_role: typing.Optional[builtins.str] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBProxyEndpoint``.
 
@@ -15434,7 +15512,9 @@ class CfnDBProxyEndpointProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def vpc_subnet_ids(self) -> typing.List[builtins.str]:
+    def vpc_subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The VPC subnet IDs for the DB proxy endpoint that you create.
 
         You can specify a different set of subnet IDs than for the original DB proxy.
@@ -15443,7 +15523,7 @@ class CfnDBProxyEndpointProps:
         '''
         result = self._values.get("vpc_subnet_ids")
         assert result is not None, "Required property 'vpc_subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def endpoint_network_type(self) -> typing.Optional[builtins.str]:
@@ -15483,7 +15563,9 @@ class CfnDBProxyEndpointProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''The VPC security group IDs for the DB proxy endpoint that you create.
 
         You can specify a different set of security group IDs than for the original DB proxy. The default is the default security group for the VPC.
@@ -15491,7 +15573,7 @@ class CfnDBProxyEndpointProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxyendpoint.html#cfn-rds-dbproxyendpoint-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15530,8 +15612,8 @@ class CfnDBProxyProps:
         *,
         db_proxy_name: builtins.str,
         engine_family: builtins.str,
-        role_arn: builtins.str,
-        vpc_subnet_ids: typing.Sequence[builtins.str],
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         default_auth_scheme: typing.Optional[builtins.str] = None,
@@ -15540,7 +15622,7 @@ class CfnDBProxyProps:
         require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxy.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         target_connection_network_type: typing.Optional[builtins.str] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBProxy``.
 
@@ -15659,24 +15741,26 @@ class CfnDBProxyProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role that the proxy uses to access secrets in AWS Secrets Manager.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def vpc_subnet_ids(self) -> typing.List[builtins.str]:
+    def vpc_subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''One or more VPC subnet IDs to associate with the new proxy.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-vpcsubnetids
         '''
         result = self._values.get("vpc_subnet_ids")
         assert result is not None, "Required property 'vpc_subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def auth(
@@ -15780,7 +15864,9 @@ class CfnDBProxyProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''One or more VPC security group IDs to associate with the new proxy.
 
         If you plan to update the resource, don't specify VPC security groups in a shared VPC.
@@ -15788,7 +15874,7 @@ class CfnDBProxyProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxy.html#cfn-rds-dbproxy-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15859,10 +15945,10 @@ class CfnDBProxyTargetGroup(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        db_proxy_name: builtins.str,
+        db_proxy_name: typing.Union[builtins.str, _IDBProxyRef_97300f25],
         target_group_name: builtins.str,
         connection_pool_configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDBProxyTargetGroup.ConnectionPoolConfigurationInfoFormatProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        db_cluster_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        db_cluster_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]] = None,
         db_instance_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Create a new ``AWS::RDS::DBProxyTargetGroup``.
@@ -16193,10 +16279,10 @@ class CfnDBProxyTargetGroupProps:
     def __init__(
         self,
         *,
-        db_proxy_name: builtins.str,
+        db_proxy_name: typing.Union[builtins.str, _IDBProxyRef_97300f25],
         target_group_name: builtins.str,
         connection_pool_configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxyTargetGroup.ConnectionPoolConfigurationInfoFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        db_cluster_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        db_cluster_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]] = None,
         db_instance_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBProxyTargetGroup``.
@@ -16251,14 +16337,14 @@ class CfnDBProxyTargetGroupProps:
             self._values["db_instance_identifiers"] = db_instance_identifiers
 
     @builtins.property
-    def db_proxy_name(self) -> builtins.str:
+    def db_proxy_name(self) -> typing.Union[builtins.str, _IDBProxyRef_97300f25]:
         '''The identifier of the ``DBProxy`` that is associated with the ``DBProxyTargetGroup`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxytargetgroup.html#cfn-rds-dbproxytargetgroup-dbproxyname
         '''
         result = self._values.get("db_proxy_name")
         assert result is not None, "Required property 'db_proxy_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDBProxyRef_97300f25], result)
 
     @builtins.property
     def target_group_name(self) -> builtins.str:
@@ -16286,13 +16372,15 @@ class CfnDBProxyTargetGroupProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDBProxyTargetGroup.ConnectionPoolConfigurationInfoFormatProperty]], result)
 
     @builtins.property
-    def db_cluster_identifiers(self) -> typing.Optional[typing.List[builtins.str]]:
+    def db_cluster_identifiers(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]]:
         '''One or more DB cluster identifiers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbproxytargetgroup.html#cfn-rds-dbproxytargetgroup-dbclusteridentifiers
         '''
         result = self._values.get("db_cluster_identifiers")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]], result)
 
     @builtins.property
     def db_instance_identifiers(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -17536,7 +17624,7 @@ class CfnDBSubnetGroup(
         id: builtins.str,
         *,
         db_subnet_group_description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -17680,7 +17768,7 @@ class CfnDBSubnetGroupProps:
         self,
         *,
         db_subnet_group_description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         db_subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -17738,14 +17826,16 @@ class CfnDBSubnetGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The EC2 Subnet IDs for the DB subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-dbsubnetgroup.html#cfn-rds-dbsubnetgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def db_subnet_group_name(self) -> typing.Optional[builtins.str]:
@@ -17826,10 +17916,10 @@ class CfnEventSubscription(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        sns_topic_arn: builtins.str,
+        sns_topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-        source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        source_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17861,6 +17951,20 @@ class CfnEventSubscription(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEventSubscription")
+    @builtins.classmethod
+    def arn_for_event_subscription(
+        cls,
+        resource: _IEventSubscriptionRef_a31e243e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6492bdbd35d4d0cd176ee82077676d6eadc5edd8289d8f54204946a06778a0e4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventSubscription", [resource]))
 
     @jsii.member(jsii_name="fromSubscriptionName")
     @builtins.classmethod
@@ -18047,10 +18151,10 @@ class CfnEventSubscriptionProps:
     def __init__(
         self,
         *,
-        sns_topic_arn: builtins.str,
+        sns_topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-        source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        source_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]] = None,
         source_type: typing.Optional[builtins.str] = None,
         subscription_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -18115,7 +18219,7 @@ class CfnEventSubscriptionProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def sns_topic_arn(self) -> builtins.str:
+    def sns_topic_arn(self) -> typing.Union[builtins.str, _ITopicRef_29aa9a88]:
         '''The Amazon Resource Name (ARN) of the SNS topic created for event notification.
 
         SNS automatically creates the ARN when you create a topic and subscribe to it.
@@ -18127,7 +18231,7 @@ class CfnEventSubscriptionProps:
         '''
         result = self._values.get("sns_topic_arn")
         assert result is not None, "Required property 'sns_topic_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ITopicRef_29aa9a88], result)
 
     @builtins.property
     def enabled(
@@ -18156,7 +18260,9 @@ class CfnEventSubscriptionProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def source_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def source_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]]:
         '''The list of identifiers of the event sources for which events are returned.
 
         If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens. It can't end with a hyphen or contain two consecutive hyphens.
@@ -18175,7 +18281,7 @@ class CfnEventSubscriptionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-eventsubscription.html#cfn-rds-eventsubscription-sourceids
         '''
         result = self._values.get("source_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]], result)
 
     @builtins.property
     def source_type(self) -> typing.Optional[builtins.str]:
@@ -18271,7 +18377,7 @@ class CfnGlobalCluster(
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         global_cluster_identifier: typing.Optional[builtins.str] = None,
-        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+        source_db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -18556,7 +18662,7 @@ class CfnGlobalClusterProps:
         engine_lifecycle_support: typing.Optional[builtins.str] = None,
         engine_version: typing.Optional[builtins.str] = None,
         global_cluster_identifier: typing.Optional[builtins.str] = None,
-        source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+        source_db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -18696,7 +18802,9 @@ class CfnGlobalClusterProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def source_db_cluster_identifier(self) -> typing.Optional[builtins.str]:
+    def source_db_cluster_identifier(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]:
         '''The Amazon Resource Name (ARN) to use as the primary cluster of the global database.
 
         If you provide a value for this parameter, don't specify values for the following settings because Amazon Aurora uses the values from the specified source DB cluster:
@@ -18709,7 +18817,7 @@ class CfnGlobalClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rds-globalcluster.html#cfn-rds-globalcluster-sourcedbclusteridentifier
         '''
         result = self._values.get("source_db_cluster_identifier")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]], result)
 
     @builtins.property
     def storage_encrypted(
@@ -18829,6 +18937,17 @@ class CfnIntegration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIntegration")
+    @builtins.classmethod
+    def arn_for_integration(cls, resource: _IIntegrationRef_af5dfafc) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f05dfe8aa520a4bf41fc271aa2c805dfa95eb619f78f4454bb531d7915573b34)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIntegration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -19275,6 +19394,17 @@ class CfnOptionGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOptionGroup")
+    @builtins.classmethod
+    def arn_for_option_group(cls, resource: _IOptionGroupRef_093d85fd) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__93298885113d87d7c52a0c0f2b61b1e37a8412452fa372109ce9a94214cd3f4c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOptionGroup", [resource]))
 
     @jsii.member(jsii_name="fromOptionGroupName")
     @builtins.classmethod
@@ -51116,9 +51246,9 @@ def _typecheckingstub__1eb14b9dcc306eabcc2963c7b6ef9b87bf8d616bb5691dbc6656242be
     database_name: typing.Optional[builtins.str] = None,
     db_cluster_identifier: typing.Optional[builtins.str] = None,
     db_cluster_instance_class: typing.Optional[builtins.str] = None,
-    db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]] = None,
     db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
     db_system_id: typing.Optional[builtins.str] = None,
     delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -51133,9 +51263,9 @@ def _typecheckingstub__1eb14b9dcc306eabcc2963c7b6ef9b87bf8d616bb5691dbc6656242be
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_mode: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
-    global_cluster_identifier: typing.Optional[builtins.str] = None,
+    global_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]] = None,
     iops: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
@@ -51164,7 +51294,13 @@ def _typecheckingstub__1eb14b9dcc306eabcc2963c7b6ef9b87bf8d616bb5691dbc6656242be
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5098bc78c7b0d482f1be724f415c25bcc2fd2a79a6b07b31c611cbb0e20059cb(
+    resource: _IDBClusterRef_ebf419fe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -51679,9 +51815,9 @@ def _typecheckingstub__aaf089104646bb0ea95e48cd2107d642585c3eb3785a21112fc029b15
     database_name: typing.Optional[builtins.str] = None,
     db_cluster_identifier: typing.Optional[builtins.str] = None,
     db_cluster_instance_class: typing.Optional[builtins.str] = None,
-    db_cluster_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_cluster_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBClusterParameterGroupRef_24b242bc]] = None,
     db_instance_parameter_group_name: typing.Optional[builtins.str] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
     db_system_id: typing.Optional[builtins.str] = None,
     delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -51696,9 +51832,9 @@ def _typecheckingstub__aaf089104646bb0ea95e48cd2107d642585c3eb3785a21112fc029b15
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_mode: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
-    global_cluster_identifier: typing.Optional[builtins.str] = None,
+    global_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IGlobalClusterRef_97cd6c06]] = None,
     iops: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     master_user_authentication_type: typing.Optional[builtins.str] = None,
     master_username: typing.Optional[builtins.str] = None,
@@ -51727,7 +51863,7 @@ def _typecheckingstub__aaf089104646bb0ea95e48cd2107d642585c3eb3785a21112fc029b15
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -51753,15 +51889,15 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     custom_iam_instance_profile: typing.Optional[builtins.str] = None,
     database_insights_mode: typing.Optional[builtins.str] = None,
-    db_cluster_identifier: typing.Optional[builtins.str] = None,
+    db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
     db_cluster_snapshot_identifier: typing.Optional[builtins.str] = None,
     db_instance_class: typing.Optional[builtins.str] = None,
     db_instance_identifier: typing.Optional[builtins.str] = None,
     db_name: typing.Optional[builtins.str] = None,
-    db_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]] = None,
     db_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     db_snapshot_identifier: typing.Optional[builtins.str] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
     db_system_id: typing.Optional[builtins.str] = None,
     dedicated_log_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -51779,7 +51915,7 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
     iops: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     license_model: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     master_user_authentication_type: typing.Optional[builtins.str] = None,
@@ -51788,12 +51924,12 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_allocated_storage: typing.Optional[jsii.Number] = None,
     monitoring_interval: typing.Optional[jsii.Number] = None,
-    monitoring_role_arn: typing.Optional[builtins.str] = None,
+    monitoring_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     nchar_character_set_name: typing.Optional[builtins.str] = None,
     network_type: typing.Optional[builtins.str] = None,
     option_group_name: typing.Optional[builtins.str] = None,
-    performance_insights_kms_key_id: typing.Optional[builtins.str] = None,
+    performance_insights_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     performance_insights_retention_period: typing.Optional[jsii.Number] = None,
     port: typing.Optional[builtins.str] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
@@ -51805,7 +51941,7 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     restore_time: typing.Optional[builtins.str] = None,
     source_db_cluster_identifier: typing.Optional[builtins.str] = None,
     source_db_instance_automated_backups_arn: typing.Optional[builtins.str] = None,
-    source_db_instance_identifier: typing.Optional[builtins.str] = None,
+    source_db_instance_identifier: typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]] = None,
     source_dbi_resource_id: typing.Optional[builtins.str] = None,
     source_region: typing.Optional[builtins.str] = None,
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -51817,7 +51953,13 @@ def _typecheckingstub__255b0779ca741853674876540bf77279f6293bea05de2cd18724d2b92
     timezone: typing.Optional[builtins.str] = None,
     use_default_processor_features: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fae47f14e3c545dfc8eda19102c731e3e252f44d48736f8e0f1307258624d960(
+    resource: _IDBInstanceRef_10d60cd7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52396,15 +52538,15 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     copy_tags_to_snapshot: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     custom_iam_instance_profile: typing.Optional[builtins.str] = None,
     database_insights_mode: typing.Optional[builtins.str] = None,
-    db_cluster_identifier: typing.Optional[builtins.str] = None,
+    db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
     db_cluster_snapshot_identifier: typing.Optional[builtins.str] = None,
     db_instance_class: typing.Optional[builtins.str] = None,
     db_instance_identifier: typing.Optional[builtins.str] = None,
     db_name: typing.Optional[builtins.str] = None,
-    db_parameter_group_name: typing.Optional[builtins.str] = None,
+    db_parameter_group_name: typing.Optional[typing.Union[builtins.str, _IDBParameterGroupRef_9d70a5d3]] = None,
     db_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     db_snapshot_identifier: typing.Optional[builtins.str] = None,
-    db_subnet_group_name: typing.Optional[builtins.str] = None,
+    db_subnet_group_name: typing.Optional[typing.Union[builtins.str, _IDBSubnetGroupRef_314322e0]] = None,
     db_system_id: typing.Optional[builtins.str] = None,
     dedicated_log_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     delete_automated_backups: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -52422,7 +52564,7 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
     iops: typing.Optional[jsii.Number] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     license_model: typing.Optional[builtins.str] = None,
     manage_master_user_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     master_user_authentication_type: typing.Optional[builtins.str] = None,
@@ -52431,12 +52573,12 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     master_user_secret: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBInstance.MasterUserSecretProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_allocated_storage: typing.Optional[jsii.Number] = None,
     monitoring_interval: typing.Optional[jsii.Number] = None,
-    monitoring_role_arn: typing.Optional[builtins.str] = None,
+    monitoring_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     multi_az: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     nchar_character_set_name: typing.Optional[builtins.str] = None,
     network_type: typing.Optional[builtins.str] = None,
     option_group_name: typing.Optional[builtins.str] = None,
-    performance_insights_kms_key_id: typing.Optional[builtins.str] = None,
+    performance_insights_kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     performance_insights_retention_period: typing.Optional[jsii.Number] = None,
     port: typing.Optional[builtins.str] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
@@ -52448,7 +52590,7 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     restore_time: typing.Optional[builtins.str] = None,
     source_db_cluster_identifier: typing.Optional[builtins.str] = None,
     source_db_instance_automated_backups_arn: typing.Optional[builtins.str] = None,
-    source_db_instance_identifier: typing.Optional[builtins.str] = None,
+    source_db_instance_identifier: typing.Optional[typing.Union[builtins.str, _IDBInstanceRef_10d60cd7]] = None,
     source_dbi_resource_id: typing.Optional[builtins.str] = None,
     source_region: typing.Optional[builtins.str] = None,
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -52460,7 +52602,7 @@ def _typecheckingstub__3bddb1be0bd1f1699e3a084c5859d94d8879ff15011f2f2eaac29ec16
     timezone: typing.Optional[builtins.str] = None,
     use_default_processor_features: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52537,8 +52679,8 @@ def _typecheckingstub__4d94f4b32c99ad047b3a29dd2b83cad728335675f9397ef40b6355d8a
     *,
     db_proxy_name: builtins.str,
     engine_family: builtins.str,
-    role_arn: builtins.str,
-    vpc_subnet_ids: typing.Sequence[builtins.str],
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     default_auth_scheme: typing.Optional[builtins.str] = None,
@@ -52547,7 +52689,13 @@ def _typecheckingstub__4d94f4b32c99ad047b3a29dd2b83cad728335675f9397ef40b6355d8a
     require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxy.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_connection_network_type: typing.Optional[builtins.str] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__58e33036b3f03ed8bb722d0fc8105c1cb863fcb09ee223666562ca50465d941d(
+    resource: _IDBProxyRef_97300f25,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52667,11 +52815,17 @@ def _typecheckingstub__54411dbda583caaf4997925cbfd0ea949cf7e685dcde3cdc9e9e301dc
     *,
     db_proxy_endpoint_name: builtins.str,
     db_proxy_name: builtins.str,
-    vpc_subnet_ids: typing.Sequence[builtins.str],
+    vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     endpoint_network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxyEndpoint.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_role: typing.Optional[builtins.str] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b35f1589a49fca024358d1ce42a4a5dd5d415698a216f2c33e748199fa7e1bfc(
+    resource: _IDBProxyEndpointRef_9d4fe7d8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52742,11 +52896,11 @@ def _typecheckingstub__3a9b3c0e1e94a5b7b563dceb2d99b8e9a70c4025e99ff97121a4d04a0
     *,
     db_proxy_endpoint_name: builtins.str,
     db_proxy_name: builtins.str,
-    vpc_subnet_ids: typing.Sequence[builtins.str],
+    vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     endpoint_network_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxyEndpoint.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_role: typing.Optional[builtins.str] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52755,8 +52909,8 @@ def _typecheckingstub__331ec6568969c058d2fc6c0482e8c31b8cc3af661d01d569ed27059f5
     *,
     db_proxy_name: builtins.str,
     engine_family: builtins.str,
-    role_arn: builtins.str,
-    vpc_subnet_ids: typing.Sequence[builtins.str],
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    vpc_subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxy.AuthFormatProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     debug_logging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     default_auth_scheme: typing.Optional[builtins.str] = None,
@@ -52765,7 +52919,7 @@ def _typecheckingstub__331ec6568969c058d2fc6c0482e8c31b8cc3af661d01d569ed27059f5
     require_tls: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnDBProxy.TagFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_connection_network_type: typing.Optional[builtins.str] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52774,10 +52928,10 @@ def _typecheckingstub__112a32157ab76a5f2f76f32ed941524642f6f3ce76f61a0d05694fdaa
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    db_proxy_name: builtins.str,
+    db_proxy_name: typing.Union[builtins.str, _IDBProxyRef_97300f25],
     target_group_name: builtins.str,
     connection_pool_configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxyTargetGroup.ConnectionPoolConfigurationInfoFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    db_cluster_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    db_cluster_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]] = None,
     db_instance_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -52838,10 +52992,10 @@ def _typecheckingstub__42d639daffefef5729c8051d75bbd49babf647363ede6bca87c067f42
 
 def _typecheckingstub__9da17c344959c8c8c8f82cc65de990bc4d662a9e9ebf37719fbb1019f5e30e6d(
     *,
-    db_proxy_name: builtins.str,
+    db_proxy_name: typing.Union[builtins.str, _IDBProxyRef_97300f25],
     target_group_name: builtins.str,
     connection_pool_configuration_info: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDBProxyTargetGroup.ConnectionPoolConfigurationInfoFormatProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    db_cluster_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    db_cluster_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]]] = None,
     db_instance_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -53068,7 +53222,7 @@ def _typecheckingstub__3437b6f3359034732d6fbef14006ac020c94fa5b18aa95cb4c8bb7332
     id: builtins.str,
     *,
     db_subnet_group_description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     db_subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -53114,7 +53268,7 @@ def _typecheckingstub__2de007053c0d484224b01fc0bfd1a04dc727898fdb5222faf562e7fd3
 def _typecheckingstub__ee6eb06c99be08b951a99e2e5521e7dcf9b3c7213a342f750abfc3bb56351b21(
     *,
     db_subnet_group_description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     db_subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -53125,13 +53279,19 @@ def _typecheckingstub__0c5db068cdeb685ae34885c6eea1acaa01b83ca0af2c63429f3a30e0a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    sns_topic_arn: builtins.str,
+    sns_topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-    source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    source_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]] = None,
     source_type: typing.Optional[builtins.str] = None,
     subscription_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6492bdbd35d4d0cd176ee82077676d6eadc5edd8289d8f54204946a06778a0e4(
+    resource: _IEventSubscriptionRef_a31e243e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -53200,10 +53360,10 @@ def _typecheckingstub__f9548d8c2732d5e0b965692b2b5ce0ada7fc0f66638ef417c33f207b0
 
 def _typecheckingstub__f8812900c3de7bd4f6e3f5180fd49f8280b522418a0ba50cefedcb2d6cca8979(
     *,
-    sns_topic_arn: builtins.str,
+    sns_topic_arn: typing.Union[builtins.str, _ITopicRef_29aa9a88],
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     event_categories: typing.Optional[typing.Sequence[builtins.str]] = None,
-    source_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    source_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IDBClusterRef_ebf419fe, _IDBInstanceRef_10d60cd7]]] = None,
     source_type: typing.Optional[builtins.str] = None,
     subscription_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -53220,7 +53380,7 @@ def _typecheckingstub__1611fa62b935d4f304c9fd8befd7c639fa3cc4898c7c6d9f86feb2d66
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
     global_cluster_identifier: typing.Optional[builtins.str] = None,
-    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+    source_db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -53301,7 +53461,7 @@ def _typecheckingstub__ef2e57f0cb9427badb90bc7e1248f0f26bc8de21a104bb924da973366
     engine_lifecycle_support: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
     global_cluster_identifier: typing.Optional[builtins.str] = None,
-    source_db_cluster_identifier: typing.Optional[builtins.str] = None,
+    source_db_cluster_identifier: typing.Optional[typing.Union[builtins.str, _IDBClusterRef_ebf419fe]] = None,
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -53320,6 +53480,12 @@ def _typecheckingstub__0596ec891883071cc8cc2bad7e4e8120eefe68f759bfc17fdbfc1a525
     integration_name: typing.Optional[builtins.str] = None,
     kms_key_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f05dfe8aa520a4bf41fc271aa2c805dfa95eb619f78f4454bb531d7915573b34(
+    resource: _IIntegrationRef_af5dfafc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -53408,6 +53574,12 @@ def _typecheckingstub__160a45fe55c01086901039aa8bde8bd5ace11ff967acd2154abcc9137
     option_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOptionGroup.OptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     option_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__93298885113d87d7c52a0c0f2b61b1e37a8412452fa372109ce9a94214cd3f4c(
+    resource: _IOptionGroupRef_093d85fd,
 ) -> None:
     """Type checking stubs"""
     pass

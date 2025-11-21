@@ -554,6 +554,17 @@ class CfnAccelerator(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccelerator")
+    @builtins.classmethod
+    def arn_for_accelerator(cls, resource: _IAcceleratorRef_b1855670) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8efa56abdff179981206b16ea3320502b510b1c29fedecb93bd598db48104a1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccelerator", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1325,7 +1336,7 @@ class CfnEndpointGroup(
         id: builtins.str,
         *,
         endpoint_group_region: builtins.str,
-        listener_arn: builtins.str,
+        listener_arn: typing.Union[builtins.str, _IListenerRef_efaa8e2a],
         endpoint_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEndpointGroup.EndpointConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         health_check_interval_seconds: typing.Optional[jsii.Number] = None,
         health_check_path: typing.Optional[builtins.str] = None,
@@ -1368,6 +1379,20 @@ class CfnEndpointGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEndpointGroup")
+    @builtins.classmethod
+    def arn_for_endpoint_group(
+        cls,
+        resource: _IEndpointGroupRef_9302598c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d0c1cebf70a4fd1e6be12516ab8abafd7f1ae69b65c0627f06153d61cbccad7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEndpointGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1794,7 +1819,7 @@ class CfnEndpointGroupProps:
         self,
         *,
         endpoint_group_region: builtins.str,
-        listener_arn: builtins.str,
+        listener_arn: typing.Union[builtins.str, _IListenerRef_efaa8e2a],
         endpoint_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpointGroup.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         health_check_interval_seconds: typing.Optional[jsii.Number] = None,
         health_check_path: typing.Optional[builtins.str] = None,
@@ -1895,14 +1920,14 @@ class CfnEndpointGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def listener_arn(self) -> builtins.str:
+    def listener_arn(self) -> typing.Union[builtins.str, _IListenerRef_efaa8e2a]:
         '''The Amazon Resource Name (ARN) of the listener.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-endpointgroup.html#cfn-globalaccelerator-endpointgroup-listenerarn
         '''
         result = self._values.get("listener_arn")
         assert result is not None, "Required property 'listener_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IListenerRef_efaa8e2a], result)
 
     @builtins.property
     def endpoint_configurations(
@@ -2060,7 +2085,7 @@ class CfnListener(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        accelerator_arn: builtins.str,
+        accelerator_arn: typing.Union[builtins.str, _IAcceleratorRef_b1855670],
         port_ranges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnListener.PortRangeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         protocol: builtins.str,
         client_affinity: typing.Optional[builtins.str] = None,
@@ -2086,6 +2111,17 @@ class CfnListener(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForListener")
+    @builtins.classmethod
+    def arn_for_listener(cls, resource: _IListenerRef_efaa8e2a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fba60f9012acb9ca61a7413fed047846735076670e88351b992226c2f537565c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForListener", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2275,7 +2311,7 @@ class CfnListenerProps:
     def __init__(
         self,
         *,
-        accelerator_arn: builtins.str,
+        accelerator_arn: typing.Union[builtins.str, _IAcceleratorRef_b1855670],
         port_ranges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.PortRangeProperty, typing.Dict[builtins.str, typing.Any]]]]],
         protocol: builtins.str,
         client_affinity: typing.Optional[builtins.str] = None,
@@ -2323,14 +2359,14 @@ class CfnListenerProps:
             self._values["client_affinity"] = client_affinity
 
     @builtins.property
-    def accelerator_arn(self) -> builtins.str:
+    def accelerator_arn(self) -> typing.Union[builtins.str, _IAcceleratorRef_b1855670]:
         '''The Amazon Resource Name (ARN) of your accelerator.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-globalaccelerator-listener.html#cfn-globalaccelerator-listener-acceleratorarn
         '''
         result = self._values.get("accelerator_arn")
         assert result is not None, "Required property 'accelerator_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAcceleratorRef_b1855670], result)
 
     @builtins.property
     def port_ranges(
@@ -4283,6 +4319,12 @@ def _typecheckingstub__1b4e9743a0b90ee8f6751e3f45acf5d26ac65581ea6ebfd2056c79343
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d8efa56abdff179981206b16ea3320502b510b1c29fedecb93bd598db48104a1(
+    resource: _IAcceleratorRef_b1855670,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__397b300551025b97bbac4a4e556a29883f3095ff492b64e883ba89d1f2e65361(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4408,7 +4450,7 @@ def _typecheckingstub__d4abd958de92d302b6b9aa605f8d58d76fb06143d26797b6f9d857004
     id: builtins.str,
     *,
     endpoint_group_region: builtins.str,
-    listener_arn: builtins.str,
+    listener_arn: typing.Union[builtins.str, _IListenerRef_efaa8e2a],
     endpoint_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpointGroup.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     health_check_interval_seconds: typing.Optional[jsii.Number] = None,
     health_check_path: typing.Optional[builtins.str] = None,
@@ -4417,6 +4459,12 @@ def _typecheckingstub__d4abd958de92d302b6b9aa605f8d58d76fb06143d26797b6f9d857004
     port_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpointGroup.PortOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     threshold_count: typing.Optional[jsii.Number] = None,
     traffic_dial_percentage: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0d0c1cebf70a4fd1e6be12516ab8abafd7f1ae69b65c0627f06153d61cbccad7(
+    resource: _IEndpointGroupRef_9302598c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4514,7 +4562,7 @@ def _typecheckingstub__e3359d163f3a349b1fc497520e7db3252e20286310ca0cc9c6ea1f9c4
 def _typecheckingstub__4f9460739d2070644400ee87add34d6bb290f1d4cb7749e5cebc8f8958fc491a(
     *,
     endpoint_group_region: builtins.str,
-    listener_arn: builtins.str,
+    listener_arn: typing.Union[builtins.str, _IListenerRef_efaa8e2a],
     endpoint_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEndpointGroup.EndpointConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     health_check_interval_seconds: typing.Optional[jsii.Number] = None,
     health_check_path: typing.Optional[builtins.str] = None,
@@ -4531,10 +4579,16 @@ def _typecheckingstub__8f5343495fec1a9582d0f433b059b03c9d1a0192305d421ce867f1a58
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    accelerator_arn: builtins.str,
+    accelerator_arn: typing.Union[builtins.str, _IAcceleratorRef_b1855670],
     port_ranges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.PortRangeProperty, typing.Dict[builtins.str, typing.Any]]]]],
     protocol: builtins.str,
     client_affinity: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fba60f9012acb9ca61a7413fed047846735076670e88351b992226c2f537565c(
+    resource: _IListenerRef_efaa8e2a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4585,7 +4639,7 @@ def _typecheckingstub__86bf56f4cda82b244e4962ced169b2d38c73f4a86245d20b41765496a
 
 def _typecheckingstub__d88bb06fc642c8ec33e109cd4ab1bc649b4bad09dd5edd5bb9719c9cccb9d86c(
     *,
-    accelerator_arn: builtins.str,
+    accelerator_arn: typing.Union[builtins.str, _IAcceleratorRef_b1855670],
     port_ranges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListener.PortRangeProperty, typing.Dict[builtins.str, typing.Any]]]]],
     protocol: builtins.str,
     client_affinity: typing.Optional[builtins.str] = None,

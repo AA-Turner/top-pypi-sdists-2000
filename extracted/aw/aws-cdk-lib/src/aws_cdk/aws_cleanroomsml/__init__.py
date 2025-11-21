@@ -169,6 +169,20 @@ class CfnTrainingDataset(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTrainingDataset")
+    @builtins.classmethod
+    def arn_for_training_dataset(
+        cls,
+        resource: _ITrainingDatasetRef_e0f12c42,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9550e7cc74f3a3279d5dadd02f957b89e1799245db85d81f550168acf07d3e4e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrainingDataset", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -888,6 +902,12 @@ def _typecheckingstub__038c489df01bd94323363a194424fbe900aac226689cefa852a1f05e7
     training_data: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrainingDataset.DatasetProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9550e7cc74f3a3279d5dadd02f957b89e1799245db85d81f550168acf07d3e4e(
+    resource: _ITrainingDatasetRef_e0f12c42,
 ) -> None:
     """Type checking stubs"""
     pass

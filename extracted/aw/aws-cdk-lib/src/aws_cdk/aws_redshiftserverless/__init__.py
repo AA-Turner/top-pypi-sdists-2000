@@ -68,6 +68,12 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_redshiftserverless import (
     INamespaceRef as _INamespaceRef_27c83e14,
     ISnapshotRef as _ISnapshotRef_a98f862c,
@@ -139,11 +145,11 @@ class CfnNamespace(
         admin_username: typing.Optional[builtins.str] = None,
         admin_user_password: typing.Optional[builtins.str] = None,
         db_name: typing.Optional[builtins.str] = None,
-        default_iam_role_arn: typing.Optional[builtins.str] = None,
+        default_iam_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
         final_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         log_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         manage_admin_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         namespace_resource_policy: typing.Any = None,
@@ -959,11 +965,11 @@ class CfnNamespaceProps:
         admin_username: typing.Optional[builtins.str] = None,
         admin_user_password: typing.Optional[builtins.str] = None,
         db_name: typing.Optional[builtins.str] = None,
-        default_iam_role_arn: typing.Optional[builtins.str] = None,
+        default_iam_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
         final_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-        iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         log_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         manage_admin_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         namespace_resource_policy: typing.Any = None,
@@ -1134,13 +1140,15 @@ class CfnNamespaceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def default_iam_role_arn(self) -> typing.Optional[builtins.str]:
+    def default_iam_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the IAM role to set as a default in the namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-namespace.html#cfn-redshiftserverless-namespace-defaultiamrolearn
         '''
         result = self._values.get("default_iam_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def final_snapshot_name(self) -> typing.Optional[builtins.str]:
@@ -1161,22 +1169,26 @@ class CfnNamespaceProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def iam_roles(self) -> typing.Optional[typing.List[builtins.str]]:
+    def iam_roles(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]]:
         '''A list of IAM roles to associate with the namespace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-namespace.html#cfn-redshiftserverless-namespace-iamroles
         '''
         result = self._values.get("iam_roles")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ID of the AWS Key Management Service key used to encrypt your data.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-namespace.html#cfn-redshiftserverless-namespace-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def log_exports(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -1943,11 +1955,11 @@ class CfnWorkgroup(
         price_performance_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkgroup.PerformanceTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         recovery_point_id: typing.Optional[builtins.str] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arn: typing.Optional[builtins.str] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_owner_account: typing.Optional[builtins.str] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         track_name: typing.Optional[builtins.str] = None,
         workgroup: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkgroup.WorkgroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3301,11 +3313,11 @@ class CfnWorkgroupProps:
         price_performance_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.PerformanceTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         recovery_point_id: typing.Optional[builtins.str] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arn: typing.Optional[builtins.str] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_owner_account: typing.Optional[builtins.str] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         track_name: typing.Optional[builtins.str] = None,
         workgroup: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.WorkgroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3576,13 +3588,15 @@ class CfnWorkgroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of security group IDs to associate with the workgroup.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-workgroup.html#cfn-redshiftserverless-workgroup-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def snapshot_arn(self) -> typing.Optional[builtins.str]:
@@ -3612,13 +3626,15 @@ class CfnWorkgroupProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def subnet_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''A list of subnet IDs the workgroup is associated with.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshiftserverless-workgroup.html#cfn-redshiftserverless-workgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -3683,11 +3699,11 @@ def _typecheckingstub__e517382d9f55a518348d7299a7ce6c5be66bae2202f4223bf3c891a7d
     admin_username: typing.Optional[builtins.str] = None,
     admin_user_password: typing.Optional[builtins.str] = None,
     db_name: typing.Optional[builtins.str] = None,
-    default_iam_role_arn: typing.Optional[builtins.str] = None,
+    default_iam_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     final_snapshot_name: typing.Optional[builtins.str] = None,
     final_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-    iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
     manage_admin_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     namespace_resource_policy: typing.Any = None,
@@ -3841,11 +3857,11 @@ def _typecheckingstub__5964a5da555f62a5d9615a6e07cd0d1128cdf904fd5aa3c5be9fd5e53
     admin_username: typing.Optional[builtins.str] = None,
     admin_user_password: typing.Optional[builtins.str] = None,
     db_name: typing.Optional[builtins.str] = None,
-    default_iam_role_arn: typing.Optional[builtins.str] = None,
+    default_iam_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     final_snapshot_name: typing.Optional[builtins.str] = None,
     final_snapshot_retention_period: typing.Optional[jsii.Number] = None,
-    iam_roles: typing.Optional[typing.Sequence[builtins.str]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    iam_roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     log_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
     manage_admin_password: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     namespace_resource_policy: typing.Any = None,
@@ -3944,11 +3960,11 @@ def _typecheckingstub__61a1b6ebbdacc577619f4e17ddabdaa553ffe5fe072b72e14ddf7d9c3
     price_performance_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.PerformanceTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     recovery_point_id: typing.Optional[builtins.str] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arn: typing.Optional[builtins.str] = None,
     snapshot_name: typing.Optional[builtins.str] = None,
     snapshot_owner_account: typing.Optional[builtins.str] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     track_name: typing.Optional[builtins.str] = None,
     workgroup: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.WorkgroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4154,11 +4170,11 @@ def _typecheckingstub__1ee3941005026bdab05d38183c12cc7cf5ff218e6db3877161b60d823
     price_performance_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.PerformanceTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     publicly_accessible: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     recovery_point_id: typing.Optional[builtins.str] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arn: typing.Optional[builtins.str] = None,
     snapshot_name: typing.Optional[builtins.str] = None,
     snapshot_owner_account: typing.Optional[builtins.str] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     track_name: typing.Optional[builtins.str] = None,
     workgroup: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkgroup.WorkgroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

@@ -155,6 +155,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_1b548a1b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1e664b151f2f3eba8c85e9cb8364ba82af114797d139b2dfac6805315049e5dc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -927,6 +938,17 @@ class CfnEnvironment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEnvironment")
+    @builtins.classmethod
+    def arn_for_environment(cls, resource: _IEnvironmentRef_780520b3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dcdee95b39bd87f5cbf6fcf80384b09bf425390ffc0c76e58a965e706811219b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironment", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1836,6 +1858,12 @@ def _typecheckingstub__4d9f18e4c35f8dd6932a89aab0c7c8325ca5f0e480e78df5838e1e64d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1e664b151f2f3eba8c85e9cb8364ba82af114797d139b2dfac6805315049e5dc(
+    resource: _IApplicationRef_1b548a1b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__930fa019de61c28a83bc70684b2fec3054c6540e78cef82bbebd5e15c7888337(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1979,6 +2007,12 @@ def _typecheckingstub__4b13501bd562f397b7070738470ee5bd51ff8aa50c0a2fb6c33998acd
     storage_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.StorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dcdee95b39bd87f5cbf6fcf80384b09bf425390ffc0c76e58a965e706811219b(
+    resource: _IEnvironmentRef_780520b3,
 ) -> None:
     """Type checking stubs"""
     pass

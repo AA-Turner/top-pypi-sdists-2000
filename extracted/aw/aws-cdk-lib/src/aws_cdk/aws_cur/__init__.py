@@ -71,6 +71,7 @@ from ..interfaces.aws_cur import (
     IReportDefinitionRef as _IReportDefinitionRef_76887e50,
     ReportDefinitionReference as _ReportDefinitionReference_735c508b,
 )
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IReportDefinitionRef_76887e50, _ITaggableV2_4e6798f8)
@@ -125,7 +126,7 @@ class CfnReportDefinition(
         refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
         report_name: builtins.str,
         report_versioning: builtins.str,
-        s3_bucket: builtins.str,
+        s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
         s3_prefix: builtins.str,
         s3_region: builtins.str,
         time_unit: builtins.str,
@@ -173,6 +174,20 @@ class CfnReportDefinition(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForReportDefinition")
+    @builtins.classmethod
+    def arn_for_report_definition(
+        cls,
+        resource: _IReportDefinitionRef_76887e50,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__99c114309be3f4c1f5aaeaf747c167afc88d92aa81df7f70f92b7acf0d7ca659)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReportDefinition", [resource]))
 
     @jsii.member(jsii_name="fromReportName")
     @builtins.classmethod
@@ -451,7 +466,7 @@ class CfnReportDefinitionProps:
         refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
         report_name: builtins.str,
         report_versioning: builtins.str,
-        s3_bucket: builtins.str,
+        s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
         s3_prefix: builtins.str,
         s3_region: builtins.str,
         time_unit: builtins.str,
@@ -598,14 +613,14 @@ class CfnReportDefinitionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def s3_bucket(self) -> builtins.str:
+    def s3_bucket(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''The S3 bucket where Amazon Web Services delivers the report.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cur-reportdefinition.html#cfn-cur-reportdefinition-s3bucket
         '''
         result = self._values.get("s3_bucket")
         assert result is not None, "Required property 's3_bucket' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
     def s3_prefix(self) -> builtins.str:
@@ -705,7 +720,7 @@ def _typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565ab
     refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
     report_name: builtins.str,
     report_versioning: builtins.str,
-    s3_bucket: builtins.str,
+    s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     s3_prefix: builtins.str,
     s3_region: builtins.str,
     time_unit: builtins.str,
@@ -713,6 +728,12 @@ def _typecheckingstub__fa6a90098f39859b607fa8b8453bf94b62703cdf41682ff1f90c565ab
     additional_schema_elements: typing.Optional[typing.Sequence[builtins.str]] = None,
     billing_view_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__99c114309be3f4c1f5aaeaf747c167afc88d92aa81df7f70f92b7acf0d7ca659(
+    resource: _IReportDefinitionRef_76887e50,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -822,7 +843,7 @@ def _typecheckingstub__8cc3d7babce4dfa37a62fc4d0d9b1b67c9fdccfaa09ca549a32d3aab0
     refresh_closed_reports: typing.Union[builtins.bool, _IResolvable_da3f097b],
     report_name: builtins.str,
     report_versioning: builtins.str,
-    s3_bucket: builtins.str,
+    s3_bucket: typing.Union[builtins.str, _IBucketRef_3debe44e],
     s3_prefix: builtins.str,
     s3_region: builtins.str,
     time_unit: builtins.str,

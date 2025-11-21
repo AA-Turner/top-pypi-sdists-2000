@@ -176,6 +176,17 @@ class CfnIndex(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForIndex")
+    @builtins.classmethod
+    def arn_for_index(cls, resource: _IIndexRef_4272045e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32e62c574691f1e6a9b9acb81be5224bf6aefeb13ff8a3279c085732027b3ece)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIndex", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -654,6 +665,20 @@ class CfnVectorBucket(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVectorBucket")
+    @builtins.classmethod
+    def arn_for_vector_bucket(
+        cls,
+        resource: _IVectorBucketRef_238bcb24,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89411d490809081b29a45d8c02fcb4cc145b0df3aed499145104f0657ba929f4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVectorBucket", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1203,6 +1228,12 @@ def _typecheckingstub__87bd43a194666dd054aecee5dc42b978d33dae31b98b1bacec49341d4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__32e62c574691f1e6a9b9acb81be5224bf6aefeb13ff8a3279c085732027b3ece(
+    resource: _IIndexRef_4272045e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__abf75f37384ae6010cf34366284fd709b9bf09472bc476d814cde62f1244e1f5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1283,6 +1314,12 @@ def _typecheckingstub__a52d66a4aae762d071703714133bff3215199691ee6f06fec05144ec7
     *,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVectorBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     vector_bucket_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__89411d490809081b29a45d8c02fcb4cc145b0df3aed499145104f0657ba929f4(
+    resource: _IVectorBucketRef_238bcb24,
 ) -> None:
     """Type checking stubs"""
     pass

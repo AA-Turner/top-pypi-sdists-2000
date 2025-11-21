@@ -157,6 +157,17 @@ class CfnHypervisor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForHypervisor")
+    @builtins.classmethod
+    def arn_for_hypervisor(cls, resource: _IHypervisorRef_a8d4b5cc) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45d1395ac659e39b7eace855324da48c5702e18a2a6591a69136f97a86acbd59)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHypervisor", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -484,6 +495,12 @@ def _typecheckingstub__f3be02ddf56a7cf36e877cb5703e48b257066d0325551bfac15ae1763
     password: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     username: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45d1395ac659e39b7eace855324da48c5702e18a2a6591a69136f97a86acbd59(
+    resource: _IHypervisorRef_a8d4b5cc,
 ) -> None:
     """Type checking stubs"""
     pass

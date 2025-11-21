@@ -73,6 +73,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_iot import (
     AccountAuditConfigurationReference as _AccountAuditConfigurationReference_f8e98698,
     AuthorizerReference as _AuthorizerReference_b295c2a2,
@@ -1371,6 +1372,17 @@ class CfnAuthorizer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAuthorizer")
+    @builtins.classmethod
+    def arn_for_authorizer(cls, resource: _IAuthorizerRef_65593d38) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aab3c7c02d64faf42e0df07e532bd24c3904188571c52d67f19cd197d5970e92)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAuthorizer", [resource]))
+
     @jsii.member(jsii_name="fromAuthorizerArn")
     @builtins.classmethod
     def from_authorizer_arn(
@@ -1846,6 +1858,20 @@ class CfnBillingGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForBillingGroup")
+    @builtins.classmethod
+    def arn_for_billing_group(
+        cls,
+        resource: _IBillingGroupRef_9603d1f5,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9f6c0e7811bed971c21cf0e900bea5a2739d5e97c8ea4fb30ddc2db11c5f70f5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBillingGroup", [resource]))
+
     @jsii.member(jsii_name="fromBillingGroupArn")
     @builtins.classmethod
     def from_billing_group_arn(
@@ -2232,6 +2258,20 @@ class CfnCACertificate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCACertificate")
+    @builtins.classmethod
+    def arn_for_ca_certificate(
+        cls,
+        resource: _ICACertificateRef_68956798,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__553a2e0d7dd8f15628778bf4ef67fa2f0896423c34d2ffb9bbf6714b54dc32b3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCACertificate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2769,6 +2809,17 @@ class CfnCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCertificate")
+    @builtins.classmethod
+    def arn_for_certificate(cls, resource: _ICertificateRef_c215b21a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33338effcfa2c5354f26f3cfc87f3cf1c1bc71341ec9800764e5c4fb823d69f4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCertificate", [resource]))
+
     @jsii.member(jsii_name="fromCertificateArn")
     @builtins.classmethod
     def from_certificate_arn(
@@ -3143,6 +3194,20 @@ class CfnCertificateProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCertificateProvider")
+    @builtins.classmethod
+    def arn_for_certificate_provider(
+        cls,
+        resource: _ICertificateProviderRef_14051fa1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__303ad712660180adfb83321b5893696cb37ca6601b21e1b0fb6df9ab381f0727)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCertificateProvider", [resource]))
 
     @jsii.member(jsii_name="fromCertificateProviderArn")
     @builtins.classmethod
@@ -3535,6 +3600,17 @@ class CfnCommand(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCommand")
+    @builtins.classmethod
+    def arn_for_command(cls, resource: _ICommandRef_ea63e38e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0cf7a9939623c3e07f43293abf64dffb3391acb6342792348f8e80a024df771b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCommand", [resource]))
 
     @jsii.member(jsii_name="fromCommandArn")
     @builtins.classmethod
@@ -4483,6 +4559,20 @@ class CfnCustomMetric(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCustomMetric")
+    @builtins.classmethod
+    def arn_for_custom_metric(
+        cls,
+        resource: _ICustomMetricRef_007a6e16,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1e186e6c47bcd7a9b957b10f9dd472f2c8678c9dea330f424db25e177feb8275)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomMetric", [resource]))
+
     @jsii.member(jsii_name="fromMetricName")
     @builtins.classmethod
     def from_metric_name(
@@ -4799,6 +4889,17 @@ class CfnDimension(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDimension")
+    @builtins.classmethod
+    def arn_for_dimension(cls, resource: _IDimensionRef_b32b102e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ba65fcf0409d2159605e101679f10b9abd6295b7f83bbda27a6717d4410a8d9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDimension", [resource]))
 
     @jsii.member(jsii_name="fromDimensionArn")
     @builtins.classmethod
@@ -5174,6 +5275,20 @@ class CfnDomainConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomainConfiguration")
+    @builtins.classmethod
+    def arn_for_domain_configuration(
+        cls,
+        resource: _IDomainConfigurationRef_fb2399ab,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02f53bb4501e782d314f785d0c9aa704092f9f19e1e473870c4ba5e047e66226)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomainConfiguration", [resource]))
 
     @jsii.member(jsii_name="fromDomainConfigurationArn")
     @builtins.classmethod
@@ -6198,7 +6313,7 @@ class CfnEncryptionConfiguration(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param encryption_type: The type of the KMS key.
-        :param kms_access_role_arn: The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS KMS on behalf of the customer.
+        :param kms_access_role_arn: The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS on behalf of the customer.
         :param kms_key_arn: The ARN of the customer managed KMS key.
         '''
         if __debug__:
@@ -6298,7 +6413,7 @@ class CfnEncryptionConfiguration(
     @builtins.property
     @jsii.member(jsii_name="kmsAccessRoleArn")
     def kms_access_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS KMS on behalf of the customer.'''
+        '''The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS  on behalf of the customer.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsAccessRoleArn"))
 
     @kms_access_role_arn.setter
@@ -6338,10 +6453,10 @@ class CfnEncryptionConfiguration(
             error_code: typing.Optional[builtins.str] = None,
             error_message: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The encryption configuration details that include the status information of the AWS Key Management Service ( AWS KMS ) key and the AWS KMS access role.
+            '''The encryption configuration details that include the status information of the AWS Key Management Service ( AWS  ) key and the AWS  access role.
 
-            :param configuration_status: The health status of KMS key and AWS KMS access role. If either KMS key or AWS KMS access role is ``UNHEALTHY`` , the return value will be ``UNHEALTHY`` . To use a customer managed KMS key, the value of ``configurationStatus`` must be ``HEALTHY`` .
-            :param error_code: The error code that indicates either the KMS key or the AWS KMS access role is ``UNHEALTHY`` . Valid values: ``KMS_KEY_VALIDATION_ERROR`` and ``ROLE_VALIDATION_ERROR`` .
+            :param configuration_status: The health status of KMS key and AWS access role. If either KMS key or AWS access role is ``UNHEALTHY`` , the return value will be ``UNHEALTHY`` . To use a customer managed KMS key, the value of ``configurationStatus`` must be ``HEALTHY`` .
+            :param error_code: The error code that indicates either the KMS key or the AWS access role is ``UNHEALTHY`` . Valid values: ``KMS_KEY_VALIDATION_ERROR`` and ``ROLE_VALIDATION_ERROR`` .
             :param error_message: The detailed error message that corresponds to the ``errorCode`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-encryptionconfiguration-configurationdetails.html
@@ -6374,9 +6489,9 @@ class CfnEncryptionConfiguration(
 
         @builtins.property
         def configuration_status(self) -> typing.Optional[builtins.str]:
-            '''The health status of KMS key and AWS KMS access role.
+            '''The health status of KMS key and AWS  access role.
 
-            If either KMS key or AWS KMS access role is ``UNHEALTHY`` , the return value will be ``UNHEALTHY`` . To use a customer managed KMS key, the value of ``configurationStatus`` must be ``HEALTHY`` .
+            If either KMS key or AWS  access role is ``UNHEALTHY`` , the return value will be ``UNHEALTHY`` . To use a customer managed KMS key, the value of ``configurationStatus`` must be ``HEALTHY`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iot-encryptionconfiguration-configurationdetails.html#cfn-iot-encryptionconfiguration-configurationdetails-configurationstatus
             '''
@@ -6385,7 +6500,7 @@ class CfnEncryptionConfiguration(
 
         @builtins.property
         def error_code(self) -> typing.Optional[builtins.str]:
-            '''The error code that indicates either the KMS key or the AWS KMS access role is ``UNHEALTHY`` .
+            '''The error code that indicates either the KMS key or the AWS  access role is ``UNHEALTHY`` .
 
             Valid values: ``KMS_KEY_VALIDATION_ERROR`` and ``ROLE_VALIDATION_ERROR`` .
 
@@ -6435,7 +6550,7 @@ class CfnEncryptionConfigurationProps:
         '''Properties for defining a ``CfnEncryptionConfiguration``.
 
         :param encryption_type: The type of the KMS key.
-        :param kms_access_role_arn: The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS KMS on behalf of the customer.
+        :param kms_access_role_arn: The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS on behalf of the customer.
         :param kms_key_arn: The ARN of the customer managed KMS key.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-encryptionconfiguration.html
@@ -6480,7 +6595,7 @@ class CfnEncryptionConfigurationProps:
 
     @builtins.property
     def kms_access_role_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS KMS on behalf of the customer.
+        '''The Amazon Resource Name (ARN) of the IAM role assumed by AWS IoT Core to call AWS  on behalf of the customer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-encryptionconfiguration.html#cfn-iot-encryptionconfiguration-kmsaccessrolearn
         '''
@@ -7216,6 +7331,17 @@ class CfnJobTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForJobTemplate")
+    @builtins.classmethod
+    def arn_for_job_template(cls, resource: _IJobTemplateRef_f04ac76b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4d0973cbee612a9630863fc9c182e6d5a508fe33d81287fd156ea18b545d27bd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForJobTemplate", [resource]))
 
     @jsii.member(jsii_name="fromJobTemplateArn")
     @builtins.classmethod
@@ -8572,7 +8698,7 @@ class CfnLogging(
 
        If you already set the log function of AWS IoT Core , you can't deploy the Cloud Development Kit  to change the logging settings. You can change the logging settings by either:
 
-       - Importing the existing logging resource into your AWS CloudFormation stack, such as with the `infrastructure as code generator (IaC generator) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/generate-IaC.html>`_ .
+       - Importing the existing logging resource into your CloudFormation stack, such as with the `infrastructure as code generator (IaC generator) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/generate-IaC.html>`_ .
        - Calling ``aws iot set-v2-logging-options --disable-all-logs`` before creating a new CloudFormation stack. This command disables all AWS IoT logging. As a result, no AWS IoT logs will be delivered to Amazon CloudWatch until you re-enable logging.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-logging.html
@@ -8599,7 +8725,7 @@ class CfnLogging(
         *,
         account_id: builtins.str,
         default_log_level: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     ) -> None:
         '''Create a new ``AWS::IoT::Logging``.
 
@@ -8717,7 +8843,7 @@ class CfnLoggingProps:
         *,
         account_id: builtins.str,
         default_log_level: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     ) -> None:
         '''Properties for defining a ``CfnLogging``.
 
@@ -8774,14 +8900,14 @@ class CfnLoggingProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The role ARN used for the log.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-logging.html#cfn-iot-logging-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8882,6 +9008,20 @@ class CfnMitigationAction(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMitigationAction")
+    @builtins.classmethod
+    def arn_for_mitigation_action(
+        cls,
+        resource: _IMitigationActionRef_e47dbe04,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__29cf135a8943b9c818c8e8c5849c577a50c2c3f317be06ec34a2506ba7533650)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMitigationAction", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9749,6 +9889,17 @@ class CfnPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPolicy")
+    @builtins.classmethod
+    def arn_for_policy(cls, resource: _IPolicyRef_d07d9913) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8796f70ff5a08fbf874c453071af67d17f6e264a78ab791e9da92cbfc2052598)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10189,7 +10340,7 @@ class CfnProvisioningTemplate(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        provisioning_role_arn: builtins.str,
+        provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         template_body: builtins.str,
         description: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -10227,6 +10378,20 @@ class CfnProvisioningTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProvisioningTemplate")
+    @builtins.classmethod
+    def arn_for_provisioning_template(
+        cls,
+        resource: _IProvisioningTemplateRef_3b3b40e9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6c047feaff1844a5caec9af4f3b5c6a7ab35c0a8bb54c67900e63c5afb535739)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProvisioningTemplate", [resource]))
 
     @jsii.member(jsii_name="fromTemplateName")
     @builtins.classmethod
@@ -10512,7 +10677,7 @@ class CfnProvisioningTemplateProps:
     def __init__(
         self,
         *,
-        provisioning_role_arn: builtins.str,
+        provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         template_body: builtins.str,
         description: typing.Optional[builtins.str] = None,
         enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -10588,7 +10753,7 @@ class CfnProvisioningTemplateProps:
             self._values["template_type"] = template_type
 
     @builtins.property
-    def provisioning_role_arn(self) -> builtins.str:
+    def provisioning_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The role ARN for the role associated with the fleet provisioning template.
 
         This IoT role grants permission to provision a device.
@@ -10597,7 +10762,7 @@ class CfnProvisioningTemplateProps:
         '''
         result = self._values.get("provisioning_role_arn")
         assert result is not None, "Required property 'provisioning_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def template_body(self) -> builtins.str:
@@ -10954,7 +11119,7 @@ class CfnRoleAlias(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         credential_duration_seconds: typing.Optional[jsii.Number] = None,
         role_alias: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10980,6 +11145,17 @@ class CfnRoleAlias(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRoleAlias")
+    @builtins.classmethod
+    def arn_for_role_alias(cls, resource: _IRoleAliasRef_26714b8b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__12d70f8ae5519a0761321c2e906b509dc13ebafc4d261e4153429b97df696799)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoleAlias", [resource]))
 
     @jsii.member(jsii_name="fromRoleAlias")
     @builtins.classmethod
@@ -11146,7 +11322,7 @@ class CfnRoleAliasProps:
     def __init__(
         self,
         *,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         credential_duration_seconds: typing.Optional[jsii.Number] = None,
         role_alias: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -11196,14 +11372,14 @@ class CfnRoleAliasProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The role ARN.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iot-rolealias.html#cfn-iot-rolealias-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def credential_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -11320,6 +11496,20 @@ class CfnScheduledAudit(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForScheduledAudit")
+    @builtins.classmethod
+    def arn_for_scheduled_audit(
+        cls,
+        resource: _IScheduledAuditRef_a5878e17,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc4cc7316d27017d79254874d0b0f39cb103e71e49a13b081eb6f201a5198a05)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScheduledAudit", [resource]))
 
     @jsii.member(jsii_name="fromScheduledAuditArn")
     @builtins.classmethod
@@ -11793,6 +11983,20 @@ class CfnSecurityProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSecurityProfile")
+    @builtins.classmethod
+    def arn_for_security_profile(
+        cls,
+        resource: _ISecurityProfileRef_5d371790,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c1ff9b0f57b91c0ba1ccc067c1474054ac807e183e7bd3b438a98f87ed7f74b0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSecurityProfile", [resource]))
 
     @jsii.member(jsii_name="fromSecurityProfileArn")
     @builtins.classmethod
@@ -13243,6 +13447,20 @@ class CfnSoftwarePackage(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSoftwarePackage")
+    @builtins.classmethod
+    def arn_for_software_package(
+        cls,
+        resource: _ISoftwarePackageRef_8860c56e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d3e27895ef08803aaa4e1709aa807e49413d64606332f0f7ea88a76a59e8cec0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSoftwarePackage", [resource]))
+
     @jsii.member(jsii_name="fromPackageName")
     @builtins.classmethod
     def from_package_name(
@@ -14227,6 +14445,17 @@ class CfnThing(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForThing")
+    @builtins.classmethod
+    def arn_for_thing(cls, resource: _IThingRef_8c8528e2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1e4874d9620a63ae1de7b37999f8fc7005c1056fed1e46fdb28956fe0c0648a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForThing", [resource]))
+
     @jsii.member(jsii_name="fromThingArn")
     @builtins.classmethod
     def from_thing_arn(
@@ -14501,6 +14730,17 @@ class CfnThingGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForThingGroup")
+    @builtins.classmethod
+    def arn_for_thing_group(cls, resource: _IThingGroupRef_d398d262) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51e70b7f9bb73eb5dfde9d5490b17b816e71205cbf8a820c3b561a908b34ae89)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForThingGroup", [resource]))
 
     @jsii.member(jsii_name="fromThingGroupArn")
     @builtins.classmethod
@@ -15351,6 +15591,17 @@ class CfnThingType(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForThingType")
+    @builtins.classmethod
+    def arn_for_thing_type(cls, resource: _IThingTypeRef_464ea9b2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b929fa5a2cf7c3907e85123906897b5779254aa4950f2803242b67fc5929fca1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForThingType", [resource]))
 
     @jsii.member(jsii_name="fromThingTypeArn")
     @builtins.classmethod
@@ -16429,6 +16680,17 @@ class CfnTopicRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTopicRule")
+    @builtins.classmethod
+    def arn_for_topic_rule(cls, resource: _ITopicRuleRef_748e9f37) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b75c55bcd962778bfc642ded48ba4588702cdf5df309620c541fea529ac446dd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTopicRule", [resource]))
 
     @jsii.member(jsii_name="fromRuleName")
     @builtins.classmethod
@@ -21653,6 +21915,20 @@ class CfnTopicRuleDestination(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTopicRuleDestination")
+    @builtins.classmethod
+    def arn_for_topic_rule_destination(
+        cls,
+        resource: _ITopicRuleDestinationRef_a6a50916,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__33e49378b467c0f9495989ecda86a9a1339261f055ec0a365bb2ca3fdfbd52a3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTopicRuleDestination", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -22798,6 +23074,12 @@ def _typecheckingstub__4e4fa4db2b2f39dbc6512c349a1f375506fa414803e0c743e3c239b76
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__aab3c7c02d64faf42e0df07e532bd24c3904188571c52d67f19cd197d5970e92(
+    resource: _IAuthorizerRef_65593d38,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__310c1c4c2dfff03e92b3a6a3e1de13fb9fbfa4745644dab039f56bcdb5c84be3(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -22899,6 +23181,12 @@ def _typecheckingstub__9800cd08bb1d66b3bd0eb0dfcdd44bd57f861cc577346b257704a3a82
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9f6c0e7811bed971c21cf0e900bea5a2739d5e97c8ea4fb30ddc2db11c5f70f5(
+    resource: _IBillingGroupRef_9603d1f5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4a18c3b4d0697a1a24c0fdba8322820151d3aef1daff80005d0610955c8df485(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -22973,6 +23261,12 @@ def _typecheckingstub__f0a57f99095fe97c57d884642a0de69e9de74b60616e0ffd2d2bef2d7
     remove_auto_registration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     verification_certificate_pem: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__553a2e0d7dd8f15628778bf4ef67fa2f0896423c34d2ffb9bbf6714b54dc32b3(
+    resource: _ICACertificateRef_68956798,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23073,6 +23367,12 @@ def _typecheckingstub__46aee44d4d6a9733c85214e26c075d74543dcab8e828397dcca352833
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__33338effcfa2c5354f26f3cfc87f3cf1c1bc71341ec9800764e5c4fb823d69f4(
+    resource: _ICertificateRef_c215b21a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cfecee0031cd00f0c731c9897fab1d78a2ea52ff0b8755d7b8beba1d6b6d98e4(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -23150,6 +23450,12 @@ def _typecheckingstub__aa47c66749868972aaf4a345219010725c3e649282a1cdc821cea25f3
     lambda_function_arn: builtins.str,
     certificate_provider_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__303ad712660180adfb83321b5893696cb37ca6601b21e1b0fb6df9ab381f0727(
+    resource: _ICertificateProviderRef_14051fa1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23232,6 +23538,12 @@ def _typecheckingstub__52a5cb4afc582c05e5d1b2fa90cfc417ff3948833b71595e4f4dfe2cc
     pending_deletion: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     role_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0cf7a9939623c3e07f43293abf64dffb3391acb6342792348f8e80a024df771b(
+    resource: _ICommandRef_ea63e38e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23397,6 +23709,12 @@ def _typecheckingstub__b5d4b322e821a4658786c2a37bf522048717e259abfffbbac6e69e0d2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1e186e6c47bcd7a9b957b10f9dd472f2c8678c9dea330f424db25e177feb8275(
+    resource: _ICustomMetricRef_007a6e16,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e694f3cb4ab80390387848a262c47752dd0bdbe195e0e49defffc1e9b36d4ed3(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -23459,6 +23777,12 @@ def _typecheckingstub__9286d29081a37ed320df129ad3a910f5794612db8e193487b1e0eed45
     type: builtins.str,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5ba65fcf0409d2159605e101679f10b9abd6295b7f83bbda27a6717d4410a8d9(
+    resource: _IDimensionRef_b32b102e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23542,6 +23866,12 @@ def _typecheckingstub__58bae527b5502ff5c7ab6b93d68302d8e2cbc6a5632a832f2c6bf436e
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     tls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomainConfiguration.TlsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     validation_certificate_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__02f53bb4501e782d314f785d0c9aa704092f9f19e1e473870c4ba5e047e66226(
+    resource: _IDomainConfigurationRef_fb2399ab,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23905,6 +24235,12 @@ def _typecheckingstub__41042e233d09c55a1d146a4913894e94014a62c885bf42884b1cf8623
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4d0973cbee612a9630863fc9c182e6d5a508fe33d81287fd156ea18b545d27bd(
+    resource: _IJobTemplateRef_f04ac76b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f36e0acf648bcbed21194f2fcc86b7da45b2ca6201f04d69359e1bd54dae7b68(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -24116,7 +24452,7 @@ def _typecheckingstub__42c0eb8383930c0ee820507c3ca84a084d9791dd182b3af6e1ef31e37
     *,
     account_id: builtins.str,
     default_log_level: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24155,7 +24491,7 @@ def _typecheckingstub__901c60f51fbfd8f93f04a87979753e82a4100266e43b803e7617ae6ab
     *,
     account_id: builtins.str,
     default_log_level: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24168,6 +24504,12 @@ def _typecheckingstub__48c6aa66211a19a61b25f381911e0ed0d3a0281ab34da05702b3caa66
     role_arn: builtins.str,
     action_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__29cf135a8943b9c818c8e8c5849c577a50c2c3f317be06ec34a2506ba7533650(
+    resource: _IMitigationActionRef_e47dbe04,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24285,6 +24627,12 @@ def _typecheckingstub__012a05ab891ef9948d58962bfcaaa5fbbf8453e113dbbe575de08c281
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8796f70ff5a08fbf874c453071af67d17f6e264a78ab791e9da92cbfc2052598(
+    resource: _IPolicyRef_d07d9913,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a60d440d28c013ebf528c142952f6850a3fe113665f6d335d783f8c691227a9b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24370,7 +24718,7 @@ def _typecheckingstub__02bb96ea93d9f923c4ca5284f1e7592d6a1e2f3924af8805a542593c8
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    provisioning_role_arn: builtins.str,
+    provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     template_body: builtins.str,
     description: typing.Optional[builtins.str] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -24378,6 +24726,12 @@ def _typecheckingstub__02bb96ea93d9f923c4ca5284f1e7592d6a1e2f3924af8805a542593c8
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     template_name: typing.Optional[builtins.str] = None,
     template_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c047feaff1844a5caec9af4f3b5c6a7ab35c0a8bb54c67900e63c5afb535739(
+    resource: _IProvisioningTemplateRef_3b3b40e9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24460,7 +24814,7 @@ def _typecheckingstub__ec0e3ed2f7ba2ae28cc3664c20f4375da353cf4745fc034770dad2555
 
 def _typecheckingstub__c77f7c34bd0ba7b87a169be036f82876b81e776ee82a74636a925edb8cb3396d(
     *,
-    provisioning_role_arn: builtins.str,
+    provisioning_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     template_body: builtins.str,
     description: typing.Optional[builtins.str] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -24526,10 +24880,16 @@ def _typecheckingstub__24de62bb2eee992c56b5999c4656f168b122a254284d811246124cfd0
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     credential_duration_seconds: typing.Optional[jsii.Number] = None,
     role_alias: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__12d70f8ae5519a0761321c2e906b509dc13ebafc4d261e4153429b97df696799(
+    resource: _IRoleAliasRef_26714b8b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24588,7 +24948,7 @@ def _typecheckingstub__d2352c1a8d22a8f103dd785adf934aa19ab3df57269d51fd6a4d82d22
 
 def _typecheckingstub__89734d52567c33f755f92e47698f90933bfc19822c106ff024434f75c7f46d81(
     *,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     credential_duration_seconds: typing.Optional[jsii.Number] = None,
     role_alias: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -24606,6 +24966,12 @@ def _typecheckingstub__c7920148477352c97a5c3a934c25ee187add77bf6cf214ae8e8ed66f8
     day_of_week: typing.Optional[builtins.str] = None,
     scheduled_audit_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc4cc7316d27017d79254874d0b0f39cb103e71e49a13b081eb6f201a5198a05(
+    resource: _IScheduledAuditRef_a5878e17,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24698,6 +25064,12 @@ def _typecheckingstub__029ea4c46fb568945f84463c5a4ee9f1b86d6603726f353ba1221eccb
     security_profile_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c1ff9b0f57b91c0ba1ccc067c1474054ac807e183e7bd3b438a98f87ed7f74b0(
+    resource: _ISecurityProfileRef_5d371790,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24887,6 +25259,12 @@ def _typecheckingstub__94c7c8e186e68cde7a8264af8ace7c73f6ac201c314e1535a6ab915b3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d3e27895ef08803aaa4e1709aa807e49413d64606332f0f7ea88a76a59e8cec0(
+    resource: _ISoftwarePackageRef_8860c56e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f04bb4bbac036b5e5c2dd4b5f400cb10635c3a33f5908c7858a66dfd6baa02ed(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -25057,6 +25435,12 @@ def _typecheckingstub__c22f8db826ad742b31d2dec16a9996680b75b22e7a2c5f79d66f96032
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f1e4874d9620a63ae1de7b37999f8fc7005c1056fed1e46fdb28956fe0c0648a(
+    resource: _IThingRef_8c8528e2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fead53b272148fd34aae6d40309f886d11f5b36948745142ad42085f84b82760(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -25113,6 +25497,12 @@ def _typecheckingstub__36ccd1615ce6e784c22f81e639e55416200039d2854f7590649016da4
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     thing_group_name: typing.Optional[builtins.str] = None,
     thing_group_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnThingGroup.ThingGroupPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__51e70b7f9bb73eb5dfde9d5490b17b816e71205cbf8a820c3b561a908b34ae89(
+    resource: _IThingGroupRef_d398d262,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25271,6 +25661,12 @@ def _typecheckingstub__855c3886be1512886349890e201c5566281b169c77e8a1ea7d540216e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b929fa5a2cf7c3907e85123906897b5779254aa4950f2803242b67fc5929fca1(
+    resource: _IThingTypeRef_464ea9b2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6719a471a2e56cfe6b27d1f229fe9a55487c255cf0c800a5247c6abc8687cf5f(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -25365,6 +25761,12 @@ def _typecheckingstub__5caaa56cc812bba0346f32f2da90d212415353bad7f74e7f8649afe3f
     topic_rule_payload: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRule.TopicRulePayloadProperty, typing.Dict[builtins.str, typing.Any]]],
     rule_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b75c55bcd962778bfc642ded48ba4588702cdf5df309620c541fea529ac446dd(
+    resource: _ITopicRuleRef_748e9f37,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25804,6 +26206,12 @@ def _typecheckingstub__816bde55ef86a51da42575115f112ffdcb91903b374da92bfb64e8a1c
     http_url_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRuleDestination.HttpUrlDestinationSummaryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     status: typing.Optional[builtins.str] = None,
     vpc_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTopicRuleDestination.VpcDestinationPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__33e49378b467c0f9495989ecda86a9a1339261f055ec0a365bb2ca3fdfbd52a3(
+    resource: _ITopicRuleDestinationRef_a6a50916,
 ) -> None:
     """Type checking stubs"""
     pass

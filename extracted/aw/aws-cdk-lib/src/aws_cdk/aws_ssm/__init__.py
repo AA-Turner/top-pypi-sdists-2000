@@ -261,8 +261,14 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
-from ..aws_iam import Grant as _Grant_a7ae64f8, IGrantable as _IGrantable_71c4f5de
+from ..aws_iam import (
+    Grant as _Grant_a7ae64f8,
+    GrantOnKeyResult as _GrantOnKeyResult_35320c49,
+    IEncryptedResource as _IEncryptedResource_8e9bf351,
+    IGrantable as _IGrantable_71c4f5de,
+)
 from ..aws_kms import IKey as _IKey_5f11635f
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 from ..interfaces.aws_ssm import (
     AssociationReference as _AssociationReference_4aae9ddd,
     DocumentReference as _DocumentReference_5661bc29,
@@ -344,7 +350,7 @@ class CfnAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        name: builtins.str,
+        name: typing.Union[builtins.str, _IDocumentRef_6c66ce42],
         apply_only_at_cron_interval: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         association_name: typing.Optional[builtins.str] = None,
         automation_target_parameter_name: typing.Optional[builtins.str] = None,
@@ -382,7 +388,7 @@ class CfnAssociation(
         :param schedule_offset: Number of days to wait after the scheduled day to run an association.
         :param sync_compliance: The mode for generating association compliance. You can specify ``AUTO`` or ``MANUAL`` . In ``AUTO`` mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is ``COMPLIANT`` . If the association execution doesn't run successfully, the association is ``NON-COMPLIANT`` . In ``MANUAL`` mode, you must specify the ``AssociationId`` as a parameter for the ``PutComplianceItems`` API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the ``PutComplianceItems`` API action. By default, all associations use ``AUTO`` mode.
         :param targets: The targets for the association. You must specify the ``InstanceId`` or ``Targets`` property. You can target all instances in an AWS account by specifying t he ``InstanceIds`` key with a value of ``*`` . Supported formats include the following. - ``Key=InstanceIds,Values=<instance-id-1>,<instance-id-2>,<instance-id-3>`` - ``Key=tag-key,Values=<my-tag-key-1>,<my-tag-key-2>`` To view a JSON and a YAML example that targets all instances, see "Create an association for all managed instances in an AWS account " on the Examples page.
-        :param wait_for_success_timeout_seconds: The number of seconds the service should wait for the association status to show "Success" before proceeding with the stack execution. If the association status doesn't show "Success" after the specified number of seconds, then stack creation fails. .. epigraph:: When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your AWS CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
+        :param wait_for_success_timeout_seconds: The number of seconds the service should wait for the association status to show "Success" before proceeding with the stack execution. If the association status doesn't show "Success" after the specified number of seconds, then stack creation fails. .. epigraph:: When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__92579425f735301e17a993e7df464a283a7d42ba685c2d4205cf945db662d245)
@@ -409,6 +415,17 @@ class CfnAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAssociation")
+    @builtins.classmethod
+    def arn_for_association(cls, resource: _IAssociationRef_a842a755) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e4a265e7dc882e8a494568f857f8e9472592c22f1b91672cc1b1b43827911bc)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssociation", [resource]))
 
     @jsii.member(jsii_name="fromAssociationId")
     @builtins.classmethod
@@ -980,7 +997,7 @@ class CfnAssociationProps:
     def __init__(
         self,
         *,
-        name: builtins.str,
+        name: typing.Union[builtins.str, _IDocumentRef_6c66ce42],
         apply_only_at_cron_interval: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         association_name: typing.Optional[builtins.str] = None,
         automation_target_parameter_name: typing.Optional[builtins.str] = None,
@@ -1016,7 +1033,7 @@ class CfnAssociationProps:
         :param schedule_offset: Number of days to wait after the scheduled day to run an association.
         :param sync_compliance: The mode for generating association compliance. You can specify ``AUTO`` or ``MANUAL`` . In ``AUTO`` mode, the system uses the status of the association execution to determine the compliance status. If the association execution runs successfully, then the association is ``COMPLIANT`` . If the association execution doesn't run successfully, the association is ``NON-COMPLIANT`` . In ``MANUAL`` mode, you must specify the ``AssociationId`` as a parameter for the ``PutComplianceItems`` API action. In this case, compliance data is not managed by State Manager. It is managed by your direct call to the ``PutComplianceItems`` API action. By default, all associations use ``AUTO`` mode.
         :param targets: The targets for the association. You must specify the ``InstanceId`` or ``Targets`` property. You can target all instances in an AWS account by specifying t he ``InstanceIds`` key with a value of ``*`` . Supported formats include the following. - ``Key=InstanceIds,Values=<instance-id-1>,<instance-id-2>,<instance-id-3>`` - ``Key=tag-key,Values=<my-tag-key-1>,<my-tag-key-2>`` To view a JSON and a YAML example that targets all instances, see "Create an association for all managed instances in an AWS account " on the Examples page.
-        :param wait_for_success_timeout_seconds: The number of seconds the service should wait for the association status to show "Success" before proceeding with the stack execution. If the association status doesn't show "Success" after the specified number of seconds, then stack creation fails. .. epigraph:: When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your AWS CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
+        :param wait_for_success_timeout_seconds: The number of seconds the service should wait for the association status to show "Success" before proceeding with the stack execution. If the association status doesn't show "Success" after the specified number of seconds, then stack creation fails. .. epigraph:: When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html
         :exampleMetadata: fixture=_generated
@@ -1116,7 +1133,7 @@ class CfnAssociationProps:
             self._values["wait_for_success_timeout_seconds"] = wait_for_success_timeout_seconds
 
     @builtins.property
-    def name(self) -> builtins.str:
+    def name(self) -> typing.Union[builtins.str, _IDocumentRef_6c66ce42]:
         '''The name of the SSM document that contains the configuration information for the instance.
 
         You can specify ``Command`` or ``Automation`` documents. The documents can be AWS -predefined documents, documents you created, or a document that is shared with you from another account. For SSM documents that are shared with you from other AWS accounts , you must specify the complete SSM document ARN, in the following format:
@@ -1131,7 +1148,7 @@ class CfnAssociationProps:
         '''
         result = self._values.get("name")
         assert result is not None, "Required property 'name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDocumentRef_6c66ce42], result)
 
     @builtins.property
     def apply_only_at_cron_interval(
@@ -1328,7 +1345,7 @@ class CfnAssociationProps:
         If the association status doesn't show "Success" after the specified number of seconds, then stack creation fails.
         .. epigraph::
 
-           When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your AWS CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
+           When you specify a value for the ``WaitForSuccessTimeoutSeconds`` , `drift detection <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>`_ for your CloudFormation stack’s configuration might yield inaccurate results. If drift detection is important in your scenario, we recommend that you don’t include ``WaitForSuccessTimeoutSeconds`` in your template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-association.html#cfn-ssm-association-waitforsuccesstimeoutseconds
         '''
@@ -1358,7 +1375,7 @@ class CfnDocument(
     This document defines the actions that Systems Manager performs on your AWS resources.
     .. epigraph::
 
-       This resource does not support AWS CloudFormation drift detection.
+       This resource does not support CloudFormation drift detection.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-document.html
     :cloudformationResource: AWS::SSM::Document
@@ -1425,6 +1442,17 @@ class CfnDocument(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDocument")
+    @builtins.classmethod
+    def arn_for_document(cls, resource: _IDocumentRef_6c66ce42) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f4f1617c8f43e163a2e8d6035d529cd8344ebef58cbe1c0e295ffce456043e36)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDocument", [resource]))
 
     @jsii.member(jsii_name="fromDocumentName")
     @builtins.classmethod
@@ -6656,7 +6684,7 @@ class CfnResourceDataSync(
         id: builtins.str,
         *,
         sync_name: builtins.str,
-        bucket_name: typing.Optional[builtins.str] = None,
+        bucket_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         bucket_prefix: typing.Optional[builtins.str] = None,
         bucket_region: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
@@ -6696,6 +6724,20 @@ class CfnResourceDataSync(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceDataSync")
+    @builtins.classmethod
+    def arn_for_resource_data_sync(
+        cls,
+        resource: _IResourceDataSyncRef_e153aa7a,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d0a40ad9955f97a81b9896272461da3bd9173c429e5e12bf580c639715a769d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceDataSync", [resource]))
 
     @jsii.member(jsii_name="fromSyncName")
     @builtins.classmethod
@@ -7244,7 +7286,7 @@ class CfnResourceDataSyncProps:
         self,
         *,
         sync_name: builtins.str,
-        bucket_name: typing.Optional[builtins.str] = None,
+        bucket_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         bucket_prefix: typing.Optional[builtins.str] = None,
         bucket_region: typing.Optional[builtins.str] = None,
         kms_key_arn: typing.Optional[builtins.str] = None,
@@ -7350,13 +7392,15 @@ class CfnResourceDataSyncProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def bucket_name(self) -> typing.Optional[builtins.str]:
+    def bucket_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
         '''The name of the S3 bucket where the aggregated data is stored.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssm-resourcedatasync.html#cfn-ssm-resourcedatasync-bucketname
         '''
         result = self._values.get("bucket_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
 
     @builtins.property
     def bucket_prefix(self) -> typing.Optional[builtins.str]:
@@ -7739,7 +7783,11 @@ class CommonStringParameterAttributes:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ssm.IParameter")
-class IParameter(_IResource_c80c4260, typing_extensions.Protocol):
+class IParameter(
+    _IResource_c80c4260,
+    _IParameterRef_b350095e,
+    typing_extensions.Protocol,
+):
     '''An SSM Parameter reference.'''
 
     @builtins.property
@@ -7788,6 +7836,7 @@ class IParameter(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IParameterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IParameterRef_b350095e), # type: ignore[misc]
 ):
     '''An SSM Parameter reference.'''
 
@@ -8058,7 +8107,101 @@ class ListParameterAttributes(CommonStringParameterAttributes):
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_ssm.ParameterDataType")
 class ParameterDataType(enum.Enum):
-    '''SSM parameter data type.'''
+    '''SSM parameter data type.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        distribution_configuration = imagebuilder.DistributionConfiguration(self, "DistributionConfiguration",
+            distribution_configuration_name="test-distribution-configuration",
+            description="A Distribution Configuration",
+            ami_distributions=[imagebuilder.AmiDistribution(
+                # Distribute AMI to us-east-2 and publish the AMI ID to an SSM parameter
+                region="us-east-2",
+                ssm_parameters=[imagebuilder.SSMParameterConfigurations(
+                    parameter=ssm.StringParameter.from_string_parameter_attributes(self, "CrossRegionParameter",
+                        parameter_name="/imagebuilder/ami",
+                        force_dynamic_reference=True
+                    )
+                )
+                ]
+            )
+            ]
+        )
+        
+        # For AMI-based image builds - add an AMI distribution in the current region
+        distribution_configuration.add_ami_distributions(
+            ami_name="imagebuilder-{{ imagebuilder:buildDate }}",
+            ami_description="Build AMI",
+            ami_kms_key=kms.Key.from_lookup(self, "ComponentKey", alias_name="alias/distribution-encryption-key"),
+            # Copy the AMI to different accounts
+            ami_target_account_ids=["123456789012", "098765432109"],
+            # Add launch permissions on the AMI
+            ami_launch_permission=imagebuilder.AmiLaunchPermission(
+                organization_arns=[
+                    self.format_arn(region="", service="organizations", resource="organization", resource_name="o-1234567abc")
+                ],
+                organizational_unit_arns=[
+                    self.format_arn(
+                        region="",
+                        service="organizations",
+                        resource="ou",
+                        resource_name="o-1234567abc/ou-a123-b4567890"
+                    )
+                ],
+                is_public_user_group=True,
+                account_ids=["234567890123"]
+            ),
+            # Attach tags to the AMI
+            ami_tags={
+                "Environment": "production",
+                "Version": "{{ imagebuilder:buildVersion }}"
+            },
+            # Optional - publish the distributed AMI ID to an SSM parameter
+            ssm_parameters=[imagebuilder.SSMParameterConfigurations(
+                parameter=ssm.StringParameter.from_string_parameter_attributes(self, "Parameter",
+                    parameter_name="/imagebuilder/ami",
+                    force_dynamic_reference=True
+                )
+            ), imagebuilder.SSMParameterConfigurations(
+                ami_account="098765432109",
+                data_type=ssm.ParameterDataType.TEXT,
+                parameter=ssm.StringParameter.from_string_parameter_attributes(self, "CrossAccountParameter",
+                    parameter_name="imagebuilder-prod-ami",
+                    force_dynamic_reference=True
+                )
+            )
+            ],
+            # Optional - create a new launch template version with the distributed AMI ID
+            launch_templates=[imagebuilder.LaunchTemplateConfiguration(
+                launch_template=ec2.LaunchTemplate.from_launch_template_attributes(self, "LaunchTemplate",
+                    launch_template_id="lt-1234"
+                ),
+                set_default_version=True
+            ), imagebuilder.LaunchTemplateConfiguration(
+                account_id="123456789012",
+                launch_template=ec2.LaunchTemplate.from_launch_template_attributes(self, "CrossAccountLaunchTemplate",
+                    launch_template_id="lt-5678"
+                ),
+                set_default_version=True
+            )
+            ],
+            # Optional - enable Fast Launch on an imported launch template
+            fast_launch_configurations=[imagebuilder.FastLaunchConfiguration(
+                enabled=True,
+                launch_template=ec2.LaunchTemplate.from_launch_template_attributes(self, "FastLaunchLT",
+                    launch_template_name="fast-launch-lt"
+                ),
+                max_parallel_launches=10,
+                target_snapshot_count=2
+            )
+            ],
+            # Optional - license configurations to apply to the AMI
+            license_configuration_arns=["arn:aws:license-manager:us-west-2:123456789012:license-configuration:lic-abcdefghijklmnopqrstuvwxyz"
+            ]
+        )
+    '''
 
     TEXT = "TEXT"
     '''Text.'''
@@ -8436,7 +8579,7 @@ class SecureStringParameterAttributes(CommonStringParameterAttributes):
         )
 
 
-@jsii.implements(IStringListParameter, IParameter)
+@jsii.implements(IStringListParameter, IParameter, _IEncryptedResource_8e9bf351)
 class StringListParameter(
     _Resource_45bc6135,
     metaclass=jsii.JSIIMeta,
@@ -8570,6 +8713,23 @@ class StringListParameter(
             check_type(argname="argument version", value=version, expected_type=type_hints["version"])
         return typing.cast(typing.List[builtins.str], jsii.sinvoke(cls, "valueForTypedListParameter", [scope, parameter_name, type, version]))
 
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__824e8abcbca38ad92af3ff44fd0365b7d085fe7ecaacd4bc420f85fa7d6e2417)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
         '''Grants read (DescribeParameter, GetParameters, GetParameter, GetParameterHistory) permissions on the SSM Parameter.
@@ -8609,6 +8769,12 @@ class StringListParameter(
     def parameter_name(self) -> builtins.str:
         '''The name of the SSM Parameter resource.'''
         return typing.cast(builtins.str, jsii.get(self, "parameterName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="parameterRef")
+    def parameter_ref(self) -> _ParameterReference_18138f09:
+        '''A reference to a Parameter resource.'''
+        return typing.cast(_ParameterReference_18138f09, jsii.get(self, "parameterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="parameterType")
@@ -8794,7 +8960,7 @@ class StringListParameterProps(ParameterOptions):
         )
 
 
-@jsii.implements(IStringParameter, IParameter)
+@jsii.implements(IStringParameter, IParameter, _IEncryptedResource_8e9bf351)
 class StringParameter(
     _Resource_45bc6135,
     metaclass=jsii.JSIIMeta,
@@ -9104,6 +9270,23 @@ class StringParameter(
 
         return typing.cast(builtins.str, jsii.sinvoke(cls, "valueFromLookup", [scope, parameter_name, default_value, options]))
 
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7acb1faa506233f639c04fd634f594bfa266630c67808f0fe4755dc49acc3e5b)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
+
     @jsii.member(jsii_name="grantRead")
     def grant_read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
         '''Grants read (DescribeParameter, GetParameters, GetParameter, GetParameterHistory) permissions on the SSM Parameter.
@@ -9143,6 +9326,12 @@ class StringParameter(
     def parameter_name(self) -> builtins.str:
         '''The name of the SSM Parameter resource.'''
         return typing.cast(builtins.str, jsii.get(self, "parameterName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="parameterRef")
+    def parameter_ref(self) -> _ParameterReference_18138f09:
+        '''A reference to a Parameter resource.'''
+        return typing.cast(_ParameterReference_18138f09, jsii.get(self, "parameterRef"))
 
     @builtins.property
     @jsii.member(jsii_name="parameterType")
@@ -9635,7 +9824,7 @@ def _typecheckingstub__92579425f735301e17a993e7df464a283a7d42ba685c2d4205cf945db
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    name: builtins.str,
+    name: typing.Union[builtins.str, _IDocumentRef_6c66ce42],
     apply_only_at_cron_interval: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     association_name: typing.Optional[builtins.str] = None,
     automation_target_parameter_name: typing.Optional[builtins.str] = None,
@@ -9652,6 +9841,12 @@ def _typecheckingstub__92579425f735301e17a993e7df464a283a7d42ba685c2d4205cf945db
     sync_compliance: typing.Optional[builtins.str] = None,
     targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssociation.TargetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     wait_for_success_timeout_seconds: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e4a265e7dc882e8a494568f857f8e9472592c22f1b91672cc1b1b43827911bc(
+    resource: _IAssociationRef_a842a755,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9804,7 +9999,7 @@ def _typecheckingstub__e23bdeb61e8b0804a4fde32db838d3743a925dc709401804cd81e355e
 
 def _typecheckingstub__eb0c608fec68cefb540b911fce04c4316c075989d67e9aa888cb8f01cc7e0dac(
     *,
-    name: builtins.str,
+    name: typing.Union[builtins.str, _IDocumentRef_6c66ce42],
     apply_only_at_cron_interval: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     association_name: typing.Optional[builtins.str] = None,
     automation_target_parameter_name: typing.Optional[builtins.str] = None,
@@ -9839,6 +10034,12 @@ def _typecheckingstub__4d0587e99b7ec516726ff27f1c34b1714d8645ad06944d59be27a6125
     target_type: typing.Optional[builtins.str] = None,
     update_method: typing.Optional[builtins.str] = None,
     version_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f4f1617c8f43e163a2e8d6035d529cd8344ebef58cbe1c0e295ffce456043e36(
+    resource: _IDocumentRef_6c66ce42,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10667,7 +10868,7 @@ def _typecheckingstub__c8a24f4d86cad49691c9635278face17e76a24ad5a69daef9687e1e2d
     id: builtins.str,
     *,
     sync_name: builtins.str,
-    bucket_name: typing.Optional[builtins.str] = None,
+    bucket_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     bucket_prefix: typing.Optional[builtins.str] = None,
     bucket_region: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
@@ -10675,6 +10876,12 @@ def _typecheckingstub__c8a24f4d86cad49691c9635278face17e76a24ad5a69daef9687e1e2d
     sync_format: typing.Optional[builtins.str] = None,
     sync_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceDataSync.SyncSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sync_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6d0a40ad9955f97a81b9896272461da3bd9173c429e5e12bf580c639715a769d(
+    resource: _IResourceDataSyncRef_e153aa7a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10785,7 +10992,7 @@ def _typecheckingstub__ac8e974fe62ffae098cb7f57d7ea4db9b8d0aafbbba47aa7622d2bdcc
 def _typecheckingstub__26353d4906971bfc49271a95bc4480dfb3fac99c43391b8a0aa7279209b75bb5(
     *,
     sync_name: builtins.str,
-    bucket_name: typing.Optional[builtins.str] = None,
+    bucket_name: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     bucket_prefix: typing.Optional[builtins.str] = None,
     bucket_region: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
@@ -10933,6 +11140,13 @@ def _typecheckingstub__9b9ae745d086e0dea148aea94e9f88d8efd375fa182578d056bcfd3fd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__824e8abcbca38ad92af3ff44fd0365b7d085fe7ecaacd4bc420f85fa7d6e2417(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__819241aedbf400f619f3bb1dab30b0594eef1072ffeee79fad21356c807bec86(
     grantee: _IGrantable_71c4f5de,
 ) -> None:
@@ -11055,6 +11269,13 @@ def _typecheckingstub__352ba5506c7762dcb469028a7b0515dc3daed2b43c5a8ff339ed16372
     default_value: typing.Optional[builtins.str] = None,
     *,
     additional_cache_key: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7acb1faa506233f639c04fd634f594bfa266630c67808f0fe4755dc49acc3e5b(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

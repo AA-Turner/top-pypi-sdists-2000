@@ -304,6 +304,17 @@ class CfnIndex(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForIndex")
+    @builtins.classmethod
+    def arn_for_index(cls, resource: _IIndexRef_4a727770) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3ee3c944df815a57d0c4c86976931da67d5b87a991ea53fb79fc453c3e9de86e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIndex", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -552,6 +563,17 @@ class CfnView(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForView")
+    @builtins.classmethod
+    def arn_for_view(cls, resource: _IViewRef_bd4cee83) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ad1393ed148ff2f5b6ac9145f2a18e8c29f82d6e855941354ce1a348f68a85c1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForView", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1048,6 +1070,12 @@ def _typecheckingstub__accccd442e137b2533911bfe6a9c63d90b98a01337a2c8e9c58697e08
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3ee3c944df815a57d0c4c86976931da67d5b87a991ea53fb79fc453c3e9de86e(
+    resource: _IIndexRef_4a727770,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9868b671e46d1bbfcbe098b2349183185ded8e3b83f1d5b803364752d2cc285a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1089,6 +1117,12 @@ def _typecheckingstub__7f124943049ede771902c48eecbb29bb165c5c4c2d774e691c255a756
     included_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnView.IncludedPropertyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     scope: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ad1393ed148ff2f5b6ac9145f2a18e8c29f82d6e855941354ce1a348f68a85c1(
+    resource: _IViewRef_bd4cee83,
 ) -> None:
     """Type checking stubs"""
     pass

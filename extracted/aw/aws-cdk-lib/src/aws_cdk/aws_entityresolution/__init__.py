@@ -213,6 +213,20 @@ class CfnIdMappingWorkflow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForIdMappingWorkflow")
+    @builtins.classmethod
+    def arn_for_id_mapping_workflow(
+        cls,
+        resource: _IIdMappingWorkflowRef_719b905c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__697e2283ce07279283f9e7b8da760b2f965cb796abe9786a0d96cb3daab2c644)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdMappingWorkflow", [resource]))
+
     @jsii.member(jsii_name="fromWorkflowName")
     @builtins.classmethod
     def from_workflow_name(
@@ -843,7 +857,7 @@ class CfnIdMappingWorkflow(
             '''A list of ``IdMappingWorkflowOutputSource`` objects, each of which contains fields ``outputS3Path`` and ``KMSArn`` .
 
             :param output_s3_path: The S3 path to which AWS Entity Resolution will write the output table.
-            :param kms_arn: Customer AWS KMS ARN for encryption at rest. If not provided, system will use an AWS Entity Resolution managed KMS key.
+            :param kms_arn: Customer AWS ARN for encryption at rest. If not provided, system will use an AWS Entity Resolution managed KMS key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-entityresolution-idmappingworkflow-idmappingworkflowoutputsource.html
             :exampleMetadata: fixture=_generated
@@ -883,7 +897,7 @@ class CfnIdMappingWorkflow(
 
         @builtins.property
         def kms_arn(self) -> typing.Optional[builtins.str]:
-            '''Customer AWS KMS ARN for encryption at rest.
+            '''Customer AWS  ARN for encryption at rest.
 
             If not provided, system will use an AWS Entity Resolution managed KMS key.
 
@@ -1462,6 +1476,17 @@ class CfnIdNamespace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIdNamespace")
+    @builtins.classmethod
+    def arn_for_id_namespace(cls, resource: _IIdNamespaceRef_b89c1cab) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8487355a1908faec8f5403f9bd7f4ff193f787822e0a99e51747b4a60e79a42b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdNamespace", [resource]))
 
     @jsii.member(jsii_name="fromIdNamespaceArn")
     @builtins.classmethod
@@ -2474,6 +2499,20 @@ class CfnMatchingWorkflow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMatchingWorkflow")
+    @builtins.classmethod
+    def arn_for_matching_workflow(
+        cls,
+        resource: _IMatchingWorkflowRef_66c9c4fe,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d81291d8a011f4111786dc94259660197e1d500c558af67b8f88a9e40fbe4eef)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMatchingWorkflow", [resource]))
 
     @jsii.member(jsii_name="fromWorkflowName")
     @builtins.classmethod
@@ -4325,6 +4364,20 @@ class CfnSchemaMapping(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSchemaMapping")
+    @builtins.classmethod
+    def arn_for_schema_mapping(
+        cls,
+        resource: _ISchemaMappingRef_a699d3c7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__629fe383aa819a7167f535711217a938aaec348eeb575093b5c7ed67aa0f107f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchemaMapping", [resource]))
+
     @jsii.member(jsii_name="fromSchemaName")
     @builtins.classmethod
     def from_schema_name(
@@ -4814,6 +4867,12 @@ def _typecheckingstub__498454075de816db2ba240e783f9530effd93522c63f637ee5bff5bbf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__697e2283ce07279283f9e7b8da760b2f965cb796abe9786a0d96cb3daab2c644(
+    resource: _IIdMappingWorkflowRef_719b905c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c71e3475fcf92412e60d6b5cded8ce1be5e96efeb895e07d62610a74d2c5d706(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4979,6 +5038,12 @@ def _typecheckingstub__725fcecd44cb8acaba43bacc813f1feb11b78b50f21d8344c7e80f5e9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8487355a1908faec8f5403f9bd7f4ff193f787822e0a99e51747b4a60e79a42b(
+    resource: _IIdNamespaceRef_b89c1cab,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a37393a68cafd76cc27f2d6601ae82638be7969941bff433eb43c0d7ff73e003(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -5117,6 +5182,12 @@ def _typecheckingstub__8c9e9b620b89ac2aae774eb42384e0472b5a13eeb28983708b164b240
     description: typing.Optional[builtins.str] = None,
     incremental_run_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMatchingWorkflow.IncrementalRunConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d81291d8a011f4111786dc94259660197e1d500c558af67b8f88a9e40fbe4eef(
+    resource: _IMatchingWorkflowRef_66c9c4fe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5377,6 +5448,12 @@ def _typecheckingstub__d4b85e0c42d14b4681c4f948114178ba1c1a3d4eee3aed6f96a55a116
     schema_name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__629fe383aa819a7167f535711217a938aaec348eeb575093b5c7ed67aa0f107f(
+    resource: _ISchemaMappingRef_a699d3c7,
 ) -> None:
     """Type checking stubs"""
     pass

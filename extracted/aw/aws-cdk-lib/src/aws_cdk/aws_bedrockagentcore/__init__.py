@@ -191,6 +191,20 @@ class CfnBrowserCustom(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForBrowserCustom")
+    @builtins.classmethod
+    def arn_for_browser_custom(
+        cls,
+        resource: _IBrowserCustomRef_f12bfa35,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3938521d3e1fa00869a698ba3a1fa8867e2077f1c510f1bd54cf729929cc8448)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBrowserCustom", [resource]))
+
     @jsii.member(jsii_name="fromBrowserId")
     @builtins.classmethod
     def from_browser_id(
@@ -1040,6 +1054,20 @@ class CfnCodeInterpreterCustom(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCodeInterpreterCustom")
+    @builtins.classmethod
+    def arn_for_code_interpreter_custom(
+        cls,
+        resource: _ICodeInterpreterCustomRef_2d5c05fb,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__975674ea4f6bb8a0c20e661871dd773f758b19950b1cf17839dc6587ebb65590)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeInterpreterCustom", [resource]))
+
     @jsii.member(jsii_name="fromCodeInterpreterId")
     @builtins.classmethod
     def from_code_interpreter_id(
@@ -1627,6 +1655,17 @@ class CfnGateway(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGateway")
+    @builtins.classmethod
+    def arn_for_gateway(cls, resource: _IGatewayRef_a3ed30fe) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6c4c1faa26b1254e7e81bc3fba266c51f8b0763206acf1eb473d1904042a366e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGateway", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4517,6 +4556,17 @@ class CfnMemory(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMemory")
+    @builtins.classmethod
+    def arn_for_memory(cls, resource: _IMemoryRef_2d13cc89) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__efd26aeb6a65d79b61f16a74d7d3f32c4d43bcea29520d215020f825921c572d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMemory", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9143,6 +9193,20 @@ class CfnWorkloadIdentity(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForWorkloadIdentity")
+    @builtins.classmethod
+    def arn_for_workload_identity(
+        cls,
+        resource: _IWorkloadIdentityRef_dc6077a7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d17bbc0e09dbed545a31bdb5536b2bc6164ac952e9964c0b9fb5b066c0ad1639)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkloadIdentity", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9398,6 +9462,12 @@ def _typecheckingstub__e817ad5ee6496ab54cf569758c4d73da62a4d6f5cf0c34866960f6e46
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3938521d3e1fa00869a698ba3a1fa8867e2077f1c510f1bd54cf729929cc8448(
+    resource: _IBrowserCustomRef_f12bfa35,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1a5d38dc7619d36a2a4f39c13ec237b55f560a41ac9a162b787880e8e6ba2f47(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -9525,6 +9595,12 @@ def _typecheckingstub__1aaa167a6af98d626969b5bd2de9377658de4e8d04df0b48dc5916f9e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__975674ea4f6bb8a0c20e661871dd773f758b19950b1cf17839dc6587ebb65590(
+    resource: _ICodeInterpreterCustomRef_2d5c05fb,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d2e6193c6a8378455a4decc0c525a09a78674fd7ad426e58017e57035bc1789a(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -9616,6 +9692,12 @@ def _typecheckingstub__718d4d7128ca57b0228b268f1204c5574e63e51d4e7701a53fd67a1e8
     kms_key_arn: typing.Optional[builtins.str] = None,
     protocol_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayProtocolConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c4c1faa26b1254e7e81bc3fba266c51f8b0763206acf1eb473d1904042a366e(
+    resource: _IGatewayRef_a3ed30fe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9936,6 +10018,12 @@ def _typecheckingstub__b95a7255db9df73ca225a32aecd624481667f18f3308ba77ce3fbf7d7
     memory_execution_role_arn: typing.Optional[builtins.str] = None,
     memory_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMemory.MemoryStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__efd26aeb6a65d79b61f16a74d7d3f32c4d43bcea29520d215020f825921c572d(
+    resource: _IMemoryRef_2d13cc89,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10475,6 +10563,12 @@ def _typecheckingstub__09a8e6f0ae71da08ac7a3937e8dcaa170d25c76feb84006a0b53e9e68
     name: builtins.str,
     allowed_resource_oauth2_return_urls: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d17bbc0e09dbed545a31bdb5536b2bc6164ac952e9964c0b9fb5b066c0ad1639(
+    resource: _IWorkloadIdentityRef_dc6077a7,
 ) -> None:
     """Type checking stubs"""
     pass

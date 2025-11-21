@@ -187,6 +187,20 @@ class CfnConfigurationSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConfigurationSet")
+    @builtins.classmethod
+    def arn_for_configuration_set(
+        cls,
+        resource: _IConfigurationSetRef_be3ec7c2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04de3b646c1d1d3fc07c65ce19d9174446aaf197c899c5e2b9702589553a45d7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfigurationSet", [resource]))
+
     @jsii.member(jsii_name="fromConfigurationSetArn")
     @builtins.classmethod
     def from_configuration_set_arn(
@@ -951,6 +965,17 @@ class CfnOptOutList(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForOptOutList")
+    @builtins.classmethod
+    def arn_for_opt_out_list(cls, resource: _IOptOutListRef_1d44f5f8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18d3377f373ff69f5f3a69ff24c03e8e55d0375f6a23941598b25909cc72b307)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOptOutList", [resource]))
+
     @jsii.member(jsii_name="fromOptOutListArn")
     @builtins.classmethod
     def from_opt_out_list_arn(
@@ -1258,6 +1283,17 @@ class CfnPhoneNumber(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPhoneNumber")
+    @builtins.classmethod
+    def arn_for_phone_number(cls, resource: _IPhoneNumberRef_7c6c9ced) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6f0507c4ca0adc8b9805dec32c85b04d0a70473ab9802f6bdc0b7e20a73538e8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPhoneNumber", [resource]))
 
     @jsii.member(jsii_name="fromPhoneNumberArn")
     @builtins.classmethod
@@ -2205,6 +2241,17 @@ class CfnPool(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPool")
+    @builtins.classmethod
+    def arn_for_pool(cls, resource: _IPoolRef_897848fa) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c213e5cd801b66ee29fd451845c5bf494a7f8228b76c98e75498ab918e235763)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPool", [resource]))
+
     @jsii.member(jsii_name="fromPoolArn")
     @builtins.classmethod
     def from_pool_arn(
@@ -3089,6 +3136,20 @@ class CfnProtectConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProtectConfiguration")
+    @builtins.classmethod
+    def arn_for_protect_configuration(
+        cls,
+        resource: _IProtectConfigurationRef_e1ab5693,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4038c61100766d71fab98889f2bbd57b9867902fd26f9e153acff749784440a4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProtectConfiguration", [resource]))
+
     @jsii.member(jsii_name="fromProtectConfigurationArn")
     @builtins.classmethod
     def from_protect_configuration_arn(
@@ -3340,7 +3401,7 @@ class CfnProtectConfiguration(
 
             .. epigraph::
 
-               If you don't specify all available ISO country codes in the ``CountryRuleSet`` for each number capability, the AWS CloudFormation drift detection feature will detect drift. This is because End User Messaging  always returns all country codes.
+               If you don't specify all available ISO country codes in the ``CountryRuleSet`` for each number capability, the CloudFormation drift detection feature will detect drift. This is because End User Messaging  always returns all country codes.
 
             :param mms: The set of ``CountryRule`` s to control which destination countries End User Messaging can send your MMS messages to.
             :param sms: The set of ``CountryRule`` s to control which destination countries End User Messaging can send your SMS messages to.
@@ -3798,6 +3859,17 @@ class CfnSenderId(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSenderId")
+    @builtins.classmethod
+    def arn_for_sender_id(cls, resource: _ISenderIdRef_c6023099) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__15bd52eff7a89cfde63e4f10bba79d1608ba416f3480f0d08b441514256cd305)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSenderId", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4061,6 +4133,12 @@ def _typecheckingstub__40dfc64df6dc2c0a72f2a15a90352d0f45df52177e2673d853e93c45f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__04de3b646c1d1d3fc07c65ce19d9174446aaf197c899c5e2b9702589553a45d7(
+    resource: _IConfigurationSetRef_be3ec7c2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bd09a8e0a95f96b6bf6ade58869d230ef8c16df306e2dba74636ef174182860e(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4182,6 +4260,12 @@ def _typecheckingstub__ea38a41fadafddeabec02441f39c67873aa2e47aa1a61c10bd3923050
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__18d3377f373ff69f5f3a69ff24c03e8e55d0375f6a23941598b25909cc72b307(
+    resource: _IOptOutListRef_1d44f5f8,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__124a7f8a72ebe536ef9b7171326a8506b93040fca900f1f72574cfb0fcf6615a(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4244,6 +4328,12 @@ def _typecheckingstub__32252c96682ee51fe1d1c58cae6b6350f48d46d59b1d32994ea664019
     self_managed_opt_outs_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     two_way: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPhoneNumber.TwoWayProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6f0507c4ca0adc8b9805dec32c85b04d0a70473ab9802f6bdc0b7e20a73538e8(
+    resource: _IPhoneNumberRef_7c6c9ced,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4402,6 +4492,12 @@ def _typecheckingstub__59ec152307c1b9f9d8e2674741d58c16f421e0af6e557203e2d5863f8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c213e5cd801b66ee29fd451845c5bf494a7f8228b76c98e75498ab918e235763(
+    resource: _IPoolRef_897848fa,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__44b74b415a2e8fb8ef92df3df07db6ad2cc85726f2444e9b9d644550e1c607ba(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4543,6 +4639,12 @@ def _typecheckingstub__3395de3209762a050f467d1fe0a98e4e81c55a9fa41d448e97b764225
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4038c61100766d71fab98889f2bbd57b9867902fd26f9e153acff749784440a4(
+    resource: _IProtectConfigurationRef_e1ab5693,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__30a9d4af727d92ea133d23d5c13cb27130f80d90393dc02c481aa8e3278db26b(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4665,6 +4767,12 @@ def _typecheckingstub__579e8861eeec43305720b40c1d4cd3b273ca5261f965f0fa1cc4ee0e0
     sender_id: builtins.str,
     deletion_protection_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__15bd52eff7a89cfde63e4f10bba79d1608ba416f3480f0d08b441514256cd305(
+    resource: _ISenderIdRef_c6023099,
 ) -> None:
     """Type checking stubs"""
     pass

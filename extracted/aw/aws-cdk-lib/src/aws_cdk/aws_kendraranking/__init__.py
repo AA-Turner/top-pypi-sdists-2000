@@ -142,6 +142,20 @@ class CfnExecutionPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForExecutionPlan")
+    @builtins.classmethod
+    def arn_for_execution_plan(
+        cls,
+        resource: _IExecutionPlanRef_0496b464,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d1d3694917f2f1c5dd6121450a7b561982dfaee5950565f0bf13b77ad7bf833a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExecutionPlan", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -456,6 +470,12 @@ def _typecheckingstub__10ad8ffee997e60c547397dcad2b6175d967468b936a768fcba477203
     capacity_units: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExecutionPlan.CapacityUnitsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d1d3694917f2f1c5dd6121450a7b561982dfaee5950565f0bf13b77ad7bf833a(
+    resource: _IExecutionPlanRef_0496b464,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -146,6 +146,20 @@ class CfnVirtualCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVirtualCluster")
+    @builtins.classmethod
+    def arn_for_virtual_cluster(
+        cls,
+        resource: _IVirtualClusterRef_14fb6023,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__516f2f16964e7ef220cab41225b3b7c3e3c0a9ee6b852252c3f1a1871264629c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVirtualCluster", [resource]))
+
     @jsii.member(jsii_name="fromVirtualClusterArn")
     @builtins.classmethod
     def from_virtual_cluster_arn(
@@ -668,6 +682,12 @@ def _typecheckingstub__a06dc2760ceb0de7a449a23941f15987094157d1a540c30fa67c9e49a
     name: builtins.str,
     security_configuration_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__516f2f16964e7ef220cab41225b3b7c3e3c0a9ee6b852252c3f1a1871264629c(
+    resource: _IVirtualClusterRef_14fb6023,
 ) -> None:
     """Type checking stubs"""
     pass

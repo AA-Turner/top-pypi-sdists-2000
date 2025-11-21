@@ -136,6 +136,17 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_ba4d90ac) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fe9bb62bf51b4dcc9d49adb22fb1d50225a948b99746c377a84e0056fe7c5f4c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -460,7 +471,7 @@ class CfnControlPanel(
         id: builtins.str,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[builtins.str] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::ControlPanel``.
@@ -478,6 +489,20 @@ class CfnControlPanel(
         props = CfnControlPanelProps(name=name, cluster_arn=cluster_arn, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForControlPanel")
+    @builtins.classmethod
+    def arn_for_control_panel(
+        cls,
+        resource: _IControlPanelRef_064cd10b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96cd58aa70a25340fca6d017f96ca5e5a7562cb7b812359aa135cf07b88df18f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForControlPanel", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -614,7 +639,7 @@ class CfnControlPanelProps:
         self,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[builtins.str] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnControlPanel``.
@@ -669,13 +694,15 @@ class CfnControlPanelProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def cluster_arn(self) -> typing.Optional[builtins.str]:
+    def cluster_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]]:
         '''The Amazon Resource Name (ARN) of the cluster for the control panel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-controlpanel.html#cfn-route53recoverycontrol-controlpanel-clusterarn
         '''
         result = self._values.get("cluster_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -735,8 +762,8 @@ class CfnRoutingControl(
         id: builtins.str,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[builtins.str] = None,
-        control_panel_arn: typing.Optional[builtins.str] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
+        control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
     ) -> None:
         '''Create a new ``AWS::Route53RecoveryControl::RoutingControl``.
 
@@ -755,6 +782,20 @@ class CfnRoutingControl(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRoutingControl")
+    @builtins.classmethod
+    def arn_for_routing_control(
+        cls,
+        resource: _IRoutingControlRef_af956175,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__90c010372b85b6d265c72d07236a5a955091211ccc6fa003d1dba45796b7b78c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoutingControl", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -871,8 +912,8 @@ class CfnRoutingControlProps:
         self,
         *,
         name: builtins.str,
-        cluster_arn: typing.Optional[builtins.str] = None,
-        control_panel_arn: typing.Optional[builtins.str] = None,
+        cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
+        control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
     ) -> None:
         '''Properties for defining a ``CfnRoutingControl``.
 
@@ -923,22 +964,26 @@ class CfnRoutingControlProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def cluster_arn(self) -> typing.Optional[builtins.str]:
+    def cluster_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]]:
         '''The Amazon Resource Name (ARN) of the cluster that hosts the routing control.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-routingcontrol.html#cfn-route53recoverycontrol-routingcontrol-clusterarn
         '''
         result = self._values.get("cluster_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]], result)
 
     @builtins.property
-    def control_panel_arn(self) -> typing.Optional[builtins.str]:
+    def control_panel_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]]:
         '''The Amazon Resource Name (ARN) of the control panel that includes the routing control.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-routingcontrol.html#cfn-route53recoverycontrol-routingcontrol-controlpanelarn
         '''
         result = self._values.get("control_panel_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1011,7 +1056,7 @@ class CfnSafetyRule(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        control_panel_arn: builtins.str,
+        control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
         name: builtins.str,
         rule_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSafetyRule.RuleConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSafetyRule.AssertionRuleProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1043,6 +1088,17 @@ class CfnSafetyRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSafetyRule")
+    @builtins.classmethod
+    def arn_for_safety_rule(cls, resource: _ISafetyRuleRef_ba2607a5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bf5c742a518663e3cbd729bbc3165921cbeb224a6b2d457f0b6eb38dc0979345)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSafetyRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1495,7 +1551,7 @@ class CfnSafetyRuleProps:
     def __init__(
         self,
         *,
-        control_panel_arn: builtins.str,
+        control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
         name: builtins.str,
         rule_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.RuleConfigProperty, typing.Dict[builtins.str, typing.Any]]],
         assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.AssertionRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1566,14 +1622,16 @@ class CfnSafetyRuleProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def control_panel_arn(self) -> builtins.str:
+    def control_panel_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IControlPanelRef_064cd10b]:
         '''The Amazon Resource Name (ARN) of the control panel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53recoverycontrol-safetyrule.html#cfn-route53recoverycontrol-safetyrule-controlpanelarn
         '''
         result = self._values.get("control_panel_arn")
         assert result is not None, "Required property 'control_panel_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IControlPanelRef_064cd10b], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1672,6 +1730,12 @@ def _typecheckingstub__a22ce3cb989f0084b0215729b9e32485e8f3c7d8c5b66e19c5d569e73
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fe9bb62bf51b4dcc9d49adb22fb1d50225a948b99746c377a84e0056fe7c5f4c(
+    resource: _IClusterRef_ba4d90ac,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f1d5d3d9f3a1044ea448e47cbbc2078fcd16eda9541fc5415cf9d029dd4ebb80(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1724,8 +1788,14 @@ def _typecheckingstub__af4420a741fa687672aaafb49569b8fb25d0ae5baef4ea3a30346b1e2
     id: builtins.str,
     *,
     name: builtins.str,
-    cluster_arn: typing.Optional[builtins.str] = None,
+    cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__96cd58aa70a25340fca6d017f96ca5e5a7562cb7b812359aa135cf07b88df18f(
+    resource: _IControlPanelRef_064cd10b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1763,7 +1833,7 @@ def _typecheckingstub__3e918a49aa511684305e6f0fb7fb172abe97ec14120062a0a7055abb8
 def _typecheckingstub__50e50657a1a484bf705523a13399e8ac229d80e2376b9afeb9094f2552d0e434(
     *,
     name: builtins.str,
-    cluster_arn: typing.Optional[builtins.str] = None,
+    cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -1774,8 +1844,14 @@ def _typecheckingstub__f8e66a23f93757dc3bc37d83299cb23ab412cab6e96d4afaf3456eb08
     id: builtins.str,
     *,
     name: builtins.str,
-    cluster_arn: typing.Optional[builtins.str] = None,
-    control_panel_arn: typing.Optional[builtins.str] = None,
+    cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
+    control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__90c010372b85b6d265c72d07236a5a955091211ccc6fa003d1dba45796b7b78c(
+    resource: _IRoutingControlRef_af956175,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1813,8 +1889,8 @@ def _typecheckingstub__bdc7cd54715a8da344cf718e3f18f4ce00a90691ceb31d93f935d4046
 def _typecheckingstub__be91c55bdc0168798c12f7b90c6849a8a971899532b4c0d715d17dc211090cf9(
     *,
     name: builtins.str,
-    cluster_arn: typing.Optional[builtins.str] = None,
-    control_panel_arn: typing.Optional[builtins.str] = None,
+    cluster_arn: typing.Optional[typing.Union[builtins.str, _IClusterRef_ba4d90ac]] = None,
+    control_panel_arn: typing.Optional[typing.Union[builtins.str, _IControlPanelRef_064cd10b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1823,12 +1899,18 @@ def _typecheckingstub__ada45d21faa78154fe211f8a129efa23cb89aef71314ca3d913f77b75
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    control_panel_arn: builtins.str,
+    control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
     name: builtins.str,
     rule_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.RuleConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.AssertionRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     gating_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.GatingRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bf5c742a518663e3cbd729bbc3165921cbeb224a6b2d457f0b6eb38dc0979345(
+    resource: _ISafetyRuleRef_ba2607a5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1909,7 +1991,7 @@ def _typecheckingstub__6e9c7596694f51a191b407b4cf7800cd696d05a6cbbcb4f0a2890c69a
 
 def _typecheckingstub__b44e00780d2bb00de407ed35a33395166d559891130b782d5658fb973337fbe9(
     *,
-    control_panel_arn: builtins.str,
+    control_panel_arn: typing.Union[builtins.str, _IControlPanelRef_064cd10b],
     name: builtins.str,
     rule_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.RuleConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     assertion_rule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSafetyRule.AssertionRuleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

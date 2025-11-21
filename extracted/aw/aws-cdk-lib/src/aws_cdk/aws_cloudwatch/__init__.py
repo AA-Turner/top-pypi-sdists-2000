@@ -1161,6 +1161,9 @@ from .. import (
     TreeInspector as _TreeInspector_488e0dd5,
 )
 from ..aws_iam import Grant as _Grant_a7ae64f8, IGrantable as _IGrantable_71c4f5de
+from ..interfaces.aws_autoscaling import (
+    IScalingPolicyRef as _IScalingPolicyRef_fcca0de5
+)
 from ..interfaces.aws_cloudwatch import (
     AlarmReference as _AlarmReference_76b2c14f,
     AnomalyDetectorReference as _AnomalyDetectorReference_11b9b19b,
@@ -1175,6 +1178,11 @@ from ..interfaces.aws_cloudwatch import (
     InsightRuleReference as _InsightRuleReference_d30ddeea,
     MetricStreamReference as _MetricStreamReference_e417a88f,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kinesisfirehose import (
+    IDeliveryStreamRef as _IDeliveryStreamRef_678f5e53
+)
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
 
 
 @jsii.data_type(
@@ -1891,18 +1899,18 @@ class CfnAlarm(
         comparison_operator: builtins.str,
         evaluation_periods: jsii.Number,
         actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.DimensionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         extended_statistic: typing.Optional[builtins.str] = None,
-        insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
         metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAlarm.MetricDataQueryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         period: typing.Optional[jsii.Number] = None,
         statistic: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1920,7 +1928,7 @@ class CfnAlarm(
         :param actions_enabled: Indicates whether actions should be executed during any changes to the alarm state. The default is TRUE. Default: - true
         :param alarm_actions: The list of actions to execute when this alarm transitions into an ALARM state from any other state. Specify each action as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutMetricAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
         :param alarm_description: The description of the alarm.
-        :param alarm_name: The name of the alarm. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the alarm name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param alarm_name: The name of the alarm. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the alarm name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param datapoints_to_alarm: The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M, and the value that you set for ``EvaluationPeriods`` is the N value. For more information, see `Evaluating an Alarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation>`_ in the *Amazon CloudWatch User Guide* . If you omit this parameter, CloudWatch uses the same value here that you set for ``EvaluationPeriods`` , and the alarm goes to alarm state if that many consecutive periods are breaching.
         :param dimensions: The dimensions for the metric associated with the alarm. For an alarm based on a math expression, you can't specify ``Dimensions`` . Instead, you use ``Metrics`` .
         :param evaluate_low_sample_count_percentile: Used only for alarms based on percentiles. If ``ignore`` , the alarm state does not change during periods with too few data points to be statistically significant. If ``evaluate`` or this parameter is not used, the alarm is always evaluated and possibly changes state no matter how many data points are available.
@@ -1968,6 +1976,17 @@ class CfnAlarm(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAlarm")
+    @builtins.classmethod
+    def arn_for_alarm(cls, resource: _IAlarmRef_2bb0e5de) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bbc3625824c9d8dd875ed28803fa041fbb52c24b0bde065c344d7da906151bb0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlarm", [resource]))
 
     @jsii.member(jsii_name="fromAlarmArn")
     @builtins.classmethod
@@ -2909,18 +2928,18 @@ class CfnAlarmProps:
         comparison_operator: builtins.str,
         evaluation_periods: jsii.Number,
         actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         datapoints_to_alarm: typing.Optional[jsii.Number] = None,
         dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.DimensionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
         extended_statistic: typing.Optional[builtins.str] = None,
-        insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         metric_name: typing.Optional[builtins.str] = None,
         metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.MetricDataQueryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         namespace: typing.Optional[builtins.str] = None,
-        ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         period: typing.Optional[jsii.Number] = None,
         statistic: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2936,7 +2955,7 @@ class CfnAlarmProps:
         :param actions_enabled: Indicates whether actions should be executed during any changes to the alarm state. The default is TRUE. Default: - true
         :param alarm_actions: The list of actions to execute when this alarm transitions into an ALARM state from any other state. Specify each action as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutMetricAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
         :param alarm_description: The description of the alarm.
-        :param alarm_name: The name of the alarm. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the alarm name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param alarm_name: The name of the alarm. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the alarm name. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param datapoints_to_alarm: The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M, and the value that you set for ``EvaluationPeriods`` is the N value. For more information, see `Evaluating an Alarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation>`_ in the *Amazon CloudWatch User Guide* . If you omit this parameter, CloudWatch uses the same value here that you set for ``EvaluationPeriods`` , and the alarm goes to alarm state if that many consecutive periods are breaching.
         :param dimensions: The dimensions for the metric associated with the alarm. For an alarm based on a math expression, you can't specify ``Dimensions`` . Instead, you use ``Metrics`` .
         :param evaluate_low_sample_count_percentile: Used only for alarms based on percentiles. If ``ignore`` , the alarm state does not change during periods with too few data points to be statistically significant. If ``evaluate`` or this parameter is not used, the alarm is always evaluated and possibly changes state no matter how many data points are available.
@@ -3131,7 +3150,9 @@ class CfnAlarmProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def alarm_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+    def alarm_actions(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]]:
         '''The list of actions to execute when this alarm transitions into an ALARM state from any other state.
 
         Specify each action as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutMetricAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutMetricAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -3139,7 +3160,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-alarmactions
         '''
         result = self._values.get("alarm_actions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def alarm_description(self) -> typing.Optional[builtins.str]:
@@ -3154,7 +3175,7 @@ class CfnAlarmProps:
     def alarm_name(self) -> typing.Optional[builtins.str]:
         '''The name of the alarm.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the alarm name.
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the alarm name.
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -3215,7 +3236,9 @@ class CfnAlarmProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def insufficient_data_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+    def insufficient_data_actions(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
         '''The actions to execute when this alarm transitions to the ``INSUFFICIENT_DATA`` state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN).
@@ -3223,7 +3246,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-insufficientdataactions
         '''
         result = self._values.get("insufficient_data_actions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def metric_name(self) -> typing.Optional[builtins.str]:
@@ -3265,7 +3288,9 @@ class CfnAlarmProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def ok_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+    def ok_actions(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
         '''The actions to execute when this alarm transitions to the ``OK`` state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN).
@@ -3273,7 +3298,7 @@ class CfnAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#cfn-cloudwatch-alarm-okactions
         '''
         result = self._values.get("ok_actions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def period(self) -> typing.Optional[jsii.Number]:
@@ -4910,14 +4935,14 @@ class CfnCompositeAlarm(
         *,
         alarm_rule: builtins.str,
         actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        actions_suppressor: typing.Optional[builtins.str] = None,
+        actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
         actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
         actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-        alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CloudWatch::CompositeAlarm``.
@@ -4955,6 +4980,20 @@ class CfnCompositeAlarm(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCompositeAlarm")
+    @builtins.classmethod
+    def arn_for_composite_alarm(
+        cls,
+        resource: _ICompositeAlarmRef_fa51824d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7af23cb9aa06ec62b0666b06bece3839d45b0343dea2057ceb06d53b6b3f6b7a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCompositeAlarm", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5193,14 +5232,14 @@ class CfnCompositeAlarmProps:
         *,
         alarm_rule: builtins.str,
         actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        actions_suppressor: typing.Optional[builtins.str] = None,
+        actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
         actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
         actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-        alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         alarm_description: typing.Optional[builtins.str] = None,
         alarm_name: typing.Optional[builtins.str] = None,
         insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-        ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnCompositeAlarm``.
@@ -5322,7 +5361,9 @@ class CfnCompositeAlarmProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def actions_suppressor(self) -> typing.Optional[builtins.str]:
+    def actions_suppressor(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]]:
         '''Actions will be suppressed if the suppressor alarm is in the ``ALARM`` state.
 
         ``ActionsSuppressor`` can be an AlarmName or an Amazon Resource Name (ARN) from an existing alarm.
@@ -5330,7 +5371,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-actionssuppressor
         '''
         result = self._values.get("actions_suppressor")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]], result)
 
     @builtins.property
     def actions_suppressor_extension_period(self) -> typing.Optional[jsii.Number]:
@@ -5361,7 +5402,9 @@ class CfnCompositeAlarmProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def alarm_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+    def alarm_actions(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
         '''The actions to execute when this alarm transitions to the ALARM state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutCompositeAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutCompositeAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -5369,7 +5412,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-alarmactions
         '''
         result = self._values.get("alarm_actions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def alarm_description(self) -> typing.Optional[builtins.str]:
@@ -5403,7 +5446,9 @@ class CfnCompositeAlarmProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
-    def ok_actions(self) -> typing.Optional[typing.List[builtins.str]]:
+    def ok_actions(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]]:
         '''The actions to execute when this alarm transitions to the OK state from any other state.
 
         Each action is specified as an Amazon Resource Name (ARN). For more information about creating alarms and the actions that you can specify, see `PutCompositeAlarm <https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_PutCompositeAlarm.html>`_ in the *Amazon CloudWatch API Reference* .
@@ -5411,7 +5456,7 @@ class CfnCompositeAlarmProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-compositealarm.html#cfn-cloudwatch-compositealarm-okactions
         '''
         result = self._values.get("ok_actions")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ITopicRef_29aa9a88]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -5492,6 +5537,17 @@ class CfnDashboard(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDashboard")
+    @builtins.classmethod
+    def arn_for_dashboard(cls, resource: _IDashboardRef_3c35946b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6020be094e2b2d4afee4b69155bd8476ddd027a5a492711e2ab0ffa4951f8de9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDashboard", [resource]))
 
     @jsii.member(jsii_name="fromDashboardName")
     @builtins.classmethod
@@ -5733,6 +5789,17 @@ class CfnInsightRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInsightRule")
+    @builtins.classmethod
+    def arn_for_insight_rule(cls, resource: _IInsightRuleRef_436d0d73) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2bdca02c0c0e49733ec98b354acc2cd5f898577d2d4262e5ad756ecb162d38ae)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInsightRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6091,9 +6158,9 @@ class CfnMetricStream(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        firehose_arn: builtins.str,
+        firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
         output_format: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMetricStream.MetricStreamFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -6132,6 +6199,20 @@ class CfnMetricStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMetricStream")
+    @builtins.classmethod
+    def arn_for_metric_stream(
+        cls,
+        resource: _IMetricStreamRef_2c784fc6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__124af1fa5c01bd8fd1b2cdf674999c1b2e7ea84e0936e842f082ee579ac35379)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMetricStream", [resource]))
 
     @jsii.member(jsii_name="fromMetricStreamArn")
     @builtins.classmethod
@@ -6648,9 +6729,9 @@ class CfnMetricStreamProps:
     def __init__(
         self,
         *,
-        firehose_arn: builtins.str,
+        firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
         output_format: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -6742,7 +6823,7 @@ class CfnMetricStreamProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def firehose_arn(self) -> builtins.str:
+    def firehose_arn(self) -> typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53]:
         '''The ARN of the Amazon Kinesis Firehose delivery stream to use for this metric stream.
 
         This Amazon Kinesis Firehose delivery stream must already exist and must be in the same account as the metric stream.
@@ -6751,7 +6832,7 @@ class CfnMetricStreamProps:
         '''
         result = self._values.get("firehose_arn")
         assert result is not None, "Required property 'firehose_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53], result)
 
     @builtins.property
     def output_format(self) -> builtins.str:
@@ -6768,7 +6849,7 @@ class CfnMetricStreamProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of an IAM role that this metric stream will use to access Amazon Kinesis Firehose resources.
 
         This IAM role must already exist and must be in the same account as the metric stream. This IAM role must include the ``firehose:PutRecord`` and ``firehose:PutRecordBatch`` permissions.
@@ -6777,7 +6858,7 @@ class CfnMetricStreamProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def exclude_filters(
@@ -17126,18 +17207,18 @@ def _typecheckingstub__5adc477b9cef758736625389f1a51dec08eb7b348be35f42b0e37d6d4
     comparison_operator: builtins.str,
     evaluation_periods: jsii.Number,
     actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
     alarm_description: typing.Optional[builtins.str] = None,
     alarm_name: typing.Optional[builtins.str] = None,
     datapoints_to_alarm: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.DimensionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
     extended_statistic: typing.Optional[builtins.str] = None,
-    insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     metric_name: typing.Optional[builtins.str] = None,
     metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.MetricDataQueryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     namespace: typing.Optional[builtins.str] = None,
-    ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     period: typing.Optional[jsii.Number] = None,
     statistic: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17145,6 +17226,12 @@ def _typecheckingstub__5adc477b9cef758736625389f1a51dec08eb7b348be35f42b0e37d6d4
     threshold_metric_id: typing.Optional[builtins.str] = None,
     treat_missing_data: typing.Optional[builtins.str] = None,
     unit: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bbc3625824c9d8dd875ed28803fa041fbb52c24b0bde065c344d7da906151bb0(
+    resource: _IAlarmRef_2bb0e5de,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17354,18 +17441,18 @@ def _typecheckingstub__bc643fb1b5f1f1f0e0d9896a5988171163c1f79adc28d1e921bdf85f1
     comparison_operator: builtins.str,
     evaluation_periods: jsii.Number,
     actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IScalingPolicyRef_fcca0de5, _ITopicRef_29aa9a88]]] = None,
     alarm_description: typing.Optional[builtins.str] = None,
     alarm_name: typing.Optional[builtins.str] = None,
     datapoints_to_alarm: typing.Optional[jsii.Number] = None,
     dimensions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.DimensionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     evaluate_low_sample_count_percentile: typing.Optional[builtins.str] = None,
     extended_statistic: typing.Optional[builtins.str] = None,
-    insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    insufficient_data_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     metric_name: typing.Optional[builtins.str] = None,
     metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAlarm.MetricDataQueryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     namespace: typing.Optional[builtins.str] = None,
-    ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     period: typing.Optional[jsii.Number] = None,
     statistic: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17554,15 +17641,21 @@ def _typecheckingstub__5c24d10326e3cd470724ecbde5d50ff23fdf44dc88f809d9a181a5cd8
     *,
     alarm_rule: builtins.str,
     actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    actions_suppressor: typing.Optional[builtins.str] = None,
+    actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
     actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
     actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-    alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     alarm_description: typing.Optional[builtins.str] = None,
     alarm_name: typing.Optional[builtins.str] = None,
     insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7af23cb9aa06ec62b0666b06bece3839d45b0343dea2057ceb06d53b6b3f6b7a(
+    resource: _ICompositeAlarmRef_fa51824d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17649,14 +17742,14 @@ def _typecheckingstub__f61e2b790710dde8e1d3a57752c99da295b632afeb42e0870113583f0
     *,
     alarm_rule: builtins.str,
     actions_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    actions_suppressor: typing.Optional[builtins.str] = None,
+    actions_suppressor: typing.Optional[typing.Union[builtins.str, _IAlarmRef_2bb0e5de, _ICompositeAlarmRef_fa51824d]] = None,
     actions_suppressor_extension_period: typing.Optional[jsii.Number] = None,
     actions_suppressor_wait_period: typing.Optional[jsii.Number] = None,
-    alarm_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    alarm_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     alarm_description: typing.Optional[builtins.str] = None,
     alarm_name: typing.Optional[builtins.str] = None,
     insufficient_data_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ok_actions: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ok_actions: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ITopicRef_29aa9a88]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -17668,6 +17761,12 @@ def _typecheckingstub__5add67d5fc6c551e627bade2623b719ee8c8de03ff6216bc3471bbe52
     *,
     dashboard_body: builtins.str,
     dashboard_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6020be094e2b2d4afee4b69155bd8476ddd027a5a492711e2ab0ffa4951f8de9(
+    resource: _IDashboardRef_3c35946b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17721,6 +17820,12 @@ def _typecheckingstub__7d177572b447b5b9761effd52cd14b4510ca4c8fc8607968bdc5e0bd8
     rule_state: builtins.str,
     apply_on_transformed_logs: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2bdca02c0c0e49733ec98b354acc2cd5f898577d2d4262e5ad756ecb162d38ae(
+    resource: _IInsightRuleRef_436d0d73,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17782,15 +17887,21 @@ def _typecheckingstub__324083d9d1c11bed8d2cf8d1d0cab6adbcb8194552cea34115b984457
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    firehose_arn: builtins.str,
+    firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
     output_format: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     name: typing.Optional[builtins.str] = None,
     statistics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamStatisticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__124af1fa5c01bd8fd1b2cdf674999c1b2e7ea84e0936e842f082ee579ac35379(
+    resource: _IMetricStreamRef_2c784fc6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17903,9 +18014,9 @@ def _typecheckingstub__dd6943836e019c7fb3dffa95c2ffb1b7cb9db587bd9c145bf9373c8ff
 
 def _typecheckingstub__3841eb4f0098d496658caf6739d964d8b08f872e67d2ad28362ac3882ccd7d74(
     *,
-    firehose_arn: builtins.str,
+    firehose_arn: typing.Union[builtins.str, _IDeliveryStreamRef_678f5e53],
     output_format: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     exclude_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMetricStream.MetricStreamFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     include_linked_accounts_metrics: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,

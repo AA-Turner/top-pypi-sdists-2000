@@ -181,6 +181,17 @@ class CfnCluster(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_a438c263) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__125754b69e7c5c96c51dc26b170d976ea4822cbcc2f9a86021b57c8706f0ef4d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1413,6 +1424,20 @@ class CfnComputeNodeGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForComputeNodeGroup")
+    @builtins.classmethod
+    def arn_for_compute_node_group(
+        cls,
+        resource: _IComputeNodeGroupRef_61cc8303,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ead4ed58fb5b442789d7f88a94e3784b4e6e3c35e279cd10cd99a9c1c8f44c6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComputeNodeGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2507,6 +2532,17 @@ class CfnQueue(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForQueue")
+    @builtins.classmethod
+    def arn_for_queue(cls, resource: _IQueueRef_533cbfaf) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ae706e8479931ce73b0ef1453485b7468c32e757d8b94bf5600e44b11b9e6e7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3099,6 +3135,12 @@ def _typecheckingstub__f3eeeaf566612baca2013a4f6d5c60484ee36ebc0edd307d32ef21991
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__125754b69e7c5c96c51dc26b170d976ea4822cbcc2f9a86021b57c8706f0ef4d(
+    resource: _IClusterRef_a438c263,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ad41b9587f0f8c306a5663de2a8a6102111fcb7fc8d0e9a53a589055d6beaedc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3245,6 +3287,12 @@ def _typecheckingstub__5d74625cecbce8d2048b29b24f3148123fb31c64b330ed51fd45d2b2c
     slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     spot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnComputeNodeGroup.SpotOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ead4ed58fb5b442789d7f88a94e3784b4e6e3c35e279cd10cd99a9c1c8f44c6(
+    resource: _IComputeNodeGroupRef_61cc8303,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3413,6 +3461,12 @@ def _typecheckingstub__456edeb02414f262683a35f15a1fae223f92feec590d98024478f680e
     name: typing.Optional[builtins.str] = None,
     slurm_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnQueue.SlurmConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4ae706e8479931ce73b0ef1453485b7468c32e757d8b94bf5600e44b11b9e6e7(
+    resource: _IQueueRef_533cbfaf,
 ) -> None:
     """Type checking stubs"""
     pass

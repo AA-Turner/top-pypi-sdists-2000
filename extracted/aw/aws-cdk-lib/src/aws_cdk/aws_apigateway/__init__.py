@@ -2062,6 +2062,11 @@ from ..interfaces.aws_apigateway import (
     UsagePlanReference as _UsagePlanReference_3d3ec4d2,
     VpcLinkReference as _VpcLinkReference_cccde188,
 )
+from ..interfaces.aws_cognito import IUserPoolRef as _IUserPoolRef_0b7d02b5
+from ..interfaces.aws_elasticloadbalancingv2 import (
+    ILoadBalancerRef as _ILoadBalancerRef_13acd8f1
+)
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
@@ -3312,6 +3317,77 @@ class ApiDefinitionS3Location:
         )
 
 
+class ApiKeyGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_apigateway.ApiKeyGrants",
+):
+    '''Collection of grant methods for a IApiKeyRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_apigateway as apigateway
+        from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+        
+        # api_key_ref: interfaces_aws_apigateway.IApiKeyRef
+        
+        api_key_grants = apigateway.ApiKeyGrants.from_api_key(api_key_ref)
+    '''
+
+    @jsii.member(jsii_name="fromApiKey")
+    @builtins.classmethod
+    def from_api_key(cls, resource: _IApiKeyRef_6e16b46a) -> "ApiKeyGrants":
+        '''Creates grants for ApiKeyGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c6f8aea4b84475655c8cf222854c17c9cd9fc4f2df16b3fd92e43d1365c7ae06)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("ApiKeyGrants", jsii.sinvoke(cls, "fromApiKey", [resource]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits the IAM principal all read operations through this key.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92b6b2c1e82ead5fcc57470b7070cbea0667e1113ef85be4ec4bae94dade48f7)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+    @jsii.member(jsii_name="readWrite")
+    def read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits the IAM principal all read and write operations through this key.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__87319b0a64eee705d6d4fb704c32bd5676a2663ee44675503f96a5d9f1206343)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWrite", [grantee]))
+
+    @jsii.member(jsii_name="write")
+    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Permits the IAM principal all write operations through this key.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dcccf9b7d942d0cfef5b69a678e4c25c2bf970888c4781e7b127480d2f2aa328)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IApiKeyRef_6e16b46a:
+        return typing.cast(_IApiKeyRef_6e16b46a, jsii.get(self, "resource"))
+
+
 @jsii.enum(jsii_type="aws-cdk-lib.aws_apigateway.ApiKeySourceType")
 class ApiKeySourceType(enum.Enum):
     HEADER = "HEADER"
@@ -4010,7 +4086,7 @@ class CfnAccount(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        cloud_watch_role_arn: typing.Optional[builtins.str] = None,
+        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Account``.
 
@@ -4101,7 +4177,7 @@ class CfnAccountProps:
     def __init__(
         self,
         *,
-        cloud_watch_role_arn: typing.Optional[builtins.str] = None,
+        cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAccount``.
 
@@ -4128,13 +4204,15 @@ class CfnAccountProps:
             self._values["cloud_watch_role_arn"] = cloud_watch_role_arn
 
     @builtins.property
-    def cloud_watch_role_arn(self) -> typing.Optional[builtins.str]:
+    def cloud_watch_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The ARN of an Amazon CloudWatch role for the current Account.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-account.html#cfn-apigateway-account-cloudwatchrolearn
         '''
         result = self._values.get("cloud_watch_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -4208,7 +4286,7 @@ class CfnApiKey(
         :param description: The description of the ApiKey.
         :param enabled: Specifies whether the ApiKey can be used by callers. Default: - false
         :param generate_distinct_id: Specifies whether ( ``true`` ) or not ( ``false`` ) the key identifier is distinct from the created API key value. This parameter is deprecated and should not be used.
-        :param name: A name for the API key. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param name: A name for the API key. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param stage_keys: DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
         :param value: Specifies a value of the API key.
@@ -4229,6 +4307,17 @@ class CfnApiKey(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApiKey")
+    @builtins.classmethod
+    def arn_for_api_key(cls, resource: _IApiKeyRef_6e16b46a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31049f8fc309092b2b52771f63e16776005dbfb0d1e5bd141571493eefbbe55a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApiKey", [resource]))
 
     @jsii.member(jsii_name="fromApiKeyId")
     @builtins.classmethod
@@ -4532,7 +4621,7 @@ class CfnApiKeyProps:
         :param description: The description of the ApiKey.
         :param enabled: Specifies whether the ApiKey can be used by callers. Default: - false
         :param generate_distinct_id: Specifies whether ( ``true`` ) or not ( ``false`` ) the key identifier is distinct from the created API key value. This parameter is deprecated and should not be used.
-        :param name: A name for the API key. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param name: A name for the API key. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param stage_keys: DEPRECATED FOR USAGE PLANS - Specifies stages associated with the API key.
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
         :param value: Specifies a value of the API key.
@@ -4639,7 +4728,7 @@ class CfnApiKeyProps:
     def name(self) -> typing.Optional[builtins.str]:
         '''A name for the API key.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the API key name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -4734,15 +4823,15 @@ class CfnAuthorizer(
         id: builtins.str,
         *,
         name: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         type: builtins.str,
-        authorizer_credentials: typing.Optional[builtins.str] = None,
+        authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
         authorizer_uri: typing.Optional[builtins.str] = None,
         auth_type: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
         identity_validation_expression: typing.Optional[builtins.str] = None,
-        provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Authorizer``.
 
@@ -4988,15 +5077,15 @@ class CfnAuthorizerProps:
         self,
         *,
         name: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         type: builtins.str,
-        authorizer_credentials: typing.Optional[builtins.str] = None,
+        authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
         authorizer_uri: typing.Optional[builtins.str] = None,
         auth_type: typing.Optional[builtins.str] = None,
         identity_source: typing.Optional[builtins.str] = None,
         identity_validation_expression: typing.Optional[builtins.str] = None,
-        provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAuthorizer``.
 
@@ -5078,14 +5167,14 @@ class CfnAuthorizerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def type(self) -> builtins.str:
@@ -5100,7 +5189,9 @@ class CfnAuthorizerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def authorizer_credentials(self) -> typing.Optional[builtins.str]:
+    def authorizer_credentials(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer.
 
         To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.
@@ -5108,7 +5199,7 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-authorizercredentials
         '''
         result = self._values.get("authorizer_credentials")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def authorizer_result_ttl_in_seconds(self) -> typing.Optional[jsii.Number]:
@@ -5164,7 +5255,9 @@ class CfnAuthorizerProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def provider_arns(self) -> typing.Optional[typing.List[builtins.str]]:
+    def provider_arns(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]]:
         '''A list of the Amazon Cognito user pool ARNs for the ``COGNITO_USER_POOLS`` authorizer.
 
         Each element is of this format: ``arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}`` . For a ``TOKEN`` or ``REQUEST`` authorizer, this is not defined.
@@ -5172,7 +5265,7 @@ class CfnAuthorizerProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-authorizer.html#cfn-apigateway-authorizer-providerarns
         '''
         result = self._values.get("provider_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5222,11 +5315,11 @@ class CfnBasePathMapping(
         scope: _constructs_77d1e7e8.Construct,
         id_: builtins.str,
         *,
-        domain_name: builtins.str,
+        domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
         base_path: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        rest_api_id: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
+        rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+        stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::BasePathMapping``.
 
@@ -5373,11 +5466,11 @@ class CfnBasePathMappingProps:
     def __init__(
         self,
         *,
-        domain_name: builtins.str,
+        domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
         base_path: typing.Optional[builtins.str] = None,
         id: typing.Optional[builtins.str] = None,
-        rest_api_id: typing.Optional[builtins.str] = None,
-        stage: typing.Optional[builtins.str] = None,
+        rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+        stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
     ) -> None:
         '''Properties for defining a ``CfnBasePathMapping``.
 
@@ -5426,14 +5519,14 @@ class CfnBasePathMappingProps:
             self._values["stage"] = stage
 
     @builtins.property
-    def domain_name(self) -> builtins.str:
+    def domain_name(self) -> typing.Union[builtins.str, _IDomainNameRef_8b0ccf94]:
         '''The domain name of the BasePathMapping resource to be described.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-domainname
         '''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDomainNameRef_8b0ccf94], result)
 
     @builtins.property
     def base_path(self) -> typing.Optional[builtins.str]:
@@ -5453,22 +5546,24 @@ class CfnBasePathMappingProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def rest_api_id(self) -> typing.Optional[builtins.str]:
+    def rest_api_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-restapiid
         '''
         result = self._values.get("rest_api_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]], result)
 
     @builtins.property
-    def stage(self) -> typing.Optional[builtins.str]:
+    def stage(self) -> typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]]:
         '''The name of the associated stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-basepathmapping.html#cfn-apigateway-basepathmapping-stage
         '''
         result = self._values.get("stage")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5810,6 +5905,20 @@ class CfnClientCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForClientCertificate")
+    @builtins.classmethod
+    def arn_for_client_certificate(
+        cls,
+        resource: _IClientCertificateRef_2a4b2b38,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2621dad41ff37a49554705837d754a31004034ed7e3966e754c0c487e0717897)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForClientCertificate", [resource]))
+
     @jsii.member(jsii_name="fromClientCertificateId")
     @builtins.classmethod
     def from_client_certificate_id(
@@ -6079,7 +6188,7 @@ class CfnDeployment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.DeploymentCanarySettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDeployment.StageDescriptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7155,7 +7264,7 @@ class CfnDeploymentProps:
     def __init__(
         self,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentCanarySettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
         stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.StageDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7259,14 +7368,14 @@ class CfnDeploymentProps:
             self._values["stage_name"] = stage_name
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-deployment.html#cfn-apigateway-deployment-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def deployment_canary_settings(
@@ -7362,7 +7471,7 @@ class CfnDocumentationPart(
         *,
         location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnDocumentationPart.LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         properties: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DocumentationPart``.
 
@@ -7628,7 +7737,7 @@ class CfnDocumentationPartProps:
         *,
         location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentationPart.LocationProperty, typing.Dict[builtins.str, typing.Any]]],
         properties: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     ) -> None:
         '''Properties for defining a ``CfnDocumentationPart``.
 
@@ -7693,14 +7802,14 @@ class CfnDocumentationPartProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-documentationpart.html#cfn-apigateway-documentationpart-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7749,7 +7858,7 @@ class CfnDocumentationVersion(
         id: builtins.str,
         *,
         documentation_version: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::DocumentationVersion``.
@@ -7867,7 +7976,7 @@ class CfnDocumentationVersionProps:
         self,
         *,
         documentation_version: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnDocumentationVersion``.
@@ -7916,14 +8025,14 @@ class CfnDocumentationVersionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-documentationversion.html#cfn-apigateway-documentationversion-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -8019,7 +8128,7 @@ class CfnDomainName(
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
         :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. Certificate Manager is the only supported source.
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your public APIs. Default: - "BASE_PATH_MAPPING_ONLY"
-        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
         '''
         if __debug__:
@@ -8040,6 +8149,17 @@ class CfnDomainName(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomainName")
+    @builtins.classmethod
+    def arn_for_domain_name(cls, resource: _IDomainNameRef_8b0ccf94) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__629ba4206cff192f72e9cccf8aff1c27e6cbaee9b590d1f7e3a6a6336b2b00e8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomainName", [resource]))
 
     @jsii.member(jsii_name="fromDomainName")
     @builtins.classmethod
@@ -8548,6 +8668,20 @@ class CfnDomainNameAccessAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDomainNameAccessAssociation")
+    @builtins.classmethod
+    def arn_for_domain_name_access_association(
+        cls,
+        resource: _IDomainNameAccessAssociationRef_f9b99574,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f47a5c43ec2b4898c4fede684eb433b4c2cbc9a75a1c77a80be2cf64a6f6405d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomainNameAccessAssociation", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8820,7 +8954,7 @@ class CfnDomainNameProps:
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
         :param regional_certificate_arn: The reference to an AWS -managed certificate that will be used for validating the regional domain name. Certificate Manager is the only supported source.
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your public APIs. Default: - "BASE_PATH_MAPPING_ONLY"
-        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html
@@ -8979,8 +9113,6 @@ class CfnDomainNameProps:
     def security_policy(self) -> typing.Optional[builtins.str]:
         '''The Transport Layer Security (TLS) version + cipher suite for this DomainName.
 
-        The valid values are ``TLS_1_0`` and ``TLS_1_2`` .
-
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-securitypolicy
         '''
         result = self._values.get("security_policy")
@@ -9073,7 +9205,7 @@ class CfnDomainNameV2(
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
-        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. Only ``TLS_1_2`` is supported.
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
         '''
         if __debug__:
@@ -9376,7 +9508,7 @@ class CfnDomainNameV2Props:
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
-        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName. Only ``TLS_1_2`` is supported.
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this DomainName.
         :param tags: The collection of tags. Each tag element is associated with a given resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html
@@ -9502,8 +9634,6 @@ class CfnDomainNameV2Props:
     def security_policy(self) -> typing.Optional[builtins.str]:
         '''The Transport Layer Security (TLS) version + cipher suite for this DomainName.
 
-        Only ``TLS_1_2`` is supported.
-
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-securitypolicy
         '''
         result = self._values.get("security_policy")
@@ -9573,7 +9703,7 @@ class CfnGatewayResponse(
         id: builtins.str,
         *,
         response_type: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         status_code: typing.Optional[builtins.str] = None,
@@ -9746,7 +9876,7 @@ class CfnGatewayResponseProps:
         self,
         *,
         response_type: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         status_code: typing.Optional[builtins.str] = None,
@@ -9811,14 +9941,14 @@ class CfnGatewayResponseProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-gatewayresponse.html#cfn-apigateway-gatewayresponse-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def response_parameters(
@@ -9955,18 +10085,18 @@ class CfnMethod(
         id: builtins.str,
         *,
         http_method: builtins.str,
-        resource_id: builtins.str,
-        rest_api_id: builtins.str,
+        resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorization_type: typing.Optional[builtins.str] = None,
-        authorizer_id: typing.Optional[builtins.str] = None,
+        authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
         integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.IntegrationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMethod.MethodResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
         request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-        request_validator_id: typing.Optional[builtins.str] = None,
+        request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Method``.
 
@@ -10867,18 +10997,18 @@ class CfnMethodProps:
         self,
         *,
         http_method: builtins.str,
-        resource_id: builtins.str,
-        rest_api_id: builtins.str,
+        resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
         authorization_type: typing.Optional[builtins.str] = None,
-        authorizer_id: typing.Optional[builtins.str] = None,
+        authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
         integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.MethodResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         operation_name: typing.Optional[builtins.str] = None,
         request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-        request_validator_id: typing.Optional[builtins.str] = None,
+        request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
     ) -> None:
         '''Properties for defining a ``CfnMethod``.
 
@@ -11024,24 +11154,24 @@ class CfnMethodProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def resource_id(self) -> builtins.str:
+    def resource_id(self) -> typing.Union[builtins.str, _IResourceRef_c7defb81]:
         '''The Resource identifier for the MethodResponse resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-resourceid
         '''
         result = self._values.get("resource_id")
         assert result is not None, "Required property 'resource_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IResourceRef_c7defb81], result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def api_key_required(
@@ -11080,7 +11210,9 @@ class CfnMethodProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def authorizer_id(self) -> typing.Optional[builtins.str]:
+    def authorizer_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]]:
         '''The identifier of an authorizer to use on this method.
 
         The method's authorization type must be ``CUSTOM`` or ``COGNITO_USER_POOLS`` .
@@ -11088,7 +11220,7 @@ class CfnMethodProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-authorizerid
         '''
         result = self._values.get("authorizer_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]], result)
 
     @builtins.property
     def integration(
@@ -11148,13 +11280,15 @@ class CfnMethodProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]], result)
 
     @builtins.property
-    def request_validator_id(self) -> typing.Optional[builtins.str]:
+    def request_validator_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]]:
         '''The identifier of a RequestValidator for request validation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-method.html#cfn-apigateway-method-requestvalidatorid
         '''
         result = self._values.get("request_validator_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11204,7 +11338,7 @@ class CfnModel(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -11217,7 +11351,7 @@ class CfnModel(
         :param rest_api_id: The string identifier of the associated RestApi.
         :param content_type: The content-type for the model.
         :param description: The description of the model.
-        :param name: A name for the model. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param name: A name for the model. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param schema: The schema for the model. For ``application/json`` models, this should be JSON schema draft 4 model. Do not include "* /" characters in the description of any properties because such "* /" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.
         '''
         if __debug__:
@@ -11356,7 +11490,7 @@ class CfnModelProps:
     def __init__(
         self,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         content_type: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
@@ -11367,7 +11501,7 @@ class CfnModelProps:
         :param rest_api_id: The string identifier of the associated RestApi.
         :param content_type: The content-type for the model.
         :param description: The description of the model.
-        :param name: A name for the model. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param name: A name for the model. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param schema: The schema for the model. For ``application/json`` models, this should be JSON schema draft 4 model. Do not include "* /" characters in the description of any properties because such "* /" characters may be interpreted as the closing marker for comments in some languages, such as Java or JavaScript, causing the installation of your API's SDK generated by API Gateway to fail.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-model.html
@@ -11411,14 +11545,14 @@ class CfnModelProps:
             self._values["schema"] = schema
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-model.html#cfn-apigateway-model-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def content_type(self) -> typing.Optional[builtins.str]:
@@ -11442,7 +11576,7 @@ class CfnModelProps:
     def name(self) -> typing.Optional[builtins.str]:
         '''A name for the model.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the model name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -11510,7 +11644,7 @@ class CfnRequestValidator(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         name: typing.Optional[builtins.str] = None,
         validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11666,7 +11800,7 @@ class CfnRequestValidatorProps:
     def __init__(
         self,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         name: typing.Optional[builtins.str] = None,
         validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -11713,14 +11847,14 @@ class CfnRequestValidatorProps:
             self._values["validate_request_parameters"] = validate_request_parameters
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-requestvalidator.html#cfn-apigateway-requestvalidator-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
@@ -11795,9 +11929,9 @@ class CfnResource(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        parent_id: builtins.str,
+        parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
         path_part: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::Resource``.
 
@@ -11922,9 +12056,9 @@ class CfnResourceProps:
     def __init__(
         self,
         *,
-        parent_id: builtins.str,
+        parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
         path_part: builtins.str,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     ) -> None:
         '''Properties for defining a ``CfnResource``.
 
@@ -11959,14 +12093,14 @@ class CfnResourceProps:
         }
 
     @builtins.property
-    def parent_id(self) -> builtins.str:
+    def parent_id(self) -> typing.Union[builtins.str, _IResourceRef_c7defb81]:
         '''The parent resource's identifier.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-resource.html#cfn-apigateway-resource-parentid
         '''
         result = self._values.get("parent_id")
         assert result is not None, "Required property 'parent_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IResourceRef_c7defb81], result)
 
     @builtins.property
     def path_part(self) -> builtins.str:
@@ -11979,14 +12113,14 @@ class CfnResourceProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-resource.html#cfn-apigateway-resource-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -12070,7 +12204,7 @@ class CfnRestApi(
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         body: typing.Any = None,
         body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRestApi.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        clone_from: typing.Optional[builtins.str] = None,
+        clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
@@ -12131,6 +12265,17 @@ class CfnRestApi(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRestApi")
+    @builtins.classmethod
+    def arn_for_rest_api(cls, resource: _IRestApiRef_72dcbda0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc3fe9a72c708df17e824ebc162dde6cce1f65248c66d62d1db913ad0b217d8d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRestApi", [resource]))
 
     @jsii.member(jsii_name="fromRestApiId")
     @builtins.classmethod
@@ -12705,7 +12850,7 @@ class CfnRestApiProps:
         binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
         body: typing.Any = None,
         body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        clone_from: typing.Optional[builtins.str] = None,
+        clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
         description: typing.Optional[builtins.str] = None,
         disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         endpoint_access_mode: typing.Optional[builtins.str] = None,
@@ -12885,13 +13030,15 @@ class CfnRestApiProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRestApi.S3LocationProperty]], result)
 
     @builtins.property
-    def clone_from(self) -> typing.Optional[builtins.str]:
+    def clone_from(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]]:
         '''The ID of the RestApi that you want to clone from.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-clonefrom
         '''
         result = self._values.get("clone_from")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -13116,13 +13263,13 @@ class CfnStage(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.AccessLogSettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
         canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.CanarySettingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_id: typing.Optional[builtins.str] = None,
-        deployment_id: typing.Optional[builtins.str] = None,
+        client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
+        deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
         method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStage.MethodSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -13867,13 +14014,13 @@ class CfnStageProps:
     def __init__(
         self,
         *,
-        rest_api_id: builtins.str,
+        rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
         access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.AccessLogSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         cache_cluster_size: typing.Optional[builtins.str] = None,
         canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.CanarySettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        client_certificate_id: typing.Optional[builtins.str] = None,
-        deployment_id: typing.Optional[builtins.str] = None,
+        client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
+        deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
         description: typing.Optional[builtins.str] = None,
         documentation_version: typing.Optional[builtins.str] = None,
         method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.MethodSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14000,14 +14147,14 @@ class CfnStageProps:
             self._values["variables"] = variables
 
     @builtins.property
-    def rest_api_id(self) -> builtins.str:
+    def rest_api_id(self) -> typing.Union[builtins.str, _IRestApiRef_72dcbda0]:
         '''The string identifier of the associated RestApi.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-restapiid
         '''
         result = self._values.get("rest_api_id")
         assert result is not None, "Required property 'rest_api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRestApiRef_72dcbda0], result)
 
     @builtins.property
     def access_log_setting(
@@ -14056,22 +14203,26 @@ class CfnStageProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStage.CanarySettingProperty]], result)
 
     @builtins.property
-    def client_certificate_id(self) -> typing.Optional[builtins.str]:
+    def client_certificate_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]]:
         '''The identifier of a client certificate for an API stage.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-clientcertificateid
         '''
         result = self._values.get("client_certificate_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]], result)
 
     @builtins.property
-    def deployment_id(self) -> typing.Optional[builtins.str]:
+    def deployment_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]]:
         '''The identifier of the Deployment that the stage points to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-stage.html#cfn-apigateway-stage-deploymentid
         '''
         result = self._values.get("deployment_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -14250,6 +14401,17 @@ class CfnUsagePlan(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUsagePlan")
+    @builtins.classmethod
+    def arn_for_usage_plan(cls, resource: _IUsagePlanRef_7a28b470) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19b131c7e2f6426fb84edf4c21b3d008bc7c9ad7d10608676dad883d5970a798)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUsagePlan", [resource]))
 
     @jsii.member(jsii_name="fromUsagePlanId")
     @builtins.classmethod
@@ -14709,9 +14871,9 @@ class CfnUsagePlanKey(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        key_id: builtins.str,
+        key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
         key_type: builtins.str,
-        usage_plan_id: builtins.str,
+        usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
     ) -> None:
         '''Create a new ``AWS::ApiGateway::UsagePlanKey``.
 
@@ -14836,9 +14998,9 @@ class CfnUsagePlanKeyProps:
     def __init__(
         self,
         *,
-        key_id: builtins.str,
+        key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
         key_type: builtins.str,
-        usage_plan_id: builtins.str,
+        usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
     ) -> None:
         '''Properties for defining a ``CfnUsagePlanKey``.
 
@@ -14873,14 +15035,14 @@ class CfnUsagePlanKeyProps:
         }
 
     @builtins.property
-    def key_id(self) -> builtins.str:
+    def key_id(self) -> typing.Union[builtins.str, _IApiKeyRef_6e16b46a]:
         '''The Id of the UsagePlanKey resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplankey.html#cfn-apigateway-usageplankey-keyid
         '''
         result = self._values.get("key_id")
         assert result is not None, "Required property 'key_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApiKeyRef_6e16b46a], result)
 
     @builtins.property
     def key_type(self) -> builtins.str:
@@ -14893,14 +15055,14 @@ class CfnUsagePlanKeyProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def usage_plan_id(self) -> builtins.str:
+    def usage_plan_id(self) -> typing.Union[builtins.str, _IUsagePlanRef_7a28b470]:
         '''The Id of the UsagePlan resource representing the usage plan containing the UsagePlanKey resource representing a plan customer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-usageplankey.html#cfn-apigateway-usageplankey-usageplanid
         '''
         result = self._values.get("usage_plan_id")
         assert result is not None, "Required property 'usage_plan_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUsagePlanRef_7a28b470], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15118,7 +15280,7 @@ class CfnVpcLink(
         id: builtins.str,
         *,
         name: builtins.str,
-        target_arns: typing.Sequence[builtins.str],
+        target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -15140,6 +15302,17 @@ class CfnVpcLink(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForVpcLink")
+    @builtins.classmethod
+    def arn_for_vpc_link(cls, resource: _IVpcLinkRef_0afd9621) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5a037997b73b32948eaffc07ceef274607953a66db4f49985e91e20e9b96e9da)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcLink", [resource]))
 
     @jsii.member(jsii_name="fromVpcLinkId")
     @builtins.classmethod
@@ -15288,7 +15461,7 @@ class CfnVpcLinkProps:
         self,
         *,
         name: builtins.str,
-        target_arns: typing.Sequence[builtins.str],
+        target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -15346,7 +15519,9 @@ class CfnVpcLinkProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def target_arns(self) -> typing.List[builtins.str]:
+    def target_arns(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]]:
         '''The ARN of the network load balancer of the VPC targeted by the VPC link.
 
         The network load balancer must be owned by the same AWS account of the API owner.
@@ -15355,7 +15530,7 @@ class CfnVpcLinkProps:
         '''
         result = self._values.get("target_arns")
         assert result is not None, "Required property 'target_arns' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -22656,6 +22831,12 @@ class RateLimitedApiKey(
     def api_key_ref(self) -> _ApiKeyReference_6382fd3a:
         '''A reference to a ApiKey resource.'''
         return typing.cast(_ApiKeyReference_6382fd3a, jsii.get(self, "apiKeyRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> ApiKeyGrants:
+        '''Collection of grant methods for an ApiKey.'''
+        return typing.cast(ApiKeyGrants, jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="keyArn")
@@ -30728,6 +30909,12 @@ class ApiKey(
         return typing.cast(_ApiKeyReference_6382fd3a, jsii.get(self, "apiKeyRef"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> ApiKeyGrants:
+        '''Collection of grant methods for an ApiKey.'''
+        return typing.cast(ApiKeyGrants, jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="keyArn")
     def key_arn(self) -> builtins.str:
         '''The API key ARN.'''
@@ -34260,6 +34447,7 @@ __all__ = [
     "ApiDefinitionConfig",
     "ApiDefinitionS3Location",
     "ApiKey",
+    "ApiKeyGrants",
     "ApiKeyOptions",
     "ApiKeyProps",
     "ApiKeySourceType",
@@ -34555,6 +34743,30 @@ def _typecheckingstub__7192edd2401ec44496a976d34ff2eed58269d2776ace8b7d7116d0382
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c6f8aea4b84475655c8cf222854c17c9cd9fc4f2df16b3fd92e43d1365c7ae06(
+    resource: _IApiKeyRef_6e16b46a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92b6b2c1e82ead5fcc57470b7070cbea0667e1113ef85be4ec4bae94dade48f7(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__87319b0a64eee705d6d4fb704c32bd5676a2663ee44675503f96a5d9f1206343(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dcccf9b7d942d0cfef5b69a678e4c25c2bf970888c4781e7b127480d2f2aa328(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__76bbf955e57234cf30598a48f4465eed2280ab222c776b1e6404dac905f82764(
     *,
     base_path: typing.Optional[builtins.str] = None,
@@ -34644,7 +34856,7 @@ def _typecheckingstub__38bd2193bbc36613b2cff1c53295e808ec15988652a9f30d8104a272c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    cloud_watch_role_arn: typing.Optional[builtins.str] = None,
+    cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34669,7 +34881,7 @@ def _typecheckingstub__508e5fd6405b784daeb72f2080dc15b070457ce1a45f97c707562d294
 
 def _typecheckingstub__cb07dd1e7339c3c46046b4af92bf506a1638d186c8ee249b12e5014bd9c1a4d3(
     *,
-    cloud_watch_role_arn: typing.Optional[builtins.str] = None,
+    cloud_watch_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34686,6 +34898,12 @@ def _typecheckingstub__7b22ef3a96b2535227fcee63bac2bd1636a3ecaf8ae447d48e70ec926
     stage_keys: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApiKey.StageKeyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     value: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31049f8fc309092b2b52771f63e16776005dbfb0d1e5bd141571493eefbbe55a(
+    resource: _IApiKeyRef_6e16b46a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34785,15 +35003,15 @@ def _typecheckingstub__5b2a6427d61aed56b5bd8abeaeb6e64934982800222c2d3f84ac52502
     id: builtins.str,
     *,
     name: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     type: builtins.str,
-    authorizer_credentials: typing.Optional[builtins.str] = None,
+    authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
     authorizer_uri: typing.Optional[builtins.str] = None,
     auth_type: typing.Optional[builtins.str] = None,
     identity_source: typing.Optional[builtins.str] = None,
     identity_validation_expression: typing.Optional[builtins.str] = None,
-    provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34873,15 +35091,15 @@ def _typecheckingstub__6f4d0fe625a57ee895a4018dba27e510cacbfc59d989a0fa3bd0732eb
 def _typecheckingstub__2555e8dbc176397cb55533139d53495b8083ff110393d71c6183eeaaa36cd980(
     *,
     name: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     type: builtins.str,
-    authorizer_credentials: typing.Optional[builtins.str] = None,
+    authorizer_credentials: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     authorizer_result_ttl_in_seconds: typing.Optional[jsii.Number] = None,
     authorizer_uri: typing.Optional[builtins.str] = None,
     auth_type: typing.Optional[builtins.str] = None,
     identity_source: typing.Optional[builtins.str] = None,
     identity_validation_expression: typing.Optional[builtins.str] = None,
-    provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34890,11 +35108,11 @@ def _typecheckingstub__30b246430425ce76f3aeef510a71365b6008738bd69977697f2b06291
     scope: _constructs_77d1e7e8.Construct,
     id_: builtins.str,
     *,
-    domain_name: builtins.str,
+    domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
     base_path: typing.Optional[builtins.str] = None,
     id: typing.Optional[builtins.str] = None,
-    rest_api_id: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
+    rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+    stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34943,11 +35161,11 @@ def _typecheckingstub__31952d98177b4dbebd3c6595c11d9157f2d9915ba5267559110e86482
 
 def _typecheckingstub__7d1bf02dcb15bc3e234f159c18646cccfa570e5c0f1d814a1362edb58e57ca24(
     *,
-    domain_name: builtins.str,
+    domain_name: typing.Union[builtins.str, _IDomainNameRef_8b0ccf94],
     base_path: typing.Optional[builtins.str] = None,
     id: typing.Optional[builtins.str] = None,
-    rest_api_id: typing.Optional[builtins.str] = None,
-    stage: typing.Optional[builtins.str] = None,
+    rest_api_id: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
+    stage: typing.Optional[typing.Union[builtins.str, _IStageRef_b829c330]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35020,6 +35238,12 @@ def _typecheckingstub__b04e1c6e6561781583a05d34684fa7f16c7a0f9593b5bdadf17a39aa7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2621dad41ff37a49554705837d754a31004034ed7e3966e754c0c487e0717897(
+    resource: _IClientCertificateRef_2a4b2b38,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0a5e31aa2352a567ea0a97f6b3c305db593bab1d23ed323eab3a574cdbc20b53(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -35064,7 +35288,7 @@ def _typecheckingstub__b0d6a79724121e56203915fc9f9807d25843c59847cf40c400a4686fa
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentCanarySettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.StageDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -35184,7 +35408,7 @@ def _typecheckingstub__a4b36eae831f3a5e4188fd26be727cd8d35c14538a8f206c1cb04a713
 
 def _typecheckingstub__06f6115d0d6ce383d655d7c6244956ed477bdc61ad553bd50def28044860463f(
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     deployment_canary_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.DeploymentCanarySettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
     stage_description: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeployment.StageDescriptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -35199,7 +35423,7 @@ def _typecheckingstub__38ba032d40661e68b76931f3085a3dab3e166be67b860e94e2f54fd43
     *,
     location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentationPart.LocationProperty, typing.Dict[builtins.str, typing.Any]]],
     properties: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35249,7 +35473,7 @@ def _typecheckingstub__1ce97e316ab1d99303726764131f5f4cf26ff37cf46f422efc545bce5
     *,
     location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDocumentationPart.LocationProperty, typing.Dict[builtins.str, typing.Any]]],
     properties: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35259,7 +35483,7 @@ def _typecheckingstub__4ce792256f8131ec9fafbd096588944d5d03c9e79025dc031faf45d37
     id: builtins.str,
     *,
     documentation_version: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -35298,7 +35522,7 @@ def _typecheckingstub__574316b6d4d513be2315a81cecd2b6fbd1cb48bdded71155573dafc5d
 def _typecheckingstub__d814a1ed5f46df046a60d908da8c64063747374742647ce116d53f1dd4684daa(
     *,
     documentation_version: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -35318,6 +35542,12 @@ def _typecheckingstub__133ab79e698bd61c150ef7c699a84e864403caafbb03bd0bc5874cee6
     routing_mode: typing.Optional[builtins.str] = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__629ba4206cff192f72e9cccf8aff1c27e6cbaee9b590d1f7e3a6a6336b2b00e8(
+    resource: _IDomainNameRef_8b0ccf94,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35434,6 +35664,12 @@ def _typecheckingstub__cafcd3b452004fc09063699f5b2263d0f36c2a080b20c7f0d51493646
     access_association_source_type: builtins.str,
     domain_name_arn: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f47a5c43ec2b4898c4fede684eb433b4c2cbc9a75a1c77a80be2cf64a6f6405d(
+    resource: _IDomainNameAccessAssociationRef_f9b99574,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35603,7 +35839,7 @@ def _typecheckingstub__dfb51ee54cd182788cbab3215f86a2155730ef96e24304891e470a0af
     id: builtins.str,
     *,
     response_type: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     status_code: typing.Optional[builtins.str] = None,
@@ -35656,7 +35892,7 @@ def _typecheckingstub__2b7e4863cef0d08069fc0f5b1902c06c852bbb4264a7bf29eb91dddbc
 def _typecheckingstub__0b43368d7d49c0d420e2923e567ff8c91d5c1f75d378bebb996f9a5b2c4e09b1(
     *,
     response_type: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     response_parameters: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     response_templates: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     status_code: typing.Optional[builtins.str] = None,
@@ -35669,18 +35905,18 @@ def _typecheckingstub__edfd42d04d09c9ea72d15a6173bfaa68d17ac55c9faa39a502d4e2068
     id: builtins.str,
     *,
     http_method: builtins.str,
-    resource_id: builtins.str,
-    rest_api_id: builtins.str,
+    resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
     authorization_type: typing.Optional[builtins.str] = None,
-    authorizer_id: typing.Optional[builtins.str] = None,
+    authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
     integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.MethodResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     operation_name: typing.Optional[builtins.str] = None,
     request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-    request_validator_id: typing.Optional[builtins.str] = None,
+    request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35820,18 +36056,18 @@ def _typecheckingstub__ff600e11d4e4158654132cbc6f3bb60aa2dc5f8337cc3f14f4a0f6be1
 def _typecheckingstub__8eafa27300c8abdc46f7b0453098151ef3832bf587f9964be625f94aee2148bd(
     *,
     http_method: builtins.str,
-    resource_id: builtins.str,
-    rest_api_id: builtins.str,
+    resource_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     api_key_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     authorization_scopes: typing.Optional[typing.Sequence[builtins.str]] = None,
     authorization_type: typing.Optional[builtins.str] = None,
-    authorizer_id: typing.Optional[builtins.str] = None,
+    authorizer_id: typing.Optional[typing.Union[builtins.str, _IAuthorizerRef_5e7c8723]] = None,
     integration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     method_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMethod.MethodResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     operation_name: typing.Optional[builtins.str] = None,
     request_models: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     request_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[builtins.bool, _IResolvable_da3f097b]]]] = None,
-    request_validator_id: typing.Optional[builtins.str] = None,
+    request_validator_id: typing.Optional[typing.Union[builtins.str, _IRequestValidatorRef_ad0e2de5]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35840,7 +36076,7 @@ def _typecheckingstub__a6e1faf9e03b333c72e2b28824ff5dd3c469b86e45694da5032821da8
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     content_type: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -35893,7 +36129,7 @@ def _typecheckingstub__189ff15874544c903e011bd25d8e6463925d43c41be7532a43378df70
 
 def _typecheckingstub__8e1e6d6536772d3f72606938d02638ae58fb2e422aa4c7c249db179ca394fcce(
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     content_type: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
@@ -35906,7 +36142,7 @@ def _typecheckingstub__31c91a22069ae0ca6e9846fb3a02b1808c13ac942ad7391e1caa2fca7
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     name: typing.Optional[builtins.str] = None,
     validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -35952,7 +36188,7 @@ def _typecheckingstub__373b014f81740f98fc49cfce56f72c1e0b243f647842baa67363b9450
 
 def _typecheckingstub__9f58946e74f4ea0477acd63d1f517a3c0b56977bdbf74e7dbf82969b550cd552(
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     name: typing.Optional[builtins.str] = None,
     validate_request_body: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     validate_request_parameters: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -35964,9 +36200,9 @@ def _typecheckingstub__44ada1c3ba590eab662ae2f9e418e3c4cdf8612323c1094e30e0658e0
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    parent_id: builtins.str,
+    parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
     path_part: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36003,9 +36239,9 @@ def _typecheckingstub__1728e101c5ee29c1334ae52f2d1757e5e5f11fa9664aa2d54ef0e876d
 
 def _typecheckingstub__1d5552a9f35619dbfaba4ec8b3153ac3f07d1a18c68b97a7ccd55ed1e90643e6(
     *,
-    parent_id: builtins.str,
+    parent_id: typing.Union[builtins.str, _IResourceRef_c7defb81],
     path_part: builtins.str,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36018,7 +36254,7 @@ def _typecheckingstub__781aae0a2f2512495cbd89d2be23edec0478e71fd6a59c0527cabb245
     binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     body: typing.Any = None,
     body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    clone_from: typing.Optional[builtins.str] = None,
+    clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
     description: typing.Optional[builtins.str] = None,
     disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     endpoint_access_mode: typing.Optional[builtins.str] = None,
@@ -36031,6 +36267,12 @@ def _typecheckingstub__781aae0a2f2512495cbd89d2be23edec0478e71fd6a59c0527cabb245
     policy: typing.Any = None,
     security_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fc3fe9a72c708df17e824ebc162dde6cce1f65248c66d62d1db913ad0b217d8d(
+    resource: _IRestApiRef_72dcbda0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36182,7 +36424,7 @@ def _typecheckingstub__5e6d4ed4722f0c07021ff207940f8656b0bbeb24224daef1a2a167c70
     binary_media_types: typing.Optional[typing.Sequence[builtins.str]] = None,
     body: typing.Any = None,
     body_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRestApi.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    clone_from: typing.Optional[builtins.str] = None,
+    clone_from: typing.Optional[typing.Union[builtins.str, _IRestApiRef_72dcbda0]] = None,
     description: typing.Optional[builtins.str] = None,
     disable_execute_api_endpoint: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     endpoint_access_mode: typing.Optional[builtins.str] = None,
@@ -36203,13 +36445,13 @@ def _typecheckingstub__2c8ae05335242844b55899042c4d5f05d3d40ee60a7702fbc9345ea65
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.AccessLogSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     cache_cluster_size: typing.Optional[builtins.str] = None,
     canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.CanarySettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    client_certificate_id: typing.Optional[builtins.str] = None,
-    deployment_id: typing.Optional[builtins.str] = None,
+    client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
+    deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
     description: typing.Optional[builtins.str] = None,
     documentation_version: typing.Optional[builtins.str] = None,
     method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.MethodSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -36353,13 +36595,13 @@ def _typecheckingstub__93f3e57e2c3b961aa0f733a06ed42f8a363845df26d6b26e0642d5e49
 
 def _typecheckingstub__a1ebc5406497577cb7c3919d6f6bedaf66797e69790cd7880fb0110e4babdf44(
     *,
-    rest_api_id: builtins.str,
+    rest_api_id: typing.Union[builtins.str, _IRestApiRef_72dcbda0],
     access_log_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.AccessLogSettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     cache_cluster_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     cache_cluster_size: typing.Optional[builtins.str] = None,
     canary_setting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.CanarySettingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    client_certificate_id: typing.Optional[builtins.str] = None,
-    deployment_id: typing.Optional[builtins.str] = None,
+    client_certificate_id: typing.Optional[typing.Union[builtins.str, _IClientCertificateRef_2a4b2b38]] = None,
+    deployment_id: typing.Optional[typing.Union[builtins.str, _IDeploymentRef_e5a0678c]] = None,
     description: typing.Optional[builtins.str] = None,
     documentation_version: typing.Optional[builtins.str] = None,
     method_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStage.MethodSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -36381,6 +36623,12 @@ def _typecheckingstub__8a8c11347e47e0f4cc9518ba40e4026dd908f54137f8dd41f789c4c65
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     throttle: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUsagePlan.ThrottleSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     usage_plan_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19b131c7e2f6426fb84edf4c21b3d008bc7c9ad7d10608676dad883d5970a798(
+    resource: _IUsagePlanRef_7a28b470,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36471,9 +36719,9 @@ def _typecheckingstub__d040334e32d6ff777d0e5db04f227d71a84ac05f4cbfac9fa40ee5d9a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    key_id: builtins.str,
+    key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
     key_type: builtins.str,
-    usage_plan_id: builtins.str,
+    usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36510,9 +36758,9 @@ def _typecheckingstub__7cbbe93db800e3cbd5bf70d2a26188eca9cc95ab585564a20d35a927a
 
 def _typecheckingstub__a83566309e98c3819e5e77ec3a51237257fe42030393661e8bbf7d1c6c2450af(
     *,
-    key_id: builtins.str,
+    key_id: typing.Union[builtins.str, _IApiKeyRef_6e16b46a],
     key_type: builtins.str,
-    usage_plan_id: builtins.str,
+    usage_plan_id: typing.Union[builtins.str, _IUsagePlanRef_7a28b470],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36534,9 +36782,15 @@ def _typecheckingstub__4a1f69db69c9ab3edee19de9b16585e4355791d79ee3b330d18242cc4
     id: builtins.str,
     *,
     name: builtins.str,
-    target_arns: typing.Sequence[builtins.str],
+    target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5a037997b73b32948eaffc07ceef274607953a66db4f49985e91e20e9b96e9da(
+    resource: _IVpcLinkRef_0afd9621,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36588,7 +36842,7 @@ def _typecheckingstub__652ea3fc4dcb1c64632ca0820a4de66a3d5f773676a1a643b6de49530
 def _typecheckingstub__82929f6feb2c8f1cf5d1cf907f6bcadc8873089d76fce54891dd75f983d750ad(
     *,
     name: builtins.str,
-    target_arns: typing.Sequence[builtins.str],
+    target_arns: typing.Sequence[typing.Union[builtins.str, _ILoadBalancerRef_13acd8f1]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

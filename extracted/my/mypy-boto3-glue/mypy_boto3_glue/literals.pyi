@@ -73,6 +73,7 @@ __all__ = (
     "FilterOperationType",
     "FilterOperatorType",
     "FilterValueTypeType",
+    "FunctionTypeType",
     "GetClassifiersPaginatorName",
     "GetConnectionsPaginatorName",
     "GetCrawlerMetricsPaginatorName",
@@ -434,6 +435,7 @@ FilterLogicalOperatorType = Literal["AND", "OR"]
 FilterOperationType = Literal["EQ", "GT", "GTE", "ISNULL", "LT", "LTE", "REGEX"]
 FilterOperatorType = Literal["EQ", "GE", "GT", "LE", "LT", "NE"]
 FilterValueTypeType = Literal["COLUMNEXTRACTED", "CONSTANT"]
+FunctionTypeType = Literal["AGGREGATE_FUNCTION", "REGULAR_FUNCTION", "STORED_PROCEDURE"]
 GetClassifiersPaginatorName = Literal["get_classifiers"]
 GetConnectionsPaginatorName = Literal["get_connections"]
 GetCrawlerMetricsPaginatorName = Literal["get_crawler_metrics"]

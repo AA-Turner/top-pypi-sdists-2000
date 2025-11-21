@@ -66,6 +66,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_iottwinmaker import (
     ComponentTypeReference as _ComponentTypeReference_a69aa683,
     EntityReference as _EntityReference_afeeeb38,
@@ -78,6 +79,7 @@ from ..interfaces.aws_iottwinmaker import (
     SyncJobReference as _SyncJobReference_a71cd428,
     WorkspaceReference as _WorkspaceReference_271a37e1,
 )
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IComponentTypeRef_219f2c31, _ITaggable_36806126)
@@ -236,6 +238,20 @@ class CfnComponentType(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForComponentType")
+    @builtins.classmethod
+    def arn_for_component_type(
+        cls,
+        resource: _IComponentTypeRef_219f2c31,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c32249f3935a5be2c6e751c2fe3e3486a2b3b4b9b2d3965074e3c2f2435dc753)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComponentType", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2175,6 +2191,17 @@ class CfnEntity(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEntity")
+    @builtins.classmethod
+    def arn_for_entity(cls, resource: _IEntityRef_350ebea0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21836336cfb746d5d16c7643ae6a3a635e2f469fa101960451d1c135380b620a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEntity", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4187,6 +4214,17 @@ class CfnScene(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForScene")
+    @builtins.classmethod
+    def arn_for_scene(cls, resource: _ISceneRef_ee2d0430) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ff29b131a055e1855abe4623c2706166fb8a9001b5e132db104d60ea50a852eb)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScene", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4595,6 +4633,17 @@ class CfnSyncJob(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSyncJob")
+    @builtins.classmethod
+    def arn_for_sync_job(cls, resource: _ISyncJobRef_c576edea) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f465627ca9224c85c55a6d75b9ecce0564b48b19196e2d7209d0ee5123639a2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSyncJob", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4887,8 +4936,8 @@ class CfnWorkspace(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        role: builtins.str,
-        s3_location: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
         workspace_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -4916,6 +4965,17 @@ class CfnWorkspace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkspace")
+    @builtins.classmethod
+    def arn_for_workspace(cls, resource: _IWorkspaceRef_8afeb0b7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0a422e1fbd7291d47bf25948e97e8e2c1fd02e6b82039511bbe843a9286f8a74)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkspace", [resource]))
 
     @jsii.member(jsii_name="fromWorkspaceArn")
     @builtins.classmethod
@@ -5117,8 +5177,8 @@ class CfnWorkspaceProps:
     def __init__(
         self,
         *,
-        role: builtins.str,
-        s3_location: builtins.str,
+        role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
         workspace_id: builtins.str,
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
@@ -5170,24 +5230,24 @@ class CfnWorkspaceProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def role(self) -> builtins.str:
+    def role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of the execution role associated with the workspace.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-workspace.html#cfn-iottwinmaker-workspace-role
         '''
         result = self._values.get("role")
         assert result is not None, "Required property 'role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def s3_location(self) -> builtins.str:
+    def s3_location(self) -> typing.Union[builtins.str, _IBucketRef_3debe44e]:
         '''The ARN of the S3 bucket where resources associated with the workspace are stored.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iottwinmaker-workspace.html#cfn-iottwinmaker-workspace-s3location
         '''
         result = self._values.get("s3_location")
         assert result is not None, "Required property 's3_location' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBucketRef_3debe44e], result)
 
     @builtins.property
     def workspace_id(self) -> builtins.str:
@@ -5258,6 +5318,12 @@ def _typecheckingstub__b8644c92bbff89aa9e628d0fdc0ded7a2f9a39289146f897d6c9e6d84
     property_definitions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.PropertyDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     property_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnComponentType.PropertyGroupProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c32249f3935a5be2c6e751c2fe3e3486a2b3b4b9b2d3965074e3c2f2435dc753(
+    resource: _IComponentTypeRef_219f2c31,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5476,6 +5542,12 @@ def _typecheckingstub__6e1a29b5ee0db8b0f9fe80447cc93db85e2ed400b28a3c61bfca379d2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21836336cfb746d5d16c7643ae6a3a635e2f469fa101960451d1c135380b620a(
+    resource: _IEntityRef_350ebea0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e51d270d4440681d46f1e667f106ed384931f38df7092845daad0ed9f82b4739(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5681,6 +5753,12 @@ def _typecheckingstub__80e723b8d84cf2c976c8c38d181a6082d3d8068ee103592ec3b3ba4c1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ff29b131a055e1855abe4623c2706166fb8a9001b5e132db104d60ea50a852eb(
+    resource: _ISceneRef_ee2d0430,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d7ac259a68f733194753cd8d59f080da530527147659943b6caacf6661e6917a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5760,6 +5838,12 @@ def _typecheckingstub__861d883ddd39366312e5f4587a1c3e710d67db29706ef3b27eceb4a2a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4f465627ca9224c85c55a6d75b9ecce0564b48b19196e2d7209d0ee5123639a2(
+    resource: _ISyncJobRef_c576edea,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3bd45586e2655ed2ae789ad688eed3cf775233bf2a1f2fb441e8c5f468c8de29(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5810,11 +5894,17 @@ def _typecheckingstub__3a54630b543997f0ca51ac34c4ac61386dc1bfeff7f09a65da3a4a997
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    role: builtins.str,
-    s3_location: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
     workspace_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0a422e1fbd7291d47bf25948e97e8e2c1fd02e6b82039511bbe843a9286f8a74(
+    resource: _IWorkspaceRef_8afeb0b7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5879,8 +5969,8 @@ def _typecheckingstub__c446d54dbed29cc835e16bcc1e47c242abc0fa4a7c115f00f8cb85515
 
 def _typecheckingstub__28aa375d16a697afdd54efb7fe26200b47cdb12808e073e144acd26ed6356448(
     *,
-    role: builtins.str,
-    s3_location: builtins.str,
+    role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    s3_location: typing.Union[builtins.str, _IBucketRef_3debe44e],
     workspace_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,

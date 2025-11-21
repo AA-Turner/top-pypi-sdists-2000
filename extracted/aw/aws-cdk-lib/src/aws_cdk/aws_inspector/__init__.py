@@ -231,7 +231,7 @@ class CfnAssessmentTarget(
         id: builtins.str,
         *,
         assessment_target_name: typing.Optional[builtins.str] = None,
-        resource_group_arn: typing.Optional[builtins.str] = None,
+        resource_group_arn: typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]] = None,
     ) -> None:
         '''Create a new ``AWS::Inspector::AssessmentTarget``.
 
@@ -250,6 +250,20 @@ class CfnAssessmentTarget(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAssessmentTarget")
+    @builtins.classmethod
+    def arn_for_assessment_target(
+        cls,
+        resource: _IAssessmentTargetRef_809e00dc,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__940674a2e7b81a96c3eebfe10a7d266d9faf1c7a80f8c34e7efe666e3c1d0ad1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssessmentTarget", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -341,7 +355,7 @@ class CfnAssessmentTargetProps:
         self,
         *,
         assessment_target_name: typing.Optional[builtins.str] = None,
-        resource_group_arn: typing.Optional[builtins.str] = None,
+        resource_group_arn: typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAssessmentTarget``.
 
@@ -384,7 +398,9 @@ class CfnAssessmentTargetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def resource_group_arn(self) -> typing.Optional[builtins.str]:
+    def resource_group_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]]:
         '''The ARN that specifies the resource group that is used to create the assessment target.
 
         If ``resourceGroupArn`` is not specified, all EC2 instances in the current AWS account and Region are included in the assessment target.
@@ -392,7 +408,7 @@ class CfnAssessmentTargetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttarget.html#cfn-inspector-assessmenttarget-resourcegrouparn
         '''
         result = self._values.get("resource_group_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -438,7 +454,7 @@ class CfnAssessmentTemplate(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        assessment_target_arn: builtins.str,
+        assessment_target_arn: typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc],
         duration_in_seconds: jsii.Number,
         rules_package_arns: typing.Sequence[builtins.str],
         assessment_template_name: typing.Optional[builtins.str] = None,
@@ -467,6 +483,20 @@ class CfnAssessmentTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAssessmentTemplate")
+    @builtins.classmethod
+    def arn_for_assessment_template(
+        cls,
+        resource: _IAssessmentTemplateRef_cd6c4843,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__07e38a2144375fd8107c58ea014a22a809ea2c49e8fd1863601f33847a13c1b3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssessmentTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -604,7 +634,7 @@ class CfnAssessmentTemplateProps:
     def __init__(
         self,
         *,
-        assessment_target_arn: builtins.str,
+        assessment_target_arn: typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc],
         duration_in_seconds: jsii.Number,
         rules_package_arns: typing.Sequence[builtins.str],
         assessment_template_name: typing.Optional[builtins.str] = None,
@@ -658,14 +688,16 @@ class CfnAssessmentTemplateProps:
             self._values["user_attributes_for_findings"] = user_attributes_for_findings
 
     @builtins.property
-    def assessment_target_arn(self) -> builtins.str:
+    def assessment_target_arn(
+        self,
+    ) -> typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc]:
         '''The ARN of the assessment target to be included in the assessment template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-inspector-assessmenttemplate.html#cfn-inspector-assessmenttemplate-assessmenttargetarn
         '''
         result = self._values.get("assessment_target_arn")
         assert result is not None, "Required property 'assessment_target_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc], result)
 
     @builtins.property
     def duration_in_seconds(self) -> jsii.Number:
@@ -771,6 +803,20 @@ class CfnResourceGroup(
         props = CfnResourceGroupProps(resource_group_tags=resource_group_tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceGroup")
+    @builtins.classmethod
+    def arn_for_resource_group(
+        cls,
+        resource: _IResourceGroupRef_66cbc2d1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__585207c43aa447aaf5155adeecaaf58a0d0e68cc269a67161b44ad3760b0158a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -978,7 +1024,13 @@ def _typecheckingstub__8b68f769512afe2cc2200d1eaed82952c7d1dda03213723b68dd167dd
     id: builtins.str,
     *,
     assessment_target_name: typing.Optional[builtins.str] = None,
-    resource_group_arn: typing.Optional[builtins.str] = None,
+    resource_group_arn: typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__940674a2e7b81a96c3eebfe10a7d266d9faf1c7a80f8c34e7efe666e3c1d0ad1(
+    resource: _IAssessmentTargetRef_809e00dc,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1010,7 +1062,7 @@ def _typecheckingstub__9c3b7128ce033766af9f209c5a813d7952af426568a0900860ae41001
 def _typecheckingstub__3da3c682a3ad54cf425ef49b70282900ce9139c52f5ffe48fcec156dad047881(
     *,
     assessment_target_name: typing.Optional[builtins.str] = None,
-    resource_group_arn: typing.Optional[builtins.str] = None,
+    resource_group_arn: typing.Optional[typing.Union[builtins.str, _IResourceGroupRef_66cbc2d1]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1019,11 +1071,17 @@ def _typecheckingstub__a0aec98d77afaa289ba5ff5ab3e1e82607bb8cb13a428a224da95d057
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    assessment_target_arn: builtins.str,
+    assessment_target_arn: typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc],
     duration_in_seconds: jsii.Number,
     rules_package_arns: typing.Sequence[builtins.str],
     assessment_template_name: typing.Optional[builtins.str] = None,
     user_attributes_for_findings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07e38a2144375fd8107c58ea014a22a809ea2c49e8fd1863601f33847a13c1b3(
+    resource: _IAssessmentTemplateRef_cd6c4843,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1072,7 +1130,7 @@ def _typecheckingstub__4f1d80ec27deb1af871c5b61bfa5b4676d207855a37d91499ac58255b
 
 def _typecheckingstub__cd83de00af49e4bec0f309270e8475a120bd6b2cc3c1a1b5df0acbbd1f0e3424(
     *,
-    assessment_target_arn: builtins.str,
+    assessment_target_arn: typing.Union[builtins.str, _IAssessmentTargetRef_809e00dc],
     duration_in_seconds: jsii.Number,
     rules_package_arns: typing.Sequence[builtins.str],
     assessment_template_name: typing.Optional[builtins.str] = None,
@@ -1086,6 +1144,12 @@ def _typecheckingstub__765c554a4b71cd63f2e78a1e2076a685c6f29c2c80897b6ac5b42ba62
     id: builtins.str,
     *,
     resource_group_tags: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__585207c43aa447aaf5155adeecaaf58a0d0e68cc269a67161b44ad3760b0158a(
+    resource: _IResourceGroupRef_66cbc2d1,
 ) -> None:
     """Type checking stubs"""
     pass

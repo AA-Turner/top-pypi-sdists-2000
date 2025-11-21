@@ -68,6 +68,10 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_memorydb import (
     ACLReference as _ACLReference_054b0a92,
     ClusterReference as _ClusterReference_75855dd3,
@@ -140,6 +144,17 @@ class CfnACL(
         props = CfnACLProps(acl_name=acl_name, tags=tags, user_names=user_names)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForACL")
+    @builtins.classmethod
+    def arn_for_acl(cls, resource: _IACLRef_c364f794) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9f48f14679e937bb7eaffacfca87491363bb5fae1fbf23622f6a3837e034a983)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForACL", [resource]))
 
     @jsii.member(jsii_name="fromACLArn")
     @builtins.classmethod
@@ -469,7 +484,7 @@ class CfnCluster(
         num_shards: typing.Optional[jsii.Number] = None,
         parameter_group_name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -551,6 +566,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_8cb56f6f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b5b8292313a9705294af4c7ea9229bc91aa301e7e4fa9bca7a3798e33d7f28cd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="fromClusterName")
     @builtins.classmethod
@@ -1191,7 +1217,7 @@ class CfnClusterProps:
         num_shards: typing.Optional[jsii.Number] = None,
         parameter_group_name: typing.Optional[builtins.str] = None,
         port: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_name: typing.Optional[builtins.str] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -1567,13 +1593,15 @@ class CfnClusterProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''A list of security group names to associate with this cluster .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-cluster.html#cfn-memorydb-cluster-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def snapshot_arns(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2268,6 +2296,20 @@ class CfnParameterGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForParameterGroup")
+    @builtins.classmethod
+    def arn_for_parameter_group(
+        cls,
+        resource: _IParameterGroupRef_471eb1a8,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04d7b0a0c06aae484cdbce297fc59a5df6e84a64b215b62488b1c669f3285c3d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForParameterGroup", [resource]))
+
     @jsii.member(jsii_name="fromParameterGroupName")
     @builtins.classmethod
     def from_parameter_group_name(
@@ -2582,7 +2624,7 @@ class CfnSubnetGroup(
         id: builtins.str,
         *,
         subnet_group_name: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2607,6 +2649,17 @@ class CfnSubnetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSubnetGroup")
+    @builtins.classmethod
+    def arn_for_subnet_group(cls, resource: _ISubnetGroupRef_efc982f4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__41b29e2cf889495187c0a550635212a38587947ee2ccd14895e5d0853b53f54c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSubnetGroup", [resource]))
 
     @jsii.member(jsii_name="fromSubnetGroupName")
     @builtins.classmethod
@@ -2764,7 +2817,7 @@ class CfnSubnetGroupProps:
         self,
         *,
         subnet_group_name: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         description: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -2822,14 +2875,16 @@ class CfnSubnetGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''A list of Amazon VPC subnet IDs for the subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-memorydb-subnetgroup.html#cfn-memorydb-subnetgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2929,6 +2984,17 @@ class CfnUser(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUser")
+    @builtins.classmethod
+    def arn_for_user(cls, resource: _IUserRef_ee6ccd70) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19119698c28547952420b03330a70b4826f05e8b8bb087c1195ffd8d28cc4cf3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
     @jsii.member(jsii_name="fromUserArn")
     @builtins.classmethod
@@ -3314,6 +3380,12 @@ def _typecheckingstub__9484fd1d572431ae11bb12955c007dddcddc12b2666a5855747b0a1ac
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9f48f14679e937bb7eaffacfca87491363bb5fae1fbf23622f6a3837e034a983(
+    resource: _IACLRef_c364f794,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__01e08140f4608bc1201cfa00751f482f04b61a9cbccdbd85b8a30ecdb464d6f6(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -3392,7 +3464,7 @@ def _typecheckingstub__2be3fd9830386937ed856721b0282cb7c4bcfb48ca212a069ae310ef4
     num_shards: typing.Optional[jsii.Number] = None,
     parameter_group_name: typing.Optional[builtins.str] = None,
     port: typing.Optional[jsii.Number] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     snapshot_name: typing.Optional[builtins.str] = None,
     snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -3402,6 +3474,12 @@ def _typecheckingstub__2be3fd9830386937ed856721b0282cb7c4bcfb48ca212a069ae310ef4
     subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     tls_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b5b8292313a9705294af4c7ea9229bc91aa301e7e4fa9bca7a3798e33d7f28cd(
+    resource: _IClusterRef_8cb56f6f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3629,7 +3707,7 @@ def _typecheckingstub__1e34c4b7ef2f8328b2d19e6f768b6f44c55efea16824463c1ed0f3497
     num_shards: typing.Optional[jsii.Number] = None,
     parameter_group_name: typing.Optional[builtins.str] = None,
     port: typing.Optional[jsii.Number] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     snapshot_name: typing.Optional[builtins.str] = None,
     snapshot_retention_limit: typing.Optional[jsii.Number] = None,
@@ -3762,6 +3840,12 @@ def _typecheckingstub__61162072dcce7ce6eaedeac288d04351f356c4501c7c00303d65b4be5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__04d7b0a0c06aae484cdbce297fc59a5df6e84a64b215b62488b1c669f3285c3d(
+    resource: _IParameterGroupRef_471eb1a8,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bbb188e3de6146df92382196ac7bd7953b94ecb705452402a7e34a6f13a90048(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -3828,9 +3912,15 @@ def _typecheckingstub__9b3dd027b7c51d2057be81ff17bfef3dbfbd3522767ca600f468a0d67
     id: builtins.str,
     *,
     subnet_group_name: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__41b29e2cf889495187c0a550635212a38587947ee2ccd14895e5d0853b53f54c(
+    resource: _ISubnetGroupRef_efc982f4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3882,7 +3972,7 @@ def _typecheckingstub__085e1da0c8228c03b5e87f741c2983f9ac01339c717a01009e150bd08
 def _typecheckingstub__9355391d833b76afd63e1ea2e6ccb22ce04e5360c7352ef34ee698b3d16fa6c1(
     *,
     subnet_group_name: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -3897,6 +3987,12 @@ def _typecheckingstub__52b4cd545a9f18f09898b753580c602cd4bd6e39c07e6a1f9e34f4fb9
     access_string: typing.Optional[builtins.str] = None,
     authentication_mode: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19119698c28547952420b03330a70b4826f05e8b8bb087c1195ffd8d28cc4cf3(
+    resource: _IUserRef_ee6ccd70,
 ) -> None:
     """Type checking stubs"""
     pass

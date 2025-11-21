@@ -180,6 +180,17 @@ class CfnAccessPoint(
 
         jsii.create(self.__class__, self, [scope_, id, props])
 
+    @jsii.member(jsii_name="arnForAccessPoint")
+    @builtins.classmethod
+    def arn_for_access_point(cls, resource: _IAccessPointRef_97eca07d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cf784903dea0d9b4624b1e11de4d6c620f7f21b7ca9853e2779c6c3ef1e77826)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPoint", [resource]))
+
     @jsii.member(jsii_name="fromAccessPointArn")
     @builtins.classmethod
     def from_access_point_arn(
@@ -1209,6 +1220,20 @@ class CfnDirectoryBucket(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDirectoryBucket")
+    @builtins.classmethod
+    def arn_for_directory_bucket(
+        cls,
+        resource: _IDirectoryBucketRef_ce513f97,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a96a5f5f136bc33cd0f1c42ddadc92c92c272f051e0bdfda5b0dc98413ca6d9b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDirectoryBucket", [resource]))
+
     @jsii.member(jsii_name="fromBucketName")
     @builtins.classmethod
     def from_bucket_name(
@@ -2185,6 +2210,12 @@ def _typecheckingstub__e5fc3ca5d7f872be531c5db2f2626dbbab094b459144a7d293c09461f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cf784903dea0d9b4624b1e11de4d6c620f7f21b7ca9853e2779c6c3ef1e77826(
+    resource: _IAccessPointRef_97eca07d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a952d5b44a408b548e0bb050b62b58a18b4842662c9403b19a79b867d01abfbb(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2352,6 +2383,12 @@ def _typecheckingstub__ea5a1e5897b0467fb93393ad6ea2dbcd3916f27713079e8bef3badf71
     bucket_name: typing.Optional[builtins.str] = None,
     lifecycle_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDirectoryBucket.LifecycleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a96a5f5f136bc33cd0f1c42ddadc92c92c272f051e0bdfda5b0dc98413ca6d9b(
+    resource: _IDirectoryBucketRef_ce513f97,
 ) -> None:
     """Type checking stubs"""
     pass

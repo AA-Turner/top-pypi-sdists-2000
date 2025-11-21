@@ -247,7 +247,7 @@ class CfnRepository(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param repository_name: The name of the new repository to be created. .. epigraph:: The repository name must be unique across the calling AWS account . Repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For more information about the limits on repository names, see `Quotas <https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html>`_ in the *AWS CodeCommit User Guide* . The suffix .git is prohibited.
-        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack. Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation. .. epigraph:: You can only use this property to add code when creating a repository with a AWS CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
+        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack. Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation. .. epigraph:: You can only use this property to add code when creating a repository with a CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
         :param kms_key_id: The ID of the AWS Key Management Service encryption key used to encrypt and decrypt the repository. .. epigraph:: The input can be the full ARN, the key ID, or the key alias. For more information, see `Finding the key ID and key ARN <https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html>`_ .
         :param repository_description: A comment or description about the new repository. .. epigraph:: The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.
         :param tags: One or more tag key-value pairs to use when tagging this repository.
@@ -267,6 +267,17 @@ class CfnRepository(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRepository")
+    @builtins.classmethod
+    def arn_for_repository(cls, resource: _IRepositoryRef_f6c56413) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8dde4718a89747db343eefe0b96452332a2d00fc8795622bbe249e45ed9b262b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRepository", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -794,7 +805,7 @@ class CfnRepositoryProps:
         '''Properties for defining a ``CfnRepository``.
 
         :param repository_name: The name of the new repository to be created. .. epigraph:: The repository name must be unique across the calling AWS account . Repository names are limited to 100 alphanumeric, dash, and underscore characters, and cannot include certain characters. For more information about the limits on repository names, see `Quotas <https://docs.aws.amazon.com/codecommit/latest/userguide/limits.html>`_ in the *AWS CodeCommit User Guide* . The suffix .git is prohibited.
-        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack. Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation. .. epigraph:: You can only use this property to add code when creating a repository with a AWS CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
+        :param code: Information about code to be committed to a repository after it is created in an AWS CloudFormation stack. Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation. .. epigraph:: You can only use this property to add code when creating a repository with a CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
         :param kms_key_id: The ID of the AWS Key Management Service encryption key used to encrypt and decrypt the repository. .. epigraph:: The input can be the full ARN, the key ID, or the key alias. For more information, see `Finding the key ID and key ARN <https://docs.aws.amazon.com/kms/latest/developerguide/find-cmk-id-arn.html>`_ .
         :param repository_description: A comment or description about the new repository. .. epigraph:: The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a webpage can expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a webpage.
         :param tags: One or more tag key-value pairs to use when tagging this repository.
@@ -887,7 +898,7 @@ class CfnRepositoryProps:
         Information about code is only used in resource creation. Updates to a stack will not reflect changes made to code properties after initial resource creation.
         .. epigraph::
 
-           You can only use this property to add code when creating a repository with a AWS CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
+           You can only use this property to add code when creating a repository with a CloudFormation template at creation time. This property cannot be used for updating code to an existing repository.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codecommit-repository.html#cfn-codecommit-repository-code
         '''
@@ -1121,6 +1132,7 @@ class CodeConfig:
 class IRepository(
     _IResource_c80c4260,
     _INotificationRuleSource_10482823,
+    _IRepositoryRef_f6c56413,
     typing_extensions.Protocol,
 ):
     @builtins.property
@@ -1600,6 +1612,7 @@ class IRepository(
 class _IRepositoryProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
     jsii.proxy_for(_INotificationRuleSource_10482823), # type: ignore[misc]
+    jsii.proxy_for(_IRepositoryRef_f6c56413), # type: ignore[misc]
 ):
     __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_codecommit.IRepository"
 
@@ -3310,6 +3323,12 @@ class Repository(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "RepositoryGrants":
+        '''Collection of grant methods for a Repository.'''
+        return typing.cast("RepositoryGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="repositoryArn")
     def repository_arn(self) -> builtins.str:
         '''The ARN of this Repository.'''
@@ -3345,6 +3364,12 @@ class Repository(
         '''The human-visible name of this Repository.'''
         return typing.cast(builtins.str, jsii.get(self, "repositoryName"))
 
+    @builtins.property
+    @jsii.member(jsii_name="repositoryRef")
+    def repository_ref(self) -> _RepositoryReference_6e315ada:
+        '''A reference to a Repository resource.'''
+        return typing.cast(_RepositoryReference_6e315ada, jsii.get(self, "repositoryRef"))
+
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codecommit.RepositoryEventTrigger")
 class RepositoryEventTrigger(enum.Enum):
@@ -3354,6 +3379,77 @@ class RepositoryEventTrigger(enum.Enum):
     UPDATE_REF = "UPDATE_REF"
     CREATE_REF = "CREATE_REF"
     DELETE_REF = "DELETE_REF"
+
+
+class RepositoryGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_codecommit.RepositoryGrants",
+):
+    '''Collection of grant methods for a IRepositoryRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_codecommit as codecommit
+        from aws_cdk.interfaces import aws_codecommit as interfaces_aws_codecommit
+        
+        # repository_ref: interfaces_aws_codecommit.IRepositoryRef
+        
+        repository_grants = codecommit.RepositoryGrants.from_repository(repository_ref)
+    '''
+
+    @jsii.member(jsii_name="fromRepository")
+    @builtins.classmethod
+    def from_repository(cls, resource: _IRepositoryRef_f6c56413) -> "RepositoryGrants":
+        '''Creates grants for RepositoryGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__23e951e2c1f738817fb29649abf6005e6a77f22795ceb81f64c3ab284713e314)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("RepositoryGrants", jsii.sinvoke(cls, "fromRepository", [resource]))
+
+    @jsii.member(jsii_name="pull")
+    def pull(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grants pull permissions.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5422e4dd85825f4007826cab5651a65fe793cfa5049957e959b6dd4671570a41)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "pull", [grantee]))
+
+    @jsii.member(jsii_name="pullPush")
+    def pull_push(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grants pullPush permissions.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ed87a8233d2b25dd036f841fb4a36753c25c207d91c0131044211408d35148b)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "pullPush", [grantee]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grants read permissions.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b52f08c2d087381cc5106a36a39bb3dd4d12526e1f9f3b9102e5624499ecfdd)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IRepositoryRef_f6c56413:
+        return typing.cast(_IRepositoryRef_f6c56413, jsii.get(self, "resource"))
 
 
 @jsii.enum(jsii_type="aws-cdk-lib.aws_codecommit.RepositoryNotificationEvents")
@@ -3760,6 +3856,7 @@ __all__ = [
     "ReferenceEvent",
     "Repository",
     "RepositoryEventTrigger",
+    "RepositoryGrants",
     "RepositoryNotificationEvents",
     "RepositoryNotifyOnOptions",
     "RepositoryProps",
@@ -3778,6 +3875,12 @@ def _typecheckingstub__64c8b70ff11de55544c0f9980a825007e7719d10a7e5b40f2acf7a97e
     repository_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRepository.RepositoryTriggerProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8dde4718a89747db343eefe0b96452332a2d00fc8795622bbe249e45ed9b262b(
+    resource: _IRepositoryRef_f6c56413,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4431,6 +4534,30 @@ def _typecheckingstub__1a5f61873c1de6801c610dc52c1b0aead08c4373e86647a8107cc8b1b
     description: typing.Optional[builtins.str] = None,
     event_pattern: typing.Optional[typing.Union[_EventPattern_fe557901, typing.Dict[builtins.str, typing.Any]]] = None,
     rule_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__23e951e2c1f738817fb29649abf6005e6a77f22795ceb81f64c3ab284713e314(
+    resource: _IRepositoryRef_f6c56413,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5422e4dd85825f4007826cab5651a65fe793cfa5049957e959b6dd4671570a41(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ed87a8233d2b25dd036f841fb4a36753c25c207d91c0131044211408d35148b(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1b52f08c2d087381cc5106a36a39bb3dd4d12526e1f9f3b9102e5624499ecfdd(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

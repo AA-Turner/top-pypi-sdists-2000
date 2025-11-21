@@ -145,6 +145,17 @@ class CfnDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_aef09168) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__72f1237a156ab052644fdb8396b68449f4257a2a95ca468b9ccb341bd324035b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -492,6 +503,20 @@ class CfnPackageGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPackageGroup")
+    @builtins.classmethod
+    def arn_for_package_group(
+        cls,
+        resource: _IPackageGroupRef_40192e09,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d9b1858a9aa65807408fe18516f285ca8bde61e9752449299e57cc64a35abaa9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPackageGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1170,6 +1195,17 @@ class CfnRepository(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForRepository")
+    @builtins.classmethod
+    def arn_for_repository(cls, resource: _IRepositoryRef_1a1f36b6) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e1b7189270c68cac17aab3b7dc4952b1c5749131e4bad2fb6819d2c0c98a3b4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRepository", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1568,6 +1604,12 @@ def _typecheckingstub__1fb789fedc85855c1509949f2cf10c2dd0562b804efa5820bf0057775
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__72f1237a156ab052644fdb8396b68449f4257a2a95ca468b9ccb341bd324035b(
+    resource: _IDomainRef_aef09168,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__46d9fe40fc43e31cea0a6a2e9dfd751eb16b8a46da32d7dccd9603f803712f90(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1625,6 +1667,12 @@ def _typecheckingstub__7a8aaa0852b2af2f8381bac18421469d96d102aa57d00f002433c8629
     domain_owner: typing.Optional[builtins.str] = None,
     origin_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackageGroup.OriginConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d9b1858a9aa65807408fe18516f285ca8bde61e9752449299e57cc64a35abaa9(
+    resource: _IPackageGroupRef_40192e09,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1732,6 +1780,12 @@ def _typecheckingstub__f4fb8e90c9d866f1bfe7bd9bf2e46e1f97b3f66247b8086423fecb602
     permissions_policy_document: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     upstreams: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3e1b7189270c68cac17aab3b7dc4952b1c5749131e4bad2fb6819d2c0c98a3b4(
+    resource: _IRepositoryRef_1a1f36b6,
 ) -> None:
     """Type checking stubs"""
     pass

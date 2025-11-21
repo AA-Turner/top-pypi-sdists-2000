@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_rolesanywhere import (
     CRLReference as _CRLReference_1b9465ab,
     ICRLRef as _ICRLRef_21f48bbb,
@@ -143,6 +144,17 @@ class CfnCRL(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCRL")
+    @builtins.classmethod
+    def arn_for_crl(cls, resource: _ICRLRef_21f48bbb) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f7e58ba309a445f56bc8597d95666454c66c4a479d286dbe1cb40e653eeec3a9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCRL", [resource]))
 
     @jsii.member(jsii_name="fromCrlId")
     @builtins.classmethod
@@ -470,7 +482,7 @@ class CfnProfile(
         id: builtins.str,
         *,
         name: builtins.str,
-        role_arns: typing.Sequence[builtins.str],
+        role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
         accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnProfile.AttributeMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         duration_seconds: typing.Optional[jsii.Number] = None,
@@ -513,6 +525,17 @@ class CfnProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProfile")
+    @builtins.classmethod
+    def arn_for_profile(cls, resource: _IProfileRef_cfaa2db9) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67245173e057bb38c29aaaa4dbf8967f0067c7a53e24fb5be33d0be80d3be67e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProfile", [resource]))
 
     @jsii.member(jsii_name="fromProfileArn")
     @builtins.classmethod
@@ -926,7 +949,7 @@ class CfnProfileProps:
         self,
         *,
         name: builtins.str,
-        role_arns: typing.Sequence[builtins.str],
+        role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
         accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProfile.AttributeMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         duration_seconds: typing.Optional[jsii.Number] = None,
@@ -1025,14 +1048,14 @@ class CfnProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arns(self) -> typing.List[builtins.str]:
+    def role_arns(self) -> typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''A list of IAM role ARNs that can be assumed when this profile is specified in a CreateSession request.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rolesanywhere-profile.html#cfn-rolesanywhere-profile-rolearns
         '''
         result = self._values.get("role_arns")
         assert result is not None, "Required property 'role_arns' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def accept_role_session_name(
@@ -1207,6 +1230,17 @@ class CfnTrustAnchor(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTrustAnchor")
+    @builtins.classmethod
+    def arn_for_trust_anchor(cls, resource: _ITrustAnchorRef_2e6950c3) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__979ccf0a025b025fe3154a0f94f2f4afa1f215da235361f8ec5274e28e05185a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustAnchor", [resource]))
 
     @jsii.member(jsii_name="fromTrustAnchorArn")
     @builtins.classmethod
@@ -1529,7 +1563,7 @@ class CfnTrustAnchor(
         ) -> None:
             '''A union object representing the data field of the TrustAnchor depending on its type.
 
-            :param acm_pca_arn: The root certificate of the AWS Private Certificate Authority specified by this ARN is used in trust validation for temporary credential requests. Included for trust anchors of type ``AWS_ACM_PCA`` . .. epigraph:: This field is not supported in your region.
+            :param acm_pca_arn: The root certificate of the Private Certificate Authority specified by this ARN is used in trust validation for temporary credential requests. Included for trust anchors of type ``AWS_ACM_PCA`` . .. epigraph:: This field is not supported in your region.
             :param x509_certificate_data: The PEM-encoded data for the certificate anchor. Included for trust anchors of type ``CERTIFICATE_BUNDLE`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rolesanywhere-trustanchor-sourcedata.html
@@ -1558,7 +1592,7 @@ class CfnTrustAnchor(
 
         @builtins.property
         def acm_pca_arn(self) -> typing.Optional[builtins.str]:
-            '''The root certificate of the AWS Private Certificate Authority specified by this ARN is used in trust validation for temporary credential requests.
+            '''The root certificate of the Private Certificate Authority specified by this ARN is used in trust validation for temporary credential requests.
 
             Included for trust anchors of type ``AWS_ACM_PCA`` .
             .. epigraph::
@@ -1840,6 +1874,12 @@ def _typecheckingstub__f35b45debe8136e3de3e7d231f09e2d880d31e3c89eb1adb6a8c5613d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f7e58ba309a445f56bc8597d95666454c66c4a479d286dbe1cb40e653eeec3a9(
+    resource: _ICRLRef_21f48bbb,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8204e9b235056c4607bf2a8db01ddb35e4b3074bbf873b9d68e9be5ab350a5d1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -1906,7 +1946,7 @@ def _typecheckingstub__15739ec913066dea67815f6297a7c4e3ed351b4df22323a7b46fa138a
     id: builtins.str,
     *,
     name: builtins.str,
-    role_arns: typing.Sequence[builtins.str],
+    role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
     accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProfile.AttributeMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     duration_seconds: typing.Optional[jsii.Number] = None,
@@ -1915,6 +1955,12 @@ def _typecheckingstub__15739ec913066dea67815f6297a7c4e3ed351b4df22323a7b46fa138a
     require_instance_properties: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     session_policy: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67245173e057bb38c29aaaa4dbf8967f0067c7a53e24fb5be33d0be80d3be67e(
+    resource: _IProfileRef_cfaa2db9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2025,7 +2071,7 @@ def _typecheckingstub__7422c94323a807bff6335911405b595c6b214c6864553b5fe25c6dac4
 def _typecheckingstub__cc8a99a4d25c139ca779820c498d07ef2292a040188712d06b21830cb9c3d764(
     *,
     name: builtins.str,
-    role_arns: typing.Sequence[builtins.str],
+    role_arns: typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]],
     accept_role_session_name: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     attribute_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnProfile.AttributeMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     duration_seconds: typing.Optional[jsii.Number] = None,
@@ -2047,6 +2093,12 @@ def _typecheckingstub__0fba7372f75a907053dd110f3529fe09fcae6182a22a6de9556840fb3
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     notification_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustAnchor.NotificationSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__979ccf0a025b025fe3154a0f94f2f4afa1f215da235361f8ec5274e28e05185a(
+    resource: _ITrustAnchorRef_2e6950c3,
 ) -> None:
     """Type checking stubs"""
     pass

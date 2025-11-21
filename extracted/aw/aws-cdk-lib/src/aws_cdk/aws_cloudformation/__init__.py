@@ -83,6 +83,7 @@ from ..interfaces.aws_cloudformation import (
     WaitConditionHandleReference as _WaitConditionHandleReference_ba26e35b,
     WaitConditionReference as _WaitConditionReference_e2d94a43,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.implements(_IInspectable_c2943556, _ICustomResourceRef_337851e1)
@@ -95,10 +96,10 @@ class CfnCustomResource(
 
     Custom resources provide a way for you to write custom provisioning logic into your CloudFormation templates and have CloudFormation run it anytime you create, update (if you changed the custom resource), or delete a stack.
 
-    For more information, see `Create custom provisioning logic with custom resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Create custom provisioning logic with custom resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-custom-resources.html>`_ in the *CloudFormation User Guide* .
     .. epigraph::
 
-       If you use AWS PrivateLink , custom resources in the VPC must have access to CloudFormation -specific Amazon S3 buckets. Custom resources must send responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *AWS CloudFormation User Guide* .
+       If you use AWS PrivateLink , custom resources in the VPC must have access to CloudFormation -specific Amazon S3 buckets. Custom resources must send responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-customresource.html
     :cloudformationResource: AWS::CloudFormation::CustomResource
@@ -130,7 +131,7 @@ class CfnCustomResource(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param service_token: The service token, such as an Amazon SNS topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
+        :param service_token: The service token, such as an Amazon topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
         :param service_timeout: The maximum time, in seconds, that can elapse before a custom resource operation times out. The value must be an integer from 1 to 3600. The default value is 3600 seconds (1 hour).
         '''
         if __debug__:
@@ -195,7 +196,7 @@ class CfnCustomResource(
     @builtins.property
     @jsii.member(jsii_name="serviceToken")
     def service_token(self) -> builtins.str:
-        '''The service token, such as an Amazon SNS topic ARN or Lambda function ARN.'''
+        '''The service token, such as an Amazon  topic ARN or Lambda function ARN.'''
         return typing.cast(builtins.str, jsii.get(self, "serviceToken"))
 
     @service_token.setter
@@ -236,7 +237,7 @@ class CfnCustomResourceProps:
     ) -> None:
         '''Properties for defining a ``CfnCustomResource``.
 
-        :param service_token: The service token, such as an Amazon SNS topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
+        :param service_token: The service token, such as an Amazon topic ARN or Lambda function ARN. The service token must be from the same Region as the stack. Updates aren't supported.
         :param service_timeout: The maximum time, in seconds, that can elapse before a custom resource operation times out. The value must be an integer from 1 to 3600. The default value is 3600 seconds (1 hour).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-customresource.html
@@ -267,7 +268,7 @@ class CfnCustomResourceProps:
 
     @builtins.property
     def service_token(self) -> builtins.str:
-        '''The service token, such as an Amazon SNS topic ARN or Lambda function ARN.
+        '''The service token, such as an Amazon  topic ARN or Lambda function ARN.
 
         The service token must be from the same Region as the stack.
 
@@ -312,7 +313,7 @@ class CfnGuardHook(
 
     Using the Guard domain specific language (DSL), you can author Guard Hooks to evaluate your resources before allowing stack operations.
 
-    For more information, see `Guard Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/guard-hooks.html>`_ in the *AWS CloudFormation Hooks User Guide* .
+    For more information, see `Guard Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/guard-hooks.html>`_ in the *CloudFormation Hooks User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-guardhook.html
     :cloudformationResource: AWS::CloudFormation::GuardHook
@@ -400,7 +401,7 @@ class CfnGuardHook(
         :param failure_mode: Specifies how the Hook responds when rules fail their evaluation. - ``FAIL`` : Prevents the action from proceeding. This is helpful for enforcing strict compliance or security policies. - ``WARN`` : Issues warnings to users but allows actions to continue. This is useful for non-critical validations or informational checks. Default: - "WARN"
         :param hook_status: Specifies if the Hook is ``ENABLED`` or ``DISABLED`` . Default: - "DISABLED"
         :param rule_location: Specifies the S3 location of your Guard rules.
-        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
+        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
         :param log_bucket: Specifies the name of an S3 bucket to store the Guard output report. This report contains the results of your Guard rule validations.
         :param options: Specifies the S3 location of your input parameters.
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
@@ -882,7 +883,7 @@ class CfnGuardHook(
 
             The ``StackNames`` or ``StackRoles`` properties are optional. However, you must specify at least one of these properties.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param filtering_criteria: The filtering criteria. - All stack names and stack roles ( ``All`` ): The Hook will only be invoked when all specified filters match. - Any stack names and stack roles ( ``Any`` ): The Hook will be invoked if at least one of the specified filters match. Default: - "ALL"
             :param stack_names: Includes or excludes specific stacks from Hook invocations.
@@ -986,7 +987,7 @@ class CfnGuardHook(
         ) -> None:
             '''Specifies the stack names for the ``StackFilters`` property type to include or exclude specific stacks from Hook invocations.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param exclude: The stack names to exclude. All stacks except those listed here will invoke the Hook.
             :param include: The stack names to include. Only the stacks specified in this list will invoke the Hook.
@@ -1062,7 +1063,7 @@ class CfnGuardHook(
         ) -> None:
             '''Specifies the stack roles for the ``StackFilters`` property type to include or exclude specific stacks from Hook invocations based on their associated IAM roles.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param exclude: The IAM role ARNs for stacks you want to exclude. The Hook will be invoked on all stacks except those initiated by the specified roles.
             :param include: The IAM role ARNs to target stacks associated with these roles. Only stack operations initiated by these roles will invoke the Hook.
@@ -1145,7 +1146,7 @@ class CfnGuardHook(
         ) -> None:
             '''The ``TargetFilters`` property type specifies the target filters for the Hook.
 
-            For more information, see `AWS CloudFormation Hook target filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-target-filtering.html>`_ .
+            For more information, see `CloudFormation Hook target filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-target-filtering.html>`_ .
 
             :param targets: List of hook targets.
             :param actions: List of actions that the hook is going to target.
@@ -1279,7 +1280,7 @@ class CfnGuardHookProps:
         :param failure_mode: Specifies how the Hook responds when rules fail their evaluation. - ``FAIL`` : Prevents the action from proceeding. This is helpful for enforcing strict compliance or security policies. - ``WARN`` : Issues warnings to users but allows actions to continue. This is useful for non-critical validations or informational checks. Default: - "WARN"
         :param hook_status: Specifies if the Hook is ``ENABLED`` or ``DISABLED`` . Default: - "DISABLED"
         :param rule_location: Specifies the S3 location of your Guard rules.
-        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
+        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
         :param log_bucket: Specifies the name of an S3 bucket to store the Guard output report. This report contains the results of your Guard rule validations.
         :param options: Specifies the S3 location of your input parameters.
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
@@ -1438,7 +1439,7 @@ class CfnGuardHookProps:
     def target_operations(self) -> typing.List[builtins.str]:
         '''Specifies the list of operations the Hook is run against.
 
-        For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* .
+        For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* .
 
         Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
 
@@ -1530,7 +1531,7 @@ class CfnHookDefaultVersion(
 
     The default version of the Hook is used in CloudFormation operations for this AWS account and AWS Region .
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     This resource type is not compatible with Guard and Lambda Hooks.
 
@@ -1579,6 +1580,20 @@ class CfnHookDefaultVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForHookDefaultVersion")
+    @builtins.classmethod
+    def arn_for_hook_default_version(
+        cls,
+        resource: _IHookDefaultVersionRef_a4784949,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce6e050fceb0c682b1cb1b4d4facd4dbaf740e0f5ce0bda17c0ca549ddf58866)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHookDefaultVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1774,7 +1789,7 @@ class CfnHookTypeConfig(
 ):
     '''The ``AWS::CloudFormation::HookTypeConfig`` resource specifies the configuration of an activated Hook.
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-hooktypeconfig.html
     :cloudformationResource: AWS::CloudFormation::HookTypeConfig
@@ -2060,7 +2075,7 @@ class CfnHookVersion(
 ):
     '''The ``AWS::CloudFormation::HookVersion`` resource publishes new or first version of a Hook to the CloudFormation registry.
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     This resource type is not compatible with Guard and Lambda Hooks.
 
@@ -2101,7 +2116,7 @@ class CfnHookVersion(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *AWS CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
         :param type_name: The unique name for your Hook. Specifies a three-part namespace for your Hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your Hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the task execution role that grants the Hook permission.
         :param logging_config: Contains logging configuration information for an extension.
@@ -2118,6 +2133,17 @@ class CfnHookVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForHookVersion")
+    @builtins.classmethod
+    def arn_for_hook_version(cls, resource: _IHookVersionRef_0d71a867) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__62456467c31f1bcbacb1b0e9513c84e2b7e645613cd4882ccd78b9a60344d37e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHookVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2357,7 +2383,7 @@ class CfnHookVersionProps:
     ) -> None:
         '''Properties for defining a ``CfnHookVersion``.
 
-        :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *AWS CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param schema_handler_package: A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register. For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *CloudFormation Hooks User Guide* . .. epigraph:: To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
         :param type_name: The unique name for your Hook. Specifies a three-part namespace for your Hook, with a recommended pattern of ``Organization::Service::Hook`` . .. epigraph:: The following organization namespaces are reserved and can't be used in your Hook type names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``ASK`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the task execution role that grants the Hook permission.
         :param logging_config: Contains logging configuration information for an extension.
@@ -2402,7 +2428,7 @@ class CfnHookVersionProps:
     def schema_handler_package(self) -> builtins.str:
         '''A URL to the Amazon S3 bucket for the Hook project package that contains the necessary files for the Hook you want to register.
 
-        For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *AWS CloudFormation Hooks User Guide* .
+        For information on generating a schema handler package, see `Modeling custom CloudFormation Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-model.html>`_ in the *CloudFormation Hooks User Guide* .
         .. epigraph::
 
            To register the Hook, you must have ``s3:GetObject`` permissions to access the S3 objects.
@@ -2478,7 +2504,7 @@ class CfnLambdaHook(
 
     You can use a Lambda Hook to evaluate your resources before allowing stack operations. This resource forwards requests for resource evaluation to a Lambda function.
 
-    For more information, see `Lambda Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/lambda-hooks.html>`_ in the *AWS CloudFormation Hooks User Guide* .
+    For more information, see `Lambda Hooks <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/lambda-hooks.html>`_ in the *CloudFormation Hooks User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-lambdahook.html
     :cloudformationResource: AWS::CloudFormation::LambdaHook
@@ -2550,7 +2576,7 @@ class CfnLambdaHook(
         :param failure_mode: Specifies how the Hook responds when the Lambda function invoked by the Hook returns a ``FAILED`` response. - ``FAIL`` : Prevents the action from proceeding. This is helpful for enforcing strict compliance or security policies. - ``WARN`` : Issues warnings to users but allows actions to continue. This is useful for non-critical validations or informational checks.
         :param hook_status: Specifies if the Hook is ``ENABLED`` or ``DISABLED`` . Default: - "ENABLED"
         :param lambda_function: Specifies the Lambda function for the Hook. You can use:. - The full Amazon Resource Name (ARN) without a suffix. - A qualified ARN with a version or alias suffix.
-        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
+        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
         :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "CREATE", "UPDATE", "DELETE" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
         '''
@@ -2854,7 +2880,7 @@ class CfnLambdaHook(
 
             The ``StackNames`` or ``StackRoles`` properties are optional. However, you must specify at least one of these properties.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param filtering_criteria: The filtering criteria. - All stack names and stack roles ( ``All`` ): The Hook will only be invoked when all specified filters match. - Any stack names and stack roles ( ``Any`` ): The Hook will be invoked if at least one of the specified filters match. Default: - "ALL"
             :param stack_names: Includes or excludes specific stacks from Hook invocations.
@@ -2958,7 +2984,7 @@ class CfnLambdaHook(
         ) -> None:
             '''Specifies the stack names for the ``StackFilters`` property type to include or exclude specific stacks from Hook invocations.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param exclude: The stack names to exclude. All stacks except those listed here will invoke the Hook.
             :param include: The stack names to include. Only the stacks specified in this list will invoke the Hook.
@@ -3034,7 +3060,7 @@ class CfnLambdaHook(
         ) -> None:
             '''Specifies the stack roles for the ``StackFilters`` property type to include or exclude specific stacks from Hook invocations based on their associated IAM roles.
 
-            For more information, see `AWS CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
+            For more information, see `CloudFormation Hooks stack level filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-stack-level-filtering.html>`_ .
 
             :param exclude: The IAM role ARNs for stacks you want to exclude. The Hook will be invoked on all stacks except those initiated by the specified roles.
             :param include: The IAM role ARNs to target stacks associated with these roles. Only stack operations initiated by these roles will invoke the Hook.
@@ -3117,7 +3143,7 @@ class CfnLambdaHook(
         ) -> None:
             '''The ``TargetFilters`` property type specifies the target filters for the Hook.
 
-            For more information, see `AWS CloudFormation Hook target filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-target-filtering.html>`_ .
+            For more information, see `CloudFormation Hook target filters <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-target-filtering.html>`_ .
 
             :param targets: List of hook targets.
             :param actions: List of actions that the hook is going to target.
@@ -3247,7 +3273,7 @@ class CfnLambdaHookProps:
         :param failure_mode: Specifies how the Hook responds when the Lambda function invoked by the Hook returns a ``FAILED`` response. - ``FAIL`` : Prevents the action from proceeding. This is helpful for enforcing strict compliance or security policies. - ``WARN`` : Issues warnings to users but allows actions to continue. This is useful for non-critical validations or informational checks.
         :param hook_status: Specifies if the Hook is ``ENABLED`` or ``DISABLED`` . Default: - "ENABLED"
         :param lambda_function: Specifies the Lambda function for the Hook. You can use:. - The full Amazon Resource Name (ARN) without a suffix. - A qualified ARN with a version or alias suffix.
-        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
+        :param target_operations: Specifies the list of operations the Hook is run against. For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* . Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
         :param stack_filters: Specifies the stack level filters for the Hook. Example stack level filter in JSON: ``"StackFilters": {"FilteringCriteria": "ALL", "StackNames": {"Exclude": [ "stack-1", "stack-2"]}}`` Example stack level filter in YAML: ``StackFilters: FilteringCriteria: ALL StackNames: Exclude: - stack-1 - stack-2``
         :param target_filters: Specifies the target filters for the Hook. Example target filter in JSON: ``"TargetFilters": {"Actions": [ "CREATE", "UPDATE", "DELETE" ]}`` Example target filter in YAML: ``TargetFilters: Actions: - CREATE - UPDATE - DELETE``
 
@@ -3383,7 +3409,7 @@ class CfnLambdaHookProps:
     def target_operations(self) -> typing.List[builtins.str]:
         '''Specifies the list of operations the Hook is run against.
 
-        For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *AWS CloudFormation Hooks User Guide* .
+        For more information, see `Hook targets <https://docs.aws.amazon.com/cloudformation-cli/latest/hooks-userguide/hooks-concepts.html#hook-terms-hook-target>`_ in the *CloudFormation Hooks User Guide* .
 
         Valid values: ``STACK`` | ``RESOURCE`` | ``CHANGE_SET`` | ``CLOUD_CONTROL``
 
@@ -3451,7 +3477,7 @@ class CfnMacro(
 ):
     '''The ``AWS::CloudFormation::Macro`` resource is a CloudFormation resource type that creates a CloudFormation macro to perform custom processing on CloudFormation templates.
 
-    For more information, see `Perform custom processing on CloudFormation templates with template macros <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Perform custom processing on CloudFormation templates with template macros <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/template-macros.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-macro.html
     :cloudformationResource: AWS::CloudFormation::Macro
@@ -3764,9 +3790,9 @@ class CfnModuleDefaultVersion(
 
     The default version of the module will be used in CloudFormation operations for this account and Region.
 
-    For more information, see `Create reusable resource configurations that can be included across templates with CloudFormation modules <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/modules.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Create reusable resource configurations that can be included across templates with CloudFormation modules <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/modules.html>`_ in the *CloudFormation User Guide* .
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-moduledefaultversion.html
     :cloudformationResource: AWS::CloudFormation::ModuleDefaultVersion
@@ -3790,7 +3816,7 @@ class CfnModuleDefaultVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        arn: typing.Optional[builtins.str] = None,
+        arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
         module_name: typing.Optional[builtins.str] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3906,7 +3932,7 @@ class CfnModuleDefaultVersionProps:
     def __init__(
         self,
         *,
-        arn: typing.Optional[builtins.str] = None,
+        arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
         module_name: typing.Optional[builtins.str] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -3945,7 +3971,9 @@ class CfnModuleDefaultVersionProps:
             self._values["version_id"] = version_id
 
     @builtins.property
-    def arn(self) -> typing.Optional[builtins.str]:
+    def arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]]:
         '''The Amazon Resource Name (ARN) of the module version to set as the default version.
 
         Conditional: You must specify either ``Arn`` , or ``ModuleName`` and ``VersionId`` .
@@ -3953,7 +3981,7 @@ class CfnModuleDefaultVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-moduledefaultversion.html#cfn-cloudformation-moduledefaultversion-arn
         '''
         result = self._values.get("arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]], result)
 
     @builtins.property
     def module_name(self) -> typing.Optional[builtins.str]:
@@ -4001,7 +4029,7 @@ class CfnModuleVersion(
 
     For more information, see `Create reusable resource configurations that can be included across templates with CloudFormation modules <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/modules.html>`_ in the *CloudFormation User Guide* .
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-moduleversion.html
     :cloudformationResource: AWS::CloudFormation::ModuleVersion
@@ -4032,7 +4060,7 @@ class CfnModuleVersion(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param module_name: The name of the module being registered.
-        :param module_package: A URL to the S3 bucket for the package that contains the template fragment and schema files for the module version to register. For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the module version, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param module_package: A URL to the S3 bucket for the package that contains the template fragment and schema files for the module version to register. For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the module version, you must have ``s3:GetObject`` permissions to access the S3 objects.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__50da97e251a6b1bacc1202d70f10c857ca74139ea4e8bcc35b2ff47e8b8b2729)
@@ -4043,6 +4071,20 @@ class CfnModuleVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForModuleVersion")
+    @builtins.classmethod
+    def arn_for_module_version(
+        cls,
+        resource: _IModuleVersionRef_76485182,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__57f2d71d0037e8f7b850e68b540b0785059f92a9a100a773c9d74735eb77782a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForModuleVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4204,7 +4246,7 @@ class CfnModuleVersionProps:
         '''Properties for defining a ``CfnModuleVersion``.
 
         :param module_name: The name of the module being registered.
-        :param module_package: A URL to the S3 bucket for the package that contains the template fragment and schema files for the module version to register. For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the module version, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param module_package: A URL to the S3 bucket for the package that contains the template fragment and schema files for the module version to register. For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the module version, you must have ``s3:GetObject`` permissions to access the S3 objects.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-moduleversion.html
         :exampleMetadata: fixture=_generated
@@ -4243,7 +4285,7 @@ class CfnModuleVersionProps:
     def module_package(self) -> builtins.str:
         '''A URL to the S3 bucket for the package that contains the template fragment and schema files for the module version to register.
 
-        For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* .
+        For more information, see `Module structure and requirements <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/modules-structure.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* .
         .. epigraph::
 
            To register the module version, you must have ``s3:GetObject`` permissions to access the S3 objects.
@@ -4279,13 +4321,13 @@ class CfnPublicTypeVersion(
     - For resource types, testing includes passing all contracts tests defined for the type.
     - For modules, testing includes determining if the module's model meets all necessary requirements.
 
-    For more information, see `Testing your public extension prior to publishing <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.html#publish-extension-testing>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* .
+    For more information, see `Testing your public extension prior to publishing <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.html#publish-extension-testing>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* .
 
     If you don't specify a version, CloudFormation uses the default version of the extension in your account and Region for testing.
 
     To perform testing, CloudFormation assumes the execution role specified when the type was registered.
 
-    An extension must have a test status of ``PASSED`` before it can be published. For more information, see `Publishing extensions to make them available for public use <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* .
+    An extension must have a test status of ``PASSED`` before it can be published. For more information, see `Publishing extensions to make them available for public use <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-publictypeversion.html
     :cloudformationResource: AWS::CloudFormation::PublicTypeVersion
@@ -4632,7 +4674,7 @@ class CfnPublisher(
 
     Public extensions are available for use by all CloudFormation users.
 
-    For information on requirements for registering as a public extension publisher, see `Publishing extensions to make them available for public use <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.htm>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* .
+    For information on requirements for registering as a public extension publisher, see `Publishing extensions to make them available for public use <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/publish-extension.htm>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-publisher.html
     :cloudformationResource: AWS::CloudFormation::Publisher
@@ -4882,7 +4924,7 @@ class CfnResourceDefaultVersion(
 
     The default version of a resource will be used in CloudFormation operations.
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcedefaultversion.html
     :cloudformationResource: AWS::CloudFormation::ResourceDefaultVersion
@@ -4907,7 +4949,7 @@ class CfnResourceDefaultVersion(
         id: builtins.str,
         *,
         type_name: typing.Optional[builtins.str] = None,
-        type_version_arn: typing.Optional[builtins.str] = None,
+        type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::CloudFormation::ResourceDefaultVersion``.
@@ -4929,6 +4971,20 @@ class CfnResourceDefaultVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceDefaultVersion")
+    @builtins.classmethod
+    def arn_for_resource_default_version(
+        cls,
+        resource: _IResourceDefaultVersionRef_6bcf9f85,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9cbbf54a128191525ec0badeaea8adcc0ab8a34c3953dd9849a5bf1962044d48)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceDefaultVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5034,7 +5090,7 @@ class CfnResourceDefaultVersionProps:
         self,
         *,
         type_name: typing.Optional[builtins.str] = None,
-        type_version_arn: typing.Optional[builtins.str] = None,
+        type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
         version_id: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceDefaultVersion``.
@@ -5083,7 +5139,9 @@ class CfnResourceDefaultVersionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def type_version_arn(self) -> typing.Optional[builtins.str]:
+    def type_version_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]]:
         '''The Amazon Resource Name (ARN) of the resource version.
 
         Conditional: You must specify either ``TypeVersionArn`` , or ``TypeName`` and ``VersionId`` .
@@ -5091,7 +5149,7 @@ class CfnResourceDefaultVersionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-resourcedefaultversion.html#cfn-cloudformation-resourcedefaultversion-typeversionarn
         '''
         result = self._values.get("type_version_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]], result)
 
     @builtins.property
     def version_id(self) -> typing.Optional[builtins.str]:
@@ -5132,7 +5190,7 @@ class CfnResourceVersion(
     - Determining which handlers, if any, have been specified for the resource.
     - Making the resource available for use in your account.
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     You can have a maximum of 50 resource versions registered at a time. This maximum is per account and per Region.
 
@@ -5173,7 +5231,7 @@ class CfnResourceVersion(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param schema_handler_package: A URL to the S3 bucket for the resource project package that contains the necessary files for the resource you want to register. For information on generating a schema handler package, see `Modeling resource types to use with AWS CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the resource version, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param schema_handler_package: A URL to the S3 bucket for the resource project package that contains the necessary files for the resource you want to register. For information on generating a schema handler package, see `Modeling resource types to use with CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the resource version, you must have ``s3:GetObject`` permissions to access the S3 objects.
         :param type_name: The name of the resource being registered. We recommend that resource names adhere to the following pattern: *company_or_organization* :: *service* :: *type* . .. epigraph:: The following organization namespaces are reserved and can't be used in your resource names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the IAM role for CloudFormation to assume when invoking the resource. If your resource calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. When CloudFormation needs to invoke the resource type handler, CloudFormation assumes this execution role to create a temporary session token, which it then passes to the resource type handler, thereby supplying your resource type with the appropriate credentials.
         :param logging_config: Logging configuration information for a resource.
@@ -5190,6 +5248,20 @@ class CfnResourceVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceVersion")
+    @builtins.classmethod
+    def arn_for_resource_version(
+        cls,
+        resource: _IResourceVersionRef_8fc1bbae,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f61cad3c378f57fcb9ada1fcba37b86086180d8dd66f2dbd057165a80e7cb0a1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5453,7 +5525,7 @@ class CfnResourceVersionProps:
     ) -> None:
         '''Properties for defining a ``CfnResourceVersion``.
 
-        :param schema_handler_package: A URL to the S3 bucket for the resource project package that contains the necessary files for the resource you want to register. For information on generating a schema handler package, see `Modeling resource types to use with AWS CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the resource version, you must have ``s3:GetObject`` permissions to access the S3 objects.
+        :param schema_handler_package: A URL to the S3 bucket for the resource project package that contains the necessary files for the resource you want to register. For information on generating a schema handler package, see `Modeling resource types to use with CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* . .. epigraph:: To register the resource version, you must have ``s3:GetObject`` permissions to access the S3 objects.
         :param type_name: The name of the resource being registered. We recommend that resource names adhere to the following pattern: *company_or_organization* :: *service* :: *type* . .. epigraph:: The following organization namespaces are reserved and can't be used in your resource names: - ``Alexa`` - ``AMZN`` - ``Amazon`` - ``AWS`` - ``Custom`` - ``Dev``
         :param execution_role_arn: The Amazon Resource Name (ARN) of the IAM role for CloudFormation to assume when invoking the resource. If your resource calls AWS APIs in any of its handlers, you must create an IAM execution role that includes the necessary permissions to call those AWS APIs, and provision that execution role in your account. When CloudFormation needs to invoke the resource type handler, CloudFormation assumes this execution role to create a temporary session token, which it then passes to the resource type handler, thereby supplying your resource type with the appropriate credentials.
         :param logging_config: Logging configuration information for a resource.
@@ -5498,7 +5570,7 @@ class CfnResourceVersionProps:
     def schema_handler_package(self) -> builtins.str:
         '''A URL to the S3 bucket for the resource project package that contains the necessary files for the resource you want to register.
 
-        For information on generating a schema handler package, see `Modeling resource types to use with AWS CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *AWS CloudFormation Command Line Interface (CLI) User Guide* .
+        For information on generating a schema handler package, see `Modeling resource types to use with CloudFormation <https://docs.aws.amazon.com/cloudformation-cli/latest/userguide/resource-type-model.html>`_ in the *CloudFormation Command Line Interface (CLI) User Guide* .
         .. epigraph::
 
            To register the resource version, you must have ``s3:GetObject`` permissions to access the S3 objects.
@@ -5573,7 +5645,7 @@ class CfnStack(
 ):
     '''The ``AWS::CloudFormation::Stack`` resource nests a stack as a resource in a top-level template.
 
-    For more information, see `Nested stacks <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Nested stacks <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html>`_ in the *CloudFormation User Guide* .
 
     You can add output values from a nested stack within the containing template. You use the `GetAtt <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/intrinsic-function-reference-getatt.html>`_ function with the nested stack's logical name and the name of the output value in the nested stack in the format ``Outputs. *NestedStackOutputName*`` .
 
@@ -5581,7 +5653,7 @@ class CfnStack(
 
     When you apply template changes to update a top-level stack, CloudFormation updates the top-level stack and initiates an update to its nested stacks. CloudFormation updates the resources of modified nested stacks, but doesn't update the resources of unmodified nested stacks.
 
-    For stacks that contain IAM resources, you must acknowledge IAM capabilities. Also, make sure that you have cancel update stack permissions, which are required if an update rolls back. For more information about IAM and CloudFormation , see `Controlling access with AWS Identity and Access Management <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html>`_ in the *AWS CloudFormation User Guide* .
+    For stacks that contain IAM resources, you must acknowledge IAM capabilities. Also, make sure that you have cancel update stack permissions, which are required if an update rolls back. For more information about IAM and CloudFormation , see `Controlling access with AWS Identity and Access Management <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html>`_ in the *CloudFormation User Guide* .
     .. epigraph::
 
        A subset of ``AWS::CloudFormation::Stack`` resource type properties listed below are available to customers using CloudFormation , AWS CDK , and Cloud Control  to configure.
@@ -5892,7 +5964,7 @@ class CfnStack(
             output_key: typing.Optional[builtins.str] = None,
             output_value: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The Output data type.
+            '''The ``Output`` data type.
 
             :param description: User defined description associated with the output.
             :param export_name: The name of the export associated with the output.
@@ -6213,12 +6285,12 @@ class CfnStackSet(
         *,
         permission_model: builtins.str,
         stack_set_name: builtins.str,
-        administration_role_arn: typing.Optional[builtins.str] = None,
+        administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         auto_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStackSet.AutoDeploymentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         call_as: typing.Optional[builtins.str] = None,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        execution_role_name: typing.Optional[builtins.str] = None,
+        execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         managed_execution: typing.Any = None,
         operation_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStackSet.OperationPreferencesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStackSet.ParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -6231,12 +6303,12 @@ class CfnStackSet(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param permission_model: Describes how the IAM roles required for StackSet operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *AWS CloudFormation User Guide* .
+        :param permission_model: Describes how the IAM roles required for StackSet operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *CloudFormation User Guide* .
         :param stack_set_name: The name to associate with the StackSet. The name must be unique in the Region where you create your StackSet.
-        :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
-        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
-        :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for StackSets with self-managed permissions. - To create a StackSet with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a StackSet with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *AWS CloudFormation User Guide* . StackSets with service-managed permissions are created in the management account, including StackSets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
-        :param capabilities: The capabilities that are allowed in the StackSet. Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *AWS CloudFormation User Guide* .
+        :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
+        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
+        :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for StackSets with self-managed permissions. - To create a StackSet with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a StackSet with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *CloudFormation User Guide* . StackSets with service-managed permissions are created in the management account, including StackSets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
+        :param capabilities: The capabilities that are allowed in the StackSet. Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *CloudFormation User Guide* .
         :param description: A description of the StackSet.
         :param execution_role_name: The name of the IAM execution role to use to create the StackSet. If you don't specify an execution role, CloudFormation uses the ``AWSCloudFormationStackSetExecutionRole`` role for the StackSet operation. Valid only if the permissions model is ``SELF_MANAGED`` . *Pattern* : ``[a-zA-Z_0-9+=,.@-]+``
         :param managed_execution: Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations. When active, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order. .. epigraph:: If there are already running or queued operations, StackSets queues all incoming operations even if they are non-conflicting. You can't modify your StackSet's execution configuration while there are running or queued operations for that StackSet. When inactive (default), StackSets performs one operation at a time in request order.
@@ -6559,7 +6631,7 @@ class CfnStackSet(
         ) -> None:
             '''Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).
 
-            For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* .
+            For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* .
 
             :param enabled: If set to ``true`` , StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions. If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions.
             :param retain_stacks_on_account_removal: If set to ``true`` , stack resources are retained when an account is removed from a target organization or OU. If set to ``false`` , stack resources are deleted. Specify only if ``Enabled`` is set to ``True`` .
@@ -6848,7 +6920,7 @@ class CfnStackSet(
         ) -> None:
             '''The user-specified preferences for how CloudFormation performs a StackSet operation.
 
-            For more information on maximum concurrent accounts and failure tolerance, see `StackSet operation options <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options>`_ in the *AWS CloudFormation User Guide* .
+            For more information on maximum concurrent accounts and failure tolerance, see `StackSet operation options <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options>`_ in the *CloudFormation User Guide* .
 
             :param concurrency_mode: Specifies how the concurrency level behaves during the operation execution. - ``STRICT_FAILURE_TOLERANCE`` : This option dynamically lowers the concurrency level to ensure the number of failed accounts never exceeds the value of ``FailureToleranceCount`` +1. The initial actual concurrency is set to the lower of either the value of the ``MaxConcurrentCount`` , or the value of ``FailureToleranceCount`` +1. The actual concurrency is then reduced proportionally by the number of failures. This is the default behavior. If failure tolerance or Maximum concurrent accounts are set to percentages, the behavior is similar. - ``SOFT_FAILURE_TOLERANCE`` : This option decouples ``FailureToleranceCount`` from the actual concurrency. This allows StackSet operations to run at the concurrency level set by the ``MaxConcurrentCount`` value, or ``MaxConcurrentPercentage`` , regardless of the number of failures.
             :param failure_tolerance_count: The number of accounts per Region this operation can fail in before CloudFormation stops the operation in that Region. If the operation is stopped in a Region, CloudFormation doesn't attempt the operation in any subsequent Regions. Conditional: You must specify either ``FailureToleranceCount`` or ``FailureTolerancePercentage`` (but not both).
@@ -7212,12 +7284,12 @@ class CfnStackSetProps:
         *,
         permission_model: builtins.str,
         stack_set_name: builtins.str,
-        administration_role_arn: typing.Optional[builtins.str] = None,
+        administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         auto_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.AutoDeploymentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         call_as: typing.Optional[builtins.str] = None,
         capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         description: typing.Optional[builtins.str] = None,
-        execution_role_name: typing.Optional[builtins.str] = None,
+        execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         managed_execution: typing.Any = None,
         operation_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.OperationPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -7228,12 +7300,12 @@ class CfnStackSetProps:
     ) -> None:
         '''Properties for defining a ``CfnStackSet``.
 
-        :param permission_model: Describes how the IAM roles required for StackSet operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *AWS CloudFormation User Guide* .
+        :param permission_model: Describes how the IAM roles required for StackSet operations are created. - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* . - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *CloudFormation User Guide* .
         :param stack_set_name: The name to associate with the StackSet. The name must be unique in the Region where you create your StackSet.
-        :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
-        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
-        :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for StackSets with self-managed permissions. - To create a StackSet with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a StackSet with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *AWS CloudFormation User Guide* . StackSets with service-managed permissions are created in the management account, including StackSets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
-        :param capabilities: The capabilities that are allowed in the StackSet. Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *AWS CloudFormation User Guide* .
+        :param administration_role_arn: The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet. Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* . Valid only if the permissions model is ``SELF_MANAGED`` .
+        :param auto_deployment: Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU). For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* . Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
+        :param call_as: Specifies whether you are acting as an account administrator in the organization's management account or as a delegated administrator in a member account. By default, ``SELF`` is specified. Use ``SELF`` for StackSets with self-managed permissions. - To create a StackSet with service-managed permissions while signed in to the management account, specify ``SELF`` . - To create a StackSet with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` . Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *CloudFormation User Guide* . StackSets with service-managed permissions are created in the management account, including StackSets that are created by delegated administrators. Valid only if the permissions model is ``SERVICE_MANAGED`` .
+        :param capabilities: The capabilities that are allowed in the StackSet. Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *CloudFormation User Guide* .
         :param description: A description of the StackSet.
         :param execution_role_name: The name of the IAM execution role to use to create the StackSet. If you don't specify an execution role, CloudFormation uses the ``AWSCloudFormationStackSetExecutionRole`` role for the StackSet operation. Valid only if the permissions model is ``SELF_MANAGED`` . *Pattern* : ``[a-zA-Z_0-9+=,.@-]+``
         :param managed_execution: Describes whether StackSets performs non-conflicting operations concurrently and queues conflicting operations. When active, StackSets performs non-conflicting operations concurrently and queues conflicting operations. After conflicting operations finish, StackSets starts queued operations in request order. .. epigraph:: If there are already running or queued operations, StackSets queues all incoming operations even if they are non-conflicting. You can't modify your StackSet's execution configuration while there are running or queued operations for that StackSet. When inactive (default), StackSets performs one operation at a time in request order.
@@ -7358,8 +7430,8 @@ class CfnStackSetProps:
     def permission_model(self) -> builtins.str:
         '''Describes how the IAM roles required for StackSet operations are created.
 
-        - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* .
-        - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *AWS CloudFormation User Guide* .
+        - With ``SELF_MANAGED`` permissions, you must create the administrator and execution roles required to deploy to target accounts. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* .
+        - With ``SERVICE_MANAGED`` permissions, StackSets automatically creates the IAM roles required to deploy to accounts managed by AWS Organizations . For more information, see `Activate trusted access for StackSets with AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-activate-trusted-access.html>`_ in the *CloudFormation User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-permissionmodel
         '''
@@ -7380,19 +7452,21 @@ class CfnStackSetProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def administration_role_arn(self) -> typing.Optional[builtins.str]:
+    def administration_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Number (ARN) of the IAM role to use to create this StackSet.
 
         Specify an IAM role only if you are using customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account.
 
-        Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *AWS CloudFormation User Guide* .
+        Use customized administrator roles to control which users or groups can manage specific StackSets within the same administrator account. For more information, see `Grant self-managed permissions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-prereqs-self-managed.html>`_ in the *CloudFormation User Guide* .
 
         Valid only if the permissions model is ``SELF_MANAGED`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-administrationrolearn
         '''
         result = self._values.get("administration_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def auto_deployment(
@@ -7400,7 +7474,7 @@ class CfnStackSetProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStackSet.AutoDeploymentProperty]]:
         '''Describes whether StackSets automatically deploys to AWS Organizations accounts that are added to a target organization or organizational unit (OU).
 
-        For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *AWS CloudFormation User Guide* .
+        For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* .
 
         Required if the permissions model is ``SERVICE_MANAGED`` . (Not used with self-managed permissions.)
 
@@ -7418,7 +7492,7 @@ class CfnStackSetProps:
         - To create a StackSet with service-managed permissions while signed in to the management account, specify ``SELF`` .
         - To create a StackSet with service-managed permissions while signed in to a delegated administrator account, specify ``DELEGATED_ADMIN`` .
 
-        Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *AWS CloudFormation User Guide* .
+        Your AWS account must be registered as a delegated admin in the management account. For more information, see `Register a delegated administrator <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-delegated-admin.html>`_ in the *CloudFormation User Guide* .
 
         StackSets with service-managed permissions are created in the management account, including StackSets that are created by delegated administrators.
 
@@ -7433,7 +7507,7 @@ class CfnStackSetProps:
     def capabilities(self) -> typing.Optional[typing.List[builtins.str]]:
         '''The capabilities that are allowed in the StackSet.
 
-        Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *AWS CloudFormation User Guide* .
+        Some StackSet templates might include resources that can affect permissions in your AWS account —for example, by creating new IAM users. For more information, see `Acknowledging IAM resources in CloudFormation templates <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/control-access-with-iam.html#using-iam-capabilities>`_ in the *CloudFormation User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-capabilities
         '''
@@ -7450,7 +7524,9 @@ class CfnStackSetProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def execution_role_name(self) -> typing.Optional[builtins.str]:
+    def execution_role_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The name of the IAM execution role to use to create the StackSet.
 
         If you don't specify an execution role, CloudFormation uses the ``AWSCloudFormationStackSetExecutionRole`` role for the StackSet operation.
@@ -7462,7 +7538,7 @@ class CfnStackSetProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-stackset.html#cfn-cloudformation-stackset-executionrolename
         '''
         result = self._values.get("execution_role_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def managed_execution(self) -> typing.Any:
@@ -7572,7 +7648,7 @@ class CfnTypeActivation(
 ):
     '''The ``AWS::CloudFormation::TypeActivation`` resource activates a public third-party extension, making it available for use in stack templates.
 
-    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *AWS CloudFormation User Guide* .
+    For information about the CloudFormation registry, see `Managing extensions with the CloudFormation registry <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/registry.html>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-typeactivation.html
     :cloudformationResource: AWS::CloudFormation::TypeActivation
@@ -7650,6 +7726,20 @@ class CfnTypeActivation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTypeActivation")
+    @builtins.classmethod
+    def arn_for_type_activation(
+        cls,
+        resource: _ITypeActivationRef_95db49a7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c6fa9bc1b7a2b23f52d56401992874e48d211739e05f905d360c3d3557a43387)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTypeActivation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8154,10 +8244,10 @@ class CfnWaitCondition(
 ):
     '''The ``AWS::CloudFormation::WaitCondition`` resource provides a way to coordinate stack resource creation with configuration actions that are external to the stack creation or to track the status of a configuration process.
 
-    In these situations, we recommend that you associate a ``CreationPolicy`` attribute with the wait condition instead of using a wait condition handle. For more information and an example, see `CreationPolicy attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-creationpolicy.html>`_ in the *AWS CloudFormation User Guide* . If you use a ``CreationPolicy`` with a wait condition, don't specify any of the wait condition's properties.
+    In these situations, we recommend that you associate a ``CreationPolicy`` attribute with the wait condition instead of using a wait condition handle. For more information and an example, see `CreationPolicy attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-creationpolicy.html>`_ in the *CloudFormation User Guide* . If you use a ``CreationPolicy`` with a wait condition, don't specify any of the wait condition's properties.
     .. epigraph::
 
-       If you use AWS PrivateLink , resources in the VPC that respond to wait conditions must have access to CloudFormation , specific Amazon S3 buckets. Resources must send wait condition responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *AWS CloudFormation User Guide* . > For Amazon EC2 and Auto Scaling resources, we recommend that you use a ``CreationPolicy`` attribute instead of wait conditions. Add a ``CreationPolicy`` attribute to those resources, and use the ``cfn-signal`` helper script to signal when an instance creation process has completed successfully.
+       If you use AWS PrivateLink , resources in the VPC that respond to wait conditions must have access to CloudFormation , specific Amazon S3 buckets. Resources must send wait condition responses to a presigned Amazon S3 URL. If they can't send responses to Amazon S3 , CloudFormation won't receive a response and the stack operation fails. For more information, see `Access CloudFormation using an interface endpoint ( AWS PrivateLink ) <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/vpc-interface-endpoints.html>`_ in the *CloudFormation User Guide* . > For Amazon EC2 and Amazon EC2 Auto Scaling resources, we recommend that you use a ``CreationPolicy`` attribute instead of wait conditions. Add a ``CreationPolicy`` attribute to those resources, and use the ``cfn-signal`` helper script to signal when an instance creation process has completed successfully.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudformation-waitcondition.html
     :cloudformationResource: AWS::CloudFormation::WaitCondition
@@ -8309,7 +8399,7 @@ class CfnWaitConditionHandle(
 
     When you reference the ``WaitConditionHandle`` resource by using the ``Ref`` function, CloudFormation returns a presigned URL. You pass this URL to applications or scripts that are running on your Amazon EC2 instances to send signals to that URL. An associated ``AWS::CloudFormation::WaitCondition`` resource checks the URL for the required number of success signals or for a failure signal.
 
-    For more information, see `Create wait conditions in a CloudFormation template <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-waitcondition.html>`_ in the *AWS CloudFormation User Guide* .
+    For more information, see `Create wait conditions in a CloudFormation template <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-waitcondition.html>`_ in the *CloudFormation User Guide* .
 
     Anytime you add a ``WaitCondition`` resource during a stack update or update a resource with a wait condition, you must associate the wait condition with a new ``WaitConditionHandle`` resource. Don't reuse an old wait condition handle that has already been defined in the template. If you reuse a wait condition handle, the wait condition might evaluate old signals from a previous create or update stack command.
 
@@ -8786,6 +8876,12 @@ def _typecheckingstub__0b8bde9f1f98ed0500179dfc97dcadf56e8ff1be4dde185bebd99abe7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ce6e050fceb0c682b1cb1b4d4facd4dbaf740e0f5ce0bda17c0ca549ddf58866(
+    resource: _IHookDefaultVersionRef_a4784949,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9d3cffde5405816d6a41ef681bf2c43df8b5bde2710721ee16254bf382423108(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8891,6 +8987,12 @@ def _typecheckingstub__291bd220d9e7cd7e2d0ca851a8919b3ac012e0d7a45a664cf291d6381
     type_name: builtins.str,
     execution_role_arn: typing.Optional[builtins.str] = None,
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHookVersion.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__62456467c31f1bcbacb1b0e9513c84e2b7e645613cd4882ccd78b9a60344d37e(
+    resource: _IHookVersionRef_0d71a867,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9153,7 +9255,7 @@ def _typecheckingstub__1c99a91d0140bd9a8f50bc3d072ae8da722981d1a5fcb2663b4fac493
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    arn: typing.Optional[builtins.str] = None,
+    arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
     module_name: typing.Optional[builtins.str] = None,
     version_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -9192,7 +9294,7 @@ def _typecheckingstub__c2565d831587a784d43e20ccbd403e1a5b0a41c68a6ea34925b2361ae
 
 def _typecheckingstub__6f3ea65dfbd0cb512b468da1b9fb9627d1355ed7f5434478a08a635f804f77fc(
     *,
-    arn: typing.Optional[builtins.str] = None,
+    arn: typing.Optional[typing.Union[builtins.str, _IModuleVersionRef_76485182]] = None,
     module_name: typing.Optional[builtins.str] = None,
     version_id: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -9205,6 +9307,12 @@ def _typecheckingstub__50da97e251a6b1bacc1202d70f10c857ca74139ea4e8bcc35b2ff47e8
     *,
     module_name: builtins.str,
     module_package: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__57f2d71d0037e8f7b850e68b540b0785059f92a9a100a773c9d74735eb77782a(
+    resource: _IModuleVersionRef_76485182,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9354,8 +9462,14 @@ def _typecheckingstub__d3bf93b0b355aca5fb2cff6cd3ed10d995f75d3a89763b8aa05fb433f
     id: builtins.str,
     *,
     type_name: typing.Optional[builtins.str] = None,
-    type_version_arn: typing.Optional[builtins.str] = None,
+    type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
     version_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9cbbf54a128191525ec0badeaea8adcc0ab8a34c3953dd9849a5bf1962044d48(
+    resource: _IResourceDefaultVersionRef_6bcf9f85,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9393,7 +9507,7 @@ def _typecheckingstub__61966d72d6d53857a7d4531e87d5aa75dd4e47794020bd350a8ad18c4
 def _typecheckingstub__846c1092e850e7f3b08a0c0fcc29b8cda8aa8f909b3c1479b1ddc873dd053222(
     *,
     type_name: typing.Optional[builtins.str] = None,
-    type_version_arn: typing.Optional[builtins.str] = None,
+    type_version_arn: typing.Optional[typing.Union[builtins.str, _IResourceVersionRef_8fc1bbae]] = None,
     version_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -9407,6 +9521,12 @@ def _typecheckingstub__0d66096cd07e25c1ed44a33ad186a98806441d15023da1aa1c7a94d39
     type_name: builtins.str,
     execution_role_arn: typing.Optional[builtins.str] = None,
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceVersion.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f61cad3c378f57fcb9ada1fcba37b86086180d8dd66f2dbd057165a80e7cb0a1(
+    resource: _IResourceVersionRef_8fc1bbae,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9547,12 +9667,12 @@ def _typecheckingstub__6d9c85250c99fa8473d88e65c23c7c33031b75b34da26e2bece38ee28
     *,
     permission_model: builtins.str,
     stack_set_name: builtins.str,
-    administration_role_arn: typing.Optional[builtins.str] = None,
+    administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     auto_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.AutoDeploymentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     call_as: typing.Optional[builtins.str] = None,
     capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     description: typing.Optional[builtins.str] = None,
-    execution_role_name: typing.Optional[builtins.str] = None,
+    execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     managed_execution: typing.Any = None,
     operation_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.OperationPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -9725,12 +9845,12 @@ def _typecheckingstub__dd7c69ee686d407257fcf95f6bae23045d509b43b119884d9c3094d63
     *,
     permission_model: builtins.str,
     stack_set_name: builtins.str,
-    administration_role_arn: typing.Optional[builtins.str] = None,
+    administration_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     auto_deployment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.AutoDeploymentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     call_as: typing.Optional[builtins.str] = None,
     capabilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     description: typing.Optional[builtins.str] = None,
-    execution_role_name: typing.Optional[builtins.str] = None,
+    execution_role_name: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     managed_execution: typing.Any = None,
     operation_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.OperationPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStackSet.ParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -9756,6 +9876,12 @@ def _typecheckingstub__9c6ab9cbd4089f894248d56e57228ffda7ba7040649f1b2a30619e7d6
     type_name: typing.Optional[builtins.str] = None,
     type_name_alias: typing.Optional[builtins.str] = None,
     version_bump: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c6fa9bc1b7a2b23f52d56401992874e48d211739e05f905d360c3d3557a43387(
+    resource: _ITypeActivationRef_95db49a7,
 ) -> None:
     """Type checking stubs"""
     pass

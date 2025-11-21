@@ -81,7 +81,7 @@ class CfnReplicationSet(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ssmincidents.CfnReplicationSet",
 ):
-    '''The ``AWS::SSMIncidents::ReplicationSet`` resource specifies a set of AWS Regions that Incident Manager data is replicated to and the AWS Key Management Service ( AWS KMS key used to encrypt the data.
+    '''The ``AWS::SSMIncidents::ReplicationSet`` resource specifies a set of AWS Regions that Incident Manager data is replicated to and the AWS Key Management Service ( AWS  key used to encrypt the data.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ssmincidents-replicationset.html
     :cloudformationResource: AWS::SSMIncidents::ReplicationSet
@@ -136,6 +136,20 @@ class CfnReplicationSet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForReplicationSet")
+    @builtins.classmethod
+    def arn_for_replication_set(
+        cls,
+        resource: _IReplicationSetRef_fc6aa93f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__56ebd48e7dfeb2b800ea663144e9353204b3e681594fd16799595b6272c69f5e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReplicationSet", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -601,6 +615,20 @@ class CfnResponsePlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForResponsePlan")
+    @builtins.classmethod
+    def arn_for_response_plan(
+        cls,
+        resource: _IResponsePlanRef_e3282c40,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a272955adefe85c2e402c24c2635485b479ca0e81dc042814e3c2ecb10eadf82)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResponsePlan", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -868,7 +896,7 @@ class CfnResponsePlan(
         ) -> None:
             '''The  chat channel used for collaboration during an incident.
 
-            :param chatbot_sns: The Amazon SNS targets that uses to notify the chat channel of updates to an incident. You can also make updates to the incident through the chat channel by using the Amazon SNS topics
+            :param chatbot_sns: The Amazon targets that uses to notify the chat channel of updates to an incident. You can also make updates to the incident through the chat channel by using the Amazon topics
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-chatchannel.html
             :exampleMetadata: fixture=_generated
@@ -892,9 +920,9 @@ class CfnResponsePlan(
 
         @builtins.property
         def chatbot_sns(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''The Amazon SNS targets that  uses to notify the chat channel of updates to an incident.
+            '''The Amazon  targets that  uses to notify the chat channel of updates to an incident.
 
-            You can also make updates to the incident through the chat channel by using the Amazon SNS topics
+            You can also make updates to the incident through the chat channel by using the Amazon  topics
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-chatchannel.html#cfn-ssmincidents-responseplan-chatchannel-chatbotsns
             '''
@@ -1085,7 +1113,7 @@ class CfnResponsePlan(
             :param title: The title of the incident is a brief and easily recognizable.
             :param dedupe_string: Used to create only one incident record for an incident.
             :param incident_tags: Tags to assign to the template. When the ``StartIncident`` API action is called, Incident Manager assigns the tags specified in the template to the incident.
-            :param notification_targets: The Amazon Simple Notification Service ( Amazon SNS ) targets that uses to notify the chat channel of updates to an incident. You can also make updates to the incident through the chat channel using the Amazon SNS topics.
+            :param notification_targets: The Amazon Simple Notification Service ( Amazon ) targets that uses to notify the chat channel of updates to an incident. You can also make updates to the incident through the chat channel using the Amazon topics.
             :param summary: The summary describes what has happened during the incident.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-incidenttemplate.html
@@ -1187,9 +1215,9 @@ class CfnResponsePlan(
         def notification_targets(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnResponsePlan.NotificationTargetItemProperty"]]]]:
-            '''The Amazon Simple Notification Service ( Amazon SNS ) targets that  uses to notify the chat channel of updates to an incident.
+            '''The Amazon Simple Notification Service ( Amazon  ) targets that  uses to notify the chat channel of updates to an incident.
 
-            You can also make updates to the incident through the chat channel using the Amazon SNS topics.
+            You can also make updates to the incident through the chat channel using the Amazon  topics.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-incidenttemplate.html#cfn-ssmincidents-responseplan-incidenttemplate-notificationtargets
             '''
@@ -1291,9 +1319,9 @@ class CfnResponsePlan(
             *,
             sns_topic_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The Amazon SNS topic that's used by  to notify the incidents chat channel.
+            '''The Amazon  topic that's used by  to notify the incidents chat channel.
 
-            :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic.
+            :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon topic.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-notificationtargetitem.html
             :exampleMetadata: fixture=_generated
@@ -1317,7 +1345,7 @@ class CfnResponsePlan(
 
         @builtins.property
         def sns_topic_arn(self) -> typing.Optional[builtins.str]:
-            '''The Amazon Resource Name (ARN) of the Amazon SNS topic.
+            '''The Amazon Resource Name (ARN) of the Amazon  topic.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ssmincidents-responseplan-notificationtargetitem.html#cfn-ssmincidents-responseplan-notificationtargetitem-snstopicarn
             '''
@@ -1956,6 +1984,12 @@ def _typecheckingstub__d35528bb6313604195e4d5ff11ca1837f21dff5fee9feafa483dfb8e2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__56ebd48e7dfeb2b800ea663144e9353204b3e681594fd16799595b6272c69f5e(
+    resource: _IReplicationSetRef_fc6aa93f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9ce1cdbf03f1712bb0e94f6fa1979c43ed34b985f58abcef9621a3ff1178d5ff(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2022,6 +2056,12 @@ def _typecheckingstub__8a7b27ead04d64e4e2a14258d6cf12fc2875606a719c2ad583afcc196
     engagements: typing.Optional[typing.Sequence[builtins.str]] = None,
     integrations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponsePlan.IntegrationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a272955adefe85c2e402c24c2635485b479ca0e81dc042814e3c2ecb10eadf82(
+    resource: _IResponsePlanRef_e3282c40,
 ) -> None:
     """Type checking stubs"""
     pass

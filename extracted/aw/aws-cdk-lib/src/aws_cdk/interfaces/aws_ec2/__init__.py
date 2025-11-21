@@ -5908,6 +5908,51 @@ class _IVPCRefProxy(
 typing.cast(typing.Any, IVPCRef).__jsii_proxy_class__ = lambda : _IVPCRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ec2.IVPNConcentratorRef")
+class IVPNConcentratorRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a VPNConcentrator.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="vpnConcentratorRef")
+    def vpn_concentrator_ref(self) -> "VPNConcentratorReference":
+        '''(experimental) A reference to a VPNConcentrator resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IVPNConcentratorRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a VPNConcentrator.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ec2.IVPNConcentratorRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="vpnConcentratorRef")
+    def vpn_concentrator_ref(self) -> "VPNConcentratorReference":
+        '''(experimental) A reference to a VPNConcentrator resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("VPNConcentratorReference", jsii.get(self, "vpnConcentratorRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IVPNConcentratorRef).__jsii_proxy_class__ = lambda : _IVPNConcentratorRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ec2.IVPNConnectionRef")
 class IVPNConnectionRef(
     _constructs_77d1e7e8.IConstruct,
@@ -10416,6 +10461,55 @@ class VPCReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.VPNConcentratorReference",
+    jsii_struct_bases=[],
+    name_mapping={"vpn_concentrator_id": "vpnConcentratorId"},
+)
+class VPNConcentratorReference:
+    def __init__(self, *, vpn_concentrator_id: builtins.str) -> None:
+        '''A reference to a VPNConcentrator resource.
+
+        :param vpn_concentrator_id: The VpnConcentratorId of the VPNConcentrator resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            
+            v_pNConcentrator_reference = interfaces_aws_ec2.VPNConcentratorReference(
+                vpn_concentrator_id="vpnConcentratorId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bf28dff327f18ae4342188e770ccb6c452865572f40526391ed06f1edfedcc2c)
+            check_type(argname="argument vpn_concentrator_id", value=vpn_concentrator_id, expected_type=type_hints["vpn_concentrator_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "vpn_concentrator_id": vpn_concentrator_id,
+        }
+
+    @builtins.property
+    def vpn_concentrator_id(self) -> builtins.str:
+        '''The VpnConcentratorId of the VPNConcentrator resource.'''
+        result = self._values.get("vpn_concentrator_id")
+        assert result is not None, "Required property 'vpn_concentrator_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "VPNConcentratorReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ec2.VPNConnectionReference",
     jsii_struct_bases=[],
     name_mapping={"vpn_connection_id": "vpnConnectionId"},
@@ -11078,6 +11172,7 @@ __all__ = [
     "IVPCGatewayAttachmentRef",
     "IVPCPeeringConnectionRef",
     "IVPCRef",
+    "IVPNConcentratorRef",
     "IVPNConnectionRef",
     "IVPNConnectionRouteRef",
     "IVPNGatewayRef",
@@ -11159,6 +11254,7 @@ __all__ = [
     "VPCGatewayAttachmentReference",
     "VPCPeeringConnectionReference",
     "VPCReference",
+    "VPNConcentratorReference",
     "VPNConnectionReference",
     "VPNConnectionRouteReference",
     "VPNGatewayReference",
@@ -11886,6 +11982,13 @@ def _typecheckingstub__eebcb09c1a21f835d06e0bc7c5cb0b566f1c84adaf87a8ad692fff4be
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bf28dff327f18ae4342188e770ccb6c452865572f40526391ed06f1edfedcc2c(
+    *,
+    vpn_concentrator_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b4d9cf45193f00d245a613110cda3f4a881f72d8c00abbeb935c2280eaa78b66(
     *,
     vpn_connection_id: builtins.str,
@@ -11959,5 +12062,5 @@ def _typecheckingstub__5bdce5af9d1e135e7564b00f4d9b2945ac4e23e3d35d3e993e24d29db
     """Type checking stubs"""
     pass
 
-for cls in [ICapacityManagerDataExportRef, ICapacityReservationFleetRef, ICapacityReservationRef, ICarrierGatewayRef, IClientVpnAuthorizationRuleRef, IClientVpnEndpointRef, IClientVpnRouteRef, IClientVpnTargetNetworkAssociationRef, ICustomerGatewayRef, IDHCPOptionsRef, IEC2FleetRef, IEIPAssociationRef, IEIPRef, IEgressOnlyInternetGatewayRef, IEnclaveCertificateIamRoleAssociationRef, IFlowLogRef, IGatewayRouteTableAssociationRef, IHostRef, IIPAMAllocationRef, IIPAMPoolCidrRef, IIPAMPoolRef, IIPAMRef, IIPAMResourceDiscoveryAssociationRef, IIPAMResourceDiscoveryRef, IIPAMScopeRef, IInstanceConnectEndpointRef, IInstanceRef, IInternetGatewayRef, IIpPoolRouteTableAssociationRef, IKeyPairRef, ILaunchTemplateRef, ILocalGatewayRouteRef, ILocalGatewayRouteTableRef, ILocalGatewayRouteTableVPCAssociationRef, ILocalGatewayRouteTableVirtualInterfaceGroupAssociationRef, ILocalGatewayVirtualInterfaceGroupRef, ILocalGatewayVirtualInterfaceRef, INatGatewayRef, INetworkAclEntryRef, INetworkAclRef, INetworkInsightsAccessScopeAnalysisRef, INetworkInsightsAccessScopeRef, INetworkInsightsAnalysisRef, INetworkInsightsPathRef, INetworkInterfaceAttachmentRef, INetworkInterfacePermissionRef, INetworkInterfaceRef, INetworkPerformanceMetricSubscriptionRef, IPlacementGroupRef, IPrefixListRef, IRouteRef, IRouteServerAssociationRef, IRouteServerEndpointRef, IRouteServerPeerRef, IRouteServerPropagationRef, IRouteServerRef, IRouteTableRef, ISecurityGroupEgressRef, ISecurityGroupIngressRef, ISecurityGroupRef, ISecurityGroupVpcAssociationRef, ISnapshotBlockPublicAccessRef, ISpotFleetRef, ISubnetCidrBlockRef, ISubnetNetworkAclAssociationRef, ISubnetRef, ISubnetRouteTableAssociationRef, ITrafficMirrorFilterRef, ITrafficMirrorFilterRuleRef, ITrafficMirrorSessionRef, ITrafficMirrorTargetRef, ITransitGatewayAttachmentRef, ITransitGatewayConnectPeerRef, ITransitGatewayConnectRef, ITransitGatewayMulticastDomainAssociationRef, ITransitGatewayMulticastDomainRef, ITransitGatewayMulticastGroupMemberRef, ITransitGatewayMulticastGroupSourceRef, ITransitGatewayPeeringAttachmentRef, ITransitGatewayRef, ITransitGatewayRouteRef, ITransitGatewayRouteTableAssociationRef, ITransitGatewayRouteTablePropagationRef, ITransitGatewayRouteTableRef, ITransitGatewayVpcAttachmentRef, IVPCBlockPublicAccessExclusionRef, IVPCBlockPublicAccessOptionsRef, IVPCCidrBlockRef, IVPCDHCPOptionsAssociationRef, IVPCEndpointConnectionNotificationRef, IVPCEndpointRef, IVPCEndpointServicePermissionsRef, IVPCEndpointServiceRef, IVPCGatewayAttachmentRef, IVPCPeeringConnectionRef, IVPCRef, IVPNConnectionRef, IVPNConnectionRouteRef, IVPNGatewayRef, IVPNGatewayRoutePropagationRef, IVerifiedAccessEndpointRef, IVerifiedAccessGroupRef, IVerifiedAccessInstanceRef, IVerifiedAccessTrustProviderRef, IVolumeAttachmentRef, IVolumeRef]:
+for cls in [ICapacityManagerDataExportRef, ICapacityReservationFleetRef, ICapacityReservationRef, ICarrierGatewayRef, IClientVpnAuthorizationRuleRef, IClientVpnEndpointRef, IClientVpnRouteRef, IClientVpnTargetNetworkAssociationRef, ICustomerGatewayRef, IDHCPOptionsRef, IEC2FleetRef, IEIPAssociationRef, IEIPRef, IEgressOnlyInternetGatewayRef, IEnclaveCertificateIamRoleAssociationRef, IFlowLogRef, IGatewayRouteTableAssociationRef, IHostRef, IIPAMAllocationRef, IIPAMPoolCidrRef, IIPAMPoolRef, IIPAMRef, IIPAMResourceDiscoveryAssociationRef, IIPAMResourceDiscoveryRef, IIPAMScopeRef, IInstanceConnectEndpointRef, IInstanceRef, IInternetGatewayRef, IIpPoolRouteTableAssociationRef, IKeyPairRef, ILaunchTemplateRef, ILocalGatewayRouteRef, ILocalGatewayRouteTableRef, ILocalGatewayRouteTableVPCAssociationRef, ILocalGatewayRouteTableVirtualInterfaceGroupAssociationRef, ILocalGatewayVirtualInterfaceGroupRef, ILocalGatewayVirtualInterfaceRef, INatGatewayRef, INetworkAclEntryRef, INetworkAclRef, INetworkInsightsAccessScopeAnalysisRef, INetworkInsightsAccessScopeRef, INetworkInsightsAnalysisRef, INetworkInsightsPathRef, INetworkInterfaceAttachmentRef, INetworkInterfacePermissionRef, INetworkInterfaceRef, INetworkPerformanceMetricSubscriptionRef, IPlacementGroupRef, IPrefixListRef, IRouteRef, IRouteServerAssociationRef, IRouteServerEndpointRef, IRouteServerPeerRef, IRouteServerPropagationRef, IRouteServerRef, IRouteTableRef, ISecurityGroupEgressRef, ISecurityGroupIngressRef, ISecurityGroupRef, ISecurityGroupVpcAssociationRef, ISnapshotBlockPublicAccessRef, ISpotFleetRef, ISubnetCidrBlockRef, ISubnetNetworkAclAssociationRef, ISubnetRef, ISubnetRouteTableAssociationRef, ITrafficMirrorFilterRef, ITrafficMirrorFilterRuleRef, ITrafficMirrorSessionRef, ITrafficMirrorTargetRef, ITransitGatewayAttachmentRef, ITransitGatewayConnectPeerRef, ITransitGatewayConnectRef, ITransitGatewayMulticastDomainAssociationRef, ITransitGatewayMulticastDomainRef, ITransitGatewayMulticastGroupMemberRef, ITransitGatewayMulticastGroupSourceRef, ITransitGatewayPeeringAttachmentRef, ITransitGatewayRef, ITransitGatewayRouteRef, ITransitGatewayRouteTableAssociationRef, ITransitGatewayRouteTablePropagationRef, ITransitGatewayRouteTableRef, ITransitGatewayVpcAttachmentRef, IVPCBlockPublicAccessExclusionRef, IVPCBlockPublicAccessOptionsRef, IVPCCidrBlockRef, IVPCDHCPOptionsAssociationRef, IVPCEndpointConnectionNotificationRef, IVPCEndpointRef, IVPCEndpointServicePermissionsRef, IVPCEndpointServiceRef, IVPCGatewayAttachmentRef, IVPCPeeringConnectionRef, IVPCRef, IVPNConcentratorRef, IVPNConnectionRef, IVPNConnectionRouteRef, IVPNGatewayRef, IVPNGatewayRoutePropagationRef, IVerifiedAccessEndpointRef, IVerifiedAccessGroupRef, IVerifiedAccessInstanceRef, IVerifiedAccessTrustProviderRef, IVolumeAttachmentRef, IVolumeRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

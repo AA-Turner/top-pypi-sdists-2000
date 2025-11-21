@@ -144,6 +144,20 @@ class CfnLoggingConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLoggingConfiguration")
+    @builtins.classmethod
+    def arn_for_logging_configuration(
+        cls,
+        resource: _ILoggingConfigurationRef_0ca02c43,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3098f82ef72b00cf08ebe6070a684c703dd13dc8b6a8d0c67c9cd57a38098450)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoggingConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -681,7 +695,7 @@ class CfnRoom(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        logging_configuration_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
         maximum_message_length: typing.Optional[jsii.Number] = None,
         maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
         message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoom.MessageReviewHandlerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -713,6 +727,17 @@ class CfnRoom(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRoom")
+    @builtins.classmethod
+    def arn_for_room(cls, resource: _IRoomRef_54a258f7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d19754b4903595adf8c1d2f8bc17536ce27cdba4153a02a5dc3d932cc9ce4339)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoom", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -969,7 +994,7 @@ class CfnRoomProps:
     def __init__(
         self,
         *,
-        logging_configuration_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
         maximum_message_length: typing.Optional[jsii.Number] = None,
         maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
         message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoom.MessageReviewHandlerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -1034,13 +1059,13 @@ class CfnRoomProps:
     @builtins.property
     def logging_configuration_identifiers(
         self,
-    ) -> typing.Optional[typing.List[builtins.str]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]]:
         '''List of logging-configuration identifiers attached to the room.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivschat-room.html#cfn-ivschat-room-loggingconfigurationidentifiers
         '''
         result = self._values.get("logging_configuration_identifiers")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]], result)
 
     @builtins.property
     def maximum_message_length(self) -> typing.Optional[jsii.Number]:
@@ -1131,6 +1156,12 @@ def _typecheckingstub__f95aa7fbca48607e1b7f21599890b14234d06edef03619f810c807a7b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3098f82ef72b00cf08ebe6070a684c703dd13dc8b6a8d0c67c9cd57a38098450(
+    resource: _ILoggingConfigurationRef_0ca02c43,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__27c1d1ba5ffc0c9e4e4e7ece89f8cc2e8faaf83bbca86ce90359f6b2f8ce3bcd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1204,12 +1235,18 @@ def _typecheckingstub__3b4e5ca285f18f1e8f75ce6f44ea1cf5cd39a13086ac408f0f6de6c51
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    logging_configuration_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
     maximum_message_length: typing.Optional[jsii.Number] = None,
     maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
     message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoom.MessageReviewHandlerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d19754b4903595adf8c1d2f8bc17536ce27cdba4153a02a5dc3d932cc9ce4339(
+    resource: _IRoomRef_54a258f7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1272,7 +1309,7 @@ def _typecheckingstub__b8de671f791820abae21cf6b0bd8d2f03cbf454fb6af42a06db0dd74e
 
 def _typecheckingstub__f899c64588038b94c1a897b6415ff71753daa2f6faffb1c99564c9bc3fec95e3(
     *,
-    logging_configuration_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    logging_configuration_identifiers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ILoggingConfigurationRef_0ca02c43]]] = None,
     maximum_message_length: typing.Optional[jsii.Number] = None,
     maximum_message_rate_per_second: typing.Optional[jsii.Number] = None,
     message_review_handler: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoom.MessageReviewHandlerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

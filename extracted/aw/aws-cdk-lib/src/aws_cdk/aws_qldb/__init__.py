@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_qldb import (
     ILedgerRef as _ILedgerRef_788059f1,
     IStreamRef as _IStreamRef_5720424a,
@@ -128,7 +129,7 @@ class CfnLedger(
         :param id: Construct identifier for this resource (unique in its scope).
         :param permissions_mode: The permissions mode to assign to the ledger that you want to create. This parameter can have one of the following values: - ``ALLOW_ALL`` : A legacy permissions mode that enables access control with API-level granularity for ledgers. This mode allows users who have the ``SendCommand`` API permission for this ledger to run all PartiQL commands (hence, ``ALLOW_ALL`` ) on any tables in the specified ledger. This mode disregards any table-level or command-level IAM permissions policies that you create for the ledger. - ``STANDARD`` : ( *Recommended* ) A permissions mode that enables access control with finer granularity for ledgers, tables, and PartiQL commands. By default, this mode denies all user requests to run any PartiQL commands on any tables in this ledger. To allow PartiQL commands to run, you must create IAM permissions policies for specific table resources and PartiQL actions, in addition to the ``SendCommand`` API permission for the ledger. For information, see `Getting started with the standard permissions mode <https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html>`_ in the *Amazon QLDB Developer Guide* . .. epigraph:: We strongly recommend using the ``STANDARD`` permissions mode to maximize the security of your ledger data.
         :param deletion_protection: Specifies whether the ledger is protected from being deleted by any user. If not defined during ledger creation, this feature is enabled ( ``true`` ) by default. If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the ``UpdateLedger`` operation to set this parameter to ``false`` .
-        :param kms_key: The key in AWS Key Management Service ( AWS KMS ) to use for encryption of data at rest in the ledger. For more information, see `Encryption at rest <https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html>`_ in the *Amazon QLDB Developer Guide* . Use one of the following options to specify this parameter: - ``AWS_OWNED_KMS_KEY`` : Use an AWS KMS key that is owned and managed by AWS on your behalf. - *Undefined* : By default, use an AWS owned KMS key. - *A valid symmetric customer managed KMS key* : Use the specified symmetric encryption KMS key in your account that you create, own, and manage. Amazon QLDB does not support asymmetric keys. For more information, see `Using symmetric and asymmetric keys <https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* . To specify a customer managed KMS key, you can use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with ``"alias/"`` . To specify a key in a different AWS account , you must use the key ARN or alias ARN. For example: - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Alias name: ``alias/ExampleAlias`` - Alias ARN: ``arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias`` For more information, see `Key identifiers (KeyId) <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key: The key in AWS Key Management Service ( AWS ) to use for encryption of data at rest in the ledger. For more information, see `Encryption at rest <https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html>`_ in the *Amazon QLDB Developer Guide* . Use one of the following options to specify this parameter: - ``AWS_OWNED_KMS_KEY`` : Use an AWS key that is owned and managed by AWS on your behalf. - *Undefined* : By default, use an AWS owned KMS key. - *A valid symmetric customer managed KMS key* : Use the specified symmetric encryption KMS key in your account that you create, own, and manage. Amazon QLDB does not support asymmetric keys. For more information, see `Using symmetric and asymmetric keys <https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* . To specify a customer managed KMS key, you can use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with ``"alias/"`` . To specify a key in a different AWS account , you must use the key ARN or alias ARN. For example: - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Alias name: ``alias/ExampleAlias`` - Alias ARN: ``arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias`` For more information, see `Key identifiers (KeyId) <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id>`_ in the *AWS Key Management Service Developer Guide* .
         :param name: The name of the ledger that you want to create. The name must be unique among all of the ledgers in your AWS account in the current Region. Naming constraints for ledger names are defined in `Quotas in Amazon QLDB <https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming>`_ in the *Amazon QLDB Developer Guide* .
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
@@ -235,7 +236,7 @@ class CfnLedger(
     @builtins.property
     @jsii.member(jsii_name="kmsKey")
     def kms_key(self) -> typing.Optional[builtins.str]:
-        '''The key in AWS Key Management Service ( AWS KMS ) to use for encryption of data at rest in the ledger.'''
+        '''The key in AWS Key Management Service ( AWS  ) to use for encryption of data at rest in the ledger.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKey"))
 
     @kms_key.setter
@@ -297,7 +298,7 @@ class CfnLedgerProps:
 
         :param permissions_mode: The permissions mode to assign to the ledger that you want to create. This parameter can have one of the following values: - ``ALLOW_ALL`` : A legacy permissions mode that enables access control with API-level granularity for ledgers. This mode allows users who have the ``SendCommand`` API permission for this ledger to run all PartiQL commands (hence, ``ALLOW_ALL`` ) on any tables in the specified ledger. This mode disregards any table-level or command-level IAM permissions policies that you create for the ledger. - ``STANDARD`` : ( *Recommended* ) A permissions mode that enables access control with finer granularity for ledgers, tables, and PartiQL commands. By default, this mode denies all user requests to run any PartiQL commands on any tables in this ledger. To allow PartiQL commands to run, you must create IAM permissions policies for specific table resources and PartiQL actions, in addition to the ``SendCommand`` API permission for the ledger. For information, see `Getting started with the standard permissions mode <https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html>`_ in the *Amazon QLDB Developer Guide* . .. epigraph:: We strongly recommend using the ``STANDARD`` permissions mode to maximize the security of your ledger data.
         :param deletion_protection: Specifies whether the ledger is protected from being deleted by any user. If not defined during ledger creation, this feature is enabled ( ``true`` ) by default. If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the ``UpdateLedger`` operation to set this parameter to ``false`` .
-        :param kms_key: The key in AWS Key Management Service ( AWS KMS ) to use for encryption of data at rest in the ledger. For more information, see `Encryption at rest <https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html>`_ in the *Amazon QLDB Developer Guide* . Use one of the following options to specify this parameter: - ``AWS_OWNED_KMS_KEY`` : Use an AWS KMS key that is owned and managed by AWS on your behalf. - *Undefined* : By default, use an AWS owned KMS key. - *A valid symmetric customer managed KMS key* : Use the specified symmetric encryption KMS key in your account that you create, own, and manage. Amazon QLDB does not support asymmetric keys. For more information, see `Using symmetric and asymmetric keys <https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* . To specify a customer managed KMS key, you can use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with ``"alias/"`` . To specify a key in a different AWS account , you must use the key ARN or alias ARN. For example: - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Alias name: ``alias/ExampleAlias`` - Alias ARN: ``arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias`` For more information, see `Key identifiers (KeyId) <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key: The key in AWS Key Management Service ( AWS ) to use for encryption of data at rest in the ledger. For more information, see `Encryption at rest <https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html>`_ in the *Amazon QLDB Developer Guide* . Use one of the following options to specify this parameter: - ``AWS_OWNED_KMS_KEY`` : Use an AWS key that is owned and managed by AWS on your behalf. - *Undefined* : By default, use an AWS owned KMS key. - *A valid symmetric customer managed KMS key* : Use the specified symmetric encryption KMS key in your account that you create, own, and manage. Amazon QLDB does not support asymmetric keys. For more information, see `Using symmetric and asymmetric keys <https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html>`_ in the *AWS Key Management Service Developer Guide* . To specify a customer managed KMS key, you can use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with ``"alias/"`` . To specify a key in a different AWS account , you must use the key ARN or alias ARN. For example: - Key ID: ``1234abcd-12ab-34cd-56ef-1234567890ab`` - Key ARN: ``arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab`` - Alias name: ``alias/ExampleAlias`` - Alias ARN: ``arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias`` For more information, see `Key identifiers (KeyId) <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#key-id>`_ in the *AWS Key Management Service Developer Guide* .
         :param name: The name of the ledger that you want to create. The name must be unique among all of the ledgers in your AWS account in the current Region. Naming constraints for ledger names are defined in `Quotas in Amazon QLDB <https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming>`_ in the *Amazon QLDB Developer Guide* .
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
@@ -382,13 +383,13 @@ class CfnLedgerProps:
 
     @builtins.property
     def kms_key(self) -> typing.Optional[builtins.str]:
-        '''The key in AWS Key Management Service ( AWS KMS ) to use for encryption of data at rest in the ledger.
+        '''The key in AWS Key Management Service ( AWS  ) to use for encryption of data at rest in the ledger.
 
         For more information, see `Encryption at rest <https://docs.aws.amazon.com/qldb/latest/developerguide/encryption-at-rest.html>`_ in the *Amazon QLDB Developer Guide* .
 
         Use one of the following options to specify this parameter:
 
-        - ``AWS_OWNED_KMS_KEY`` : Use an AWS KMS key that is owned and managed by AWS on your behalf.
+        - ``AWS_OWNED_KMS_KEY`` : Use an AWS  key that is owned and managed by AWS on your behalf.
         - *Undefined* : By default, use an AWS owned KMS key.
         - *A valid symmetric customer managed KMS key* : Use the specified symmetric encryption KMS key in your account that you create, own, and manage.
 
@@ -495,7 +496,7 @@ class CfnStream(
         inclusive_start_time: builtins.str,
         kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.KinesisConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         ledger_name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stream_name: builtins.str,
         exclusive_end_time: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -527,6 +528,17 @@ class CfnStream(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStream")
+    @builtins.classmethod
+    def arn_for_stream(cls, resource: _IStreamRef_5720424a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d1b81fb9cb7d99e54023e431abf5265ea7209ea94338fc44122427f5e91fd0f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStream", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -794,7 +806,7 @@ class CfnStreamProps:
         inclusive_start_time: builtins.str,
         kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.KinesisConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
         ledger_name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stream_name: builtins.str,
         exclusive_end_time: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -896,7 +908,7 @@ class CfnStreamProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role that grants QLDB permissions for a journal stream to write data records to a Kinesis Data Streams resource.
 
         To pass a role to QLDB when requesting a journal stream, you must have permissions to perform the ``iam:PassRole`` action on the IAM role resource. This is required for all journal stream requests.
@@ -905,7 +917,7 @@ class CfnStreamProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def stream_name(self) -> builtins.str:
@@ -1039,10 +1051,16 @@ def _typecheckingstub__19df9eb6d681fce76d2012fd0458a104b842f687fd7aed1f8d9228e06
     inclusive_start_time: builtins.str,
     kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.KinesisConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     ledger_name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stream_name: builtins.str,
     exclusive_end_time: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d1b81fb9cb7d99e54023e431abf5265ea7209ea94338fc44122427f5e91fd0f(
+    resource: _IStreamRef_5720424a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1114,7 +1132,7 @@ def _typecheckingstub__93b24971535d3527d042ac4bb7ac175f1193a6f26f891b339dd6cbadd
     inclusive_start_time: builtins.str,
     kinesis_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.KinesisConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     ledger_name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stream_name: builtins.str,
     exclusive_end_time: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,

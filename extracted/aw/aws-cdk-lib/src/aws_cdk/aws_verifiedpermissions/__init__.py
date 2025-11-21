@@ -101,7 +101,7 @@ class CfnIdentitySource(
 
     After you create an identity source, you can use the identities provided by the IdP as proxies for the principal in authorization queries that use the `IsAuthorizedWithToken <https://docs.aws.amazon.com/verifiedpermissions/latest/apireference/API_IsAuthorizedWithToken.html>`_ operation. These identities take the form of tokens that contain claims about the user, such as IDs, attributes and group memberships. Amazon Cognito provides both identity tokens and access tokens, and Verified Permissions can use either or both. Any combination of identity and access tokens results in the same Cedar principal. Verified Permissions automatically translates the information about the identities into the standard Cedar attributes that can be evaluated by your policies. Because the Amazon Cognito identity and access tokens can contain different information, the tokens you choose to use determine the attributes that are available to access in the Cedar principal from your policies.
 
-    Amazon Cognito Identity is not available in all of the same AWS Regions as  . Because of this, the ``AWS::VerifiedPermissions::IdentitySource`` type is not available to create from AWS CloudFormation in Regions where Amazon Cognito Identity is not currently available. Users can still create ``AWS::VerifiedPermissions::IdentitySource`` in those Regions, but only from the AWS CLI ,  SDK, or from the AWS console.
+    Amazon Cognito Identity is not available in all of the same AWS Regions as  . Because of this, the ``AWS::VerifiedPermissions::IdentitySource`` type is not available to create from CloudFormation in Regions where Amazon Cognito Identity is not currently available. Users can still create ``AWS::VerifiedPermissions::IdentitySource`` in those Regions, but only from the AWS CLI ,  SDK, or from the AWS console.
     .. epigraph::
 
        To reference a user from this identity source in your Cedar policies, use the following syntax.
@@ -1998,6 +1998,17 @@ class CfnPolicyStore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPolicyStore")
+    @builtins.classmethod
+    def arn_for_policy_store(cls, resource: _IPolicyStoreRef_ac45e491) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0452b3bafa79c48a044e0023e33f027ba6dea19ad62899e88cfb8658a9387353)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicyStore", [resource]))
+
     @jsii.member(jsii_name="fromPolicyStoreArn")
     @builtins.classmethod
     def from_policy_store_arn(
@@ -2995,6 +3006,12 @@ def _typecheckingstub__8cc0f2986096a74fa71e43f21c340737b2abb3e3f40afbfe29ca3f0bd
     description: typing.Optional[builtins.str] = None,
     schema: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPolicyStore.SchemaDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0452b3bafa79c48a044e0023e33f027ba6dea19ad62899e88cfb8658a9387353(
+    resource: _IPolicyStoreRef_ac45e491,
 ) -> None:
     """Type checking stubs"""
     pass

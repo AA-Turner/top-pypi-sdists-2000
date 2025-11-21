@@ -73,6 +73,8 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import ISecurityGroupRef as _ISecurityGroupRef_efa4ff18
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_neptune import (
     DBClusterParameterGroupReference as _DBClusterParameterGroupReference_da7b4f10,
     DBClusterReference as _DBClusterReference_46880dce,
@@ -101,7 +103,7 @@ class CfnDBCluster(
 
        Currently, you can create this resource only in AWS Regions in which Amazon Neptune is supported.
 
-    If no ``DeletionPolicy`` is set for ``AWS::Neptune::DBCluster`` resources, the default deletion behavior is that the entire volume will be deleted without a snapshot. To retain a backup of the volume, the ``DeletionPolicy`` should be set to ``Snapshot`` . For more information about how AWS CloudFormation deletes resources, see `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ .
+    If no ``DeletionPolicy`` is set for ``AWS::Neptune::DBCluster`` resources, the default deletion behavior is that the entire volume will be deleted without a snapshot. To retain a backup of the volume, the ``DeletionPolicy`` should be set to ``Snapshot`` . For more information about how CloudFormation deletes resources, see `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ .
 
     You can use ``AWS::Neptune::DBCluster.DeletionProtection`` to help guard against unintended deletion of your DB cluster.
 
@@ -173,7 +175,7 @@ class CfnDBCluster(
         enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         engine_version: typing.Optional[builtins.str] = None,
         iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         restore_to_time: typing.Optional[builtins.str] = None,
@@ -184,7 +186,7 @@ class CfnDBCluster(
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Create a new ``AWS::Neptune::DBCluster``.
 
@@ -1246,7 +1248,7 @@ class CfnDBClusterProps:
         enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
         engine_version: typing.Optional[builtins.str] = None,
         iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         preferred_backup_window: typing.Optional[builtins.str] = None,
         preferred_maintenance_window: typing.Optional[builtins.str] = None,
         restore_to_time: typing.Optional[builtins.str] = None,
@@ -1257,7 +1259,7 @@ class CfnDBClusterProps:
         storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-        vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDBCluster``.
 
@@ -1567,7 +1569,9 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The Amazon Resource Name (ARN) of the KMS key that is used to encrypt the database instances in the DB cluster, such as ``arn:aws:kms:us-east-1:012345678910:key/abcd1234-a123-456a-a12b-a123b4cd56ef`` .
 
         If you enable the ``StorageEncrypted`` property but don't specify this property, the default KMS key is used. If you specify this property, you must set the ``StorageEncrypted`` property to ``true`` .
@@ -1575,7 +1579,7 @@ class CfnDBClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def preferred_backup_window(self) -> typing.Optional[builtins.str]:
@@ -1706,13 +1710,15 @@ class CfnDBClusterProps:
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
-    def vpc_security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def vpc_security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''Provides a list of VPC security groups that the DB cluster belongs to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbcluster.html#cfn-neptune-dbcluster-vpcsecuritygroupids
         '''
         result = self._values.get("vpc_security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1736,20 +1742,20 @@ class CfnDBInstance(
 
     *Updating DB Instances*
 
-    You can set a deletion policy for your DB instance to control how AWS CloudFormation handles the instance when the stack is deleted. For Neptune DB instances, you can choose to *retain* the instance, to *delete* the instance, or to *create a snapshot* of the instance. The default AWS CloudFormation behavior depends on the ``DBClusterIdentifier`` property:
+    You can set a deletion policy for your DB instance to control how CloudFormation handles the instance when the stack is deleted. For Neptune DB instances, you can choose to *retain* the instance, to *delete* the instance, or to *create a snapshot* of the instance. The default CloudFormation behavior depends on the ``DBClusterIdentifier`` property:
 
-    - For ``AWS::Neptune::DBInstance`` resources that don't specify the ``DBClusterIdentifier`` property, AWS CloudFormation saves a snapshot of the DB instance.
-    - For ``AWS::Neptune::DBInstance`` resources that do specify the ``DBClusterIdentifier`` property, AWS CloudFormation deletes the DB instance.
+    - For ``AWS::Neptune::DBInstance`` resources that don't specify the ``DBClusterIdentifier`` property, CloudFormation saves a snapshot of the DB instance.
+    - For ``AWS::Neptune::DBInstance`` resources that do specify the ``DBClusterIdentifier`` property, CloudFormation deletes the DB instance.
 
     *Deleting DB Instances*
     .. epigraph::
 
-       If a DB instance is deleted or replaced during an update, AWS CloudFormation deletes all automated snapshots. However, it retains manual DB snapshots. During an update that requires replacement, you can apply a stack policy to prevent DB instances from being replaced.
+       If a DB instance is deleted or replaced during an update, CloudFormation deletes all automated snapshots. However, it retains manual DB snapshots. During an update that requires replacement, you can apply a stack policy to prevent DB instances from being replaced.
 
-    When properties labeled *Update requires: Replacement* are updated, AWS CloudFormation first creates a replacement DB instance, changes references from other dependent resources to point to the replacement DB instance, and finally deletes the old DB instance.
+    When properties labeled *Update requires: Replacement* are updated, CloudFormation first creates a replacement DB instance, changes references from other dependent resources to point to the replacement DB instance, and finally deletes the old DB instance.
     .. epigraph::
 
-       We highly recommend that you take a snapshot of the database before updating the stack. If you don't, you lose the data when AWS CloudFormation replaces your DB instance. To preserve your data, perform the following procedure:
+       We highly recommend that you take a snapshot of the database before updating the stack. If you don't, you lose the data when CloudFormation replaces your DB instance. To preserve your data, perform the following procedure:
 
        - Deactivate any applications that are using the DB instance so that there's no activity on the DB instance.
        - Create a snapshot of the DB instance.
@@ -2424,7 +2430,7 @@ class CfnDBParameterGroup(
         :param id: Construct identifier for this resource (unique in its scope).
         :param description: Provides the customer-specified description for this DB parameter group.
         :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
+        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers CloudFormation to reboot the associated DB instance without failover.
         :param name: Provides the name of the DB parameter group.
         :param tags: The tags that you want to attach to this parameter group.
         '''
@@ -2580,7 +2586,7 @@ class CfnDBParameterGroupProps:
 
         :param description: Provides the customer-specified description for this DB parameter group.
         :param family: Must be ``neptune1`` for engine versions prior to `1.2.0.0 <https://docs.aws.amazon.com/neptune/latest/userguide/engine-releases-1.2.0.0.html>`_ , or ``neptune1.2`` for engine version ``1.2.0.0`` and higher.
-        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
+        :param parameters: The parameters to set for this DB parameter group. The parameters are expressed as a JSON object consisting of key-value pairs. Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers CloudFormation to reboot the associated DB instance without failover.
         :param name: Provides the name of the DB parameter group.
         :param tags: The tags that you want to attach to this parameter group.
 
@@ -2651,7 +2657,7 @@ class CfnDBParameterGroupProps:
 
         The parameters are expressed as a JSON object consisting of key-value pairs.
 
-        Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers AWS CloudFormation to reboot the associated DB instance without failover.
+        Changes to dynamic parameters are applied immediately. During an update, if you have static parameters (whether they were changed or not), it triggers CloudFormation to reboot the associated DB instance without failover.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-neptune-dbparametergroup.html#cfn-neptune-dbparametergroup-parameters
         '''
@@ -3398,7 +3404,7 @@ def _typecheckingstub__c02a97dc4524b23c97bacdafe22108ee784060ff42aa0df4868429383
     enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
     engine_version: typing.Optional[builtins.str] = None,
     iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     restore_to_time: typing.Optional[builtins.str] = None,
@@ -3409,7 +3415,7 @@ def _typecheckingstub__c02a97dc4524b23c97bacdafe22108ee784060ff42aa0df4868429383
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3673,7 +3679,7 @@ def _typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5
     enable_cloudwatch_logs_exports: typing.Optional[typing.Sequence[builtins.str]] = None,
     engine_version: typing.Optional[builtins.str] = None,
     iam_auth_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     preferred_backup_window: typing.Optional[builtins.str] = None,
     preferred_maintenance_window: typing.Optional[builtins.str] = None,
     restore_to_time: typing.Optional[builtins.str] = None,
@@ -3684,7 +3690,7 @@ def _typecheckingstub__88c4bf370341b0e8b113f0ee9d80be6e0b45183ba249011ead676b8c5
     storage_encrypted: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     use_latest_restorable_time: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
-    vpc_security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    vpc_security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

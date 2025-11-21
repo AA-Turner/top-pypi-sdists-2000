@@ -131,6 +131,20 @@ class CfnSuiteDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSuiteDefinition")
+    @builtins.classmethod
+    def arn_for_suite_definition(
+        cls,
+        resource: _ISuiteDefinitionRef_45c0f8ee,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__17f3efd305766db779a6fd41cb9de952799baa8c0b321ae03258a511d286aa4c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSuiteDefinition", [resource]))
+
     @jsii.member(jsii_name="fromSuiteDefinitionArn")
     @builtins.classmethod
     def from_suite_definition_arn(
@@ -610,6 +624,12 @@ def _typecheckingstub__945861bb0ea34e6da34c3c8b60ba3b233f881a73cecd8fa75200bae6d
     *,
     suite_definition_configuration: typing.Any,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__17f3efd305766db779a6fd41cb9de952799baa8c0b321ae03258a511d286aa4c(
+    resource: _ISuiteDefinitionRef_45c0f8ee,
 ) -> None:
     """Type checking stubs"""
     pass

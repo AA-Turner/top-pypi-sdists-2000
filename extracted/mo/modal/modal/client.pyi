@@ -5,7 +5,6 @@ import google.protobuf.message
 import grpclib.client
 import modal._utils.async_utils
 import modal._utils.auth_token_manager
-import modal_proto.api_grpc
 import modal_proto.modal_api_grpc
 import synchronicity.combined_types
 import typing
@@ -23,13 +22,13 @@ class _Client:
     _client_from_env: typing.ClassVar[typing.Optional[_Client]]
     _client_from_env_lock: typing.ClassVar[typing.Optional[asyncio.locks.Lock]]
     _cancellation_context: modal._utils.async_utils.TaskContext
-    _cancellation_context_event_loop: asyncio.events.AbstractEventLoop
-    _stub: typing.Optional[modal_proto.api_grpc.ModalClientStub]
-    _auth_token_manager: modal._utils.auth_token_manager._AuthTokenManager
+    _cancellation_context_event_loop: typing.Optional[asyncio.events.AbstractEventLoop]
+    _stub: typing.Optional[modal_proto.modal_api_grpc.ModalClientModal]
+    _auth_token_manager: typing.Optional[modal._utils.auth_token_manager._AuthTokenManager]
     _snapshotted: bool
 
     def __init__(
-        self, server_url: str, client_type: int, credentials: typing.Optional[tuple[str, str]], version: str = "1.2.2"
+        self, server_url: str, client_type: int, credentials: typing.Optional[tuple[str, str]], version: str = "1.2.3"
     ):
         """mdmd:hidden
         The Modal client object is not intended to be instantiated directly by users.
@@ -150,13 +149,13 @@ class Client:
     _client_from_env: typing.ClassVar[typing.Optional[Client]]
     _client_from_env_lock: typing.ClassVar[typing.Optional[asyncio.locks.Lock]]
     _cancellation_context: modal._utils.async_utils.TaskContext
-    _cancellation_context_event_loop: asyncio.events.AbstractEventLoop
-    _stub: typing.Optional[modal_proto.api_grpc.ModalClientStub]
-    _auth_token_manager: modal._utils.auth_token_manager._AuthTokenManager
+    _cancellation_context_event_loop: typing.Optional[asyncio.events.AbstractEventLoop]
+    _stub: typing.Optional[modal_proto.modal_api_grpc.ModalClientModal]
+    _auth_token_manager: typing.Optional[modal._utils.auth_token_manager._AuthTokenManager]
     _snapshotted: bool
 
     def __init__(
-        self, server_url: str, client_type: int, credentials: typing.Optional[tuple[str, str]], version: str = "1.2.2"
+        self, server_url: str, client_type: int, credentials: typing.Optional[tuple[str, str]], version: str = "1.2.3"
     ):
         """mdmd:hidden
         The Modal client object is not intended to be instantiated directly by users.

@@ -205,6 +205,17 @@ class CfnAgentStatus(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAgentStatus")
+    @builtins.classmethod
+    def arn_for_agent_status(cls, resource: _IAgentStatusRef_67596e12) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__985efce7d51e6b6d5f263df8fe473f63ae7c3862ee395b66b755bc2727945a65)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgentStatus", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -598,7 +609,7 @@ class CfnApprovedOrigin(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_id: builtins.str,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
         origin: builtins.str,
     ) -> None:
         '''Create a new ``AWS::Connect::ApprovedOrigin``.
@@ -690,7 +701,12 @@ class CfnApprovedOrigin(
     name_mapping={"instance_id": "instanceId", "origin": "origin"},
 )
 class CfnApprovedOriginProps:
-    def __init__(self, *, instance_id: builtins.str, origin: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
+        origin: builtins.str,
+    ) -> None:
         '''Properties for defining a ``CfnApprovedOrigin``.
 
         :param instance_id: The Amazon Resource Name (ARN) of the instance. *Minimum* : ``1`` *Maximum* : ``100``
@@ -720,7 +736,7 @@ class CfnApprovedOriginProps:
         }
 
     @builtins.property
-    def instance_id(self) -> builtins.str:
+    def instance_id(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         *Minimum* : ``1``
@@ -731,7 +747,7 @@ class CfnApprovedOriginProps:
         '''
         result = self._values.get("instance_id")
         assert result is not None, "Required property 'instance_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def origin(self) -> builtins.str:
@@ -797,7 +813,7 @@ class CfnContactFlow(
         id: builtins.str,
         *,
         content: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -831,6 +847,17 @@ class CfnContactFlow(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForContactFlow")
+    @builtins.classmethod
+    def arn_for_contact_flow(cls, resource: _IContactFlowRef_747dc709) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e9095c329fca5b45d66dab1fccc242e6ae82dd746edeab2b003d272ea355d443)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactFlow", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1019,7 +1046,7 @@ class CfnContactFlowModule(
         id: builtins.str,
         *,
         content: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
@@ -1050,6 +1077,20 @@ class CfnContactFlowModule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForContactFlowModule")
+    @builtins.classmethod
+    def arn_for_contact_flow_module(
+        cls,
+        resource: _IContactFlowModuleRef_7a0e807b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__594ee3994c2d321f1ded11e73b783e5e3491183cfb9dae318d2f0adcfd0ebae3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactFlowModule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1212,7 +1253,7 @@ class CfnContactFlowModuleProps:
         self,
         *,
         content: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         state: typing.Optional[builtins.str] = None,
@@ -1281,14 +1322,14 @@ class CfnContactFlowModuleProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-contactflowmodule.html#cfn-connect-contactflowmodule-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1359,7 +1400,7 @@ class CfnContactFlowProps:
         self,
         *,
         content: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -1435,14 +1476,14 @@ class CfnContactFlowProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-contactflow.html#cfn-connect-contactflow-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -1801,6 +1842,20 @@ class CfnEmailAddress(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEmailAddress")
+    @builtins.classmethod
+    def arn_for_email_address(
+        cls,
+        resource: _IEmailAddressRef_35d49535,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__98a0239dae758fd013b020f0b8a394622176551877a96a418a071f3c534e7ac8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEmailAddress", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2304,7 +2359,7 @@ class CfnEvaluationForm(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormBaseItemProperty", typing.Dict[builtins.str, typing.Any]]]]],
         status: builtins.str,
         title: builtins.str,
@@ -2342,6 +2397,20 @@ class CfnEvaluationForm(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEvaluationForm")
+    @builtins.classmethod
+    def arn_for_evaluation_form(
+        cls,
+        resource: _IEvaluationFormRef_fa83f2b6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__17f11f6e71002ab1f9575406dbf201d99508497f1204ddcb88d1eed331722df9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEvaluationForm", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5388,7 +5457,7 @@ class CfnEvaluationFormProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormBaseItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
         status: builtins.str,
         title: builtins.str,
@@ -5579,14 +5648,14 @@ class CfnEvaluationFormProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The identifier of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-evaluationform.html#cfn-connect-evaluationform-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def items(
@@ -5755,7 +5824,7 @@ class CfnHoursOfOperation(
         id: builtins.str,
         *,
         config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnHoursOfOperation.HoursOfOperationConfigProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         time_zone: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -5789,6 +5858,20 @@ class CfnHoursOfOperation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForHoursOfOperation")
+    @builtins.classmethod
+    def arn_for_hours_of_operation(
+        cls,
+        resource: _IHoursOfOperationRef_5b4f8721,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b29283b351b66869118b9820a74132e9dd95c4882c9d0e8e14ea121ae7efaba7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHoursOfOperation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6442,7 +6525,7 @@ class CfnHoursOfOperationProps:
         self,
         *,
         config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         time_zone: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -6547,14 +6630,14 @@ class CfnHoursOfOperationProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnHoursOfOperation.HoursOfOperationConfigProperty]]], result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-hoursofoperation.html#cfn-connect-hoursofoperation-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -6704,6 +6787,17 @@ class CfnInstance(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForInstance")
+    @builtins.classmethod
+    def arn_for_instance(cls, resource: _IInstanceRef_b6835093) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__941d1392a5833365a03c940bc71ac18bb6462d16c9e41d71b35d84fccb36cca0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstance", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7331,7 +7425,7 @@ class CfnInstanceStorageConfig(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         resource_type: builtins.str,
         storage_type: builtins.str,
         kinesis_firehose_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInstanceStorageConfig.KinesisFirehoseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7923,7 +8017,7 @@ class CfnInstanceStorageConfigProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         resource_type: builtins.str,
         storage_type: builtins.str,
         kinesis_firehose_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.KinesisFirehoseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8006,14 +8100,14 @@ class CfnInstanceStorageConfigProps:
             self._values["s3_config"] = s3_config
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-instancestorageconfig.html#cfn-connect-instancestorageconfig-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def resource_type(self) -> builtins.str:
@@ -8123,7 +8217,7 @@ class CfnIntegrationAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_id: builtins.str,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
         integration_arn: builtins.str,
         integration_type: builtins.str,
     ) -> None:
@@ -8250,7 +8344,7 @@ class CfnIntegrationAssociationProps:
     def __init__(
         self,
         *,
-        instance_id: builtins.str,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
         integration_arn: builtins.str,
         integration_type: builtins.str,
     ) -> None:
@@ -8287,7 +8381,7 @@ class CfnIntegrationAssociationProps:
         }
 
     @builtins.property
-    def instance_id(self) -> builtins.str:
+    def instance_id(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         *Minimum* : ``1``
@@ -8298,7 +8392,7 @@ class CfnIntegrationAssociationProps:
         '''
         result = self._values.get("instance_id")
         assert result is not None, "Required property 'instance_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def integration_arn(self) -> builtins.str:
@@ -8412,6 +8506,17 @@ class CfnPhoneNumber(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPhoneNumber")
+    @builtins.classmethod
+    def arn_for_phone_number(cls, resource: _IPhoneNumberRef_62bb2b03) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ace4cf0aec7582be307eb1c4435fe5f7c6a0a3ad0c1a79fd0acb0198e947d673)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPhoneNumber", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9248,7 +9353,7 @@ class CfnPrompt(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         s3_uri: typing.Optional[builtins.str] = None,
@@ -9277,6 +9382,17 @@ class CfnPrompt(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPrompt")
+    @builtins.classmethod
+    def arn_for_prompt(cls, resource: _IPromptRef_5f2c955a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc46dab0c2d14e8dfdb3e969df4458aabc563abc513ce6843f4ada17bb396a17)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPrompt", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9415,7 +9531,7 @@ class CfnPromptProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         s3_uri: typing.Optional[builtins.str] = None,
@@ -9470,14 +9586,14 @@ class CfnPromptProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The identifier of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-prompt.html#cfn-connect-prompt-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -9581,7 +9697,7 @@ class CfnQueue(
         id: builtins.str,
         *,
         hours_of_operation_arn: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         max_contacts: typing.Optional[jsii.Number] = None,
@@ -9624,6 +9740,17 @@ class CfnQueue(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForQueue")
+    @builtins.classmethod
+    def arn_for_queue(cls, resource: _IQueueRef_da280a64) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e2260ac73200da744b6c234260ea164580139111bb6707750278d0e109ade3a3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10003,7 +10130,7 @@ class CfnQueueProps:
         self,
         *,
         hours_of_operation_arn: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         description: typing.Optional[builtins.str] = None,
         max_contacts: typing.Optional[jsii.Number] = None,
@@ -10102,14 +10229,14 @@ class CfnQueueProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The identifier of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-queue.html#cfn-connect-queue-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -10254,7 +10381,7 @@ class CfnQuickConnect(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         quick_connect_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnQuickConnect.QuickConnectConfigProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
@@ -10283,6 +10410,20 @@ class CfnQuickConnect(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForQuickConnect")
+    @builtins.classmethod
+    def arn_for_quick_connect(
+        cls,
+        resource: _IQuickConnectRef_4f4116a8,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e3e4eb0a23736e29d930c03aefcb682719bc73d58ce7993d4052e46edc2c69bd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQuickConnect", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10765,7 +10906,7 @@ class CfnQuickConnectProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         quick_connect_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnQuickConnect.QuickConnectConfigProperty, typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
@@ -10834,14 +10975,14 @@ class CfnQuickConnectProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-quickconnect.html#cfn-connect-quickconnect-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -10960,7 +11101,7 @@ class CfnRoutingProfile(
         *,
         default_outbound_queue_arn: builtins.str,
         description: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRoutingProfile.MediaConcurrencyProperty", typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         agent_availability_timer: typing.Optional[builtins.str] = None,
@@ -10999,6 +11140,20 @@ class CfnRoutingProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRoutingProfile")
+    @builtins.classmethod
+    def arn_for_routing_profile(
+        cls,
+        resource: _IRoutingProfileRef_908ef992,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__101a29fea1d94d7b9ecdd5e4851b18a046a208351c818f073e110d5a87858dee)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoutingProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11592,7 +11747,7 @@ class CfnRoutingProfileProps:
         *,
         default_outbound_queue_arn: builtins.str,
         description: builtins.str,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.MediaConcurrencyProperty, typing.Dict[builtins.str, typing.Any]]]]],
         name: builtins.str,
         agent_availability_timer: typing.Optional[builtins.str] = None,
@@ -11706,14 +11861,14 @@ class CfnRoutingProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The identifier of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-routingprofile.html#cfn-connect-routingprofile-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def media_concurrencies(
@@ -11935,6 +12090,17 @@ class CfnRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRule")
+    @builtins.classmethod
+    def arn_for_rule(cls, resource: _IRuleRef_795f35b4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21ce47746fd90d93763234aac8a998b283a3b36d6c26d70e2e44daffed315bf2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13523,7 +13689,7 @@ class CfnSecurityKey(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_id: builtins.str,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
         key: builtins.str,
     ) -> None:
         '''Create a new ``AWS::Connect::SecurityKey``.
@@ -13627,7 +13793,12 @@ class CfnSecurityKey(
     name_mapping={"instance_id": "instanceId", "key": "key"},
 )
 class CfnSecurityKeyProps:
-    def __init__(self, *, instance_id: builtins.str, key: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
+        key: builtins.str,
+    ) -> None:
         '''Properties for defining a ``CfnSecurityKey``.
 
         :param instance_id: The Amazon Resource Name (ARN) of the instance. *Minimum* : ``1`` *Maximum* : ``100``
@@ -13657,7 +13828,7 @@ class CfnSecurityKeyProps:
         }
 
     @builtins.property
-    def instance_id(self) -> builtins.str:
+    def instance_id(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         *Minimum* : ``1``
@@ -13668,7 +13839,7 @@ class CfnSecurityKeyProps:
         '''
         result = self._values.get("instance_id")
         assert result is not None, "Required property 'instance_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def key(self) -> builtins.str:
@@ -13759,7 +13930,7 @@ class CfnSecurityProfile(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         security_profile_name: builtins.str,
         allowed_access_control_hierarchy_group_id: typing.Optional[builtins.str] = None,
         allowed_access_control_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -13806,6 +13977,20 @@ class CfnSecurityProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSecurityProfile")
+    @builtins.classmethod
+    def arn_for_security_profile(
+        cls,
+        resource: _ISecurityProfileRef_b6bb0bdf,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__605777f68f6348b588e4d9c01c50e35ca60eeab982e060cca3cec1c2c85b7777)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSecurityProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14436,7 +14621,7 @@ class CfnSecurityProfileProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         security_profile_name: builtins.str,
         allowed_access_control_hierarchy_group_id: typing.Optional[builtins.str] = None,
         allowed_access_control_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14543,14 +14728,14 @@ class CfnSecurityProfileProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The identifier of the Amazon Connect instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-securityprofile.html#cfn-connect-securityprofile-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def security_profile_name(self) -> builtins.str:
@@ -14776,6 +14961,20 @@ class CfnTaskTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTaskTemplate")
+    @builtins.classmethod
+    def arn_for_task_template(
+        cls,
+        resource: _ITaskTemplateRef_9cc832c1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__534412111be38c2d2445cd8c536febb1a009f1eef77a386c6dd489a6c701be58)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTaskTemplate", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15828,6 +16027,20 @@ class CfnTrafficDistributionGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTrafficDistributionGroup")
+    @builtins.classmethod
+    def arn_for_traffic_distribution_group(
+        cls,
+        resource: _ITrafficDistributionGroupRef_d8a61fd6,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ee904e8a4e6fe4dcc9c15d6c1689a759bfd0088d09d2db288ae01d459d5f453)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrafficDistributionGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -16181,6 +16394,17 @@ class CfnUser(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUser")
+    @builtins.classmethod
+    def arn_for_user(cls, resource: _IUserRef_7465521c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18a58c02c716920ea89623af4079c1d73cfc325b3632baf55e840a062cb5c1b9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16803,7 +17027,7 @@ class CfnUserHierarchyGroup(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         parent_group_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -16829,6 +17053,20 @@ class CfnUserHierarchyGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserHierarchyGroup")
+    @builtins.classmethod
+    def arn_for_user_hierarchy_group(
+        cls,
+        resource: _IUserHierarchyGroupRef_e567627c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__02879d9b411f3ce8bd843f8f971e5d4909d0ccd4c4ea85854249fe8d6929530f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserHierarchyGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16953,7 +17191,7 @@ class CfnUserHierarchyGroupProps:
     def __init__(
         self,
         *,
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         parent_group_arn: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -17002,14 +17240,14 @@ class CfnUserHierarchyGroupProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the user hierarchy group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-userhierarchygroup.html#cfn-connect-userhierarchygroup-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -17138,6 +17376,20 @@ class CfnUserHierarchyStructure(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserHierarchyStructure")
+    @builtins.classmethod
+    def arn_for_user_hierarchy_structure(
+        cls,
+        resource: _IUserHierarchyStructureRef_34687182,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df89dbffb17433056c8b0b2fda2b30c518a512cbc61b91aaa0241b0fdcf67822)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserHierarchyStructure", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18246,7 +18498,7 @@ class CfnView(
         id: builtins.str,
         *,
         actions: typing.Sequence[builtins.str],
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         template: typing.Any,
         description: typing.Optional[builtins.str] = None,
@@ -18277,6 +18529,17 @@ class CfnView(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForView")
+    @builtins.classmethod
+    def arn_for_view(cls, resource: _IViewRef_83e9673f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c7618f126a589a27ec8b1bfafbb2a862c9f94db11e1a2bcb9b2dc9cee7f0c9a3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForView", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18452,7 +18715,7 @@ class CfnViewProps:
         self,
         *,
         actions: typing.Sequence[builtins.str],
-        instance_arn: builtins.str,
+        instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
         name: builtins.str,
         template: typing.Any,
         description: typing.Optional[builtins.str] = None,
@@ -18522,14 +18785,14 @@ class CfnViewProps:
         return typing.cast(typing.List[builtins.str], result)
 
     @builtins.property
-    def instance_arn(self) -> builtins.str:
+    def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
         '''The Amazon Resource Name (ARN) of the instance.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-view.html#cfn-connect-view-instancearn
         '''
         result = self._values.get("instance_arn")
         assert result is not None, "Required property 'instance_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IInstanceRef_b6835093], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -18613,7 +18876,7 @@ class CfnViewVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        view_arn: builtins.str,
+        view_arn: typing.Union[builtins.str, _IViewRef_83e9673f],
         version_description: typing.Optional[builtins.str] = None,
         view_content_sha256: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -18636,6 +18899,17 @@ class CfnViewVersion(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForViewVersion")
+    @builtins.classmethod
+    def arn_for_view_version(cls, resource: _IViewVersionRef_9f0eb9b0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b18e539209dd27e86b0f94e5ae1b078558505cb618bcf4e09aac05d86d1e7bfd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForViewVersion", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18749,7 +19023,7 @@ class CfnViewVersionProps:
     def __init__(
         self,
         *,
-        view_arn: builtins.str,
+        view_arn: typing.Union[builtins.str, _IViewRef_83e9673f],
         version_description: typing.Optional[builtins.str] = None,
         view_content_sha256: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -18790,7 +19064,7 @@ class CfnViewVersionProps:
             self._values["view_content_sha256"] = view_content_sha256
 
     @builtins.property
-    def view_arn(self) -> builtins.str:
+    def view_arn(self) -> typing.Union[builtins.str, _IViewRef_83e9673f]:
         '''The unqualified Amazon Resource Name (ARN) of the view.
 
         For example:
@@ -18801,7 +19075,7 @@ class CfnViewVersionProps:
         '''
         result = self._values.get("view_arn")
         assert result is not None, "Required property 'view_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IViewRef_83e9673f], result)
 
     @builtins.property
     def version_description(self) -> typing.Optional[builtins.str]:
@@ -18908,6 +19182,12 @@ def _typecheckingstub__188703c629c18d36bedd60b2ef308608c79b0a7639ceafb679e00ecdf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__985efce7d51e6b6d5f263df8fe473f63ae7c3862ee395b66b755bc2727945a65(
+    resource: _IAgentStatusRef_67596e12,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d83454aed4d3419db0f2c17c70b50ce23d4acfe85654c14b3955ccec567507d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18986,7 +19266,7 @@ def _typecheckingstub__44955422cb4c00b338f45e52a0d4136fdcdb94c8e433595b636f468d5
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     origin: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -19018,7 +19298,7 @@ def _typecheckingstub__49fb9b02cf4a1b22d6433eac9cb35377d1877512b477dbf9c030fec47
 
 def _typecheckingstub__437fb8bad3e7665288233ec7ee3b4db6669d85ab53efddb888b5d729979a4e2f(
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     origin: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -19029,12 +19309,18 @@ def _typecheckingstub__bacec198fd7006a7e922c6b62694383eb7200d23c3f8da491f520191b
     id: builtins.str,
     *,
     content: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9095c329fca5b45d66dab1fccc242e6ae82dd746edeab2b003d272ea355d443(
+    resource: _IContactFlowRef_747dc709,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19098,11 +19384,17 @@ def _typecheckingstub__008a6ee0ce6447d7f5f7c62774a959e253bc4a69cef26848e6d3f74cf
     id: builtins.str,
     *,
     content: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__594ee3994c2d321f1ded11e73b783e5e3491183cfb9dae318d2f0adcfd0ebae3(
+    resource: _IContactFlowModuleRef_7a0e807b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19158,7 +19450,7 @@ def _typecheckingstub__47de1c508f0616d427a0546578e35f062250082b28649c89857700196
 def _typecheckingstub__84f0f2ba3fd7010e7e0bb6aaa71b591e31e6d4c4ad736e9c4e08be6f11de0102(
     *,
     content: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     state: typing.Optional[builtins.str] = None,
@@ -19170,7 +19462,7 @@ def _typecheckingstub__84f0f2ba3fd7010e7e0bb6aaa71b591e31e6d4c4ad736e9c4e08be6f1
 def _typecheckingstub__c0555b19a226cc1a8bd054951921ffd23e0c635fe29a3d69a330d8262710a7d8(
     *,
     content: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -19232,6 +19524,12 @@ def _typecheckingstub__82663491f0adb2dbe44ce9a95c4b21bf5d7529ba2b8adcceab5da9bed
     description: typing.Optional[builtins.str] = None,
     display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__98a0239dae758fd013b020f0b8a394622176551877a96a418a071f3c534e7ac8(
+    resource: _IEmailAddressRef_35d49535,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19307,7 +19605,7 @@ def _typecheckingstub__67672e07b9b284918b4f61d0c04df64749fd2f5f1f5a07e093b1e338f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormBaseItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
     status: builtins.str,
     title: builtins.str,
@@ -19315,6 +19613,12 @@ def _typecheckingstub__67672e07b9b284918b4f61d0c04df64749fd2f5f1f5a07e093b1e338f
     description: typing.Optional[builtins.str] = None,
     scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__17f11f6e71002ab1f9575406dbf201d99508497f1204ddcb88d1eed331722df9(
+    resource: _IEvaluationFormRef_fa83f2b6,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19603,7 +19907,7 @@ def _typecheckingstub__4b2bf16cb3e015cee3921d57ba3346d4fc6c93af2e79cdcf6d8dec3a5
 
 def _typecheckingstub__b678e993288629444b4e1bc33b4631f7578a458c70203ec6ae7263a8aedc75ad(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     items: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormBaseItemProperty, typing.Dict[builtins.str, typing.Any]]]]],
     status: builtins.str,
     title: builtins.str,
@@ -19620,12 +19924,18 @@ def _typecheckingstub__da9a7b2f06b8b2d053fcfa26018be9202b48193f9ffb7fc1d9518391c
     id: builtins.str,
     *,
     config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     time_zone: builtins.str,
     description: typing.Optional[builtins.str] = None,
     hours_of_operation_overrides: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationOverrideProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b29283b351b66869118b9820a74132e9dd95c4882c9d0e8e14ea121ae7efaba7(
+    resource: _IHoursOfOperationRef_5b4f8721,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19733,7 +20043,7 @@ def _typecheckingstub__bf0fe9b40d5f92cd82deaad81370dd578dddfd7a1db227ec3b04d8a18
 def _typecheckingstub__66cef12b59765322de54d22fe6de568f262a635899fc46cbe6a5f5a97b848467(
     *,
     config: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnHoursOfOperation.HoursOfOperationConfigProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     time_zone: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -19752,6 +20062,12 @@ def _typecheckingstub__f291b6bb708a40e1a35dc95de4a38d5f9d8117683bed082183bd387f4
     directory_id: typing.Optional[builtins.str] = None,
     instance_alias: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__941d1392a5833365a03c940bc71ac18bb6462d16c9e41d71b35d84fccb36cca0(
+    resource: _IInstanceRef_b6835093,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19831,7 +20147,7 @@ def _typecheckingstub__30c8e9e3ad538fac1acafd66e46e4e7a4f3893f93a8c6bb42ba1525f1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     resource_type: builtins.str,
     storage_type: builtins.str,
     kinesis_firehose_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.KinesisFirehoseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19938,7 +20254,7 @@ def _typecheckingstub__7296a98085d62b3fe09acddef52fca10fedbaae666bc4512bfa543fd1
 
 def _typecheckingstub__220fe9c269db6e3bcb651e492fae1b71e17d6b254dfd6b60c71dc0cda259419b(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     resource_type: builtins.str,
     storage_type: builtins.str,
     kinesis_firehose_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.KinesisFirehoseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19953,7 +20269,7 @@ def _typecheckingstub__0623057688349069456f9eae4995faa9cd189f98024c1f76262706d57
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     integration_arn: builtins.str,
     integration_type: builtins.str,
 ) -> None:
@@ -19992,7 +20308,7 @@ def _typecheckingstub__beb9a11163321e5e540a87e2baf965475a45e960cf9aa4a424acc86dc
 
 def _typecheckingstub__fe194aedf3230ea702915cbc89ea1228fbcd7507b4352cd6ca6f2c8b3d412d21(
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     integration_arn: builtins.str,
     integration_type: builtins.str,
 ) -> None:
@@ -20010,6 +20326,12 @@ def _typecheckingstub__9ec70d84fd2bda163d290722acbb6feca633b4ee134732d8b720c0b96
     source_phone_number_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ace4cf0aec7582be307eb1c4435fe5f7c6a0a3ad0c1a79fd0acb0198e947d673(
+    resource: _IPhoneNumberRef_62bb2b03,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20166,11 +20488,17 @@ def _typecheckingstub__683007bdfb211b27a1db29f576ae38fe5ce650e538e8600382be8cd90
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     s3_uri: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc46dab0c2d14e8dfdb3e969df4458aabc563abc513ce6843f4ada17bb396a17(
+    resource: _IPromptRef_5f2c955a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20219,7 +20547,7 @@ def _typecheckingstub__9b88b3999e96c364888f1b8a2f9495a78cd1b725cf709724ac7827965
 
 def _typecheckingstub__de9fba0f83321ee92a8e37f03749f2012ea66a3d9d17e7a5b3d12208f718130d(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     s3_uri: typing.Optional[builtins.str] = None,
@@ -20233,7 +20561,7 @@ def _typecheckingstub__305bba43cd31a2f9d719dec6a726b64cb46f6b33b3b631880aa85047c
     id: builtins.str,
     *,
     hours_of_operation_arn: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     max_contacts: typing.Optional[jsii.Number] = None,
@@ -20242,6 +20570,12 @@ def _typecheckingstub__305bba43cd31a2f9d719dec6a726b64cb46f6b33b3b631880aa85047c
     quick_connect_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e2260ac73200da744b6c234260ea164580139111bb6707750278d0e109ade3a3(
+    resource: _IQueueRef_da280a64,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20337,7 +20671,7 @@ def _typecheckingstub__6034538ecc5b69375cb012cf0eadba4ed8798c3aa677d36052499166f
 def _typecheckingstub__baa26a31f9cdaa2c1ff32bcd44e00a08477582db0c01e27c9e1a60c3e96a8bce(
     *,
     hours_of_operation_arn: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     max_contacts: typing.Optional[jsii.Number] = None,
@@ -20354,11 +20688,17 @@ def _typecheckingstub__44121049328c061f99076678805110a34e47bc31097d43b030f388eca
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     quick_connect_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnQuickConnect.QuickConnectConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e3e4eb0a23736e29d930c03aefcb682719bc73d58ce7993d4052e46edc2c69bd(
+    resource: _IQuickConnectRef_4f4116a8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20440,7 +20780,7 @@ def _typecheckingstub__7730396d4c494428f6ddd636283d9d5c17ba3fbc6013f1c545a8788d6
 
 def _typecheckingstub__3d4ffda8775de853a0509cc15bc43b59e37fc8f6d1d2c110c1202c4192841fbd(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     quick_connect_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnQuickConnect.QuickConnectConfigProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
@@ -20455,13 +20795,19 @@ def _typecheckingstub__ca1360ef7fc87b491018629ca5fc6a3c13fcbdd97e4a14461038caf03
     *,
     default_outbound_queue_arn: builtins.str,
     description: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.MediaConcurrencyProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     agent_availability_timer: typing.Optional[builtins.str] = None,
     manual_assignment_queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileManualAssignmentQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     queue_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.RoutingProfileQueueConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__101a29fea1d94d7b9ecdd5e4851b18a046a208351c818f073e110d5a87858dee(
+    resource: _IRoutingProfileRef_908ef992,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20576,7 +20922,7 @@ def _typecheckingstub__c352ac5c14b7a76c3094c7e1595be9aaa093440801508c4780610a6d2
     *,
     default_outbound_queue_arn: builtins.str,
     description: builtins.str,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     media_concurrencies: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRoutingProfile.MediaConcurrencyProperty, typing.Dict[builtins.str, typing.Any]]]]],
     name: builtins.str,
     agent_availability_timer: typing.Optional[builtins.str] = None,
@@ -20598,6 +20944,12 @@ def _typecheckingstub__999d5f7971fc0ea0f693e0f9a61faf62317d493403a6d249ca1db6bc5
     publish_status: builtins.str,
     trigger_event_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnRule.RuleTriggerEventSourceProperty, typing.Dict[builtins.str, typing.Any]]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__21ce47746fd90d93763234aac8a998b283a3b36d6c26d70e2e44daffed315bf2(
+    resource: _IRuleRef_795f35b4,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20779,7 +21131,7 @@ def _typecheckingstub__eec1c8c6bb56659ae557c882f85d373b6d643a7be8fd81d7dcb8e28a4
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     key: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -20811,7 +21163,7 @@ def _typecheckingstub__bae1fd3a5ae97acd56284508ad71af29fda88e415500606aed041d91b
 
 def _typecheckingstub__328945501d2d11db9e341c31e7f88f7eaea8695d95d7c557b2d470e619744f5e(
     *,
-    instance_id: builtins.str,
+    instance_id: typing.Union[builtins.str, _IInstanceRef_b6835093],
     key: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -20821,7 +21173,7 @@ def _typecheckingstub__3e088a4b4379aab0e18ddc67fbe352d07789383efb957a27db08764dc
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     security_profile_name: builtins.str,
     allowed_access_control_hierarchy_group_id: typing.Optional[builtins.str] = None,
     allowed_access_control_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -20832,6 +21184,12 @@ def _typecheckingstub__3e088a4b4379aab0e18ddc67fbe352d07789383efb957a27db08764dc
     permissions: typing.Optional[typing.Sequence[builtins.str]] = None,
     tag_restricted_resources: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__605777f68f6348b588e4d9c01c50e35ca60eeab982e060cca3cec1c2c85b7777(
+    resource: _ISecurityProfileRef_b6bb0bdf,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20954,7 +21312,7 @@ def _typecheckingstub__28182eb4900e860efe6341c99d0dcf288e987e00f5d29ed0a88996f9f
 
 def _typecheckingstub__8a8ad9faa5e934c4966c739f0b5e3756a03460ba17b7caf0aca4e26118e04c95(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     security_profile_name: builtins.str,
     allowed_access_control_hierarchy_group_id: typing.Optional[builtins.str] = None,
     allowed_access_control_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -20984,6 +21342,12 @@ def _typecheckingstub__e55cf6106eb4919ab3d57f42477e52e40f628476ec3364c5bf5b40089
     self_assign_contact_flow_arn: typing.Optional[builtins.str] = None,
     status: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__534412111be38c2d2445cd8c536febb1a009f1eef77a386c6dd489a6c701be58(
+    resource: _ITaskTemplateRef_9cc832c1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21150,6 +21514,12 @@ def _typecheckingstub__ca487c7b5364a4f5551b0a2850374d278ea9b277effd6a5a44ae511b7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2ee904e8a4e6fe4dcc9c15d6c1689a759bfd0088d09d2db288ae01d459d5f453(
+    resource: _ITrafficDistributionGroupRef_d8a61fd6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b4f6c13df7129e219cbf36228095876149e60b246cf354ab6fe83b9652428171(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21211,6 +21581,12 @@ def _typecheckingstub__05b3c171d418de057737855a6729454df2138450ce49f656f47804ab2
     password: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     user_proficiencies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUser.UserProficiencyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__18a58c02c716920ea89623af4079c1d73cfc325b3632baf55e840a062cb5c1b9(
+    resource: _IUserRef_7465521c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21328,10 +21704,16 @@ def _typecheckingstub__0ee71292692b3a4ed0bb1ecb030ac42cd8de9fe7fd30c25bca5b2f1ea
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     parent_group_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__02879d9b411f3ce8bd843f8f971e5d4909d0ccd4c4ea85854249fe8d6929530f(
+    resource: _IUserHierarchyGroupRef_e567627c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21374,7 +21756,7 @@ def _typecheckingstub__0d964880cee57a50d651477affc39220cab9a8575f6e5da757f56a627
 
 def _typecheckingstub__51f9a797f445ffc1deaff140a69a030bdb25f3fa135ef233a56621cf7d99867c(
     *,
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     parent_group_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -21388,6 +21770,12 @@ def _typecheckingstub__0dd86f1d677cc33d8aa1cee7bb5d0ab37a797bd1cb536ed79c4373391
     *,
     instance_arn: builtins.str,
     user_hierarchy_structure: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserHierarchyStructure.UserHierarchyStructureProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__df89dbffb17433056c8b0b2fda2b30c518a512cbc61b91aaa0241b0fdcf67822(
+    resource: _IUserHierarchyStructureRef_34687182,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21502,11 +21890,17 @@ def _typecheckingstub__94b4f2f620952c31a829f98f6f735cb6b2bcb05a7aeec0d58a9bf353e
     id: builtins.str,
     *,
     actions: typing.Sequence[builtins.str],
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     template: typing.Any,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c7618f126a589a27ec8b1bfafbb2a862c9f94db11e1a2bcb9b2dc9cee7f0c9a3(
+    resource: _IViewRef_83e9673f,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21562,7 +21956,7 @@ def _typecheckingstub__2c8717b700734d2f2ffa968661ed869e26cd339beb41934a1e4fb19cf
 def _typecheckingstub__f907c1817accd77cdb1d6d91c707e676a4ecb33911eb5e958e9ef56a1cda0cbd(
     *,
     actions: typing.Sequence[builtins.str],
-    instance_arn: builtins.str,
+    instance_arn: typing.Union[builtins.str, _IInstanceRef_b6835093],
     name: builtins.str,
     template: typing.Any,
     description: typing.Optional[builtins.str] = None,
@@ -21575,9 +21969,15 @@ def _typecheckingstub__c352cc20d21de3ffee67568db6d5f70cd6bd44413ffa25ab4bc4e5003
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    view_arn: builtins.str,
+    view_arn: typing.Union[builtins.str, _IViewRef_83e9673f],
     version_description: typing.Optional[builtins.str] = None,
     view_content_sha256: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b18e539209dd27e86b0f94e5ae1b078558505cb618bcf4e09aac05d86d1e7bfd(
+    resource: _IViewVersionRef_9f0eb9b0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21614,7 +22014,7 @@ def _typecheckingstub__c5c8aa5e5d6802692a03611724808d85ab729895ff6180601dee7f8b5
 
 def _typecheckingstub__625c576cd29cfea7eb8a7d7197edcd80462fd0eac7870bac9066ac9fee2ad619(
     *,
-    view_arn: builtins.str,
+    view_arn: typing.Union[builtins.str, _IViewRef_83e9673f],
     version_description: typing.Optional[builtins.str] = None,
     view_content_sha256: typing.Optional[builtins.str] = None,
 ) -> None:

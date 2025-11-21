@@ -135,6 +135,17 @@ class CfnDatastore(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDatastore")
+    @builtins.classmethod
+    def arn_for_datastore(cls, resource: _IDatastoreRef_15dedc0d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f1285bcfbc7e5a604b76ad7121fefd14feb57771b2eebcfb389e8fe796e2073)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatastore", [resource]))
+
     @jsii.member(jsii_name="fromDatastoreArn")
     @builtins.classmethod
     def from_datastore_arn(
@@ -418,6 +429,12 @@ def _typecheckingstub__79b4005abdc2acc4fbde1f52def5483b4f3842866d771c24e762a57e0
     datastore_name: typing.Optional[builtins.str] = None,
     kms_key_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4f1285bcfbc7e5a604b76ad7121fefd14feb57771b2eebcfb389e8fe796e2073(
+    resource: _IDatastoreRef_15dedc0d,
 ) -> None:
     """Type checking stubs"""
     pass

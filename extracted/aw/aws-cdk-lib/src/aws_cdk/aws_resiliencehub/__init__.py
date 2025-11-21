@@ -188,6 +188,17 @@ class CfnApp(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApp")
+    @builtins.classmethod
+    def arn_for_app(cls, resource: _IAppRef_b94999c1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3f5a3898a386ff4c512c39c1ed5aba2e7e6daa59b9eff56f64d178f37191b7ca)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApp", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -755,7 +766,7 @@ class CfnApp(
             :param mapping_type: Specifies the type of resource mapping.
             :param physical_resource_id: Identifier of the physical resource.
             :param eks_source_name: Name of the Amazon Elastic Kubernetes Service cluster and namespace that this resource is mapped to when the ``mappingType`` is ``EKS`` . .. epigraph:: This parameter accepts values in "eks-cluster/namespace" format.
-            :param logical_stack_name: Name of the AWS CloudFormation stack this resource is mapped to when the ``mappingType`` is ``CfnStack`` .
+            :param logical_stack_name: Name of the CloudFormation stack this resource is mapped to when the ``mappingType`` is ``CfnStack`` .
             :param resource_name: Name of the resource that this resource is mapped to when the ``mappingType`` is ``Resource`` .
             :param terraform_source_name: Name of the Terraform source that this resource is mapped to when the ``mappingType`` is ``Terraform`` .
 
@@ -844,7 +855,7 @@ class CfnApp(
 
         @builtins.property
         def logical_stack_name(self) -> typing.Optional[builtins.str]:
-            '''Name of the AWS CloudFormation stack this resource is mapped to when the ``mappingType`` is ``CfnStack`` .
+            '''Name of the CloudFormation stack this resource is mapped to when the ``mappingType`` is ``CfnStack`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resiliencehub-app-resourcemapping.html#cfn-resiliencehub-app-resourcemapping-logicalstackname
             '''
@@ -1768,6 +1779,12 @@ def _typecheckingstub__303e76fc3650422653be00dea7484c071f68688b86b0b136d647cee73
     permission_model: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApp.PermissionModelProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resiliency_policy_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f5a3898a386ff4c512c39c1ed5aba2e7e6daa59b9eff56f64d178f37191b7ca(
+    resource: _IAppRef_b94999c1,
 ) -> None:
     """Type checking stubs"""
     pass

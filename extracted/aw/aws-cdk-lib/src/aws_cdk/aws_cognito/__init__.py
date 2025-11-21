@@ -1361,7 +1361,9 @@ from ..interfaces.aws_cognito import (
     UserPoolUserReference as _UserPoolUserReference_b50e0a97,
     UserPoolUserToGroupAttachmentReference as _UserPoolUserToGroupAttachmentReference_fa1a0479,
 )
-from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_iam import (
+    IOIDCProviderRef as _IOIDCProviderRef_a866c7c8, IRoleRef as _IRoleRef_8400221f
+)
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
@@ -2269,7 +2271,7 @@ class CfnIdentityPool(
 ):
     '''The ``AWS::Cognito::IdentityPool`` resource creates an Amazon Cognito identity pool.
 
-    To avoid deleting the resource accidentally from AWS CloudFormation , use `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ and the `UpdateReplacePolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatereplacepolicy.html>`_ to retain the resource on deletion or replacement.
+    To avoid deleting the resource accidentally from CloudFormation , use `DeletionPolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html>`_ and the `UpdateReplacePolicy Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatereplacepolicy.html>`_ to retain the resource on deletion or replacement.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-identitypool.html
     :cloudformationResource: AWS::Cognito::IdentityPool
@@ -2301,7 +2303,7 @@ class CfnIdentityPool(
         developer_provider_name: typing.Optional[builtins.str] = None,
         identity_pool_name: typing.Optional[builtins.str] = None,
         identity_pool_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_id_connect_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        open_id_connect_provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]] = None,
         push_sync: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentityPool.PushSyncProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         saml_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         supported_login_providers: typing.Any = None,
@@ -2343,6 +2345,20 @@ class CfnIdentityPool(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIdentityPool")
+    @builtins.classmethod
+    def arn_for_identity_pool(
+        cls,
+        resource: _IIdentityPoolRef_5cf45895,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__912ed8f8aad117802c963bedb0856e57b3d9c2ac50b13a8663c7bf0fe865cc8f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdentityPool", [resource]))
 
     @jsii.member(jsii_name="fromIdentityPoolId")
     @builtins.classmethod
@@ -3195,7 +3211,7 @@ class CfnIdentityPoolProps:
         developer_provider_name: typing.Optional[builtins.str] = None,
         identity_pool_name: typing.Optional[builtins.str] = None,
         identity_pool_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        open_id_connect_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+        open_id_connect_provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]] = None,
         push_sync: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPool.PushSyncProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         saml_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
         supported_login_providers: typing.Any = None,
@@ -3368,13 +3384,13 @@ class CfnIdentityPoolProps:
     @builtins.property
     def open_id_connect_provider_arns(
         self,
-    ) -> typing.Optional[typing.List[builtins.str]]:
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]]:
         '''The Amazon Resource Names (ARNs) of the OpenID connect providers.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-identitypool.html#cfn-cognito-identitypool-openidconnectproviderarns
         '''
         result = self._values.get("open_id_connect_provider_arns")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]], result)
 
     @builtins.property
     def push_sync(
@@ -3467,7 +3483,7 @@ class CfnIdentityPoolRoleAttachment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        identity_pool_id: builtins.str,
+        identity_pool_id: typing.Union[builtins.str, _IIdentityPoolRef_5cf45895],
         role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union["CfnIdentityPoolRoleAttachment.RoleMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         roles: typing.Any = None,
     ) -> None:
@@ -3903,7 +3919,7 @@ class CfnIdentityPoolRoleAttachmentProps:
     def __init__(
         self,
         *,
-        identity_pool_id: builtins.str,
+        identity_pool_id: typing.Union[builtins.str, _IIdentityPoolRef_5cf45895],
         role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPoolRoleAttachment.RoleMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         roles: typing.Any = None,
     ) -> None:
@@ -3962,14 +3978,16 @@ class CfnIdentityPoolRoleAttachmentProps:
             self._values["roles"] = roles
 
     @builtins.property
-    def identity_pool_id(self) -> builtins.str:
+    def identity_pool_id(
+        self,
+    ) -> typing.Union[builtins.str, _IIdentityPoolRef_5cf45895]:
         '''An identity pool ID in the format ``REGION:GUID`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-identitypoolroleattachment.html#cfn-cognito-identitypoolroleattachment-identitypoolid
         '''
         result = self._values.get("identity_pool_id")
         assert result is not None, "Required property 'identity_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IIdentityPoolRef_5cf45895], result)
 
     @builtins.property
     def role_mappings(
@@ -5676,6 +5694,17 @@ class CfnUserPool(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserPool")
+    @builtins.classmethod
+    def arn_for_user_pool(cls, resource: _IUserPoolRef_0b7d02b5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f6ad258bbde251e2bd38155880bbd36070b3fcb013eccfc837a58d4eb98412dd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserPool", [resource]))
 
     @jsii.member(jsii_name="fromUserPoolArn")
     @builtins.classmethod
@@ -8604,7 +8633,7 @@ class CfnUserPoolClient(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         access_token_validity: typing.Optional[jsii.Number] = None,
         allowed_o_auth_flows: typing.Optional[typing.Sequence[builtins.str]] = None,
         allowed_o_auth_flows_user_pool_client: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -9448,7 +9477,7 @@ class CfnUserPoolClientProps:
     def __init__(
         self,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         access_token_validity: typing.Optional[jsii.Number] = None,
         allowed_o_auth_flows: typing.Optional[typing.Sequence[builtins.str]] = None,
         allowed_o_auth_flows_user_pool_client: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -9622,14 +9651,14 @@ class CfnUserPoolClientProps:
             self._values["write_attributes"] = write_attributes
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool where you want to create an app client.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolclient.html#cfn-cognito-userpoolclient-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def access_token_validity(self) -> typing.Optional[jsii.Number]:
@@ -10361,11 +10390,11 @@ class CfnUserPoolGroup(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         description: typing.Optional[builtins.str] = None,
         group_name: typing.Optional[builtins.str] = None,
         precedence: typing.Optional[jsii.Number] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::Cognito::UserPoolGroup``.
 
@@ -10513,11 +10542,11 @@ class CfnUserPoolGroupProps:
     def __init__(
         self,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         description: typing.Optional[builtins.str] = None,
         group_name: typing.Optional[builtins.str] = None,
         precedence: typing.Optional[jsii.Number] = None,
-        role_arn: typing.Optional[builtins.str] = None,
+        role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserPoolGroup``.
 
@@ -10566,14 +10595,14 @@ class CfnUserPoolGroupProps:
             self._values["role_arn"] = role_arn
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool where you want to create a user group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolgroup.html#cfn-cognito-userpoolgroup-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -10611,7 +10640,9 @@ class CfnUserPoolGroupProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def role_arn(self) -> typing.Optional[builtins.str]:
+    def role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) for the IAM role that you want to associate with the group.
 
         A group role primarily declares a preferred role for the credentials that you get from an identity pool. Amazon Cognito ID tokens have a ``cognito:preferred_role`` claim that presents the highest-precedence group that a user belongs to. Both ID and access tokens also contain a ``cognito:groups`` claim that list all the groups that a user is a member of.
@@ -10619,7 +10650,7 @@ class CfnUserPoolGroupProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolgroup.html#cfn-cognito-userpoolgroup-rolearn
         '''
         result = self._values.get("role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11751,7 +11782,7 @@ class CfnUserPoolResourceServer(
         *,
         identifier: builtins.str,
         name: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserPoolResourceServer.ResourceServerScopeTypeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Cognito::UserPoolResourceServer``.
@@ -11968,7 +11999,7 @@ class CfnUserPoolResourceServerProps:
         *,
         identifier: builtins.str,
         name: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolResourceServer.ResourceServerScopeTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserPoolResourceServer``.
@@ -12038,14 +12069,14 @@ class CfnUserPoolResourceServerProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool where you want to create a resource server.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolresourceserver.html#cfn-cognito-userpoolresourceserver-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def scopes(
@@ -12164,7 +12195,7 @@ class CfnUserPoolRiskConfigurationAttachment(
         id: builtins.str,
         *,
         client_id: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         account_takeover_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserPoolRiskConfigurationAttachment.AccountTakeoverRiskConfigurationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         compromised_credentials_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserPoolRiskConfigurationAttachment.CompromisedCredentialsRiskConfigurationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         risk_exception_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserPoolRiskConfigurationAttachment.RiskExceptionConfigurationTypeProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13113,7 +13144,7 @@ class CfnUserPoolRiskConfigurationAttachmentProps:
         self,
         *,
         client_id: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         account_takeover_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.AccountTakeoverRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         compromised_credentials_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.CompromisedCredentialsRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         risk_exception_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.RiskExceptionConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13231,14 +13262,14 @@ class CfnUserPoolRiskConfigurationAttachmentProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool that has the risk configuration applied.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolriskconfigurationattachment.html#cfn-cognito-userpoolriskconfigurationattachment-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def account_takeover_risk_configuration(
@@ -13318,7 +13349,7 @@ class CfnUserPoolUICustomizationAttachment(
         id: builtins.str,
         *,
         client_id: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         css: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::Cognito::UserPoolUICustomizationAttachment``.
@@ -13432,7 +13463,7 @@ class CfnUserPoolUICustomizationAttachmentProps:
         self,
         *,
         client_id: builtins.str,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         css: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserPoolUICustomizationAttachment``.
@@ -13483,14 +13514,14 @@ class CfnUserPoolUICustomizationAttachmentProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool where you want to apply branding to the classic hosted UI.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluicustomizationattachment.html#cfn-cognito-userpooluicustomizationattachment-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def css(self) -> typing.Optional[builtins.str]:
@@ -13560,7 +13591,7 @@ class CfnUserPoolUser(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         client_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         desired_delivery_mediums: typing.Optional[typing.Sequence[builtins.str]] = None,
         force_alias_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -13856,7 +13887,7 @@ class CfnUserPoolUserProps:
     def __init__(
         self,
         *,
-        user_pool_id: builtins.str,
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
         client_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         desired_delivery_mediums: typing.Optional[typing.Sequence[builtins.str]] = None,
         force_alias_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -13935,14 +13966,14 @@ class CfnUserPoolUserProps:
             self._values["validation_data"] = validation_data
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool where you want to create a user.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpooluser.html#cfn-cognito-userpooluser-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     @builtins.property
     def client_metadata(
@@ -14114,9 +14145,9 @@ class CfnUserPoolUserToGroupAttachment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        group_name: builtins.str,
-        username: builtins.str,
-        user_pool_id: builtins.str,
+        group_name: typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48],
+        username: typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211],
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     ) -> None:
         '''Create a new ``AWS::Cognito::UserPoolUserToGroupAttachment``.
 
@@ -14232,9 +14263,9 @@ class CfnUserPoolUserToGroupAttachmentProps:
     def __init__(
         self,
         *,
-        group_name: builtins.str,
-        username: builtins.str,
-        user_pool_id: builtins.str,
+        group_name: typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48],
+        username: typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211],
+        user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     ) -> None:
         '''Properties for defining a ``CfnUserPoolUserToGroupAttachment``.
 
@@ -14269,34 +14300,34 @@ class CfnUserPoolUserToGroupAttachmentProps:
         }
 
     @builtins.property
-    def group_name(self) -> builtins.str:
+    def group_name(self) -> typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48]:
         '''The name of the group that you want to add your user to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolusertogroupattachment.html#cfn-cognito-userpoolusertogroupattachment-groupname
         '''
         result = self._values.get("group_name")
         assert result is not None, "Required property 'group_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48], result)
 
     @builtins.property
-    def username(self) -> builtins.str:
+    def username(self) -> typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211]:
         '''The user's username.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolusertogroupattachment.html#cfn-cognito-userpoolusertogroupattachment-username
         '''
         result = self._values.get("username")
         assert result is not None, "Required property 'username' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211], result)
 
     @builtins.property
-    def user_pool_id(self) -> builtins.str:
+    def user_pool_id(self) -> typing.Union[builtins.str, _IUserPoolRef_0b7d02b5]:
         '''The ID of the user pool that contains the group that you want to add the user to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-userpoolusertogroupattachment.html#cfn-cognito-userpoolusertogroupattachment-userpoolid
         '''
         result = self._values.get("user_pool_id")
         assert result is not None, "Required property 'user_pool_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IUserPoolRef_0b7d02b5], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -24645,10 +24676,16 @@ def _typecheckingstub__d5156c08d9bb3b0ceca6f4ec485d84f9775d7be40128a6614e1b9cbf0
     developer_provider_name: typing.Optional[builtins.str] = None,
     identity_pool_name: typing.Optional[builtins.str] = None,
     identity_pool_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    open_id_connect_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    open_id_connect_provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]] = None,
     push_sync: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPool.PushSyncProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     saml_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     supported_login_providers: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__912ed8f8aad117802c963bedb0856e57b3d9c2ac50b13a8663c7bf0fe865cc8f(
+    resource: _IIdentityPoolRef_5cf45895,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24839,7 +24876,7 @@ def _typecheckingstub__3f190bc45ca19526ebd4b37441370bac2bb0babaadb5489ad9375252a
     developer_provider_name: typing.Optional[builtins.str] = None,
     identity_pool_name: typing.Optional[builtins.str] = None,
     identity_pool_tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    open_id_connect_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
+    open_id_connect_provider_arns: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IOIDCProviderRef_a866c7c8]]] = None,
     push_sync: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPool.PushSyncProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     saml_provider_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     supported_login_providers: typing.Any = None,
@@ -24851,7 +24888,7 @@ def _typecheckingstub__e0686a984bb6b75dbf3aca8c723d268e911604e9a4aafa6bc4c2a74b9
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    identity_pool_id: builtins.str,
+    identity_pool_id: typing.Union[builtins.str, _IIdentityPoolRef_5cf45895],
     role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPoolRoleAttachment.RoleMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     roles: typing.Any = None,
 ) -> None:
@@ -24917,7 +24954,7 @@ def _typecheckingstub__ee34c709dd9513ee04193cc48ac24cd57fca8873fec78fe528978c6e1
 
 def _typecheckingstub__7531b732f0c0a047085fd9c4031282884fde57038e57a1ebd6d247d39ccd050b(
     *,
-    identity_pool_id: builtins.str,
+    identity_pool_id: typing.Union[builtins.str, _IIdentityPoolRef_5cf45895],
     role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPoolRoleAttachment.RoleMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     roles: typing.Any = None,
 ) -> None:
@@ -25190,6 +25227,12 @@ def _typecheckingstub__32d20f28e2758f9a461380e2ed5d06233baf0f45541047ba837f26ebc
     verification_message_template: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPool.VerificationMessageTemplateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     web_authn_relying_party_id: typing.Optional[builtins.str] = None,
     web_authn_user_verification: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f6ad258bbde251e2bd38155880bbd36070b3fcb013eccfc837a58d4eb98412dd(
+    resource: _IUserPoolRef_0b7d02b5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25603,7 +25646,7 @@ def _typecheckingstub__87712ca9ae8faf9f73a6c5d11987fcf280543ea093bcc4253c800c015
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     access_token_validity: typing.Optional[jsii.Number] = None,
     allowed_o_auth_flows: typing.Optional[typing.Sequence[builtins.str]] = None,
     allowed_o_auth_flows_user_pool_client: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -25810,7 +25853,7 @@ def _typecheckingstub__7b0535ba992a4a94b92b965971fc09c8b8c0a72362c42aaf98b5ae4cb
 
 def _typecheckingstub__073ea5893b9cfc70c0362e57cd0c1b5397e1c6374434fc1d5c261da79307d954(
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     access_token_validity: typing.Optional[jsii.Number] = None,
     allowed_o_auth_flows: typing.Optional[typing.Sequence[builtins.str]] = None,
     allowed_o_auth_flows_user_pool_client: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -25906,11 +25949,11 @@ def _typecheckingstub__64c0c3e44e677deced2e13e5ab4d3c7550518140bbe9dfaf681651d95
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     description: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
     precedence: typing.Optional[jsii.Number] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25959,11 +26002,11 @@ def _typecheckingstub__3a22fc1c6f27de296195da5e404a5a9d43aea635361d630ed9185ab2d
 
 def _typecheckingstub__c67d3106556c2dbeca0c87692e053d37b59118869232a8d862cf3afebbfdb774(
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     description: typing.Optional[builtins.str] = None,
     group_name: typing.Optional[builtins.str] = None,
     precedence: typing.Optional[jsii.Number] = None,
-    role_arn: typing.Optional[builtins.str] = None,
+    role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26083,7 +26126,7 @@ def _typecheckingstub__5ff380728a32f62434c91f2ef979d9f2a64ce347253fb0640fb5f618b
     *,
     identifier: builtins.str,
     name: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolResourceServer.ResourceServerScopeTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -26137,7 +26180,7 @@ def _typecheckingstub__e3ec779f0da483496b42d0bd063d70d51362c7b804d031893cdf65153
     *,
     identifier: builtins.str,
     name: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     scopes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolResourceServer.ResourceServerScopeTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -26148,7 +26191,7 @@ def _typecheckingstub__e3245a667ca916eabc555ef843b4a36bfcb47060fa353bd730066a76d
     id: builtins.str,
     *,
     client_id: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     account_takeover_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.AccountTakeoverRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     compromised_credentials_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.CompromisedCredentialsRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     risk_exception_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.RiskExceptionConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -26270,7 +26313,7 @@ def _typecheckingstub__94550db26287873cca0c0acdb5d5eeb1043c346f4abf4c7e67a461cf6
 def _typecheckingstub__aae4da006a28eede974ab417d5b2bc68196cfdf7df68bb0ddfc79b19b8790f8b(
     *,
     client_id: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     account_takeover_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.AccountTakeoverRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     compromised_credentials_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.CompromisedCredentialsRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     risk_exception_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.RiskExceptionConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -26283,7 +26326,7 @@ def _typecheckingstub__bf3306ea8a9b6f4ebe73eb42059e52138281652a9e2e36e507fd8658e
     id: builtins.str,
     *,
     client_id: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     css: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -26322,7 +26365,7 @@ def _typecheckingstub__95fdebc4b645acafac0d58bca95a8d84ac0be5fcf3ca3d612ad578dbb
 def _typecheckingstub__4e4f062a7f00241b34ab17fd47a3486ca4cbd516aac965d87988b2f16d5ac603(
     *,
     client_id: builtins.str,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     css: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -26332,7 +26375,7 @@ def _typecheckingstub__392de74de1133635a0d4d21dbd0cb3290007171e021625ff9a1259834
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     client_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     desired_delivery_mediums: typing.Optional[typing.Sequence[builtins.str]] = None,
     force_alias_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -26414,7 +26457,7 @@ def _typecheckingstub__480fd17b16e7156f8c801d35ad2f0806c252a5a32182194061ca2a956
 
 def _typecheckingstub__382fb58e358860ff3016c5f0203cf6f5b59ab27ba70ef920ce589784afe54f17(
     *,
-    user_pool_id: builtins.str,
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
     client_metadata: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     desired_delivery_mediums: typing.Optional[typing.Sequence[builtins.str]] = None,
     force_alias_creation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -26430,9 +26473,9 @@ def _typecheckingstub__a7364d75afc292798863e1183adee778bee531b8ea162e2882fe2861f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    group_name: builtins.str,
-    username: builtins.str,
-    user_pool_id: builtins.str,
+    group_name: typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48],
+    username: typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211],
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26469,9 +26512,9 @@ def _typecheckingstub__82177f095c7231924dc4eb6d3e0b1affc9151da04e151d35489d6ee49
 
 def _typecheckingstub__795e0d8c9020bae33ab9db3f6ee92c3fab525494304ae5dab03e978b4cc524b3(
     *,
-    group_name: builtins.str,
-    username: builtins.str,
-    user_pool_id: builtins.str,
+    group_name: typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48],
+    username: typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211],
+    user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
 ) -> None:
     """Type checking stubs"""
     pass

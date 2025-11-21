@@ -76,6 +76,8 @@ from .type_defs import (
     DeletePublicAccessBlockRequestTypeDef,
     EmptyResponseMetadataTypeDef,
     FileobjTypeDef,
+    GetBucketAbacOutputTypeDef,
+    GetBucketAbacRequestTypeDef,
     GetBucketAccelerateConfigurationOutputTypeDef,
     GetBucketAccelerateConfigurationRequestTypeDef,
     GetBucketAclOutputTypeDef,
@@ -168,6 +170,7 @@ from .type_defs import (
     ListPartsRequestTypeDef,
     NotificationConfigurationDeprecatedResponseTypeDef,
     NotificationConfigurationResponseTypeDef,
+    PutBucketAbacRequestTypeDef,
     PutBucketAccelerateConfigurationRequestTypeDef,
     PutBucketAclRequestTypeDef,
     PutBucketAnalyticsConfigurationRequestTypeDef,
@@ -556,6 +559,17 @@ class S3Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/delete_public_access_block.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#delete_public_access_block)
+        """
+
+    def get_bucket_abac(
+        self, **kwargs: Unpack[GetBucketAbacRequestTypeDef]
+    ) -> GetBucketAbacOutputTypeDef:
+        """
+        Returns the attribute-based access control (ABAC) property of the general
+        purpose bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_abac.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#get_bucket_abac)
         """
 
     def get_bucket_accelerate_configuration(
@@ -1021,6 +1035,17 @@ class S3Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_parts.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_parts)
+        """
+
+    def put_bucket_abac(
+        self, **kwargs: Unpack[PutBucketAbacRequestTypeDef]
+    ) -> EmptyResponseMetadataTypeDef:
+        """
+        Sets the attribute-based access control (ABAC) property of the general purpose
+        bucket.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/put_bucket_abac.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#put_bucket_abac)
         """
 
     def put_bucket_accelerate_configuration(

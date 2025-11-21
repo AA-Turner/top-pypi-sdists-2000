@@ -181,6 +181,20 @@ class CfnAnomalyDetector(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAnomalyDetector")
+    @builtins.classmethod
+    def arn_for_anomaly_detector(
+        cls,
+        resource: _IAnomalyDetectorRef_fef2b996,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__114e115249b8e928b79f5b7cb5e3fed1d136c04a5ab6a491f1bfee0b570b9121)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnomalyDetector", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -977,7 +991,7 @@ class CfnResourcePolicy(
 
     Only Prometheus-compatible APIs can be used for workspace sharing. You can add non-Prometheus-compatible APIs to the policy, but they will be ignored. For more information, see `Prometheus-compatible APIs <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-APIReference-Prometheus-Compatible-Apis.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
 
-    If your workspace uses customer-managed AWS KMS keys for encryption, you must grant the principals in your resource-based policy access to those AWS KMS keys. You can do this by creating AWS KMS grants. For more information, see `CreateGrant <https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html>`_ in the *AWS KMS API Reference* and `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+    If your workspace uses customer-managed AWS  keys for encryption, you must grant the principals in your resource-based policy access to those AWS  keys. You can do this by creating AWS  grants. For more information, see `CreateGrant <https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateGrant.html>`_ in the *AWS  API Reference* and `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
 
     For more information about working with IAM , see `Using Amazon Managed Service for Prometheus with IAM <https://docs.aws.amazon.com/prometheus/latest/userguide/security_iam_service-with-iam.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
 
@@ -1226,6 +1240,20 @@ class CfnRuleGroupsNamespace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRuleGroupsNamespace")
+    @builtins.classmethod
+    def arn_for_rule_groups_namespace(
+        cls,
+        resource: _IRuleGroupsNamespaceRef_7b589be9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61dec5652442e30c74dbfed7f2f112f1c34f77b348a643313ec2df915c902ada)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRuleGroupsNamespace", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1572,6 +1600,17 @@ class CfnScraper(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForScraper")
+    @builtins.classmethod
+    def arn_for_scraper(cls, resource: _IScraperRef_2b17ef67) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d13ca5c90dffa472e2c1b90166865a8eadf1584a016d1e7bf43dfa45975425b3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScraper", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2881,7 +2920,7 @@ class CfnWorkspace(
         :param id: Construct identifier for this resource (unique in its scope).
         :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
-        :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+        :param kms_key_arn: (optional) The ARN for a customer managed AWS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
         :param logging_configuration: Contains information about the logging configuration for the workspace.
         :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: The list of tag keys and values that are associated with the workspace.
@@ -2902,6 +2941,17 @@ class CfnWorkspace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForWorkspace")
+    @builtins.classmethod
+    def arn_for_workspace(cls, resource: _IWorkspaceRef_d8b2b588) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b3d6e079335cf4fb62650b716c0e1e39e889e44a3c76895cf3db3d9711219145)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkspace", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3012,7 +3062,7 @@ class CfnWorkspace(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyArn")
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''(optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace.'''
+        '''(optional) The ARN for a customer managed AWS  key to use for encrypting data within your workspace.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
 
     @kms_key_arn.setter
@@ -3722,7 +3772,7 @@ class CfnWorkspaceProps:
 
         :param alert_manager_definition: The alert manager definition, a YAML configuration for the alert manager in your Amazon Managed Service for Prometheus workspace. For details about the alert manager definition, see `Creating an alert manager configuration files <https://docs.aws.amazon.com/prometheus/latest/userguide/AMP-alertmanager-config.html>`_ in the *Amazon Managed Service for Prometheus User Guide* . The following example shows part of a CloudFormation YAML file with an embedded alert manager definition (following the ``- |-`` ). ``Workspace: Type: AWS::APS::Workspace .... Properties: .... AlertManagerDefinition: Fn::Sub: - |- alertmanager_config: | templates: - 'default_template' route: receiver: example-sns receivers: - name: example-sns sns_configs: - topic_arn: 'arn:aws:sns:${AWS::Region}:${AWS::AccountId}:${TopicName}' -``
         :param alias: The alias that is assigned to this workspace to help identify it. It does not need to be unique.
-        :param kms_key_arn: (optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
+        :param kms_key_arn: (optional) The ARN for a customer managed AWS key to use for encrypting data within your workspace. For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
         :param logging_configuration: Contains information about the logging configuration for the workspace.
         :param query_logging_configuration: The definition of logging configuration in an Amazon Managed Service for Prometheus workspace.
         :param tags: The list of tag keys and values that are associated with the workspace.
@@ -3825,7 +3875,7 @@ class CfnWorkspaceProps:
 
     @builtins.property
     def kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''(optional) The ARN for a customer managed AWS KMS key to use for encrypting data within your workspace.
+        '''(optional) The ARN for a customer managed AWS  key to use for encrypting data within your workspace.
 
         For more information about using your own key in your workspace, see `Encryption at rest <https://docs.aws.amazon.com/prometheus/latest/userguide/encryption-at-rest-Amazon-Service-Prometheus.html>`_ in the *Amazon Managed Service for Prometheus User Guide* .
 
@@ -3914,6 +3964,12 @@ def _typecheckingstub__58b3184629f18780da9f7c9eb2f8acdbdbb5190c9fc3ae41fdbbe3434
     labels: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.LabelProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     missing_data_action: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAnomalyDetector.MissingDataActionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__114e115249b8e928b79f5b7cb5e3fed1d136c04a5ab6a491f1bfee0b570b9121(
+    resource: _IAnomalyDetectorRef_fef2b996,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4081,6 +4137,12 @@ def _typecheckingstub__02d681a4d4a1e9d9052c98f45bf8b21257e825ee8185b30ea4b6f887f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__61dec5652442e30c74dbfed7f2f112f1c34f77b348a643313ec2df915c902ada(
+    resource: _IRuleGroupsNamespaceRef_7b589be9,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f066376b2a4b15a103f9a01bca66f252615381ddc55bd5508262712fd03eec2d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4138,6 +4200,12 @@ def _typecheckingstub__4d4cb1653b22b80f73c5fa4972418519c1d58f8ac033d22184f1b74ee
     role_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.RoleConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scraper_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScraper.ScraperLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d13ca5c90dffa472e2c1b90166865a8eadf1584a016d1e7bf43dfa45975425b3(
+    resource: _IScraperRef_2b17ef67,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4311,6 +4379,12 @@ def _typecheckingstub__0d7d4de6c2c3c0a6cc1f746f35f29f98344da5c5d59e48a9d1e788ab8
     query_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.QueryLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     workspace_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkspace.WorkspaceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b3d6e079335cf4fb62650b716c0e1e39e889e44a3c76895cf3db3d9711219145(
+    resource: _IWorkspaceRef_d8b2b588,
 ) -> None:
     """Type checking stubs"""
     pass

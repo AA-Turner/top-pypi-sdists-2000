@@ -170,6 +170,20 @@ class CfnAccessPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessPolicy")
+    @builtins.classmethod
+    def arn_for_access_policy(
+        cls,
+        resource: _IAccessPolicyRef_53bd9e99,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__101a5cb67238a287b8b3fa12ebca1880bea23e038a5b6acfa7b6d5827cf17363)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessPolicy", [resource]))
+
     @jsii.member(jsii_name="fromAccessPolicyArn")
     @builtins.classmethod
     def from_access_policy_arn(
@@ -936,7 +950,7 @@ class CfnAsset(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        asset_model_id: builtins.str,
+        asset_model_id: typing.Union[builtins.str, _IAssetModelRef_a295b695],
         asset_name: builtins.str,
         asset_description: typing.Optional[builtins.str] = None,
         asset_external_id: typing.Optional[builtins.str] = None,
@@ -971,6 +985,17 @@ class CfnAsset(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAsset")
+    @builtins.classmethod
+    def arn_for_asset(cls, resource: _IAssetRef_c1a45f64) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4211cd86d7e35201aab3c68bbe879edb03514cd2e66e92d98a2bd413d913dea8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAsset", [resource]))
 
     @jsii.member(jsii_name="fromAssetArn")
     @builtins.classmethod
@@ -1685,6 +1710,17 @@ class CfnAssetModel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAssetModel")
+    @builtins.classmethod
+    def arn_for_asset_model(cls, resource: _IAssetModelRef_a295b695) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b3038cdd23dcd9339ea5e5ef85173fc5c794045e68d0f2afe1e55c1200bdfa08)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAssetModel", [resource]))
 
     @jsii.member(jsii_name="fromAssetModelArn")
     @builtins.classmethod
@@ -4068,7 +4104,7 @@ class CfnAssetProps:
     def __init__(
         self,
         *,
-        asset_model_id: builtins.str,
+        asset_model_id: typing.Union[builtins.str, _IAssetModelRef_a295b695],
         asset_name: builtins.str,
         asset_description: typing.Optional[builtins.str] = None,
         asset_external_id: typing.Optional[builtins.str] = None,
@@ -4149,7 +4185,7 @@ class CfnAssetProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def asset_model_id(self) -> builtins.str:
+    def asset_model_id(self) -> typing.Union[builtins.str, _IAssetModelRef_a295b695]:
         '''The ID of the asset model from which to create the asset.
 
         This can be either the actual ID in UUID format, or else ``externalId:`` followed by the external ID, if it has one. For more information, see `Referencing objects with external IDs <https://docs.aws.amazon.com/iot-sitewise/latest/userguide/object-ids.html#external-id-references>`_ in the *AWS IoT SiteWise User Guide* .
@@ -4158,7 +4194,7 @@ class CfnAssetProps:
         '''
         result = self._values.get("asset_model_id")
         assert result is not None, "Required property 'asset_model_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IAssetModelRef_a295b695], result)
 
     @builtins.property
     def asset_name(self) -> builtins.str:
@@ -4324,6 +4360,20 @@ class CfnComputationModel(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForComputationModel")
+    @builtins.classmethod
+    def arn_for_computation_model(
+        cls,
+        resource: _IComputationModelRef_5fc2055d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__28cd5ed57a96fbf2be71a8228745ef980925c567cf0482138b0f35d778d43ee3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComputationModel", [resource]))
 
     @jsii.member(jsii_name="fromComputationModelArn")
     @builtins.classmethod
@@ -5126,6 +5176,17 @@ class CfnDashboard(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDashboard")
+    @builtins.classmethod
+    def arn_for_dashboard(cls, resource: _IDashboardRef_0211bee9) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c58d52994d853c381a2cf445c5a27fb952251b70a70b4f30127306898895d9da)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDashboard", [resource]))
+
     @jsii.member(jsii_name="fromDashboardArn")
     @builtins.classmethod
     def from_dashboard_arn(
@@ -5509,6 +5570,17 @@ class CfnDataset(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataset")
+    @builtins.classmethod
+    def arn_for_dataset(cls, resource: _IDatasetRef_406a2301) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22881c299b6f73e567114d2f18d752f3f9895ee05b764e96f79a9dbb89d5d39e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataset", [resource]))
 
     @jsii.member(jsii_name="fromDatasetArn")
     @builtins.classmethod
@@ -6120,6 +6192,17 @@ class CfnGateway(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGateway")
+    @builtins.classmethod
+    def arn_for_gateway(cls, resource: _IGatewayRef_4b449489) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0cdc3e9991474107895f17586704441f933dfca5cbf0d5118308b7ea35985915)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGateway", [resource]))
 
     @jsii.member(jsii_name="fromGatewayId")
     @builtins.classmethod
@@ -6903,6 +6986,17 @@ class CfnPortal(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPortal")
+    @builtins.classmethod
+    def arn_for_portal(cls, resource: _IPortalRef_e8556ba7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb8b6c71dcba3d36b3e145aa7eeca8d8d6bdafe036d5aeb22f04439ec83cd3d6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPortal", [resource]))
+
     @jsii.member(jsii_name="fromPortalArn")
     @builtins.classmethod
     def from_portal_arn(
@@ -7607,6 +7701,17 @@ class CfnProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_252ad716) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0435ecdaaa5a415fff5845ad519a3ffc3f72415784419af7f50ebc92acaef8e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
+
     @jsii.member(jsii_name="fromProjectArn")
     @builtins.classmethod
     def from_project_arn(
@@ -7946,6 +8051,12 @@ def _typecheckingstub__531aa21f3bed6dedfd9fce9d7bb67acf86efe74ca96cafedea1800e81
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__101a5cb67238a287b8b3fa12ebca1880bea23e038a5b6acfa7b6d5827cf17363(
+    resource: _IAccessPolicyRef_53bd9e99,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8c5448873247f014fbabe75495d971f11170e821c8ceaf95d73559ecdd8e1681(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8057,13 +8168,19 @@ def _typecheckingstub__23b484c08f8b327d7857c955867af231fc3193cc5df788160c4e1c6e3
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    asset_model_id: builtins.str,
+    asset_model_id: typing.Union[builtins.str, _IAssetModelRef_a295b695],
     asset_name: builtins.str,
     asset_description: typing.Optional[builtins.str] = None,
     asset_external_id: typing.Optional[builtins.str] = None,
     asset_hierarchies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAsset.AssetHierarchyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     asset_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAsset.AssetPropertyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4211cd86d7e35201aab3c68bbe879edb03514cd2e66e92d98a2bd413d913dea8(
+    resource: _IAssetRef_c1a45f64,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8173,6 +8290,12 @@ def _typecheckingstub__64edf231bb465b8f44da5cbed11fe0e7614208f47a50131d6c645ff0d
     asset_model_type: typing.Optional[builtins.str] = None,
     enforced_asset_model_interface_relationships: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAssetModel.EnforcedAssetModelInterfaceRelationshipProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b3038cdd23dcd9339ea5e5ef85173fc5c794045e68d0f2afe1e55c1200bdfa08(
+    resource: _IAssetModelRef_a295b695,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8410,7 +8533,7 @@ def _typecheckingstub__a4c397ea0e26142735f716b5c92fe1c51048d94b5142d035ce8dc4cb1
 
 def _typecheckingstub__306f4833ce13fd25ec4269f2a96d0ee80f11a34f43885f5b4b372569dc9f7931(
     *,
-    asset_model_id: builtins.str,
+    asset_model_id: typing.Union[builtins.str, _IAssetModelRef_a295b695],
     asset_name: builtins.str,
     asset_description: typing.Optional[builtins.str] = None,
     asset_external_id: typing.Optional[builtins.str] = None,
@@ -8430,6 +8553,12 @@ def _typecheckingstub__566bf1711c9dcacb9cb88add46c2c4e157208bdce4a774ccb256a7d21
     computation_model_name: builtins.str,
     computation_model_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__28cd5ed57a96fbf2be71a8228745ef980925c567cf0482138b0f35d778d43ee3(
+    resource: _IComputationModelRef_5fc2055d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8556,6 +8685,12 @@ def _typecheckingstub__7408e63e7ba97e630e06dc4a383d275da9719808da2d750b179e27c09
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c58d52994d853c381a2cf445c5a27fb952251b70a70b4f30127306898895d9da(
+    resource: _IDashboardRef_0211bee9,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8d3ef066d6cc1deed982b975e1b332ddc442fc91c9cc1968ea2dadbe5c8d0e80(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8633,6 +8768,12 @@ def _typecheckingstub__44369ff07e07f1dbb28102a65eb5a8e6317f5b2e832b326cf3fc0bef1
     dataset_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataset.DatasetSourceProperty, typing.Dict[builtins.str, typing.Any]]],
     dataset_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__22881c299b6f73e567114d2f18d752f3f9895ee05b764e96f79a9dbb89d5d39e(
+    resource: _IDatasetRef_406a2301,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8732,6 +8873,12 @@ def _typecheckingstub__b4e7aa58e6088e2cbee0005ea5a43b4c9db3b6647e2ff56a2b30310e7
     gateway_capability_summaries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGateway.GatewayCapabilitySummaryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     gateway_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0cdc3e9991474107895f17586704441f933dfca5cbf0d5118308b7ea35985915(
+    resource: _IGatewayRef_4b449489,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8850,6 +8997,12 @@ def _typecheckingstub__cbc23e7f8ea9f23ecedfbb8e22cd39fad67b5932c9e8eb1d5d50975c1
     portal_type: typing.Optional[builtins.str] = None,
     portal_type_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnPortal.PortalTypeEntryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb8b6c71dcba3d36b3e145aa7eeca8d8d6bdafe036d5aeb22f04439ec83cd3d6(
+    resource: _IPortalRef_e8556ba7,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8982,6 +9135,12 @@ def _typecheckingstub__2ca003aa6daa3e15044d74469428b378e883b1a517620f59fc80331c1
     asset_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     project_description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a0435ecdaaa5a415fff5845ad519a3ffc3f72415784419af7f50ebc92acaef8e(
+    resource: _IProjectRef_252ad716,
 ) -> None:
     """Type checking stubs"""
     pass

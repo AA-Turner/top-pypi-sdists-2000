@@ -2419,7 +2419,7 @@ class CfnJob(
         :param data_catalog_outputs: One or more artifacts that represent the AWS Glue Data Catalog output from running the job.
         :param dataset_name: A dataset that the job is to process.
         :param encryption_key_arn: The Amazon Resource Name (ARN) of an encryption key that is used to protect the job output. For more information, see `Encrypting data written by DataBrew jobs <https://docs.aws.amazon.com/databrew/latest/dg/encryption-security-configuration.html>`_
-        :param encryption_mode: The encryption mode for the job, which can be one of the following:. - ``SSE-KMS`` - Server-side encryption with keys managed by AWS KMS . - ``SSE-S3`` - Server-side encryption with keys managed by Amazon S3.
+        :param encryption_mode: The encryption mode for the job, which can be one of the following:. - ``SSE-KMS`` - Server-side encryption with keys managed by AWS . - ``SSE-S3`` - Server-side encryption with keys managed by Amazon S3.
         :param job_sample: A sample configuration for profile jobs only, which determines the number of rows on which the profile job is run. If a ``JobSample`` value isn't provided, the default value is used. The default value is CUSTOM_ROWS for the mode parameter and 20,000 for the size parameter.
         :param log_subscription: The current status of Amazon CloudWatch logging for the job.
         :param max_capacity: The maximum number of nodes that can be consumed when the job processes data.
@@ -4624,7 +4624,7 @@ class CfnJobProps:
         :param data_catalog_outputs: One or more artifacts that represent the AWS Glue Data Catalog output from running the job.
         :param dataset_name: A dataset that the job is to process.
         :param encryption_key_arn: The Amazon Resource Name (ARN) of an encryption key that is used to protect the job output. For more information, see `Encrypting data written by DataBrew jobs <https://docs.aws.amazon.com/databrew/latest/dg/encryption-security-configuration.html>`_
-        :param encryption_mode: The encryption mode for the job, which can be one of the following:. - ``SSE-KMS`` - Server-side encryption with keys managed by AWS KMS . - ``SSE-S3`` - Server-side encryption with keys managed by Amazon S3.
+        :param encryption_mode: The encryption mode for the job, which can be one of the following:. - ``SSE-KMS`` - Server-side encryption with keys managed by AWS . - ``SSE-S3`` - Server-side encryption with keys managed by Amazon S3.
         :param job_sample: A sample configuration for profile jobs only, which determines the number of rows on which the profile job is run. If a ``JobSample`` value isn't provided, the default value is used. The default value is CUSTOM_ROWS for the mode parameter and 20,000 for the size parameter.
         :param log_subscription: The current status of Amazon CloudWatch logging for the job.
         :param max_capacity: The maximum number of nodes that can be consumed when the job processes data.
@@ -4939,7 +4939,7 @@ class CfnJobProps:
     def encryption_mode(self) -> typing.Optional[builtins.str]:
         '''The encryption mode for the job, which can be one of the following:.
 
-        - ``SSE-KMS`` - Server-side encryption with keys managed by AWS KMS .
+        - ``SSE-KMS`` - Server-side encryption with keys managed by AWS  .
         - ``SSE-S3`` - Server-side encryption with keys managed by Amazon S3.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-databrew-job.html#cfn-databrew-job-encryptionmode

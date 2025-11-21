@@ -67,6 +67,7 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kinesisanalyticsv2 import (
     ApplicationCloudWatchLoggingOptionReference as _ApplicationCloudWatchLoggingOptionReference_7dfe072d,
     ApplicationOutputReference as _ApplicationOutputReference_157ab52d,
@@ -281,7 +282,7 @@ class CfnApplication(
         id: builtins.str,
         *,
         runtime_environment: builtins.str,
-        service_execution_role: builtins.str,
+        service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
         application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         application_description: typing.Optional[builtins.str] = None,
         application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplication.ApplicationMaintenanceConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -321,6 +322,17 @@ class CfnApplication(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_f869ed37) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9f8bc337ab4bc24217b441b0da79cc843bb27998e49aa105fdd6726112592d7a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
     @jsii.member(jsii_name="fromApplicationName")
     @builtins.classmethod
@@ -4920,7 +4932,7 @@ class CfnApplicationProps:
         self,
         *,
         runtime_environment: builtins.str,
-        service_execution_role: builtins.str,
+        service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
         application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         application_description: typing.Optional[builtins.str] = None,
         application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -5166,14 +5178,14 @@ class CfnApplicationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def service_execution_role(self) -> builtins.str:
+    def service_execution_role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''Specifies the IAM role that the application uses to access external resources.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisanalyticsv2-application.html#cfn-kinesisanalyticsv2-application-serviceexecutionrole
         '''
         result = self._values.get("service_execution_role")
         assert result is not None, "Required property 'service_execution_role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def application_configuration(
@@ -6265,7 +6277,7 @@ def _typecheckingstub__7c8b2c6c7d478ea7b78b40516077a829373526fa660eddd97eaf1bd6d
     id: builtins.str,
     *,
     runtime_environment: builtins.str,
-    service_execution_role: builtins.str,
+    service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
     application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     application_description: typing.Optional[builtins.str] = None,
     application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6273,6 +6285,12 @@ def _typecheckingstub__7c8b2c6c7d478ea7b78b40516077a829373526fa660eddd97eaf1bd6d
     application_name: typing.Optional[builtins.str] = None,
     run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.RunConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9f8bc337ab4bc24217b441b0da79cc843bb27998e49aa105fdd6726112592d7a(
+    resource: _IApplicationRef_f869ed37,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6805,7 +6823,7 @@ def _typecheckingstub__ab53bf322f4d836bf11dd6009f9301db2389ef834eed9f7d666779302
 def _typecheckingstub__1a8c37d3aa14d2be4ee34651f1a08832a97729d54b381d3780f6fc93f45de193(
     *,
     runtime_environment: builtins.str,
-    service_execution_role: builtins.str,
+    service_execution_role: typing.Union[builtins.str, _IRoleRef_8400221f],
     application_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     application_description: typing.Optional[builtins.str] = None,
     application_maintenance_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationMaintenanceConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

@@ -64,6 +64,7 @@ from .. import (
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_supportapp import (
     AccountAliasReference as _AccountAliasReference_0ae4a14e,
     IAccountAliasRef as _IAccountAliasRef_9eb989a0,
@@ -292,7 +293,7 @@ class CfnSlackChannelConfiguration(
         id: builtins.str,
         *,
         channel_id: builtins.str,
-        channel_role_arn: builtins.str,
+        channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         notify_on_case_severity: builtins.str,
         team_id: builtins.str,
         channel_name: typing.Optional[builtins.str] = None,
@@ -512,7 +513,7 @@ class CfnSlackChannelConfigurationProps:
         self,
         *,
         channel_id: builtins.str,
-        channel_role_arn: builtins.str,
+        channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         notify_on_case_severity: builtins.str,
         team_id: builtins.str,
         channel_name: typing.Optional[builtins.str] = None,
@@ -591,7 +592,7 @@ class CfnSlackChannelConfigurationProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def channel_role_arn(self) -> builtins.str:
+    def channel_role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role for this Slack channel configuration.
 
         The  App uses this role to perform  and Service Quotas actions on your behalf.
@@ -600,7 +601,7 @@ class CfnSlackChannelConfigurationProps:
         '''
         result = self._values.get("channel_role_arn")
         assert result is not None, "Required property 'channel_role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def notify_on_case_severity(self) -> builtins.str:
@@ -939,7 +940,7 @@ def _typecheckingstub__e35f22740d18bea5877d00346f0c0dfc0f8a99695f5876d0bb73d3f74
     id: builtins.str,
     *,
     channel_id: builtins.str,
-    channel_role_arn: builtins.str,
+    channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     notify_on_case_severity: builtins.str,
     team_id: builtins.str,
     channel_name: typing.Optional[builtins.str] = None,
@@ -1013,7 +1014,7 @@ def _typecheckingstub__bdf168cfdf59423abb532004d6218672a01d6693597b0f69fecd68f3b
 def _typecheckingstub__f1843e7081e108ba747a740558f507bae85fe1c8cfcc3feaeba051b183cee274(
     *,
     channel_id: builtins.str,
-    channel_role_arn: builtins.str,
+    channel_role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     notify_on_case_severity: builtins.str,
     team_id: builtins.str,
     channel_name: typing.Optional[builtins.str] = None,

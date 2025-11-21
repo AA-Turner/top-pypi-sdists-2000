@@ -683,7 +683,7 @@ class CfnDBCluster(
         :param enable_cloudwatch_logs_exports: The list of log types that need to be enabled for exporting to Amazon CloudWatch Logs. You can enable audit logs or profiler logs. For more information, see `Auditing Amazon DocumentDB Events <https://docs.aws.amazon.com/documentdb/latest/developerguide/event-auditing.html>`_ and `Profiling Amazon DocumentDB Operations <https://docs.aws.amazon.com/documentdb/latest/developerguide/profiling.html>`_ .
         :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. If you intend to trigger an in-place upgrade, please refer to `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ . Note that for an in-place engine version upgrade, you need to remove other cluster properties changes (e.g. SecurityGroupId) from the CFN template.
         :param global_cluster_identifier: The cluster identifier of the new global cluster.
-        :param kms_key_id: The AWS KMS key identifier for an encrypted cluster. The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
+        :param kms_key_id: The AWS key identifier for an encrypted cluster. The AWS key identifier is the Amazon Resource Name (ARN) for the AWS encryption key. If you are creating a cluster using the same AWS account that owns the AWS encryption key that is used to encrypt the new cluster, you can use the AWS key alias instead of the ARN for the AWS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
         :param manage_master_user_password: Specifies whether to manage the master user password with Amazon Web Services Secrets Manager. Constraint: You can't manage the master user password with Amazon Web Services Secrets Manager if ``MasterUserPassword`` is specified.
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@). Constraints: Must contain from 8 to 100 characters.
@@ -1000,7 +1000,7 @@ class CfnDBCluster(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key identifier for an encrypted cluster.'''
+        '''The AWS  key identifier for an encrypted cluster.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -1795,7 +1795,7 @@ class CfnDBClusterProps:
         :param enable_cloudwatch_logs_exports: The list of log types that need to be enabled for exporting to Amazon CloudWatch Logs. You can enable audit logs or profiler logs. For more information, see `Auditing Amazon DocumentDB Events <https://docs.aws.amazon.com/documentdb/latest/developerguide/event-auditing.html>`_ and `Profiling Amazon DocumentDB Operations <https://docs.aws.amazon.com/documentdb/latest/developerguide/profiling.html>`_ .
         :param engine_version: The version number of the database engine to use. The ``--engine-version`` will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version. If you intend to trigger an in-place upgrade, please refer to `Amazon DocumentDB in-place major version upgrade <https://docs.aws.amazon.com/documentdb/latest/developerguide/docdb-mvu.html>`_ . Note that for an in-place engine version upgrade, you need to remove other cluster properties changes (e.g. SecurityGroupId) from the CFN template.
         :param global_cluster_identifier: The cluster identifier of the new global cluster.
-        :param kms_key_id: The AWS KMS key identifier for an encrypted cluster. The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
+        :param kms_key_id: The AWS key identifier for an encrypted cluster. The AWS key identifier is the Amazon Resource Name (ARN) for the AWS encryption key. If you are creating a cluster using the same AWS account that owns the AWS encryption key that is used to encrypt the new cluster, you can use the AWS key alias instead of the ARN for the AWS encryption key. If an encryption key is not specified in ``KmsKeyId`` : - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key. AWS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
         :param manage_master_user_password: Specifies whether to manage the master user password with Amazon Web Services Secrets Manager. Constraint: You can't manage the master user password with Amazon Web Services Secrets Manager if ``MasterUserPassword`` is specified.
         :param master_username: The name of the master user for the cluster. Constraints: - Must be from 1 to 63 letters or numbers. - The first character must be a letter. - Cannot be a reserved word for the chosen database engine.
         :param master_user_password: The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@). Constraints: Must contain from 8 to 100 characters.
@@ -2084,15 +2084,15 @@ class CfnDBClusterProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''The AWS KMS key identifier for an encrypted cluster.
+        '''The AWS  key identifier for an encrypted cluster.
 
-        The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.
+        The AWS  key identifier is the Amazon Resource Name (ARN) for the AWS  encryption key. If you are creating a cluster using the same AWS account that owns the AWS  encryption key that is used to encrypt the new cluster, you can use the AWS  key alias instead of the ARN for the AWS  encryption key.
 
         If an encryption key is not specified in ``KmsKeyId`` :
 
         - If the ``StorageEncrypted`` parameter is ``true`` , Amazon DocumentDB uses your default encryption key.
 
-        AWS KMS creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
+        AWS  creates the default encryption key for your AWS account . Your AWS account has a different default encryption key for each AWS Regions .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-docdb-dbcluster.html#cfn-docdb-dbcluster-kmskeyid
         '''

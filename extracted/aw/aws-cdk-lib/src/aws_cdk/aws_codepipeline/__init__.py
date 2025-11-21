@@ -2898,7 +2898,7 @@ class CfnPipeline(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.StageDeclarationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ArtifactStoreProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipeline.ArtifactStoreMapProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2948,6 +2948,17 @@ class CfnPipeline(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPipeline")
+    @builtins.classmethod
+    def arn_for_pipeline(cls, resource: _IPipelineRef_fb1b56f9) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4fc25ed904d0a79f666ba857a0abf2a4a93935a974a7f2ed28c0fdda44387994)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPipeline", [resource]))
 
     @jsii.member(jsii_name="fromPipelineName")
     @builtins.classmethod
@@ -4092,7 +4103,7 @@ class CfnPipeline(
 
             ``EncryptionKey`` is a property of the `ArtifactStore <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-artifactstore.html>`_ property type.
 
-            :param id: The ID used to identify the key. For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN. .. epigraph:: Aliases are recognized only in the account that created the AWS KMS key. For cross-account actions, you can only use the key ID or key ARN to identify the key. Cross-account actions involve using the role from the other account (AccountB), so specifying the key ID will use the key from the other account (AccountB).
+            :param id: The ID used to identify the key. For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN. .. epigraph:: Aliases are recognized only in the account that created the AWS key. For cross-account actions, you can only use the key ID or key ARN to identify the key. Cross-account actions involve using the role from the other account (AccountB), so specifying the key ID will use the key from the other account (AccountB).
             :param type: The type of encryption key, such as an AWS KMS key. When creating or updating a pipeline, the value must be set to 'KMS'.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-encryptionkey.html
@@ -4125,7 +4136,7 @@ class CfnPipeline(
             For an AWS KMS key, you can use the key ID, the key ARN, or the alias ARN.
             .. epigraph::
 
-               Aliases are recognized only in the account that created the AWS KMS key. For cross-account actions, you can only use the key ID or key ARN to identify the key. Cross-account actions involve using the role from the other account (AccountB), so specifying the key ID will use the key from the other account (AccountB).
+               Aliases are recognized only in the account that created the AWS  key. For cross-account actions, you can only use the key ID or key ARN to identify the key. Cross-account actions involve using the role from the other account (AccountB), so specifying the key ID will use the key from the other account (AccountB).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codepipeline-pipeline-encryptionkey.html#cfn-codepipeline-pipeline-encryptionkey-id
             '''
@@ -6018,7 +6029,7 @@ class CfnPipelineProps:
     def __init__(
         self,
         *,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.StageDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]],
         artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreMapProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -6291,14 +6302,14 @@ class CfnPipelineProps:
             self._values["variables"] = variables
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) for CodePipeline to use to either perform actions with no ``actionRoleArn`` , or to use to assume roles for actions with an ``actionRoleArn`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codepipeline-pipeline.html#cfn-codepipeline-pipeline-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def stages(
@@ -12226,7 +12237,7 @@ def _typecheckingstub__43ae22b404f50a75462f3d5423718be3ca300d4e4e15354489d856039
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.StageDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreMapProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -12238,6 +12249,12 @@ def _typecheckingstub__43ae22b404f50a75462f3d5423718be3ca300d4e4e15354489d856039
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.PipelineTriggerDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     variables: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.VariableDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4fc25ed904d0a79f666ba857a0abf2a4a93935a974a7f2ed28c0fdda44387994(
+    resource: _IPipelineRef_fb1b56f9,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12571,7 +12588,7 @@ def _typecheckingstub__c1db744a2dce48273e96d1e41fe3217fb05516aae94ff61ffe871290c
 
 def _typecheckingstub__34b7cf6aaa1cc98db41892b9b8499f74092bf6b5f7f4050d1bd7642f7df7be5c(
     *,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     stages: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.StageDeclarationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     artifact_store: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     artifact_stores: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ArtifactStoreMapProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

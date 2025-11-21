@@ -197,6 +197,17 @@ class CfnConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConfig")
+    @builtins.classmethod
+    def arn_for_config(cls, resource: _IConfigRef_dc69720e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__365365e1c7c4bd5fb62c97f557a526bdd6cfc007c46548818c0586e10fd37261)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfig", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1915,6 +1926,20 @@ class CfnDataflowEndpointGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataflowEndpointGroup")
+    @builtins.classmethod
+    def arn_for_dataflow_endpoint_group(
+        cls,
+        resource: _IDataflowEndpointGroupRef_cf3d8979,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b68706ea1f6a930b0d56f7ef983f244c96ac1cd461a026e159a3510e8cfecca)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataflowEndpointGroup", [resource]))
+
     @jsii.member(jsii_name="fromDataflowEndpointGroupArn")
     @builtins.classmethod
     def from_dataflow_endpoint_group_arn(
@@ -3115,7 +3140,7 @@ class CfnMissionProfile(
         dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMissionProfile.DataflowEdgeProperty", typing.Dict[builtins.str, typing.Any]]]]],
         minimum_viable_contact_duration_seconds: jsii.Number,
         name: builtins.str,
-        tracking_config_arn: builtins.str,
+        tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnMissionProfile.StreamsKmsKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3153,6 +3178,20 @@ class CfnMissionProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForMissionProfile")
+    @builtins.classmethod
+    def arn_for_mission_profile(
+        cls,
+        resource: _IMissionProfileRef_941bd296,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9ad46294c1796ac7fb5144053b5f10fc3d20b09aba78bb752bbdce03c5d22fb9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMissionProfile", [resource]))
 
     @jsii.member(jsii_name="fromMissionProfileId")
     @builtins.classmethod
@@ -3568,7 +3607,7 @@ class CfnMissionProfileProps:
         dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.DataflowEdgeProperty, typing.Dict[builtins.str, typing.Any]]]]],
         minimum_viable_contact_duration_seconds: jsii.Number,
         name: builtins.str,
-        tracking_config_arn: builtins.str,
+        tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
         contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
         streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.StreamsKmsKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -3685,14 +3724,14 @@ class CfnMissionProfileProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def tracking_config_arn(self) -> builtins.str:
+    def tracking_config_arn(self) -> typing.Union[builtins.str, _IConfigRef_dc69720e]:
         '''The ARN of a tracking config objects that defines how to track the satellite through the sky during a contact.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-groundstation-missionprofile.html#cfn-groundstation-missionprofile-trackingconfigarn
         '''
         result = self._values.get("tracking_config_arn")
         assert result is not None, "Required property 'tracking_config_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IConfigRef_dc69720e], result)
 
     @builtins.property
     def contact_post_pass_duration_seconds(self) -> typing.Optional[jsii.Number]:
@@ -3771,6 +3810,12 @@ def _typecheckingstub__13b5342b1ca67f4a4ccbf4e2d71441ec8ac6775411c783b3c9c933f4c
     config_data: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfig.ConfigDataProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__365365e1c7c4bd5fb62c97f557a526bdd6cfc007c46548818c0586e10fd37261(
+    resource: _IConfigRef_dc69720e,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3951,6 +3996,12 @@ def _typecheckingstub__669b82a6c91e9541f061b9397341fc4b6628a648faf22449b040ab31e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9b68706ea1f6a930b0d56f7ef983f244c96ac1cd461a026e159a3510e8cfecca(
+    resource: _IDataflowEndpointGroupRef_cf3d8979,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__60c28e2791fd9c2db24e1b61c6453ed2a0648b906a01e1eac7a613e12ab7f864(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4098,12 +4149,18 @@ def _typecheckingstub__a8c20b1debe7b2cad3b5475e1d2b3d48fdf917b223b50d168e430ffa9
     dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.DataflowEdgeProperty, typing.Dict[builtins.str, typing.Any]]]]],
     minimum_viable_contact_duration_seconds: jsii.Number,
     name: builtins.str,
-    tracking_config_arn: builtins.str,
+    tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
     contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
     contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
     streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.StreamsKmsKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     streams_kms_role: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9ad46294c1796ac7fb5144053b5f10fc3d20b09aba78bb752bbdce03c5d22fb9(
+    resource: _IMissionProfileRef_941bd296,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4204,7 +4261,7 @@ def _typecheckingstub__cb791267f06ed92ca1c83c1b6ade129961c1c9de1a7d2ef1d57b3df27
     dataflow_edges: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.DataflowEdgeProperty, typing.Dict[builtins.str, typing.Any]]]]],
     minimum_viable_contact_duration_seconds: jsii.Number,
     name: builtins.str,
-    tracking_config_arn: builtins.str,
+    tracking_config_arn: typing.Union[builtins.str, _IConfigRef_dc69720e],
     contact_post_pass_duration_seconds: typing.Optional[jsii.Number] = None,
     contact_pre_pass_duration_seconds: typing.Optional[jsii.Number] = None,
     streams_kms_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnMissionProfile.StreamsKmsKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

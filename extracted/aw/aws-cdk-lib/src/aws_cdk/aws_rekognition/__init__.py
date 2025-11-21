@@ -132,6 +132,17 @@ class CfnCollection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCollection")
+    @builtins.classmethod
+    def arn_for_collection(cls, resource: _ICollectionRef_cd86fe44) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d52b0f443e5b4227ba7ab4c5121e872c8168541ad9c90c27833b47e404f23ef2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCollection", [resource]))
+
     @jsii.member(jsii_name="fromCollectionArn")
     @builtins.classmethod
     def from_collection_arn(
@@ -387,6 +398,17 @@ class CfnProject(
         props = CfnProjectProps(project_name=project_name, tags=tags)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_fbe2a8df) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78f0c2fed8fa2fb065ea66167ae02e2e889e7e38dc774eee4070b2802108e437)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -686,6 +708,20 @@ class CfnStreamProcessor(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForStreamProcessor")
+    @builtins.classmethod
+    def arn_for_stream_processor(
+        cls,
+        resource: _IStreamProcessorRef_a51f63be,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bcb846764f929d72bf382a16d586668b1e6adb862070304acddb92d74a8d23e4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStreamProcessor", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1958,6 +1994,12 @@ def _typecheckingstub__001405b167561982ca01f91c85c5f23fd1bfd335896f67495614aef9f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d52b0f443e5b4227ba7ab4c5121e872c8168541ad9c90c27833b47e404f23ef2(
+    resource: _ICollectionRef_cd86fe44,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7d3242f1abddcc1ee90dcbc46a3d9b120bee7e515a9b64e3c5e40a76de6243d8(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2016,6 +2058,12 @@ def _typecheckingstub__14434bd621070d38889fc701fc289b3379981bee9c73fd7502773f1ee
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__78f0c2fed8fa2fb065ea66167ae02e2e889e7e38dc774eee4070b2802108e437(
+    resource: _IProjectRef_fbe2a8df,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0172e641847a31da5e6877581313d2ece51b9650bcb74b1b80ba13e563323cc0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2065,6 +2113,12 @@ def _typecheckingstub__db29995773d1d6016b19ea60d9d43e43a080dc683708f8f6806c20b41
     polygon_regions_of_interest: typing.Any = None,
     s3_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamProcessor.S3DestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bcb846764f929d72bf382a16d586668b1e6adb862070304acddb92d74a8d23e4(
+    resource: _IStreamProcessorRef_a51f63be,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -149,6 +149,17 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_776a7ba1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7e9a5aa59a4674660b0a4f58c7a469fed835a0eb6f54e77a23de596b6cb62f9d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
     @jsii.member(jsii_name="fromApplicationName")
     @builtins.classmethod
     def from_application_name(
@@ -781,7 +792,7 @@ class CfnApplicationVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union["CfnApplicationVersion.SourceBundleProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -980,7 +991,7 @@ class CfnApplicationVersionProps:
     def __init__(
         self,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationVersion.SourceBundleProperty, typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -1023,14 +1034,14 @@ class CfnApplicationVersionProps:
             self._values["description"] = description
 
     @builtins.property
-    def application_name(self) -> builtins.str:
+    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
         '''The name of the Elastic Beanstalk application that is associated with this application version.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-applicationversion.html#cfn-elasticbeanstalk-applicationversion-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
 
     @builtins.property
     def source_bundle(
@@ -1120,7 +1131,7 @@ class CfnConfigurationTemplate(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         description: typing.Optional[builtins.str] = None,
         environment_id: typing.Optional[builtins.str] = None,
         option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConfigurationTemplate.ConfigurationOptionSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1519,7 +1530,7 @@ class CfnConfigurationTemplateProps:
     def __init__(
         self,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         description: typing.Optional[builtins.str] = None,
         environment_id: typing.Optional[builtins.str] = None,
         option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationTemplate.ConfigurationOptionSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -1594,14 +1605,14 @@ class CfnConfigurationTemplateProps:
             self._values["source_configuration"] = source_configuration
 
     @builtins.property
-    def application_name(self) -> builtins.str:
+    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
         '''The name of the Elastic Beanstalk application to associate with this configuration template.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-configurationtemplate.html#cfn-elasticbeanstalk-configurationtemplate-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -1753,7 +1764,7 @@ class CfnEnvironment(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         cname_prefix: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
@@ -1762,7 +1773,7 @@ class CfnEnvironment(
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        template_name: typing.Optional[builtins.str] = None,
+        template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
         tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.TierProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2275,7 +2286,7 @@ class CfnEnvironmentProps:
     def __init__(
         self,
         *,
-        application_name: builtins.str,
+        application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
         cname_prefix: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
         environment_name: typing.Optional[builtins.str] = None,
@@ -2284,7 +2295,7 @@ class CfnEnvironmentProps:
         platform_arn: typing.Optional[builtins.str] = None,
         solution_stack_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        template_name: typing.Optional[builtins.str] = None,
+        template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
         tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.TierProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         version_label: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2384,14 +2395,14 @@ class CfnEnvironmentProps:
             self._values["version_label"] = version_label
 
     @builtins.property
-    def application_name(self) -> builtins.str:
+    def application_name(self) -> typing.Union[builtins.str, _IApplicationRef_776a7ba1]:
         '''The name of the application that is associated with this environment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-applicationname
         '''
         result = self._values.get("application_name")
         assert result is not None, "Required property 'application_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IApplicationRef_776a7ba1], result)
 
     @builtins.property
     def cname_prefix(self) -> typing.Optional[builtins.str]:
@@ -2495,7 +2506,9 @@ class CfnEnvironmentProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def template_name(self) -> typing.Optional[builtins.str]:
+    def template_name(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]]:
         '''The name of the Elastic Beanstalk configuration template to use with the environment.
 
         .. epigraph::
@@ -2505,7 +2518,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticbeanstalk-environment.html#cfn-elasticbeanstalk-environment-templatename
         '''
         result = self._values.get("template_name")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]], result)
 
     @builtins.property
     def tier(
@@ -2563,6 +2576,12 @@ def _typecheckingstub__2037a8b39c672f9e224a0d55f87a787c8f06cc34801647c616c1d3544
     application_name: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     resource_lifecycle_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplication.ApplicationResourceLifecycleConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7e9a5aa59a4674660b0a4f58c7a469fed835a0eb6f54e77a23de596b6cb62f9d(
+    resource: _IApplicationRef_776a7ba1,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2652,7 +2671,7 @@ def _typecheckingstub__1c1516c528cdf5646f1fbc2db47de8d7888e64c08ccc28b6b1ea3f1c4
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationVersion.SourceBundleProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -2699,7 +2718,7 @@ def _typecheckingstub__bab0ce5312d0bfddca943d9bb19c1093f2bc6756b952bafc260c4c84b
 
 def _typecheckingstub__0d59bfde6ef9919e591cebecf28041cd2684a7628953d69fbe6a460205d95f96(
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     source_bundle: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationVersion.SourceBundleProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -2710,7 +2729,7 @@ def _typecheckingstub__e16e4991a410c838f73cd94150f707bdc9d297ed64ed0f67e1bf18326
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     description: typing.Optional[builtins.str] = None,
     environment_id: typing.Optional[builtins.str] = None,
     option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationTemplate.ConfigurationOptionSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2795,7 +2814,7 @@ def _typecheckingstub__a3fd0a38fbd1739c9c00badb2a396cea51ea99ab2d5bec33851b4206c
 
 def _typecheckingstub__796fd0fbbd75363f93a84b4414ff29f987c772572666882bfec89de9a1ec0553(
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     description: typing.Optional[builtins.str] = None,
     environment_id: typing.Optional[builtins.str] = None,
     option_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationTemplate.ConfigurationOptionSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -2810,7 +2829,7 @@ def _typecheckingstub__2cf0ef6beb55fa53b1a8e411b9c9453f886af4235facc3424c0cc1684
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     cname_prefix: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     environment_name: typing.Optional[builtins.str] = None,
@@ -2819,7 +2838,7 @@ def _typecheckingstub__2cf0ef6beb55fa53b1a8e411b9c9453f886af4235facc3424c0cc1684
     platform_arn: typing.Optional[builtins.str] = None,
     solution_stack_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    template_name: typing.Optional[builtins.str] = None,
+    template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
     tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.TierProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     version_label: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -2931,7 +2950,7 @@ def _typecheckingstub__20ebf44ad0b64564e5b4154c6f5b2e8a52f2ed1b20db6288a5f6c8278
 
 def _typecheckingstub__f9bf8840bb336097f9a8ab8a2978d262cc75efab262110246ba9ccd4885b1eb0(
     *,
-    application_name: builtins.str,
+    application_name: typing.Union[builtins.str, _IApplicationRef_776a7ba1],
     cname_prefix: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
     environment_name: typing.Optional[builtins.str] = None,
@@ -2940,7 +2959,7 @@ def _typecheckingstub__f9bf8840bb336097f9a8ab8a2978d262cc75efab262110246ba9ccd48
     platform_arn: typing.Optional[builtins.str] = None,
     solution_stack_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    template_name: typing.Optional[builtins.str] = None,
+    template_name: typing.Optional[typing.Union[builtins.str, _IConfigurationTemplateRef_3b882d17]] = None,
     tier: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.TierProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     version_label: typing.Optional[builtins.str] = None,
 ) -> None:

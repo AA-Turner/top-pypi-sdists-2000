@@ -170,6 +170,17 @@ class CfnGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGroup")
+    @builtins.classmethod
+    def arn_for_group(cls, resource: _IGroupRef_0073e6c0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7dcd7784282a6d610a90bbadeb465c781fca98c0ab7d8f6d949531ad0da99112)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGroup", [resource]))
+
     @jsii.member(jsii_name="fromGroupArn")
     @builtins.classmethod
     def from_group_arn(
@@ -1302,6 +1313,12 @@ def _typecheckingstub__b5a62cc8e7383e674185642c2fff396c4c4bfc5896a81d18b8b2d31ba
     resource_query: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroup.ResourceQueryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     resources: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7dcd7784282a6d610a90bbadeb465c781fca98c0ab7d8f6d949531ad0da99112(
+    resource: _IGroupRef_0073e6c0,
 ) -> None:
     """Type checking stubs"""
     pass

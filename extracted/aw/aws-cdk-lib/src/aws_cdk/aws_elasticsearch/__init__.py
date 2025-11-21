@@ -915,7 +915,7 @@ class CfnDomain(
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
         :param domain_endpoint_options: Specifies additional options for the domain endpoint, such as whether to require HTTPS for all traffic or whether to use a custom endpoint rather than the default endpoint.
-        :param domain_name: A name for the OpenSearch Service domain. For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param domain_name: A name for the OpenSearch Service domain. For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param ebs_options: The configurations of Amazon Elastic Block Store (Amazon EBS) volumes that are attached to data nodes in the OpenSearch Service domain. For more information, see `EBS volume size limits <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html#ebsresource>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param elasticsearch_cluster_config: ElasticsearchClusterConfig is a property of the AWS::Elasticsearch::Domain resource that configures the cluster of an Amazon OpenSearch Service domain.
         :param elasticsearch_version: The version of Elasticsearch to use, such as 2.3. If not specified, 1.5 is used as the default. For information about the versions that OpenSearch Service supports, see `Supported versions of OpenSearch and Elasticsearch <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version>`_ in the *Amazon OpenSearch Service Developer Guide* . If you set the `EnableVersionUpgrade <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-upgradeopensearchdomain>`_ update policy to ``true`` , you can update ``ElasticsearchVersion`` without interruption. When ``EnableVersionUpgrade`` is set to ``false`` , or is not specified, updating ``ElasticsearchVersion`` results in `replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ .
@@ -950,6 +950,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_67910ee2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f92c16f52961caa436aedaacb16657f8201f8e49e96b5f617f6b4adcf1098c98)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2679,7 +2690,7 @@ class CfnDomainProps:
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
         :param domain_endpoint_options: Specifies additional options for the domain endpoint, such as whether to require HTTPS for all traffic or whether to use a custom endpoint rather than the default endpoint.
-        :param domain_name: A name for the OpenSearch Service domain. For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param domain_name: A name for the OpenSearch Service domain. For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param ebs_options: The configurations of Amazon Elastic Block Store (Amazon EBS) volumes that are attached to data nodes in the OpenSearch Service domain. For more information, see `EBS volume size limits <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/limits.html#ebsresource>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param elasticsearch_cluster_config: ElasticsearchClusterConfig is a property of the AWS::Elasticsearch::Domain resource that configures the cluster of an Amazon OpenSearch Service domain.
         :param elasticsearch_version: The version of Elasticsearch to use, such as 2.3. If not specified, 1.5 is used as the default. For information about the versions that OpenSearch Service supports, see `Supported versions of OpenSearch and Elasticsearch <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version>`_ in the *Amazon OpenSearch Service Developer Guide* . If you set the `EnableVersionUpgrade <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html#cfn-attributes-updatepolicy-upgradeopensearchdomain>`_ update policy to ``true`` , you can update ``ElasticsearchVersion`` without interruption. When ``EnableVersionUpgrade`` is set to ``false`` , or is not specified, updating ``ElasticsearchVersion`` results in `replacement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html#update-replacement>`_ .
@@ -2902,7 +2913,7 @@ class CfnDomainProps:
     def domain_name(self) -> typing.Optional[builtins.str]:
         '''A name for the OpenSearch Service domain.
 
-        For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        For valid values, see the `DomainName <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/configuration-api.html#configuration-api-datatypes-domainname>`_ data type in the *Amazon OpenSearch Service Developer Guide* . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the domain name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         .. epigraph::
 
            If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -3311,6 +3322,77 @@ class DomainAttributes:
         return "DomainAttributes(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+class DomainGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_elasticsearch.DomainGrants",
+):
+    '''Collection of grant methods for a IDomainRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_elasticsearch as elasticsearch
+        from aws_cdk.interfaces import aws_elasticsearch as interfaces_aws_elasticsearch
+        
+        # domain_ref: interfaces_aws_elasticsearch.IDomainRef
+        
+        domain_grants = elasticsearch.DomainGrants.from_domain(domain_ref)
+    '''
+
+    @jsii.member(jsii_name="fromDomain")
+    @builtins.classmethod
+    def from_domain(cls, resource: _IDomainRef_67910ee2) -> "DomainGrants":
+        '''Creates grants for DomainGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4eb4c309d3ec514b4242abf2edd58c6a39a0bdd6070dfb9eacddc73729b94ab)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("DomainGrants", jsii.sinvoke(cls, "fromDomain", [resource]))
+
+    @jsii.member(jsii_name="read")
+    def read(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant read permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d7aa8fc84712b3c4f9dc4827d2da386a96fd37b26d831c20aa04f74434b3725)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "read", [grantee]))
+
+    @jsii.member(jsii_name="readWrite")
+    def read_write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant read/write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__84e47ae4cd97487b893c80fe1ce4ca5db341166a328f152baa9ac6d8806e6a47)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "readWrite", [grantee]))
+
+    @jsii.member(jsii_name="write")
+    def write(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant write permissions for this domain and its contents to an IAM principal (Role/Group/User).
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__edda7f46a4987bb67082b25cdb0a0723a0ccad1ac8df517dc2785f996d154ff9)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "write", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IDomainRef_67910ee2:
+        return typing.cast(_IDomainRef_67910ee2, jsii.get(self, "resource"))
 
 
 @jsii.data_type(
@@ -4234,7 +4316,7 @@ class EncryptionAtRestOptions:
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_elasticsearch.IDomain")
-class IDomain(_IResource_c80c4260, typing_extensions.Protocol):
+class IDomain(_IResource_c80c4260, _IDomainRef_67910ee2, typing_extensions.Protocol):
     '''(deprecated) An interface that represents an Elasticsearch domain - either created with the CDK, or an existing one.
 
     :deprecated: use opensearchservice module instead
@@ -5059,6 +5141,7 @@ class IDomain(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IDomainProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IDomainRef_67910ee2), # type: ignore[misc]
 ):
     '''(deprecated) An interface that represents an Elasticsearch domain - either created with the CDK, or an existing one.
 
@@ -7805,6 +7888,24 @@ class Domain(
         return typing.cast(builtins.str, jsii.get(self, "domainName"))
 
     @builtins.property
+    @jsii.member(jsii_name="domainRef")
+    def domain_ref(self) -> _DomainReference_fe98c4cd:
+        '''(deprecated) A reference to a Domain resource.
+
+        :stability: deprecated
+        '''
+        return typing.cast(_DomainReference_fe98c4cd, jsii.get(self, "domainRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> DomainGrants:
+        '''(deprecated) Collection of grant methods for a Domain.
+
+        :stability: deprecated
+        '''
+        return typing.cast(DomainGrants, jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="appLogGroup")
     def app_log_group(self) -> typing.Optional[_ILogGroup_3c4fa718]:
         '''(deprecated) Log group that application logs are logged to.
@@ -7873,6 +7974,7 @@ __all__ = [
     "CustomEndpointOptions",
     "Domain",
     "DomainAttributes",
+    "DomainGrants",
     "DomainProps",
     "EbsOptions",
     "ElasticsearchVersion",
@@ -7926,6 +8028,12 @@ def _typecheckingstub__63b7f3680a648547d6da1f542a01684f9c4d84033f4c9aee8eaecae81
     snapshot_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SnapshotOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_options: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.VPCOptionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f92c16f52961caa436aedaacb16657f8201f8e49e96b5f617f6b4adcf1098c98(
+    resource: _IDomainRef_67910ee2,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8201,6 +8309,30 @@ def _typecheckingstub__72419130e136fdde5577319d89e912d0d4cabd7e160115eb7fb1c0f58
     *,
     domain_arn: builtins.str,
     domain_endpoint: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4eb4c309d3ec514b4242abf2edd58c6a39a0bdd6070dfb9eacddc73729b94ab(
+    resource: _IDomainRef_67910ee2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6d7aa8fc84712b3c4f9dc4827d2da386a96fd37b26d831c20aa04f74434b3725(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__84e47ae4cd97487b893c80fe1ce4ca5db341166a328f152baa9ac6d8806e6a47(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__edda7f46a4987bb67082b25cdb0a0723a0ccad1ac8df517dc2785f996d154ff9(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

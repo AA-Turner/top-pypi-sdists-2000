@@ -257,6 +257,7 @@ class CfnConnection(
                     instance_profile_arn="instanceProfileArn",
                     java_virtual_env="javaVirtualEnv",
                     log_uri="logUri",
+                    managed_endpoint_arn="managedEndpointArn",
                     python_virtual_env="pythonVirtualEnv",
                     runtime_role="runtimeRole",
                     trusted_certificates_s3_uri="trustedCertificatesS3Uri"
@@ -1278,6 +1279,7 @@ class CfnConnection(
                         instance_profile_arn="instanceProfileArn",
                         java_virtual_env="javaVirtualEnv",
                         log_uri="logUri",
+                        managed_endpoint_arn="managedEndpointArn",
                         python_virtual_env="pythonVirtualEnv",
                         runtime_role="runtimeRole",
                         trusted_certificates_s3_uri="trustedCertificatesS3Uri"
@@ -2921,6 +2923,7 @@ class CfnConnection(
             "instance_profile_arn": "instanceProfileArn",
             "java_virtual_env": "javaVirtualEnv",
             "log_uri": "logUri",
+            "managed_endpoint_arn": "managedEndpointArn",
             "python_virtual_env": "pythonVirtualEnv",
             "runtime_role": "runtimeRole",
             "trusted_certificates_s3_uri": "trustedCertificatesS3Uri",
@@ -2934,6 +2937,7 @@ class CfnConnection(
             instance_profile_arn: typing.Optional[builtins.str] = None,
             java_virtual_env: typing.Optional[builtins.str] = None,
             log_uri: typing.Optional[builtins.str] = None,
+            managed_endpoint_arn: typing.Optional[builtins.str] = None,
             python_virtual_env: typing.Optional[builtins.str] = None,
             runtime_role: typing.Optional[builtins.str] = None,
             trusted_certificates_s3_uri: typing.Optional[builtins.str] = None,
@@ -2944,6 +2948,7 @@ class CfnConnection(
             :param instance_profile_arn: The instance profile ARN of Spark EMR.
             :param java_virtual_env: The java virtual env of the Spark EMR.
             :param log_uri: The log URI of the Spark EMR.
+            :param managed_endpoint_arn: 
             :param python_virtual_env: The Python virtual env of the Spark EMR.
             :param runtime_role: The runtime role of the Spark EMR.
             :param trusted_certificates_s3_uri: The certificates S3 URI of the Spark EMR.
@@ -2962,6 +2967,7 @@ class CfnConnection(
                     instance_profile_arn="instanceProfileArn",
                     java_virtual_env="javaVirtualEnv",
                     log_uri="logUri",
+                    managed_endpoint_arn="managedEndpointArn",
                     python_virtual_env="pythonVirtualEnv",
                     runtime_role="runtimeRole",
                     trusted_certificates_s3_uri="trustedCertificatesS3Uri"
@@ -2973,6 +2979,7 @@ class CfnConnection(
                 check_type(argname="argument instance_profile_arn", value=instance_profile_arn, expected_type=type_hints["instance_profile_arn"])
                 check_type(argname="argument java_virtual_env", value=java_virtual_env, expected_type=type_hints["java_virtual_env"])
                 check_type(argname="argument log_uri", value=log_uri, expected_type=type_hints["log_uri"])
+                check_type(argname="argument managed_endpoint_arn", value=managed_endpoint_arn, expected_type=type_hints["managed_endpoint_arn"])
                 check_type(argname="argument python_virtual_env", value=python_virtual_env, expected_type=type_hints["python_virtual_env"])
                 check_type(argname="argument runtime_role", value=runtime_role, expected_type=type_hints["runtime_role"])
                 check_type(argname="argument trusted_certificates_s3_uri", value=trusted_certificates_s3_uri, expected_type=type_hints["trusted_certificates_s3_uri"])
@@ -2985,6 +2992,8 @@ class CfnConnection(
                 self._values["java_virtual_env"] = java_virtual_env
             if log_uri is not None:
                 self._values["log_uri"] = log_uri
+            if managed_endpoint_arn is not None:
+                self._values["managed_endpoint_arn"] = managed_endpoint_arn
             if python_virtual_env is not None:
                 self._values["python_virtual_env"] = python_virtual_env
             if runtime_role is not None:
@@ -3026,6 +3035,14 @@ class CfnConnection(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-sparkemrpropertiesinput.html#cfn-datazone-connection-sparkemrpropertiesinput-loguri
             '''
             result = self._values.get("log_uri")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def managed_endpoint_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-connection-sparkemrpropertiesinput.html#cfn-datazone-connection-sparkemrpropertiesinput-managedendpointarn
+            '''
+            result = self._values.get("managed_endpoint_arn")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -3531,6 +3548,7 @@ class CfnConnectionProps:
                         instance_profile_arn="instanceProfileArn",
                         java_virtual_env="javaVirtualEnv",
                         log_uri="logUri",
+                        managed_endpoint_arn="managedEndpointArn",
                         python_virtual_env="pythonVirtualEnv",
                         runtime_role="runtimeRole",
                         trusted_certificates_s3_uri="trustedCertificatesS3Uri"
@@ -5676,6 +5694,17 @@ class CfnDomain(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomain")
+    @builtins.classmethod
+    def arn_for_domain(cls, resource: _IDomainRef_513ec0a7) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d5e284c8cabfd9511a986c0764c39a5b5e62bdd21494add504bfd7b37591704e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
     @jsii.member(jsii_name="fromDomainArn")
     @builtins.classmethod
@@ -14804,9 +14833,9 @@ class CfnUserProfile(
     )
     class IamUserProfileDetailsProperty:
         def __init__(self, *, arn: typing.Optional[builtins.str] = None) -> None:
-            '''The details of an IAM user profile in Amazon DataZone.
+            '''The details of the IAM User Profile.
 
-            :param arn: The ARN of an IAM user profile in Amazon DataZone.
+            :param arn: The ARN of the IAM User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-iamuserprofiledetails.html
             :exampleMetadata: fixture=_generated
@@ -14830,7 +14859,7 @@ class CfnUserProfile(
 
         @builtins.property
         def arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of an IAM user profile in Amazon DataZone.
+            '''The ARN of the IAM User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-iamuserprofiledetails.html#cfn-datazone-userprofile-iamuserprofiledetails-arn
             '''
@@ -14865,11 +14894,11 @@ class CfnUserProfile(
             last_name: typing.Optional[builtins.str] = None,
             username: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The single sign-on details of the user profile.
+            '''The details of the SSO User Profile.
 
-            :param first_name: The first name included in the single sign-on details of the user profile.
-            :param last_name: The last name included in the single sign-on details of the user profile.
-            :param username: The username included in the single sign-on details of the user profile.
+            :param first_name: The First Name of the IAM User Profile.
+            :param last_name: The Last Name of the IAM User Profile.
+            :param username: The username of the SSO User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-ssouserprofiledetails.html
             :exampleMetadata: fixture=_generated
@@ -14901,7 +14930,7 @@ class CfnUserProfile(
 
         @builtins.property
         def first_name(self) -> typing.Optional[builtins.str]:
-            '''The first name included in the single sign-on details of the user profile.
+            '''The First Name of the IAM User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-ssouserprofiledetails.html#cfn-datazone-userprofile-ssouserprofiledetails-firstname
             '''
@@ -14910,7 +14939,7 @@ class CfnUserProfile(
 
         @builtins.property
         def last_name(self) -> typing.Optional[builtins.str]:
-            '''The last name included in the single sign-on details of the user profile.
+            '''The Last Name of the IAM User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-ssouserprofiledetails.html#cfn-datazone-userprofile-ssouserprofiledetails-lastname
             '''
@@ -14919,7 +14948,7 @@ class CfnUserProfile(
 
         @builtins.property
         def username(self) -> typing.Optional[builtins.str]:
-            '''The username included in the single sign-on details of the user profile.
+            '''The username of the SSO User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-ssouserprofiledetails.html#cfn-datazone-userprofile-ssouserprofiledetails-username
             '''
@@ -14949,10 +14978,9 @@ class CfnUserProfile(
             iam: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserProfile.IamUserProfileDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             sso: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnUserProfile.SsoUserProfileDetailsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The details of the user profile in Amazon DataZone.
-
-            :param iam: The IAM details included in the user profile details.
-            :param sso: The single sign-on details included in the user profile details.
+            '''
+            :param iam: The details of the IAM User Profile.
+            :param sso: The details of the SSO User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-userprofiledetails.html
             :exampleMetadata: fixture=_generated
@@ -14988,7 +15016,7 @@ class CfnUserProfile(
         def iam(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUserProfile.IamUserProfileDetailsProperty"]]:
-            '''The IAM details included in the user profile details.
+            '''The details of the IAM User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-userprofiledetails.html#cfn-datazone-userprofile-userprofiledetails-iam
             '''
@@ -14999,7 +15027,7 @@ class CfnUserProfile(
         def sso(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnUserProfile.SsoUserProfileDetailsProperty"]]:
-            '''The single sign-on details included in the user profile details.
+            '''The details of the SSO User Profile.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-datazone-userprofile-userprofiledetails.html#cfn-datazone-userprofile-userprofiledetails-sso
             '''
@@ -15454,6 +15482,7 @@ def _typecheckingstub__94fbdb6dfc5f26da94f6f165997647170dbb3404b50c6d28eef32f77d
     instance_profile_arn: typing.Optional[builtins.str] = None,
     java_virtual_env: typing.Optional[builtins.str] = None,
     log_uri: typing.Optional[builtins.str] = None,
+    managed_endpoint_arn: typing.Optional[builtins.str] = None,
     python_virtual_env: typing.Optional[builtins.str] = None,
     runtime_role: typing.Optional[builtins.str] = None,
     trusted_certificates_s3_uri: typing.Optional[builtins.str] = None,
@@ -15754,6 +15783,12 @@ def _typecheckingstub__047efef40bc572d080b2e64b8f32c1db40e40ba16fc7d29d887073e9c
     service_role: typing.Optional[builtins.str] = None,
     single_sign_on: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDomain.SingleSignOnProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d5e284c8cabfd9511a986c0764c39a5b5e62bdd21494add504bfd7b37591704e(
+    resource: _IDomainRef_513ec0a7,
 ) -> None:
     """Type checking stubs"""
     pass

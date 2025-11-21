@@ -370,6 +370,7 @@ from ..interfaces.aws_config import (
     StoredQueryReference as _StoredQueryReference_385d82e9,
 )
 from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IAggregationAuthorizationRef_769e70e0, _ITaggable_36806126)
@@ -430,6 +431,20 @@ class CfnAggregationAuthorization(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAggregationAuthorization")
+    @builtins.classmethod
+    def arn_for_aggregation_authorization(
+        cls,
+        resource: _IAggregationAuthorizationRef_769e70e0,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__804659882d1cba368995209c668655ae06e111bc89ea44a2d8e313cc5c30f65c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAggregationAuthorization", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -725,7 +740,7 @@ class CfnConfigRule(
         :param id: Construct identifier for this resource (unique in its scope).
         :param source: Provides the rule owner ( ``AWS`` for managed rules, ``CUSTOM_POLICY`` for Custom Policy rules, and ``CUSTOM_LAMBDA`` for Custom Lambda rules), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.
         :param compliance: Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.
-        :param config_rule_name: A name for the AWS Config rule. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        :param config_rule_name: A name for the AWS Config rule. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         :param description: The description that you provide for the AWS Config rule.
         :param evaluation_modes: The modes the AWS Config rule can be evaluated in. The valid values are distinct objects. By default, the value is Detective evaluation mode only.
         :param input_parameters: A string, in JSON format, that is passed to the AWS Config rule Lambda function.
@@ -748,6 +763,17 @@ class CfnConfigRule(
         )
 
         jsii.create(self.__class__, self, [scope_, id, props])
+
+    @jsii.member(jsii_name="arnForConfigRule")
+    @builtins.classmethod
+    def arn_for_config_rule(cls, resource: _IConfigRuleRef_d9037ddf) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7fd59c3149ec1871d441a33764827f568047532454308bec8896f615eb5308cd)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfigRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1545,7 +1571,7 @@ class CfnConfigRuleProps:
 
         :param source: Provides the rule owner ( ``AWS`` for managed rules, ``CUSTOM_POLICY`` for Custom Policy rules, and ``CUSTOM_LAMBDA`` for Custom Lambda rules), the rule identifier, and the notifications that cause the function to evaluate your AWS resources.
         :param compliance: Indicates whether an AWS resource or AWS Config rule is compliant and provides the number of contributors that affect the compliance.
-        :param config_rule_name: A name for the AWS Config rule. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        :param config_rule_name: A name for the AWS Config rule. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
         :param description: The description that you provide for the AWS Config rule.
         :param evaluation_modes: The modes the AWS Config rule can be evaluated in. The valid values are distinct objects. By default, the value is Detective evaluation mode only.
         :param input_parameters: A string, in JSON format, that is passed to the AWS Config rule Lambda function.
@@ -1657,7 +1683,7 @@ class CfnConfigRuleProps:
     def config_rule_name(self) -> typing.Optional[builtins.str]:
         '''A name for the AWS Config rule.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the rule name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configrule.html#cfn-config-configrule-configrulename
         '''
@@ -1810,6 +1836,20 @@ class CfnConfigurationAggregator(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForConfigurationAggregator")
+    @builtins.classmethod
+    def arn_for_configuration_aggregator(
+        cls,
+        resource: _IConfigurationAggregatorRef_c6214f1c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e2b496e306d76face94f02fe9f9444ba2f0680fe64177541e420f0f98b50f4ac)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfigurationAggregator", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2261,7 +2301,7 @@ class CfnConfigurationRecorder(
 
        To enable AWS Config , you must create a configuration recorder and a delivery channel.
 
-       AWS Config uses the delivery channel to deliver the configuration changes to your Amazon S3 bucket or Amazon SNS topic. For more information, see `AWS::Config::DeliveryChannel <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-deliverychannel.html>`_ .
+       AWS Config uses the delivery channel to deliver the configuration changes to your Amazon S3 bucket or Amazon  topic. For more information, see `AWS::Config::DeliveryChannel <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-deliverychannel.html>`_ .
 
     AWS CloudFormation starts the recorder as soon as the delivery channel is available.
 
@@ -3286,7 +3326,7 @@ class CfnConformancePack(
         *,
         conformance_pack_name: builtins.str,
         conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConformancePack.ConformancePackInputParameterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delivery_s3_bucket: typing.Optional[builtins.str] = None,
+        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         template_body: typing.Optional[builtins.str] = None,
         template_s3_uri: typing.Optional[builtins.str] = None,
@@ -3637,7 +3677,7 @@ class CfnConformancePackProps:
         *,
         conformance_pack_name: builtins.str,
         conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConformancePack.ConformancePackInputParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        delivery_s3_bucket: typing.Optional[builtins.str] = None,
+        delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
         template_body: typing.Optional[builtins.str] = None,
         template_s3_uri: typing.Optional[builtins.str] = None,
@@ -3726,13 +3766,15 @@ class CfnConformancePackProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnConformancePack.ConformancePackInputParameterProperty]]]], result)
 
     @builtins.property
-    def delivery_s3_bucket(self) -> typing.Optional[builtins.str]:
+    def delivery_s3_bucket(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
         '''The name of the Amazon S3 bucket where AWS Config stores conformance pack templates.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-conformancepack.html#cfn-config-conformancepack-deliverys3bucket
         '''
         result = self._values.get("delivery_s3_bucket")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
 
     @builtins.property
     def delivery_s3_key_prefix(self) -> typing.Optional[builtins.str]:
@@ -3798,9 +3840,9 @@ class CfnDeliveryChannel(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_config.CfnDeliveryChannel",
 ):
-    '''Specifies a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon SNS topic.
+    '''Specifies a delivery channel object to deliver configuration information to an Amazon S3 bucket and Amazon  topic.
 
-    Before you can create a delivery channel, you must create a configuration recorder. You can use this action to change the Amazon S3 bucket or an Amazon SNS topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon SNS topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.
+    Before you can create a delivery channel, you must create a configuration recorder. You can use this action to change the Amazon S3 bucket or an Amazon  topic of the existing delivery channel. To change the Amazon S3 bucket or an Amazon  topic, call this action and specify the changed values for the S3 bucket and the SNS topic. If you specify a different value for either the S3 bucket or the SNS topic, this action will keep the existing value for the parameter that is not changed.
     .. epigraph::
 
        In the China (Beijing) Region, when you call this action, the Amazon S3 bucket must also be in the China (Beijing) Region. In all the other regions, AWS Config supports cross-region and cross-account delivery channels.
@@ -3810,7 +3852,7 @@ class CfnDeliveryChannel(
 
        AWS Config does not support the delivery channel to an Amazon S3 bucket bucket where object lock is enabled. For more information, see `How S3 Object Lock works <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock-overview.html>`_ .
 
-    When you create the delivery channel, you can specify; how often AWS Config delivers configuration snapshots to your Amazon S3 bucket (for example, 24 hours), the S3 bucket to which AWS Config sends configuration snapshots and configuration history files, and the Amazon SNS topic to which AWS Config sends notifications about configuration changes, such as updated resources, AWS Config rule evaluations, and when AWS Config delivers the configuration snapshot to your S3 bucket. For more information, see `Deliver Configuration Items <https://docs.aws.amazon.com/config/latest/developerguide/how-does-config-work.html#delivery-channel>`_ in the AWS Config Developer Guide.
+    When you create the delivery channel, you can specify; how often AWS Config delivers configuration snapshots to your Amazon S3 bucket (for example, 24 hours), the S3 bucket to which AWS Config sends configuration snapshots and configuration history files, and the Amazon  topic to which AWS Config sends notifications about configuration changes, such as updated resources, AWS Config rule evaluations, and when AWS Config delivers the configuration snapshot to your S3 bucket. For more information, see `Deliver Configuration Items <https://docs.aws.amazon.com/config/latest/developerguide/how-does-config-work.html#delivery-channel>`_ in the AWS Config Developer Guide.
     .. epigraph::
 
        To enable AWS Config , you must create a configuration recorder and a delivery channel. If you want to create the resources separately, you must create a configuration recorder before you can create a delivery channel. AWS Config uses the configuration recorder to capture configuration changes to your resources. For more information, see `AWS::Config::ConfigurationRecorder <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-configurationrecorder.html>`_ .
@@ -3859,9 +3901,9 @@ class CfnDeliveryChannel(
         :param id: Construct identifier for this resource (unique in its scope).
         :param s3_bucket_name: The name of the Amazon S3 bucket to which AWS Config delivers configuration snapshots and configuration history files. If you specify a bucket that belongs to another AWS account , that bucket must have policies that grant access permissions to AWS Config . For more information, see `Permissions for the Amazon S3 Bucket <https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-policy.html>`_ in the *AWS Config Developer Guide* .
         :param config_snapshot_delivery_properties: The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.
-        :param name: A name for the delivery channel. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Updates are not supported. To change the name, you must run two separate updates. In the first update, delete this resource, and then recreate it with a new name in the second update.
+        :param name: A name for the delivery channel. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Updates are not supported. To change the name, you must run two separate updates. In the first update, delete this resource, and then recreate it with a new name in the second update.
         :param s3_key_prefix: The prefix for the specified Amazon S3 bucket.
-        :param s3_kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS KMS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config . Must belong to the same Region as the destination S3 bucket.
+        :param s3_kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config . Must belong to the same Region as the destination S3 bucket.
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config sends notifications about configuration changes. If you choose a topic from another account, the topic must have policies that grant access permissions to AWS Config . For more information, see `Permissions for the Amazon SNS Topic <https://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html>`_ in the *AWS Config Developer Guide* .
         '''
         if __debug__:
@@ -3988,7 +4030,7 @@ class CfnDeliveryChannel(
     @builtins.property
     @jsii.member(jsii_name="s3KmsKeyArn")
     def s3_kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS KMS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config .'''
+        '''The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS  ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config .'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "s3KmsKeyArn"))
 
     @s3_kms_key_arn.setter
@@ -4114,9 +4156,9 @@ class CfnDeliveryChannelProps:
 
         :param s3_bucket_name: The name of the Amazon S3 bucket to which AWS Config delivers configuration snapshots and configuration history files. If you specify a bucket that belongs to another AWS account , that bucket must have policies that grant access permissions to AWS Config . For more information, see `Permissions for the Amazon S3 Bucket <https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-policy.html>`_ in the *AWS Config Developer Guide* .
         :param config_snapshot_delivery_properties: The options for how often AWS Config delivers configuration snapshots to the Amazon S3 bucket.
-        :param name: A name for the delivery channel. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Updates are not supported. To change the name, you must run two separate updates. In the first update, delete this resource, and then recreate it with a new name in the second update.
+        :param name: A name for the delivery channel. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . Updates are not supported. To change the name, you must run two separate updates. In the first update, delete this resource, and then recreate it with a new name in the second update.
         :param s3_key_prefix: The prefix for the specified Amazon S3 bucket.
-        :param s3_kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS KMS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config . Must belong to the same Region as the destination S3 bucket.
+        :param s3_kms_key_arn: The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config . Must belong to the same Region as the destination S3 bucket.
         :param sns_topic_arn: The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config sends notifications about configuration changes. If you choose a topic from another account, the topic must have policies that grant access permissions to AWS Config . For more information, see `Permissions for the Amazon SNS Topic <https://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html>`_ in the *AWS Config Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-config-deliverychannel.html
@@ -4190,7 +4232,7 @@ class CfnDeliveryChannelProps:
     def name(self) -> typing.Optional[builtins.str]:
         '''A name for the delivery channel.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the delivery channel name. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
 
         Updates are not supported. To change the name, you must run two separate updates. In the first update, delete this resource, and then recreate it with a new name in the second update.
 
@@ -4210,7 +4252,7 @@ class CfnDeliveryChannelProps:
 
     @builtins.property
     def s3_kms_key_arn(self) -> typing.Optional[builtins.str]:
-        '''The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS KMS ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config .
+        '''The Amazon Resource Name (ARN) of the AWS Key Management Service ( AWS  ) AWS KMS key (KMS key) used to encrypt objects delivered by AWS Config .
 
         Must belong to the same Region as the destination S3 bucket.
 
@@ -4358,6 +4400,20 @@ class CfnOrganizationConfigRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOrganizationConfigRule")
+    @builtins.classmethod
+    def arn_for_organization_config_rule(
+        cls,
+        resource: _IOrganizationConfigRuleRef_657a40fe,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e4802f85b18ad2006a4ffea306ab5ed2c850eea44f91e9cad0a496b1b0298ad0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOrganizationConfigRule", [resource]))
 
     @jsii.member(jsii_name="fromOrganizationConfigRuleId")
     @builtins.classmethod
@@ -5874,6 +5930,20 @@ class CfnRemediationConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRemediationConfiguration")
+    @builtins.classmethod
+    def arn_for_remediation_configuration(
+        cls,
+        resource: _IRemediationConfigurationRef_520713b3,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__da91e8fb8c70f77ed5f7673cfe2acccad4203b1fc3b7b21eba2fb3c4a10b7702)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRemediationConfiguration", [resource]))
 
     @jsii.member(jsii_name="fromRemediationConfigurationId")
     @builtins.classmethod
@@ -14717,6 +14787,12 @@ def _typecheckingstub__6d45b6827b30a710c41539b6e64a482fe288457f84fc8da58a369837e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__804659882d1cba368995209c668655ae06e111bc89ea44a2d8e313cc5c30f65c(
+    resource: _IAggregationAuthorizationRef_769e70e0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6d44e9df1899840ed48cc8968c2953fc999bd4ebae4355121a7d0d44eb5a78d5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -14768,6 +14844,12 @@ def _typecheckingstub__deecc74e0a0f7e54fde16a159ece5d8f96f56f6b8aca025003adcc1d9
     input_parameters: typing.Any = None,
     maximum_execution_frequency: typing.Optional[builtins.str] = None,
     scope: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigRule.ScopeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7fd59c3149ec1871d441a33764827f568047532454308bec8896f615eb5308cd(
+    resource: _IConfigRuleRef_d9037ddf,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -14906,6 +14988,12 @@ def _typecheckingstub__40705fa4ca5c4067a90bb01d176f11c05ad5552df80610a5336835002
     configuration_aggregator_name: typing.Optional[builtins.str] = None,
     organization_aggregation_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationAggregator.OrganizationAggregationSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e2b496e306d76face94f02fe9f9444ba2f0680fe64177541e420f0f98b50f4ac(
+    resource: _IConfigurationAggregatorRef_c6214f1c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15080,7 +15168,7 @@ def _typecheckingstub__3e2b5c522b5074ba2ef97dd80a498043778309ce04aa178507276f160
     *,
     conformance_pack_name: builtins.str,
     conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConformancePack.ConformancePackInputParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    delivery_s3_bucket: typing.Optional[builtins.str] = None,
+    delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
     template_body: typing.Optional[builtins.str] = None,
     template_s3_uri: typing.Optional[builtins.str] = None,
@@ -15163,7 +15251,7 @@ def _typecheckingstub__eb7114b56400f450b835ab5d3aed18b5a4e6466e2dad2710b6844c6e7
     *,
     conformance_pack_name: builtins.str,
     conformance_pack_input_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConformancePack.ConformancePackInputParameterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    delivery_s3_bucket: typing.Optional[builtins.str] = None,
+    delivery_s3_bucket: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     delivery_s3_key_prefix: typing.Optional[builtins.str] = None,
     template_body: typing.Optional[builtins.str] = None,
     template_s3_uri: typing.Optional[builtins.str] = None,
@@ -15262,6 +15350,12 @@ def _typecheckingstub__dbb132a46c30059a4907d7496d2b696999321fd7c5b82f7812c5a4d9b
     organization_custom_policy_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationCustomPolicyRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     organization_custom_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationCustomRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     organization_managed_rule_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationConfigRule.OrganizationManagedRuleMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e4802f85b18ad2006a4ffea306ab5ed2c850eea44f91e9cad0a496b1b0298ad0(
+    resource: _IOrganizationConfigRuleRef_657a40fe,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -15477,6 +15571,12 @@ def _typecheckingstub__7d77d8d51b1a809acec3ca2be829980e6b8f99140bb4eb3ce00b9209c
     resource_type: typing.Optional[builtins.str] = None,
     retry_attempt_seconds: typing.Optional[jsii.Number] = None,
     target_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__da91e8fb8c70f77ed5f7673cfe2acccad4203b1fc3b7b21eba2fb3c4a10b7702(
+    resource: _IRemediationConfigurationRef_520713b3,
 ) -> None:
     """Type checking stubs"""
     pass

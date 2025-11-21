@@ -68,11 +68,17 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_vpclattice import (
     AccessLogSubscriptionReference as _AccessLogSubscriptionReference_25905b5c,
     AuthPolicyReference as _AuthPolicyReference_2a1c0bc7,
+    DomainVerificationReference as _DomainVerificationReference_9b6bf03d,
     IAccessLogSubscriptionRef as _IAccessLogSubscriptionRef_3411271a,
     IAuthPolicyRef as _IAuthPolicyRef_38d3dc32,
+    IDomainVerificationRef as _IDomainVerificationRef_2bb01157,
     IListenerRef as _IListenerRef_04c46b6b,
     IResourceConfigurationRef as _IResourceConfigurationRef_b9c2bd0b,
     IResourceGatewayRef as _IResourceGatewayRef_f860a76d,
@@ -162,6 +168,20 @@ class CfnAccessLogSubscription(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAccessLogSubscription")
+    @builtins.classmethod
+    def arn_for_access_log_subscription(
+        cls,
+        resource: _IAccessLogSubscriptionRef_3411271a,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b006594f2b5a99a86ec25dbfeac8c2023ac71a3ba27153247b2879692fe06c02)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessLogSubscription", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -619,6 +639,318 @@ class CfnAuthPolicyProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IDomainVerificationRef_2bb01157, _ITaggableV2_4e6798f8)
+class CfnDomainVerification(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_vpclattice.CfnDomainVerification",
+):
+    '''Creates a Lattice Domain Verification.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html
+    :cloudformationResource: AWS::VpcLattice::DomainVerification
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_vpclattice as vpclattice
+        
+        cfn_domain_verification = vpclattice.CfnDomainVerification(self, "MyCfnDomainVerification",
+            domain_name="domainName",
+        
+            # the properties below are optional
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        domain_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::VpcLattice::DomainVerification``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param domain_name: 
+        :param tags: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e087b5ebdfc61e8611a8aecc13f27453c5d334d80ba357b19a41a8c67e1475cb)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnDomainVerificationProps(domain_name=domain_name, tags=tags)
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomainVerification")
+    @builtins.classmethod
+    def arn_for_domain_verification(
+        cls,
+        resource: _IDomainVerificationRef_2bb01157,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c3a151591e2a37cf3e4992e89269c839341b1b3d39773d92cd313ec1a0e3eb82)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomainVerification", [resource]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01871c2423a3858ac5c857f4d87c18e6aede14b7661b5a314da2feff620efa3a)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__febcf80d5d0b30f3050d4e99d25999634469be29f1ed461ce200d535c11c0bd7)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrTxtMethodConfig")
+    def attr_txt_method_config(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: TxtMethodConfig
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrTxtMethodConfig"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="domainVerificationRef")
+    def domain_verification_ref(self) -> _DomainVerificationReference_9b6bf03d:
+        '''A reference to a DomainVerification resource.'''
+        return typing.cast(_DomainVerificationReference_9b6bf03d, jsii.get(self, "domainVerificationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="domainName")
+    def domain_name(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "domainName"))
+
+    @domain_name.setter
+    def domain_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7a460763a4e33b65d111e75dc866c5d7a8f5f1a0cfe3e0ac9c7364fd53927549)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0cdbc9351627dba59de976196e827173a6dc3cfd19e7026f2d1156106e4c17e8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_vpclattice.CfnDomainVerification.TxtMethodConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "value": "value"},
+    )
+    class TxtMethodConfigProperty:
+        def __init__(
+            self,
+            *,
+            name: typing.Optional[builtins.str] = None,
+            value: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param name: 
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_vpclattice as vpclattice
+                
+                txt_method_config_property = vpclattice.CfnDomainVerification.TxtMethodConfigProperty(
+                    name="name",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4b83ecaca3c5acb7c3f910dcca4c9c395d4ab1ba7e24b7f6253c7d2cf83e1d6c)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if name is not None:
+                self._values["name"] = name
+            if value is not None:
+                self._values["value"] = value
+
+        @builtins.property
+        def name(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html#cfn-vpclattice-domainverification-txtmethodconfig-name
+            '''
+            result = self._values.get("name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def value(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html#cfn-vpclattice-domainverification-txtmethodconfig-value
+            '''
+            result = self._values.get("value")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TxtMethodConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_vpclattice.CfnDomainVerificationProps",
+    jsii_struct_bases=[],
+    name_mapping={"domain_name": "domainName", "tags": "tags"},
+)
+class CfnDomainVerificationProps:
+    def __init__(
+        self,
+        *,
+        domain_name: builtins.str,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDomainVerification``.
+
+        :param domain_name: 
+        :param tags: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_vpclattice as vpclattice
+            
+            cfn_domain_verification_props = vpclattice.CfnDomainVerificationProps(
+                domain_name="domainName",
+            
+                # the properties below are optional
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__edf9347666231c58e5ba2fec87dba25e1d2390d973b1fbb321187566cfb52a43)
+            check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "domain_name": domain_name,
+        }
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def domain_name(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html#cfn-vpclattice-domainverification-domainname
+        '''
+        result = self._values.get("domain_name")
+        assert result is not None, "Required property 'domain_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html#cfn-vpclattice-domainverification-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDomainVerificationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IListenerRef_04c46b6b, _ITaggable_36806126)
 class CfnListener(
     _CfnResource_9df397a6,
@@ -703,6 +1035,17 @@ class CfnListener(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForListener")
+    @builtins.classmethod
+    def arn_for_listener(cls, resource: _IListenerRef_04c46b6b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6fbf0006897327f79b9538b500dd6178788b78898c654bc20af5493dc1ac2464)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForListener", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1351,6 +1694,9 @@ class CfnResourceConfiguration(
         
             # the properties below are optional
             allow_association_to_sharable_service_network=False,
+            custom_domain_name="customDomainName",
+            domain_verification_id="domainVerificationId",
+            group_domain="groupDomain",
             port_ranges=["portRanges"],
             protocol_type="protocolType",
             resource_configuration_auth_type="resourceConfigurationAuthType",
@@ -1379,6 +1725,9 @@ class CfnResourceConfiguration(
         name: builtins.str,
         resource_configuration_type: builtins.str,
         allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        custom_domain_name: typing.Optional[builtins.str] = None,
+        domain_verification_id: typing.Optional[builtins.str] = None,
+        group_domain: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
@@ -1394,6 +1743,9 @@ class CfnResourceConfiguration(
         :param name: The name of the resource configuration.
         :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
+        :param custom_domain_name: 
+        :param domain_verification_id: 
+        :param group_domain: 
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
@@ -1410,6 +1762,9 @@ class CfnResourceConfiguration(
             name=name,
             resource_configuration_type=resource_configuration_type,
             allow_association_to_sharable_service_network=allow_association_to_sharable_service_network,
+            custom_domain_name=custom_domain_name,
+            domain_verification_id=domain_verification_id,
+            group_domain=group_domain,
             port_ranges=port_ranges,
             protocol_type=protocol_type,
             resource_configuration_auth_type=resource_configuration_auth_type,
@@ -1420,6 +1775,20 @@ class CfnResourceConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceConfiguration")
+    @builtins.classmethod
+    def arn_for_resource_configuration(
+        cls,
+        resource: _IResourceConfigurationRef_b9c2bd0b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a026c929e042a2c8696f375006989eb8176f553b6f97062f37332b7a82cee58f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceConfiguration", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1532,6 +1901,42 @@ class CfnResourceConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "allowAssociationToSharableServiceNetwork", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="customDomainName")
+    def custom_domain_name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "customDomainName"))
+
+    @custom_domain_name.setter
+    def custom_domain_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d3cf4bb19142ab56d534f92ec9479ad1edaf9d6a25789c36c13d3740f3194297)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "customDomainName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="domainVerificationId")
+    def domain_verification_id(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "domainVerificationId"))
+
+    @domain_verification_id.setter
+    def domain_verification_id(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1d03086b2a0c53c0c64e67a04a890a9781a35d61fc45d406070c884ee0f9aac4)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "domainVerificationId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="groupDomain")
+    def group_domain(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "groupDomain"))
+
+    @group_domain.setter
+    def group_domain(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bebab4839b94bb14dd9b6aab81ccdac22c78ad7e4c963f74da28b2250e440a43)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "groupDomain", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="portRanges")
@@ -1816,6 +2221,9 @@ class CfnResourceConfiguration(
         "name": "name",
         "resource_configuration_type": "resourceConfigurationType",
         "allow_association_to_sharable_service_network": "allowAssociationToSharableServiceNetwork",
+        "custom_domain_name": "customDomainName",
+        "domain_verification_id": "domainVerificationId",
+        "group_domain": "groupDomain",
         "port_ranges": "portRanges",
         "protocol_type": "protocolType",
         "resource_configuration_auth_type": "resourceConfigurationAuthType",
@@ -1832,6 +2240,9 @@ class CfnResourceConfigurationProps:
         name: builtins.str,
         resource_configuration_type: builtins.str,
         allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        custom_domain_name: typing.Optional[builtins.str] = None,
+        domain_verification_id: typing.Optional[builtins.str] = None,
+        group_domain: typing.Optional[builtins.str] = None,
         port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
         protocol_type: typing.Optional[builtins.str] = None,
         resource_configuration_auth_type: typing.Optional[builtins.str] = None,
@@ -1845,6 +2256,9 @@ class CfnResourceConfigurationProps:
         :param name: The name of the resource configuration.
         :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
+        :param custom_domain_name: 
+        :param domain_verification_id: 
+        :param group_domain: 
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
@@ -1868,6 +2282,9 @@ class CfnResourceConfigurationProps:
             
                 # the properties below are optional
                 allow_association_to_sharable_service_network=False,
+                custom_domain_name="customDomainName",
+                domain_verification_id="domainVerificationId",
+                group_domain="groupDomain",
                 port_ranges=["portRanges"],
                 protocol_type="protocolType",
                 resource_configuration_auth_type="resourceConfigurationAuthType",
@@ -1892,6 +2309,9 @@ class CfnResourceConfigurationProps:
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument resource_configuration_type", value=resource_configuration_type, expected_type=type_hints["resource_configuration_type"])
             check_type(argname="argument allow_association_to_sharable_service_network", value=allow_association_to_sharable_service_network, expected_type=type_hints["allow_association_to_sharable_service_network"])
+            check_type(argname="argument custom_domain_name", value=custom_domain_name, expected_type=type_hints["custom_domain_name"])
+            check_type(argname="argument domain_verification_id", value=domain_verification_id, expected_type=type_hints["domain_verification_id"])
+            check_type(argname="argument group_domain", value=group_domain, expected_type=type_hints["group_domain"])
             check_type(argname="argument port_ranges", value=port_ranges, expected_type=type_hints["port_ranges"])
             check_type(argname="argument protocol_type", value=protocol_type, expected_type=type_hints["protocol_type"])
             check_type(argname="argument resource_configuration_auth_type", value=resource_configuration_auth_type, expected_type=type_hints["resource_configuration_auth_type"])
@@ -1905,6 +2325,12 @@ class CfnResourceConfigurationProps:
         }
         if allow_association_to_sharable_service_network is not None:
             self._values["allow_association_to_sharable_service_network"] = allow_association_to_sharable_service_network
+        if custom_domain_name is not None:
+            self._values["custom_domain_name"] = custom_domain_name
+        if domain_verification_id is not None:
+            self._values["domain_verification_id"] = domain_verification_id
+        if group_domain is not None:
+            self._values["group_domain"] = group_domain
         if port_ranges is not None:
             self._values["port_ranges"] = port_ranges
         if protocol_type is not None:
@@ -1955,6 +2381,30 @@ class CfnResourceConfigurationProps:
         '''
         result = self._values.get("allow_association_to_sharable_service_network")
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def custom_domain_name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-customdomainname
+        '''
+        result = self._values.get("custom_domain_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def domain_verification_id(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-domainverificationid
+        '''
+        result = self._values.get("domain_verification_id")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def group_domain(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-groupdomain
+        '''
+        result = self._values.get("group_domain")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def port_ranges(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -2081,11 +2531,11 @@ class CfnResourceGateway(
         id: builtins.str,
         *,
         name: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::VpcLattice::ResourceGateway``.
@@ -2115,6 +2565,20 @@ class CfnResourceGateway(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResourceGateway")
+    @builtins.classmethod
+    def arn_for_resource_gateway(
+        cls,
+        resource: _IResourceGatewayRef_f860a76d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__445eb71ebf6c45d6eca00f9b3cec34ae6e3bea84b534dca97f190deb34a4ed8f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceGateway", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2294,11 +2758,11 @@ class CfnResourceGatewayProps:
         self,
         *,
         name: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         vpc_identifier: builtins.str,
         ip_address_type: typing.Optional[builtins.str] = None,
         ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnResourceGateway``.
@@ -2369,14 +2833,16 @@ class CfnResourceGatewayProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The IDs of the VPC subnets for the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def vpc_identifier(self) -> builtins.str:
@@ -2407,13 +2873,15 @@ class CfnResourceGatewayProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''The IDs of the security groups applied to the resource gateway.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourcegateway.html#cfn-vpclattice-resourcegateway-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2736,6 +3204,17 @@ class CfnRule(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForRule")
+    @builtins.classmethod
+    def arn_for_rule(cls, resource: _IRuleRef_b63824ff) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0f380d113a5affaf842481454c8f290afea5d4dae9fcb1fde03894699af4a840)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4004,6 +4483,17 @@ class CfnService(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForService")
+    @builtins.classmethod
+    def arn_for_service(cls, resource: _IServiceRef_a78feffa) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4306f47865951580098581bd4908dbd0376f4788c912e18ccb0d89aa43414c60)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForService", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4331,6 +4821,20 @@ class CfnServiceNetwork(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceNetwork")
+    @builtins.classmethod
+    def arn_for_service_network(
+        cls,
+        resource: _IServiceNetworkRef_1e3df588,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef44579ef46c3b8a5a03f8c105f893320862db1ec99497a8ace7373a08221c74)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceNetwork", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4672,6 +5176,7 @@ class CfnServiceNetworkResourceAssociation(
         from aws_cdk import aws_vpclattice as vpclattice
         
         cfn_service_network_resource_association = vpclattice.CfnServiceNetworkResourceAssociation(self, "MyCfnServiceNetworkResourceAssociation",
+            private_dns_enabled=False,
             resource_configuration_id="resourceConfigurationId",
             service_network_id="serviceNetworkId",
             tags=[CfnTag(
@@ -4686,6 +5191,7 @@ class CfnServiceNetworkResourceAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         resource_configuration_id: typing.Optional[builtins.str] = None,
         service_network_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4694,6 +5200,7 @@ class CfnServiceNetworkResourceAssociation(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param private_dns_enabled: 
         :param resource_configuration_id: The ID of the resource configuration associated with the service network.
         :param service_network_id: The ID of the service network associated with the resource configuration.
         :param tags: A key-value pair to associate with a resource.
@@ -4703,12 +5210,27 @@ class CfnServiceNetworkResourceAssociation(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnServiceNetworkResourceAssociationProps(
+            private_dns_enabled=private_dns_enabled,
             resource_configuration_id=resource_configuration_id,
             service_network_id=service_network_id,
             tags=tags,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceNetworkResourceAssociation")
+    @builtins.classmethod
+    def arn_for_service_network_resource_association(
+        cls,
+        resource: _IServiceNetworkResourceAssociationRef_82997816,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05c5dedf0c91c43055294c80549e5e231513cc69847eba1c93df110e713b330a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceNetworkResourceAssociation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4778,6 +5300,23 @@ class CfnServiceNetworkResourceAssociation(
         return typing.cast(_ServiceNetworkResourceAssociationReference_02618c82, jsii.get(self, "serviceNetworkResourceAssociationRef"))
 
     @builtins.property
+    @jsii.member(jsii_name="privateDnsEnabled")
+    def private_dns_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "privateDnsEnabled"))
+
+    @private_dns_enabled.setter
+    def private_dns_enabled(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__049099c6a1901e52b5f08209c26332c7529a9d788fa834296fd8651843a26a74)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "privateDnsEnabled", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="resourceConfigurationId")
     def resource_configuration_id(self) -> typing.Optional[builtins.str]:
         '''The ID of the resource configuration associated with the service network.'''
@@ -4821,6 +5360,7 @@ class CfnServiceNetworkResourceAssociation(
     jsii_type="aws-cdk-lib.aws_vpclattice.CfnServiceNetworkResourceAssociationProps",
     jsii_struct_bases=[],
     name_mapping={
+        "private_dns_enabled": "privateDnsEnabled",
         "resource_configuration_id": "resourceConfigurationId",
         "service_network_id": "serviceNetworkId",
         "tags": "tags",
@@ -4830,12 +5370,14 @@ class CfnServiceNetworkResourceAssociationProps:
     def __init__(
         self,
         *,
+        private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         resource_configuration_id: typing.Optional[builtins.str] = None,
         service_network_id: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkResourceAssociation``.
 
+        :param private_dns_enabled: 
         :param resource_configuration_id: The ID of the resource configuration associated with the service network.
         :param service_network_id: The ID of the service network associated with the resource configuration.
         :param tags: A key-value pair to associate with a resource.
@@ -4850,6 +5392,7 @@ class CfnServiceNetworkResourceAssociationProps:
             from aws_cdk import aws_vpclattice as vpclattice
             
             cfn_service_network_resource_association_props = vpclattice.CfnServiceNetworkResourceAssociationProps(
+                private_dns_enabled=False,
                 resource_configuration_id="resourceConfigurationId",
                 service_network_id="serviceNetworkId",
                 tags=[CfnTag(
@@ -4860,16 +5403,29 @@ class CfnServiceNetworkResourceAssociationProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d8fd9f985a37c435043ce57ac34945022dddb3d1b8d09e05d4ebecfce4d884f2)
+            check_type(argname="argument private_dns_enabled", value=private_dns_enabled, expected_type=type_hints["private_dns_enabled"])
             check_type(argname="argument resource_configuration_id", value=resource_configuration_id, expected_type=type_hints["resource_configuration_id"])
             check_type(argname="argument service_network_id", value=service_network_id, expected_type=type_hints["service_network_id"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if private_dns_enabled is not None:
+            self._values["private_dns_enabled"] = private_dns_enabled
         if resource_configuration_id is not None:
             self._values["resource_configuration_id"] = resource_configuration_id
         if service_network_id is not None:
             self._values["service_network_id"] = service_network_id
         if tags is not None:
             self._values["tags"] = tags
+
+    @builtins.property
+    def private_dns_enabled(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkresourceassociation.html#cfn-vpclattice-servicenetworkresourceassociation-privatednsenabled
+        '''
+        result = self._values.get("private_dns_enabled")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def resource_configuration_id(self) -> typing.Optional[builtins.str]:
@@ -4981,6 +5537,20 @@ class CfnServiceNetworkServiceAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceNetworkServiceAssociation")
+    @builtins.classmethod
+    def arn_for_service_network_service_association(
+        cls,
+        resource: _IServiceNetworkServiceAssociationRef_c2d152c8,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__93c79e283a5d207f6e819661e70bfa23641b257c8c7fd6d26513b3308e12ac56)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceNetworkServiceAssociation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5462,6 +6032,20 @@ class CfnServiceNetworkVpcAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServiceNetworkVpcAssociation")
+    @builtins.classmethod
+    def arn_for_service_network_vpc_association(
+        cls,
+        resource: _IServiceNetworkVpcAssociationRef_6dc1c638,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e6790bd0f54a8d9469eab17a8e4e3ee5fd11dda3aa2931f679332fd0c8d3322)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceNetworkVpcAssociation", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6145,6 +6729,17 @@ class CfnTargetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTargetGroup")
+    @builtins.classmethod
+    def arn_for_target_group(cls, resource: _ITargetGroupRef_52994392) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1b837a4eea298ea839bc910bb896af0fdb25461a7af698092aab05283a98ffa)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTargetGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7025,6 +7620,8 @@ __all__ = [
     "CfnAccessLogSubscriptionProps",
     "CfnAuthPolicy",
     "CfnAuthPolicyProps",
+    "CfnDomainVerification",
+    "CfnDomainVerificationProps",
     "CfnListener",
     "CfnListenerProps",
     "CfnResourceConfiguration",
@@ -7059,6 +7656,12 @@ def _typecheckingstub__5d1e4f257245d8e5be92083145da5c0b7311cde5a905b65c5cb20fb0c
     resource_identifier: typing.Optional[builtins.str] = None,
     service_network_log_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b006594f2b5a99a86ec25dbfeac8c2023ac71a3ba27153247b2879692fe06c02(
+    resource: _IAccessLogSubscriptionRef_3411271a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7151,6 +7754,62 @@ def _typecheckingstub__5d3fae469a4114f5041ab337d4b2b87c6bebd93bfab70112ebf9e8315
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e087b5ebdfc61e8611a8aecc13f27453c5d334d80ba357b19a41a8c67e1475cb(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    domain_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c3a151591e2a37cf3e4992e89269c839341b1b3d39773d92cd313ec1a0e3eb82(
+    resource: _IDomainVerificationRef_2bb01157,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01871c2423a3858ac5c857f4d87c18e6aede14b7661b5a314da2feff620efa3a(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__febcf80d5d0b30f3050d4e99d25999634469be29f1ed461ce200d535c11c0bd7(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7a460763a4e33b65d111e75dc866c5d7a8f5f1a0cfe3e0ac9c7364fd53927549(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0cdbc9351627dba59de976196e827173a6dc3cfd19e7026f2d1156106e4c17e8(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4b83ecaca3c5acb7c3f910dcca4c9c395d4ab1ba7e24b7f6253c7d2cf83e1d6c(
+    *,
+    name: typing.Optional[builtins.str] = None,
+    value: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__edf9347666231c58e5ba2fec87dba25e1d2390d973b1fbb321187566cfb52a43(
+    *,
+    domain_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2bf0492fe381e6c540d4fceb6599cf5162be861921ce004b402eda7520043896(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -7161,6 +7820,12 @@ def _typecheckingstub__2bf0492fe381e6c540d4fceb6599cf5162be861921ce004b402eda752
     port: typing.Optional[jsii.Number] = None,
     service_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6fbf0006897327f79b9538b500dd6178788b78898c654bc20af5493dc1ac2464(
+    resource: _IListenerRef_04c46b6b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7262,6 +7927,9 @@ def _typecheckingstub__6d403f9161b4d427bd92d4b1a1a263447b680ac47cb5036d62501f7fb
     name: builtins.str,
     resource_configuration_type: builtins.str,
     allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    custom_domain_name: typing.Optional[builtins.str] = None,
+    domain_verification_id: typing.Optional[builtins.str] = None,
+    group_domain: typing.Optional[builtins.str] = None,
     port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
     protocol_type: typing.Optional[builtins.str] = None,
     resource_configuration_auth_type: typing.Optional[builtins.str] = None,
@@ -7269,6 +7937,12 @@ def _typecheckingstub__6d403f9161b4d427bd92d4b1a1a263447b680ac47cb5036d62501f7fb
     resource_configuration_group_id: typing.Optional[builtins.str] = None,
     resource_gateway_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a026c929e042a2c8696f375006989eb8176f553b6f97062f37332b7a82cee58f(
+    resource: _IResourceConfigurationRef_b9c2bd0b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7299,6 +7973,24 @@ def _typecheckingstub__78c78698636e3ca61354c53cb8cdfc165b65a1ae7d941087c00f199b8
 
 def _typecheckingstub__d1ef450fae7a40fb3e9c4ee0eb161050d61b06bd98ab10bb1187f14c7b5c9ceb(
     value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d3cf4bb19142ab56d534f92ec9479ad1edaf9d6a25789c36c13d3740f3194297(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d03086b2a0c53c0c64e67a04a890a9781a35d61fc45d406070c884ee0f9aac4(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bebab4839b94bb14dd9b6aab81ccdac22c78ad7e4c963f74da28b2250e440a43(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7367,6 +8059,9 @@ def _typecheckingstub__797cfcb00db81ec7627009ae5f799c38c09652aee4a602480e341f9e4
     name: builtins.str,
     resource_configuration_type: builtins.str,
     allow_association_to_sharable_service_network: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    custom_domain_name: typing.Optional[builtins.str] = None,
+    domain_verification_id: typing.Optional[builtins.str] = None,
+    group_domain: typing.Optional[builtins.str] = None,
     port_ranges: typing.Optional[typing.Sequence[builtins.str]] = None,
     protocol_type: typing.Optional[builtins.str] = None,
     resource_configuration_auth_type: typing.Optional[builtins.str] = None,
@@ -7383,12 +8078,18 @@ def _typecheckingstub__c33d35acb93670756de87bb99dc9b48c5bdce217c8b7068ec8d831a66
     id: builtins.str,
     *,
     name: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     vpc_identifier: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
     ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__445eb71ebf6c45d6eca00f9b3cec34ae6e3bea84b534dca97f190deb34a4ed8f(
+    resource: _IResourceGatewayRef_f860a76d,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7450,11 +8151,11 @@ def _typecheckingstub__bf6ddd6a110cbcda973426d8df8b1e68b145ff32b0292ba9db84cd36b
 def _typecheckingstub__ed2c643634b9016a56acc1cdf5c3044eaa6f62d982922519a82cdbd49bdae174(
     *,
     name: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     vpc_identifier: builtins.str,
     ip_address_type: typing.Optional[builtins.str] = None,
     ipv4_addresses_per_eni: typing.Optional[jsii.Number] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -7513,6 +8214,12 @@ def _typecheckingstub__1f45608cbfcaa493b76adef96feba7bb9cfff722793ed8a8e3ad2ccbb
     name: typing.Optional[builtins.str] = None,
     service_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0f380d113a5affaf842481454c8f290afea5d4dae9fcb1fde03894699af4a840(
+    resource: _IRuleRef_b63824ff,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7678,6 +8385,12 @@ def _typecheckingstub__33a5a5cd8abc7f43b01f33e191d5a271b64487609134b2e87132fdd4f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4306f47865951580098581bd4908dbd0376f4788c912e18ccb0d89aa43414c60(
+    resource: _IServiceRef_a78feffa,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ede9bc29bf899f3899c1f881b2709bb1f0d23807a2e274be3a163f1b4b86acfd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7746,6 +8459,12 @@ def _typecheckingstub__656136ed78cebb4875c7f9ba5dbfd3a8474257e368bb831d8f332cd48
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ef44579ef46c3b8a5a03f8c105f893320862db1ec99497a8ace7373a08221c74(
+    resource: _IServiceNetworkRef_1e3df588,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d0d95730aa970c2f6def693b1a11d7668dcf1e0f233cf3d15c3c6b791e7af6d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7803,9 +8522,16 @@ def _typecheckingstub__ffab6e55fc82b7928229e0716dca828baee57de24513094d512751e4f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     resource_configuration_id: typing.Optional[builtins.str] = None,
     service_network_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05c5dedf0c91c43055294c80549e5e231513cc69847eba1c93df110e713b330a(
+    resource: _IServiceNetworkResourceAssociationRef_82997816,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7818,6 +8544,12 @@ def _typecheckingstub__5266c95707ced321dae79a2a458f435f13776f9a7eb6b7ccd15a2faec
 
 def _typecheckingstub__19f6968b61e203ddf7a2a3eb4577b74930ab5ee8b1fa259adefd457eb40389a3(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__049099c6a1901e52b5f08209c26332c7529a9d788fa834296fd8651843a26a74(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7842,6 +8574,7 @@ def _typecheckingstub__a7b2caf1b457306227662fd5f3d77c20c3a7709749640ee23bd13b6a2
 
 def _typecheckingstub__d8fd9f985a37c435043ce57ac34945022dddb3d1b8d09e05d4ebecfce4d884f2(
     *,
+    private_dns_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     resource_configuration_id: typing.Optional[builtins.str] = None,
     service_network_id: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7857,6 +8590,12 @@ def _typecheckingstub__5fca8cd49cce41155937ce0a58cb5d8795cc6cabeb7236c6e50e7dc2e
     service_identifier: typing.Optional[builtins.str] = None,
     service_network_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__93c79e283a5d207f6e819661e70bfa23641b257c8c7fd6d26513b3308e12ac56(
+    resource: _IServiceNetworkServiceAssociationRef_c2d152c8,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7925,6 +8664,12 @@ def _typecheckingstub__51a5a54250d817f615a37a7e170370627b854e32b301763e487856be4
     service_network_identifier: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_identifier: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3e6790bd0f54a8d9469eab17a8e4e3ee5fd11dda3aa2931f679332fd0c8d3322(
+    resource: _IServiceNetworkVpcAssociationRef_6dc1c638,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8018,6 +8763,12 @@ def _typecheckingstub__8f8ff68e6e993cdd9866d74d0830ca79ebc03271ed9540ff83660d8fd
     name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     targets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTargetGroup.TargetProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f1b837a4eea298ea839bc910bb896af0fdb25461a7af698092aab05283a98ffa(
+    resource: _ITargetGroupRef_52994392,
 ) -> None:
     """Type checking stubs"""
     pass

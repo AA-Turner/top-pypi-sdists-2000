@@ -65,6 +65,7 @@ from .. import (
     IResolvable as _IResolvable_da3f097b,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_lex import (
     BotAliasReference as _BotAliasReference_eb7b7ff7,
     BotReference as _BotReference_9f65244d,
@@ -85,7 +86,7 @@ class CfnBot(
 ):
     '''.. epigraph::
 
-   Amazon Lex V2 is the only supported version in AWS CloudFormation .
+   Amazon Lex V2 is the only supported version in CloudFormation .
 
     Specifies an Amazon Lex conversational bot.
 
@@ -108,7 +109,7 @@ class CfnBot(
         data_privacy: typing.Any,
         idle_session_ttl_in_seconds: jsii.Number,
         name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         auto_build_bot_locales: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         bot_file_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.S3LocationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bot_locales: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBot.BotLocaleProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -158,6 +159,17 @@ class CfnBot(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBot")
+    @builtins.classmethod
+    def arn_for_bot(cls, resource: _IBotRef_68a57b40) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e8b227597eac0169aa260ede9cf90fdb836e2125ced96820d150f287db42714e)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBot", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5019,7 +5031,7 @@ class CfnBot(
 
             :param s3_bucket_name: The name of the Amazon S3 bucket that contains the grammar source.
             :param s3_object_key: The path to the grammar in the Amazon S3 bucket.
-            :param kms_key_arn: The AWS KMS key required to decrypt the contents of the grammar, if any.
+            :param kms_key_arn: The AWS key required to decrypt the contents of the grammar, if any.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-grammarslottypesource.html
             :exampleMetadata: fixture=_generated
@@ -5072,7 +5084,7 @@ class CfnBot(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The AWS KMS key required to decrypt the contents of the grammar, if any.
+            '''The AWS  key required to decrypt the contents of the grammar, if any.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lex-bot-grammarslottypesource.html#cfn-lex-bot-grammarslottypesource-kmskeyarn
             '''
@@ -12621,7 +12633,7 @@ class CfnBotAlias(
 ):
     '''.. epigraph::
 
-   Amazon Lex V2 is the only supported version in AWS CloudFormation .
+   Amazon Lex V2 is the only supported version in CloudFormation .
 
     Specifies an alias for the specified version of a bot. Use an alias to enable you to change the version of a bot without updating applications that use the bot.
 
@@ -12734,6 +12746,17 @@ class CfnBotAlias(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForBotAlias")
+    @builtins.classmethod
+    def arn_for_bot_alias(cls, resource: _IBotAliasRef_8ce881f4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9163764d006888d8342c571427d400258a20e02ec3155f6bc79d96809b3c9fc5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBotAlias", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14096,7 +14119,7 @@ class CfnBotProps:
         data_privacy: typing.Any,
         idle_session_ttl_in_seconds: jsii.Number,
         name: builtins.str,
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         auto_build_bot_locales: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         bot_file_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         bot_locales: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.BotLocaleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14207,14 +14230,14 @@ class CfnBotProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role used to build and run the bot.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-bot.html#cfn-lex-bot-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def auto_build_bot_locales(
@@ -14339,7 +14362,7 @@ class CfnBotVersion(
 ):
     '''.. epigraph::
 
-   Amazon Lex V2 is the only supported version in AWS CloudFormation .
+   Amazon Lex V2 is the only supported version in CloudFormation .
 
     Specifies a new version of the bot based on the ``DRAFT`` version. If the ``DRAFT`` version of this resource hasn't changed since you created the last version, Amazon Lex doesn't create a new version, it returns the last created version.
 
@@ -14374,7 +14397,7 @@ class CfnBotVersion(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        bot_id: builtins.str,
+        bot_id: typing.Union[builtins.str, _IBotRef_68a57b40],
         bot_version_locale_specification: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBotVersion.BotVersionLocaleSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -14638,7 +14661,7 @@ class CfnBotVersionProps:
     def __init__(
         self,
         *,
-        bot_id: builtins.str,
+        bot_id: typing.Union[builtins.str, _IBotRef_68a57b40],
         bot_version_locale_specification: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBotVersion.BotVersionLocaleSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
         description: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -14683,14 +14706,14 @@ class CfnBotVersionProps:
             self._values["description"] = description
 
     @builtins.property
-    def bot_id(self) -> builtins.str:
+    def bot_id(self) -> typing.Union[builtins.str, _IBotRef_68a57b40]:
         '''The unique identifier of the bot.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lex-botversion.html#cfn-lex-botversion-botid
         '''
         result = self._values.get("bot_id")
         assert result is not None, "Required property 'bot_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IBotRef_68a57b40], result)
 
     @builtins.property
     def bot_version_locale_specification(
@@ -14735,7 +14758,7 @@ class CfnResourcePolicy(
 ):
     '''.. epigraph::
 
-   Amazon Lex V2 is the only supported version in AWS CloudFormation .
+   Amazon Lex V2 is the only supported version in CloudFormation .
 
     Specifies a new resource policy with the specified policy statements.
 
@@ -14957,7 +14980,7 @@ def _typecheckingstub__5c185fb71324df3b939f1cbff6a813b57733510cba6989dac147b9a3a
     data_privacy: typing.Any,
     idle_session_ttl_in_seconds: jsii.Number,
     name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     auto_build_bot_locales: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     bot_file_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bot_locales: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.BotLocaleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -14967,6 +14990,12 @@ def _typecheckingstub__5c185fb71324df3b939f1cbff6a813b57733510cba6989dac147b9a3a
     replication: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.ReplicationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     test_bot_alias_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.TestBotAliasSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     test_bot_alias_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e8b227597eac0169aa260ede9cf90fdb836e2125ced96820d150f287db42714e(
+    resource: _IBotRef_68a57b40,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16038,6 +16067,12 @@ def _typecheckingstub__57cf179c443f74ff3b1c43c56eef686f369711792e444e53d5668f07a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9163764d006888d8342c571427d400258a20e02ec3155f6bc79d96809b3c9fc5(
+    resource: _IBotAliasRef_8ce881f4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__69e306fef7aca1ecd05a385248f8253ae3fef56958f84e69c038125bb4b466d0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16210,7 +16245,7 @@ def _typecheckingstub__5bd27c18d3e2a58ae9aef768e05a25ed92243f8298c9575d9ff15c1d7
     data_privacy: typing.Any,
     idle_session_ttl_in_seconds: jsii.Number,
     name: builtins.str,
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     auto_build_bot_locales: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     bot_file_s3_location: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.S3LocationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bot_locales: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBot.BotLocaleProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -16228,7 +16263,7 @@ def _typecheckingstub__4f9a25d6b442565e4ffb72003af0c316d38fe2ab4bfc804150cdde827
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    bot_id: builtins.str,
+    bot_id: typing.Union[builtins.str, _IBotRef_68a57b40],
     bot_version_locale_specification: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBotVersion.BotVersionLocaleSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -16282,7 +16317,7 @@ def _typecheckingstub__4802f8ce0abbf146138354d6e73113a70e24b8b7c9612564e44de4c4a
 
 def _typecheckingstub__c7e84893518e25327247dbe2e6a44e1ceeb51478dafbe33bce09ea7685937be5(
     *,
-    bot_id: builtins.str,
+    bot_id: typing.Union[builtins.str, _IBotRef_68a57b40],
     bot_version_locale_specification: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBotVersion.BotVersionLocaleSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
 ) -> None:

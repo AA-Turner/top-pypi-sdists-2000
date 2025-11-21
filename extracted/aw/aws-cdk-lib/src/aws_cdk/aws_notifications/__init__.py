@@ -353,6 +353,17 @@ class CfnEventRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEventRule")
+    @builtins.classmethod
+    def arn_for_event_rule(cls, resource: _IEventRuleRef_2a7b3cf1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c1c85cd911fafeebce60e0eaf3204899ea9837ab8a933a65d031abc11018c42c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventRule", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -388,7 +399,7 @@ class CfnEventRule(
     def attr_arn(self) -> builtins.str:
         '''The Amazon Resource Name (ARN) of the ``EventRule`` .
 
-        AWS CloudFormation stack generates this ARN and then uses this ARN associated with the ``NotificationConfiguration`` .
+        CloudFormation stack generates this ARN and then uses this ARN associated with the ``NotificationConfiguration`` .
 
         :cloudformationAttribute: Arn
         '''
@@ -1177,6 +1188,20 @@ class CfnNotificationConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForNotificationConfiguration")
+    @builtins.classmethod
+    def arn_for_notification_configuration(
+        cls,
+        resource: _INotificationConfigurationRef_52a9226d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__12fcc600bb6d698b1177b4ab6b9265ffccc4c77e1396850195df3ea6113db7d4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNotificationConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1944,6 +1969,12 @@ def _typecheckingstub__ec202e2ad7890be955535389c490f73db69e1ae4c0e2b9af79f33a0bb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c1c85cd911fafeebce60e0eaf3204899ea9837ab8a933a65d031abc11018c42c(
+    resource: _IEventRuleRef_2a7b3cf1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7c5fa74e0d9c81586c85ebd06110e66abfa6f3eca8a5c7b89fcce4d070b434dd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2097,6 +2128,12 @@ def _typecheckingstub__e5a1cf31f790937b5967ad78a42e8a6c98b04b21643bfcdd379cabb7f
     name: builtins.str,
     aggregation_duration: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__12fcc600bb6d698b1177b4ab6b9265ffccc4c77e1396850195df3ea6113db7d4(
+    resource: _INotificationConfigurationRef_52a9226d,
 ) -> None:
     """Type checking stubs"""
     pass

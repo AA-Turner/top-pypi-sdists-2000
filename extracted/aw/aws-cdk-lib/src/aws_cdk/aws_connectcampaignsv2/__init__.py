@@ -330,6 +330,17 @@ class CfnCampaign(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCampaign")
+    @builtins.classmethod
+    def arn_for_campaign(cls, resource: _ICampaignRef_408c1832) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9fc69a65d7e6e3f42c04772f0ea86d7fe04188e3e9db32e64d4478bc1964e332)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCampaign", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3419,6 +3430,12 @@ def _typecheckingstub__228f2b3a0b621ad8a32effe36abeb2d513f50077bd0ad5de7f33f1ea8
     schedule: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.ScheduleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.SourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9fc69a65d7e6e3f42c04772f0ea86d7fe04188e3e9db32e64d4478bc1964e332(
+    resource: _ICampaignRef_408c1832,
 ) -> None:
     """Type checking stubs"""
     pass

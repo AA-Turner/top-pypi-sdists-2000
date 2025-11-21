@@ -4806,6 +4806,17 @@ class CfnApi(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApi")
+    @builtins.classmethod
+    def arn_for_api(cls, resource: _IApiRef_f01990a1) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e2df1344aa2741a683b50730750c1854a607d6c1a8bff8eda3db575e3a42f182)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApi", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6243,6 +6254,17 @@ class CfnApiKey(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApiKey")
+    @builtins.classmethod
+    def arn_for_api_key(cls, resource: _IApiKeyRef_f32c50c4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a341c62de2d38187c77188eabc9c2fcaa54c44f3286b6eead673d594ef19cd09)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApiKey", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6712,6 +6734,20 @@ class CfnChannelNamespace(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForChannelNamespace")
+    @builtins.classmethod
+    def arn_for_channel_namespace(
+        cls,
+        resource: _IChannelNamespaceRef_68af2ba2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24013cad727d12539eb199564609149610402c9bb64b1ece064ae152c9fee3f9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannelNamespace", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7555,7 +7591,7 @@ class CfnDataSource(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -7567,7 +7603,7 @@ class CfnDataSource(
         metrics_config: typing.Optional[builtins.str] = None,
         open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.OpenSearchServiceConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataSource.RelationalDatabaseConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        service_role_arn: typing.Optional[builtins.str] = None,
+        service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Create a new ``AWS::AppSync::DataSource``.
 
@@ -7608,6 +7644,17 @@ class CfnDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataSource")
+    @builtins.classmethod
+    def arn_for_data_source(cls, resource: _IDataSourceRef_7564634a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__817c1bb4621b3e4cc61fd3ef13f31a4500cece457238281138fc52d410dc657f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataSource", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8831,7 +8878,7 @@ class CfnDataSourceProps:
     def __init__(
         self,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         name: builtins.str,
         type: builtins.str,
         description: typing.Optional[builtins.str] = None,
@@ -8843,7 +8890,7 @@ class CfnDataSourceProps:
         metrics_config: typing.Optional[builtins.str] = None,
         open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        service_role_arn: typing.Optional[builtins.str] = None,
+        service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     ) -> None:
         '''Properties for defining a ``CfnDataSource``.
 
@@ -8978,14 +9025,14 @@ class CfnDataSourceProps:
             self._values["service_role_arn"] = service_role_arn
 
     @builtins.property
-    def api_id(self) -> builtins.str:
+    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
         '''Unique AWS AppSync GraphQL API identifier where this data source will be created.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
 
     @builtins.property
     def name(self) -> builtins.str:
@@ -9121,7 +9168,9 @@ class CfnDataSourceProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataSource.RelationalDatabaseConfigProperty]], result)
 
     @builtins.property
-    def service_role_arn(self) -> typing.Optional[builtins.str]:
+    def service_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The AWS Identity and Access Management service role ARN for the data source.
 
         The system assumes this role when accessing the data source.
@@ -9131,7 +9180,7 @@ class CfnDataSourceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-datasource.html#cfn-appsync-datasource-servicerolearn
         '''
         result = self._values.get("service_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9207,6 +9256,17 @@ class CfnDomainName(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDomainName")
+    @builtins.classmethod
+    def arn_for_domain_name(cls, resource: _IDomainNameRef_15b9da81) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78d1879a619810f28893ebecc4eeea2524ff6277dc4f7404821d7f09883b8ea1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomainName", [resource]))
 
     @jsii.member(jsii_name="fromDomainName")
     @builtins.classmethod
@@ -9415,8 +9475,8 @@ class CfnDomainNameApiAssociation(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        api_id: builtins.str,
-        domain_name: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
     ) -> None:
         '''Create a new ``AWS::AppSync::DomainNameApiAssociation``.
 
@@ -9519,7 +9579,12 @@ class CfnDomainNameApiAssociation(
     name_mapping={"api_id": "apiId", "domain_name": "domainName"},
 )
 class CfnDomainNameApiAssociationProps:
-    def __init__(self, *, api_id: builtins.str, domain_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+        domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
+    ) -> None:
         '''Properties for defining a ``CfnDomainNameApiAssociation``.
 
         :param api_id: The API ID.
@@ -9549,24 +9614,24 @@ class CfnDomainNameApiAssociationProps:
         }
 
     @builtins.property
-    def api_id(self) -> builtins.str:
+    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
         '''The API ID.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainnameapiassociation.html#cfn-appsync-domainnameapiassociation-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
 
     @builtins.property
-    def domain_name(self) -> builtins.str:
+    def domain_name(self) -> typing.Union[builtins.str, _IDomainNameRef_15b9da81]:
         '''The domain name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-domainnameapiassociation.html#cfn-appsync-domainnameapiassociation-domainname
         '''
         result = self._values.get("domain_name")
         assert result is not None, "Required property 'domain_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IDomainNameRef_15b9da81], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9705,7 +9770,7 @@ class CfnFunctionConfiguration(
     You can use pipeline resolvers to attach functions. For more information, see `Pipeline Resolvers <https://docs.aws.amazon.com/appsync/latest/devguide/pipeline-resolvers.html>`_ in the *AWS AppSync Developer Guide* .
     .. epigraph::
 
-       When you submit an update, AWS CloudFormation updates resources based on differences between what you submit and the stack's current template. To cause this resource to be updated you must change a property value for this resource in the AWS CloudFormation template. Changing the Amazon S3 file content without changing a property value will not result in an update operation.
+       When you submit an update, AWS CloudFormation updates resources based on differences between what you submit and the stack's current template. To cause this resource to be updated you must change a property value for this resource in the CloudFormation template. Changing the Amazon S3 file content without changing a property value will not result in an update operation.
 
        See `Update Behaviors of Stack Resources <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-update-behaviors.html>`_ in the *AWS CloudFormation User Guide* .
 
@@ -9755,7 +9820,7 @@ class CfnFunctionConfiguration(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -10349,7 +10414,7 @@ class CfnFunctionConfigurationProps:
     def __init__(
         self,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         data_source_name: builtins.str,
         name: builtins.str,
         code: typing.Optional[builtins.str] = None,
@@ -10465,14 +10530,14 @@ class CfnFunctionConfigurationProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> builtins.str:
+    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
         '''The AWS AppSync GraphQL API that you want to attach using this function.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-functionconfiguration.html#cfn-appsync-functionconfiguration-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
 
     @builtins.property
     def data_source_name(self) -> builtins.str:
@@ -10787,6 +10852,17 @@ class CfnGraphQLApi(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGraphQLApi")
+    @builtins.classmethod
+    def arn_for_graph_ql_api(cls, resource: _IGraphQLApiRef_d46d77ba) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d6ec39faa527b1f7ae6fa66fa5e5e048dc11fe7a338af7caaf4ca22c1c60a9ed)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGraphQLApi", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12695,7 +12771,7 @@ class CfnResolver(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         field_name: builtins.str,
         type_name: builtins.str,
         caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnResolver.CachingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -12760,6 +12836,17 @@ class CfnResolver(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResolver")
+    @builtins.classmethod
+    def arn_for_resolver(cls, resource: _IResolverRef_2a44c944) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce2534ccaee597ec196f1cb88a6a60dea9cc271160ac4059575f4f6bdc10457a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResolver", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13475,7 +13562,7 @@ class CfnResolverProps:
     def __init__(
         self,
         *,
-        api_id: builtins.str,
+        api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
         field_name: builtins.str,
         type_name: builtins.str,
         caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -13616,14 +13703,14 @@ class CfnResolverProps:
             self._values["sync_config"] = sync_config
 
     @builtins.property
-    def api_id(self) -> builtins.str:
+    def api_id(self) -> typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba]:
         '''The AWS AppSync GraphQL API to which you want to attach this resolver.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-appsync-resolver.html#cfn-appsync-resolver-apiid
         '''
         result = self._values.get("api_id")
         assert result is not None, "Required property 'api_id' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba], result)
 
     @builtins.property
     def field_name(self) -> builtins.str:
@@ -26861,6 +26948,12 @@ def _typecheckingstub__9b24e030284e4cb760e04c0345cc69b457962fa5c53b82f009a5c412a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e2df1344aa2741a683b50730750c1854a607d6c1a8bff8eda3db575e3a42f182(
+    resource: _IApiRef_f01990a1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1a34658e511f6fa9562934d95c768fd4b2af2314ddf2dab2969f39073417c21f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -27062,6 +27155,12 @@ def _typecheckingstub__e6065dd18c9d420fd4fcd70aced8416006f044f82aecff54150165e83
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a341c62de2d38187c77188eabc9c2fcaa54c44f3286b6eead673d594ef19cd09(
+    resource: _IApiKeyRef_f32c50c4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1f8f02bc91fc0b32c990b8d08a5d7a0ef78a88363920fa69d4196dcc7f2ecfb3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -27123,6 +27222,12 @@ def _typecheckingstub__a093c57f7353830d56f8cde41e8653e333d0f0b91da87dd9ca86d7246
     publish_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannelNamespace.AuthModeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     subscribe_auth_modes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannelNamespace.AuthModeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24013cad727d12539eb199564609149610402c9bb64b1ece064ae152c9fee3f9(
+    resource: _IChannelNamespaceRef_68af2ba2,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27243,7 +27348,7 @@ def _typecheckingstub__f2dc8968068d09d9cb599cea5efad1a18016c4eca4fcc6c15e6169a08
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -27255,7 +27360,13 @@ def _typecheckingstub__f2dc8968068d09d9cb599cea5efad1a18016c4eca4fcc6c15e6169a08
     metrics_config: typing.Optional[builtins.str] = None,
     open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    service_role_arn: typing.Optional[builtins.str] = None,
+    service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__817c1bb4621b3e4cc61fd3ef13f31a4500cece457238281138fc52d410dc657f(
+    resource: _IDataSourceRef_7564634a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27445,7 +27556,7 @@ def _typecheckingstub__4357a1467126648487c710ab6683bf4d3954927d7c54c51b699c6f185
 
 def _typecheckingstub__77a27321db4878d92375c672ad2fd1de24e61150d04b9a9b7f544b60bf81d6d7(
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     name: builtins.str,
     type: builtins.str,
     description: typing.Optional[builtins.str] = None,
@@ -27457,7 +27568,7 @@ def _typecheckingstub__77a27321db4878d92375c672ad2fd1de24e61150d04b9a9b7f544b60b
     metrics_config: typing.Optional[builtins.str] = None,
     open_search_service_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.OpenSearchServiceConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     relational_database_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataSource.RelationalDatabaseConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    service_role_arn: typing.Optional[builtins.str] = None,
+    service_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27470,6 +27581,12 @@ def _typecheckingstub__678693553586e835af6ffdc6ac5860f81ffd96791de73368d44d41d3a
     domain_name: builtins.str,
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78d1879a619810f28893ebecc4eeea2524ff6277dc4f7404821d7f09883b8ea1(
+    resource: _IDomainNameRef_15b9da81,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27530,8 +27647,8 @@ def _typecheckingstub__053707dba2452392a89bf081ac7d866beeff7c348bacbfe351a815a63
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: builtins.str,
-    domain_name: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27562,8 +27679,8 @@ def _typecheckingstub__8dd7f18cf3cb236d2ffa804f6505477d416e7b844f92f9ba86f74aea1
 
 def _typecheckingstub__10a899ca55570211a5da411a83f28448dd1e54a82a4e83cb8d8ca2b1f292ebf5(
     *,
-    api_id: builtins.str,
-    domain_name: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
+    domain_name: typing.Union[builtins.str, _IDomainNameRef_15b9da81],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -27582,7 +27699,7 @@ def _typecheckingstub__6a4866dafc094db4e3a18f26e71e3f210828f39f8958d47fe2d4c085a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     data_source_name: builtins.str,
     name: builtins.str,
     code: typing.Optional[builtins.str] = None,
@@ -27722,7 +27839,7 @@ def _typecheckingstub__441bd762beaec70fd67cf86d84e674beae78bf0e9f78d94f1b683b403
 
 def _typecheckingstub__68fb3836c61478b4bf652995d052fa027e6b2f6b9606529969b49a74037c3061(
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     data_source_name: builtins.str,
     name: builtins.str,
     code: typing.Optional[builtins.str] = None,
@@ -27762,6 +27879,12 @@ def _typecheckingstub__54e0e0488820e5a410f75b28895d4271db1e58bd6c71e17fd04fcf3fa
     user_pool_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGraphQLApi.UserPoolConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     visibility: typing.Optional[builtins.str] = None,
     xray_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d6ec39faa527b1f7ae6fa66fa5e5e048dc11fe7a338af7caaf4ca22c1c60a9ed(
+    resource: _IGraphQLApiRef_d46d77ba,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -28030,7 +28153,7 @@ def _typecheckingstub__45a19b37f9f570b32d81c1e70bfcb51be048fdffa3df94ad801e69b81
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     field_name: builtins.str,
     type_name: builtins.str,
     caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -28047,6 +28170,12 @@ def _typecheckingstub__45a19b37f9f570b32d81c1e70bfcb51be048fdffa3df94ad801e69b81
     response_mapping_template_s3_location: typing.Optional[builtins.str] = None,
     runtime: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.AppSyncRuntimeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sync_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.SyncConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce2534ccaee597ec196f1cb88a6a60dea9cc271160ac4059575f4f6bdc10457a(
+    resource: _IResolverRef_2a44c944,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -28206,7 +28335,7 @@ def _typecheckingstub__fd8efb0c43d72e5061a7c9c3de6483787260ccff8a3dff5a5152ca959
 
 def _typecheckingstub__57b1ba8346de8783ad38f1a2377fd50bdd7577d903f4b68402c7b5ab604f16e5(
     *,
-    api_id: builtins.str,
+    api_id: typing.Union[builtins.str, _IGraphQLApiRef_d46d77ba],
     field_name: builtins.str,
     type_name: builtins.str,
     caching_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnResolver.CachingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

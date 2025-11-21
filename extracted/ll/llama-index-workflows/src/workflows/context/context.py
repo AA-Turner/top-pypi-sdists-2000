@@ -30,16 +30,15 @@ from workflows.events import (
     StartEvent,
     StopEvent,
 )
-from workflows.runtime.types.internal_state import BrokerState
-from workflows.runtime.broker import WorkflowBroker
+from workflows.handler import WorkflowHandler
 from workflows.plugins.basic import basic_runtime
+from workflows.runtime.broker import WorkflowBroker
+from workflows.runtime.types.internal_state import BrokerState
 from workflows.runtime.types.plugin import Plugin, WorkflowRuntime
 from workflows.types import RunResultT
-from workflows.handler import WorkflowHandler
 
 from .serializers import BaseSerializer, JsonSerializer
 from .state_store import MODEL_T, DictState, InMemoryStateStore
-
 
 if TYPE_CHECKING:  # pragma: no cover
     from workflows import Workflow
@@ -215,13 +214,14 @@ class Context(Generic[MODEL_T]):
         # Initialize a runtime plugin (asyncio-based by default)
         runtime: WorkflowRuntime = plugin or self._plugin.new_runtime(str(uuid.uuid4()))
         # Initialize the new broker implementation (broker2)
-        self._broker_run = WorkflowBroker(
+        broker: WorkflowBroker[MODEL_T] = WorkflowBroker(
             workflow=workflow,
-            context=self,
+            context=cast("Context[MODEL_T]", self),
             runtime=runtime,
             plugin=self._plugin,
         )
-        return self._broker_run
+        self._broker_run = broker
+        return broker
 
     def _workflow_run(
         self,

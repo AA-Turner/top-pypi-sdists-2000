@@ -121,6 +121,8 @@ from .literals import (
     EkPubKeyTypeType,
     ElasticGpuStatusType,
     EnaSupportType,
+    EncryptionStateValueType,
+    EncryptionSupportOptionValueType,
     EndDateTypeType,
     EndpointIpAddressTypeType,
     EphemeralNvmeSupportType,
@@ -200,6 +202,7 @@ from .literals import (
     IpamPolicyResourceTypeType,
     IpamPolicyStateType,
     IpamPoolAllocationResourceTypeType,
+    IpamPoolAwsServiceType,
     IpamPoolCidrFailureCodeType,
     IpamPoolCidrStateType,
     IpamPoolPublicIpSourceType,
@@ -360,6 +363,9 @@ from .literals import (
     TransitGatewayAttachmentResourceTypeType,
     TransitGatewayAttachmentStateType,
     TransitGatewayConnectPeerStateType,
+    TransitGatewayMeteringPayerTypeType,
+    TransitGatewayMeteringPolicyEntryStateType,
+    TransitGatewayMeteringPolicyStateType,
     TransitGatewayMulitcastDomainAssociationStateType,
     TransitGatewayMulticastDomainStateType,
     TransitGatewayPolicyTableStateType,
@@ -396,6 +402,7 @@ from .literals import (
     VpcBlockPublicAccessExclusionStateType,
     VpcBlockPublicAccessStateType,
     VpcCidrBlockStateCodeType,
+    VpcEncryptionControlExclusionStateInputType,
     VpcEncryptionControlExclusionStateType,
     VpcEncryptionControlModeType,
     VpcEncryptionControlStateType,
@@ -854,6 +861,10 @@ __all__ = (
     "CreateTransitGatewayConnectRequestOptionsTypeDef",
     "CreateTransitGatewayConnectRequestTypeDef",
     "CreateTransitGatewayConnectResultTypeDef",
+    "CreateTransitGatewayMeteringPolicyEntryRequestTypeDef",
+    "CreateTransitGatewayMeteringPolicyEntryResultTypeDef",
+    "CreateTransitGatewayMeteringPolicyRequestTypeDef",
+    "CreateTransitGatewayMeteringPolicyResultTypeDef",
     "CreateTransitGatewayMulticastDomainRequestOptionsTypeDef",
     "CreateTransitGatewayMulticastDomainRequestTypeDef",
     "CreateTransitGatewayMulticastDomainResultTypeDef",
@@ -897,6 +908,8 @@ __all__ = (
     "CreateVolumeRequestTypeDef",
     "CreateVpcBlockPublicAccessExclusionRequestTypeDef",
     "CreateVpcBlockPublicAccessExclusionResultTypeDef",
+    "CreateVpcEncryptionControlRequestTypeDef",
+    "CreateVpcEncryptionControlResultTypeDef",
     "CreateVpcEndpointConnectionNotificationRequestTypeDef",
     "CreateVpcEndpointConnectionNotificationResultTypeDef",
     "CreateVpcEndpointRequestTypeDef",
@@ -1058,6 +1071,10 @@ __all__ = (
     "DeleteTransitGatewayConnectPeerResultTypeDef",
     "DeleteTransitGatewayConnectRequestTypeDef",
     "DeleteTransitGatewayConnectResultTypeDef",
+    "DeleteTransitGatewayMeteringPolicyEntryRequestTypeDef",
+    "DeleteTransitGatewayMeteringPolicyEntryResultTypeDef",
+    "DeleteTransitGatewayMeteringPolicyRequestTypeDef",
+    "DeleteTransitGatewayMeteringPolicyResultTypeDef",
     "DeleteTransitGatewayMulticastDomainRequestTypeDef",
     "DeleteTransitGatewayMulticastDomainResultTypeDef",
     "DeleteTransitGatewayPeeringAttachmentRequestTypeDef",
@@ -1088,6 +1105,8 @@ __all__ = (
     "DeleteVolumeRequestVolumeDeleteTypeDef",
     "DeleteVpcBlockPublicAccessExclusionRequestTypeDef",
     "DeleteVpcBlockPublicAccessExclusionResultTypeDef",
+    "DeleteVpcEncryptionControlRequestTypeDef",
+    "DeleteVpcEncryptionControlResultTypeDef",
     "DeleteVpcEndpointConnectionNotificationsRequestTypeDef",
     "DeleteVpcEndpointConnectionNotificationsResultTypeDef",
     "DeleteVpcEndpointServiceConfigurationsRequestTypeDef",
@@ -1559,6 +1578,8 @@ __all__ = (
     "DescribeTransitGatewayConnectsRequestPaginateTypeDef",
     "DescribeTransitGatewayConnectsRequestTypeDef",
     "DescribeTransitGatewayConnectsResultTypeDef",
+    "DescribeTransitGatewayMeteringPoliciesRequestTypeDef",
+    "DescribeTransitGatewayMeteringPoliciesResultTypeDef",
     "DescribeTransitGatewayMulticastDomainsRequestPaginateTypeDef",
     "DescribeTransitGatewayMulticastDomainsRequestTypeDef",
     "DescribeTransitGatewayMulticastDomainsResultTypeDef",
@@ -1626,6 +1647,8 @@ __all__ = (
     "DescribeVpcClassicLinkDnsSupportResultTypeDef",
     "DescribeVpcClassicLinkRequestTypeDef",
     "DescribeVpcClassicLinkResultTypeDef",
+    "DescribeVpcEncryptionControlsRequestTypeDef",
+    "DescribeVpcEncryptionControlsResultTypeDef",
     "DescribeVpcEndpointAssociationsRequestTypeDef",
     "DescribeVpcEndpointAssociationsResultTypeDef",
     "DescribeVpcEndpointConnectionNotificationsRequestPaginateTypeDef",
@@ -1857,6 +1880,7 @@ __all__ = (
     "EnableVpcClassicLinkResultTypeDef",
     "EnclaveOptionsRequestTypeDef",
     "EnclaveOptionsTypeDef",
+    "EncryptionSupportTypeDef",
     "EventInformationTypeDef",
     "ExplanationTypeDef",
     "ExportClientVpnClientCertificateRevocationListRequestTypeDef",
@@ -2041,6 +2065,8 @@ __all__ = (
     "GetTransitGatewayAttachmentPropagationsRequestPaginateTypeDef",
     "GetTransitGatewayAttachmentPropagationsRequestTypeDef",
     "GetTransitGatewayAttachmentPropagationsResultTypeDef",
+    "GetTransitGatewayMeteringPolicyEntriesRequestTypeDef",
+    "GetTransitGatewayMeteringPolicyEntriesResultTypeDef",
     "GetTransitGatewayMulticastDomainAssociationsRequestPaginateTypeDef",
     "GetTransitGatewayMulticastDomainAssociationsRequestTypeDef",
     "GetTransitGatewayMulticastDomainAssociationsResultTypeDef",
@@ -2064,6 +2090,8 @@ __all__ = (
     "GetVerifiedAccessEndpointTargetsResultTypeDef",
     "GetVerifiedAccessGroupPolicyRequestTypeDef",
     "GetVerifiedAccessGroupPolicyResultTypeDef",
+    "GetVpcResourcesBlockingEncryptionEnforcementRequestTypeDef",
+    "GetVpcResourcesBlockingEncryptionEnforcementResultTypeDef",
     "GetVpnConnectionDeviceSampleConfigurationRequestTypeDef",
     "GetVpnConnectionDeviceSampleConfigurationResultTypeDef",
     "GetVpnConnectionDeviceTypesRequestPaginateTypeDef",
@@ -2315,6 +2343,8 @@ __all__ = (
     "ListSnapshotsInRecycleBinRequestPaginateTypeDef",
     "ListSnapshotsInRecycleBinRequestTypeDef",
     "ListSnapshotsInRecycleBinResultTypeDef",
+    "ListVolumesInRecycleBinRequestTypeDef",
+    "ListVolumesInRecycleBinResultTypeDef",
     "LoadBalancersConfigOutputTypeDef",
     "LoadBalancersConfigTypeDef",
     "LoadPermissionModificationsTypeDef",
@@ -2442,6 +2472,8 @@ __all__ = (
     "ModifyTrafficMirrorFilterRuleResultTypeDef",
     "ModifyTrafficMirrorSessionRequestTypeDef",
     "ModifyTrafficMirrorSessionResultTypeDef",
+    "ModifyTransitGatewayMeteringPolicyRequestTypeDef",
+    "ModifyTransitGatewayMeteringPolicyResultTypeDef",
     "ModifyTransitGatewayOptionsTypeDef",
     "ModifyTransitGatewayPrefixListReferenceRequestTypeDef",
     "ModifyTransitGatewayPrefixListReferenceResultTypeDef",
@@ -2482,6 +2514,8 @@ __all__ = (
     "ModifyVpcBlockPublicAccessExclusionResultTypeDef",
     "ModifyVpcBlockPublicAccessOptionsRequestTypeDef",
     "ModifyVpcBlockPublicAccessOptionsResultTypeDef",
+    "ModifyVpcEncryptionControlRequestTypeDef",
+    "ModifyVpcEncryptionControlResultTypeDef",
     "ModifyVpcEndpointConnectionNotificationRequestTypeDef",
     "ModifyVpcEndpointConnectionNotificationResultTypeDef",
     "ModifyVpcEndpointRequestTypeDef",
@@ -2746,6 +2780,8 @@ __all__ = (
     "RestoreSnapshotFromRecycleBinResultTypeDef",
     "RestoreSnapshotTierRequestTypeDef",
     "RestoreSnapshotTierResultTypeDef",
+    "RestoreVolumeFromRecycleBinRequestTypeDef",
+    "RestoreVolumeFromRecycleBinResultTypeDef",
     "RevokeClientVpnIngressRequestTypeDef",
     "RevokeClientVpnIngressResultTypeDef",
     "RevokeSecurityGroupEgressRequestSecurityGroupRevokeEgressTypeDef",
@@ -2926,6 +2962,9 @@ __all__ = (
     "TransitGatewayConnectPeerTypeDef",
     "TransitGatewayConnectRequestBgpOptionsTypeDef",
     "TransitGatewayConnectTypeDef",
+    "TransitGatewayMeteringPolicyEntryTypeDef",
+    "TransitGatewayMeteringPolicyRuleTypeDef",
+    "TransitGatewayMeteringPolicyTypeDef",
     "TransitGatewayMulticastDeregisteredGroupMembersTypeDef",
     "TransitGatewayMulticastDeregisteredGroupSourcesTypeDef",
     "TransitGatewayMulticastDomainAssociationTypeDef",
@@ -3023,6 +3062,7 @@ __all__ = (
     "VolumeCreateTagsRequestTypeDef",
     "VolumeDetailTypeDef",
     "VolumeModificationTypeDef",
+    "VolumeRecycleBinInfoTypeDef",
     "VolumeResponseTypeDef",
     "VolumeStatusActionTypeDef",
     "VolumeStatusAttachmentStatusTypeDef",
@@ -3038,9 +3078,11 @@ __all__ = (
     "VpcCidrBlockStateTypeDef",
     "VpcClassicLinkTypeDef",
     "VpcCreateTagsRequestTypeDef",
+    "VpcEncryptionControlConfigurationTypeDef",
     "VpcEncryptionControlExclusionTypeDef",
     "VpcEncryptionControlExclusionsTypeDef",
     "VpcEncryptionControlTypeDef",
+    "VpcEncryptionNonCompliantResourceTypeDef",
     "VpcEndpointAssociationTypeDef",
     "VpcEndpointConnectionTypeDef",
     "VpcEndpointTypeDef",
@@ -4072,12 +4114,18 @@ class CloudWatchLogOptionsSpecificationTypeDef(TypedDict):
     LogEnabled: NotRequired[bool]
     LogGroupArn: NotRequired[str]
     LogOutputFormat: NotRequired[str]
+    BgpLogEnabled: NotRequired[bool]
+    BgpLogGroupArn: NotRequired[str]
+    BgpLogOutputFormat: NotRequired[str]
 
 
 class CloudWatchLogOptionsTypeDef(TypedDict):
     LogEnabled: NotRequired[bool]
     LogGroupArn: NotRequired[str]
     LogOutputFormat: NotRequired[str]
+    BgpLogEnabled: NotRequired[bool]
+    BgpLogGroupArn: NotRequired[str]
+    BgpLogOutputFormat: NotRequired[str]
 
 
 class CoipAddressUsageTypeDef(TypedDict):
@@ -4422,6 +4470,26 @@ CreateTransitGatewayConnectRequestOptionsTypeDef = TypedDict(
         "Protocol": Literal["gre"],
     },
 )
+CreateTransitGatewayMeteringPolicyEntryRequestTypeDef = TypedDict(
+    "CreateTransitGatewayMeteringPolicyEntryRequestTypeDef",
+    {
+        "TransitGatewayMeteringPolicyId": str,
+        "PolicyRuleNumber": int,
+        "MeteredAccount": TransitGatewayMeteringPayerTypeType,
+        "SourceTransitGatewayAttachmentId": NotRequired[str],
+        "SourceTransitGatewayAttachmentType": NotRequired[TransitGatewayAttachmentResourceTypeType],
+        "SourceCidrBlock": NotRequired[str],
+        "SourcePortRange": NotRequired[str],
+        "DestinationTransitGatewayAttachmentId": NotRequired[str],
+        "DestinationTransitGatewayAttachmentType": NotRequired[
+            TransitGatewayAttachmentResourceTypeType
+        ],
+        "DestinationCidrBlock": NotRequired[str],
+        "DestinationPortRange": NotRequired[str],
+        "Protocol": NotRequired[str],
+        "DryRun": NotRequired[bool],
+    },
+)
 
 
 class CreateTransitGatewayMulticastDomainRequestOptionsTypeDef(TypedDict):
@@ -4544,6 +4612,18 @@ class SubnetConfigurationTypeDef(TypedDict):
     SubnetId: NotRequired[str]
     Ipv4: NotRequired[str]
     Ipv6: NotRequired[str]
+
+
+class VpcEncryptionControlConfigurationTypeDef(TypedDict):
+    Mode: VpcEncryptionControlModeType
+    InternetGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    EgressOnlyInternetGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    NatGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VirtualPrivateGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VpcPeeringExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    LambdaExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VpcLatticeExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    ElasticFileSystemExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
 
 
 class CreateVpnConnectionRouteRequestTypeDef(TypedDict):
@@ -5017,6 +5097,17 @@ class DeleteTransitGatewayConnectRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class DeleteTransitGatewayMeteringPolicyEntryRequestTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyId: str
+    PolicyRuleNumber: int
+    DryRun: NotRequired[bool]
+
+
+class DeleteTransitGatewayMeteringPolicyRequestTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyId: str
+    DryRun: NotRequired[bool]
+
+
 class DeleteTransitGatewayMulticastDomainRequestTypeDef(TypedDict):
     TransitGatewayMulticastDomainId: str
     DryRun: NotRequired[bool]
@@ -5099,6 +5190,11 @@ class DeleteVolumeRequestVolumeDeleteTypeDef(TypedDict):
 
 class DeleteVpcBlockPublicAccessExclusionRequestTypeDef(TypedDict):
     ExclusionId: str
+    DryRun: NotRequired[bool]
+
+
+class DeleteVpcEncryptionControlRequestTypeDef(TypedDict):
+    VpcEncryptionControlId: str
     DryRun: NotRequired[bool]
 
 
@@ -6293,6 +6389,11 @@ class EnclaveOptionsTypeDef(TypedDict):
     Enabled: NotRequired[bool]
 
 
+class EncryptionSupportTypeDef(TypedDict):
+    EncryptionState: NotRequired[EncryptionStateValueType]
+    StateMessage: NotRequired[str]
+
+
 class EventInformationTypeDef(TypedDict):
     EventDescription: NotRequired[str]
     EventSubType: NotRequired[str]
@@ -6760,6 +6861,24 @@ class VerifiedAccessEndpointTargetTypeDef(TypedDict):
 class GetVerifiedAccessGroupPolicyRequestTypeDef(TypedDict):
     VerifiedAccessGroupId: str
     DryRun: NotRequired[bool]
+
+
+class GetVpcResourcesBlockingEncryptionEnforcementRequestTypeDef(TypedDict):
+    VpcId: str
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
+
+VpcEncryptionNonCompliantResourceTypeDef = TypedDict(
+    "VpcEncryptionNonCompliantResourceTypeDef",
+    {
+        "Id": NotRequired[str],
+        "Type": NotRequired[str],
+        "Description": NotRequired[str],
+        "IsExcludable": NotRequired[bool],
+    },
+)
 
 
 class GetVpnConnectionDeviceSampleConfigurationRequestTypeDef(TypedDict):
@@ -7445,6 +7564,13 @@ class SnapshotRecycleBinInfoTypeDef(TypedDict):
     VolumeId: NotRequired[str]
 
 
+class ListVolumesInRecycleBinRequestTypeDef(TypedDict):
+    VolumeIds: NotRequired[Sequence[str]]
+    DryRun: NotRequired[bool]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+
+
 class LoadPermissionRequestTypeDef(TypedDict):
     Group: NotRequired[Literal["all"]]
     UserId: NotRequired[str]
@@ -7688,6 +7814,13 @@ class ModifyTrafficMirrorSessionRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class ModifyTransitGatewayMeteringPolicyRequestTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyId: str
+    AddMiddleboxAttachmentIds: NotRequired[Sequence[str]]
+    RemoveMiddleboxAttachmentIds: NotRequired[Sequence[str]]
+    DryRun: NotRequired[bool]
+
+
 class ModifyTransitGatewayOptionsTypeDef(TypedDict):
     AddTransitGatewayCidrBlocks: NotRequired[Sequence[str]]
     RemoveTransitGatewayCidrBlocks: NotRequired[Sequence[str]]
@@ -7700,6 +7833,7 @@ class ModifyTransitGatewayOptionsTypeDef(TypedDict):
     DefaultRouteTablePropagation: NotRequired[DefaultRouteTablePropagationValueType]
     PropagationDefaultRouteTableId: NotRequired[str]
     AmazonSideAsn: NotRequired[int]
+    EncryptionSupport: NotRequired[EncryptionSupportOptionValueType]
 
 
 class ModifyTransitGatewayPrefixListReferenceRequestTypeDef(TypedDict):
@@ -7793,6 +7927,20 @@ class ModifyVpcBlockPublicAccessExclusionRequestTypeDef(TypedDict):
 class ModifyVpcBlockPublicAccessOptionsRequestTypeDef(TypedDict):
     InternetGatewayBlockMode: InternetGatewayBlockModeType
     DryRun: NotRequired[bool]
+
+
+class ModifyVpcEncryptionControlRequestTypeDef(TypedDict):
+    VpcEncryptionControlId: str
+    DryRun: NotRequired[bool]
+    Mode: NotRequired[VpcEncryptionControlModeType]
+    InternetGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    EgressOnlyInternetGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    NatGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VirtualPrivateGatewayExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VpcPeeringExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    LambdaExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    VpcLatticeExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
+    ElasticFileSystemExclusion: NotRequired[VpcEncryptionControlExclusionStateInputType]
 
 
 class ModifyVpcEndpointConnectionNotificationRequestTypeDef(TypedDict):
@@ -8464,6 +8612,11 @@ class RestoreSnapshotTierRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class RestoreVolumeFromRecycleBinRequestTypeDef(TypedDict):
+    VolumeId: str
+    DryRun: NotRequired[bool]
+
+
 class RevokeClientVpnIngressRequestTypeDef(TypedDict):
     ClientVpnEndpointId: str
     TargetNetworkCidr: str
@@ -8747,26 +8900,28 @@ TransitGatewayConnectOptionsTypeDef = TypedDict(
         "Protocol": NotRequired[Literal["gre"]],
     },
 )
+TransitGatewayMeteringPolicyRuleTypeDef = TypedDict(
+    "TransitGatewayMeteringPolicyRuleTypeDef",
+    {
+        "SourceTransitGatewayAttachmentId": NotRequired[str],
+        "SourceTransitGatewayAttachmentType": NotRequired[TransitGatewayAttachmentResourceTypeType],
+        "SourceCidrBlock": NotRequired[str],
+        "SourcePortRange": NotRequired[str],
+        "DestinationTransitGatewayAttachmentId": NotRequired[str],
+        "DestinationTransitGatewayAttachmentType": NotRequired[
+            TransitGatewayAttachmentResourceTypeType
+        ],
+        "DestinationCidrBlock": NotRequired[str],
+        "DestinationPortRange": NotRequired[str],
+        "Protocol": NotRequired[str],
+    },
+)
 
 
 class TransitGatewayMulticastDomainOptionsTypeDef(TypedDict):
     Igmpv2Support: NotRequired[Igmpv2SupportValueType]
     StaticSourcesSupport: NotRequired[StaticSourcesSupportValueType]
     AutoAcceptSharedAssociations: NotRequired[AutoAcceptSharedAssociationsValueType]
-
-
-class TransitGatewayOptionsTypeDef(TypedDict):
-    AmazonSideAsn: NotRequired[int]
-    TransitGatewayCidrBlocks: NotRequired[list[str]]
-    AutoAcceptSharedAttachments: NotRequired[AutoAcceptSharedAttachmentsValueType]
-    DefaultRouteTableAssociation: NotRequired[DefaultRouteTableAssociationValueType]
-    AssociationDefaultRouteTableId: NotRequired[str]
-    DefaultRouteTablePropagation: NotRequired[DefaultRouteTablePropagationValueType]
-    PropagationDefaultRouteTableId: NotRequired[str]
-    VpnEcmpSupport: NotRequired[VpnEcmpSupportValueType]
-    DnsSupport: NotRequired[DnsSupportValueType]
-    SecurityGroupReferencingSupport: NotRequired[SecurityGroupReferencingSupportValueType]
-    MulticastSupport: NotRequired[MulticastSupportValueType]
 
 
 class TransitGatewayPeeringAttachmentOptionsTypeDef(TypedDict):
@@ -9800,6 +9955,11 @@ class RestoreSnapshotTierResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class RestoreVolumeFromRecycleBinResultTypeDef(TypedDict):
+    Return: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class RunScheduledInstancesResultTypeDef(TypedDict):
     InstanceIdSet: list[str]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -10568,6 +10728,15 @@ TrafficMirrorTargetTypeDef = TypedDict(
 )
 
 
+class TransitGatewayMeteringPolicyTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyId: NotRequired[str]
+    TransitGatewayId: NotRequired[str]
+    MiddleboxAttachmentIds: NotRequired[list[str]]
+    State: NotRequired[TransitGatewayMeteringPolicyStateType]
+    UpdateEffectiveAt: NotRequired[datetime]
+    Tags: NotRequired[list[TagTypeDef]]
+
+
 class TransitGatewayPolicyTableTypeDef(TypedDict):
     TransitGatewayPolicyTableId: NotRequired[str]
     TransitGatewayId: NotRequired[str]
@@ -10732,6 +10901,7 @@ class ByoipCidrTypeDef(TypedDict):
     StatusMessage: NotRequired[str]
     State: NotRequired[ByoipCidrStateType]
     NetworkBorderGroup: NotRequired[str]
+    AdvertisementType: NotRequired[str]
 
 
 class DisassociateIpamByoasnResultTypeDef(TypedDict):
@@ -13657,6 +13827,14 @@ class DescribeTransitGatewayConnectsRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class DescribeTransitGatewayMeteringPoliciesRequestTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyIds: NotRequired[Sequence[str]]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
+
 class DescribeTransitGatewayMulticastDomainsRequestPaginateTypeDef(TypedDict):
     TransitGatewayMulticastDomainIds: NotRequired[Sequence[str]]
     Filters: NotRequired[Sequence[FilterTypeDef]]
@@ -13922,6 +14100,15 @@ class DescribeVpcClassicLinkRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     VpcIds: NotRequired[Sequence[str]]
     Filters: NotRequired[Sequence[FilterTypeDef]]
+
+
+class DescribeVpcEncryptionControlsRequestTypeDef(TypedDict):
+    DryRun: NotRequired[bool]
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    VpcEncryptionControlIds: NotRequired[Sequence[str]]
+    VpcIds: NotRequired[Sequence[str]]
+    NextToken: NotRequired[str]
+    MaxResults: NotRequired[int]
 
 
 class DescribeVpcEndpointAssociationsRequestTypeDef(TypedDict):
@@ -14284,6 +14471,14 @@ class GetTransitGatewayAttachmentPropagationsRequestPaginateTypeDef(TypedDict):
 
 class GetTransitGatewayAttachmentPropagationsRequestTypeDef(TypedDict):
     TransitGatewayAttachmentId: str
+    Filters: NotRequired[Sequence[FilterTypeDef]]
+    MaxResults: NotRequired[int]
+    NextToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+
+
+class GetTransitGatewayMeteringPolicyEntriesRequestTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyId: str
     Filters: NotRequired[Sequence[FilterTypeDef]]
     MaxResults: NotRequired[int]
     NextToken: NotRequired[str]
@@ -15125,6 +15320,24 @@ class LaunchTemplateTypeDef(TypedDict):
     Operator: NotRequired[OperatorResponseTypeDef]
 
 
+class VolumeRecycleBinInfoTypeDef(TypedDict):
+    VolumeId: NotRequired[str]
+    VolumeType: NotRequired[VolumeTypeType]
+    State: NotRequired[VolumeStateType]
+    Size: NotRequired[int]
+    Iops: NotRequired[int]
+    Throughput: NotRequired[int]
+    OutpostArn: NotRequired[str]
+    AvailabilityZone: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
+    SourceVolumeId: NotRequired[str]
+    SnapshotId: NotRequired[str]
+    Operator: NotRequired[OperatorResponseTypeDef]
+    CreateTime: NotRequired[datetime]
+    RecycleBinEnterTime: NotRequired[datetime]
+    RecycleBinExitTime: NotRequired[datetime]
+
+
 class EbsStatusSummaryTypeDef(TypedDict):
     Details: NotRequired[list[EbsStatusDetailsTypeDef]]
     Status: NotRequired[SummaryStatusType]
@@ -15176,6 +15389,21 @@ class EnableFastSnapshotRestoreStateErrorItemTypeDef(TypedDict):
     AvailabilityZone: NotRequired[str]
     AvailabilityZoneId: NotRequired[str]
     Error: NotRequired[EnableFastSnapshotRestoreStateErrorTypeDef]
+
+
+class TransitGatewayOptionsTypeDef(TypedDict):
+    AmazonSideAsn: NotRequired[int]
+    TransitGatewayCidrBlocks: NotRequired[list[str]]
+    AutoAcceptSharedAttachments: NotRequired[AutoAcceptSharedAttachmentsValueType]
+    DefaultRouteTableAssociation: NotRequired[DefaultRouteTableAssociationValueType]
+    AssociationDefaultRouteTableId: NotRequired[str]
+    DefaultRouteTablePropagation: NotRequired[DefaultRouteTablePropagationValueType]
+    PropagationDefaultRouteTableId: NotRequired[str]
+    VpnEcmpSupport: NotRequired[VpnEcmpSupportValueType]
+    DnsSupport: NotRequired[DnsSupportValueType]
+    SecurityGroupReferencingSupport: NotRequired[SecurityGroupReferencingSupportValueType]
+    MulticastSupport: NotRequired[MulticastSupportValueType]
+    EncryptionSupport: NotRequired[EncryptionSupportTypeDef]
 
 
 class HistoryRecordEntryTypeDef(TypedDict):
@@ -15408,6 +15636,12 @@ class GetTransitGatewayRouteTablePropagationsResultTypeDef(TypedDict):
 
 class GetVerifiedAccessEndpointTargetsResultTypeDef(TypedDict):
     VerifiedAccessEndpointTargets: list[VerifiedAccessEndpointTargetTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class GetVpcResourcesBlockingEncryptionEnforcementResultTypeDef(TypedDict):
+    NonCompliantResources: list[VpcEncryptionNonCompliantResourceTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -15750,7 +15984,7 @@ class IpamPoolTypeDef(TypedDict):
     AllocationDefaultNetmaskLength: NotRequired[int]
     AllocationResourceTags: NotRequired[list[IpamResourceTagTypeDef]]
     Tags: NotRequired[list[TagTypeDef]]
-    AwsService: NotRequired[Literal["ec2"]]
+    AwsService: NotRequired[IpamPoolAwsServiceType]
     PublicIpSource: NotRequired[IpamPoolPublicIpSourceType]
     SourceResource: NotRequired[IpamPoolSourceResourceTypeDef]
 
@@ -16510,6 +16744,15 @@ class TransitGatewayConnectTypeDef(TypedDict):
     Tags: NotRequired[list[TagTypeDef]]
 
 
+class TransitGatewayMeteringPolicyEntryTypeDef(TypedDict):
+    PolicyRuleNumber: NotRequired[str]
+    MeteredAccount: NotRequired[TransitGatewayMeteringPayerTypeType]
+    State: NotRequired[TransitGatewayMeteringPolicyEntryStateType]
+    UpdatedAt: NotRequired[datetime]
+    UpdateEffectiveAt: NotRequired[datetime]
+    MeteringPolicyRule: NotRequired[TransitGatewayMeteringPolicyRuleTypeDef]
+
+
 class TransitGatewayMulticastDomainTypeDef(TypedDict):
     TransitGatewayMulticastDomainId: NotRequired[str]
     TransitGatewayId: NotRequired[str]
@@ -16518,17 +16761,6 @@ class TransitGatewayMulticastDomainTypeDef(TypedDict):
     Options: NotRequired[TransitGatewayMulticastDomainOptionsTypeDef]
     State: NotRequired[TransitGatewayMulticastDomainStateType]
     CreationTime: NotRequired[datetime]
-    Tags: NotRequired[list[TagTypeDef]]
-
-
-class TransitGatewayTypeDef(TypedDict):
-    TransitGatewayId: NotRequired[str]
-    TransitGatewayArn: NotRequired[str]
-    State: NotRequired[TransitGatewayStateType]
-    OwnerId: NotRequired[str]
-    Description: NotRequired[str]
-    CreationTime: NotRequired[datetime]
-    Options: NotRequired[TransitGatewayOptionsTypeDef]
     Tags: NotRequired[list[TagTypeDef]]
 
 
@@ -17281,6 +17513,27 @@ class DescribeTrafficMirrorTargetsResultTypeDef(TypedDict):
     TrafficMirrorTargets: list[TrafficMirrorTargetTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+
+class CreateTransitGatewayMeteringPolicyResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicy: TransitGatewayMeteringPolicyTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteTransitGatewayMeteringPolicyResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicy: TransitGatewayMeteringPolicyTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DescribeTransitGatewayMeteringPoliciesResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicies: list[TransitGatewayMeteringPolicyTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class ModifyTransitGatewayMeteringPolicyResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicy: TransitGatewayMeteringPolicyTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class CreateTransitGatewayPolicyTableResultTypeDef(TypedDict):
@@ -18121,6 +18374,12 @@ class ModifyLaunchTemplateResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class ListVolumesInRecycleBinResultTypeDef(TypedDict):
+    Volumes: list[VolumeRecycleBinInfoTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class CreateEgressOnlyInternetGatewayResultTypeDef(TypedDict):
     ClientToken: str
     EgressOnlyInternetGateway: EgressOnlyInternetGatewayTypeDef
@@ -18280,6 +18539,17 @@ class EnableFastSnapshotRestoreErrorItemTypeDef(TypedDict):
     FastSnapshotRestoreStateErrors: NotRequired[
         list[EnableFastSnapshotRestoreStateErrorItemTypeDef]
     ]
+
+
+class TransitGatewayTypeDef(TypedDict):
+    TransitGatewayId: NotRequired[str]
+    TransitGatewayArn: NotRequired[str]
+    State: NotRequired[TransitGatewayStateType]
+    OwnerId: NotRequired[str]
+    Description: NotRequired[str]
+    CreationTime: NotRequired[datetime]
+    Options: NotRequired[TransitGatewayOptionsTypeDef]
+    Tags: NotRequired[list[TagTypeDef]]
 
 
 class DescribeFleetHistoryResultTypeDef(TypedDict):
@@ -19319,6 +19589,22 @@ class DescribeTransitGatewayConnectsResultTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 
+class CreateTransitGatewayMeteringPolicyEntryResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyEntry: TransitGatewayMeteringPolicyEntryTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteTransitGatewayMeteringPolicyEntryResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyEntry: TransitGatewayMeteringPolicyEntryTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetTransitGatewayMeteringPolicyEntriesResultTypeDef(TypedDict):
+    TransitGatewayMeteringPolicyEntries: list[TransitGatewayMeteringPolicyEntryTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
 class CreateTransitGatewayMulticastDomainResultTypeDef(TypedDict):
     TransitGatewayMulticastDomain: TransitGatewayMulticastDomainTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
@@ -19333,27 +19619,6 @@ class DescribeTransitGatewayMulticastDomainsResultTypeDef(TypedDict):
     TransitGatewayMulticastDomains: list[TransitGatewayMulticastDomainTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
-
-
-class CreateTransitGatewayResultTypeDef(TypedDict):
-    TransitGateway: TransitGatewayTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
-
-
-class DeleteTransitGatewayResultTypeDef(TypedDict):
-    TransitGateway: TransitGatewayTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
-
-
-class DescribeTransitGatewaysResultTypeDef(TypedDict):
-    TransitGateways: list[TransitGatewayTypeDef]
-    ResponseMetadata: ResponseMetadataTypeDef
-    NextToken: NotRequired[str]
-
-
-class ModifyTransitGatewayResultTypeDef(TypedDict):
-    TransitGateway: TransitGatewayTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class AcceptTransitGatewayPeeringAttachmentResultTypeDef(TypedDict):
@@ -20045,7 +20310,7 @@ class CreateIpamPoolRequestTypeDef(TypedDict):
     AllocationResourceTags: NotRequired[Sequence[RequestIpamResourceTagTypeDef]]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     ClientToken: NotRequired[str]
-    AwsService: NotRequired[Literal["ec2"]]
+    AwsService: NotRequired[IpamPoolAwsServiceType]
     PublicIpSource: NotRequired[IpamPoolPublicIpSourceType]
     SourceResource: NotRequired[IpamPoolSourceResourceRequestTypeDef]
 
@@ -20558,6 +20823,13 @@ class CreateTransitGatewayConnectRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
 
 
+class CreateTransitGatewayMeteringPolicyRequestTypeDef(TypedDict):
+    TransitGatewayId: str
+    MiddleboxAttachmentIds: NotRequired[Sequence[str]]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+    DryRun: NotRequired[bool]
+
+
 class CreateTransitGatewayMulticastDomainRequestTypeDef(TypedDict):
     TransitGatewayId: str
     Options: NotRequired[CreateTransitGatewayMulticastDomainRequestOptionsTypeDef]
@@ -20712,6 +20984,12 @@ class CreateVpcBlockPublicAccessExclusionRequestTypeDef(TypedDict):
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
 
 
+class CreateVpcEncryptionControlRequestTypeDef(TypedDict):
+    VpcId: str
+    DryRun: NotRequired[bool]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
+
+
 CreateVpcEndpointRequestTypeDef = TypedDict(
     "CreateVpcEndpointRequestTypeDef",
     {
@@ -20783,6 +21061,7 @@ class CreateVpcRequestServiceResourceCreateVpcTypeDef(TypedDict):
     Ipv6IpamPoolId: NotRequired[str]
     Ipv6NetmaskLength: NotRequired[int]
     Ipv6CidrBlockNetworkBorderGroup: NotRequired[str]
+    VpcEncryptionControl: NotRequired[VpcEncryptionControlConfigurationTypeDef]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     DryRun: NotRequired[bool]
     InstanceTenancy: NotRequired[TenancyType]
@@ -20798,6 +21077,7 @@ class CreateVpcRequestTypeDef(TypedDict):
     Ipv6IpamPoolId: NotRequired[str]
     Ipv6NetmaskLength: NotRequired[int]
     Ipv6CidrBlockNetworkBorderGroup: NotRequired[str]
+    VpcEncryptionControl: NotRequired[VpcEncryptionControlConfigurationTypeDef]
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     DryRun: NotRequired[bool]
     InstanceTenancy: NotRequired[TenancyType]
@@ -21292,6 +21572,27 @@ class EnableFastSnapshotRestoresResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class CreateTransitGatewayResultTypeDef(TypedDict):
+    TransitGateway: TransitGatewayTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteTransitGatewayResultTypeDef(TypedDict):
+    TransitGateway: TransitGatewayTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DescribeTransitGatewaysResultTypeDef(TypedDict):
+    TransitGateways: list[TransitGatewayTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class ModifyTransitGatewayResultTypeDef(TypedDict):
+    TransitGateway: TransitGatewayTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class CreateNetworkInsightsPathResultTypeDef(TypedDict):
     NetworkInsightsPath: NetworkInsightsPathTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
@@ -21673,6 +21974,27 @@ class DescribeVolumeStatusResultTypeDef(TypedDict):
     VolumeStatuses: list[VolumeStatusItemTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+
+class CreateVpcEncryptionControlResultTypeDef(TypedDict):
+    VpcEncryptionControl: VpcEncryptionControlTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteVpcEncryptionControlResultTypeDef(TypedDict):
+    VpcEncryptionControl: VpcEncryptionControlTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DescribeVpcEncryptionControlsResultTypeDef(TypedDict):
+    VpcEncryptionControls: list[VpcEncryptionControlTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+
+class ModifyVpcEncryptionControlResultTypeDef(TypedDict):
+    VpcEncryptionControl: VpcEncryptionControlTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class VpcTypeDef(TypedDict):

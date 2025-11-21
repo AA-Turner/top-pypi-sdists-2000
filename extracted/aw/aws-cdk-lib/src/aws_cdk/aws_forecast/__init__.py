@@ -172,6 +172,17 @@ class CfnDataset(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDataset")
+    @builtins.classmethod
+    def arn_for_dataset(cls, resource: _IDatasetRef_e339586a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e7321d2a22c43244bdb8c0f7c1054f5978ceb1e5113b993c92c6751db081ef4c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataset", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -408,7 +419,7 @@ class CfnDataset(
             You can specify this optional object in the `CreateDataset <https://docs.aws.amazon.com/forecast/latest/dg/API_CreateDataset.html>`_ and `CreatePredictor <https://docs.aws.amazon.com/forecast/latest/dg/API_CreatePredictor.html>`_ requests.
 
             :param kms_key_arn: The Amazon Resource Name (ARN) of the KMS key.
-            :param role_arn: The ARN of the IAM role that Amazon Forecast can assume to access the AWS KMS key. Passing a role across AWS accounts is not allowed. If you pass a role that isn't in your account, you get an ``InvalidInputException`` error.
+            :param role_arn: The ARN of the IAM role that Amazon Forecast can assume to access the AWS key. Passing a role across AWS accounts is not allowed. If you pass a role that isn't in your account, you get an ``InvalidInputException`` error.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-forecast-dataset-encryptionconfig.html
             :exampleMetadata: fixture=_generated
@@ -445,7 +456,7 @@ class CfnDataset(
 
         @builtins.property
         def role_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the IAM role that Amazon Forecast can assume to access the AWS KMS key.
+            '''The ARN of the IAM role that Amazon Forecast can assume to access the AWS  key.
 
             Passing a role across AWS accounts is not allowed. If you pass a role that isn't in your account, you get an ``InvalidInputException`` error.
 
@@ -670,6 +681,20 @@ class CfnDatasetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDatasetGroup")
+    @builtins.classmethod
+    def arn_for_dataset_group(
+        cls,
+        resource: _IDatasetGroupRef_6d6b1f2e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa0a6d9f67d9280e67a066e006de2d1335a7652278affaf48c4585d95de30f33)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatasetGroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1100,6 +1125,12 @@ def _typecheckingstub__1b255d6566d3108723fad5445eb36969a47899e6f15f691797cfff629
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e7321d2a22c43244bdb8c0f7c1054f5978ceb1e5113b993c92c6751db081ef4c(
+    resource: _IDatasetRef_e339586a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c3188a463f212919233b295ee25b6e0aaffc31e7e8210e2646c840e3c1e66be(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1193,6 +1224,12 @@ def _typecheckingstub__5388ec02293ab366c5482f6fdf1bcfeef6fb2f3ebfa93879ddc0f4ab1
     domain: builtins.str,
     dataset_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fa0a6d9f67d9280e67a066e006de2d1335a7652278affaf48c4585d95de30f33(
+    resource: _IDatasetGroupRef_6d6b1f2e,
 ) -> None:
     """Type checking stubs"""
     pass

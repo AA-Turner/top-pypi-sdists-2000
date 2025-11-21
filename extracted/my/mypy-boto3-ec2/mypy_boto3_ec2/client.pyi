@@ -456,6 +456,10 @@ from .type_defs import (
     CreateTransitGatewayConnectPeerResultTypeDef,
     CreateTransitGatewayConnectRequestTypeDef,
     CreateTransitGatewayConnectResultTypeDef,
+    CreateTransitGatewayMeteringPolicyEntryRequestTypeDef,
+    CreateTransitGatewayMeteringPolicyEntryResultTypeDef,
+    CreateTransitGatewayMeteringPolicyRequestTypeDef,
+    CreateTransitGatewayMeteringPolicyResultTypeDef,
     CreateTransitGatewayMulticastDomainRequestTypeDef,
     CreateTransitGatewayMulticastDomainResultTypeDef,
     CreateTransitGatewayPeeringAttachmentRequestTypeDef,
@@ -485,6 +489,8 @@ from .type_defs import (
     CreateVolumeRequestTypeDef,
     CreateVpcBlockPublicAccessExclusionRequestTypeDef,
     CreateVpcBlockPublicAccessExclusionResultTypeDef,
+    CreateVpcEncryptionControlRequestTypeDef,
+    CreateVpcEncryptionControlResultTypeDef,
     CreateVpcEndpointConnectionNotificationRequestTypeDef,
     CreateVpcEndpointConnectionNotificationResultTypeDef,
     CreateVpcEndpointRequestTypeDef,
@@ -614,6 +620,10 @@ from .type_defs import (
     DeleteTransitGatewayConnectPeerResultTypeDef,
     DeleteTransitGatewayConnectRequestTypeDef,
     DeleteTransitGatewayConnectResultTypeDef,
+    DeleteTransitGatewayMeteringPolicyEntryRequestTypeDef,
+    DeleteTransitGatewayMeteringPolicyEntryResultTypeDef,
+    DeleteTransitGatewayMeteringPolicyRequestTypeDef,
+    DeleteTransitGatewayMeteringPolicyResultTypeDef,
     DeleteTransitGatewayMulticastDomainRequestTypeDef,
     DeleteTransitGatewayMulticastDomainResultTypeDef,
     DeleteTransitGatewayPeeringAttachmentRequestTypeDef,
@@ -643,6 +653,8 @@ from .type_defs import (
     DeleteVolumeRequestTypeDef,
     DeleteVpcBlockPublicAccessExclusionRequestTypeDef,
     DeleteVpcBlockPublicAccessExclusionResultTypeDef,
+    DeleteVpcEncryptionControlRequestTypeDef,
+    DeleteVpcEncryptionControlResultTypeDef,
     DeleteVpcEndpointConnectionNotificationsRequestTypeDef,
     DeleteVpcEndpointConnectionNotificationsResultTypeDef,
     DeleteVpcEndpointServiceConfigurationsRequestTypeDef,
@@ -963,6 +975,8 @@ from .type_defs import (
     DescribeTransitGatewayConnectPeersResultTypeDef,
     DescribeTransitGatewayConnectsRequestTypeDef,
     DescribeTransitGatewayConnectsResultTypeDef,
+    DescribeTransitGatewayMeteringPoliciesRequestTypeDef,
+    DescribeTransitGatewayMeteringPoliciesResultTypeDef,
     DescribeTransitGatewayMulticastDomainsRequestTypeDef,
     DescribeTransitGatewayMulticastDomainsResultTypeDef,
     DescribeTransitGatewayPeeringAttachmentsRequestTypeDef,
@@ -1007,6 +1021,8 @@ from .type_defs import (
     DescribeVpcClassicLinkDnsSupportResultTypeDef,
     DescribeVpcClassicLinkRequestTypeDef,
     DescribeVpcClassicLinkResultTypeDef,
+    DescribeVpcEncryptionControlsRequestTypeDef,
+    DescribeVpcEncryptionControlsResultTypeDef,
     DescribeVpcEndpointAssociationsRequestTypeDef,
     DescribeVpcEndpointAssociationsResultTypeDef,
     DescribeVpcEndpointConnectionNotificationsRequestTypeDef,
@@ -1277,6 +1293,8 @@ from .type_defs import (
     GetSubnetCidrReservationsResultTypeDef,
     GetTransitGatewayAttachmentPropagationsRequestTypeDef,
     GetTransitGatewayAttachmentPropagationsResultTypeDef,
+    GetTransitGatewayMeteringPolicyEntriesRequestTypeDef,
+    GetTransitGatewayMeteringPolicyEntriesResultTypeDef,
     GetTransitGatewayMulticastDomainAssociationsRequestTypeDef,
     GetTransitGatewayMulticastDomainAssociationsResultTypeDef,
     GetTransitGatewayPolicyTableAssociationsRequestTypeDef,
@@ -1295,6 +1313,8 @@ from .type_defs import (
     GetVerifiedAccessEndpointTargetsResultTypeDef,
     GetVerifiedAccessGroupPolicyRequestTypeDef,
     GetVerifiedAccessGroupPolicyResultTypeDef,
+    GetVpcResourcesBlockingEncryptionEnforcementRequestTypeDef,
+    GetVpcResourcesBlockingEncryptionEnforcementResultTypeDef,
     GetVpnConnectionDeviceSampleConfigurationRequestTypeDef,
     GetVpnConnectionDeviceSampleConfigurationResultTypeDef,
     GetVpnConnectionDeviceTypesRequestTypeDef,
@@ -1320,6 +1340,8 @@ from .type_defs import (
     ListImagesInRecycleBinResultTypeDef,
     ListSnapshotsInRecycleBinRequestTypeDef,
     ListSnapshotsInRecycleBinResultTypeDef,
+    ListVolumesInRecycleBinRequestTypeDef,
+    ListVolumesInRecycleBinResultTypeDef,
     LockSnapshotRequestTypeDef,
     LockSnapshotResultTypeDef,
     ModifyAddressAttributeRequestTypeDef,
@@ -1413,6 +1435,8 @@ from .type_defs import (
     ModifyTrafficMirrorFilterRuleResultTypeDef,
     ModifyTrafficMirrorSessionRequestTypeDef,
     ModifyTrafficMirrorSessionResultTypeDef,
+    ModifyTransitGatewayMeteringPolicyRequestTypeDef,
+    ModifyTransitGatewayMeteringPolicyResultTypeDef,
     ModifyTransitGatewayPrefixListReferenceRequestTypeDef,
     ModifyTransitGatewayPrefixListReferenceResultTypeDef,
     ModifyTransitGatewayRequestTypeDef,
@@ -1441,6 +1465,8 @@ from .type_defs import (
     ModifyVpcBlockPublicAccessExclusionResultTypeDef,
     ModifyVpcBlockPublicAccessOptionsRequestTypeDef,
     ModifyVpcBlockPublicAccessOptionsResultTypeDef,
+    ModifyVpcEncryptionControlRequestTypeDef,
+    ModifyVpcEncryptionControlResultTypeDef,
     ModifyVpcEndpointConnectionNotificationRequestTypeDef,
     ModifyVpcEndpointConnectionNotificationResultTypeDef,
     ModifyVpcEndpointRequestTypeDef,
@@ -1555,6 +1581,8 @@ from .type_defs import (
     RestoreSnapshotFromRecycleBinResultTypeDef,
     RestoreSnapshotTierRequestTypeDef,
     RestoreSnapshotTierResultTypeDef,
+    RestoreVolumeFromRecycleBinRequestTypeDef,
+    RestoreVolumeFromRecycleBinResultTypeDef,
     RevokeClientVpnIngressRequestTypeDef,
     RevokeClientVpnIngressResultTypeDef,
     RevokeSecurityGroupEgressRequestTypeDef,
@@ -3087,6 +3115,28 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_transit_gateway_connect_peer)
         """
 
+    def create_transit_gateway_metering_policy(
+        self, **kwargs: Unpack[CreateTransitGatewayMeteringPolicyRequestTypeDef]
+    ) -> CreateTransitGatewayMeteringPolicyResultTypeDef:
+        """
+        Creates a metering policy for a transit gateway to track and measure network
+        traffic.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_transit_gateway_metering_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_transit_gateway_metering_policy)
+        """
+
+    def create_transit_gateway_metering_policy_entry(
+        self, **kwargs: Unpack[CreateTransitGatewayMeteringPolicyEntryRequestTypeDef]
+    ) -> CreateTransitGatewayMeteringPolicyEntryResultTypeDef:
+        """
+        Creates an entry in a transit gateway metering policy to define traffic
+        measurement rules.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_transit_gateway_metering_policy_entry.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_transit_gateway_metering_policy_entry)
+        """
+
     def create_transit_gateway_multicast_domain(
         self, **kwargs: Unpack[CreateTransitGatewayMulticastDomainRequestTypeDef]
     ) -> CreateTransitGatewayMulticastDomainResultTypeDef:
@@ -3240,6 +3290,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_vpc_block_public_access_exclusion.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_vpc_block_public_access_exclusion)
+        """
+
+    def create_vpc_encryption_control(
+        self, **kwargs: Unpack[CreateVpcEncryptionControlRequestTypeDef]
+    ) -> CreateVpcEncryptionControlResultTypeDef:
+        """
+        Creates a VPC Encryption Control configuration for a specified VPC.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_vpc_encryption_control.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_vpc_encryption_control)
         """
 
     def create_vpc_endpoint(
@@ -3968,6 +4028,26 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_transit_gateway_connect_peer)
         """
 
+    def delete_transit_gateway_metering_policy(
+        self, **kwargs: Unpack[DeleteTransitGatewayMeteringPolicyRequestTypeDef]
+    ) -> DeleteTransitGatewayMeteringPolicyResultTypeDef:
+        """
+        Deletes a transit gateway metering policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_transit_gateway_metering_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_transit_gateway_metering_policy)
+        """
+
+    def delete_transit_gateway_metering_policy_entry(
+        self, **kwargs: Unpack[DeleteTransitGatewayMeteringPolicyEntryRequestTypeDef]
+    ) -> DeleteTransitGatewayMeteringPolicyEntryResultTypeDef:
+        """
+        Deletes an entry from a transit gateway metering policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_transit_gateway_metering_policy_entry.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_transit_gateway_metering_policy_entry)
+        """
+
     def delete_transit_gateway_multicast_domain(
         self, **kwargs: Unpack[DeleteTransitGatewayMulticastDomainRequestTypeDef]
     ) -> DeleteTransitGatewayMulticastDomainResultTypeDef:
@@ -4115,6 +4195,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_vpc_block_public_access_exclusion.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_vpc_block_public_access_exclusion)
+        """
+
+    def delete_vpc_encryption_control(
+        self, **kwargs: Unpack[DeleteVpcEncryptionControlRequestTypeDef]
+    ) -> DeleteVpcEncryptionControlResultTypeDef:
+        """
+        Deletes a VPC Encryption Control configuration.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/delete_vpc_encryption_control.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#delete_vpc_encryption_control)
         """
 
     def delete_vpc_endpoint_connection_notifications(
@@ -5796,6 +5886,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_transit_gateway_connects)
         """
 
+    def describe_transit_gateway_metering_policies(
+        self, **kwargs: Unpack[DescribeTransitGatewayMeteringPoliciesRequestTypeDef]
+    ) -> DescribeTransitGatewayMeteringPoliciesResultTypeDef:
+        """
+        Describes one or more transit gateway metering policies.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_transit_gateway_metering_policies.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_transit_gateway_metering_policies)
+        """
+
     def describe_transit_gateway_multicast_domains(
         self, **kwargs: Unpack[DescribeTransitGatewayMulticastDomainsRequestTypeDef]
     ) -> DescribeTransitGatewayMulticastDomainsResultTypeDef:
@@ -6015,6 +6115,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_vpc_classic_link_dns_support.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_vpc_classic_link_dns_support)
+        """
+
+    def describe_vpc_encryption_controls(
+        self, **kwargs: Unpack[DescribeVpcEncryptionControlsRequestTypeDef]
+    ) -> DescribeVpcEncryptionControlsResultTypeDef:
+        """
+        Describes one or more VPC Encryption Control configurations.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/describe_vpc_encryption_controls.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#describe_vpc_encryption_controls)
         """
 
     def describe_vpc_endpoint_associations(
@@ -7463,6 +7573,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_transit_gateway_attachment_propagations)
         """
 
+    def get_transit_gateway_metering_policy_entries(
+        self, **kwargs: Unpack[GetTransitGatewayMeteringPolicyEntriesRequestTypeDef]
+    ) -> GetTransitGatewayMeteringPolicyEntriesResultTypeDef:
+        """
+        Retrieves the entries for a transit gateway metering policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_transit_gateway_metering_policy_entries.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_transit_gateway_metering_policy_entries)
+        """
+
     def get_transit_gateway_multicast_domain_associations(
         self, **kwargs: Unpack[GetTransitGatewayMulticastDomainAssociationsRequestTypeDef]
     ) -> GetTransitGatewayMulticastDomainAssociationsResultTypeDef:
@@ -7555,6 +7675,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_verified_access_group_policy.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_verified_access_group_policy)
+        """
+
+    def get_vpc_resources_blocking_encryption_enforcement(
+        self, **kwargs: Unpack[GetVpcResourcesBlockingEncryptionEnforcementRequestTypeDef]
+    ) -> GetVpcResourcesBlockingEncryptionEnforcementResultTypeDef:
+        """
+        Gets information about resources in a VPC that are blocking encryption
+        enforcement.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/get_vpc_resources_blocking_encryption_enforcement.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#get_vpc_resources_blocking_encryption_enforcement)
         """
 
     def get_vpn_connection_device_sample_configuration(
@@ -7674,6 +7805,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/list_snapshots_in_recycle_bin.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#list_snapshots_in_recycle_bin)
+        """
+
+    def list_volumes_in_recycle_bin(
+        self, **kwargs: Unpack[ListVolumesInRecycleBinRequestTypeDef]
+    ) -> ListVolumesInRecycleBinResultTypeDef:
+        """
+        Lists one or more volumes that are currently in the Recycle Bin.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/list_volumes_in_recycle_bin.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#list_volumes_in_recycle_bin)
         """
 
     def lock_snapshot(
@@ -8193,6 +8334,16 @@ class EC2Client(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_transit_gateway)
         """
 
+    def modify_transit_gateway_metering_policy(
+        self, **kwargs: Unpack[ModifyTransitGatewayMeteringPolicyRequestTypeDef]
+    ) -> ModifyTransitGatewayMeteringPolicyResultTypeDef:
+        """
+        Modifies a transit gateway metering policy.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_transit_gateway_metering_policy.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_transit_gateway_metering_policy)
+        """
+
     def modify_transit_gateway_prefix_list_reference(
         self, **kwargs: Unpack[ModifyTransitGatewayPrefixListReferenceRequestTypeDef]
     ) -> ModifyTransitGatewayPrefixListReferenceResultTypeDef:
@@ -8337,6 +8488,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_vpc_block_public_access_options.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_vpc_block_public_access_options)
+        """
+
+    def modify_vpc_encryption_control(
+        self, **kwargs: Unpack[ModifyVpcEncryptionControlRequestTypeDef]
+    ) -> ModifyVpcEncryptionControlResultTypeDef:
+        """
+        Modifies the encryption control configuration for a VPC.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/modify_vpc_encryption_control.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#modify_vpc_encryption_control)
         """
 
     def modify_vpc_endpoint(
@@ -8965,6 +9126,16 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/restore_snapshot_tier.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#restore_snapshot_tier)
+        """
+
+    def restore_volume_from_recycle_bin(
+        self, **kwargs: Unpack[RestoreVolumeFromRecycleBinRequestTypeDef]
+    ) -> RestoreVolumeFromRecycleBinResultTypeDef:
+        """
+        Restores a volume from the Recycle Bin.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/restore_volume_from_recycle_bin.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#restore_volume_from_recycle_bin)
         """
 
     def revoke_client_vpn_ingress(

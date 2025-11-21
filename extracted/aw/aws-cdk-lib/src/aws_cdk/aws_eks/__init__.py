@@ -2203,6 +2203,7 @@ from ..aws_iam import (
 )
 from ..aws_lambda import ILayerVersion as _ILayerVersion_5ac127c8
 from ..aws_s3_assets import Asset as _Asset_ac2a7e61
+from ..interfaces.aws_ec2 import ISubnetRef as _ISubnetRef_ac31e361
 from ..interfaces.aws_eks import (
     AccessEntryReference as _AccessEntryReference_447195cd,
     AddonReference as _AddonReference_afb1bd13,
@@ -2219,6 +2220,7 @@ from ..interfaces.aws_eks import (
     NodegroupReference as _NodegroupReference_eab944f6,
     PodIdentityAssociationReference as _PodIdentityAssociationReference_14e19bbb,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
@@ -5067,6 +5069,17 @@ class CfnAccessEntry(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAccessEntry")
+    @builtins.classmethod
+    def arn_for_access_entry(cls, resource: _IAccessEntryRef_14bb9c0a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8fc076ea75df70bc18e6646b0b0dfc56f172dae5807fc58bd261a16c67ebb653)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessEntry", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5627,7 +5640,7 @@ class CfnAddon(
         pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAddon.PodIdentityAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         resolve_conflicts: typing.Optional[builtins.str] = None,
-        service_account_role_arn: typing.Optional[builtins.str] = None,
+        service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::EKS::Addon``.
@@ -5663,6 +5676,17 @@ class CfnAddon(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForAddon")
+    @builtins.classmethod
+    def arn_for_addon(cls, resource: _IAddonRef_fb5de88c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51a5406bc62f26fc219359867db20bf590d4793887770ba7e4d71bd64b78992a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAddon", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6019,7 +6043,7 @@ class CfnAddonProps:
         pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAddon.PodIdentityAssociationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         resolve_conflicts: typing.Optional[builtins.str] = None,
-        service_account_role_arn: typing.Optional[builtins.str] = None,
+        service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnAddon``.
@@ -6197,7 +6221,9 @@ class CfnAddonProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def service_account_role_arn(self) -> typing.Optional[builtins.str]:
+    def service_account_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of an existing IAM role to bind to the add-on's service account.
 
         The role must be assigned the IAM permissions required by the add-on. If you don't specify an existing IAM role, then the add-on uses the permissions assigned to the node IAM role. For more information, see `Amazon EKS node IAM role <https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html>`_ in the *Amazon EKS User Guide* .
@@ -6208,7 +6234,7 @@ class CfnAddonProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-addon.html#cfn-eks-addon-serviceaccountrolearn
         '''
         result = self._values.get("service_account_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -6357,7 +6383,7 @@ class CfnCluster(
         id: builtins.str,
         *,
         resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ResourcesVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -6389,11 +6415,11 @@ class CfnCluster(
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
         :param kubernetes_network_config: The Kubernetes network configuration for the cluster.
         :param logging: The logging configuration for your cluster.
-        :param name: The unique name to give to your cluster. The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in AWS CloudFormation .
+        :param name: The unique name to give to your cluster. The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in CloudFormation .
         :param outpost_config: An object representing the configuration of your local Amazon EKS cluster on an AWS Outpost. This object isn't available for clusters on the AWS cloud.
         :param remote_network_config: The configuration in the cluster for EKS Hybrid Nodes. You can add, change, or remove this configuration after the cluster is created.
         :param storage_config: Indicates the current configuration of the block storage capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the block storage capability is enabled, EKS Auto Mode will create and delete EBS volumes in your AWS account. For more information, see EKS Auto Mode block storage capability in the *Amazon EKS User Guide* .
-        :param tags: The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster. .. epigraph:: You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster. .. epigraph:: You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
         :param upgrade_policy: This value indicates if extended support is enabled or disabled for the cluster. `Learn more about EKS Extended Support in the *Amazon EKS User Guide* . <https://docs.aws.amazon.com/eks/latest/userguide/extended-support-control.html>`_
         :param version: The desired Kubernetes version for your cluster. If you don't specify a value here, the default version available in Amazon EKS is used. .. epigraph:: The default version might not be the latest version available.
         :param zonal_shift_config: The configuration for zonal shift for the cluster.
@@ -6424,6 +6450,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_5527f448) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__acf89f84d6ca120e9aa1958aec34727cee0f515b6ea26ac8bb331ddc8f197e9c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="fromClusterArn")
     @builtins.classmethod
@@ -6915,7 +6952,7 @@ class CfnCluster(
         ) -> None:
             '''The access configuration for the cluster.
 
-            :param authentication_mode: The desired authentication mode for the cluster. If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the AWS Management Console , the default value is ``API_AND_CONFIG_MAP`` .
+            :param authentication_mode: The desired authentication mode for the cluster. If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the the console , the default value is ``API_AND_CONFIG_MAP`` .
             :param bootstrap_cluster_creator_admin_permissions: Specifies whether or not the cluster creator IAM principal was set as a cluster admin access entry during cluster creation time. The default value is ``true`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-accessconfig.html
@@ -6946,7 +6983,7 @@ class CfnCluster(
         def authentication_mode(self) -> typing.Optional[builtins.str]:
             '''The desired authentication mode for the cluster.
 
-            If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the AWS Management Console , the default value is ``API_AND_CONFIG_MAP`` .
+            If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the the console , the default value is ``API_AND_CONFIG_MAP`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-accessconfig.html#cfn-eks-cluster-accessconfig-authenticationmode
             '''
@@ -7753,7 +7790,7 @@ class CfnCluster(
     )
     class ProviderProperty:
         def __init__(self, *, key_arn: typing.Optional[builtins.str] = None) -> None:
-            '''Identifies the AWS Key Management Service ( AWS KMS ) key used to encrypt the secrets.
+            '''Identifies the AWS Key Management Service ( AWS  ) key used to encrypt the secrets.
 
             :param key_arn: Amazon Resource Name (ARN) or alias of the KMS key. The KMS key must be symmetric and created in the same AWS Region as the cluster. If the KMS key was created in a different account, the `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ must have access to the KMS key. For more information, see `Allowing users in other accounts to use a KMS key <https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html>`_ in the *AWS Key Management Service Developer Guide* .
 
@@ -8414,7 +8451,7 @@ class CfnClusterProps:
         self,
         *,
         resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ResourcesVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-        role_arn: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
         access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -8444,11 +8481,11 @@ class CfnClusterProps:
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
         :param kubernetes_network_config: The Kubernetes network configuration for the cluster.
         :param logging: The logging configuration for your cluster.
-        :param name: The unique name to give to your cluster. The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in AWS CloudFormation .
+        :param name: The unique name to give to your cluster. The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in CloudFormation .
         :param outpost_config: An object representing the configuration of your local Amazon EKS cluster on an AWS Outpost. This object isn't available for clusters on the AWS cloud.
         :param remote_network_config: The configuration in the cluster for EKS Hybrid Nodes. You can add, change, or remove this configuration after the cluster is created.
         :param storage_config: Indicates the current configuration of the block storage capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the block storage capability is enabled, EKS Auto Mode will create and delete EBS volumes in your AWS account. For more information, see EKS Auto Mode block storage capability in the *Amazon EKS User Guide* .
-        :param tags: The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster. .. epigraph:: You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+        :param tags: The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster. .. epigraph:: You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
         :param upgrade_policy: This value indicates if extended support is enabled or disabled for the cluster. `Learn more about EKS Extended Support in the *Amazon EKS User Guide* . <https://docs.aws.amazon.com/eks/latest/userguide/extended-support-control.html>`_
         :param version: The desired Kubernetes version for your cluster. If you don't specify a value here, the default version available in Amazon EKS is used. .. epigraph:: The default version might not be the latest version available.
         :param zonal_shift_config: The configuration for zonal shift for the cluster.
@@ -8618,7 +8655,7 @@ class CfnClusterProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCluster.ResourcesVpcConfigProperty], result)
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role that provides permissions for the Kubernetes control plane to make calls to AWS API operations on your behalf.
 
         For more information, see `Amazon EKS Service IAM Role <https://docs.aws.amazon.com/eks/latest/userguide/service_IAM_role.html>`_ in the **Amazon EKS User Guide** .
@@ -8627,7 +8664,7 @@ class CfnClusterProps:
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
     def access_config(
@@ -8731,7 +8768,7 @@ class CfnClusterProps:
     def name(self) -> typing.Optional[builtins.str]:
         '''The unique name to give to your cluster.
 
-        The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in AWS CloudFormation .
+        The name can contain only alphanumeric characters (case-sensitive) and hyphens. It must start with an alphanumeric character and can't be longer than 100 characters. The name must be unique within the AWS Region and AWS account that you're creating the cluster in. Note that underscores can't be used in CloudFormation .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-name
         '''
@@ -8784,7 +8821,7 @@ class CfnClusterProps:
         Each tag consists of a key and an optional value, both of which you define. Cluster tags don't propagate to any other resources associated with the cluster.
         .. epigraph::
 
-           You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the AWS CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
+           You must have the ``eks:TagResource`` and ``eks:UntagResource`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-tags
         '''
@@ -8931,6 +8968,20 @@ class CfnFargateProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForFargateProfile")
+    @builtins.classmethod
+    def arn_for_fargate_profile(
+        cls,
+        resource: _IFargateProfileRef_ebba9623,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c62d4336aef51ec7813a4b4af67342c66c46cfd302381a17f490f8f40b58381d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFargateProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9461,6 +9512,20 @@ class CfnIdentityProviderConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForIdentityProviderConfig")
+    @builtins.classmethod
+    def arn_for_identity_provider_config(
+        cls,
+        resource: _IIdentityProviderConfigRef_0106e882,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__34801166e9e75cba4add5f2a32bddc7f06c49030536f66b194b2011569cce956)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdentityProviderConfig", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10070,9 +10135,9 @@ class CfnNodegroup(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        cluster_name: builtins.str,
-        node_role: builtins.str,
-        subnets: typing.Sequence[builtins.str],
+        cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
+        node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         ami_type: typing.Optional[builtins.str] = None,
         capacity_type: typing.Optional[builtins.str] = None,
         disk_size: typing.Optional[jsii.Number] = None,
@@ -10141,6 +10206,17 @@ class CfnNodegroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForNodegroup")
+    @builtins.classmethod
+    def arn_for_nodegroup(cls, resource: _INodegroupRef_cac0d8aa) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19982cfc58b84a650ce9bb68eeaf60912fd6067c7ebca829e4893f1fce3c2d8f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNodegroup", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11273,9 +11349,9 @@ class CfnNodegroupProps:
     def __init__(
         self,
         *,
-        cluster_name: builtins.str,
-        node_role: builtins.str,
-        subnets: typing.Sequence[builtins.str],
+        cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
+        node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+        subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         ami_type: typing.Optional[builtins.str] = None,
         capacity_type: typing.Optional[builtins.str] = None,
         disk_size: typing.Optional[jsii.Number] = None,
@@ -11445,17 +11521,17 @@ class CfnNodegroupProps:
             self._values["version"] = version
 
     @builtins.property
-    def cluster_name(self) -> builtins.str:
+    def cluster_name(self) -> typing.Union[builtins.str, _IClusterRef_5527f448]:
         '''The name of your cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-nodegroup.html#cfn-eks-nodegroup-clustername
         '''
         result = self._values.get("cluster_name")
         assert result is not None, "Required property 'cluster_name' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IClusterRef_5527f448], result)
 
     @builtins.property
-    def node_role(self) -> builtins.str:
+    def node_role(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The Amazon Resource Name (ARN) of the IAM role to associate with your node group.
 
         The Amazon EKS worker node ``kubelet`` daemon makes calls to AWS APIs on your behalf. Nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch nodes and register them into a cluster, you must create an IAM role for those nodes to use when they are launched. For more information, see `Amazon EKS node IAM role <https://docs.aws.amazon.com/eks/latest/userguide/create-node-role.html>`_ in the **Amazon EKS User Guide** . If you specify ``launchTemplate`` , then don't specify ``[IamInstanceProfile](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html)`` in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ in the *Amazon EKS User Guide* .
@@ -11464,10 +11540,10 @@ class CfnNodegroupProps:
         '''
         result = self._values.get("node_role")
         assert result is not None, "Required property 'node_role' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def subnets(self) -> typing.List[builtins.str]:
+    def subnets(self) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The subnets to use for the Auto Scaling group that is created for your node group.
 
         If you specify ``launchTemplate`` , then don't specify ``[SubnetId](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html)`` in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ in the *Amazon EKS User Guide* .
@@ -11476,7 +11552,7 @@ class CfnNodegroupProps:
         '''
         result = self._values.get("subnets")
         assert result is not None, "Required property 'subnets' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def ami_type(self) -> typing.Optional[builtins.str]:
@@ -22790,6 +22866,12 @@ def _typecheckingstub__a2f5b1ef69d6e68b0a3a090b2b57166d8868d0487e670242c91873093
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8fc076ea75df70bc18e6646b0b0dfc56f172dae5807fc58bd261a16c67ebb653(
+    resource: _IAccessEntryRef_14bb9c0a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0d2a19d3fcdc61c683ec8a1d3fbbec66a1f1ec722b4eb7cc1ecb1b5779af27e5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -22885,8 +22967,14 @@ def _typecheckingstub__45ff0728c7d6fc5f47c97aa791c327f70a32e19bdf463d94d9351053f
     pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAddon.PodIdentityAssociationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     resolve_conflicts: typing.Optional[builtins.str] = None,
-    service_account_role_arn: typing.Optional[builtins.str] = None,
+    service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__51a5406bc62f26fc219359867db20bf590d4793887770ba7e4d71bd64b78992a(
+    resource: _IAddonRef_fb5de88c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -22988,7 +23076,7 @@ def _typecheckingstub__484b2779e40e4780cb0940ac7bc9daaf91fa04347613d732138d3be3d
     pod_identity_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAddon.PodIdentityAssociationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     preserve_on_delete: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     resolve_conflicts: typing.Optional[builtins.str] = None,
-    service_account_role_arn: typing.Optional[builtins.str] = None,
+    service_account_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -22999,7 +23087,7 @@ def _typecheckingstub__d3e62a858014f3867f3039d1328d57223fb0d16e3fb6d1e2d79279938
     id: builtins.str,
     *,
     resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ResourcesVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -23016,6 +23104,12 @@ def _typecheckingstub__d3e62a858014f3867f3039d1328d57223fb0d16e3fb6d1e2d79279938
     upgrade_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.UpgradePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
     zonal_shift_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ZonalShiftConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__acf89f84d6ca120e9aa1958aec34727cee0f515b6ea26ac8bb331ddc8f197e9c(
+    resource: _IClusterRef_5527f448,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23306,7 +23400,7 @@ def _typecheckingstub__12178fb427a2491053da380c7def573901cbee28defad0982fa8c86d7
 def _typecheckingstub__270f142a59c249328ab174c5b0484cfdae6e3110ab52578dbe783d6f8a898e92(
     *,
     resources_vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ResourcesVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
-    role_arn: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
     access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -23337,6 +23431,12 @@ def _typecheckingstub__d74e3378581d3898ad60f22c46414b34a44ce82bd54d09c56466afda9
     fargate_profile_name: typing.Optional[builtins.str] = None,
     subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c62d4336aef51ec7813a4b4af67342c66c46cfd302381a17f490f8f40b58381d(
+    resource: _IFargateProfileRef_ebba9623,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23430,6 +23530,12 @@ def _typecheckingstub__5aefb3bc5a12905f1fee3f10f2a7ba558d09704a51fff92ba5d790fc1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__34801166e9e75cba4add5f2a32bddc7f06c49030536f66b194b2011569cce956(
+    resource: _IIdentityProviderConfigRef_0106e882,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__aca6289219889a58359f4ccacfd4a7e605c15ea354401b67c76587c445a36e88(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23508,9 +23614,9 @@ def _typecheckingstub__27ebd660a66f96284eec036f7614b1586f77d9990c9dd345fe73522c7
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    cluster_name: builtins.str,
-    node_role: builtins.str,
-    subnets: typing.Sequence[builtins.str],
+    cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
+    node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     ami_type: typing.Optional[builtins.str] = None,
     capacity_type: typing.Optional[builtins.str] = None,
     disk_size: typing.Optional[jsii.Number] = None,
@@ -23527,6 +23633,12 @@ def _typecheckingstub__27ebd660a66f96284eec036f7614b1586f77d9990c9dd345fe73522c7
     taints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.TaintProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     update_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnNodegroup.UpdateConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19982cfc58b84a650ce9bb68eeaf60912fd6067c7ebca829e4893f1fce3c2d8f(
+    resource: _INodegroupRef_cac0d8aa,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23725,9 +23837,9 @@ def _typecheckingstub__883c5208b02930e4808e078b3ecb98b51411fa92d248a8031301fe543
 
 def _typecheckingstub__61a7b4277678abead400083fb1974a4f71ee28a78b5e79235fc3a458144e88c3(
     *,
-    cluster_name: builtins.str,
-    node_role: builtins.str,
-    subnets: typing.Sequence[builtins.str],
+    cluster_name: typing.Union[builtins.str, _IClusterRef_5527f448],
+    node_role: typing.Union[builtins.str, _IRoleRef_8400221f],
+    subnets: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     ami_type: typing.Optional[builtins.str] = None,
     capacity_type: typing.Optional[builtins.str] = None,
     disk_size: typing.Optional[jsii.Number] = None,

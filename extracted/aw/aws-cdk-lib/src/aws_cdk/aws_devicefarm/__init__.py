@@ -158,6 +158,17 @@ class CfnDevicePool(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDevicePool")
+    @builtins.classmethod
+    def arn_for_device_pool(cls, resource: _IDevicePoolRef_2a77f578) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4a2d825fe561be1751da0f7b9cec0bb42a3bcc3d9c8de6eb67bb6d16b8b6a0f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDevicePool", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -674,6 +685,20 @@ class CfnInstanceProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForInstanceProfile")
+    @builtins.classmethod
+    def arn_for_instance_profile(
+        cls,
+        resource: _IInstanceProfileRef_9b6bf1ce,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f6a53d5135b7664fb4856232b627a04a21d254e01539e548a5110b2453e4e2d)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstanceProfile", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1078,6 +1103,20 @@ class CfnNetworkProfile(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForNetworkProfile")
+    @builtins.classmethod
+    def arn_for_network_profile(
+        cls,
+        resource: _INetworkProfileRef_321b625c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e5aa4a59eba534bebfee2b72fd1331c9039d882d804a865be36b1dc5cc12677a)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNetworkProfile", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1603,6 +1642,17 @@ class CfnProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForProject")
+    @builtins.classmethod
+    def arn_for_project(cls, resource: _IProjectRef_a22154a0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2df4411534f8d1b7522224da68ef2a084232b13a59bb770a98f27a9afac5f844)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2003,6 +2053,20 @@ class CfnTestGridProject(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTestGridProject")
+    @builtins.classmethod
+    def arn_for_test_grid_project(
+        cls,
+        resource: _ITestGridProjectRef_35482f1c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d104f6de3ac4b4e9bfff57d38ef6af6a9ab75d6bba50b1156bcb08d58059f52)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTestGridProject", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2402,6 +2466,20 @@ class CfnVPCEConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForVPCEConfiguration")
+    @builtins.classmethod
+    def arn_for_vpce_configuration(
+        cls,
+        resource: _IVPCEConfigurationRef_40fa5aa0,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__82554adbe863bf4df225d7b81d737baf8ea355777299dff5e2d25819a43d76a5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVPCEConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2692,6 +2770,12 @@ def _typecheckingstub__96c6314bfee539a8146973e0d5495e39f622c4c3953e795d05460e2bb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d4a2d825fe561be1751da0f7b9cec0bb42a3bcc3d9c8de6eb67bb6d16b8b6a0f(
+    resource: _IDevicePoolRef_2a77f578,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__06066b24c235ef43fb2b2aa45da0a1ad576ff065b3b44d12f93725c3a454a27e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2775,6 +2859,12 @@ def _typecheckingstub__6b9dd1552bba1f4a322e22652920f9f1fa8079a149ae08cb1e20455b8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1f6a53d5135b7664fb4856232b627a04a21d254e01539e548a5110b2453e4e2d(
+    resource: _IInstanceProfileRef_9b6bf1ce,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9c146e7e4ae72d3aab6ff3154ac09aa531bf8c9be0d22f33d454b43266ed916b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2851,6 +2941,12 @@ def _typecheckingstub__600f319c8811bcdb37dc45d939671c38345fae417a48df83d7c3947fb
     uplink_delay_ms: typing.Optional[jsii.Number] = None,
     uplink_jitter_ms: typing.Optional[jsii.Number] = None,
     uplink_loss_percent: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e5aa4a59eba534bebfee2b72fd1331c9039d882d804a865be36b1dc5cc12677a(
+    resource: _INetworkProfileRef_321b625c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2969,6 +3065,12 @@ def _typecheckingstub__235d8b8da76a28a97a451896d3b8c3cb58dfdd957be4b441ac00cfaaf
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2df4411534f8d1b7522224da68ef2a084232b13a59bb770a98f27a9afac5f844(
+    resource: _IProjectRef_a22154a0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__44321592fb37277f56b4c3ebb2731b7b3e6e2595385a1ef9fa999ecf399f65bd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3032,6 +3134,12 @@ def _typecheckingstub__06e22928736806899d37c63a4cf4f8d19875d02a5e91a831c1382fb29
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestGridProject.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d104f6de3ac4b4e9bfff57d38ef6af6a9ab75d6bba50b1156bcb08d58059f52(
+    resource: _ITestGridProjectRef_35482f1c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3100,6 +3208,12 @@ def _typecheckingstub__5ef2954941f94384014186cbe5af3721ce845014f6d2b72d0ecf56ea0
     vpce_service_name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     vpce_configuration_description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__82554adbe863bf4df225d7b81d737baf8ea355777299dff5e2d25819a43d76a5(
+    resource: _IVPCEConfigurationRef_40fa5aa0,
 ) -> None:
     """Type checking stubs"""
     pass

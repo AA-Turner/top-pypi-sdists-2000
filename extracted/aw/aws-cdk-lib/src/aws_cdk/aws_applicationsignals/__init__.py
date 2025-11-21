@@ -798,6 +798,20 @@ class CfnServiceLevelObjective(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForServiceLevelObjective")
+    @builtins.classmethod
+    def arn_for_service_level_objective(
+        cls,
+        resource: _IServiceLevelObjectiveRef_54989f43,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50a8d652cbf22349e5d84f80af59842df8ded75cea6b970f58214a8f492fd4f8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceLevelObjective", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3531,6 +3545,12 @@ def _typecheckingstub__8476d024be5b448cfb8f9ae2f80fa7f2083296f712cdb7cd12e69365d
     request_based_sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.RequestBasedSliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sli: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServiceLevelObjective.SliProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50a8d652cbf22349e5d84f80af59842df8ded75cea6b970f58214a8f492fd4f8(
+    resource: _IServiceLevelObjectiveRef_54989f43,
 ) -> None:
     """Type checking stubs"""
     pass

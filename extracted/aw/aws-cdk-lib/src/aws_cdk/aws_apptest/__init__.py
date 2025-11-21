@@ -234,6 +234,17 @@ class CfnTestCase(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForTestCase")
+    @builtins.classmethod
+    def arn_for_test_case(cls, resource: _ITestCaseRef_0a7c2b60) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5be8513a4f58234de0bc05c3cc6b07419c39d84cd9b47499ae2069ad1cef6aad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTestCase", [resource]))
+
     @jsii.member(jsii_name="fromTestCaseArn")
     @builtins.classmethod
     def from_test_case_arn(
@@ -2861,6 +2872,12 @@ def _typecheckingstub__b54328fdade9df4505a5f85498cf53fc62e7fc59a222ac471d1a63974
     steps: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTestCase.StepProperty, typing.Dict[builtins.str, typing.Any]]]]],
     description: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5be8513a4f58234de0bc05c3cc6b07419c39d84cd9b47499ae2069ad1cef6aad(
+    resource: _ITestCaseRef_0a7c2b60,
 ) -> None:
     """Type checking stubs"""
     pass

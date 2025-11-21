@@ -161,6 +161,17 @@ class CfnAsset(
 
         jsii.create(self.__class__, self, [scope, id_, props])
 
+    @jsii.member(jsii_name="arnForAsset")
+    @builtins.classmethod
+    def arn_for_asset(cls, resource: _IAssetRef_d7225408) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__72c4935313670a704c37ffaf237491190e4167a7588d54e1b26ac3036777f102)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAsset", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -649,6 +660,17 @@ class CfnChannel(
         )
 
         jsii.create(self.__class__, self, [scope, id_, props])
+
+    @jsii.member(jsii_name="arnForChannel")
+    @builtins.classmethod
+    def arn_for_channel(cls, resource: _IChannelRef_0367ac9a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6efcbaa8d9901f61c667a000957ab2d6a69d34dc7fcc218ffbd4b4cbdfd52767)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannel", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1433,6 +1455,20 @@ class CfnOriginEndpoint(
         )
 
         jsii.create(self.__class__, self, [scope, id_, props])
+
+    @jsii.member(jsii_name="arnForOriginEndpoint")
+    @builtins.classmethod
+    def arn_for_origin_endpoint(
+        cls,
+        resource: _IOriginEndpointRef_c2596103,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d06027b59947a7651ee122728b554f78a5269a579881ac1bbc03b79ee55d8f67)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOriginEndpoint", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4396,6 +4432,20 @@ class CfnPackagingConfiguration(
 
         jsii.create(self.__class__, self, [scope, id_, props])
 
+    @jsii.member(jsii_name="arnForPackagingConfiguration")
+    @builtins.classmethod
+    def arn_for_packaging_configuration(
+        cls,
+        resource: _IPackagingConfigurationRef_fcdeb1f4,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f954ffbd394e1016422f8426f00240aa19c25f94e1570cb44eda9ac617bc2fa4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPackagingConfiguration", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6565,6 +6615,20 @@ class CfnPackagingGroup(
 
         jsii.create(self.__class__, self, [scope, id_, props])
 
+    @jsii.member(jsii_name="arnForPackagingGroup")
+    @builtins.classmethod
+    def arn_for_packaging_group(
+        cls,
+        resource: _IPackagingGroupRef_b90b8e10,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__875cbaffa51a0ce2f97dd08e13750fa8cdec34545b396d1c3d9a56095ca53eed)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPackagingGroup", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6979,6 +7043,12 @@ def _typecheckingstub__f18cc60b1c4089a35fd436a7258b422078f0fecc32d062615b3434a45
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__72c4935313670a704c37ffaf237491190e4167a7588d54e1b26ac3036777f102(
+    resource: _IAssetRef_d7225408,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e2a76b75b5e09e9a8d97792dff99a5272eed0a3f4557a4181b2b56b77f0cdcef(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7064,6 +7134,12 @@ def _typecheckingstub__affeaf26cf4f8ef0e55a6096e7b94b296b27d02db77d19dbc77989422
     hls_ingest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.HlsIngestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ingress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6efcbaa8d9901f61c667a000957ab2d6a69d34dc7fcc218ffbd4b4cbdfd52767(
+    resource: _IChannelRef_0367ac9a,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7170,6 +7246,12 @@ def _typecheckingstub__01f85bb3acbb258c87305e632e7d154966949216428ef553b6c3235e0
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     time_delay_seconds: typing.Optional[jsii.Number] = None,
     whitelist: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d06027b59947a7651ee122728b554f78a5269a579881ac1bbc03b79ee55d8f67(
+    resource: _IOriginEndpointRef_c2596103,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7455,6 +7537,12 @@ def _typecheckingstub__832773f8276f2faf0375005ff4da2278882f295916abd90cfb3e88d27
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f954ffbd394e1016422f8426f00240aa19c25f94e1570cb44eda9ac617bc2fa4(
+    resource: _IPackagingConfigurationRef_fcdeb1f4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f7ec79234b846ccf4526d21383984a066ad27bec0c2e18914091e7914cd114d5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7662,6 +7750,12 @@ def _typecheckingstub__bbd1b59c1bc28934f2358b37570be82b032aa4ccdab40560578195b02
     authorization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingGroup.AuthorizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     egress_access_logs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPackagingGroup.LogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__875cbaffa51a0ce2f97dd08e13750fa8cdec34545b396d1c3d9a56095ca53eed(
+    resource: _IPackagingGroupRef_b90b8e10,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -4,11 +4,10 @@
 from __future__ import annotations
 
 import asyncio
-from contextvars import copy_context
 import functools
 import time
-from typing import Any, Awaitable, Callable, TYPE_CHECKING, Generic, Protocol
-
+from contextvars import copy_context
+from typing import TYPE_CHECKING, Any, Awaitable, Callable, Generic, Protocol
 
 from workflows.decorators import P, R, StepConfig
 from workflows.errors import WorkflowRuntimeError
@@ -25,7 +24,6 @@ from workflows.runtime.types.results import (
     StepWorkerStateContextVar,
     WaitingForEvent,
 )
-
 from workflows.workflow import Workflow
 
 if TYPE_CHECKING:
@@ -40,7 +38,7 @@ class StepWorkerFunction(Protocol, Generic[R]):
         event: Event,
         context: Context,  # TODO - pass an identifier and re-hydrate from the plugin for distributed step workers
         workflow: Workflow,
-    ) -> Awaitable[list[StepFunctionResult[R, Any]]]: ...
+    ) -> Awaitable[list[StepFunctionResult[R]]]: ...
 
 
 async def partial(
@@ -81,7 +79,7 @@ def as_step_worker_function(func: Callable[P, Awaitable[R]]) -> StepWorkerFuncti
         event: Event,
         context: Context,
         workflow: Workflow,
-    ) -> list[StepFunctionResult[R, Any]]:
+    ) -> list[StepFunctionResult[R]]:
         returns = Returns[R](return_values=[])
 
         token = StepWorkerStateContextVar.set(

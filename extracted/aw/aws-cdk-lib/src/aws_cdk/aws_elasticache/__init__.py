@@ -68,6 +68,10 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_ec2 import (
+    ISecurityGroupRef as _ISecurityGroupRef_efa4ff18,
+    ISubnetRef as _ISubnetRef_ac31e361,
+)
 from ..interfaces.aws_elasticache import (
     CacheClusterReference as _CacheClusterReference_eaa6c194,
     GlobalReplicationGroupReference as _GlobalReplicationGroupReference_6fafc89d,
@@ -90,6 +94,7 @@ from ..interfaces.aws_elasticache import (
     UserGroupReference as _UserGroupReference_d89cdf7b,
     UserReference as _UserReference_7ff80ad9,
 )
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
 @jsii.implements(_IInspectable_c2943556, _ICacheClusterRef_a6e2b9ff, _ITaggable_36806126)
@@ -199,7 +204,7 @@ class CfnCacheCluster(
         :param cache_parameter_group_name: The name of the parameter group to associate with this cluster. If this argument is omitted, the default parameter group for the specified engine is used. You cannot use any parameter group which has ``cluster-enabled='yes'`` when creating a cluster.
         :param cache_security_group_names: A list of security group names to associate with this cluster. Use this parameter only when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC).
         :param cache_subnet_group_name: The name of the subnet group to be used for the cluster. Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC). .. epigraph:: If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see ``[AWS::ElastiCache::SubnetGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-subnetgroup.html) .``
-        :param cluster_name: A name for the cache cluster. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The name must contain 1 to 50 alphanumeric characters or hyphens. The name must start with a letter and cannot end with a hyphen or contain two consecutive hyphens.
+        :param cluster_name: A name for the cache cluster. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The name must contain 1 to 50 alphanumeric characters or hyphens. The name must start with a letter and cannot end with a hyphen or contain two consecutive hyphens.
         :param engine_version: The version number of the cache engine to be used for this cluster. To view the supported cache engine versions, use the DescribeCacheEngineVersions operation. *Important:* You can upgrade to a newer engine version (see `Selecting a Cache Engine and Version <https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html#VersionManagement>`_ ), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster or replication group and create it anew with the earlier engine version.
         :param ip_discovery: The network type you choose when modifying a cluster, either ``ipv4`` | ``ipv6`` . IPv6 is supported for workloads using Valkey 7.2 and above, Redis OSS engine version 6.2 to 7.1 and Memcached engine version 1.6.6 and above on all instances built on the `Nitro system <https://docs.aws.amazon.com/ec2/nitro/>`_ .
         :param log_delivery_configurations: Specifies the destination, format and type of the logs.
@@ -1087,7 +1092,7 @@ class CfnCacheClusterProps:
         :param cache_parameter_group_name: The name of the parameter group to associate with this cluster. If this argument is omitted, the default parameter group for the specified engine is used. You cannot use any parameter group which has ``cluster-enabled='yes'`` when creating a cluster.
         :param cache_security_group_names: A list of security group names to associate with this cluster. Use this parameter only when you are creating a cluster outside of an Amazon Virtual Private Cloud (Amazon VPC).
         :param cache_subnet_group_name: The name of the subnet group to be used for the cluster. Use this parameter only when you are creating a cluster in an Amazon Virtual Private Cloud (Amazon VPC). .. epigraph:: If you're going to launch your cluster in an Amazon VPC, you need to create a subnet group before you start creating a cluster. For more information, see ``[AWS::ElastiCache::SubnetGroup](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticache-subnetgroup.html) .``
-        :param cluster_name: A name for the cache cluster. If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The name must contain 1 to 50 alphanumeric characters or hyphens. The name must start with a letter and cannot end with a hyphen or contain two consecutive hyphens.
+        :param cluster_name: A name for the cache cluster. If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . The name must contain 1 to 50 alphanumeric characters or hyphens. The name must start with a letter and cannot end with a hyphen or contain two consecutive hyphens.
         :param engine_version: The version number of the cache engine to be used for this cluster. To view the supported cache engine versions, use the DescribeCacheEngineVersions operation. *Important:* You can upgrade to a newer engine version (see `Selecting a Cache Engine and Version <https://docs.aws.amazon.com/AmazonElastiCache/latest/dg/SelectEngine.html#VersionManagement>`_ ), but you cannot downgrade to an earlier engine version. If you want to use an earlier engine version, you must delete the existing cluster or replication group and create it anew with the earlier engine version.
         :param ip_discovery: The network type you choose when modifying a cluster, either ``ipv4`` | ``ipv6`` . IPv6 is supported for workloads using Valkey 7.2 and above, Redis OSS engine version 6.2 to 7.1 and Memcached engine version 1.6.6 and above on all instances built on the `Nitro system <https://docs.aws.amazon.com/ec2/nitro/>`_ .
         :param log_delivery_configurations: Specifies the destination, format and type of the logs.
@@ -1395,7 +1400,7 @@ class CfnCacheClusterProps:
     def cluster_name(self) -> typing.Optional[builtins.str]:
         '''A name for the cache cluster.
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the cache cluster. For more information, see `Name Type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ .
 
         The name must contain 1 to 50 alphanumeric characters or hyphens. The name must start with a letter and cannot end with a hyphen or contain two consecutive hyphens.
 
@@ -1735,6 +1740,20 @@ class CfnGlobalReplicationGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGlobalReplicationGroup")
+    @builtins.classmethod
+    def arn_for_global_replication_group(
+        cls,
+        resource: _IGlobalReplicationGroupRef_64ba38b1,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0106bf96c7e277c536b122f1c2c319b78235bf49c80c0f7e57a46e74e8286d90)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGlobalReplicationGroup", [resource]))
 
     @jsii.member(jsii_name="fromGlobalReplicationGroupId")
     @builtins.classmethod
@@ -2527,6 +2546,20 @@ class CfnParameterGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForParameterGroup")
+    @builtins.classmethod
+    def arn_for_parameter_group(
+        cls,
+        resource: _IParameterGroupRef_f36b5e48,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__baeb5bb005b0dc62dfe17d5f8d9e8c0ae8f658e16abf26ec5a442e932ee292f2)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForParameterGroup", [resource]))
+
     @jsii.member(jsii_name="fromCacheParameterGroupName")
     @builtins.classmethod
     def from_cache_parameter_group_name(
@@ -3015,6 +3048,20 @@ class CfnReplicationGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForReplicationGroup")
+    @builtins.classmethod
+    def arn_for_replication_group(
+        cls,
+        resource: _IReplicationGroupRef_0d541dee,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1aa68619fe12dd1873fde463f87bd54c026e88221c7456a4593b983308d83dec)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReplicationGroup", [resource]))
 
     @jsii.member(jsii_name="fromReplicationGroupId")
     @builtins.classmethod
@@ -5634,15 +5681,15 @@ class CfnServerlessCache(
         description: typing.Optional[builtins.str] = None,
         endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         major_engine_version: typing.Optional[builtins.str] = None,
         reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnServerlessCache.EndpointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_group_id: typing.Optional[builtins.str] = None,
+        user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::ServerlessCache``.
 
@@ -5689,6 +5736,20 @@ class CfnServerlessCache(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForServerlessCache")
+    @builtins.classmethod
+    def arn_for_serverless_cache(
+        cls,
+        resource: _IServerlessCacheRef_27114db2,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7507c0d871d74f6a8df94c97f10f554cf951f9ac6c733d87af665857b74e7aaa)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServerlessCache", [resource]))
 
     @jsii.member(jsii_name="fromServerlessCacheName")
     @builtins.classmethod
@@ -6411,15 +6472,15 @@ class CfnServerlessCacheProps:
         description: typing.Optional[builtins.str] = None,
         endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         final_snapshot_name: typing.Optional[builtins.str] = None,
-        kms_key_id: typing.Optional[builtins.str] = None,
+        kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         major_engine_version: typing.Optional[builtins.str] = None,
         reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
         snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
         snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-        subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        user_group_id: typing.Optional[builtins.str] = None,
+        user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
     ) -> None:
         '''Properties for defining a ``CfnServerlessCache``.
 
@@ -6616,13 +6677,15 @@ class CfnServerlessCacheProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def kms_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The ID of the AWS Key Management Service (KMS) key that is used to encrypt data at rest in the serverless cache.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-kmskeyid
         '''
         result = self._values.get("kms_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def major_engine_version(self) -> typing.Optional[builtins.str]:
@@ -6647,13 +6710,15 @@ class CfnServerlessCacheProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServerlessCache.EndpointProperty]], result)
 
     @builtins.property
-    def security_group_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def security_group_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]]:
         '''The IDs of the EC2 security groups associated with the serverless cache.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-securitygroupids
         '''
         result = self._values.get("security_group_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]], result)
 
     @builtins.property
     def snapshot_arns_to_restore(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -6676,7 +6741,9 @@ class CfnServerlessCacheProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+    def subnet_ids(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]]:
         '''If no subnet IDs are given and your VPC is in us-west-1, then ElastiCache will select 2 default subnets across AZs in your VPC.
 
         For all other Regions, if no subnet IDs are given then ElastiCache will select 3 default subnets across AZs in your default VPC.
@@ -6684,7 +6751,7 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-subnetids
         '''
         result = self._values.get("subnet_ids")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -6696,7 +6763,9 @@ class CfnServerlessCacheProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def user_group_id(self) -> typing.Optional[builtins.str]:
+    def user_group_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]]:
         '''The identifier of the user group associated with the serverless cache.
 
         Available for Valkey and Redis OSS only. Default is NULL.
@@ -6704,7 +6773,7 @@ class CfnServerlessCacheProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-serverlesscache.html#cfn-elasticache-serverlesscache-usergroupid
         '''
         result = self._values.get("user_group_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6757,7 +6826,7 @@ class CfnSubnetGroup(
         id: builtins.str,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -6782,6 +6851,17 @@ class CfnSubnetGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForSubnetGroup")
+    @builtins.classmethod
+    def arn_for_subnet_group(cls, resource: _ISubnetGroupRef_b7141182) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bb943e4cb8962a255ad875af86b90780e5ab5df4ae4734e1cb98ac4dfe7269f4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSubnetGroup", [resource]))
 
     @jsii.member(jsii_name="fromCacheSubnetGroupName")
     @builtins.classmethod
@@ -6922,7 +7002,7 @@ class CfnSubnetGroupProps:
         self,
         *,
         description: builtins.str,
-        subnet_ids: typing.Sequence[builtins.str],
+        subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
         cache_subnet_group_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -6980,14 +7060,16 @@ class CfnSubnetGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def subnet_ids(self) -> typing.List[builtins.str]:
+    def subnet_ids(
+        self,
+    ) -> typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]]:
         '''The EC2 subnet IDs for the cache subnet group.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticache-subnetgroup.html#cfn-elasticache-subnetgroup-subnetids
         '''
         result = self._values.get("subnet_ids")
         assert result is not None, "Required property 'subnet_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _ISubnetRef_ac31e361]], result)
 
     @builtins.property
     def cache_subnet_group_name(self) -> typing.Optional[builtins.str]:
@@ -7105,6 +7187,17 @@ class CfnUser(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUser")
+    @builtins.classmethod
+    def arn_for_user(cls, resource: _IUserRef_7cc9cbc0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7926c8228d0cbec24c73cc68885b3ac11dad5f7f4b6f913d423e08f7143e5eba)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
     @jsii.member(jsii_name="fromUserArn")
     @builtins.classmethod
@@ -7441,7 +7534,7 @@ class CfnUserGroup(
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[builtins.str],
+        user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ElastiCache::UserGroup``.
@@ -7462,6 +7555,17 @@ class CfnUserGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForUserGroup")
+    @builtins.classmethod
+    def arn_for_user_group(cls, resource: _IUserGroupRef_2cd8e96b) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8586bb4703f8da74dfa920ad16d7601405cd6a48e174ef6ad526f45c08786d35)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserGroup", [resource]))
 
     @jsii.member(jsii_name="fromUserGroupArn")
     @builtins.classmethod
@@ -7641,7 +7745,7 @@ class CfnUserGroupProps:
         *,
         engine: builtins.str,
         user_group_id: builtins.str,
-        user_ids: typing.Sequence[builtins.str],
+        user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnUserGroup``.
@@ -7707,7 +7811,7 @@ class CfnUserGroupProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def user_ids(self) -> typing.List[builtins.str]:
+    def user_ids(self) -> typing.List[typing.Union[builtins.str, _IUserRef_7cc9cbc0]]:
         '''The list of user IDs that belong to the user group.
 
         A user named ``default`` must be included.
@@ -7716,7 +7820,7 @@ class CfnUserGroupProps:
         '''
         result = self._values.get("user_ids")
         assert result is not None, "Required property 'user_ids' is missing"
-        return typing.cast(typing.List[builtins.str], result)
+        return typing.cast(typing.List[typing.Union[builtins.str, _IUserRef_7cc9cbc0]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -8227,6 +8331,12 @@ def _typecheckingstub__7b347e00f869706c90d3dc918dc3fb240c81a3a2e15ca55cb3a114e77
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0106bf96c7e277c536b122f1c2c319b78235bf49c80c0f7e57a46e74e8286d90(
+    resource: _IGlobalReplicationGroupRef_64ba38b1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ff89494f4cbd1e19d9e3985a30ea573557681f435cc9ec3daa095b003c844fd1(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8361,6 +8471,12 @@ def _typecheckingstub__86f3b322f4ea3d0cc63e18e1b285cc656e6d789289e29668aa7acce95
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__baeb5bb005b0dc62dfe17d5f8d9e8c0ae8f658e16abf26ec5a442e932ee292f2(
+    resource: _IParameterGroupRef_f36b5e48,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8698073c2c79628abaa44336eab31fa950987b13f7afd1265b2c7155cb2684c9(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -8458,6 +8574,12 @@ def _typecheckingstub__be27fffa79ab6bf194b2d0d4de1313299c709e45a12e57a99e85fb26c
     transit_encryption_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     transit_encryption_mode: typing.Optional[builtins.str] = None,
     user_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1aa68619fe12dd1873fde463f87bd54c026e88221c7456a4593b983308d83dec(
+    resource: _IReplicationGroupRef_0d541dee,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8907,15 +9029,21 @@ def _typecheckingstub__f204522453489e8198605933b3b942062e9c202c1099285663a7d772a
     description: typing.Optional[builtins.str] = None,
     endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     final_snapshot_name: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     major_engine_version: typing.Optional[builtins.str] = None,
     reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
     snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    user_group_id: typing.Optional[builtins.str] = None,
+    user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7507c0d871d74f6a8df94c97f10f554cf951f9ac6c733d87af665857b74e7aaa(
+    resource: _IServerlessCacheRef_27114db2,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9078,15 +9206,15 @@ def _typecheckingstub__58b8c0bd8ed5d4d4b90b896e92a64fc113ba2b7b80dfa7075b8fad4b0
     description: typing.Optional[builtins.str] = None,
     endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     final_snapshot_name: typing.Optional[builtins.str] = None,
-    kms_key_id: typing.Optional[builtins.str] = None,
+    kms_key_id: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     major_engine_version: typing.Optional[builtins.str] = None,
     reader_endpoint: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnServerlessCache.EndpointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    security_group_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     snapshot_arns_to_restore: typing.Optional[typing.Sequence[builtins.str]] = None,
     snapshot_retention_limit: typing.Optional[jsii.Number] = None,
-    subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnet_ids: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    user_group_id: typing.Optional[builtins.str] = None,
+    user_group_id: typing.Optional[typing.Union[builtins.str, _IUserGroupRef_2cd8e96b]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9096,9 +9224,15 @@ def _typecheckingstub__1d31f960507f2c9e3587baf93d99fa25f2747d0865408ff081e5c5230
     id: builtins.str,
     *,
     description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     cache_subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bb943e4cb8962a255ad875af86b90780e5ab5df4ae4734e1cb98ac4dfe7269f4(
+    resource: _ISubnetGroupRef_b7141182,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9150,7 +9284,7 @@ def _typecheckingstub__3f6670815d10d752e7b16bcf0f681bfa6e802161e1b1eba4c63dd3a6d
 def _typecheckingstub__a4b45c5c5c7c2f90c8c0fc4304349cfb95eff57e46669706a32a0b5b73fc2139(
     *,
     description: builtins.str,
-    subnet_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]],
     cache_subnet_group_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -9169,6 +9303,12 @@ def _typecheckingstub__3690e849b3e5bf7f482e77652d683906b1133738dbc72aea39d018672
     no_password_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     passwords: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7926c8228d0cbec24c73cc68885b3ac11dad5f7f4b6f913d423e08f7143e5eba(
+    resource: _IUserRef_7cc9cbc0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9263,8 +9403,14 @@ def _typecheckingstub__ecc142924e04b2348d54a42d3f1272d7a6d9f1886d6e9133f1a0ed55a
     *,
     engine: builtins.str,
     user_group_id: builtins.str,
-    user_ids: typing.Sequence[builtins.str],
+    user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8586bb4703f8da74dfa920ad16d7601405cd6a48e174ef6ad526f45c08786d35(
+    resource: _IUserGroupRef_2cd8e96b,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9325,7 +9471,7 @@ def _typecheckingstub__781d57350a7876de81adb05f4b5f1c6a6733fe48684f64bf990d33773
     *,
     engine: builtins.str,
     user_group_id: builtins.str,
-    user_ids: typing.Sequence[builtins.str],
+    user_ids: typing.Sequence[typing.Union[builtins.str, _IUserRef_7cc9cbc0]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

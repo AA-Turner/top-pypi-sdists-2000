@@ -67,8 +67,18 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_events import IEventBusRef as _IEventBusRef_aa86e9b4
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kinesis import IStreamRef as _IStreamRef_b484e253
+from ..interfaces.aws_lambda import IFunctionRef as _IFunctionRef_2601eb33
+from ..interfaces.aws_logs import ILogGroupRef as _ILogGroupRef_874d025a
 from ..interfaces.aws_pipes import (
     IPipeRef as _IPipeRef_ab8f7bb0, PipeReference as _PipeReference_92f1927d
+)
+from ..interfaces.aws_sns import ITopicRef as _ITopicRef_29aa9a88
+from ..interfaces.aws_sqs import IQueueRef as _IQueueRef_fa8b2198
+from ..interfaces.aws_stepfunctions import (
+    IStateMachineRef as _IStateMachineRef_65490661
 )
 
 
@@ -423,12 +433,12 @@ class CfnPipe(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        role_arn: builtins.str,
-        source: builtins.str,
-        target: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
+        target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
         description: typing.Optional[builtins.str] = None,
         desired_state: typing.Optional[builtins.str] = None,
-        enrichment: typing.Optional[builtins.str] = None,
+        enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeEnrichmentParametersProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
         log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnPipe.PipeLogConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -448,7 +458,7 @@ class CfnPipe(
         :param desired_state: The state the pipe should be in.
         :param enrichment: The ARN of the enrichment resource.
         :param enrichment_parameters: The parameters required to set up enrichment on your pipe.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. To update a pipe that is using the default AWS owned key to use a customer managed key instead, or update a pipe that is using a customer managed key to use a different customer managed key, specify a customer managed key identifier. To update a pipe that is using a customer managed key to use the default AWS owned key , specify an empty string. For more information, see `Managing keys <https://docs.aws.amazon.com/kms/latest/developerguide/getting-started.html>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. To update a pipe that is using the default AWS owned key to use a customer managed key instead, or update a pipe that is using a customer managed key to use a different customer managed key, specify a customer managed key identifier. To update a pipe that is using a customer managed key to use the default AWS owned key , specify an empty string. For more information, see `Managing keys <https://docs.aws.amazon.com/kms/latest/developerguide/getting-started.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param log_configuration: The logging configuration settings for the pipe.
         :param name: The name of the pipe.
         :param source_parameters: The parameters required to set up a source for your pipe.
@@ -476,6 +486,17 @@ class CfnPipe(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForPipe")
+    @builtins.classmethod
+    def arn_for_pipe(cls, resource: _IPipeRef_ab8f7bb0) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1aa2484c1e22e6cf64fdfb316fdb55c0359ae58d82a97d15a4a479fe61d7255b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPipe", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -668,7 +689,7 @@ class CfnPipe(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyIdentifier")
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data.'''
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyIdentifier"))
 
     @kms_key_identifier.setter
@@ -7054,12 +7075,12 @@ class CfnPipeProps:
     def __init__(
         self,
         *,
-        role_arn: builtins.str,
-        source: builtins.str,
-        target: builtins.str,
+        role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+        source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
+        target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
         description: typing.Optional[builtins.str] = None,
         desired_state: typing.Optional[builtins.str] = None,
-        enrichment: typing.Optional[builtins.str] = None,
+        enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
         enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeEnrichmentParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_identifier: typing.Optional[builtins.str] = None,
         log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7077,7 +7098,7 @@ class CfnPipeProps:
         :param desired_state: The state the pipe should be in.
         :param enrichment: The ARN of the enrichment resource.
         :param enrichment_parameters: The parameters required to set up enrichment on your pipe.
-        :param kms_key_identifier: The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. To update a pipe that is using the default AWS owned key to use a customer managed key instead, or update a pipe that is using a customer managed key to use a different customer managed key, specify a customer managed key identifier. To update a pipe that is using a customer managed key to use the default AWS owned key , specify an empty string. For more information, see `Managing keys <https://docs.aws.amazon.com/kms/latest/developerguide/getting-started.html>`_ in the *AWS Key Management Service Developer Guide* .
+        :param kms_key_identifier: The identifier of the AWS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data. The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN. To update a pipe that is using the default AWS owned key to use a customer managed key instead, or update a pipe that is using a customer managed key to use a different customer managed key, specify a customer managed key identifier. To update a pipe that is using a customer managed key to use the default AWS owned key , specify an empty string. For more information, see `Managing keys <https://docs.aws.amazon.com/kms/latest/developerguide/getting-started.html>`_ in the *AWS Key Management Service Developer Guide* .
         :param log_configuration: The logging configuration settings for the pipe.
         :param name: The name of the pipe.
         :param source_parameters: The parameters required to set up a source for your pipe.
@@ -7457,34 +7478,38 @@ class CfnPipeProps:
             self._values["target_parameters"] = target_parameters
 
     @builtins.property
-    def role_arn(self) -> builtins.str:
+    def role_arn(self) -> typing.Union[builtins.str, _IRoleRef_8400221f]:
         '''The ARN of the role that allows the pipe to send data to the target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-rolearn
         '''
         result = self._values.get("role_arn")
         assert result is not None, "Required property 'role_arn' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IRoleRef_8400221f], result)
 
     @builtins.property
-    def source(self) -> builtins.str:
+    def source(
+        self,
+    ) -> typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198]:
         '''The ARN of the source resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-source
         '''
         result = self._values.get("source")
         assert result is not None, "Required property 'source' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198], result)
 
     @builtins.property
-    def target(self) -> builtins.str:
+    def target(
+        self,
+    ) -> typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661]:
         '''The ARN of the target resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-target
         '''
         result = self._values.get("target")
         assert result is not None, "Required property 'target' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661], result)
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -7505,13 +7530,15 @@ class CfnPipeProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def enrichment(self) -> typing.Optional[builtins.str]:
+    def enrichment(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]]:
         '''The ARN of the enrichment resource.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-pipes-pipe.html#cfn-pipes-pipe-enrichment
         '''
         result = self._values.get("enrichment")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]], result)
 
     @builtins.property
     def enrichment_parameters(
@@ -7526,7 +7553,7 @@ class CfnPipeProps:
 
     @builtins.property
     def kms_key_identifier(self) -> typing.Optional[builtins.str]:
-        '''The identifier of the AWS KMS customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data.
+        '''The identifier of the AWS  customer managed key for EventBridge to use, if you choose to use a customer managed key to encrypt pipe data.
 
         The identifier can be the key Amazon Resource Name (ARN), KeyId, key alias, or key alias ARN.
 
@@ -7617,12 +7644,12 @@ def _typecheckingstub__2590746a77e697feb25a71ec367eb957a7632f9fe5a46ae7e30476068
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    role_arn: builtins.str,
-    source: builtins.str,
-    target: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
+    target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
     description: typing.Optional[builtins.str] = None,
     desired_state: typing.Optional[builtins.str] = None,
-    enrichment: typing.Optional[builtins.str] = None,
+    enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeEnrichmentParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
     log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -7630,6 +7657,12 @@ def _typecheckingstub__2590746a77e697feb25a71ec367eb957a7632f9fe5a46ae7e30476068
     source_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeSourceParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     target_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeTargetParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1aa2484c1e22e6cf64fdfb316fdb55c0359ae58d82a97d15a4a479fe61d7255b(
+    resource: _IPipeRef_ab8f7bb0,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8272,12 +8305,12 @@ def _typecheckingstub__6f2cbc8cdc4847f4898a4137ea8b22908f1ad5c472f632396cf65a72a
 
 def _typecheckingstub__f6a6720db1bd2e7acc178f6bd481fd8e3e740405a24c01b669c4c4595318b8c0(
     *,
-    role_arn: builtins.str,
-    source: builtins.str,
-    target: builtins.str,
+    role_arn: typing.Union[builtins.str, _IRoleRef_8400221f],
+    source: typing.Union[builtins.str, _IStreamRef_b484e253, _IQueueRef_fa8b2198],
+    target: typing.Union[builtins.str, _ITopicRef_29aa9a88, _IFunctionRef_2601eb33, _IEventBusRef_aa86e9b4, _IQueueRef_fa8b2198, _ILogGroupRef_874d025a, _IStateMachineRef_65490661],
     description: typing.Optional[builtins.str] = None,
     desired_state: typing.Optional[builtins.str] = None,
-    enrichment: typing.Optional[builtins.str] = None,
+    enrichment: typing.Optional[typing.Union[builtins.str, _IFunctionRef_2601eb33]] = None,
     enrichment_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeEnrichmentParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_identifier: typing.Optional[builtins.str] = None,
     log_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipe.PipeLogConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,

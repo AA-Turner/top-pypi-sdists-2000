@@ -1698,9 +1698,9 @@ ecs.Ec2Service(self, "EC2Service",
 
 ### Managed Instances Capacity Providers
 
-Managed Instances Capacity Providers allow you to use AWS-managed EC2 instances for your ECS tasks while providing more control over instance selection than standard Fargate. AWS handles the instance lifecycle, patching, and maintenance while you can specify detailed instance requirements.
+Managed Instances Capacity Providers allow you to use AWS-managed EC2 instances for your ECS tasks while providing more control over instance selection than standard Fargate. AWS handles the instance lifecycle, patching, and maintenance while you can specify detailed instance requirements. You can  define detailed instance requirements to control which types of instances are used for your workloads.
 
-To create a Managed Instances Capacity Provider, you need to specify the required EC2 instance profile, and networking configuration. You can also define detailed instance requirements to control which types of instances are used for your workloads.
+See [ECS documentation for Managed Instances Capacity Provider](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/managed-instances-capacity-providers-concept.html) for more documentation.
 
 ```python
 # vpc: ec2.Vpc
@@ -1731,14 +1731,19 @@ mi_capacity_provider.connections.allow_from(ec2.Peer.ipv4(vpc.vpc_cidr_block), e
 # Add the capacity provider to the cluster
 cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
 
-task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+task_definition = ecs.TaskDefinition(self, "TaskDef",
+    memory_mi_b="512",
+    cpu="256",
+    network_mode=ecs.NetworkMode.AWS_VPC,
+    compatibility=ecs.Compatibility.MANAGED_INSTANCES
+)
 
 task_definition.add_container("web",
     image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
     memory_reservation_mi_b=256
 )
 
-ecs.Ec2Service(self, "EC2Service",
+ecs.FargateService(self, "FargateService",
     cluster=cluster,
     task_definition=task_definition,
     min_healthy_percent=100,
@@ -1799,6 +1804,41 @@ mi_capacity_provider = ecs.ManagedInstancesCapacityProvider(self, "MICapacityPro
         on_demand_max_price_percentage_over_lowest_price=10
     )
 )
+```
+
+#### Note: Service Replacement When Migrating from LaunchType to CapacityProviderStrategy
+
+**Understanding the Limitation**
+
+The ECS [CreateService API](https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html#ECS-CreateService-request-launchType) does not allow specifying both `launchType` and `capacityProviderStrategies` simultaneously. When you specify `capacityProviderStrategies`, the CDK uses those capacity providers instead of a launch type. This is a limitation of the ECS API and CloudFormation, not a CDK bug.
+
+**Impact on Updates**
+
+Because `launchType` is immutable during updates, switching from `launchType` to `capacityProviderStrategies` requires CloudFormation to replace the service. This means your existing service will be deleted and recreated with the new configuration. This behavior is expected and reflects the underlying API constraints.
+
+**Workaround**
+
+While we work on a long-term solution, you can use the following [escape hatch](https://docs.aws.amazon.com/cdk/v2/guide/cfn-layer.html) to preserve your service during the migration:
+
+```python
+# cluster: ecs.Cluster
+# task_definition: ecs.TaskDefinition
+# mi_capacity_provider: ecs.ManagedInstancesCapacityProvider
+
+
+service = ecs.FargateService(self, "Service",
+    cluster=cluster,
+    task_definition=task_definition,
+    capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+        capacity_provider=mi_capacity_provider.capacity_provider_name,
+        weight=1
+    )
+    ]
+)
+
+# Escape hatch: Force launchType at the CloudFormation level to prevent service replacement
+cfn_service = service.node.default_child
+cfn_service.launch_type = "FARGATE"
 ```
 
 ### Cluster Default Provider Strategy
@@ -2457,6 +2497,7 @@ from ..interfaces.aws_ecs import (
     TaskDefinitionReference as _TaskDefinitionReference_b050a42a,
     TaskSetReference as _TaskSetReference_bf1a6f8f,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
 
@@ -6943,6 +6984,9 @@ class CfnCapacityProvider(
                 ),
         
                 # the properties below are optional
+                infrastructure_optimization=ecs.CfnCapacityProvider.InfrastructureOptimizationProperty(
+                    scale_in_after=123
+                ),
                 propagate_tags="propagateTags"
             ),
             name="name",
@@ -6987,6 +7031,20 @@ class CfnCapacityProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCapacityProvider")
+    @builtins.classmethod
+    def arn_for_capacity_provider(
+        cls,
+        resource: _ICapacityProviderRef_2d421d38,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95f275957049f35fab12212269fb8430aff327a95d054b9ab139ffbf449b1e01)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapacityProvider", [resource]))
 
     @jsii.member(jsii_name="fromCapacityProviderName")
     @builtins.classmethod
@@ -7483,6 +7541,65 @@ class CfnCapacityProvider(
 
         def __repr__(self) -> str:
             return "BaselineEbsBandwidthMbpsRequestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnCapacityProvider.InfrastructureOptimizationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"scale_in_after": "scaleInAfter"},
+    )
+    class InfrastructureOptimizationProperty:
+        def __init__(
+            self,
+            *,
+            scale_in_after: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider.
+
+            Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+
+            :param scale_in_after: This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are: Not set (null) - Uses the default optimization behavior, ``-1`` - Disables automatic infrastructure optimization, ``0`` to ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-infrastructureoptimization.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                infrastructure_optimization_property = ecs.CfnCapacityProvider.InfrastructureOptimizationProperty(
+                    scale_in_after=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8190745b8f3973969ec09a1b3747ebde0910102f01aadd896aee0896b3ad4be7)
+                check_type(argname="argument scale_in_after", value=scale_in_after, expected_type=type_hints["scale_in_after"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if scale_in_after is not None:
+                self._values["scale_in_after"] = scale_in_after
+
+        @builtins.property
+        def scale_in_after(self) -> typing.Optional[jsii.Number]:
+            '''This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized.
+
+            A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are: Not set (null) - Uses the default optimization behavior, ``-1`` - Disables automatic infrastructure optimization, ``0`` to ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-infrastructureoptimization.html#cfn-ecs-capacityprovider-infrastructureoptimization-scaleinafter
+            '''
+            result = self._values.get("scale_in_after")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InfrastructureOptimizationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8318,6 +8435,7 @@ class CfnCapacityProvider(
         name_mapping={
             "infrastructure_role_arn": "infrastructureRoleArn",
             "instance_launch_template": "instanceLaunchTemplate",
+            "infrastructure_optimization": "infrastructureOptimization",
             "propagate_tags": "propagateTags",
         },
     )
@@ -8327,6 +8445,7 @@ class CfnCapacityProvider(
             *,
             infrastructure_role_arn: builtins.str,
             instance_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceLaunchTemplateProperty", typing.Dict[builtins.str, typing.Any]]],
+            infrastructure_optimization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InfrastructureOptimizationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             propagate_tags: typing.Optional[builtins.str] = None,
         ) -> None:
             '''The configuration for a Amazon ECS Managed Instances provider.
@@ -8335,6 +8454,7 @@ class CfnCapacityProvider(
 
             :param infrastructure_role_arn: The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS assumes to manage instances. This role must include permissions for Amazon EC2 instance lifecycle management, networking, and any additional AWS services required for your workloads. For more information, see `Amazon ECS infrastructure IAM role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html>`_ in the *Amazon ECS Developer Guide* .
             :param instance_launch_template: The launch template that defines how Amazon ECS launches Amazon ECS Managed Instances. This includes the instance profile for your tasks, network and storage configuration, and instance requirements that determine which Amazon EC2 instance types can be used. For more information, see `Store instance launch parameters in Amazon EC2 launch templates <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html>`_ in the *Amazon EC2 User Guide* .
+            :param infrastructure_optimization: Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
             :param propagate_tags: Determines whether tags from the capacity provider are automatically applied to Amazon ECS Managed Instances. This helps with cost allocation and resource management by ensuring consistent tagging across your infrastructure.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html
@@ -8424,6 +8544,9 @@ class CfnCapacityProvider(
                     ),
                 
                     # the properties below are optional
+                    infrastructure_optimization=ecs.CfnCapacityProvider.InfrastructureOptimizationProperty(
+                        scale_in_after=123
+                    ),
                     propagate_tags="propagateTags"
                 )
             '''
@@ -8431,11 +8554,14 @@ class CfnCapacityProvider(
                 type_hints = typing.get_type_hints(_typecheckingstub__45a3888e29c1b6fb29bc3dbf90f279f8c543b8924bb51956a75f3290eca0b7c9)
                 check_type(argname="argument infrastructure_role_arn", value=infrastructure_role_arn, expected_type=type_hints["infrastructure_role_arn"])
                 check_type(argname="argument instance_launch_template", value=instance_launch_template, expected_type=type_hints["instance_launch_template"])
+                check_type(argname="argument infrastructure_optimization", value=infrastructure_optimization, expected_type=type_hints["infrastructure_optimization"])
                 check_type(argname="argument propagate_tags", value=propagate_tags, expected_type=type_hints["propagate_tags"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "infrastructure_role_arn": infrastructure_role_arn,
                 "instance_launch_template": instance_launch_template,
             }
+            if infrastructure_optimization is not None:
+                self._values["infrastructure_optimization"] = infrastructure_optimization
             if propagate_tags is not None:
                 self._values["propagate_tags"] = propagate_tags
 
@@ -8468,6 +8594,19 @@ class CfnCapacityProvider(
             result = self._values.get("instance_launch_template")
             assert result is not None, "Required property 'instance_launch_template' is missing"
             return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceLaunchTemplateProperty"], result)
+
+        @builtins.property
+        def infrastructure_optimization(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InfrastructureOptimizationProperty"]]:
+            '''Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider.
+
+            Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-infrastructureoptimization
+            '''
+            result = self._values.get("infrastructure_optimization")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InfrastructureOptimizationProperty"]], result)
 
         @builtins.property
         def propagate_tags(self) -> typing.Optional[builtins.str]:
@@ -9275,6 +9414,9 @@ class CfnCapacityProviderProps:
                     ),
             
                     # the properties below are optional
+                    infrastructure_optimization=ecs.CfnCapacityProvider.InfrastructureOptimizationProperty(
+                        scale_in_after=123
+                    ),
                     propagate_tags="propagateTags"
                 ),
                 name="name",
@@ -9450,7 +9592,7 @@ class CfnCluster(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
         cluster_name: typing.Optional[builtins.str] = None,
         cluster_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -9485,6 +9627,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_7ad11494) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cfb2a9f62f04a78f928f54162262e2e70b01391927c3613bb02dc8cf667f3425)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="fromClusterArn")
     @builtins.classmethod
@@ -10424,9 +10577,9 @@ class CfnClusterCapacityProviderAssociations(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        cluster: builtins.str,
+        cluster: typing.Union[builtins.str, _IClusterRef_7ad11494],
         default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]],
-        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
     ) -> None:
         '''Create a new ``AWS::ECS::ClusterCapacityProviderAssociations``.
 
@@ -10680,9 +10833,9 @@ class CfnClusterCapacityProviderAssociationsProps:
     def __init__(
         self,
         *,
-        cluster: builtins.str,
+        cluster: typing.Union[builtins.str, _IClusterRef_7ad11494],
         default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]],
-        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnClusterCapacityProviderAssociations``.
 
@@ -10726,14 +10879,14 @@ class CfnClusterCapacityProviderAssociationsProps:
             self._values["capacity_providers"] = capacity_providers
 
     @builtins.property
-    def cluster(self) -> builtins.str:
+    def cluster(self) -> typing.Union[builtins.str, _IClusterRef_7ad11494]:
         '''The cluster the capacity provider association is the target of.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-clustercapacityproviderassociations.html#cfn-ecs-clustercapacityproviderassociations-cluster
         '''
         result = self._values.get("cluster")
         assert result is not None, "Required property 'cluster' is missing"
-        return typing.cast(builtins.str, result)
+        return typing.cast(typing.Union[builtins.str, _IClusterRef_7ad11494], result)
 
     @builtins.property
     def default_capacity_provider_strategy(
@@ -10748,13 +10901,15 @@ class CfnClusterCapacityProviderAssociationsProps:
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty]]], result)
 
     @builtins.property
-    def capacity_providers(self) -> typing.Optional[typing.List[builtins.str]]:
+    def capacity_providers(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]]:
         '''The capacity providers to associate with the cluster.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-clustercapacityproviderassociations.html#cfn-ecs-clustercapacityproviderassociations-capacityproviders
         '''
         result = self._values.get("capacity_providers")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -10785,7 +10940,7 @@ class CfnClusterProps:
     def __init__(
         self,
         *,
-        capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
         cluster_name: typing.Optional[builtins.str] = None,
         cluster_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -10876,7 +11031,9 @@ class CfnClusterProps:
             self._values["tags"] = tags
 
     @builtins.property
-    def capacity_providers(self) -> typing.Optional[typing.List[builtins.str]]:
+    def capacity_providers(
+        self,
+    ) -> typing.Optional[typing.List[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]]:
         '''The short name of one or more capacity providers to associate with the cluster.
 
         A capacity provider must be associated with a cluster before it can be included as part of the default capacity provider strategy of the cluster or used in a capacity provider strategy when calling the `CreateService <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CreateService.html>`_ or `RunTask <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RunTask.html>`_ actions.
@@ -10890,7 +11047,7 @@ class CfnClusterProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-cluster.html#cfn-ecs-cluster-capacityproviders
         '''
         result = self._values.get("capacity_providers")
-        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+        return typing.cast(typing.Optional[typing.List[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]], result)
 
     @builtins.property
     def cluster_name(self) -> typing.Optional[builtins.str]:
@@ -11232,7 +11389,7 @@ class CfnService(
 
     .. epigraph::
 
-       The stack update fails if you change any properties that require replacement and at least one Amazon ECS Service Connect ``ServiceConnectConfiguration`` property is configured. This is because AWS CloudFormation creates the replacement service first, but each ``ServiceConnectService`` must have a name that is unique in the namespace. > Starting April 15, 2023, AWS ; will not onboard new customers to Amazon Elastic Inference (EI), and will help current customers migrate their workloads to options that offer better price and performance. After April 15, 2023, new customers will not be able to launch instances with Amazon EI accelerators in Amazon SageMaker, Amazon ECS , or Amazon EC2 . However, customers who have used Amazon EI at least once during the past 30-day period are considered current customers and will be able to continue using the service. > On June 12, 2025, Amazon ECS launched support for updating capacity provider configuration for Amazon ECS services. With this launch, Amazon ECS also aligned the AWS CloudFormation update behavior for ``CapacityProviderStrategy`` parameter with the standard practice. For more information, see `Amazon ECS adds support for updating capacity provider configuration for ECS services <https://docs.aws.amazon.com/about-aws/whats-new/2025/05/amazon-ecs-capacity-provider-configuration-ecs/>`_ . Previously Amazon ECS ignored the ``CapacityProviderStrategy`` property if it was set to an empty list for example, ``[]`` in AWS CloudFormation , because updating capacity provider configuration was not supported. Now, with support for capacity provider updates, customers can remove capacity providers from a service by passing an empty list. When you specify an empty list ( ``[]`` ) for the ``CapacityProviderStrategy`` property in your AWS CloudFormation template, Amazon ECS will remove any capacity providers associated with the service, as follows:
+       The stack update fails if you change any properties that require replacement and at least one Amazon ECS Service Connect ``ServiceConnectConfiguration`` property is configured. This is because AWS CloudFormation creates the replacement service first, but each ``ServiceConnectService`` must have a name that is unique in the namespace. > Starting April 15, 2023, AWS ; will not onboard new customers to Amazon Elastic Inference (EI), and will help current customers migrate their workloads to options that offer better price and performance. After April 15, 2023, new customers will not be able to launch instances with Amazon EI accelerators in Amazon SageMaker, Amazon ECS , or Amazon EC2 . However, customers who have used Amazon EI at least once during the past 30-day period are considered current customers and will be able to continue using the service. > On June 12, 2025, Amazon ECS launched support for updating capacity provider configuration for Amazon ECS services. With this launch, Amazon ECS also aligned the CloudFormation update behavior for ``CapacityProviderStrategy`` parameter with the standard practice. For more information, see `Amazon ECS adds support for updating capacity provider configuration for ECS services <https://docs.aws.amazon.com/about-aws/whats-new/2025/05/amazon-ecs-capacity-provider-configuration-ecs/>`_ . Previously Amazon ECS ignored the ``CapacityProviderStrategy`` property if it was set to an empty list for example, ``[]`` in CloudFormation , because updating capacity provider configuration was not supported. Now, with support for capacity provider updates, customers can remove capacity providers from a service by passing an empty list. When you specify an empty list ( ``[]`` ) for the ``CapacityProviderStrategy`` property in your CloudFormation template, Amazon ECS will remove any capacity providers associated with the service, as follows:
 
        - For services created with a capacity provider strategy after the launch:
        - If there's a cluster default strategy set, the service will revert to using that default strategy.
@@ -11246,228 +11403,45 @@ class CfnService(
 
        Recommended Actions
 
-       If you are currently using ``CapacityProviderStrategy: []`` in your AWS CloudFormation templates, you should take one of the following actions:
+       If you are currently using ``CapacityProviderStrategy: []`` in your CloudFormation templates, you should take one of the following actions:
 
        - If you do not intend to update the Capacity Provider Strategy:
-       - Remove the ``CapacityProviderStrategy`` property entirely from your AWS CloudFormation template
+       - Remove the ``CapacityProviderStrategy`` property entirely from your CloudFormation template
        - Alternatively, use ``!Ref AWS ::NoValue`` for the ``CapacityProviderStrategy`` property in your template
-       - If you intend to maintain or update the Capacity Provider Strategy, specify the actual Capacity Provider Strategy for the service in your AWS CloudFormation template.
+       - If you intend to maintain or update the Capacity Provider Strategy, specify the actual Capacity Provider Strategy for the service in your CloudFormation template.
 
-       If your AWS CloudFormation template had an empty list ([]) for ``CapacityProviderStrategy`` prior to the aforementioned launch on June 12, and you are using the same template with ``CapacityProviderStrategy: []`` , you might encounter the following error:
+       If your CloudFormation template had an empty list ([]) for ``CapacityProviderStrategy`` prior to the aforementioned launch on June 12, and you are using the same template with ``CapacityProviderStrategy: []`` , you might encounter the following error:
 
        Invalid request provided: When switching from launch type to capacity provider strategy on an existing service, or making a change to a capacity provider strategy on a service that is already using one, you must force a new deployment. (Service: Ecs, Status Code: 400, Request ID: xxx) (SDK Attempt Count: 1)" (RequestToken: xxx HandlerErrorCode: InvalidRequest)
 
-       Note that AWS CloudFormation automatically initiates a new deployment when it detects a parameter change, but customers cannot choose to force a deployment through AWS CloudFormation . This is an invalid input scenario that requires one of the remediation actions listed above.
+       Note that CloudFormation automatically initiates a new deployment when it detects a parameter change, but customers cannot choose to force a deployment through CloudFormation . This is an invalid input scenario that requires one of the remediation actions listed above.
 
        If you are experiencing active production issues related to this change, contact AWS Support or your Technical Account Manager.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html
     :cloudformationResource: AWS::ECS::Service
-    :exampleMetadata: fixture=_generated
+    :exampleMetadata: infused
 
     Example::
 
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_ecs as ecs
+        # cluster: ecs.Cluster
+        # task_definition: ecs.TaskDefinition
+        # mi_capacity_provider: ecs.ManagedInstancesCapacityProvider
         
-        # hook_details: Any
         
-        cfn_service = ecs.CfnService(self, "MyCfnService",
-            availability_zone_rebalancing="availabilityZoneRebalancing",
-            capacity_provider_strategy=[ecs.CfnService.CapacityProviderStrategyItemProperty(
-                base=123,
-                capacity_provider="capacityProvider",
-                weight=123
-            )],
-            cluster="cluster",
-            deployment_configuration=ecs.CfnService.DeploymentConfigurationProperty(
-                alarms=ecs.CfnService.DeploymentAlarmsProperty(
-                    alarm_names=["alarmNames"],
-                    enable=False,
-                    rollback=False
-                ),
-                bake_time_in_minutes=123,
-                canary_configuration=ecs.CfnService.CanaryConfigurationProperty(
-                    canary_bake_time_in_minutes=123,
-                    canary_percent=123
-                ),
-                deployment_circuit_breaker=ecs.CfnService.DeploymentCircuitBreakerProperty(
-                    enable=False,
-                    rollback=False
-                ),
-                lifecycle_hooks=[ecs.CfnService.DeploymentLifecycleHookProperty(
-                    hook_target_arn="hookTargetArn",
-                    lifecycle_stages=["lifecycleStages"],
-                    role_arn="roleArn",
-        
-                    # the properties below are optional
-                    hook_details=hook_details
-                )],
-                linear_configuration=ecs.CfnService.LinearConfigurationProperty(
-                    step_bake_time_in_minutes=123,
-                    step_percent=123
-                ),
-                maximum_percent=123,
-                minimum_healthy_percent=123,
-                strategy="strategy"
-            ),
-            deployment_controller=ecs.CfnService.DeploymentControllerProperty(
-                type="type"
-            ),
-            desired_count=123,
-            enable_ecs_managed_tags=False,
-            enable_execute_command=False,
-            force_new_deployment=ecs.CfnService.ForceNewDeploymentProperty(
-                enable_force_new_deployment=False,
-        
-                # the properties below are optional
-                force_new_deployment_nonce="forceNewDeploymentNonce"
-            ),
-            health_check_grace_period_seconds=123,
-            launch_type="launchType",
-            load_balancers=[ecs.CfnService.LoadBalancerProperty(
-                advanced_configuration=ecs.CfnService.AdvancedConfigurationProperty(
-                    alternate_target_group_arn="alternateTargetGroupArn",
-        
-                    # the properties below are optional
-                    production_listener_rule="productionListenerRule",
-                    role_arn="roleArn",
-                    test_listener_rule="testListenerRule"
-                ),
-                container_name="containerName",
-                container_port=123,
-                load_balancer_name="loadBalancerName",
-                target_group_arn="targetGroupArn"
-            )],
-            network_configuration=ecs.CfnService.NetworkConfigurationProperty(
-                awsvpc_configuration=ecs.CfnService.AwsVpcConfigurationProperty(
-                    assign_public_ip="assignPublicIp",
-                    security_groups=["securityGroups"],
-                    subnets=["subnets"]
-                )
-            ),
-            placement_constraints=[ecs.CfnService.PlacementConstraintProperty(
-                type="type",
-        
-                # the properties below are optional
-                expression="expression"
-            )],
-            placement_strategies=[ecs.CfnService.PlacementStrategyProperty(
-                type="type",
-        
-                # the properties below are optional
-                field="field"
-            )],
-            platform_version="platformVersion",
-            propagate_tags="propagateTags",
-            role="role",
-            scheduling_strategy="schedulingStrategy",
-            service_connect_configuration=ecs.CfnService.ServiceConnectConfigurationProperty(
-                enabled=False,
-        
-                # the properties below are optional
-                access_log_configuration=ecs.CfnService.ServiceConnectAccessLogConfigurationProperty(
-                    format="format",
-        
-                    # the properties below are optional
-                    include_query_parameters="includeQueryParameters"
-                ),
-                log_configuration=ecs.CfnService.LogConfigurationProperty(
-                    log_driver="logDriver",
-                    options={
-                        "options_key": "options"
-                    },
-                    secret_options=[ecs.CfnService.SecretProperty(
-                        name="name",
-                        value_from="valueFrom"
-                    )]
-                ),
-                namespace="namespace",
-                services=[ecs.CfnService.ServiceConnectServiceProperty(
-                    port_name="portName",
-        
-                    # the properties below are optional
-                    client_aliases=[ecs.CfnService.ServiceConnectClientAliasProperty(
-                        port=123,
-        
-                        # the properties below are optional
-                        dns_name="dnsName",
-                        test_traffic_rules=ecs.CfnService.ServiceConnectTestTrafficRulesProperty(
-                            header=ecs.CfnService.ServiceConnectTestTrafficRulesHeaderProperty(
-                                name="name",
-        
-                                # the properties below are optional
-                                value=ecs.CfnService.ServiceConnectTestTrafficRulesHeaderValueProperty(
-                                    exact="exact"
-                                )
-                            )
-                        )
-                    )],
-                    discovery_name="discoveryName",
-                    ingress_port_override=123,
-                    timeout=ecs.CfnService.TimeoutConfigurationProperty(
-                        idle_timeout_seconds=123,
-                        per_request_timeout_seconds=123
-                    ),
-                    tls=ecs.CfnService.ServiceConnectTlsConfigurationProperty(
-                        issuer_certificate_authority=ecs.CfnService.ServiceConnectTlsCertificateAuthorityProperty(
-                            aws_pca_authority_arn="awsPcaAuthorityArn"
-                        ),
-        
-                        # the properties below are optional
-                        kms_key="kmsKey",
-                        role_arn="roleArn"
-                    )
-                )]
-            ),
-            service_name="serviceName",
-            service_registries=[ecs.CfnService.ServiceRegistryProperty(
-                container_name="containerName",
-                container_port=123,
-                port=123,
-                registry_arn="registryArn"
-            )],
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )],
-            task_definition="taskDefinition",
-            volume_configurations=[ecs.CfnService.ServiceVolumeConfigurationProperty(
-                name="name",
-        
-                # the properties below are optional
-                managed_ebs_volume=ecs.CfnService.ServiceManagedEBSVolumeConfigurationProperty(
-                    role_arn="roleArn",
-        
-                    # the properties below are optional
-                    encrypted=False,
-                    filesystem_type="filesystemType",
-                    iops=123,
-                    kms_key_id="kmsKeyId",
-                    size_in_gi_b=123,
-                    snapshot_id="snapshotId",
-                    tag_specifications=[ecs.CfnService.EBSTagSpecificationProperty(
-                        resource_type="resourceType",
-        
-                        # the properties below are optional
-                        propagate_tags="propagateTags",
-                        tags=[CfnTag(
-                            key="key",
-                            value="value"
-                        )]
-                    )],
-                    throughput=123,
-                    volume_initialization_rate=123,
-                    volume_type="volumeType"
-                )
-            )],
-            vpc_lattice_configurations=[ecs.CfnService.VpcLatticeConfigurationProperty(
-                port_name="portName",
-                role_arn="roleArn",
-                target_group_arn="targetGroupArn"
-            )]
+        service = ecs.FargateService(self, "Service",
+            cluster=cluster,
+            task_definition=task_definition,
+            capacity_provider_strategies=[ecs.CapacityProviderStrategy(
+                capacity_provider=mi_capacity_provider.capacity_provider_name,
+                weight=1
+            )
+            ]
         )
+        
+        # Escape hatch: Force launchType at the CloudFormation level to prevent service replacement
+        cfn_service = service.node.default_child
+        cfn_service.launch_type = "FARGATE"
     '''
 
     def __init__(
@@ -11477,7 +11451,7 @@ class CfnService(
         *,
         availability_zone_rebalancing: typing.Optional[builtins.str] = None,
         capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.CapacityProviderStrategyItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cluster: typing.Optional[builtins.str] = None,
+        cluster: typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]] = None,
         deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DeploymentConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deployment_controller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.DeploymentControllerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         desired_count: typing.Optional[jsii.Number] = None,
@@ -11492,13 +11466,13 @@ class CfnService(
         placement_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.PlacementStrategyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_version: typing.Optional[builtins.str] = None,
         propagate_tags: typing.Optional[builtins.str] = None,
-        role: typing.Optional[builtins.str] = None,
+        role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         scheduling_strategy: typing.Optional[builtins.str] = None,
         service_connect_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.ServiceConnectConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         service_name: typing.Optional[builtins.str] = None,
         service_registries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.ServiceRegistryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_definition: typing.Optional[builtins.str] = None,
+        task_definition: typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]] = None,
         volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.ServiceVolumeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         vpc_lattice_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnService.VpcLatticeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -11567,6 +11541,17 @@ class CfnService(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForService")
+    @builtins.classmethod
+    def arn_for_service(cls, resource: _IServiceRef_adcb3d02) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7c53c69e7f9ad92a8b439e9a3e76bd76dde37100af8dfc523bb2ac24515e13f4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForService", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12288,7 +12273,7 @@ class CfnService(
         ) -> None:
             '''Configuration for a canary deployment strategy that shifts a fixed percentage of traffic to the new service revision, waits for a specified bake time, then shifts the remaining traffic.
 
-            The following validation applies only to Canary deployments created through AWS CloudFormation . AWS CloudFormation operations time out after 36 hours. Canary deployments can approach this limit because of their extended duration. This can cause AWS CloudFormation to roll back the deployment. To prevent timeout-related rollbacks, AWS CloudFormation rejects deployments when the calculated deployment time exceeds 33 hours based on your template configuration:
+            The following validation applies only to Canary deployments created through CloudFormation . CloudFormation operations time out after 36 hours. Canary deployments can approach this limit because of their extended duration. This can cause CloudFormation to roll back the deployment. To prevent timeout-related rollbacks, CloudFormation rejects deployments when the calculated deployment time exceeds 33 hours based on your template configuration:
 
             ``BakeTimeInMinutes + CanaryBakeTimeInMinutes``
 
@@ -12944,7 +12929,7 @@ class CfnService(
         def __init__(self, *, type: typing.Optional[builtins.str] = None) -> None:
             '''The deployment controller to use for the service.
 
-            :param type: The deployment controller type to use. The deployment controller is the mechanism that determines how tasks are deployed for your service. The valid options are: - ECS When you create a service which uses the ``ECS`` deployment controller, you can choose between the following deployment strategies: - ``ROLLING`` : When you create a service which uses the *rolling update* ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration. Rolling update deployments are best suited for the following scenarios: - Gradual service updates: You need to update your service incrementally without taking the entire service offline at once. - Limited resource requirements: You want to avoid the additional resource costs of running two complete environments simultaneously (as required by blue/green deployments). - Acceptable deployment time: Your application can tolerate a longer deployment process, as rolling updates replace tasks one by one. - No need for instant roll back: Your service can tolerate a rollback process that takes minutes rather than seconds. - Simple deployment process: You prefer a straightforward deployment approach without the complexity of managing multiple environments, target groups, and listeners. - No load balancer requirement: Your service doesn't use or require a load balancer, Application Load Balancer , Network Load Balancer , or Service Connect (which are required for blue/green deployments). - Stateful applications: Your application maintains state that makes it difficult to run two parallel environments. - Cost sensitivity: You want to minimize deployment costs by not running duplicate environments during deployment. Rolling updates are the default deployment strategy for services and provide a balance between deployment safety and resource efficiency for many common application scenarios. - ``BLUE_GREEN`` : A *blue/green* deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed. Amazon ECS blue/green deployments are best suited for the following scenarios: - Service validation: When you need to validate new service revisions before directing production traffic to them - Zero downtime: When your service requires zero-downtime deployments - Instant roll back: When you need the ability to quickly roll back if issues are detected - Load balancer requirement: When your service uses Application Load Balancer , Network Load Balancer , or Service Connect - External Use a third-party deployment controller. - Blue/green deployment (powered by CodeDeploy ) CodeDeploy installs an updated version of the application as a new replacement task set and reroutes production traffic from the original application task set to the replacement task set. The original task set is terminated after a successful deployment. Use this deployment controller to verify a new deployment of a service before sending production traffic to it. When updating the deployment controller for a service, consider the following depending on the type of migration you're performing. - If you have a template that contains the ``EXTERNAL`` deployment controller information as well as ``TaskSet`` and ``PrimaryTaskSet`` resources, and you remove the task set resources from the template when updating from ``EXTERNAL`` to ``ECS`` , the ``DescribeTaskSet`` and ``DeleteTaskSet`` API calls will return a 400 error after the deployment controller is updated to ``ECS`` . This results in a delete failure on the task set resources, even though the stack transitions to ``UPDATE_COMPLETE`` status. For more information, see `Resource removed from stack but not deleted <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-resource-removed-not-deleted>`_ in the AWS CloudFormation User Guide. To fix this issue, delete the task sets directly using the Amazon ECS ``DeleteTaskSet`` API. For more information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the Amazon Elastic Container Service API Reference. - If you're migrating from ``CODE_DEPLOY`` to ``ECS`` with a new task definition and AWS CloudFormation performs a rollback operation, the Amazon ECS ``UpdateService`` request fails with the following error: Resource handler returned message: "Invalid request provided: Unable to update task definition on services with a CODE_DEPLOY deployment controller. - After a successful migration from ``ECS`` to ``EXTERNAL`` deployment controller, you need to manually remove the ``ACTIVE`` task set, because Amazon ECS no longer manages the deployment. For information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the Amazon Elastic Container Service API Reference.
+            :param type: The deployment controller type to use. The deployment controller is the mechanism that determines how tasks are deployed for your service. The valid options are: - ECS When you create a service which uses the ``ECS`` deployment controller, you can choose between the following deployment strategies: - ``ROLLING`` : When you create a service which uses the *rolling update* ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration. Rolling update deployments are best suited for the following scenarios: - Gradual service updates: You need to update your service incrementally without taking the entire service offline at once. - Limited resource requirements: You want to avoid the additional resource costs of running two complete environments simultaneously (as required by blue/green deployments). - Acceptable deployment time: Your application can tolerate a longer deployment process, as rolling updates replace tasks one by one. - No need for instant roll back: Your service can tolerate a rollback process that takes minutes rather than seconds. - Simple deployment process: You prefer a straightforward deployment approach without the complexity of managing multiple environments, target groups, and listeners. - No load balancer requirement: Your service doesn't use or require a load balancer, Application Load Balancer , Network Load Balancer , or Service Connect (which are required for blue/green deployments). - Stateful applications: Your application maintains state that makes it difficult to run two parallel environments. - Cost sensitivity: You want to minimize deployment costs by not running duplicate environments during deployment. Rolling updates are the default deployment strategy for services and provide a balance between deployment safety and resource efficiency for many common application scenarios. - ``BLUE_GREEN`` : A *blue/green* deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed. Amazon ECS blue/green deployments are best suited for the following scenarios: - Service validation: When you need to validate new service revisions before directing production traffic to them - Zero downtime: When your service requires zero-downtime deployments - Instant roll back: When you need the ability to quickly roll back if issues are detected - Load balancer requirement: When your service uses Application Load Balancer , Network Load Balancer , or Service Connect - External Use a third-party deployment controller. - Blue/green deployment (powered by CodeDeploy ) CodeDeploy installs an updated version of the application as a new replacement task set and reroutes production traffic from the original application task set to the replacement task set. The original task set is terminated after a successful deployment. Use this deployment controller to verify a new deployment of a service before sending production traffic to it. When updating the deployment controller for a service, consider the following depending on the type of migration you're performing. - If you have a template that contains the ``EXTERNAL`` deployment controller information as well as ``TaskSet`` and ``PrimaryTaskSet`` resources, and you remove the task set resources from the template when updating from ``EXTERNAL`` to ``ECS`` , the ``DescribeTaskSet`` and ``DeleteTaskSet`` API calls will return a 400 error after the deployment controller is updated to ``ECS`` . This results in a delete failure on the task set resources, even though the stack transitions to ``UPDATE_COMPLETE`` status. For more information, see `Resource removed from stack but not deleted <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-resource-removed-not-deleted>`_ in the AWS CloudFormation User Guide. To fix this issue, delete the task sets directly using the Amazon ECS ``DeleteTaskSet`` API. For more information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the ECSlong API Reference. - If you're migrating from ``CODE_DEPLOY`` to ``ECS`` with a new task definition and CloudFormation performs a rollback operation, the Amazon ECS ``UpdateService`` request fails with the following error: Resource handler returned message: "Invalid request provided: Unable to update task definition on services with a CODE_DEPLOY deployment controller. - After a successful migration from ``ECS`` to ``EXTERNAL`` deployment controller, you need to manually remove the ``ACTIVE`` task set, because Amazon ECS no longer manages the deployment. For information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the ECSlong API Reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentcontroller.html
             :exampleMetadata: fixture=_generated
@@ -13009,12 +12994,12 @@ class CfnService(
 
             When updating the deployment controller for a service, consider the following depending on the type of migration you're performing.
 
-            - If you have a template that contains the ``EXTERNAL`` deployment controller information as well as ``TaskSet`` and ``PrimaryTaskSet`` resources, and you remove the task set resources from the template when updating from ``EXTERNAL`` to ``ECS`` , the ``DescribeTaskSet`` and ``DeleteTaskSet`` API calls will return a 400 error after the deployment controller is updated to ``ECS`` . This results in a delete failure on the task set resources, even though the stack transitions to ``UPDATE_COMPLETE`` status. For more information, see `Resource removed from stack but not deleted <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-resource-removed-not-deleted>`_ in the AWS CloudFormation User Guide. To fix this issue, delete the task sets directly using the Amazon ECS ``DeleteTaskSet`` API. For more information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the Amazon Elastic Container Service API Reference.
-            - If you're migrating from ``CODE_DEPLOY`` to ``ECS`` with a new task definition and AWS CloudFormation performs a rollback operation, the Amazon ECS ``UpdateService`` request fails with the following error:
+            - If you have a template that contains the ``EXTERNAL`` deployment controller information as well as ``TaskSet`` and ``PrimaryTaskSet`` resources, and you remove the task set resources from the template when updating from ``EXTERNAL`` to ``ECS`` , the ``DescribeTaskSet`` and ``DeleteTaskSet`` API calls will return a 400 error after the deployment controller is updated to ``ECS`` . This results in a delete failure on the task set resources, even though the stack transitions to ``UPDATE_COMPLETE`` status. For more information, see `Resource removed from stack but not deleted <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/troubleshooting.html#troubleshooting-errors-resource-removed-not-deleted>`_ in the AWS CloudFormation User Guide. To fix this issue, delete the task sets directly using the Amazon ECS ``DeleteTaskSet`` API. For more information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the ECSlong API Reference.
+            - If you're migrating from ``CODE_DEPLOY`` to ``ECS`` with a new task definition and CloudFormation performs a rollback operation, the Amazon ECS ``UpdateService`` request fails with the following error:
 
             Resource handler returned message: "Invalid request provided: Unable to update task definition on services with a CODE_DEPLOY deployment controller.
 
-            - After a successful migration from ``ECS`` to ``EXTERNAL`` deployment controller, you need to manually remove the ``ACTIVE`` task set, because Amazon ECS no longer manages the deployment. For information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the Amazon Elastic Container Service API Reference.
+            - After a successful migration from ``ECS`` to ``EXTERNAL`` deployment controller, you need to manually remove the ``ACTIVE`` task set, because Amazon ECS no longer manages the deployment. For information about how to delete a task set, see `DeleteTaskSet <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_DeleteTaskSet.html>`_ in the ECSlong API Reference.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentcontroller.html#cfn-ecs-service-deploymentcontroller-type
             '''
@@ -13396,7 +13381,7 @@ class CfnService(
         ) -> None:
             '''Configuration for a linear deployment strategy that shifts production traffic in equal percentage increments with configurable wait times between each step until 100 percent of traffic is shifted to the new service revision.
 
-            The following validation applies only to Linear deployments created through AWS CloudFormation . AWS CloudFormation operations time out after 36 hours. Linear deployments can approach this limit because of their extended duration. This can cause AWS CloudFormation to roll back the deployment. To prevent timeout-related rollbacks, AWS CloudFormation rejects deployments when the calculated deployment time exceeds 33 hours based on your template configuration:
+            The following validation applies only to Linear deployments created through CloudFormation . CloudFormation operations time out after 36 hours. Linear deployments can approach this limit because of their extended duration. This can cause CloudFormation to roll back the deployment. To prevent timeout-related rollbacks, CloudFormation rejects deployments when the calculated deployment time exceeds 33 hours based on your template configuration:
 
             ``BakeTimeInMinutes + (StepBakeTimeInMinutes × Number of deployment steps)``
 
@@ -13405,7 +13390,7 @@ class CfnService(
             - *If ``StepPercent`` evenly divides by 100* : The number of deployment steps equals ``(100 ÷ StepPercent) - 1``
             - *Otherwise* : The number of deployment steps equals the floor of ``100 ÷ StepPercent`` . For example, if ``StepPercent`` is 11, the number of deployment steps is 9 (not 9.1).
 
-            This calculation reflects that AWS CloudFormation doesn't apply the step bake time after the final traffic shift reaches 100%. For example, with a ``StepPercent`` of 50%, there are actually two traffic shifts, but only one deployment step is counted for validation purposes because the bake time is applied only after the first 50% shift, not after reaching 100%.
+            This calculation reflects that CloudFormation doesn't apply the step bake time after the final traffic shift reaches 100%. For example, with a ``StepPercent`` of 50%, there are actually two traffic shifts, but only one deployment step is counted for validation purposes because the bake time is applied only after the first 50% shift, not after reaching 100%.
 
             Additional backend processes (such as task scaling and running lifecycle hooks) can extend deployment time beyond these calculations. Even deployments under the 33-hour threshold might still time out if these processes cause the total duration to exceed 36 hours.
 
@@ -15835,7 +15820,7 @@ class CfnServiceProps:
         *,
         availability_zone_rebalancing: typing.Optional[builtins.str] = None,
         capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-        cluster: typing.Optional[builtins.str] = None,
+        cluster: typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]] = None,
         deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         deployment_controller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentControllerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         desired_count: typing.Optional[jsii.Number] = None,
@@ -15850,13 +15835,13 @@ class CfnServiceProps:
         placement_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.PlacementStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         platform_version: typing.Optional[builtins.str] = None,
         propagate_tags: typing.Optional[builtins.str] = None,
-        role: typing.Optional[builtins.str] = None,
+        role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         scheduling_strategy: typing.Optional[builtins.str] = None,
         service_connect_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceConnectConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         service_name: typing.Optional[builtins.str] = None,
         service_registries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceRegistryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_definition: typing.Optional[builtins.str] = None,
+        task_definition: typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]] = None,
         volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceVolumeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         vpc_lattice_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.VpcLatticeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
@@ -16215,7 +16200,9 @@ class CfnServiceProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnService.CapacityProviderStrategyItemProperty]]]], result)
 
     @builtins.property
-    def cluster(self) -> typing.Optional[builtins.str]:
+    def cluster(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]]:
         '''The short name or full Amazon Resource Name (ARN) of the cluster that you run your service on.
 
         If you do not specify a cluster, the default cluster is assumed.
@@ -16223,7 +16210,7 @@ class CfnServiceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-cluster
         '''
         result = self._values.get("cluster")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]], result)
 
     @builtins.property
     def deployment_configuration(
@@ -16418,7 +16405,7 @@ class CfnServiceProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def role(self) -> typing.Optional[builtins.str]:
+    def role(self) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf.
 
         This parameter is only permitted if you are using a load balancer with your service and your task definition doesn't use the ``awsvpc`` network mode. If you specify the ``role`` parameter, you must also specify a load balancer object with the ``loadBalancers`` parameter.
@@ -16431,7 +16418,7 @@ class CfnServiceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-role
         '''
         result = self._values.get("role")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def scheduling_strategy(self) -> typing.Optional[builtins.str]:
@@ -16519,7 +16506,9 @@ class CfnServiceProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def task_definition(self) -> typing.Optional[builtins.str]:
+    def task_definition(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]]:
         '''The ``family`` and ``revision`` ( ``family:revision`` ) or full ARN of the task definition to run in your service.
 
         If a ``revision`` isn't specified, the latest ``ACTIVE`` revision is used.
@@ -16531,7 +16520,7 @@ class CfnServiceProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-service.html#cfn-ecs-service-taskdefinition
         '''
         result = self._values.get("task_definition")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]], result)
 
     @builtins.property
     def volume_configurations(
@@ -16826,7 +16815,7 @@ class CfnTaskDefinition(
         cpu: typing.Optional[builtins.str] = None,
         enable_fault_injection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTaskDefinition.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
-        execution_role_arn: typing.Optional[builtins.str] = None,
+        execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         family: typing.Optional[builtins.str] = None,
         inference_accelerators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTaskDefinition.InferenceAcceleratorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ipc_mode: typing.Optional[builtins.str] = None,
@@ -16838,7 +16827,7 @@ class CfnTaskDefinition(
         requires_compatibilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         runtime_platform: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTaskDefinition.RuntimePlatformProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_role_arn: typing.Optional[builtins.str] = None,
+        task_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTaskDefinition.VolumeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Create a new ``AWS::ECS::TaskDefinition``.
@@ -16890,6 +16879,20 @@ class CfnTaskDefinition(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTaskDefinition")
+    @builtins.classmethod
+    def arn_for_task_definition(
+        cls,
+        resource: _ITaskDefinitionRef_8091fc1c,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0160aeb79e58377e790012a297cb8c40001c2d6ab351815c1d7f4ec174d884c3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTaskDefinition", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -17423,7 +17426,7 @@ class CfnTaskDefinition(
             :param interactive: When this parameter is ``true`` , you can deploy containerized applications that require ``stdin`` or a ``tty`` to be allocated. This parameter maps to ``OpenStdin`` in the docker container create command and the ``--interactive`` option to docker run.
             :param links: The ``links`` parameter allows containers to communicate with each other without the need for port mappings. This parameter is only supported if the network mode of a task definition is ``bridge`` . The ``name:internalName`` construct is analogous to ``name:alias`` in Docker links. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed.. This parameter maps to ``Links`` in the docker container create command and the ``--link`` option to docker run. .. epigraph:: This parameter is not supported for Windows containers. > Containers that are collocated on a single container instance may be able to communicate with each other without requiring links or host port mappings. Network isolation is achieved on the container instance using security groups and VPC settings.
             :param linux_parameters: Linux-specific modifications that are applied to the container, such as Linux kernel capabilities. For more information see `KernelCapabilities <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_KernelCapabilities.html>`_ . .. epigraph:: This parameter is not supported for Windows containers.
-            :param log_configuration: The log configuration specification for the container. This parameter maps to ``LogConfig`` in the docker Create a container command and the ``--log-driver`` option to docker run. By default, containers use the same logging driver that the Docker daemon uses. However, the container may use a different logging driver than the Docker daemon by specifying a log driver with this parameter in the container definition. To use a different logging driver for a container, the log system must be configured properly on the container instance (or on a different log server for remote logging options). For more information on the options for different supported log drivers, see `Configure logging drivers <https://docs.aws.amazon.com/https://docs.docker.com/engine/admin/logging/overview/>`_ in the Docker documentation. .. epigraph:: Amazon ECS currently supports a subset of the logging drivers available to the Docker daemon (shown in the `LogConfiguration <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html>`_ data type). Additional log drivers may be available in future releases of the Amazon ECS container agent. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version --format '{{.Server.APIVersion}}'`` .. epigraph:: The Amazon ECS container agent running on a container instance must register the logging drivers available on that instance with the ``ECS_AVAILABLE_LOGGING_DRIVERS`` environment variable before containers placed on that instance can use these log configuration options. For more information, see `Amazon ECS Container Agent Configuration <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+            :param log_configuration: The log configuration specification for the container. This parameter maps to ``LogConfig`` in the docker Create a container command and the ``--log-driver`` option to docker run. By default, containers use the same logging driver that the Docker daemon uses. However, the container may use a different logging driver than the Docker daemon by specifying a log driver with this parameter in the container definition. To use a different logging driver for a container, the log system must be configured properly on the container instance (or on a different log server for remote logging options). For more information on the options for different supported log drivers, see `Configure logging drivers <https://docs.aws.amazon.com/https://docs.docker.com/engine/admin/logging/overview/>`_ in the Docker documentation. .. epigraph:: Amazon ECS currently supports a subset of the logging drivers available to the Docker daemon (shown in the `LogConfiguration <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html>`_ data type). Additional log drivers may be available in future releases of the Amazon ECS container agent. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version --format '{{.Server.APIVersion}}'`` .. epigraph:: The Amazon ECS container agent running on a container instance must register the logging drivers available on that instance with the ``ECS_AVAILABLE_LOGGING_DRIVERS`` environment variable before containers placed on that instance can use these log configuration options. For more information, see `Amazon ECS Container Agent Configuration <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html>`_ in the *ECSlong Developer Guide* .
             :param memory: The amount (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. The total amount of memory reserved for all containers within a task must be lower than the task ``memory`` value, if one is specified. This parameter maps to ``Memory`` in the `Create a container <https://docs.aws.amazon.com/https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate>`_ section of the `Docker Remote API <https://docs.aws.amazon.com/https://docs.docker.com/engine/api/v1.35/>`_ and the ``--memory`` option to `docker run <https://docs.aws.amazon.com/https://docs.docker.com/engine/reference/run/#security-configuration>`_ . If using the Fargate launch type, this parameter is optional. If using the EC2 launch type, you must specify either a task-level memory value or a container-level memory value. If you specify both a container-level ``memory`` and ``memoryReservation`` value, ``memory`` must be greater than ``memoryReservation`` . If you specify ``memoryReservation`` , then that value is subtracted from the available memory resources for the container instance where the container is placed. Otherwise, the value of ``memory`` is used. The Docker 20.10.0 or later daemon reserves a minimum of 6 MiB of memory for a container, so you should not specify fewer than 6 MiB of memory for your containers. The Docker 19.03.13-ce or earlier daemon reserves a minimum of 4 MiB of memory for a container, so you should not specify fewer than 4 MiB of memory for your containers.
             :param memory_reservation: The soft limit (in MiB) of memory to reserve for the container. When system memory is under heavy contention, Docker attempts to keep the container memory to this soft limit. However, your container can consume more memory when it needs to, up to either the hard limit specified with the ``memory`` parameter (if applicable), or all of the available memory on the container instance, whichever comes first. This parameter maps to ``MemoryReservation`` in the docker container create command and the ``--memory-reservation`` option to docker run. If a task-level memory value is not specified, you must specify a non-zero integer for one or both of ``memory`` or ``memoryReservation`` in a container definition. If you specify both, ``memory`` must be greater than ``memoryReservation`` . If you specify ``memoryReservation`` , then that value is subtracted from the available memory resources for the container instance where the container is placed. Otherwise, the value of ``memory`` is used. For example, if your container normally uses 128 MiB of memory, but occasionally bursts to 256 MiB of memory for short periods of time, you can set a ``memoryReservation`` of 128 MiB, and a ``memory`` hard limit of 300 MiB. This configuration would allow the container to only reserve 128 MiB of memory from the remaining resources on the container instance, but also allow the container to consume more memory resources when needed. The Docker 20.10.0 or later daemon reserves a minimum of 6 MiB of memory for a container. So, don't specify less than 6 MiB of memory for your containers. The Docker 19.03.13-ce or earlier daemon reserves a minimum of 4 MiB of memory for a container. So, don't specify less than 4 MiB of memory for your containers.
             :param mount_points: The mount points for data volumes in your container. This parameter maps to ``Volumes`` in the docker container create command and the ``--volume`` option to docker run. Windows containers can mount whole directories on the same drive as ``$env:ProgramData`` . Windows containers can't mount directories on a different drive, and mount point can't be across drives.
@@ -18089,7 +18092,7 @@ class CfnTaskDefinition(
             This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: ``sudo docker version --format '{{.Server.APIVersion}}'``
             .. epigraph::
 
-               The Amazon ECS container agent running on a container instance must register the logging drivers available on that instance with the ``ECS_AVAILABLE_LOGGING_DRIVERS`` environment variable before containers placed on that instance can use these log configuration options. For more information, see `Amazon ECS Container Agent Configuration <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+               The Amazon ECS container agent running on a container instance must register the logging drivers available on that instance with the ``ECS_AVAILABLE_LOGGING_DRIVERS`` environment variable before containers placed on that instance can use these log configuration options. For more information, see `Amazon ECS Container Agent Configuration <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-config.html>`_ in the *ECSlong Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-taskdefinition-containerdefinition.html#cfn-ecs-taskdefinition-containerdefinition-logconfiguration
             '''
@@ -21680,7 +21683,7 @@ class CfnTaskDefinitionProps:
         cpu: typing.Optional[builtins.str] = None,
         enable_fault_injection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-        execution_role_arn: typing.Optional[builtins.str] = None,
+        execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         family: typing.Optional[builtins.str] = None,
         inference_accelerators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.InferenceAcceleratorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ipc_mode: typing.Optional[builtins.str] = None,
@@ -21692,7 +21695,7 @@ class CfnTaskDefinitionProps:
         requires_compatibilities: typing.Optional[typing.Sequence[builtins.str]] = None,
         runtime_platform: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.RuntimePlatformProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-        task_role_arn: typing.Optional[builtins.str] = None,
+        task_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.VolumeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTaskDefinition``.
@@ -22056,7 +22059,9 @@ class CfnTaskDefinitionProps:
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTaskDefinition.EphemeralStorageProperty]], result)
 
     @builtins.property
-    def execution_role_arn(self) -> typing.Optional[builtins.str]:
+    def execution_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the task execution role that grants the Amazon ECS container agent permission to make AWS API calls on your behalf.
 
         For informationabout the required IAM roles for Amazon ECS, see `IAM roles for Amazon ECS <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/security-ecs-iam-role-overview.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -22064,7 +22069,7 @@ class CfnTaskDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-executionrolearn
         '''
         result = self._values.get("execution_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def family(self) -> typing.Optional[builtins.str]:
@@ -22263,7 +22268,9 @@ class CfnTaskDefinitionProps:
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
 
     @builtins.property
-    def task_role_arn(self) -> typing.Optional[builtins.str]:
+    def task_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The short name or full Amazon Resource Name (ARN) of the AWS Identity and Access Management role that grants containers in the task permission to call AWS APIs on your behalf.
 
         For more information, see `Amazon ECS Task Role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
@@ -22276,7 +22283,7 @@ class CfnTaskDefinitionProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-taskdefinition.html#cfn-ecs-taskdefinition-taskrolearn
         '''
         result = self._values.get("task_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
     def volumes(
@@ -24054,6 +24061,58 @@ class ClusterAttributes:
         )
 
 
+class ClusterGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecs.ClusterGrants",
+):
+    '''Collection of grant methods for a IClusterRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ecs as ecs
+        from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+        
+        # cluster_ref: interfaces_aws_ecs.IClusterRef
+        
+        cluster_grants = ecs.ClusterGrants.from_cluster(cluster_ref)
+    '''
+
+    @jsii.member(jsii_name="fromCluster")
+    @builtins.classmethod
+    def from_cluster(cls, resource: _IClusterRef_7ad11494) -> "ClusterGrants":
+        '''Creates grants for ClusterGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cdbeca024617ef50d12d72477b7d03211890aadca15b77ebfddf79a5f56e0352)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("ClusterGrants", jsii.sinvoke(cls, "fromCluster", [resource]))
+
+    @jsii.member(jsii_name="taskProtection")
+    def task_protection(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grants an ECS Task Protection API permission to the specified grantee.
+
+        This method provides a streamlined way to assign the 'ecs:UpdateTaskProtection'
+        permission, enabling the grantee to manage task protection in the ECS cluster.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9644075d92c7a86cf54f4289554db439a1492f74887d260c00318aa8437ba93c)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "taskProtection", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IClusterRef_7ad11494:
+        return typing.cast(_IClusterRef_7ad11494, jsii.get(self, "resource"))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_ecs.ClusterProps",
     jsii_struct_bases=[],
@@ -24589,29 +24648,35 @@ class Compatibility(enum.Enum):
             is_default=True
         )
         
-        cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
-        
-        task_definition = ecs.TaskDefinition(self, "TD",
-            memory_mi_b="512",
-            cpu="256",
-            compatibility=ecs.Compatibility.FARGATE
+        cluster = ecs.Cluster(self, "Ec2Cluster", vpc=vpc)
+        cluster.add_capacity("DefaultAutoScalingGroup",
+            instance_type=ec2.InstanceType("t2.micro"),
+            vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
         )
         
-        container_definition = task_definition.add_container("TheContainer",
+        task_definition = ecs.TaskDefinition(self, "TD",
+            compatibility=ecs.Compatibility.EC2
+        )
+        
+        task_definition.add_container("TheContainer",
             image=ecs.ContainerImage.from_registry("foo/bar"),
             memory_limit_mi_b=256
         )
         
-        run_task = tasks.EcsRunTask(self, "RunFargate",
+        run_task = tasks.EcsRunTask(self, "Run",
             integration_pattern=sfn.IntegrationPattern.RUN_JOB,
             cluster=cluster,
             task_definition=task_definition,
-            assign_public_ip=True,
-            container_overrides=[tasks.ContainerOverride(
-                container_definition=container_definition,
-                environment=[tasks.TaskEnvironmentVariable(name="SOME_KEY", value=sfn.JsonPath.string_at("$.SomeKey"))]
-            )],
-            launch_target=tasks.EcsFargateLaunchTarget(),
+            launch_target=tasks.EcsEc2LaunchTarget(
+                placement_strategies=[
+                    ecs.PlacementStrategy.spread_across_instances(),
+                    ecs.PlacementStrategy.packed_by_cpu(),
+                    ecs.PlacementStrategy.randomly()
+                ],
+                placement_constraints=[
+                    ecs.PlacementConstraint.member_of("blieptuut")
+                ]
+            ),
             propagated_tag_source=ecs.PropagatedTagSource.TASK_DEFINITION
         )
     '''
@@ -28798,33 +28863,30 @@ class Ec2ServiceProps(BaseServiceOptions):
 
         Example::
 
-            # task_definition: ecs.TaskDefinition
-            # cluster: ecs.Cluster
+            # vpc: ec2.Vpc
             
             
-            # Add a container to the task definition
-            specific_container = task_definition.add_container("Container",
-                image=ecs.ContainerImage.from_registry("/aws/aws-example-app"),
-                memory_limit_mi_b=2048
+            # Create an ECS cluster
+            cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+            
+            # Add capacity to it
+            cluster.add_capacity("DefaultAutoScalingGroupCapacity",
+                instance_type=ec2.InstanceType("t2.xlarge"),
+                desired_capacity=3
             )
             
-            # Add a port mapping
-            specific_container.add_port_mappings(
-                container_port=7600,
-                protocol=ecs.Protocol.TCP
+            task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+            
+            task_definition.add_container("DefaultContainer",
+                image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+                memory_limit_mi_b=512
             )
             
-            ecs.Ec2Service(self, "Service",
+            # Instantiate an Amazon ECS Service
+            ecs_service = ecs.Ec2Service(self, "Service",
                 cluster=cluster,
                 task_definition=task_definition,
-                min_healthy_percent=100,
-                cloud_map_options=ecs.CloudMapOptions(
-                    # Create SRV records - useful for bridge networking
-                    dns_record_type=cloudmap.DnsRecordType.SRV,
-                    # Targets port TCP port 7600 `specificContainer`
-                    container=specific_container,
-                    container_port=7600
-                )
+                min_healthy_percent=100
             )
         '''
         if isinstance(circuit_breaker, dict):
@@ -35694,7 +35756,7 @@ typing.cast(typing.Any, IAlternateTarget).__jsii_proxy_class__ = lambda : _IAlte
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecs.ICluster")
-class ICluster(_IResource_c80c4260, typing_extensions.Protocol):
+class ICluster(_IResource_c80c4260, _IClusterRef_7ad11494, typing_extensions.Protocol):
     '''A regional grouping of one or more container instances on which you can run tasks and services.'''
 
     @builtins.property
@@ -35756,6 +35818,7 @@ class ICluster(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IClusterProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IClusterRef_7ad11494), # type: ignore[misc]
 ):
     '''A regional grouping of one or more container instances on which you can run tasks and services.'''
 
@@ -37794,14 +37857,19 @@ class ManagedInstancesCapacityProvider(
         # Add the capacity provider to the cluster
         cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
         
-        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        task_definition = ecs.TaskDefinition(self, "TaskDef",
+            memory_mi_b="512",
+            cpu="256",
+            network_mode=ecs.NetworkMode.AWS_VPC,
+            compatibility=ecs.Compatibility.MANAGED_INSTANCES
+        )
         
         task_definition.add_container("web",
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
             memory_reservation_mi_b=256
         )
         
-        ecs.Ec2Service(self, "EC2Service",
+        ecs.FargateService(self, "FargateService",
             cluster=cluster,
             task_definition=task_definition,
             min_healthy_percent=100,
@@ -37964,14 +38032,19 @@ class ManagedInstancesCapacityProviderProps:
             # Add the capacity provider to the cluster
             cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
             
-            task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+            task_definition = ecs.TaskDefinition(self, "TaskDef",
+                memory_mi_b="512",
+                cpu="256",
+                network_mode=ecs.NetworkMode.AWS_VPC,
+                compatibility=ecs.Compatibility.MANAGED_INSTANCES
+            )
             
             task_definition.add_container("web",
                 image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
                 memory_reservation_mi_b=256
             )
             
-            ecs.Ec2Service(self, "EC2Service",
+            ecs.FargateService(self, "FargateService",
                 cluster=cluster,
                 task_definition=task_definition,
                 min_healthy_percent=100,
@@ -39112,14 +39185,19 @@ class PropagateManagedInstancesTags(enum.Enum):
         # Add the capacity provider to the cluster
         cluster.add_managed_instances_capacity_provider(mi_capacity_provider)
         
-        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        task_definition = ecs.TaskDefinition(self, "TaskDef",
+            memory_mi_b="512",
+            cpu="256",
+            network_mode=ecs.NetworkMode.AWS_VPC,
+            compatibility=ecs.Compatibility.MANAGED_INSTANCES
+        )
         
         task_definition.add_container("web",
             image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
             memory_reservation_mi_b=256
         )
         
-        ecs.Ec2Service(self, "EC2Service",
+        ecs.FargateService(self, "FargateService",
             cluster=cluster,
             task_definition=task_definition,
             min_healthy_percent=100,
@@ -43474,29 +43552,35 @@ class TaskDefinitionProps(CommonTaskDefinitionProps):
                 is_default=True
             )
             
-            cluster = ecs.Cluster(self, "FargateCluster", vpc=vpc)
-            
-            task_definition = ecs.TaskDefinition(self, "TD",
-                memory_mi_b="512",
-                cpu="256",
-                compatibility=ecs.Compatibility.FARGATE
+            cluster = ecs.Cluster(self, "Ec2Cluster", vpc=vpc)
+            cluster.add_capacity("DefaultAutoScalingGroup",
+                instance_type=ec2.InstanceType("t2.micro"),
+                vpc_subnets=ec2.SubnetSelection(subnet_type=ec2.SubnetType.PUBLIC)
             )
             
-            container_definition = task_definition.add_container("TheContainer",
+            task_definition = ecs.TaskDefinition(self, "TD",
+                compatibility=ecs.Compatibility.EC2
+            )
+            
+            task_definition.add_container("TheContainer",
                 image=ecs.ContainerImage.from_registry("foo/bar"),
                 memory_limit_mi_b=256
             )
             
-            run_task = tasks.EcsRunTask(self, "RunFargate",
+            run_task = tasks.EcsRunTask(self, "Run",
                 integration_pattern=sfn.IntegrationPattern.RUN_JOB,
                 cluster=cluster,
                 task_definition=task_definition,
-                assign_public_ip=True,
-                container_overrides=[tasks.ContainerOverride(
-                    container_definition=container_definition,
-                    environment=[tasks.TaskEnvironmentVariable(name="SOME_KEY", value=sfn.JsonPath.string_at("$.SomeKey"))]
-                )],
-                launch_target=tasks.EcsFargateLaunchTarget(),
+                launch_target=tasks.EcsEc2LaunchTarget(
+                    placement_strategies=[
+                        ecs.PlacementStrategy.spread_across_instances(),
+                        ecs.PlacementStrategy.packed_by_cpu(),
+                        ecs.PlacementStrategy.randomly()
+                    ],
+                    placement_constraints=[
+                        ecs.PlacementConstraint.member_of("blieptuut")
+                    ]
+                ),
                 propagated_tag_source=ecs.PropagatedTagSource.TASK_DEFINITION
             )
         '''
@@ -45778,6 +45862,12 @@ class Cluster(
         return typing.cast(builtins.str, jsii.get(self, "clusterName"))
 
     @builtins.property
+    @jsii.member(jsii_name="clusterRef")
+    def cluster_ref(self) -> _ClusterReference_91201a3a:
+        '''A reference to a Cluster resource.'''
+        return typing.cast(_ClusterReference_91201a3a, jsii.get(self, "clusterRef"))
+
+    @builtins.property
     @jsii.member(jsii_name="clusterScopedCapacityProviderNames")
     def cluster_scoped_capacity_provider_names(self) -> typing.List[builtins.str]:
         '''Getter for _clusterScopedCapacityProviderNames.
@@ -45802,6 +45892,12 @@ class Cluster(
         This is necessary to correctly create Capacity Provider Associations.
         '''
         return typing.cast(typing.List[CapacityProviderStrategy], jsii.get(self, "defaultCapacityProviderStrategy"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> ClusterGrants:
+        '''Collection of grant methods for a Cluster.'''
+        return typing.cast(ClusterGrants, jsii.get(self, "grants"))
 
     @builtins.property
     @jsii.member(jsii_name="hasEc2Capacity")
@@ -47299,33 +47395,30 @@ class Ec2Service(
 
     Example::
 
-        # task_definition: ecs.TaskDefinition
-        # cluster: ecs.Cluster
+        # vpc: ec2.Vpc
         
         
-        # Add a container to the task definition
-        specific_container = task_definition.add_container("Container",
-            image=ecs.ContainerImage.from_registry("/aws/aws-example-app"),
-            memory_limit_mi_b=2048
+        # Create an ECS cluster
+        cluster = ecs.Cluster(self, "Cluster", vpc=vpc)
+        
+        # Add capacity to it
+        cluster.add_capacity("DefaultAutoScalingGroupCapacity",
+            instance_type=ec2.InstanceType("t2.xlarge"),
+            desired_capacity=3
         )
         
-        # Add a port mapping
-        specific_container.add_port_mappings(
-            container_port=7600,
-            protocol=ecs.Protocol.TCP
+        task_definition = ecs.Ec2TaskDefinition(self, "TaskDef")
+        
+        task_definition.add_container("DefaultContainer",
+            image=ecs.ContainerImage.from_registry("amazon/amazon-ecs-sample"),
+            memory_limit_mi_b=512
         )
         
-        ecs.Ec2Service(self, "Service",
+        # Instantiate an Amazon ECS Service
+        ecs_service = ecs.Ec2Service(self, "Service",
             cluster=cluster,
             task_definition=task_definition,
-            min_healthy_percent=100,
-            cloud_map_options=ecs.CloudMapOptions(
-                # Create SRV records - useful for bridge networking
-                dns_record_type=cloudmap.DnsRecordType.SRV,
-                # Targets port TCP port 7600 `specificContainer`
-                container=specific_container,
-                container_port=7600
-            )
+            min_healthy_percent=100
         )
     '''
 
@@ -48735,6 +48828,7 @@ __all__ = [
     "CloudMapOptions",
     "Cluster",
     "ClusterAttributes",
+    "ClusterGrants",
     "ClusterProps",
     "CommonTaskDefinitionAttributes",
     "CommonTaskDefinitionProps",
@@ -49240,6 +49334,12 @@ def _typecheckingstub__59a913caee739f6d41600bf8ae89985db638913fbcb77a8abd5451cda
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__95f275957049f35fab12212269fb8430aff327a95d054b9ab139ffbf449b1e01(
+    resource: _ICapacityProviderRef_2d421d38,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a3210cc1a506360b31eb93a9301cea4ee37fb10be16276e632ecd13d5269ee37(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -49324,6 +49424,13 @@ def _typecheckingstub__55f829b236ccb12cc42e7c374a47c6c0909fecf313bf4ebb779169af0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8190745b8f3973969ec09a1b3747ebde0910102f01aadd896aee0896b3ad4be7(
+    *,
+    scale_in_after: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cb545da33f3067adee24bf90d3e903b06a7562a7e6ea6b3785f5b0ae6f3e105d(
     *,
     ec2_instance_profile_arn: builtins.str,
@@ -49377,6 +49484,7 @@ def _typecheckingstub__45a3888e29c1b6fb29bc3dbf90f279f8c543b8924bb51956a75f3290e
     *,
     infrastructure_role_arn: builtins.str,
     instance_launch_template: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceLaunchTemplateProperty, typing.Dict[builtins.str, typing.Any]]],
+    infrastructure_optimization: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InfrastructureOptimizationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     propagate_tags: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -49463,13 +49571,19 @@ def _typecheckingstub__ea27f9318b2a509011f1175119715629617e6b8d976d0782e37d54e45
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
     cluster_name: typing.Optional[builtins.str] = None,
     cluster_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     default_capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     service_connect_defaults: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ServiceConnectDefaultsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cfb2a9f62f04a78f928f54162262e2e70b01391927c3613bb02dc8cf667f3425(
+    resource: _IClusterRef_7ad11494,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -49608,9 +49722,9 @@ def _typecheckingstub__5b726b14d4a82695a68a7344f7ef1201a7390a69e77c604686bf3a3a1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
-    cluster: builtins.str,
+    cluster: typing.Union[builtins.str, _IClusterRef_7ad11494],
     default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -49656,16 +49770,16 @@ def _typecheckingstub__35e502a63db6f1c8f1c9225401bd8b2f0070d6dc6d8696b559629d5cc
 
 def _typecheckingstub__dec87cf6e858f074737c41c7a13a61e2e324b94deacf1f66ca9c0a48eb0b81b2(
     *,
-    cluster: builtins.str,
+    cluster: typing.Union[builtins.str, _IClusterRef_7ad11494],
     default_capacity_provider_strategy: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnClusterCapacityProviderAssociations.CapacityProviderStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]],
-    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__a7ff73a79103ae391f3b72b66851726ce38d98e8f5615c045aee9f3b899102a2(
     *,
-    capacity_providers: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_providers: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ICapacityProviderRef_2d421d38]]] = None,
     cluster_name: typing.Optional[builtins.str] = None,
     cluster_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -49732,7 +49846,7 @@ def _typecheckingstub__ec1192a1d20e03deef75c7fa1457b92ecf9506c5c5df97b5a4473fc3a
     *,
     availability_zone_rebalancing: typing.Optional[builtins.str] = None,
     capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    cluster: typing.Optional[builtins.str] = None,
+    cluster: typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]] = None,
     deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deployment_controller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentControllerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     desired_count: typing.Optional[jsii.Number] = None,
@@ -49747,15 +49861,21 @@ def _typecheckingstub__ec1192a1d20e03deef75c7fa1457b92ecf9506c5c5df97b5a4473fc3a
     placement_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.PlacementStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     platform_version: typing.Optional[builtins.str] = None,
     propagate_tags: typing.Optional[builtins.str] = None,
-    role: typing.Optional[builtins.str] = None,
+    role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     scheduling_strategy: typing.Optional[builtins.str] = None,
     service_connect_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceConnectConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     service_name: typing.Optional[builtins.str] = None,
     service_registries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceRegistryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    task_definition: typing.Optional[builtins.str] = None,
+    task_definition: typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]] = None,
     volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceVolumeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     vpc_lattice_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.VpcLatticeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7c53c69e7f9ad92a8b439e9a3e76bd76dde37100af8dfc523bb2ac24515e13f4(
+    resource: _IServiceRef_adcb3d02,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -50223,7 +50343,7 @@ def _typecheckingstub__7f93658ccdbf3f250d0d1ce12224e9eddaef71a8f664c6a279122f60d
     *,
     availability_zone_rebalancing: typing.Optional[builtins.str] = None,
     capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
-    cluster: typing.Optional[builtins.str] = None,
+    cluster: typing.Optional[typing.Union[builtins.str, _IClusterRef_7ad11494]] = None,
     deployment_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deployment_controller: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.DeploymentControllerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     desired_count: typing.Optional[jsii.Number] = None,
@@ -50238,13 +50358,13 @@ def _typecheckingstub__7f93658ccdbf3f250d0d1ce12224e9eddaef71a8f664c6a279122f60d
     placement_strategies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.PlacementStrategyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     platform_version: typing.Optional[builtins.str] = None,
     propagate_tags: typing.Optional[builtins.str] = None,
-    role: typing.Optional[builtins.str] = None,
+    role: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     scheduling_strategy: typing.Optional[builtins.str] = None,
     service_connect_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceConnectConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     service_name: typing.Optional[builtins.str] = None,
     service_registries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceRegistryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    task_definition: typing.Optional[builtins.str] = None,
+    task_definition: typing.Optional[typing.Union[builtins.str, _ITaskDefinitionRef_8091fc1c]] = None,
     volume_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.ServiceVolumeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     vpc_lattice_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnService.VpcLatticeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
@@ -50259,7 +50379,7 @@ def _typecheckingstub__a77e92d9ff0a9ac5b9f5909726a2e91dafa1fae662c3fdef09e5f9c3f
     cpu: typing.Optional[builtins.str] = None,
     enable_fault_injection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    execution_role_arn: typing.Optional[builtins.str] = None,
+    execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     family: typing.Optional[builtins.str] = None,
     inference_accelerators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.InferenceAcceleratorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ipc_mode: typing.Optional[builtins.str] = None,
@@ -50271,8 +50391,14 @@ def _typecheckingstub__a77e92d9ff0a9ac5b9f5909726a2e91dafa1fae662c3fdef09e5f9c3f
     requires_compatibilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     runtime_platform: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.RuntimePlatformProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    task_role_arn: typing.Optional[builtins.str] = None,
+    task_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.VolumeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0160aeb79e58377e790012a297cb8c40001c2d6ab351815c1d7f4ec174d884c3(
+    resource: _ITaskDefinitionRef_8091fc1c,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -50734,7 +50860,7 @@ def _typecheckingstub__aa26bba98a26acc68000a13cd676c1f16ef698b1af77ac4e6fb710c7f
     cpu: typing.Optional[builtins.str] = None,
     enable_fault_injection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
-    execution_role_arn: typing.Optional[builtins.str] = None,
+    execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     family: typing.Optional[builtins.str] = None,
     inference_accelerators: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.InferenceAcceleratorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     ipc_mode: typing.Optional[builtins.str] = None,
@@ -50746,7 +50872,7 @@ def _typecheckingstub__aa26bba98a26acc68000a13cd676c1f16ef698b1af77ac4e6fb710c7f
     requires_compatibilities: typing.Optional[typing.Sequence[builtins.str]] = None,
     runtime_platform: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.RuntimePlatformProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
-    task_role_arn: typing.Optional[builtins.str] = None,
+    task_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     volumes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskDefinition.VolumeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -50959,6 +51085,18 @@ def _typecheckingstub__e1b726254528b84beacd1d06c3a114fe981a40c7e7a6a740787f20749
     execute_command_configuration: typing.Optional[typing.Union[ExecuteCommandConfiguration, typing.Dict[builtins.str, typing.Any]]] = None,
     has_ec2_capacity: typing.Optional[builtins.bool] = None,
     security_groups: typing.Optional[typing.Sequence[_ISecurityGroup_acf8a799]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cdbeca024617ef50d12d72477b7d03211890aadca15b77ebfddf79a5f56e0352(
+    resource: _IClusterRef_7ad11494,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9644075d92c7a86cf54f4289554db439a1492f74887d260c00318aa8437ba93c(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

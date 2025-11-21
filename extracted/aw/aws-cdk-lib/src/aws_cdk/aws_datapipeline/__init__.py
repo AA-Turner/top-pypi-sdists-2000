@@ -183,6 +183,17 @@ class CfnPipeline(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPipeline")
+    @builtins.classmethod
+    def arn_for_pipeline(cls, resource: _IPipelineRef_5a3c7db8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2cf783c7d7169a3e1ab5e6af69cc7d469c61f6cec6fd9618e0d159282d513297)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPipeline", [resource]))
+
     @jsii.member(jsii_name="fromPipelineID")
     @builtins.classmethod
     def from_pipeline_id(
@@ -1079,6 +1090,12 @@ def _typecheckingstub__234bba6a4e11fe2b9f45dcf4e448e89d2ca6fc1f137ad5c70158dbb94
     parameter_values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.ParameterValueProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     pipeline_objects: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPipeline.PipelineObjectProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     pipeline_tags: typing.Optional[typing.Sequence[typing.Union[CfnPipeline.PipelineTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2cf783c7d7169a3e1ab5e6af69cc7d469c61f6cec6fd9618e0d159282d513297(
+    resource: _IPipelineRef_5a3c7db8,
 ) -> None:
     """Type checking stubs"""
     pass

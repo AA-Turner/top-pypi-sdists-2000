@@ -66,10 +66,13 @@ from .. import (
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
 )
+from ..interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
+from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_mwaa import (
     EnvironmentReference as _EnvironmentReference_14c1e070,
     IEnvironmentRef as _IEnvironmentRef_842152e5,
 )
+from ..interfaces.aws_s3 import IBucketRef as _IBucketRef_3debe44e
 
 
 @jsii.implements(_IInspectable_c2943556, _IEnvironmentRef_842152e5, _ITaggable_36806126)
@@ -165,8 +168,8 @@ class CfnEnvironment(
         dag_s3_path: typing.Optional[builtins.str] = None,
         endpoint_management: typing.Optional[builtins.str] = None,
         environment_class: typing.Optional[builtins.str] = None,
-        execution_role_arn: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[builtins.str] = None,
+        execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        kms_key: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEnvironment.LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         max_webservers: typing.Optional[jsii.Number] = None,
         max_workers: typing.Optional[jsii.Number] = None,
@@ -178,7 +181,7 @@ class CfnEnvironment(
         requirements_s3_object_version: typing.Optional[builtins.str] = None,
         requirements_s3_path: typing.Optional[builtins.str] = None,
         schedulers: typing.Optional[jsii.Number] = None,
-        source_bucket_arn: typing.Optional[builtins.str] = None,
+        source_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         startup_script_s3_object_version: typing.Optional[builtins.str] = None,
         startup_script_s3_path: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
@@ -251,6 +254,17 @@ class CfnEnvironment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForEnvironment")
+    @builtins.classmethod
+    def arn_for_environment(cls, resource: _IEnvironmentRef_842152e5) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96b224375ff0273e6eac6dff1f2e5250275c43e5a9c26a0b28420ec7640ce43f)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironment", [resource]))
 
     @jsii.member(jsii_name="fromEnvironmentArn")
     @builtins.classmethod
@@ -1175,8 +1189,8 @@ class CfnEnvironmentProps:
         dag_s3_path: typing.Optional[builtins.str] = None,
         endpoint_management: typing.Optional[builtins.str] = None,
         environment_class: typing.Optional[builtins.str] = None,
-        execution_role_arn: typing.Optional[builtins.str] = None,
-        kms_key: typing.Optional[builtins.str] = None,
+        execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+        kms_key: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
         logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         max_webservers: typing.Optional[jsii.Number] = None,
         max_workers: typing.Optional[jsii.Number] = None,
@@ -1188,7 +1202,7 @@ class CfnEnvironmentProps:
         requirements_s3_object_version: typing.Optional[builtins.str] = None,
         requirements_s3_path: typing.Optional[builtins.str] = None,
         schedulers: typing.Optional[jsii.Number] = None,
-        source_bucket_arn: typing.Optional[builtins.str] = None,
+        source_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
         startup_script_s3_object_version: typing.Optional[builtins.str] = None,
         startup_script_s3_path: typing.Optional[builtins.str] = None,
         tags: typing.Any = None,
@@ -1449,7 +1463,9 @@ class CfnEnvironmentProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
-    def execution_role_arn(self) -> typing.Optional[builtins.str]:
+    def execution_role_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]]:
         '''The Amazon Resource Name (ARN) of the execution role in IAM that allows MWAA to access AWS resources in your environment.
 
         For example, ``arn:aws:iam::123456789:role/my-execution-role`` . To learn more, see `Amazon MWAA Execution role <https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-create-role.html>`_ .
@@ -1457,10 +1473,10 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mwaa-environment.html#cfn-mwaa-environment-executionrolearn
         '''
         result = self._values.get("execution_role_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]], result)
 
     @builtins.property
-    def kms_key(self) -> typing.Optional[builtins.str]:
+    def kms_key(self) -> typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]]:
         '''The AWS Key Management Service (KMS) key to encrypt and decrypt the data in your environment.
 
         You can use an AWS KMS key managed by MWAA, or a customer-managed KMS key (advanced).
@@ -1468,7 +1484,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mwaa-environment.html#cfn-mwaa-environment-kmskey
         '''
         result = self._values.get("kms_key")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def logging_configuration(
@@ -1591,7 +1607,9 @@ class CfnEnvironmentProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def source_bucket_arn(self) -> typing.Optional[builtins.str]:
+    def source_bucket_arn(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]]:
         '''The Amazon Resource Name (ARN) of the Amazon S3 bucket where your DAG code and supporting files are stored.
 
         For example, ``arn:aws:s3:::my-airflow-bucket-unique-name`` . To learn more, see `Create an Amazon S3 bucket for Amazon MWAA <https://docs.aws.amazon.com/mwaa/latest/userguide/mwaa-s3-bucket.html>`_ .
@@ -1599,7 +1617,7 @@ class CfnEnvironmentProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mwaa-environment.html#cfn-mwaa-environment-sourcebucketarn
         '''
         result = self._values.get("source_bucket_arn")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]], result)
 
     @builtins.property
     def startup_script_s3_object_version(self) -> typing.Optional[builtins.str]:
@@ -1704,8 +1722,8 @@ def _typecheckingstub__558d6a60af086ab1a40ad8057fcb128456129bbbd328752ab90d8a6d5
     dag_s3_path: typing.Optional[builtins.str] = None,
     endpoint_management: typing.Optional[builtins.str] = None,
     environment_class: typing.Optional[builtins.str] = None,
-    execution_role_arn: typing.Optional[builtins.str] = None,
-    kms_key: typing.Optional[builtins.str] = None,
+    execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+    kms_key: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_webservers: typing.Optional[jsii.Number] = None,
     max_workers: typing.Optional[jsii.Number] = None,
@@ -1717,13 +1735,19 @@ def _typecheckingstub__558d6a60af086ab1a40ad8057fcb128456129bbbd328752ab90d8a6d5
     requirements_s3_object_version: typing.Optional[builtins.str] = None,
     requirements_s3_path: typing.Optional[builtins.str] = None,
     schedulers: typing.Optional[jsii.Number] = None,
-    source_bucket_arn: typing.Optional[builtins.str] = None,
+    source_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     startup_script_s3_object_version: typing.Optional[builtins.str] = None,
     startup_script_s3_path: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
     webserver_access_mode: typing.Optional[builtins.str] = None,
     weekly_maintenance_window_start: typing.Optional[builtins.str] = None,
     worker_replacement_strategy: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__96b224375ff0273e6eac6dff1f2e5250275c43e5a9c26a0b28420ec7640ce43f(
+    resource: _IEnvironmentRef_842152e5,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1948,8 +1972,8 @@ def _typecheckingstub__9d7baed808ece1f6aca4fce5dbeac04c731d688aec6f3395e1f0892ea
     dag_s3_path: typing.Optional[builtins.str] = None,
     endpoint_management: typing.Optional[builtins.str] = None,
     environment_class: typing.Optional[builtins.str] = None,
-    execution_role_arn: typing.Optional[builtins.str] = None,
-    kms_key: typing.Optional[builtins.str] = None,
+    execution_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+    kms_key: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
     logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     max_webservers: typing.Optional[jsii.Number] = None,
     max_workers: typing.Optional[jsii.Number] = None,
@@ -1961,7 +1985,7 @@ def _typecheckingstub__9d7baed808ece1f6aca4fce5dbeac04c731d688aec6f3395e1f0892ea
     requirements_s3_object_version: typing.Optional[builtins.str] = None,
     requirements_s3_path: typing.Optional[builtins.str] = None,
     schedulers: typing.Optional[jsii.Number] = None,
-    source_bucket_arn: typing.Optional[builtins.str] = None,
+    source_bucket_arn: typing.Optional[typing.Union[builtins.str, _IBucketRef_3debe44e]] = None,
     startup_script_s3_object_version: typing.Optional[builtins.str] = None,
     startup_script_s3_path: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,

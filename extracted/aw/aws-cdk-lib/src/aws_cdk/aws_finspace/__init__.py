@@ -166,6 +166,17 @@ class CfnEnvironment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForEnvironment")
+    @builtins.classmethod
+    def arn_for_environment(cls, resource: _IEnvironmentRef_e735ced8) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__47cfdd4f5664b2860ba0729679bf45cfcf2e6699436980782a3d82a81d10483c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironment", [resource]))
+
     @jsii.member(jsii_name="fromEnvironmentArn")
     @builtins.classmethod
     def from_environment_arn(
@@ -962,6 +973,12 @@ def _typecheckingstub__9f57ac69116cda232b57cc77dd248367e34b3decfb4cc4cd606394bbf
     kms_key_id: typing.Optional[builtins.str] = None,
     superuser_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEnvironment.SuperuserParametersProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__47cfdd4f5664b2860ba0729679bf45cfcf2e6699436980782a3d82a81d10483c(
+    resource: _IEnvironmentRef_e735ced8,
 ) -> None:
     """Type checking stubs"""
     pass

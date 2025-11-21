@@ -263,6 +263,17 @@ class CfnBroker(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForBroker")
+    @builtins.classmethod
+    def arn_for_broker(cls, resource: _IBrokerRef_bd875819) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__65a3807b80344d52e1ebf0357601d8262aeda03bd226f1c2f04feac612ffef01)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForBroker", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -825,8 +836,8 @@ class CfnBroker(
         ) -> None:
             '''Encryption options for the broker.
 
-            :param use_aws_owned_key: Enables the use of an AWS owned CMK using AWS KMS (KMS). Set to ``true`` by default, if no value is provided, for example, for RabbitMQ brokers.
-            :param kms_key_id: The customer master key (CMK) to use for the A AWS KMS (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.
+            :param use_aws_owned_key: Enables the use of an AWS owned CMK using AWS (KMS). Set to ``true`` by default, if no value is provided, for example, for RabbitMQ brokers.
+            :param kms_key_id: The customer master key (CMK) to use for the A AWS (KMS). This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-amazonmq-broker-encryptionoptions.html
             :exampleMetadata: fixture=_generated
@@ -858,7 +869,7 @@ class CfnBroker(
         def use_aws_owned_key(
             self,
         ) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
-            '''Enables the use of an AWS owned CMK using AWS KMS (KMS).
+            '''Enables the use of an AWS owned CMK using AWS  (KMS).
 
             Set to ``true`` by default, if no value is provided, for example, for RabbitMQ brokers.
 
@@ -870,7 +881,7 @@ class CfnBroker(
 
         @builtins.property
         def kms_key_id(self) -> typing.Optional[builtins.str]:
-            '''The customer master key (CMK) to use for the A AWS KMS (KMS).
+            '''The customer master key (CMK) to use for the A AWS  (KMS).
 
             This key is used to encrypt your data at rest. If not provided, Amazon MQ will use a default CMK to encrypt your data.
 
@@ -2016,6 +2027,20 @@ class CfnConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForConfiguration")
+    @builtins.classmethod
+    def arn_for_configuration(
+        cls,
+        resource: _IConfigurationRef_769e84b9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__43365c105d93276bbd5e65bdc4db2f6781b8ffcdda71dd9ace1c156148647846)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConfiguration", [resource]))
+
     @jsii.member(jsii_name="fromConfigurationArn")
     @builtins.classmethod
     def from_configuration_arn(
@@ -2789,6 +2814,12 @@ def _typecheckingstub__d16f84aeefdd69c636acf0c8b4d958b93ded39c1da5d5eecb39ce8753
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__65a3807b80344d52e1ebf0357601d8262aeda03bd226f1c2f04feac612ffef01(
+    resource: _IBrokerRef_bd875819,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2d7a61b5b47c0d5f9d4072378260a383a676994ae22eab1593156375aeda79a7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3027,6 +3058,12 @@ def _typecheckingstub__e5d8c71c30a8f2bd8b3e455320ae87cc2204a9546d3ee226605a95753
     description: typing.Optional[builtins.str] = None,
     engine_version: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[CfnConfiguration.TagsEntryProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__43365c105d93276bbd5e65bdc4db2f6781b8ffcdda71dd9ace1c156148647846(
+    resource: _IConfigurationRef_769e84b9,
 ) -> None:
     """Type checking stubs"""
     pass

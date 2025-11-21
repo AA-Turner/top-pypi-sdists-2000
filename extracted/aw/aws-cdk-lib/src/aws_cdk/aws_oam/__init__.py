@@ -155,6 +155,17 @@ class CfnLink(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForLink")
+    @builtins.classmethod
+    def arn_for_link(cls, resource: _ILinkRef_912f3726) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__85cdff47ee463dee7cc5a14c599c5d62c05a57c04f1ce8ca6ac1513190b1024b)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLink", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -389,7 +400,7 @@ class CfnLink(
 
             When used in ``LogGroupConfiguration`` this field specifies which log groups are to share their log events with the monitoring account. Use the term ``LogGroupName`` and one or more of the following operands.
 
-            :param filter: When used in ``MetricConfiguration`` this field specifies which metric namespaces are to be shared with the monitoring account. When used in ``LogGroupConfiguration`` this field specifies which log groups are to share their log events with the monitoring account. Use the term ``LogGroupName`` and one or more of the following operands. Use single quotation marks (') around log group names and metric namespaces. The matching of log group names and metric namespaces is case sensitive. Each filter has a limit of five conditional operands. Conditional operands are ``AND`` and ``OR`` . - ``=`` and ``!=`` - ``AND`` - ``OR`` - ``LIKE`` and ``NOT LIKE`` . These can be used only as prefix searches. Include a ``%`` at the end of the string that you want to search for and include. - ``IN`` and ``NOT IN`` , using parentheses ``( )`` Examples: - ``Namespace NOT LIKE 'AWS/%'`` includes only namespaces that don't start with ``AWS/`` , such as custom namespaces. - ``Namespace IN ('AWS/EC2', 'AWS/ELB', 'AWS/S3')`` includes only the metrics in the EC2, Elastic Load Balancing , and Amazon S3 namespaces. - ``Namespace = 'AWS/EC2' OR Namespace NOT LIKE 'AWS/%'`` includes only the EC2 namespace and your custom namespaces. - ``LogGroupName IN ('This-Log-Group', 'Other-Log-Group')`` includes only the log groups with names ``This-Log-Group`` and ``Other-Log-Group`` . - ``LogGroupName NOT IN ('Private-Log-Group', 'Private-Log-Group-2')`` includes all log groups except the log groups with names ``Private-Log-Group`` and ``Private-Log-Group-2`` . - ``LogGroupName LIKE 'aws/lambda/%' OR LogGroupName LIKE 'AWSLogs%'`` includes all log groups that have names that start with ``aws/lambda/`` or ``AWSLogs`` . .. epigraph:: If you are updating a link that uses filters, you can specify ``*`` as the only value for the ``filter`` parameter to delete the filter and share all log groups with the monitoring account.
+            :param filter: When used in ``MetricConfiguration`` this field specifies which metric namespaces are to be shared with the monitoring account. When used in ``LogGroupConfiguration`` this field specifies which log groups are to share their log events with the monitoring account. Use the term ``LogGroupName`` and one or more of the following operands. Use single quotation marks (') around log group names and metric namespaces. The matching of log group names and metric namespaces is case sensitive. Each filter has a limit of five conditional operands. Conditional operands are ``AND`` and ``OR`` . - ``=`` and ``!=`` - ``AND`` - ``OR`` - ``LIKE`` and ``NOT LIKE`` . These can be used only as prefix searches. Include a ``%`` at the end of the string that you want to search for and include. - ``IN`` and ``NOT IN`` , using parentheses ``( )`` Examples: - ``Namespace NOT LIKE 'AWS/%'`` includes only namespaces that don't start with ``AWS/`` , such as custom namespaces. - ``Namespace IN ('AWS/EC2', 'AWS/ELB', 'AWS/S3')`` includes only the metrics in the EC2, ELB , and Amazon S3 namespaces. - ``Namespace = 'AWS/EC2' OR Namespace NOT LIKE 'AWS/%'`` includes only the EC2 namespace and your custom namespaces. - ``LogGroupName IN ('This-Log-Group', 'Other-Log-Group')`` includes only the log groups with names ``This-Log-Group`` and ``Other-Log-Group`` . - ``LogGroupName NOT IN ('Private-Log-Group', 'Private-Log-Group-2')`` includes all log groups except the log groups with names ``Private-Log-Group`` and ``Private-Log-Group-2`` . - ``LogGroupName LIKE 'aws/lambda/%' OR LogGroupName LIKE 'AWSLogs%'`` includes all log groups that have names that start with ``aws/lambda/`` or ``AWSLogs`` . .. epigraph:: If you are updating a link that uses filters, you can specify ``*`` as the only value for the ``filter`` parameter to delete the filter and share all log groups with the monitoring account.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-oam-link-linkfilter.html
             :exampleMetadata: fixture=_generated
@@ -430,7 +441,7 @@ class CfnLink(
             Examples:
 
             - ``Namespace NOT LIKE 'AWS/%'`` includes only namespaces that don't start with ``AWS/`` , such as custom namespaces.
-            - ``Namespace IN ('AWS/EC2', 'AWS/ELB', 'AWS/S3')`` includes only the metrics in the EC2, Elastic Load Balancing , and Amazon S3 namespaces.
+            - ``Namespace IN ('AWS/EC2', 'AWS/ELB', 'AWS/S3')`` includes only the metrics in the EC2, ELB , and Amazon S3 namespaces.
             - ``Namespace = 'AWS/EC2' OR Namespace NOT LIKE 'AWS/%'`` includes only the EC2 namespace and your custom namespaces.
             - ``LogGroupName IN ('This-Log-Group', 'Other-Log-Group')`` includes only the log groups with names ``This-Log-Group`` and ``Other-Log-Group`` .
             - ``LogGroupName NOT IN ('Private-Log-Group', 'Private-Log-Group-2')`` includes all log groups except the log groups with names ``Private-Log-Group`` and ``Private-Log-Group-2`` .
@@ -672,6 +683,17 @@ class CfnSink(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForSink")
+    @builtins.classmethod
+    def arn_for_sink(cls, resource: _ISinkRef_52a08f4c) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4c6b89e924e20e42bdcb116001de5e3f789c985592af20298d95db5db79b12c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSink", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -895,6 +917,12 @@ def _typecheckingstub__2ffbd6521de55eb2e3d4f2bc8edac2d144f850a53dbdfd3dac4b15916
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__85cdff47ee463dee7cc5a14c599c5d62c05a57c04f1ce8ca6ac1513190b1024b(
+    resource: _ILinkRef_912f3726,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c070a52405d10c02ca36373c6f7099717b46c4eeb9b9100704beaaf1d2c1ed20(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -970,6 +998,12 @@ def _typecheckingstub__9fc6909cf2fa64c817adc7144cbdc866a604a4bcf1e0859e6a2301142
     name: builtins.str,
     policy: typing.Any = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4c6b89e924e20e42bdcb116001de5e3f789c985592af20298d95db5db79b12c(
+    resource: _ISinkRef_52a08f4c,
 ) -> None:
     """Type checking stubs"""
     pass

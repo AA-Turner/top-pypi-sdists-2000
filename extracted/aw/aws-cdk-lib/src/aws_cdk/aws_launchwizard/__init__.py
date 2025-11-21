@@ -154,6 +154,17 @@ class CfnDeployment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForDeployment")
+    @builtins.classmethod
+    def arn_for_deployment(cls, resource: _IDeploymentRef_84f246b4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__568a48adc369ee7d93157209ab196d4f495c58158a475e203141da4dce6b7146)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDeployment", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -476,6 +487,12 @@ def _typecheckingstub__fe77ed4e81ab71d948f0b03ed5f8780bcc2f324a23805bc45e7eef5f9
     workload_name: builtins.str,
     specifications: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__568a48adc369ee7d93157209ab196d4f495c58158a475e203141da4dce6b7146(
+    resource: _IDeploymentRef_84f246b4,
 ) -> None:
     """Type checking stubs"""
     pass

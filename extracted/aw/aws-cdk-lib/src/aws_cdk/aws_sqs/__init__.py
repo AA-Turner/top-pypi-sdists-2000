@@ -164,11 +164,17 @@ from ..aws_cloudwatch import (
 from ..aws_iam import (
     AddToResourcePolicyResult as _AddToResourcePolicyResult_1d0a53ad,
     Grant as _Grant_a7ae64f8,
+    GrantOnKeyResult as _GrantOnKeyResult_35320c49,
+    IEncryptedResource as _IEncryptedResource_8e9bf351,
     IGrantable as _IGrantable_71c4f5de,
+    IResourceWithPolicyV2 as _IResourceWithPolicyV2_01035ec6,
     PolicyDocument as _PolicyDocument_3ac34393,
     PolicyStatement as _PolicyStatement_0fe33853,
 )
 from ..aws_kms import IKey as _IKey_5f11635f
+from ..interfaces.aws_kms import (
+    IAliasRef as _IAliasRef_43fafabd, IKeyRef as _IKeyRef_d4fc6ef3
+)
 from ..interfaces.aws_sqs import (
     IQueueInlinePolicyRef as _IQueueInlinePolicyRef_be43bfb1,
     IQueuePolicyRef as _IQueuePolicyRef_dc2b5987,
@@ -199,7 +205,7 @@ class CfnQueue(
     - If you delete a queue, you must wait at least 60 seconds before creating a queue with the same name.
     - To successfully create a new queue, you must provide a queue name that adheres to the `limits related to queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/limits-queues.html>`_ and is unique within the scope of your queues.
 
-    For more information about creating FIFO (first-in-first-out) queues, see `Creating an Amazon SQS queue ( AWS CloudFormation ) <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/create-queue-cloudformation.html>`_ in the *Amazon SQS Developer Guide* .
+    For more information about creating FIFO (first-in-first-out) queues, see `Creating an Amazon SQS queue ( CloudFormation ) <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/create-queue-cloudformation.html>`_ in the *Amazon SQS Developer Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html
     :cloudformationResource: AWS::SQS::Queue
@@ -248,7 +254,7 @@ class CfnQueue(
         fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         fifo_throughput_limit: typing.Optional[builtins.str] = None,
         kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-        kms_master_key_id: typing.Optional[builtins.str] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         maximum_message_size: typing.Optional[jsii.Number] = None,
         message_retention_period: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
@@ -268,16 +274,16 @@ class CfnQueue(
         :param delay_seconds: The time in seconds for which the delivery of all messages in the queue is delayed. You can specify an integer value of ``0`` to ``900`` (15 minutes). The default value is ``0`` .
         :param fifo_queue: If set to true, creates a FIFO queue. If you don't specify this property, Amazon SQS creates a standard queue. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* .
         :param fifo_throughput_limit: For high throughput for FIFO queues, specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are ``perQueue`` and ``perMessageGroupId`` . To enable high throughput for a FIFO queue, set this attribute to ``perMessageGroupId`` *and* set the ``DeduplicationScope`` attribute to ``messageGroup`` . If you set these attributes to anything other than these values, normal throughput is in effect and deduplication occurs as specified. For more information, see `High throughput for FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html>`_ and `Quotas related to messages <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html>`_ in the *Amazon SQS Developer Guide* .
-        :param kms_data_key_reuse_period_seconds: The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. The value must be an integer between 60 (1 minute) and 86,400 (24 hours). The default is 300 (5 minutes). .. epigraph:: A shorter time period provides better security, but results in more calls to AWS KMS , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
+        :param kms_data_key_reuse_period_seconds: The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS again. The value must be an integer between 60 (1 minute) and 86,400 (24 hours). The default is 300 (5 minutes). .. epigraph:: A shorter time period provides better security, but results in more calls to AWS , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
         :param kms_master_key_id: The ID of an AWS Key Management Service (KMS) for Amazon SQS , or a custom KMS. To use the AWS managed KMS for Amazon SQS , specify a (default) alias ARN, alias name (for example ``alias/aws/sqs`` ), key ARN, or key ID. For more information, see the following: - `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html>`_ in the *Amazon SQS Developer Guide* - `CreateQueue <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html>`_ in the *Amazon SQS API Reference* - `Request Parameters <https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters>`_ in the *AWS Key Management Service API Reference* - The Key Management Service (KMS) section of the `Security best practices for AWS Key Management Service <https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html>`_ in the *AWS Key Management Service Developer Guide*
         :param maximum_message_size: The limit of how many bytes that a message can contain before Amazon SQS rejects it. You can specify an integer from 1,024 bytes (1 KiB) to 1,048,576 bytes (1 MiB). Default: 1,048,576 bytes (1 MiB).
         :param message_retention_period: The number of seconds that Amazon SQS retains a message. You can specify an integer value from ``60`` seconds (1 minute) to ``1,209,600`` seconds (14 days). The default value is ``345,600`` seconds (4 days).
-        :param queue_name: A name for the queue. To create a FIFO queue, the name of your FIFO queue must end with the ``.fifo`` suffix. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *AWS CloudFormation User Guide* . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param queue_name: A name for the queue. To create a FIFO queue, the name of your FIFO queue must end with the ``.fifo`` suffix. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *CloudFormation User Guide* . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param receive_message_wait_time_seconds: Specifies the duration, in seconds, that the ReceiveMessage action call waits until a message is in the queue in order to include it in the response, rather than returning an empty response if a message isn't yet available. You can specify an integer from 1 to 20. Short polling is used as the default or when you specify 0 for this property. For more information, see `Consuming messages using long polling <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html#sqs-long-polling>`_ in the *Amazon SQS Developer Guide* .
         :param redrive_allow_policy: The string that includes the parameters for the permissions for the dead-letter queue redrive permission and which source queues can specify dead-letter queues as a JSON object. The parameters are as follows: - ``redrivePermission`` : The permission type that defines which source queues can specify the current queue as the dead-letter queue. Valid values are: - ``allowAll`` : (Default) Any source queues in this AWS account in the same Region can specify this queue as the dead-letter queue. - ``denyAll`` : No source queues can specify this queue as the dead-letter queue. - ``byQueue`` : Only queues specified by the ``sourceQueueArns`` parameter can specify this queue as the dead-letter queue. - ``sourceQueueArns`` : The Amazon Resource Names (ARN)s of the source queues that can specify this queue as the dead-letter queue and redrive messages. You can specify this parameter only when the ``redrivePermission`` parameter is set to ``byQueue`` . You can specify up to 10 source queue ARNs. To allow more than 10 source queues to specify dead-letter queues, set the ``redrivePermission`` parameter to ``allowAll`` .
         :param redrive_policy: The string that includes the parameters for the dead-letter queue functionality of the source queue as a JSON object. The parameters are as follows: - ``deadLetterTargetArn`` : The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of ``maxReceiveCount`` is exceeded. - ``maxReceiveCount`` : The number of times a message is received by a consumer of the source queue before being moved to the dead-letter queue. When the ``ReceiveCount`` for a message exceeds the ``maxReceiveCount`` for a queue, Amazon SQS moves the message to the dead-letter-queue. .. epigraph:: The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue. *JSON* ``{ "deadLetterTargetArn" : *String* , "maxReceiveCount" : *Integer* }`` *YAML* ``deadLetterTargetArn : *String*`` ``maxReceiveCount : *Integer*``
         :param sqs_managed_sse_enabled: Enables server-side queue encryption using SQS owned encryption keys. Only one server-side encryption option is supported per queue (for example, `SSE-KMS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sse-existing-queue.html>`_ or `SSE-SQS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sqs-sse-queue.html>`_ ). When ``SqsManagedSseEnabled`` is not defined, ``SSE-SQS`` encryption is enabled by default.
-        :param tags: The tags that you attach to this queue. For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
+        :param tags: The tags that you attach to this queue. For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *CloudFormation User Guide* .
         :param visibility_timeout: The length of time during which a message will be unavailable after a message is delivered from the queue. This blocks other components from receiving the same message and gives the initial component time to process and delete the message from the queue. Values must be from 0 to 43,200 seconds (12 hours). If you don't specify a value, AWS CloudFormation uses the default value of 30 seconds. For more information about Amazon SQS queue visibility timeouts, see `Visibility timeout <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>`_ in the *Amazon SQS Developer Guide* .
         '''
         if __debug__:
@@ -304,6 +310,17 @@ class CfnQueue(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForQueue")
+    @builtins.classmethod
+    def arn_for_queue(cls, resource: _IQueueRef_fa8b2198) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__722a92eb0cd4ca74862788bfdd1e2c8f0a2a7b6e0dbce380469836d36ed717ad)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -461,7 +478,7 @@ class CfnQueue(
     @builtins.property
     @jsii.member(jsii_name="kmsDataKeyReusePeriodSeconds")
     def kms_data_key_reuse_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again.'''
+        '''The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS  again.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "kmsDataKeyReusePeriodSeconds"))
 
     @kms_data_key_reuse_period_seconds.setter
@@ -811,7 +828,7 @@ class CfnQueuePolicy(
 ):
     '''The ``AWS::SQS::QueuePolicy`` type applies a policy to Amazon SQS queues.
 
-    For an example snippet, see `Declaring an Amazon SQS policy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-sqs-policy>`_ in the *AWS CloudFormation User Guide* .
+    For an example snippet, see `Declaring an Amazon SQS policy <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-iam.html#scenario-sqs-policy>`_ in the *CloudFormation User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queuepolicy.html
     :cloudformationResource: AWS::SQS::QueuePolicy
@@ -1041,7 +1058,7 @@ class CfnQueueProps:
         fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         fifo_throughput_limit: typing.Optional[builtins.str] = None,
         kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-        kms_master_key_id: typing.Optional[builtins.str] = None,
+        kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
         maximum_message_size: typing.Optional[jsii.Number] = None,
         message_retention_period: typing.Optional[jsii.Number] = None,
         queue_name: typing.Optional[builtins.str] = None,
@@ -1059,16 +1076,16 @@ class CfnQueueProps:
         :param delay_seconds: The time in seconds for which the delivery of all messages in the queue is delayed. You can specify an integer value of ``0`` to ``900`` (15 minutes). The default value is ``0`` .
         :param fifo_queue: If set to true, creates a FIFO queue. If you don't specify this property, Amazon SQS creates a standard queue. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* .
         :param fifo_throughput_limit: For high throughput for FIFO queues, specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are ``perQueue`` and ``perMessageGroupId`` . To enable high throughput for a FIFO queue, set this attribute to ``perMessageGroupId`` *and* set the ``DeduplicationScope`` attribute to ``messageGroup`` . If you set these attributes to anything other than these values, normal throughput is in effect and deduplication occurs as specified. For more information, see `High throughput for FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/high-throughput-fifo.html>`_ and `Quotas related to messages <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/quotas-messages.html>`_ in the *Amazon SQS Developer Guide* .
-        :param kms_data_key_reuse_period_seconds: The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. The value must be an integer between 60 (1 minute) and 86,400 (24 hours). The default is 300 (5 minutes). .. epigraph:: A shorter time period provides better security, but results in more calls to AWS KMS , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
+        :param kms_data_key_reuse_period_seconds: The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS again. The value must be an integer between 60 (1 minute) and 86,400 (24 hours). The default is 300 (5 minutes). .. epigraph:: A shorter time period provides better security, but results in more calls to AWS , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
         :param kms_master_key_id: The ID of an AWS Key Management Service (KMS) for Amazon SQS , or a custom KMS. To use the AWS managed KMS for Amazon SQS , specify a (default) alias ARN, alias name (for example ``alias/aws/sqs`` ), key ARN, or key ID. For more information, see the following: - `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html>`_ in the *Amazon SQS Developer Guide* - `CreateQueue <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/API_CreateQueue.html>`_ in the *Amazon SQS API Reference* - `Request Parameters <https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters>`_ in the *AWS Key Management Service API Reference* - The Key Management Service (KMS) section of the `Security best practices for AWS Key Management Service <https://docs.aws.amazon.com/kms/latest/developerguide/best-practices.html>`_ in the *AWS Key Management Service Developer Guide*
         :param maximum_message_size: The limit of how many bytes that a message can contain before Amazon SQS rejects it. You can specify an integer from 1,024 bytes (1 KiB) to 1,048,576 bytes (1 MiB). Default: 1,048,576 bytes (1 MiB).
         :param message_retention_period: The number of seconds that Amazon SQS retains a message. You can specify an integer value from ``60`` seconds (1 minute) to ``1,209,600`` seconds (14 days). The default value is ``345,600`` seconds (4 days).
-        :param queue_name: A name for the queue. To create a FIFO queue, the name of your FIFO queue must end with the ``.fifo`` suffix. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* . If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *AWS CloudFormation User Guide* . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param queue_name: A name for the queue. To create a FIFO queue, the name of your FIFO queue must end with the ``.fifo`` suffix. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* . If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *CloudFormation User Guide* . .. epigraph:: If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
         :param receive_message_wait_time_seconds: Specifies the duration, in seconds, that the ReceiveMessage action call waits until a message is in the queue in order to include it in the response, rather than returning an empty response if a message isn't yet available. You can specify an integer from 1 to 20. Short polling is used as the default or when you specify 0 for this property. For more information, see `Consuming messages using long polling <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-short-and-long-polling.html#sqs-long-polling>`_ in the *Amazon SQS Developer Guide* .
         :param redrive_allow_policy: The string that includes the parameters for the permissions for the dead-letter queue redrive permission and which source queues can specify dead-letter queues as a JSON object. The parameters are as follows: - ``redrivePermission`` : The permission type that defines which source queues can specify the current queue as the dead-letter queue. Valid values are: - ``allowAll`` : (Default) Any source queues in this AWS account in the same Region can specify this queue as the dead-letter queue. - ``denyAll`` : No source queues can specify this queue as the dead-letter queue. - ``byQueue`` : Only queues specified by the ``sourceQueueArns`` parameter can specify this queue as the dead-letter queue. - ``sourceQueueArns`` : The Amazon Resource Names (ARN)s of the source queues that can specify this queue as the dead-letter queue and redrive messages. You can specify this parameter only when the ``redrivePermission`` parameter is set to ``byQueue`` . You can specify up to 10 source queue ARNs. To allow more than 10 source queues to specify dead-letter queues, set the ``redrivePermission`` parameter to ``allowAll`` .
         :param redrive_policy: The string that includes the parameters for the dead-letter queue functionality of the source queue as a JSON object. The parameters are as follows: - ``deadLetterTargetArn`` : The Amazon Resource Name (ARN) of the dead-letter queue to which Amazon SQS moves messages after the value of ``maxReceiveCount`` is exceeded. - ``maxReceiveCount`` : The number of times a message is received by a consumer of the source queue before being moved to the dead-letter queue. When the ``ReceiveCount`` for a message exceeds the ``maxReceiveCount`` for a queue, Amazon SQS moves the message to the dead-letter-queue. .. epigraph:: The dead-letter queue of a FIFO queue must also be a FIFO queue. Similarly, the dead-letter queue of a standard queue must also be a standard queue. *JSON* ``{ "deadLetterTargetArn" : *String* , "maxReceiveCount" : *Integer* }`` *YAML* ``deadLetterTargetArn : *String*`` ``maxReceiveCount : *Integer*``
         :param sqs_managed_sse_enabled: Enables server-side queue encryption using SQS owned encryption keys. Only one server-side encryption option is supported per queue (for example, `SSE-KMS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sse-existing-queue.html>`_ or `SSE-SQS <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-configure-sqs-sse-queue.html>`_ ). When ``SqsManagedSseEnabled`` is not defined, ``SSE-SQS`` encryption is enabled by default.
-        :param tags: The tags that you attach to this queue. For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
+        :param tags: The tags that you attach to this queue. For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *CloudFormation User Guide* .
         :param visibility_timeout: The length of time during which a message will be unavailable after a message is delivered from the queue. This blocks other components from receiving the same message and gives the initial component time to process and delete the message from the queue. Values must be from 0 to 43,200 seconds (12 hours). If you don't specify a value, AWS CloudFormation uses the default value of 30 seconds. For more information about Amazon SQS queue visibility timeouts, see `Visibility timeout <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-visibility-timeout.html>`_ in the *Amazon SQS Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html
@@ -1222,12 +1239,12 @@ class CfnQueueProps:
 
     @builtins.property
     def kms_data_key_reuse_period_seconds(self) -> typing.Optional[jsii.Number]:
-        '''The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again.
+        '''The length of time in seconds for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS  again.
 
         The value must be an integer between 60 (1 minute) and 86,400 (24 hours). The default is 300 (5 minutes).
         .. epigraph::
 
-           A shorter time period provides better security, but results in more calls to AWS KMS , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
+           A shorter time period provides better security, but results in more calls to AWS  , which might incur charges after Free Tier. For more information, see `Encryption at rest <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html#sqs-how-does-the-data-key-reuse-period-work>`_ in the *Amazon SQS Developer Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-kmsdatakeyreuseperiodseconds
         '''
@@ -1235,7 +1252,9 @@ class CfnQueueProps:
         return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
-    def kms_master_key_id(self) -> typing.Optional[builtins.str]:
+    def kms_master_key_id(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]]:
         '''The ID of an AWS Key Management Service (KMS) for Amazon SQS , or a custom KMS.
 
         To use the AWS managed KMS for Amazon SQS , specify a (default) alias ARN, alias name (for example ``alias/aws/sqs`` ), key ARN, or key ID. For more information, see the following:
@@ -1248,7 +1267,7 @@ class CfnQueueProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-kmsmasterkeyid
         '''
         result = self._values.get("kms_master_key_id")
-        return typing.cast(typing.Optional[builtins.str], result)
+        return typing.cast(typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]], result)
 
     @builtins.property
     def maximum_message_size(self) -> typing.Optional[jsii.Number]:
@@ -1279,7 +1298,7 @@ class CfnQueueProps:
 
         To create a FIFO queue, the name of your FIFO queue must end with the ``.fifo`` suffix. For more information, see `Amazon SQS FIFO queues <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-fifo-queues.html>`_ in the *Amazon SQS Developer Guide* .
 
-        If you don't specify a name, AWS CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *AWS CloudFormation User Guide* .
+        If you don't specify a name, CloudFormation generates a unique physical ID and uses that ID for the queue name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ in the *CloudFormation User Guide* .
         .. epigraph::
 
            If you specify a name, you can't perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
@@ -1362,7 +1381,7 @@ class CfnQueueProps:
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''The tags that you attach to this queue.
 
-        For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *AWS CloudFormation User Guide* .
+        For more information, see `Resource tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ in the *CloudFormation User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-sqs-queue.html#cfn-sqs-queue-tags
         '''
@@ -1479,7 +1498,7 @@ class FifoThroughputLimit(enum.Enum):
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_sqs.IQueue")
-class IQueue(_IResource_c80c4260, typing_extensions.Protocol):
+class IQueue(_IResource_c80c4260, _IQueueRef_fa8b2198, typing_extensions.Protocol):
     '''Represents an SQS queue.'''
 
     @builtins.property
@@ -1965,6 +1984,7 @@ class IQueue(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IQueueProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IQueueRef_fa8b2198), # type: ignore[misc]
 ):
     '''Represents an SQS queue.'''
 
@@ -2748,7 +2768,7 @@ class QueueAttributes:
         )
 
 
-@jsii.implements(IQueue)
+@jsii.implements(IQueue, _IEncryptedResource_8e9bf351)
 class QueueBase(
     _Resource_45bc6135,
     metaclass=jsii.JSIIAbstractClass,
@@ -2846,6 +2866,23 @@ class QueueBase(
             type_hints = typing.get_type_hints(_typecheckingstub__e5a5ff7c810718528837ec11092f8e03040d6e612831c88a6e7076dbc91fefde)
             check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
         return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantConsumeMessages", [grantee]))
+
+    @jsii.member(jsii_name="grantOnKey")
+    def grant_on_key(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *actions: builtins.str,
+    ) -> _GrantOnKeyResult_35320c49:
+        '''Gives permissions to a grantable entity to perform actions on the encryption key.
+
+        :param grantee: -
+        :param actions: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0462575b26d9a0a6e126eea464f42b3c49cf8a5ce7d9a227dc46d6d4b4e52f6a)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+            check_type(argname="argument actions", value=actions, expected_type=typing.Tuple[type_hints["actions"], ...]) # pyright: ignore [reportGeneralTypeIssues]
+        return typing.cast(_GrantOnKeyResult_35320c49, jsii.invoke(self, "grantOnKey", [grantee, *actions]))
 
     @jsii.member(jsii_name="grantPurge")
     def grant_purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
@@ -3424,6 +3461,12 @@ class QueueBase(
         ...
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "QueueGrants":
+        '''Collection of grant methods for a Queue.'''
+        return typing.cast("QueueGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="queueArn")
     @abc.abstractmethod
     def queue_arn(self) -> builtins.str:
@@ -3436,6 +3479,12 @@ class QueueBase(
     def queue_name(self) -> builtins.str:
         '''The name of this queue.'''
         ...
+
+    @builtins.property
+    @jsii.member(jsii_name="queueRef")
+    def queue_ref(self) -> _QueueReference_f2e39de6:
+        '''A reference to a Queue resource.'''
+        return typing.cast(_QueueReference_f2e39de6, jsii.get(self, "queueRef"))
 
     @builtins.property
     @jsii.member(jsii_name="queueUrl")
@@ -3562,6 +3611,113 @@ class QueueEncryption(enum.Enum):
     To learn more about SSE-SQS on Amazon SQS, please visit the
     `Amazon SQS documentation <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-server-side-encryption.html>`_.
     '''
+
+
+class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueGrants"):
+    '''Collection of grant methods for a IQueueRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_sqs as sqs
+        from aws_cdk.interfaces import aws_sqs as interfaces_aws_sqs
+        
+        # queue_ref: interfaces_aws_sqs.IQueueRef
+        
+        queue_grants = sqs.QueueGrants.from_queue(queue_ref)
+    '''
+
+    @jsii.member(jsii_name="fromQueue")
+    @builtins.classmethod
+    def from_queue(cls, resource: _IQueueRef_fa8b2198) -> "QueueGrants":
+        '''Creates grants for QueueGrants.
+
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c08434b501101166e7b3cee8c95e2b67fb1d57c2c72090a010e04e35ecfa89a4)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast("QueueGrants", jsii.sinvoke(cls, "fromQueue", [resource]))
+
+    @jsii.member(jsii_name="consumeMessages")
+    def consume_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant permissions to consume messages from a queue.
+
+        This will grant the following permissions:
+
+        - sqs:ChangeMessageVisibility
+        - sqs:DeleteMessage
+        - sqs:ReceiveMessage
+        - sqs:GetQueueAttributes
+        - sqs:GetQueueUrl
+
+        If encryption is used, permission to use the key to decrypt the contents of the queue will also be granted to the same principal.
+
+        This will grant the following KMS permissions:
+
+        - kms:Decrypt
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7e8dfe45bed9f0d42dd136c0b65cbd04007888a955edb2cc0e24c372e922668f)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "consumeMessages", [grantee]))
+
+    @jsii.member(jsii_name="purge")
+    def purge(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grants purge permissions.
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e89108b582f144dc33eb6fadfda0d6f7453427c9bafe90a490ac1c210c32f461)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "purge", [grantee]))
+
+    @jsii.member(jsii_name="sendMessages")
+    def send_messages(self, grantee: _IGrantable_71c4f5de) -> _Grant_a7ae64f8:
+        '''Grant access to send messages to a queue to the given identity.
+
+        This will grant the following permissions:
+
+        - sqs:SendMessage
+        - sqs:GetQueueAttributes
+        - sqs:GetQueueUrl
+
+        If encryption is used, permission to use the key to encrypt/decrypt the contents of the queue will also be granted to the same principal.
+
+        This will grant the following KMS permissions:
+
+        - kms:Decrypt
+        - kms:Encrypt
+        - kms:ReEncrypt*
+        - kms:GenerateDataKey*
+
+        :param grantee: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2d8d71ea37d7ec94c7e189585531197b71dc4c5af628d4a98ddfbdeb7d54766)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "sendMessages", [grantee]))
+
+    @builtins.property
+    @jsii.member(jsii_name="resource")
+    def _resource(self) -> _IQueueRef_fa8b2198:
+        return typing.cast(_IQueueRef_fa8b2198, jsii.get(self, "resource"))
+
+    @builtins.property
+    @jsii.member(jsii_name="encryptedResource")
+    def _encrypted_resource(self) -> typing.Optional[_IEncryptedResource_8e9bf351]:
+        return typing.cast(typing.Optional[_IEncryptedResource_8e9bf351], jsii.get(self, "encryptedResource"))
+
+    @builtins.property
+    @jsii.member(jsii_name="policyResource")
+    def _policy_resource(self) -> typing.Optional[_IResourceWithPolicyV2_01035ec6]:
+        return typing.cast(typing.Optional[_IResourceWithPolicyV2_01035ec6], jsii.get(self, "policyResource"))
 
 
 class QueuePolicy(
@@ -4407,6 +4563,7 @@ __all__ = [
     "QueueAttributes",
     "QueueBase",
     "QueueEncryption",
+    "QueueGrants",
     "QueuePolicy",
     "QueuePolicyProps",
     "QueueProps",
@@ -4426,7 +4583,7 @@ def _typecheckingstub__3eb05e7ff1a578da7a665c63824c9ec0104e997736ccc02638ac12409
     fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     fifo_throughput_limit: typing.Optional[builtins.str] = None,
     kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-    kms_master_key_id: typing.Optional[builtins.str] = None,
+    kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     maximum_message_size: typing.Optional[jsii.Number] = None,
     message_retention_period: typing.Optional[jsii.Number] = None,
     queue_name: typing.Optional[builtins.str] = None,
@@ -4436,6 +4593,12 @@ def _typecheckingstub__3eb05e7ff1a578da7a665c63824c9ec0104e997736ccc02638ac12409
     sqs_managed_sse_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     visibility_timeout: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__722a92eb0cd4ca74862788bfdd1e2c8f0a2a7b6e0dbce380469836d36ed717ad(
+    resource: _IQueueRef_fa8b2198,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4640,7 +4803,7 @@ def _typecheckingstub__8fdefcde5dbe865461bead4520126014a0ec05bd2ffb75d2c2800ff30
     fifo_queue: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     fifo_throughput_limit: typing.Optional[builtins.str] = None,
     kms_data_key_reuse_period_seconds: typing.Optional[jsii.Number] = None,
-    kms_master_key_id: typing.Optional[builtins.str] = None,
+    kms_master_key_id: typing.Optional[typing.Union[builtins.str, _IAliasRef_43fafabd, _IKeyRef_d4fc6ef3]] = None,
     maximum_message_size: typing.Optional[jsii.Number] = None,
     message_retention_period: typing.Optional[jsii.Number] = None,
     queue_name: typing.Optional[builtins.str] = None,
@@ -4754,6 +4917,13 @@ def _typecheckingstub__e5a5ff7c810718528837ec11092f8e03040d6e612831c88a6e7076dbc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0462575b26d9a0a6e126eea464f42b3c49cf8a5ce7d9a227dc46d6d4b4e52f6a(
+    grantee: _IGrantable_71c4f5de,
+    *actions: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bfd8b992fb1933e6301f1bd505a1e614230868a1ad14e16c1798998235c1918c(
     grantee: _IGrantable_71c4f5de,
 ) -> None:
@@ -4781,6 +4951,30 @@ def _typecheckingstub__9ffb259ebfbf10975a9ae041468c8a95370628f64ddfb35eda3c5a406
     statistic: typing.Optional[builtins.str] = None,
     unit: typing.Optional[_Unit_61bc6f70] = None,
     visible: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c08434b501101166e7b3cee8c95e2b67fb1d57c2c72090a010e04e35ecfa89a4(
+    resource: _IQueueRef_fa8b2198,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7e8dfe45bed9f0d42dd136c0b65cbd04007888a955edb2cc0e24c372e922668f(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e89108b582f144dc33eb6fadfda0d6f7453427c9bafe90a490ac1c210c32f461(
+    grantee: _IGrantable_71c4f5de,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2d8d71ea37d7ec94c7e189585531197b71dc4c5af628d4a98ddfbdeb7d54766(
+    grantee: _IGrantable_71c4f5de,
 ) -> None:
     """Type checking stubs"""
     pass

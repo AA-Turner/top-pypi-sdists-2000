@@ -343,6 +343,17 @@ class CfnPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForPlan")
+    @builtins.classmethod
+    def arn_for_plan(cls, resource: _IPlanRef_4ff27154) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1cec92ab4557dc4cd37d3ca4b382260919de526e4ba9d724549af0454cfde2e6)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPlan", [resource]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4702,6 +4713,12 @@ def _typecheckingstub__717f8fc7634107cdad75ab8dc89a21d48c1d0f596f5095c671ae6741e
     recovery_time_objective_minutes: typing.Optional[jsii.Number] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     triggers: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPlan.TriggerProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1cec92ab4557dc4cd37d3ca4b382260919de526e4ba9d724549af0454cfde2e6(
+    resource: _IPlanRef_4ff27154,
 ) -> None:
     """Type checking stubs"""
     pass

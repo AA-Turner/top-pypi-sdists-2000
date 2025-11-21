@@ -165,7 +165,7 @@ class CfnCluster(
         :param deletion_protection_enabled: Whether deletion protection is enabled on this cluster.
         :param kms_encryption_key: The KMS key that encrypts data on the cluster.
         :param multi_region_properties: Defines the structure for multi-Region cluster configurations, containing the witness Region and peered cluster settings.
-        :param policy_document: The IAM policy applied to the cluster resource.
+        :param policy_document: A resource-based policy document in JSON format. Length constraints: Minimum length of 1. Maximum length of 20480 characters (approximately 20KB).
         :param tags: A map of key and value pairs this cluster is tagged with.
         '''
         if __debug__:
@@ -181,6 +181,17 @@ class CfnCluster(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCluster")
+    @builtins.classmethod
+    def arn_for_cluster(cls, resource: _IClusterRef_6da541cd) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b7c822ed17267e20b96b1503dafd48003185c02d153d26880746d76dfbd24da0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
     @jsii.member(jsii_name="fromIdentifier")
     @builtins.classmethod
@@ -250,6 +261,15 @@ class CfnCluster(
         :cloudformationAttribute: EncryptionDetails
         '''
         return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrEncryptionDetails"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrEndpoint")
+    def attr_endpoint(self) -> builtins.str:
+        '''The DSQL cluster endpoint.
+
+        :cloudformationAttribute: Endpoint
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrEndpoint"))
 
     @builtins.property
     @jsii.member(jsii_name="attrIdentifier")
@@ -377,7 +397,7 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="policyDocument")
     def policy_document(self) -> typing.Optional[builtins.str]:
-        '''The IAM policy applied to the cluster resource.'''
+        '''A resource-based policy document in JSON format.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "policyDocument"))
 
     @policy_document.setter
@@ -417,11 +437,11 @@ class CfnCluster(
             encryption_type: typing.Optional[builtins.str] = None,
             kms_key_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Configuration details about encryption for the cluster including the AWS KMS key ARN, encryption type, and encryption status.
+            '''Configuration details about encryption for the cluster including the AWS  key ARN, encryption type, and encryption status.
 
             :param encryption_status: The status of encryption for the cluster.
             :param encryption_type: The type of encryption that protects the data on your cluster.
-            :param kms_key_arn: The ARN of the AWS KMS key that encrypts data in the cluster.
+            :param kms_key_arn: The ARN of the AWS key that encrypts data in the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dsql-cluster-encryptiondetails.html
             :exampleMetadata: fixture=_generated
@@ -471,7 +491,7 @@ class CfnCluster(
 
         @builtins.property
         def kms_key_arn(self) -> typing.Optional[builtins.str]:
-            '''The ARN of the AWS KMS key that encrypts data in the cluster.
+            '''The ARN of the AWS  key that encrypts data in the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-dsql-cluster-encryptiondetails.html#cfn-dsql-cluster-encryptiondetails-kmskeyarn
             '''
@@ -590,7 +610,7 @@ class CfnClusterProps:
         :param deletion_protection_enabled: Whether deletion protection is enabled on this cluster.
         :param kms_encryption_key: The KMS key that encrypts data on the cluster.
         :param multi_region_properties: Defines the structure for multi-Region cluster configurations, containing the witness Region and peered cluster settings.
-        :param policy_document: The IAM policy applied to the cluster resource.
+        :param policy_document: A resource-based policy document in JSON format. Length constraints: Minimum length of 1. Maximum length of 20480 characters (approximately 20KB).
         :param tags: A map of key and value pairs this cluster is tagged with.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html
@@ -668,7 +688,9 @@ class CfnClusterProps:
 
     @builtins.property
     def policy_document(self) -> typing.Optional[builtins.str]:
-        '''The IAM policy applied to the cluster resource.
+        '''A resource-based policy document in JSON format.
+
+        Length constraints: Minimum length of 1. Maximum length of 20480 characters (approximately 20KB).
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-dsql-cluster.html#cfn-dsql-cluster-policydocument
         '''
@@ -712,6 +734,12 @@ def _typecheckingstub__b82b76673b1942e60f823768c857e13a61b0491cdd1ca21c1f2a574e9
     multi_region_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.MultiRegionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     policy_document: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7c822ed17267e20b96b1503dafd48003185c02d153d26880746d76dfbd24da0(
+    resource: _IClusterRef_6da541cd,
 ) -> None:
     """Type checking stubs"""
     pass
