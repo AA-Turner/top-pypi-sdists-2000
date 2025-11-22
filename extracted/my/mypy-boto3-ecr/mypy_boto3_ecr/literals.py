@@ -60,6 +60,8 @@ __all__ = (
     "ScanningConfigurationFailureCodeType",
     "ScanningRepositoryFilterTypeType",
     "ServiceName",
+    "SigningRepositoryFilterTypeType",
+    "SigningStatusType",
     "TagStatusType",
     "TargetStorageClassType",
     "UpstreamRegistryType",
@@ -124,6 +126,8 @@ ScanStatusType = Literal[
 ScanTypeType = Literal["BASIC", "ENHANCED"]
 ScanningConfigurationFailureCodeType = Literal["REPOSITORY_NOT_FOUND"]
 ScanningRepositoryFilterTypeType = Literal["WILDCARD"]
+SigningRepositoryFilterTypeType = Literal["WILDCARD_MATCH"]
+SigningStatusType = Literal["COMPLETE", "FAILED", "IN_PROGRESS"]
 TagStatusType = Literal["ANY", "TAGGED", "UNTAGGED"]
 TargetStorageClassType = Literal["ARCHIVE", "STANDARD"]
 UpstreamRegistryType = Literal[
@@ -232,6 +236,7 @@ ServiceName = Literal[
     "comprehend",
     "comprehendmedical",
     "compute-optimizer",
+    "compute-optimizer-automation",
     "config",
     "connect",
     "connect-contact-lens",

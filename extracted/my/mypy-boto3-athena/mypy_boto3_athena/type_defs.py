@@ -67,6 +67,12 @@ __all__ = (
     "CapacityAssignmentTypeDef",
     "CapacityAssignmentUnionTypeDef",
     "CapacityReservationTypeDef",
+    "ClassificationOutputTypeDef",
+    "ClassificationTypeDef",
+    "ClassificationUnionTypeDef",
+    "CloudWatchLoggingConfigurationOutputTypeDef",
+    "CloudWatchLoggingConfigurationTypeDef",
+    "CloudWatchLoggingConfigurationUnionTypeDef",
     "ColumnInfoTypeDef",
     "ColumnTypeDef",
     "CreateCapacityReservationInputTypeDef",
@@ -128,6 +134,10 @@ __all__ = (
     "GetQueryResultsOutputTypeDef",
     "GetQueryRuntimeStatisticsInputTypeDef",
     "GetQueryRuntimeStatisticsOutputTypeDef",
+    "GetResourceDashboardRequestTypeDef",
+    "GetResourceDashboardResponseTypeDef",
+    "GetSessionEndpointRequestTypeDef",
+    "GetSessionEndpointResponseTypeDef",
     "GetSessionRequestTypeDef",
     "GetSessionResponseTypeDef",
     "GetSessionStatusRequestTypeDef",
@@ -177,9 +187,13 @@ __all__ = (
     "ListTagsForResourceOutputTypeDef",
     "ListWorkGroupsInputTypeDef",
     "ListWorkGroupsOutputTypeDef",
+    "ManagedLoggingConfigurationTypeDef",
     "ManagedQueryResultsConfigurationTypeDef",
     "ManagedQueryResultsConfigurationUpdatesTypeDef",
     "ManagedQueryResultsEncryptionConfigurationTypeDef",
+    "MonitoringConfigurationOutputTypeDef",
+    "MonitoringConfigurationTypeDef",
+    "MonitoringConfigurationUnionTypeDef",
     "NamedQueryTypeDef",
     "NotebookMetadataTypeDef",
     "NotebookSessionSummaryTypeDef",
@@ -206,6 +220,7 @@ __all__ = (
     "ResultSetMetadataTypeDef",
     "ResultSetTypeDef",
     "RowTypeDef",
+    "S3LoggingConfigurationTypeDef",
     "SessionConfigurationTypeDef",
     "SessionStatisticsTypeDef",
     "SessionStatusTypeDef",
@@ -235,7 +250,9 @@ __all__ = (
     "UpdateNotebookMetadataInputTypeDef",
     "UpdatePreparedStatementInputTypeDef",
     "UpdateWorkGroupInputTypeDef",
+    "WorkGroupConfigurationOutputTypeDef",
     "WorkGroupConfigurationTypeDef",
+    "WorkGroupConfigurationUnionTypeDef",
     "WorkGroupConfigurationUpdatesTypeDef",
     "WorkGroupSummaryTypeDef",
     "WorkGroupTypeDef",
@@ -354,6 +371,30 @@ class CapacityAssignmentOutputTypeDef(TypedDict):
 
 class CapacityAssignmentTypeDef(TypedDict):
     WorkGroupNames: NotRequired[Sequence[str]]
+
+
+class ClassificationOutputTypeDef(TypedDict):
+    Name: NotRequired[str]
+    Properties: NotRequired[dict[str, str]]
+
+
+class ClassificationTypeDef(TypedDict):
+    Name: NotRequired[str]
+    Properties: NotRequired[Mapping[str, str]]
+
+
+class CloudWatchLoggingConfigurationOutputTypeDef(TypedDict):
+    Enabled: bool
+    LogGroup: NotRequired[str]
+    LogStreamNamePrefix: NotRequired[str]
+    LogTypes: NotRequired[dict[str, list[str]]]
+
+
+class CloudWatchLoggingConfigurationTypeDef(TypedDict):
+    Enabled: bool
+    LogGroup: NotRequired[str]
+    LogStreamNamePrefix: NotRequired[str]
+    LogTypes: NotRequired[Mapping[str, Sequence[str]]]
 
 
 ColumnInfoTypeDef = TypedDict(
@@ -484,22 +525,6 @@ class EncryptionConfigurationTypeDef(TypedDict):
     KmsKey: NotRequired[str]
 
 
-class EngineConfigurationOutputTypeDef(TypedDict):
-    MaxConcurrentDpus: int
-    CoordinatorDpuSize: NotRequired[int]
-    DefaultExecutorDpuSize: NotRequired[int]
-    AdditionalConfigs: NotRequired[dict[str, str]]
-    SparkProperties: NotRequired[dict[str, str]]
-
-
-class EngineConfigurationTypeDef(TypedDict):
-    MaxConcurrentDpus: int
-    CoordinatorDpuSize: NotRequired[int]
-    DefaultExecutorDpuSize: NotRequired[int]
-    AdditionalConfigs: NotRequired[Mapping[str, str]]
-    SparkProperties: NotRequired[Mapping[str, str]]
-
-
 class EngineVersionTypeDef(TypedDict):
     SelectedEngineVersion: NotRequired[str]
     EffectiveEngineVersion: NotRequired[str]
@@ -598,6 +623,14 @@ class GetQueryResultsInputTypeDef(TypedDict):
 
 class GetQueryRuntimeStatisticsInputTypeDef(TypedDict):
     QueryExecutionId: str
+
+
+class GetResourceDashboardRequestTypeDef(TypedDict):
+    ResourceARN: str
+
+
+class GetSessionEndpointRequestTypeDef(TypedDict):
+    SessionId: str
 
 
 class GetSessionRequestTypeDef(TypedDict):
@@ -753,8 +786,19 @@ class ListWorkGroupsInputTypeDef(TypedDict):
     MaxResults: NotRequired[int]
 
 
+class ManagedLoggingConfigurationTypeDef(TypedDict):
+    Enabled: bool
+    KmsKey: NotRequired[str]
+
+
 class ManagedQueryResultsEncryptionConfigurationTypeDef(TypedDict):
     KmsKey: str
+
+
+class S3LoggingConfigurationTypeDef(TypedDict):
+    Enabled: bool
+    KmsKey: NotRequired[str]
+    LogLocation: NotRequired[str]
 
 
 class QueryExecutionContextTypeDef(TypedDict):
@@ -900,6 +944,18 @@ class GetNamedQueryOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class GetResourceDashboardResponseTypeDef(TypedDict):
+    Url: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetSessionEndpointResponseTypeDef(TypedDict):
+    EndpointUrl: str
+    AuthToken: str
+    AuthTokenExpirationTime: datetime
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class ImportNotebookOutputTypeDef(TypedDict):
     NotebookId: str
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1016,6 +1072,21 @@ class CapacityAssignmentConfigurationTypeDef(TypedDict):
 CapacityAssignmentUnionTypeDef = Union[CapacityAssignmentTypeDef, CapacityAssignmentOutputTypeDef]
 
 
+class EngineConfigurationOutputTypeDef(TypedDict):
+    CoordinatorDpuSize: NotRequired[int]
+    MaxConcurrentDpus: NotRequired[int]
+    DefaultExecutorDpuSize: NotRequired[int]
+    AdditionalConfigs: NotRequired[dict[str, str]]
+    SparkProperties: NotRequired[dict[str, str]]
+    Classifications: NotRequired[list[ClassificationOutputTypeDef]]
+
+
+ClassificationUnionTypeDef = Union[ClassificationTypeDef, ClassificationOutputTypeDef]
+CloudWatchLoggingConfigurationUnionTypeDef = Union[
+    CloudWatchLoggingConfigurationTypeDef, CloudWatchLoggingConfigurationOutputTypeDef
+]
+
+
 class ResultSetMetadataTypeDef(TypedDict):
     ColumnInfo: NotRequired[list[ColumnInfoTypeDef]]
 
@@ -1117,12 +1188,8 @@ class SessionConfigurationTypeDef(TypedDict):
     ExecutionRole: NotRequired[str]
     WorkingDirectory: NotRequired[str]
     IdleTimeoutSeconds: NotRequired[int]
+    SessionIdleTimeoutInMinutes: NotRequired[int]
     EncryptionConfiguration: NotRequired[EncryptionConfigurationTypeDef]
-
-
-EngineConfigurationUnionTypeDef = Union[
-    EngineConfigurationTypeDef, EngineConfigurationOutputTypeDef
-]
 
 
 class ListEngineVersionsOutputTypeDef(TypedDict):
@@ -1248,6 +1315,12 @@ class ManagedQueryResultsConfigurationUpdatesTypeDef(TypedDict):
     RemoveEncryptionConfiguration: NotRequired[bool]
 
 
+class MonitoringConfigurationOutputTypeDef(TypedDict):
+    CloudWatchLoggingConfiguration: NotRequired[CloudWatchLoggingConfigurationOutputTypeDef]
+    ManagedLoggingConfiguration: NotRequired[ManagedLoggingConfigurationTypeDef]
+    S3LoggingConfiguration: NotRequired[S3LoggingConfigurationTypeDef]
+
+
 class QueryExecutionStatisticsTypeDef(TypedDict):
     EngineExecutionTimeInMillis: NotRequired[int]
     DataScannedInBytes: NotRequired[int]
@@ -1258,6 +1331,7 @@ class QueryExecutionStatisticsTypeDef(TypedDict):
     QueryPlanningTimeInMillis: NotRequired[int]
     ServiceProcessingTimeInMillis: NotRequired[int]
     ResultReuseInformation: NotRequired[ResultReuseInformationTypeDef]
+    DpuCount: NotRequired[float]
 
 
 class QueryStageTypeDef(TypedDict):
@@ -1303,6 +1377,21 @@ class PutCapacityAssignmentConfigurationInputTypeDef(TypedDict):
     CapacityAssignments: Sequence[CapacityAssignmentUnionTypeDef]
 
 
+class EngineConfigurationTypeDef(TypedDict):
+    CoordinatorDpuSize: NotRequired[int]
+    MaxConcurrentDpus: NotRequired[int]
+    DefaultExecutorDpuSize: NotRequired[int]
+    AdditionalConfigs: NotRequired[Mapping[str, str]]
+    SparkProperties: NotRequired[Mapping[str, str]]
+    Classifications: NotRequired[Sequence[ClassificationUnionTypeDef]]
+
+
+class MonitoringConfigurationTypeDef(TypedDict):
+    CloudWatchLoggingConfiguration: NotRequired[CloudWatchLoggingConfigurationUnionTypeDef]
+    ManagedLoggingConfiguration: NotRequired[ManagedLoggingConfigurationTypeDef]
+    S3LoggingConfiguration: NotRequired[S3LoggingConfigurationTypeDef]
+
+
 class GetTableMetadataOutputTypeDef(TypedDict):
     TableMetadata: TableMetadataTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1319,28 +1408,6 @@ class ResultSetTypeDef(TypedDict):
     ResultSetMetadata: NotRequired[ResultSetMetadataTypeDef]
 
 
-class GetSessionResponseTypeDef(TypedDict):
-    SessionId: str
-    Description: str
-    WorkGroup: str
-    EngineVersion: str
-    EngineConfiguration: EngineConfigurationOutputTypeDef
-    NotebookVersion: str
-    SessionConfiguration: SessionConfigurationTypeDef
-    Status: SessionStatusTypeDef
-    Statistics: SessionStatisticsTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
-
-
-class StartSessionRequestTypeDef(TypedDict):
-    WorkGroup: str
-    EngineConfiguration: EngineConfigurationUnionTypeDef
-    Description: NotRequired[str]
-    NotebookVersion: NotRequired[str]
-    SessionIdleTimeoutInMinutes: NotRequired[int]
-    ClientRequestToken: NotRequired[str]
-
-
 class ListWorkGroupsOutputTypeDef(TypedDict):
     WorkGroups: list[WorkGroupSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1353,7 +1420,21 @@ class ListSessionsResponseTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 
-class WorkGroupConfigurationTypeDef(TypedDict):
+class GetSessionResponseTypeDef(TypedDict):
+    SessionId: str
+    Description: str
+    WorkGroup: str
+    EngineVersion: str
+    EngineConfiguration: EngineConfigurationOutputTypeDef
+    NotebookVersion: str
+    MonitoringConfiguration: MonitoringConfigurationOutputTypeDef
+    SessionConfiguration: SessionConfigurationTypeDef
+    Status: SessionStatusTypeDef
+    Statistics: SessionStatisticsTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class WorkGroupConfigurationOutputTypeDef(TypedDict):
     ResultConfiguration: NotRequired[ResultConfigurationTypeDef]
     ManagedQueryResultsConfiguration: NotRequired[ManagedQueryResultsConfigurationTypeDef]
     EnforceWorkGroupConfiguration: NotRequired[bool]
@@ -1363,34 +1444,13 @@ class WorkGroupConfigurationTypeDef(TypedDict):
     EngineVersion: NotRequired[EngineVersionTypeDef]
     AdditionalConfiguration: NotRequired[str]
     ExecutionRole: NotRequired[str]
+    MonitoringConfiguration: NotRequired[MonitoringConfigurationOutputTypeDef]
+    EngineConfiguration: NotRequired[EngineConfigurationOutputTypeDef]
     CustomerContentEncryptionConfiguration: NotRequired[
         CustomerContentEncryptionConfigurationTypeDef
     ]
     EnableMinimumEncryptionConfiguration: NotRequired[bool]
     IdentityCenterConfiguration: NotRequired[IdentityCenterConfigurationTypeDef]
-    QueryResultsS3AccessGrantsConfiguration: NotRequired[
-        QueryResultsS3AccessGrantsConfigurationTypeDef
-    ]
-
-
-class WorkGroupConfigurationUpdatesTypeDef(TypedDict):
-    EnforceWorkGroupConfiguration: NotRequired[bool]
-    ResultConfigurationUpdates: NotRequired[ResultConfigurationUpdatesTypeDef]
-    ManagedQueryResultsConfigurationUpdates: NotRequired[
-        ManagedQueryResultsConfigurationUpdatesTypeDef
-    ]
-    PublishCloudWatchMetricsEnabled: NotRequired[bool]
-    BytesScannedCutoffPerQuery: NotRequired[int]
-    RemoveBytesScannedCutoffPerQuery: NotRequired[bool]
-    RequesterPaysEnabled: NotRequired[bool]
-    EngineVersion: NotRequired[EngineVersionTypeDef]
-    RemoveCustomerContentEncryptionConfiguration: NotRequired[bool]
-    AdditionalConfiguration: NotRequired[str]
-    ExecutionRole: NotRequired[str]
-    CustomerContentEncryptionConfiguration: NotRequired[
-        CustomerContentEncryptionConfigurationTypeDef
-    ]
-    EnableMinimumEncryptionConfiguration: NotRequired[bool]
     QueryResultsS3AccessGrantsConfiguration: NotRequired[
         QueryResultsS3AccessGrantsConfigurationTypeDef
     ]
@@ -1421,14 +1481,34 @@ class QueryExecutionTypeDef(TypedDict):
     ]
 
 
-class StartQueryExecutionInputTypeDef(TypedDict):
-    QueryString: str
-    ClientRequestToken: NotRequired[str]
-    QueryExecutionContext: NotRequired[QueryExecutionContextTypeDef]
+EngineConfigurationUnionTypeDef = Union[
+    EngineConfigurationTypeDef, EngineConfigurationOutputTypeDef
+]
+MonitoringConfigurationUnionTypeDef = Union[
+    MonitoringConfigurationTypeDef, MonitoringConfigurationOutputTypeDef
+]
+
+
+class WorkGroupConfigurationTypeDef(TypedDict):
     ResultConfiguration: NotRequired[ResultConfigurationTypeDef]
-    WorkGroup: NotRequired[str]
-    ExecutionParameters: NotRequired[Sequence[str]]
-    ResultReuseConfiguration: NotRequired[ResultReuseConfigurationTypeDef]
+    ManagedQueryResultsConfiguration: NotRequired[ManagedQueryResultsConfigurationTypeDef]
+    EnforceWorkGroupConfiguration: NotRequired[bool]
+    PublishCloudWatchMetricsEnabled: NotRequired[bool]
+    BytesScannedCutoffPerQuery: NotRequired[int]
+    RequesterPaysEnabled: NotRequired[bool]
+    EngineVersion: NotRequired[EngineVersionTypeDef]
+    AdditionalConfiguration: NotRequired[str]
+    ExecutionRole: NotRequired[str]
+    MonitoringConfiguration: NotRequired[MonitoringConfigurationTypeDef]
+    EngineConfiguration: NotRequired[EngineConfigurationTypeDef]
+    CustomerContentEncryptionConfiguration: NotRequired[
+        CustomerContentEncryptionConfigurationTypeDef
+    ]
+    EnableMinimumEncryptionConfiguration: NotRequired[bool]
+    IdentityCenterConfiguration: NotRequired[IdentityCenterConfigurationTypeDef]
+    QueryResultsS3AccessGrantsConfiguration: NotRequired[
+        QueryResultsS3AccessGrantsConfigurationTypeDef
+    ]
 
 
 class GetQueryResultsOutputTypeDef(TypedDict):
@@ -1438,27 +1518,13 @@ class GetQueryResultsOutputTypeDef(TypedDict):
     NextToken: NotRequired[str]
 
 
-class CreateWorkGroupInputTypeDef(TypedDict):
-    Name: str
-    Configuration: NotRequired[WorkGroupConfigurationTypeDef]
-    Description: NotRequired[str]
-    Tags: NotRequired[Sequence[TagTypeDef]]
-
-
 class WorkGroupTypeDef(TypedDict):
     Name: str
     State: NotRequired[WorkGroupStateType]
-    Configuration: NotRequired[WorkGroupConfigurationTypeDef]
+    Configuration: NotRequired[WorkGroupConfigurationOutputTypeDef]
     Description: NotRequired[str]
     CreationTime: NotRequired[datetime]
     IdentityCenterApplicationArn: NotRequired[str]
-
-
-class UpdateWorkGroupInputTypeDef(TypedDict):
-    WorkGroup: str
-    Description: NotRequired[str]
-    ConfigurationUpdates: NotRequired[WorkGroupConfigurationUpdatesTypeDef]
-    State: NotRequired[WorkGroupStateType]
 
 
 class GetQueryRuntimeStatisticsOutputTypeDef(TypedDict):
@@ -1477,6 +1543,74 @@ class GetQueryExecutionOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class StartQueryExecutionInputTypeDef(TypedDict):
+    QueryString: str
+    ClientRequestToken: NotRequired[str]
+    QueryExecutionContext: NotRequired[QueryExecutionContextTypeDef]
+    ResultConfiguration: NotRequired[ResultConfigurationTypeDef]
+    WorkGroup: NotRequired[str]
+    ExecutionParameters: NotRequired[Sequence[str]]
+    ResultReuseConfiguration: NotRequired[ResultReuseConfigurationTypeDef]
+    EngineConfiguration: NotRequired[EngineConfigurationUnionTypeDef]
+
+
+class StartSessionRequestTypeDef(TypedDict):
+    WorkGroup: str
+    EngineConfiguration: EngineConfigurationUnionTypeDef
+    Description: NotRequired[str]
+    ExecutionRole: NotRequired[str]
+    MonitoringConfiguration: NotRequired[MonitoringConfigurationUnionTypeDef]
+    NotebookVersion: NotRequired[str]
+    SessionIdleTimeoutInMinutes: NotRequired[int]
+    ClientRequestToken: NotRequired[str]
+    Tags: NotRequired[Sequence[TagTypeDef]]
+    CopyWorkGroupTags: NotRequired[bool]
+
+
+class WorkGroupConfigurationUpdatesTypeDef(TypedDict):
+    EnforceWorkGroupConfiguration: NotRequired[bool]
+    ResultConfigurationUpdates: NotRequired[ResultConfigurationUpdatesTypeDef]
+    ManagedQueryResultsConfigurationUpdates: NotRequired[
+        ManagedQueryResultsConfigurationUpdatesTypeDef
+    ]
+    PublishCloudWatchMetricsEnabled: NotRequired[bool]
+    BytesScannedCutoffPerQuery: NotRequired[int]
+    RemoveBytesScannedCutoffPerQuery: NotRequired[bool]
+    RequesterPaysEnabled: NotRequired[bool]
+    EngineVersion: NotRequired[EngineVersionTypeDef]
+    RemoveCustomerContentEncryptionConfiguration: NotRequired[bool]
+    AdditionalConfiguration: NotRequired[str]
+    ExecutionRole: NotRequired[str]
+    CustomerContentEncryptionConfiguration: NotRequired[
+        CustomerContentEncryptionConfigurationTypeDef
+    ]
+    EnableMinimumEncryptionConfiguration: NotRequired[bool]
+    QueryResultsS3AccessGrantsConfiguration: NotRequired[
+        QueryResultsS3AccessGrantsConfigurationTypeDef
+    ]
+    MonitoringConfiguration: NotRequired[MonitoringConfigurationUnionTypeDef]
+    EngineConfiguration: NotRequired[EngineConfigurationUnionTypeDef]
+
+
+WorkGroupConfigurationUnionTypeDef = Union[
+    WorkGroupConfigurationTypeDef, WorkGroupConfigurationOutputTypeDef
+]
+
+
 class GetWorkGroupOutputTypeDef(TypedDict):
     WorkGroup: WorkGroupTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
+
+
+class UpdateWorkGroupInputTypeDef(TypedDict):
+    WorkGroup: str
+    Description: NotRequired[str]
+    ConfigurationUpdates: NotRequired[WorkGroupConfigurationUpdatesTypeDef]
+    State: NotRequired[WorkGroupStateType]
+
+
+class CreateWorkGroupInputTypeDef(TypedDict):
+    Name: str
+    Configuration: NotRequired[WorkGroupConfigurationUnionTypeDef]
+    Description: NotRequired[str]
+    Tags: NotRequired[Sequence[TagTypeDef]]

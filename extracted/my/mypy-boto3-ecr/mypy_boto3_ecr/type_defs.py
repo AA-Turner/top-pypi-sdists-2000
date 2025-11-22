@@ -42,6 +42,7 @@ from .literals import (
     ScanFrequencyType,
     ScanStatusType,
     ScanTypeType,
+    SigningStatusType,
     TagStatusType,
     TargetStorageClassType,
     UpstreamRegistryType,
@@ -88,6 +89,7 @@ __all__ = (
     "DeleteRepositoryPolicyResponseTypeDef",
     "DeleteRepositoryRequestTypeDef",
     "DeleteRepositoryResponseTypeDef",
+    "DeleteSigningConfigurationResponseTypeDef",
     "DeregisterPullTimeUpdateExclusionRequestTypeDef",
     "DeregisterPullTimeUpdateExclusionResponseTypeDef",
     "DescribeImageReplicationStatusRequestTypeDef",
@@ -96,6 +98,8 @@ __all__ = (
     "DescribeImageScanFindingsRequestTypeDef",
     "DescribeImageScanFindingsRequestWaitTypeDef",
     "DescribeImageScanFindingsResponseTypeDef",
+    "DescribeImageSigningStatusRequestTypeDef",
+    "DescribeImageSigningStatusResponseTypeDef",
     "DescribeImagesFilterTypeDef",
     "DescribeImagesRequestPaginateTypeDef",
     "DescribeImagesRequestTypeDef",
@@ -129,6 +133,7 @@ __all__ = (
     "GetRegistryScanningConfigurationResponseTypeDef",
     "GetRepositoryPolicyRequestTypeDef",
     "GetRepositoryPolicyResponseTypeDef",
+    "GetSigningConfigurationResponseTypeDef",
     "ImageDetailTypeDef",
     "ImageFailureTypeDef",
     "ImageIdentifierTypeDef",
@@ -139,6 +144,7 @@ __all__ = (
     "ImageScanFindingsTypeDef",
     "ImageScanStatusTypeDef",
     "ImageScanningConfigurationTypeDef",
+    "ImageSigningStatusTypeDef",
     "ImageTagMutabilityExclusionFilterTypeDef",
     "ImageTypeDef",
     "InitiateLayerUploadRequestTypeDef",
@@ -179,6 +185,8 @@ __all__ = (
     "PutRegistryScanningConfigurationResponseTypeDef",
     "PutReplicationConfigurationRequestTypeDef",
     "PutReplicationConfigurationResponseTypeDef",
+    "PutSigningConfigurationRequestTypeDef",
+    "PutSigningConfigurationResponseTypeDef",
     "RecommendationTypeDef",
     "RegisterPullTimeUpdateExclusionRequestTypeDef",
     "RegisterPullTimeUpdateExclusionResponseTypeDef",
@@ -205,6 +213,12 @@ __all__ = (
     "ScoreDetailsTypeDef",
     "SetRepositoryPolicyRequestTypeDef",
     "SetRepositoryPolicyResponseTypeDef",
+    "SigningConfigurationOutputTypeDef",
+    "SigningConfigurationTypeDef",
+    "SigningConfigurationUnionTypeDef",
+    "SigningRepositoryFilterTypeDef",
+    "SigningRuleOutputTypeDef",
+    "SigningRuleTypeDef",
     "StartImageScanRequestTypeDef",
     "StartImageScanResponseTypeDef",
     "StartLifecyclePolicyPreviewRequestTypeDef",
@@ -407,6 +421,13 @@ class ImageScanStatusTypeDef(TypedDict):
     description: NotRequired[str]
 
 
+class ImageSigningStatusTypeDef(TypedDict):
+    signingProfileArn: NotRequired[str]
+    failureCode: NotRequired[str]
+    failureReason: NotRequired[str]
+    status: NotRequired[SigningStatusType]
+
+
 class DescribeImagesFilterTypeDef(TypedDict):
     tagStatus: NotRequired[TagStatusType]
     imageStatus: NotRequired[ImageStatusFilterType]
@@ -602,6 +623,15 @@ class SetRepositoryPolicyRequestTypeDef(TypedDict):
     policyText: str
     registryId: NotRequired[str]
     force: NotRequired[bool]
+
+
+SigningRepositoryFilterTypeDef = TypedDict(
+    "SigningRepositoryFilterTypeDef",
+    {
+        "filter": str,
+        "filterType": Literal["WILDCARD_MATCH"],
+    },
+)
 
 
 class StartLifecyclePolicyPreviewRequestTypeDef(TypedDict):
@@ -849,6 +879,12 @@ class DescribeImageScanFindingsRequestTypeDef(TypedDict):
     maxResults: NotRequired[int]
 
 
+class DescribeImageSigningStatusRequestTypeDef(TypedDict):
+    repositoryName: str
+    imageId: ImageIdentifierTypeDef
+    registryId: NotRequired[str]
+
+
 class ImageFailureTypeDef(TypedDict):
     imageId: NotRequired[ImageIdentifierTypeDef]
     failureCode: NotRequired[ImageFailureCodeType]
@@ -1070,6 +1106,14 @@ class StartImageScanResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class DescribeImageSigningStatusResponseTypeDef(TypedDict):
+    repositoryName: str
+    imageId: ImageIdentifierTypeDef
+    registryId: str
+    signingStatuses: list[ImageSigningStatusTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 DescribeImagesRequestPaginateTypeDef = TypedDict(
     "DescribeImagesRequestPaginateTypeDef",
     {
@@ -1249,6 +1293,16 @@ class ReplicationRuleTypeDef(TypedDict):
     repositoryFilters: NotRequired[Sequence[RepositoryFilterTypeDef]]
 
 
+class SigningRuleOutputTypeDef(TypedDict):
+    signingProfileArn: str
+    repositoryFilters: NotRequired[list[SigningRepositoryFilterTypeDef]]
+
+
+class SigningRuleTypeDef(TypedDict):
+    signingProfileArn: str
+    repositoryFilters: NotRequired[Sequence[SigningRepositoryFilterTypeDef]]
+
+
 ResourceTypeDef = TypedDict(
     "ResourceTypeDef",
     {
@@ -1363,6 +1417,14 @@ class ReplicationConfigurationTypeDef(TypedDict):
     rules: Sequence[ReplicationRuleTypeDef]
 
 
+class SigningConfigurationOutputTypeDef(TypedDict):
+    rules: list[SigningRuleOutputTypeDef]
+
+
+class SigningConfigurationTypeDef(TypedDict):
+    rules: Sequence[SigningRuleTypeDef]
+
+
 EnhancedImageScanFindingTypeDef = TypedDict(
     "EnhancedImageScanFindingTypeDef",
     {
@@ -1419,6 +1481,28 @@ ReplicationConfigurationUnionTypeDef = Union[
 ]
 
 
+class DeleteSigningConfigurationResponseTypeDef(TypedDict):
+    registryId: str
+    signingConfiguration: SigningConfigurationOutputTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetSigningConfigurationResponseTypeDef(TypedDict):
+    registryId: str
+    signingConfiguration: SigningConfigurationOutputTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class PutSigningConfigurationResponseTypeDef(TypedDict):
+    signingConfiguration: SigningConfigurationOutputTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+SigningConfigurationUnionTypeDef = Union[
+    SigningConfigurationTypeDef, SigningConfigurationOutputTypeDef
+]
+
+
 class ImageScanFindingsTypeDef(TypedDict):
     imageScanCompletedAt: NotRequired[datetime]
     vulnerabilitySourceUpdatedAt: NotRequired[datetime]
@@ -1429,6 +1513,10 @@ class ImageScanFindingsTypeDef(TypedDict):
 
 class PutReplicationConfigurationRequestTypeDef(TypedDict):
     replicationConfiguration: ReplicationConfigurationUnionTypeDef
+
+
+class PutSigningConfigurationRequestTypeDef(TypedDict):
+    signingConfiguration: SigningConfigurationUnionTypeDef
 
 
 class DescribeImageScanFindingsResponseTypeDef(TypedDict):

@@ -361,6 +361,8 @@ from .type_defs import (
     CreateInstanceExportTaskResultTypeDef,
     CreateInternetGatewayRequestTypeDef,
     CreateInternetGatewayResultTypeDef,
+    CreateInterruptibleCapacityReservationAllocationRequestTypeDef,
+    CreateInterruptibleCapacityReservationAllocationResultTypeDef,
     CreateIpamExternalResourceVerificationTokenRequestTypeDef,
     CreateIpamExternalResourceVerificationTokenResultTypeDef,
     CreateIpamPolicyRequestTypeDef,
@@ -1627,6 +1629,8 @@ from .type_defs import (
     UnmonitorInstancesResultTypeDef,
     UpdateCapacityManagerOrganizationsAccessRequestTypeDef,
     UpdateCapacityManagerOrganizationsAccessResultTypeDef,
+    UpdateInterruptibleCapacityReservationAllocationRequestTypeDef,
+    UpdateInterruptibleCapacityReservationAllocationResultTypeDef,
     UpdateSecurityGroupRuleDescriptionsEgressRequestTypeDef,
     UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef,
     UpdateSecurityGroupRuleDescriptionsIngressRequestTypeDef,
@@ -2595,6 +2599,17 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_internet_gateway.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_internet_gateway)
+        """
+
+    def create_interruptible_capacity_reservation_allocation(
+        self, **kwargs: Unpack[CreateInterruptibleCapacityReservationAllocationRequestTypeDef]
+    ) -> CreateInterruptibleCapacityReservationAllocationResultTypeDef:
+        """
+        Creates an interruptible Capacity Reservation by specifying the number of
+        unused instances you want to allocate from your source reservation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/create_interruptible_capacity_reservation_allocation.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#create_interruptible_capacity_reservation_allocation)
         """
 
     def create_ipam(self, **kwargs: Unpack[CreateIpamRequestTypeDef]) -> CreateIpamResultTypeDef:
@@ -9374,6 +9389,18 @@ class EC2Client(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/update_capacity_manager_organizations_access.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#update_capacity_manager_organizations_access)
+        """
+
+    def update_interruptible_capacity_reservation_allocation(
+        self, **kwargs: Unpack[UpdateInterruptibleCapacityReservationAllocationRequestTypeDef]
+    ) -> UpdateInterruptibleCapacityReservationAllocationResultTypeDef:
+        """
+        Modifies the number of instances allocated to an interruptible reservation,
+        allowing you to add more capacity or reclaim capacity to your source Capacity
+        Reservation.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ec2/client/update_interruptible_capacity_reservation_allocation.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ec2/client/#update_interruptible_capacity_reservation_allocation)
         """
 
     def update_security_group_rule_descriptions_egress(

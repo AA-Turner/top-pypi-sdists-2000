@@ -1,6 +1,9 @@
 mod common;
 
+use std::process::Command;
+
 use anyhow::Result;
+use assert_cmd::assert::OutputAssertExt;
 use assert_fs::fixture::{FileWriteStr, PathChild};
 use indoc::indoc;
 use prek_consts::env_vars::EnvVars;
@@ -44,6 +47,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/nested/project4
       ['.pre-commit-config.yaml']
 
@@ -51,6 +55,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -58,6 +63,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -65,6 +71,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -72,6 +79,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -88,6 +96,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -101,6 +110,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -115,6 +125,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -122,6 +133,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -136,6 +148,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -143,6 +156,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -163,6 +177,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['.prekignore', '.pre-commit-config.yaml', 'project5/.pre-commit-config.yaml']
 
@@ -182,6 +197,7 @@ fn basic_discovery() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['.prekignore', '.pre-commit-config.yaml', 'project5/.pre-commit-config.yaml']
 
@@ -313,6 +329,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -327,6 +344,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/nested/project4
       ['.pre-commit-config.yaml']
 
@@ -334,6 +352,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -341,6 +360,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -348,6 +368,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -364,6 +385,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -371,6 +393,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -387,6 +410,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/nested/project4
       ['.pre-commit-config.yaml']
 
@@ -394,6 +418,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -401,6 +426,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -408,6 +434,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -415,6 +442,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -431,6 +459,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -444,6 +473,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -469,6 +499,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/nested/project4
       ['.pre-commit-config.yaml']
 
@@ -476,6 +507,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -483,6 +515,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -490,6 +523,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -507,6 +541,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/nested/project4
       ['.pre-commit-config.yaml']
 
@@ -514,6 +549,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project5
       ['.pre-commit-config.yaml']
 
@@ -521,6 +557,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -528,6 +565,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project5/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -535,6 +573,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['nested/project4/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project5/.pre-commit-config.yaml', 'project2/.pre-commit-config.yaml']
       [TEMP_DIR]/
@@ -562,6 +601,7 @@ fn run_with_selectors() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -599,6 +639,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project4
       ['.pre-commit-config.yaml']
 
@@ -606,6 +647,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project4/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -613,6 +655,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -628,6 +671,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project4
       ['.pre-commit-config.yaml']
 
@@ -635,6 +679,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project4/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -642,6 +687,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -657,6 +703,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project4
       ['.pre-commit-config.yaml']
 
@@ -664,6 +711,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project4/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -671,6 +719,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -686,6 +735,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project4
       ['.pre-commit-config.yaml']
 
@@ -693,6 +743,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project4/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -700,6 +751,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -715,6 +767,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3/project4
       ['.pre-commit-config.yaml']
 
@@ -722,6 +775,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project3
       ['project4/.pre-commit-config.yaml', '.pre-commit-config.yaml']
 
@@ -729,6 +783,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -743,6 +798,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -777,6 +833,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/project2
       ['.pre-commit-config.yaml']
 
@@ -784,6 +841,7 @@ fn skips() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['project2/.pre-commit-config.yaml', '.pre-commit-config.yaml', 'project3/project4/.pre-commit-config.yaml', 'project3/.pre-commit-config.yaml']
 
@@ -856,6 +914,7 @@ fn gitignore_respected() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/src
       ['.pre-commit-config.yaml']
 
@@ -863,6 +922,7 @@ fn gitignore_respected() -> Result<()> {
     Show CWD.................................................................Passed
     - hook id: show-cwd
     - duration: [TIME]
+
       [TEMP_DIR]/
       ['.gitignore', '.pre-commit-config.yaml', 'src/.pre-commit-config.yaml']
 
@@ -905,6 +965,102 @@ fn reference_files_across_projects() -> Result<()> {
 
     ----- stderr -----
     warning: This file does not exist and will be ignored: `../backend/non-exist.py`
+    ");
+
+    Ok(())
+}
+
+#[test]
+fn submodule_discovery() -> Result<()> {
+    let context = TestContext::new();
+    let cwd = context.work_dir();
+    context.init_project();
+
+    let config = indoc! {r"
+    repos:
+      - repo: local
+        hooks:
+        - id: show-cwd
+          name: Show CWD
+          language: python
+          entry: python -c 'import sys, os; print(os.getcwd()); print(sys.argv[1:])'
+          verbose: true
+    "};
+
+    context.setup_workspace(&["project2"], config)?;
+
+    // Create a submodule
+    let submodule_path = cwd.child("submodule");
+    let submodule_context = TestContext::new_at(submodule_path.to_path_buf());
+
+    submodule_context.init_project();
+    submodule_context.configure_git_author();
+    submodule_context.write_pre_commit_config(config);
+    submodule_context.git_add(".");
+    submodule_context.git_commit("Initial commit");
+
+    // Add submodule to the main project
+    Command::new("git")
+        .args(["submodule", "add", "./submodule"])
+        .current_dir(cwd)
+        .assert()
+        .success();
+    context.git_add(".");
+
+    // 1. Test that workspace discovery does not recurse into git submodules
+    cmd_snapshot!(context.filters(), context.run().arg("--all-files"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    Running hooks for `project2`:
+    Show CWD.................................................................Passed
+    - hook id: show-cwd
+    - duration: [TIME]
+
+      [TEMP_DIR]/project2
+      ['.pre-commit-config.yaml']
+
+    Running hooks for `.`:
+    Show CWD.................................................................Passed
+    - hook id: show-cwd
+    - duration: [TIME]
+
+      [TEMP_DIR]/
+      ['.pre-commit-config.yaml', '.gitmodules', 'project2/.pre-commit-config.yaml']
+
+    ----- stderr -----
+    ");
+
+    // 2. Test that current directory is in the submodule with a .pre-commit-config
+    cmd_snapshot!(context.filters(), context.run().current_dir(&submodule_path).arg("--all-files"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    Show CWD.................................................................Passed
+    - hook id: show-cwd
+    - duration: [TIME]
+
+      [TEMP_DIR]/submodule
+      ['.pre-commit-config.yaml']
+
+    ----- stderr -----
+    ");
+
+    // 3. Test that current directory is in the submodule without .pre-commit-config
+    // Remove the config file in the submodule
+    std::fs::remove_file(submodule_path.join(".pre-commit-config.yaml"))?;
+    submodule_context.git_add(".");
+    submodule_context.git_commit("Remove config");
+
+    cmd_snapshot!(context.filters(), context.run().current_dir(&submodule_path), @r"
+    success: false
+    exit_code: 2
+    ----- stdout -----
+
+    ----- stderr -----
+    error: No `.pre-commit-config.yaml` found in the current directory or parent directories.
+
+    hint: If you just added one, rerun your command with the `--refresh` flag to rescan the workspace.
     ");
 
     Ok(())

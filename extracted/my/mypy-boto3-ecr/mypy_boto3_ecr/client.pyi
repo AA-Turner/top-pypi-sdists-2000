@@ -63,12 +63,15 @@ from .type_defs import (
     DeleteRepositoryPolicyResponseTypeDef,
     DeleteRepositoryRequestTypeDef,
     DeleteRepositoryResponseTypeDef,
+    DeleteSigningConfigurationResponseTypeDef,
     DeregisterPullTimeUpdateExclusionRequestTypeDef,
     DeregisterPullTimeUpdateExclusionResponseTypeDef,
     DescribeImageReplicationStatusRequestTypeDef,
     DescribeImageReplicationStatusResponseTypeDef,
     DescribeImageScanFindingsRequestTypeDef,
     DescribeImageScanFindingsResponseTypeDef,
+    DescribeImageSigningStatusRequestTypeDef,
+    DescribeImageSigningStatusResponseTypeDef,
     DescribeImagesRequestTypeDef,
     DescribeImagesResponseTypeDef,
     DescribePullThroughCacheRulesRequestTypeDef,
@@ -92,6 +95,7 @@ from .type_defs import (
     GetRegistryScanningConfigurationResponseTypeDef,
     GetRepositoryPolicyRequestTypeDef,
     GetRepositoryPolicyResponseTypeDef,
+    GetSigningConfigurationResponseTypeDef,
     InitiateLayerUploadRequestTypeDef,
     InitiateLayerUploadResponseTypeDef,
     ListImageReferrersRequestTypeDef,
@@ -118,6 +122,8 @@ from .type_defs import (
     PutRegistryScanningConfigurationResponseTypeDef,
     PutReplicationConfigurationRequestTypeDef,
     PutReplicationConfigurationResponseTypeDef,
+    PutSigningConfigurationRequestTypeDef,
+    PutSigningConfigurationResponseTypeDef,
     RegisterPullTimeUpdateExclusionRequestTypeDef,
     RegisterPullTimeUpdateExclusionResponseTypeDef,
     SetRepositoryPolicyRequestTypeDef,
@@ -184,6 +190,7 @@ class Exceptions(BaseClientExceptions):
     ScanNotFoundException: type[BotocoreClientError]
     SecretNotFoundException: type[BotocoreClientError]
     ServerException: type[BotocoreClientError]
+    SigningConfigurationNotFoundException: type[BotocoreClientError]
     TemplateAlreadyExistsException: type[BotocoreClientError]
     TemplateNotFoundException: type[BotocoreClientError]
     TooManyTagsException: type[BotocoreClientError]
@@ -370,6 +377,14 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#delete_repository_policy)
         """
 
+    def delete_signing_configuration(self) -> DeleteSigningConfigurationResponseTypeDef:
+        """
+        Deletes the registry's signing configuration.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/delete_signing_configuration.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#delete_signing_configuration)
+        """
+
     def deregister_pull_time_update_exclusion(
         self, **kwargs: Unpack[DeregisterPullTimeUpdateExclusionRequestTypeDef]
     ) -> DeregisterPullTimeUpdateExclusionResponseTypeDef:
@@ -398,6 +413,16 @@ class ECRClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/describe_image_scan_findings.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#describe_image_scan_findings)
+        """
+
+    def describe_image_signing_status(
+        self, **kwargs: Unpack[DescribeImageSigningStatusRequestTypeDef]
+    ) -> DescribeImageSigningStatusResponseTypeDef:
+        """
+        Returns the signing status for a specified image.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/describe_image_signing_status.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#describe_image_signing_status)
         """
 
     def describe_images(
@@ -527,6 +552,15 @@ class ECRClient(BaseClient):
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#get_repository_policy)
         """
 
+    def get_signing_configuration(self) -> GetSigningConfigurationResponseTypeDef:
+        """
+        Retrieves the registry's signing configuration, which defines rules for
+        automatically signing images using Amazon Web Services Signer.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/get_signing_configuration.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#get_signing_configuration)
+        """
+
     def initiate_layer_upload(
         self, **kwargs: Unpack[InitiateLayerUploadRequestTypeDef]
     ) -> InitiateLayerUploadResponseTypeDef:
@@ -653,6 +687,17 @@ class ECRClient(BaseClient):
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/put_replication_configuration.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#put_replication_configuration)
+        """
+
+    def put_signing_configuration(
+        self, **kwargs: Unpack[PutSigningConfigurationRequestTypeDef]
+    ) -> PutSigningConfigurationResponseTypeDef:
+        """
+        Creates or updates the registry's signing configuration, which defines rules
+        for automatically signing images with Amazon Web Services Signer.
+
+        [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/ecr/client/put_signing_configuration.html)
+        [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_ecr/client/#put_signing_configuration)
         """
 
     def register_pull_time_update_exclusion(

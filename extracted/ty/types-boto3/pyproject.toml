@@ -4,10 +4,10 @@
 
 [project]
 name = "types-boto3"
-version = "1.41.1"
+version = "1.41.2"
 license = "MIT"
 authors = [{ name = "Vlad Emelianov", email = "vlad.emelianov.nz@gmail.com" }]
-description = "Type annotations for boto3 1.41.1 generated with mypy-boto3-builder 8.12.0"
+description = "Type annotations for boto3 1.41.2 generated with mypy-boto3-builder 8.12.0"
 readme = "README.md"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -69,7 +69,7 @@ full = [
     "types-boto3-full>=1.41.0, <1.42.0",
 ]
 boto3 = [
-    "boto3==1.41.1",
+    "boto3==1.41.2",
 ]
 all = [
     "types-boto3-accessanalyzer>=1.41.0, <1.42.0",
@@ -166,6 +166,7 @@ all = [
     "types-boto3-comprehend>=1.41.0, <1.42.0",
     "types-boto3-comprehendmedical>=1.41.0, <1.42.0",
     "types-boto3-compute-optimizer>=1.41.0, <1.42.0",
+    "types-boto3-compute-optimizer-automation>=1.41.0, <1.42.0",
     "types-boto3-config>=1.41.0, <1.42.0",
     "types-boto3-connect>=1.41.0, <1.42.0",
     "types-boto3-connect-contact-lens>=1.41.0, <1.42.0",
@@ -772,6 +773,9 @@ comprehendmedical = [
 ]
 compute-optimizer = [
     "types-boto3-compute-optimizer>=1.41.0, <1.42.0",
+]
+compute-optimizer-automation = [
+    "types-boto3-compute-optimizer-automation>=1.41.0, <1.42.0",
 ]
 config = [
     "types-boto3-config>=1.41.0, <1.42.0",

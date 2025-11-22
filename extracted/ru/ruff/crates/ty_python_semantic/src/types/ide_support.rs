@@ -11,13 +11,14 @@ use crate::semantic_index::{
     attribute_scopes, global_scope, place_table, semantic_index, use_def_map,
 };
 use crate::types::call::{CallArguments, MatchedArgument};
+use crate::types::generics::Specialization;
 use crate::types::signatures::Signature;
 use crate::types::{CallDunderError, UnionType};
 use crate::types::{
-    ClassBase, ClassLiteral, DynamicType, KnownClass, KnownInstanceType, Type, TypeContext,
+    ClassBase, ClassLiteral, KnownClass, KnownInstanceType, Type, TypeContext,
     TypeVarBoundOrConstraints, class::CodeGeneratorKind,
 };
-use crate::{Db, HasType, NameKind, SemanticModel};
+use crate::{Db, DisplaySettings, HasType, NameKind, SemanticModel};
 use ruff_db::files::{File, FileRange};
 use ruff_db::parsed::parsed_module;
 use ruff_python_ast::name::Name;
@@ -27,6 +28,23 @@ use rustc_hash::FxHashSet;
 
 pub use resolve_definition::{ImportAliasResolution, ResolvedDefinition, map_stub_definition};
 use resolve_definition::{find_symbol_in_scope, resolve_definition};
+
+// `__init__`, `__repr__`, `__eq__`, `__ne__` and `__hash__` are always included via `object`,
+// so we don't need to list them here.
+const SYNTHETIC_DATACLASS_ATTRIBUTES: &[&str] = &[
+    "__lt__",
+    "__le__",
+    "__gt__",
+    "__ge__",
+    "__replace__",
+    "__setattr__",
+    "__delattr__",
+    "__slots__",
+    "__weakref__",
+    "__match_args__",
+    "__dataclass_fields__",
+    "__dataclass_params__",
+];
 
 pub(crate) fn all_declarations_and_bindings<'db>(
     db: &'db dyn Db,
@@ -119,13 +137,9 @@ impl<'db> AllMembers<'db> {
             ),
 
             Type::NominalInstance(instance) => {
-                let class_literal = instance.class_literal(db);
+                let (class_literal, specialization) = instance.class(db).class_literal(db);
                 self.extend_with_instance_members(db, ty, class_literal);
-
-                // If this is a NamedTuple instance, include members from NamedTupleFallback
-                if CodeGeneratorKind::NamedTuple.matches(db, class_literal, None) {
-                    self.extend_with_type(db, KnownClass::NamedTupleFallback.to_class_literal(db));
-                }
+                self.extend_with_synthetic_members(db, ty, class_literal, specialization);
             }
 
             Type::NewTypeInstance(newtype) => {
@@ -146,10 +160,7 @@ impl<'db> AllMembers<'db> {
 
             Type::ClassLiteral(class_literal) => {
                 self.extend_with_class_members(db, ty, class_literal);
-
-                if CodeGeneratorKind::NamedTuple.matches(db, class_literal, None) {
-                    self.extend_with_type(db, KnownClass::NamedTupleFallback.to_class_literal(db));
-                }
+                self.extend_with_synthetic_members(db, ty, class_literal, None);
 
                 if let Type::ClassLiteral(meta_class_literal) = ty.to_meta_type(db) {
                     self.extend_with_class_members(db, ty, meta_class_literal);
@@ -158,23 +169,15 @@ impl<'db> AllMembers<'db> {
 
             Type::GenericAlias(generic_alias) => {
                 let class_literal = generic_alias.origin(db);
-                if CodeGeneratorKind::NamedTuple.matches(db, class_literal, None) {
-                    self.extend_with_type(db, KnownClass::NamedTupleFallback.to_class_literal(db));
-                }
                 self.extend_with_class_members(db, ty, class_literal);
+                self.extend_with_synthetic_members(db, ty, class_literal, None);
             }
 
             Type::SubclassOf(subclass_of_type) => {
                 if let Some(class_type) = subclass_of_type.subclass_of().into_class() {
-                    let class_literal = class_type.class_literal(db).0;
+                    let (class_literal, specialization) = class_type.class_literal(db);
                     self.extend_with_class_members(db, ty, class_literal);
-
-                    if CodeGeneratorKind::NamedTuple.matches(db, class_literal, None) {
-                        self.extend_with_type(
-                            db,
-                            KnownClass::NamedTupleFallback.to_class_literal(db),
-                        );
-                    }
+                    self.extend_with_synthetic_members(db, ty, class_literal, specialization);
                 }
             }
 
@@ -296,9 +299,10 @@ impl<'db> AllMembers<'db> {
                             Type::KnownInstance(
                                 KnownInstanceType::TypeVar(_)
                                 | KnownInstanceType::TypeAliasType(_)
-                                | KnownInstanceType::UnionType(_),
+                                | KnownInstanceType::UnionType(_)
+                                | KnownInstanceType::Literal(_)
+                                | KnownInstanceType::Annotated(_),
                             ) => continue,
-                            Type::Dynamic(DynamicType::TodoTypeAlias) => continue,
                             _ => {}
                         }
                     }
@@ -412,6 +416,36 @@ impl<'db> AllMembers<'db> {
                     ty,
                 });
             }
+        }
+    }
+
+    fn extend_with_synthetic_members(
+        &mut self,
+        db: &'db dyn Db,
+        ty: Type<'db>,
+        class_literal: ClassLiteral<'db>,
+        specialization: Option<Specialization<'db>>,
+    ) {
+        match CodeGeneratorKind::from_class(db, class_literal, specialization) {
+            Some(CodeGeneratorKind::NamedTuple) => {
+                if ty.is_nominal_instance() {
+                    self.extend_with_type(db, KnownClass::NamedTupleFallback.to_instance(db));
+                } else {
+                    self.extend_with_type(db, KnownClass::NamedTupleFallback.to_class_literal(db));
+                }
+            }
+            Some(CodeGeneratorKind::TypedDict) => {}
+            Some(CodeGeneratorKind::DataclassLike(_)) => {
+                for attr in SYNTHETIC_DATACLASS_ATTRIBUTES {
+                    if let Place::Defined(synthetic_member, _, _) = ty.member(db, attr).place {
+                        self.members.insert(Member {
+                            name: Name::from(*attr),
+                            ty: synthetic_member,
+                        });
+                    }
+                }
+            }
+            None => {}
         }
     }
 }
@@ -925,6 +959,22 @@ pub struct CallSignatureDetails<'db> {
     pub argument_to_parameter_mapping: Vec<MatchedArgument<'db>>,
 }
 
+impl CallSignatureDetails<'_> {
+    fn get_definition_parameter_range(&self, db: &dyn Db, name: &str) -> Option<FileRange> {
+        let definition = self.signature.definition()?;
+        let file = definition.file(db);
+        let module_ref = parsed_module(db, file).load(db);
+
+        let parameters = match definition.kind(db) {
+            DefinitionKind::Function(node) => &node.node(&module_ref).parameters,
+            // TODO: lambda functions
+            _ => return None,
+        };
+
+        Some(FileRange::new(file, parameters.find(name)?.name().range))
+    }
+}
+
 /// Extract signature details from a function call expression.
 /// This function analyzes the callable being invoked and returns zero or more
 /// `CallSignatureDetails` objects, each representing one possible signature
@@ -971,6 +1021,65 @@ pub fn call_signature_details<'db>(
         // Type is not callable, return empty signatures
         vec![]
     }
+}
+
+/// Given a call expression that has overloads, and whose overload is resolved to a
+/// single option by its arguments, return the type of the Signature.
+///
+/// This is only used for simplifying complex call types, so if we ever detect that
+/// the given callable type *is* simple, or that our answer *won't* be simple, we
+/// bail at out and return None, so that the original type can be used.
+///
+/// We do this because `Type::Signature` intentionally loses a lot of context, and
+/// so it has a "worse" display than say `Type::FunctionLiteral` or `Type::BoundMethod`,
+/// which this analysis would naturally wipe away. The contexts this function
+/// succeeds in are those where we would print a complicated/ugly type anyway.
+pub fn call_type_simplified_by_overloads<'db>(
+    db: &'db dyn Db,
+    model: &SemanticModel<'db>,
+    call_expr: &ast::ExprCall,
+) -> Option<String> {
+    let func_type = call_expr.func.inferred_type(model);
+
+    // Use into_callable to handle all the complex type conversions
+    let callable_type = func_type.try_upcast_to_callable(db)?;
+    let bindings = callable_type.bindings(db);
+
+    // If the callable is trivial this analysis is useless, bail out
+    if let Some(binding) = bindings.single_element()
+        && binding.overloads().len() < 2
+    {
+        return None;
+    }
+
+    // Hand the overload resolution system as much type info as we have
+    let args = CallArguments::from_arguments_typed(&call_expr.arguments, |_, splatted_value| {
+        splatted_value.inferred_type(model)
+    });
+
+    // Try to resolve overloads with the arguments/types we have
+    let mut resolved = bindings
+        .match_parameters(db, &args)
+        .check_types(db, &args, TypeContext::default(), &[])
+        // Only use the Ok
+        .iter()
+        .flatten()
+        .flat_map(|binding| {
+            binding.matching_overloads().map(|(_, overload)| {
+                overload
+                    .signature
+                    .display_with(db, DisplaySettings::default().multiline())
+                    .to_string()
+            })
+        })
+        .collect::<Vec<_>>();
+
+    // If at the end of this we still got multiple signatures (or no signatures), give up
+    if resolved.len() != 1 {
+        return None;
+    }
+
+    resolved.pop()
 }
 
 /// Returns the definitions of the binary operation along with its callable type.
@@ -1120,15 +1229,16 @@ pub fn find_active_signature_from_details(
 }
 
 #[derive(Default)]
-pub struct InlayHintFunctionArgumentDetails {
-    pub argument_names: HashMap<usize, String>,
+pub struct InlayHintCallArgumentDetails {
+    /// The position of the arguments mapped to their name and the range of the argument definition in the signature.
+    pub argument_names: HashMap<usize, (String, Option<FileRange>)>,
 }
 
-pub fn inlay_hint_function_argument_details<'db>(
+pub fn inlay_hint_call_argument_details<'db>(
     db: &'db dyn Db,
     model: &SemanticModel<'db>,
     call_expr: &ast::ExprCall,
-) -> Option<InlayHintFunctionArgumentDetails> {
+) -> Option<InlayHintCallArgumentDetails> {
     let signature_details = call_signature_details(db, model, call_expr);
 
     if signature_details.is_empty() {
@@ -1140,6 +1250,7 @@ pub fn inlay_hint_function_argument_details<'db>(
     let call_signature_details = signature_details.get(active_signature_index)?;
 
     let parameters = call_signature_details.signature.parameters();
+
     let mut argument_names = HashMap::new();
 
     for arg_index in 0..call_expr.arguments.args.len() {
@@ -1162,16 +1273,19 @@ pub fn inlay_hint_function_argument_details<'db>(
             continue;
         };
 
+        let parameter_label_offset =
+            call_signature_details.get_definition_parameter_range(db, param.name()?);
+
         // Only add hints for parameters that can be specified by name
         if !param.is_positional_only() && !param.is_variadic() && !param.is_keyword_variadic() {
             let Some(name) = param.name() else {
                 continue;
             };
-            argument_names.insert(arg_index, name.to_string());
+            argument_names.insert(arg_index, (name.to_string(), parameter_label_offset));
         }
     }
 
-    Some(InlayHintFunctionArgumentDetails { argument_names })
+    Some(InlayHintCallArgumentDetails { argument_names })
 }
 
 /// Find the text range of a specific parameter in function parameters by name.

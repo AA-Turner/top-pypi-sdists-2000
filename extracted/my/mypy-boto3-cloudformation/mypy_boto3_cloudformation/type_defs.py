@@ -115,7 +115,9 @@ __all__ = (
     "ActivateTypeInputTypeDef",
     "ActivateTypeOutputTypeDef",
     "AnnotationTypeDef",
+    "AutoDeploymentOutputTypeDef",
     "AutoDeploymentTypeDef",
+    "AutoDeploymentUnionTypeDef",
     "BatchDescribeTypeConfigurationsErrorTypeDef",
     "BatchDescribeTypeConfigurationsInputTypeDef",
     "BatchDescribeTypeConfigurationsOutputTypeDef",
@@ -440,9 +442,16 @@ class AnnotationTypeDef(TypedDict):
     SeverityLevel: NotRequired[AnnotationSeverityLevelType]
 
 
+class AutoDeploymentOutputTypeDef(TypedDict):
+    Enabled: NotRequired[bool]
+    RetainStacksOnAccountRemoval: NotRequired[bool]
+    DependsOn: NotRequired[list[str]]
+
+
 class AutoDeploymentTypeDef(TypedDict):
     Enabled: NotRequired[bool]
     RetainStacksOnAccountRemoval: NotRequired[bool]
+    DependsOn: NotRequired[Sequence[str]]
 
 
 TypeConfigurationIdentifierTypeDef = TypedDict(
@@ -1574,6 +1583,9 @@ class UpdateTerminationProtectionOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+AutoDeploymentUnionTypeDef = Union[AutoDeploymentTypeDef, AutoDeploymentOutputTypeDef]
+
+
 class BatchDescribeTypeConfigurationsErrorTypeDef(TypedDict):
     ErrorCode: NotRequired[str]
     ErrorMessage: NotRequired[str]
@@ -1617,30 +1629,12 @@ class UpdateGeneratedTemplateInputTypeDef(TypedDict):
     TemplateConfiguration: NotRequired[TemplateConfigurationTypeDef]
 
 
-class CreateStackSetInputTypeDef(TypedDict):
-    StackSetName: str
-    Description: NotRequired[str]
-    TemplateBody: NotRequired[str]
-    TemplateURL: NotRequired[str]
-    StackId: NotRequired[str]
-    Parameters: NotRequired[Sequence[ParameterTypeDef]]
-    Capabilities: NotRequired[Sequence[CapabilityType]]
-    Tags: NotRequired[Sequence[TagTypeDef]]
-    AdministrationRoleARN: NotRequired[str]
-    ExecutionRoleName: NotRequired[str]
-    PermissionModel: NotRequired[PermissionModelsType]
-    AutoDeployment: NotRequired[AutoDeploymentTypeDef]
-    CallAs: NotRequired[CallAsType]
-    ClientRequestToken: NotRequired[str]
-    ManagedExecution: NotRequired[ManagedExecutionTypeDef]
-
-
 class StackSetSummaryTypeDef(TypedDict):
     StackSetName: NotRequired[str]
     StackSetId: NotRequired[str]
     Description: NotRequired[str]
     Status: NotRequired[StackSetStatusType]
-    AutoDeployment: NotRequired[AutoDeploymentTypeDef]
+    AutoDeployment: NotRequired[AutoDeploymentOutputTypeDef]
     PermissionModel: NotRequired[PermissionModelsType]
     DriftStatus: NotRequired[StackDriftStatusType]
     LastDriftCheckTimestamp: NotRequired[datetime]
@@ -2196,7 +2190,7 @@ class StackSetTypeDef(TypedDict):
     AdministrationRoleARN: NotRequired[str]
     ExecutionRoleName: NotRequired[str]
     StackSetDriftDetectionDetails: NotRequired[StackSetDriftDetectionDetailsTypeDef]
-    AutoDeployment: NotRequired[AutoDeploymentTypeDef]
+    AutoDeployment: NotRequired[AutoDeploymentOutputTypeDef]
     PermissionModel: NotRequired[PermissionModelsType]
     OrganizationalUnitIds: NotRequired[list[str]]
     ManagedExecution: NotRequired[ManagedExecutionTypeDef]
@@ -2258,6 +2252,24 @@ class ListStackSetOperationResultsOutputTypeDef(TypedDict):
     Summaries: list[StackSetOperationResultSummaryTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+
+class CreateStackSetInputTypeDef(TypedDict):
+    StackSetName: str
+    Description: NotRequired[str]
+    TemplateBody: NotRequired[str]
+    TemplateURL: NotRequired[str]
+    StackId: NotRequired[str]
+    Parameters: NotRequired[Sequence[ParameterTypeDef]]
+    Capabilities: NotRequired[Sequence[CapabilityType]]
+    Tags: NotRequired[Sequence[TagTypeDef]]
+    AdministrationRoleARN: NotRequired[str]
+    ExecutionRoleName: NotRequired[str]
+    PermissionModel: NotRequired[PermissionModelsType]
+    AutoDeployment: NotRequired[AutoDeploymentUnionTypeDef]
+    CallAs: NotRequired[CallAsType]
+    ClientRequestToken: NotRequired[str]
+    ManagedExecution: NotRequired[ManagedExecutionTypeDef]
 
 
 class BatchDescribeTypeConfigurationsOutputTypeDef(TypedDict):
@@ -2481,7 +2493,7 @@ class UpdateStackSetInputTypeDef(TypedDict):
     ExecutionRoleName: NotRequired[str]
     DeploymentTargets: NotRequired[DeploymentTargetsUnionTypeDef]
     PermissionModel: NotRequired[PermissionModelsType]
-    AutoDeployment: NotRequired[AutoDeploymentTypeDef]
+    AutoDeployment: NotRequired[AutoDeploymentUnionTypeDef]
     OperationId: NotRequired[str]
     Accounts: NotRequired[Sequence[str]]
     Regions: NotRequired[Sequence[str]]

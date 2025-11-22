@@ -54,6 +54,7 @@ from .literals import (
     TargetRoleType,
     TargetStateType,
     TargetTypeType,
+    UpgradeRolloutOrderType,
     WriteForwardingStatusType,
 )
 
@@ -4106,6 +4107,7 @@ class DBClusterTypeDef(TypedDict):
     DBClusterOptionGroupMemberships: NotRequired[list[DBClusterOptionGroupStatusTypeDef]]
     PreferredBackupWindow: NotRequired[str]
     PreferredMaintenanceWindow: NotRequired[str]
+    UpgradeRolloutOrder: NotRequired[UpgradeRolloutOrderType]
     ReplicationSourceIdentifier: NotRequired[str]
     ReadReplicaIdentifiers: NotRequired[list[str]]
     StatusInfos: NotRequired[list[DBClusterStatusInfoTypeDef]]
@@ -4623,6 +4625,7 @@ class DBInstanceTypeDef(TypedDict):
     AvailabilityZone: NotRequired[str]
     DBSubnetGroup: NotRequired[DBSubnetGroupTypeDef]
     PreferredMaintenanceWindow: NotRequired[str]
+    UpgradeRolloutOrder: NotRequired[UpgradeRolloutOrderType]
     PendingModifiedValues: NotRequired[PendingModifiedValuesTypeDef]
     LatestRestorableTime: NotRequired[datetime]
     MultiAZ: NotRequired[bool]

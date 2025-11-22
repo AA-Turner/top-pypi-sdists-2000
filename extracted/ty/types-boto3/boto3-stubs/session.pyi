@@ -118,6 +118,7 @@ from types_boto3_cognito_sync.client import CognitoSyncClient
 from types_boto3_comprehend.client import ComprehendClient
 from types_boto3_comprehendmedical.client import ComprehendMedicalClient
 from types_boto3_compute_optimizer.client import ComputeOptimizerClient
+from types_boto3_compute_optimizer_automation.client import ComputeOptimizerAutomationClient
 from types_boto3_config.client import ConfigServiceClient
 from types_boto3_connect.client import ConnectClient
 from types_boto3_connect_contact_lens.client import ConnectContactLensClient
@@ -2272,6 +2273,25 @@ class Session:
     ) -> ComputeOptimizerClient:
         """
         Create client for ComputeOptimizer service.
+        """
+
+    @overload
+    def client(
+        self,
+        service_name: Literal["compute-optimizer-automation"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ComputeOptimizerAutomationClient:
+        """
+        Create client for ComputeOptimizerAutomation service.
         """
 
     @overload

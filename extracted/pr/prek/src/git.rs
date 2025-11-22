@@ -9,7 +9,7 @@ use anyhow::Result;
 use path_clean::PathClean;
 use rustc_hash::FxHashSet;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
-use tracing::{debug, warn};
+use tracing::{debug, instrument, warn};
 
 use crate::process;
 use crate::process::{Cmd, StatusError};
@@ -117,6 +117,7 @@ pub(crate) async fn get_changed_files(
     Ok(zsplit(&output.stdout)?)
 }
 
+#[instrument(level = "trace")]
 pub(crate) async fn ls_files(cwd: &Path, path: &Path) -> Result<Vec<PathBuf>, Error> {
     let output = git_cmd("git ls-files")?
         .current_dir(cwd)
@@ -265,6 +266,7 @@ async fn parse_merge_msg_for_conflicts() -> Result<Vec<PathBuf>, Error> {
     Ok(conflicts)
 }
 
+#[instrument(level = "trace")]
 pub(crate) async fn get_diff(path: &Path) -> Result<Vec<u8>, Error> {
     let output = git_cmd("git diff")?
         .arg("diff")
@@ -295,6 +297,7 @@ pub(crate) async fn write_tree() -> Result<String, Error> {
 }
 
 /// Get the path of the top-level directory of the working tree.
+#[instrument(level = "trace")]
 pub(crate) fn get_root() -> Result<PathBuf, Error> {
     let git = GIT.as_ref().map_err(|&e| Error::GitNotFound(e))?;
     let output = std::process::Command::new(git)
@@ -583,4 +586,25 @@ pub(crate) async fn get_parent_commit(commit: &str) -> Result<Option<String>, Er
     } else {
         Ok(None)
     }
+}
+
+/// Return a list of absolute paths of all git submodules in the repository.
+#[instrument(level = "trace")]
+pub(crate) fn list_submodules(git_root: &Path) -> Result<Vec<PathBuf>, Error> {
+    let git = GIT.as_ref().map_err(|&e| Error::GitNotFound(e))?;
+    let output = std::process::Command::new(git)
+        .current_dir(git_root)
+        .arg("config")
+        .arg("--file")
+        .arg(".gitmodules")
+        .arg("--get-regexp")
+        .arg(r"^submodule\..*\.path$")
+        .output()?;
+
+    Ok(String::from_utf8_lossy(&output.stdout)
+        .trim_ascii()
+        .lines()
+        .filter_map(|line| line.split_whitespace().nth(1))
+        .map(|submodule| git_root.join(submodule))
+        .collect())
 }

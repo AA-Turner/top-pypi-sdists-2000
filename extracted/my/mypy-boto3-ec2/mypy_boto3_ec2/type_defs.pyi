@@ -188,6 +188,7 @@ from .literals import (
     InterfaceProtocolTypeType,
     InternetGatewayBlockModeType,
     InternetGatewayExclusionModeType,
+    InterruptibleCapacityReservationAllocationStatusType,
     IpAddressTypeType,
     IpamAddressHistoryResourceTypeType,
     IpamAssociatedResourceDiscoveryStatusType,
@@ -747,6 +748,8 @@ __all__ = (
     "CreateInternetGatewayRequestServiceResourceCreateInternetGatewayTypeDef",
     "CreateInternetGatewayRequestTypeDef",
     "CreateInternetGatewayResultTypeDef",
+    "CreateInterruptibleCapacityReservationAllocationRequestTypeDef",
+    "CreateInterruptibleCapacityReservationAllocationResultTypeDef",
     "CreateIpamExternalResourceVerificationTokenRequestTypeDef",
     "CreateIpamExternalResourceVerificationTokenResultTypeDef",
     "CreateIpamPolicyRequestTypeDef",
@@ -2226,6 +2229,8 @@ __all__ = (
     "InternetGatewayAttachmentTypeDef",
     "InternetGatewayCreateTagsRequestTypeDef",
     "InternetGatewayTypeDef",
+    "InterruptibleCapacityAllocationTypeDef",
+    "InterruptionInfoTypeDef",
     "IpPermissionOutputTypeDef",
     "IpPermissionTypeDef",
     "IpPermissionUnionTypeDef",
@@ -3014,6 +3019,8 @@ __all__ = (
     "UnsuccessfulItemTypeDef",
     "UpdateCapacityManagerOrganizationsAccessRequestTypeDef",
     "UpdateCapacityManagerOrganizationsAccessResultTypeDef",
+    "UpdateInterruptibleCapacityReservationAllocationRequestTypeDef",
+    "UpdateInterruptibleCapacityReservationAllocationResultTypeDef",
     "UpdateSecurityGroupRuleDescriptionsEgressRequestTypeDef",
     "UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef",
     "UpdateSecurityGroupRuleDescriptionsIngressRequestTypeDef",
@@ -3870,6 +3877,17 @@ class CapacityReservationTopologyTypeDef(TypedDict):
     NetworkNodes: NotRequired[list[str]]
     AvailabilityZoneId: NotRequired[str]
     AvailabilityZone: NotRequired[str]
+
+class InterruptibleCapacityAllocationTypeDef(TypedDict):
+    InstanceCount: NotRequired[int]
+    TargetInstanceCount: NotRequired[int]
+    Status: NotRequired[InterruptibleCapacityReservationAllocationStatusType]
+    InterruptibleCapacityReservationId: NotRequired[str]
+    InterruptionType: NotRequired[Literal["adhoc"]]
+
+class InterruptionInfoTypeDef(TypedDict):
+    SourceCapacityReservationId: NotRequired[str]
+    InterruptionType: NotRequired[Literal["adhoc"]]
 
 class CertificateAuthenticationRequestTypeDef(TypedDict):
     ClientRootCertificateChainArn: NotRequired[str]
@@ -8053,6 +8071,11 @@ class UpdateCapacityManagerOrganizationsAccessRequestTypeDef(TypedDict):
     DryRun: NotRequired[bool]
     ClientToken: NotRequired[str]
 
+class UpdateInterruptibleCapacityReservationAllocationRequestTypeDef(TypedDict):
+    CapacityReservationId: str
+    TargetInstanceCount: int
+    DryRun: NotRequired[bool]
+
 class ValidationErrorTypeDef(TypedDict):
     Code: NotRequired[str]
     Message: NotRequired[str]
@@ -8286,6 +8309,13 @@ class CreateImageResultTypeDef(TypedDict):
 
 class CreateImageUsageReportResultTypeDef(TypedDict):
     ReportId: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class CreateInterruptibleCapacityReservationAllocationResultTypeDef(TypedDict):
+    SourceCapacityReservationId: str
+    TargetInstanceCount: int
+    Status: InterruptibleCapacityReservationAllocationStatusType
+    InterruptionType: Literal["adhoc"]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class CreatePublicIpv4PoolResultTypeDef(TypedDict):
@@ -8862,6 +8892,15 @@ class UnlockSnapshotResultTypeDef(TypedDict):
 class UpdateCapacityManagerOrganizationsAccessResultTypeDef(TypedDict):
     CapacityManagerStatus: CapacityManagerStatusType
     OrganizationsAccess: bool
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class UpdateInterruptibleCapacityReservationAllocationResultTypeDef(TypedDict):
+    InterruptibleCapacityReservationId: str
+    SourceCapacityReservationId: str
+    InstanceCount: int
+    TargetInstanceCount: int
+    Status: InterruptibleCapacityReservationAllocationStatusType
+    InterruptionType: Literal["adhoc"]
     ResponseMetadata: ResponseMetadataTypeDef
 
 class UpdateSecurityGroupRuleDescriptionsEgressResultTypeDef(TypedDict):
@@ -10125,36 +10164,6 @@ class CapacityReservationBillingRequestTypeDef(TypedDict):
     StatusMessage: NotRequired[str]
     CapacityReservationInfo: NotRequired[CapacityReservationInfoTypeDef]
 
-class CapacityReservationTypeDef(TypedDict):
-    CapacityReservationId: NotRequired[str]
-    OwnerId: NotRequired[str]
-    CapacityReservationArn: NotRequired[str]
-    AvailabilityZoneId: NotRequired[str]
-    InstanceType: NotRequired[str]
-    InstancePlatform: NotRequired[CapacityReservationInstancePlatformType]
-    AvailabilityZone: NotRequired[str]
-    Tenancy: NotRequired[CapacityReservationTenancyType]
-    TotalInstanceCount: NotRequired[int]
-    AvailableInstanceCount: NotRequired[int]
-    EbsOptimized: NotRequired[bool]
-    EphemeralStorage: NotRequired[bool]
-    State: NotRequired[CapacityReservationStateType]
-    StartDate: NotRequired[datetime]
-    EndDate: NotRequired[datetime]
-    EndDateType: NotRequired[EndDateTypeType]
-    InstanceMatchCriteria: NotRequired[InstanceMatchCriteriaType]
-    CreateDate: NotRequired[datetime]
-    Tags: NotRequired[list[TagTypeDef]]
-    OutpostArn: NotRequired[str]
-    CapacityReservationFleetId: NotRequired[str]
-    PlacementGroupArn: NotRequired[str]
-    CapacityAllocations: NotRequired[list[CapacityAllocationTypeDef]]
-    ReservationType: NotRequired[CapacityReservationTypeType]
-    UnusedReservationBillingOwnerId: NotRequired[str]
-    CommitmentInfo: NotRequired[CapacityReservationCommitmentInfoTypeDef]
-    DeliveryPreference: NotRequired[CapacityReservationDeliveryPreferenceType]
-    CapacityBlockId: NotRequired[str]
-
 class CapacityReservationFleetTypeDef(TypedDict):
     CapacityReservationFleetId: NotRequired[str]
     CapacityReservationFleetArn: NotRequired[str]
@@ -10224,6 +10233,39 @@ class DescribeCapacityReservationTopologyResultTypeDef(TypedDict):
     CapacityReservations: list[CapacityReservationTopologyTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
+
+class CapacityReservationTypeDef(TypedDict):
+    CapacityReservationId: NotRequired[str]
+    OwnerId: NotRequired[str]
+    CapacityReservationArn: NotRequired[str]
+    AvailabilityZoneId: NotRequired[str]
+    InstanceType: NotRequired[str]
+    InstancePlatform: NotRequired[CapacityReservationInstancePlatformType]
+    AvailabilityZone: NotRequired[str]
+    Tenancy: NotRequired[CapacityReservationTenancyType]
+    TotalInstanceCount: NotRequired[int]
+    AvailableInstanceCount: NotRequired[int]
+    EbsOptimized: NotRequired[bool]
+    EphemeralStorage: NotRequired[bool]
+    State: NotRequired[CapacityReservationStateType]
+    StartDate: NotRequired[datetime]
+    EndDate: NotRequired[datetime]
+    EndDateType: NotRequired[EndDateTypeType]
+    InstanceMatchCriteria: NotRequired[InstanceMatchCriteriaType]
+    CreateDate: NotRequired[datetime]
+    Tags: NotRequired[list[TagTypeDef]]
+    OutpostArn: NotRequired[str]
+    CapacityReservationFleetId: NotRequired[str]
+    PlacementGroupArn: NotRequired[str]
+    CapacityAllocations: NotRequired[list[CapacityAllocationTypeDef]]
+    ReservationType: NotRequired[CapacityReservationTypeType]
+    UnusedReservationBillingOwnerId: NotRequired[str]
+    CommitmentInfo: NotRequired[CapacityReservationCommitmentInfoTypeDef]
+    DeliveryPreference: NotRequired[CapacityReservationDeliveryPreferenceType]
+    CapacityBlockId: NotRequired[str]
+    Interruptible: NotRequired[bool]
+    InterruptibleCapacityAllocation: NotRequired[InterruptibleCapacityAllocationTypeDef]
+    InterruptionInfo: NotRequired[InterruptionInfoTypeDef]
 
 class DescribeVpcClassicLinkDnsSupportResultTypeDef(TypedDict):
     Vpcs: list[ClassicLinkDnsSupportTypeDef]
@@ -13712,6 +13754,9 @@ class GetCapacityReservationUsageResultTypeDef(TypedDict):
     AvailableInstanceCount: int
     State: CapacityReservationStateType
     InstanceUsages: list[InstanceUsageTypeDef]
+    Interruptible: bool
+    InterruptibleCapacityAllocation: InterruptibleCapacityAllocationTypeDef
+    InterruptionInfo: InterruptionInfoTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
@@ -15881,6 +15926,16 @@ class DescribeCapacityReservationBillingRequestsResultTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
     NextToken: NotRequired[str]
 
+class DescribeCapacityReservationFleetsResultTypeDef(TypedDict):
+    CapacityReservationFleets: list[CapacityReservationFleetTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+    NextToken: NotRequired[str]
+
+class ModifyInstanceCapacityReservationAttributesRequestTypeDef(TypedDict):
+    InstanceId: str
+    CapacityReservationSpecification: CapacityReservationSpecificationTypeDef
+    DryRun: NotRequired[bool]
+
 class CreateCapacityReservationBySplittingResultTypeDef(TypedDict):
     SourceCapacityReservation: CapacityReservationTypeDef
     DestinationCapacityReservation: CapacityReservationTypeDef
@@ -15906,16 +15961,6 @@ class PurchaseCapacityBlockResultTypeDef(TypedDict):
     CapacityReservation: CapacityReservationTypeDef
     CapacityBlocks: list[CapacityBlockTypeDef]
     ResponseMetadata: ResponseMetadataTypeDef
-
-class DescribeCapacityReservationFleetsResultTypeDef(TypedDict):
-    CapacityReservationFleets: list[CapacityReservationFleetTypeDef]
-    ResponseMetadata: ResponseMetadataTypeDef
-    NextToken: NotRequired[str]
-
-class ModifyInstanceCapacityReservationAttributesRequestTypeDef(TypedDict):
-    InstanceId: str
-    CapacityReservationSpecification: CapacityReservationSpecificationTypeDef
-    DryRun: NotRequired[bool]
 
 class DescribeClassicLinkInstancesResultTypeDef(TypedDict):
     Instances: list[ClassicLinkInstanceTypeDef]
@@ -17877,6 +17922,13 @@ class CreateInternetGatewayRequestServiceResourceCreateInternetGatewayTypeDef(Ty
 class CreateInternetGatewayRequestTypeDef(TypedDict):
     TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
     DryRun: NotRequired[bool]
+
+class CreateInterruptibleCapacityReservationAllocationRequestTypeDef(TypedDict):
+    CapacityReservationId: str
+    InstanceCount: int
+    ClientToken: NotRequired[str]
+    DryRun: NotRequired[bool]
+    TagSpecifications: NotRequired[Sequence[TagSpecificationUnionTypeDef]]
 
 class CreateIpamExternalResourceVerificationTokenRequestTypeDef(TypedDict):
     IpamId: str

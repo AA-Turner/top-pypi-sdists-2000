@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: types-psutil
-Version: 7.0.0.20251116
+Version: 7.1.1.20251122
 Summary: Typing stubs for psutil
 License-Expression: Apache-2.0
 Project-URL: Homepage, https://github.com/python/typeshed
@@ -21,7 +21,7 @@ This is a [type stub package](https://typing.python.org/en/latest/tutorials/exte
 for the [`psutil`](https://github.com/giampaolo/psutil) package. It can be used by type checkers
 to check code that uses `psutil`. This version of
 `types-psutil` aims to provide accurate annotations for
-`psutil==7.0.*`.
+`psutil==7.1.1`.
 
 This package is part of the [typeshed project](https://github.com/python/typeshed).
 All fixes for types and metadata should be contributed there.
@@ -35,4 +35,4 @@ This package was tested with the following type checkers:
 * [pyright](https://github.com/microsoft/pyright) 1.1.407
 
 It was generated from typeshed commit
-[`ebce8d766b41fbf4d83cf47c1297563a9508ff60`](https://github.com/python/typeshed/commit/ebce8d766b41fbf4d83cf47c1297563a9508ff60).
+[`cc792321dd482a5336225229bf584ad51a3e85cd`](https://github.com/python/typeshed/commit/cc792321dd482a5336225229bf584ad51a3e85cd).

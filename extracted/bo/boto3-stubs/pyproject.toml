@@ -4,10 +4,10 @@
 
 [project]
 name = "boto3-stubs"
-version = "1.41.1"
+version = "1.41.2"
 license = "MIT"
 authors = [{ name = "Vlad Emelianov", email = "vlad.emelianov.nz@gmail.com" }]
-description = "Type annotations for boto3 1.41.1 generated with mypy-boto3-builder 8.12.0"
+description = "Type annotations for boto3 1.41.2 generated with mypy-boto3-builder 8.12.0"
 readme = "README.md"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -69,7 +69,7 @@ full = [
     "boto3-stubs-full>=1.41.0, <1.42.0",
 ]
 boto3 = [
-    "boto3==1.41.1",
+    "boto3==1.41.2",
 ]
 all = [
     "mypy-boto3-accessanalyzer>=1.41.0, <1.42.0",
@@ -166,6 +166,7 @@ all = [
     "mypy-boto3-comprehend>=1.41.0, <1.42.0",
     "mypy-boto3-comprehendmedical>=1.41.0, <1.42.0",
     "mypy-boto3-compute-optimizer>=1.41.0, <1.42.0",
+    "mypy-boto3-compute-optimizer-automation>=1.41.0, <1.42.0",
     "mypy-boto3-config>=1.41.0, <1.42.0",
     "mypy-boto3-connect>=1.41.0, <1.42.0",
     "mypy-boto3-connect-contact-lens>=1.41.0, <1.42.0",
@@ -772,6 +773,9 @@ comprehendmedical = [
 ]
 compute-optimizer = [
     "mypy-boto3-compute-optimizer>=1.41.0, <1.42.0",
+]
+compute-optimizer-automation = [
+    "mypy-boto3-compute-optimizer-automation>=1.41.0, <1.42.0",
 ]
 config = [
     "mypy-boto3-config>=1.41.0, <1.42.0",

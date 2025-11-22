@@ -10,6 +10,7 @@ class _FlashManager:
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        h2_enabled: bool = False,
     ):
         """Initialize self.  See help(type(self)) for accurate signature."""
         ...
@@ -36,6 +37,7 @@ class FlashManager:
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        h2_enabled: bool = False,
     ): ...
 
     class __is_port_connection_healthy_spec(typing_extensions.Protocol[SUPERSELF]):
@@ -92,6 +94,7 @@ class __flash_forward_spec(typing_extensions.Protocol):
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        h2_enabled: bool = False,
     ) -> FlashManager:
         """Forward a port to the Modal Flash service, exposing that port as a stable web endpoint.
         This is a highly experimental method that can break or be removed at any time without warning.
@@ -105,6 +108,7 @@ class __flash_forward_spec(typing_extensions.Protocol):
         port: int,
         process: typing.Optional[subprocess.Popen] = None,
         health_check_url: typing.Optional[str] = None,
+        h2_enabled: bool = False,
     ) -> FlashManager:
         """Forward a port to the Modal Flash service, exposing that port as a stable web endpoint.
         This is a highly experimental method that can break or be removed at any time without warning.

@@ -112,6 +112,7 @@ __all__ = (
     "TargetTypeType",
     "TenantDatabaseAvailableWaiterName",
     "TenantDatabaseDeletedWaiterName",
+    "UpgradeRolloutOrderType",
     "WaiterName",
     "WriteForwardingStatusType",
 )
@@ -262,6 +263,7 @@ TargetStateType = Literal["AVAILABLE", "REGISTERING", "UNAVAILABLE", "UNUSED"]
 TargetTypeType = Literal["RDS_INSTANCE", "RDS_SERVERLESS_ENDPOINT", "TRACKED_CLUSTER"]
 TenantDatabaseAvailableWaiterName = Literal["tenant_database_available"]
 TenantDatabaseDeletedWaiterName = Literal["tenant_database_deleted"]
+UpgradeRolloutOrderType = Literal["first", "last", "second"]
 WriteForwardingStatusType = Literal["disabled", "disabling", "enabled", "enabling", "unknown"]
 RDSServiceName = Literal["rds"]
 ServiceName = Literal[
@@ -359,6 +361,7 @@ ServiceName = Literal[
     "comprehend",
     "comprehendmedical",
     "compute-optimizer",
+    "compute-optimizer-automation",
     "config",
     "connect",
     "connect-contact-lens",

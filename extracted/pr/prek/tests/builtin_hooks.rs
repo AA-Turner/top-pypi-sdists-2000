@@ -10,6 +10,40 @@ use crate::common::{TestContext, cmd_snapshot};
 
 mod common;
 
+/// Tests that `repo: builtin` hooks doesn't create hook env.
+#[test]
+fn builtin_hooks_not_create_env() {
+    let context = TestContext::new();
+    context.init_project();
+
+    context.write_pre_commit_config(indoc::indoc! {r"
+        repos:
+          - repo: builtin
+            hooks:
+              - id: end-of-file-fixer
+    "});
+    context.git_add(".");
+
+    cmd_snapshot!(context.filters(), context.run(), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+    fix end of files.........................................................Passed
+
+    ----- stderr -----
+    ");
+
+    let hooks_dir = context
+        .home_dir()
+        .join("hooks")
+        .read_dir()
+        .into_iter()
+        .flatten()
+        .flatten()
+        .collect::<Vec<_>>();
+    assert_eq!(hooks_dir.len(), 0);
+}
+
 #[test]
 fn end_of_file_fixer_hook() -> Result<()> {
     let context = TestContext::new();
@@ -18,8 +52,7 @@ fn end_of_file_fixer_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: end-of-file-fixer
     "});
@@ -42,7 +75,7 @@ fn end_of_file_fixer_hook() -> Result<()> {
     context.git_add(".");
 
     // First run: hooks should fail and fix the files
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
@@ -50,6 +83,7 @@ fn end_of_file_fixer_hook() -> Result<()> {
     - hook id: end-of-file-fixer
     - exit code: 1
     - files were modified by this hook
+
       Fixing multiple_crlf.txt
       Fixing only_newlines.txt
       Fixing only_win_newlines.txt
@@ -57,7 +91,7 @@ fn end_of_file_fixer_hook() -> Result<()> {
       Fixing multiple_lf.txt
 
     ----- stderr -----
-    "#);
+    ");
 
     // Assert that the files have been corrected
     assert_snapshot!(context.read("correct_lf.txt"), @"Hello World\n");
@@ -92,8 +126,7 @@ fn check_yaml_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-yaml
     "});
@@ -116,6 +149,7 @@ fn check_yaml_hook() -> Result<()> {
     check yaml...............................................................Failed
     - hook id: check-yaml
     - exit code: 1
+
       duplicate.yaml: Failed to yaml decode (duplicate entry with key "a")
       invalid.yaml: Failed to yaml decode (mapping values are not allowed in this context at line 1 column 5)
 
@@ -151,8 +185,7 @@ fn check_yaml_multiple_document() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-yaml
                 name: Python version
@@ -182,6 +215,7 @@ fn check_yaml_multiple_document() -> Result<()> {
     Rust version.............................................................Failed
     - hook id: check-yaml
     - exit code: 1
+
       multiple.yaml: Failed to yaml decode (deserializing from YAML containing more than one document is not supported)
 
     ----- stderr -----
@@ -198,8 +232,7 @@ fn check_json_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-json
     "});
@@ -223,6 +256,7 @@ fn check_json_hook() -> Result<()> {
     check json...............................................................Failed
     - hook id: check-json
     - exit code: 1
+
       duplicate.json: Failed to json decode (duplicate key `a` at line 1 column 12)
       invalid.json: Failed to json decode (trailing comma at line 1 column 9)
 
@@ -258,8 +292,7 @@ fn mixed_line_ending_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: mixed-line-ending
     "});
@@ -285,6 +318,7 @@ fn mixed_line_ending_hook() -> Result<()> {
     - hook id: mixed-line-ending
     - exit code: 1
     - files were modified by this hook
+
       Fixing mixed.txt
 
     ----- stderr -----
@@ -310,8 +344,7 @@ fn mixed_line_ending_hook() -> Result<()> {
     // Test with --fix=no
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: mixed-line-ending
                 args: ['--fix=no']
@@ -321,24 +354,24 @@ fn mixed_line_ending_hook() -> Result<()> {
         .child("mixed.txt")
         .write_str("line1\nline2\r\n")?;
     context.git_add(".");
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     mixed line ending........................................................Failed
     - hook id: mixed-line-ending
     - exit code: 1
+
       mixed.txt: mixed line endings
 
     ----- stderr -----
-    "#);
+    ");
     assert_snapshot!(context.read("mixed.txt"), @"line1\nline2\r\n");
 
     // Test with --fix=crlf
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: mixed-line-ending
                 args: ['--fix', 'crlf']
@@ -356,6 +389,7 @@ fn mixed_line_ending_hook() -> Result<()> {
     - hook id: mixed-line-ending
     - exit code: 1
     - files were modified by this hook
+
       Fixing .pre-commit-config.yaml
       Fixing mixed.txt
       Fixing only_lf.txt
@@ -367,8 +401,7 @@ fn mixed_line_ending_hook() -> Result<()> {
     // Test mixed args with missing value for `--fix`
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: mixed-line-ending
                 args: ['--fix']
@@ -406,8 +439,7 @@ fn check_added_large_files_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-added-large-files
                 args: ['--maxkb', '1']
@@ -421,17 +453,18 @@ fn check_added_large_files_hook() -> Result<()> {
     context.git_add(".");
 
     // First run: hook should fail because of the large file
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     check for added large files..............................................Failed
     - hook id: check-added-large-files
     - exit code: 1
+
       large_file.txt (2 KB) exceeds 1 KB
 
     ----- stderr -----
-    "#);
+    ");
 
     // Commit the files
     context.git_add(".");
@@ -444,26 +477,26 @@ fn check_added_large_files_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-added-large-files
                 args: ['--maxkb=1', '--enforce-all']
     "});
 
     // Second run: the hook should check all files even if not staged
-    cmd_snapshot!(context.filters(), context.run().arg("--all-files"), @r#"
+    cmd_snapshot!(context.filters(), context.run().arg("--all-files"), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     check for added large files..............................................Failed
     - hook id: check-added-large-files
     - exit code: 1
+
       unstaged_large_file.txt (2 KB) exceeds 1 KB
       large_file.txt (2 KB) exceeds 1 KB
 
     ----- stderr -----
-    "#);
+    ");
 
     context.git_rm("unstaged_large_file.txt");
     context.git_clean();
@@ -471,8 +504,7 @@ fn check_added_large_files_hook() -> Result<()> {
     // Test git-lfs integration
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-added-large-files
                 args: ['--maxkb=1']
@@ -519,8 +551,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
           - repo: meta
             hooks:
               - id: identity
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: end-of-file-fixer
               - id: check-yaml
@@ -562,6 +593,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     identity.................................................................Passed
     - hook id: identity
     - duration: [TIME]
+
       correct.txt
       invalid.yaml
       empty.json
@@ -579,6 +611,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     - hook id: end-of-file-fixer
     - exit code: 1
     - files were modified by this hook
+
       Fixing invalid.yaml
       Fixing duplicate.json
       Fixing eof_no_newline.txt
@@ -588,22 +621,26 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     check yaml...............................................................Failed
     - hook id: check-yaml
     - exit code: 1
+
       duplicate.yaml: Failed to yaml decode (duplicate entry with key "a")
       invalid.yaml: Failed to yaml decode (mapping values are not allowed in this context at line 1 column 5)
     check json...............................................................Failed
     - hook id: check-json
     - exit code: 1
+
       duplicate.json: Failed to json decode (duplicate key `a` at line 1 column 12)
       invalid.json: Failed to json decode (trailing comma at line 1 column 9)
     mixed line ending........................................................Failed
     - hook id: mixed-line-ending
     - exit code: 1
     - files were modified by this hook
+
       Fixing mixed.txt
     trim trailing whitespace.................................................Failed
     - hook id: trailing-whitespace
     - exit code: 1
     - files were modified by this hook
+
       Fixing trailing_ws.txt
     check for added large files..............................................Passed
 
@@ -611,6 +648,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     identity.................................................................Passed
     - hook id: identity
     - duration: [TIME]
+
       app/.pre-commit-config.yaml
       app/invalid.json
       app/duplicate.yaml
@@ -646,6 +684,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     identity.................................................................Passed
     - hook id: identity
     - duration: [TIME]
+
       correct.txt
       invalid.yaml
       empty.json
@@ -663,6 +702,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     - hook id: end-of-file-fixer
     - exit code: 1
     - files were modified by this hook
+
       Fixing invalid.yaml
       Fixing duplicate.json
       Fixing duplicate.yaml
@@ -677,6 +717,7 @@ fn builtin_hooks_workspace_mode() -> Result<()> {
     identity.................................................................Passed
     - hook id: identity
     - duration: [TIME]
+
       app/.pre-commit-config.yaml
       app/invalid.json
       app/duplicate.yaml
@@ -706,8 +747,7 @@ fn fix_byte_order_marker_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: fix-byte-order-marker
     "});
@@ -735,6 +775,7 @@ fn fix_byte_order_marker_hook() -> Result<()> {
     - hook id: fix-byte-order-marker
     - exit code: 1
     - files were modified by this hook
+
       bom_only.txt: removed byte-order marker
       with_bom.txt: removed byte-order marker
 
@@ -771,8 +812,7 @@ fn check_symlinks_hook_unix() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-symlinks
     "});
@@ -798,17 +838,18 @@ fn check_symlinks_hook_unix() -> Result<()> {
     context.git_add(".");
 
     // First run: should fail due to broken symlink
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     check for broken symlinks................................................Failed
     - hook id: check-symlinks
     - exit code: 1
+
       broken_link.txt: Broken symlink
 
     ----- stderr -----
-    "#);
+    ");
 
     // Remove broken symlink
     std::fs::remove_file(cwd.child("broken_link.txt").path())?;
@@ -836,8 +877,7 @@ fn check_symlinks_hook_windows() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-symlinks
     "});
@@ -876,6 +916,7 @@ fn check_symlinks_hook_windows() -> Result<()> {
     check for broken symlinks................................................Failed
     - hook id: check-symlinks
     - exit code: 1
+
       broken_link.txt: Broken symlink
 
     ----- stderr -----
@@ -906,8 +947,7 @@ fn detect_private_key_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: detect-private-key
     "});
@@ -951,6 +991,7 @@ fn detect_private_key_hook() -> Result<()> {
     detect private key.......................................................Failed
     - hook id: detect-private-key
     - exit code: 1
+
       Private key found: doc.txt
       Private key found: id_ecdsa
       Private key found: key.ppk
@@ -997,8 +1038,7 @@ fn check_merge_conflict_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-merge-conflict
                 args: ['--assume-in-merge']
@@ -1036,6 +1076,7 @@ fn check_merge_conflict_hook() -> Result<()> {
     check for merge conflicts................................................Failed
     - hook id: check-merge-conflict
     - exit code: 1
+
       partial_conflict.txt:2: Merge conflict string "<<<<<<< " found
       conflict.txt:2: Merge conflict string "<<<<<<< " found
       conflict.txt:4: Merge conflict string "=======" found
@@ -1079,8 +1120,7 @@ fn check_merge_conflict_without_assume_flag() -> Result<()> {
     // if we're not actually in a merge state
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-merge-conflict
     "});
@@ -1118,8 +1158,7 @@ fn check_xml_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-xml
     "});
@@ -1162,6 +1201,7 @@ fn check_xml_hook() -> Result<()> {
     check xml................................................................Failed
     - hook id: check-xml
     - exit code: 1
+
       invalid_mismatched.xml: Failed to xml parse (ill-formed document: expected `</element>`, but `</different>` was found)
       empty.xml: Failed to xml parse (no element found)
       invalid_unclosed.xml: Failed to xml parse (ill-formed document: expected `</element>`, but `</root>` was found)
@@ -1201,6 +1241,7 @@ fn check_xml_hook() -> Result<()> {
     check xml................................................................Failed
     - hook id: check-xml
     - exit code: 1
+
       empty.xml: Failed to xml parse (no element found)
 
     ----- stderr -----
@@ -1217,8 +1258,7 @@ fn check_xml_with_features() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-xml
     "});
@@ -1276,8 +1316,7 @@ fn no_commit_to_branch_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: no-commit-to-branch
     "});
@@ -1290,17 +1329,18 @@ fn no_commit_to_branch_hook() -> Result<()> {
     context.git_commit("Initial commit");
 
     // Test 1: Try to commit to master branch (should fail)
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'master'
 
     ----- stderr -----
-    "#);
+    ");
 
     // Test 2: Create and switch to a feature branch (should pass)
     context.git_branch("feature/new-feature");
@@ -1326,17 +1366,18 @@ fn no_commit_to_branch_hook() -> Result<()> {
     cwd.child("main.txt").write_str("Main content")?;
     context.git_add(".");
 
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'main'
 
     ----- stderr -----
-    "#);
+    ");
 
     Ok(())
 }
@@ -1349,8 +1390,7 @@ fn no_commit_to_branch_hook_with_custom_branches() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: no-commit-to-branch
                 args: ['--branch', 'develop', '--branch', 'production']
@@ -1380,17 +1420,18 @@ fn no_commit_to_branch_hook_with_custom_branches() -> Result<()> {
     cwd.child("develop.txt").write_str("Develop content")?;
     context.git_add(".");
 
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'develop'
 
     ----- stderr -----
-    "#);
+    ");
 
     // Test 3: Create and switch to production branch (should fail)
     context.git_branch("production");
@@ -1400,17 +1441,18 @@ fn no_commit_to_branch_hook_with_custom_branches() -> Result<()> {
         .write_str("Production content")?;
     context.git_add(".");
 
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'production'
 
     ----- stderr -----
-    "#);
+    ");
 
     Ok(())
 }
@@ -1423,8 +1465,7 @@ fn no_commit_to_branch_hook_with_patterns() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: no-commit-to-branch
                 args: ['--pattern', '^feature/.*', '--pattern', '.*-wip$']
@@ -1438,17 +1479,18 @@ fn no_commit_to_branch_hook_with_patterns() -> Result<()> {
     context.git_commit("Initial commit");
 
     // Test 1: Try to commit to master branch (should fail - If branch is not specified, branch defaults to master and main)
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'master'
 
     ----- stderr -----
-    "#);
+    ");
 
     // Test 2: Create and switch to feature branch (should fail - matches pattern)
     context.git_branch("feature/new-feature");
@@ -1457,17 +1499,18 @@ fn no_commit_to_branch_hook_with_patterns() -> Result<()> {
     cwd.child("feature.txt").write_str("Feature content")?;
     context.git_add(".");
 
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'feature/new-feature'
 
     ----- stderr -----
-    "#);
+    ");
 
     // Test 3: Create and switch to wip branch (should fail - matches pattern)
     context.git_branch("my-branch-wip");
@@ -1476,17 +1519,18 @@ fn no_commit_to_branch_hook_with_patterns() -> Result<()> {
     cwd.child("wip.txt").write_str("WIP content")?;
     context.git_add(".");
 
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     don't commit to branch...................................................Failed
     - hook id: no-commit-to-branch
     - exit code: 1
+
       You are not allowed to commit to branch 'my-branch-wip'
 
     ----- stderr -----
-    "#);
+    ");
 
     // Test 4: Create and switch to normal branch (should pass - doesn't match patterns)
     context.git_branch("normal-branch");
@@ -1519,8 +1563,7 @@ fn no_commit_to_branch_hook_with_patterns() -> Result<()> {
     // Test 6: Try to commit to branch with invalid pattern (should fail - invalid pattern)
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: no-commit-to-branch
                 args: ['--pattern', '*invalid-pattern*']
@@ -1555,8 +1598,7 @@ fn check_executables_have_shebangs_hook() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-executables-have-shebangs
     "});
@@ -1589,13 +1631,14 @@ fn check_executables_have_shebangs_hook() -> Result<()> {
     context.git_add(".");
 
     // First run: should fail for script_without_shebang.sh and empty.sh
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     check that executables have shebangs.....................................Failed
     - hook id: check-executables-have-shebangs
     - exit code: 1
+
       empty.sh marked executable but has no (or invalid) shebang!
         If it isn't supposed to be executable, try: 'chmod -x empty.sh'
         If on Windows, you may also need to: 'git add --chmod=-x empty.sh'
@@ -1606,7 +1649,7 @@ fn check_executables_have_shebangs_hook() -> Result<()> {
         If it is supposed to be executable, double-check its shebang.
 
     ----- stderr -----
-    "#);
+    ");
 
     // Fix the files: remove executable bit or add shebang
     cwd.child("script_without_shebang.sh")
@@ -1642,8 +1685,7 @@ fn check_executables_have_shebangs_win() -> Result<()> {
     let repo_path = context.work_dir();
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-executables-have-shebangs
     "});
@@ -1678,6 +1720,7 @@ fn check_executables_have_shebangs_win() -> Result<()> {
     check that executables have shebangs.....................................Failed
     - hook id: check-executables-have-shebangs
     - exit code: 1
+
       win_script_without_shebang.sh marked executable but has no (or invalid) shebang!
         If it isn't supposed to be executable, try: 'chmod -x win_script_without_shebang.sh'
         If on Windows, you may also need to: 'git add --chmod=-x win_script_without_shebang.sh'
@@ -1698,8 +1741,7 @@ fn check_executables_have_shebangs_various_cases() -> Result<()> {
 
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-executables-have-shebangs
     "});
@@ -1739,13 +1781,14 @@ fn check_executables_have_shebangs_various_cases() -> Result<()> {
     context.git_add(".");
 
     // Run: should fail for partial_shebang.sh, whitespace.sh, invalid_shebang.sh
-    cmd_snapshot!(context.filters(), context.run(), @r#"
+    cmd_snapshot!(context.filters(), context.run(), @r"
     success: false
     exit_code: 1
     ----- stdout -----
     check that executables have shebangs.....................................Failed
     - hook id: check-executables-have-shebangs
     - exit code: 1
+
       partial_shebang.sh marked executable but has no (or invalid) shebang!
         If it isn't supposed to be executable, try: 'chmod -x partial_shebang.sh'
         If on Windows, you may also need to: 'git add --chmod=-x partial_shebang.sh'
@@ -1760,7 +1803,7 @@ fn check_executables_have_shebangs_various_cases() -> Result<()> {
         If it is supposed to be executable, double-check its shebang.
 
     ----- stderr -----
-    "#);
+    ");
 
     // Fix the files: add valid shebangs or remove executable bit
     cwd.child("partial_shebang.sh")
@@ -1793,8 +1836,7 @@ fn check_executables_have_shebangs_various_cases_win() -> Result<()> {
     context.configure_git_author();
     context.write_pre_commit_config(indoc::indoc! {r"
         repos:
-          - repo: https://github.com/pre-commit/pre-commit-hooks
-            rev: v5.0.0
+          - repo: builtin
             hooks:
               - id: check-executables-have-shebangs
     "});
@@ -1835,6 +1877,7 @@ fn check_executables_have_shebangs_various_cases_win() -> Result<()> {
     check that executables have shebangs.....................................Failed
     - hook id: check-executables-have-shebangs
     - exit code: 1
+
       invalid_shebang.sh marked executable but has no (or invalid) shebang!
         If it isn't supposed to be executable, try: 'chmod -x invalid_shebang.sh'
         If on Windows, you may also need to: 'git add --chmod=-x invalid_shebang.sh'

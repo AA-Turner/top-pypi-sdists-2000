@@ -83,7 +83,7 @@ use crate::types::{
     ClassLiteral, ClassType, DeprecatedInstance, DynamicType, FindLegacyTypeVarsVisitor,
     HasRelationToVisitor, IsDisjointVisitor, IsEquivalentVisitor, KnownClass, KnownInstanceType,
     NormalizedVisitor, SpecialFormType, Truthiness, Type, TypeContext, TypeMapping, TypeRelation,
-    UnionBuilder, binding_type, todo_type, walk_signature,
+    UnionBuilder, binding_type, walk_signature,
 };
 use crate::{Db, FxOrderSet, ModuleName, resolve_module};
 
@@ -971,7 +971,7 @@ impl<'db> FunctionType<'db> {
         db: &'db dyn Db,
         other: Self,
         inferable: InferableTypeVars<'_, 'db>,
-        relation: TypeRelation,
+        relation: TypeRelation<'db>,
         relation_visitor: &HasRelationToVisitor<'db>,
         disjointness_visitor: &IsDisjointVisitor<'db>,
     ) -> ConstraintSet<'db> {
@@ -979,8 +979,10 @@ impl<'db> FunctionType<'db> {
         // our representation of a function type includes any specialization that should be applied
         // to the signature. Different specializations of the same function type are only subtypes
         // of each other if they result in subtype signatures.
-        if matches!(relation, TypeRelation::Subtyping | TypeRelation::Redundancy)
-            && self.normalized(db) == other.normalized(db)
+        if matches!(
+            relation,
+            TypeRelation::Subtyping | TypeRelation::Redundancy | TypeRelation::SubtypingAssuming(_)
+        ) && self.normalized(db) == other.normalized(db)
         {
             return ConstraintSet::from(true);
         }
@@ -1150,70 +1152,6 @@ fn is_instance_truthiness<'db>(
     }
 }
 
-/// Return true, if the type passed as `mode` would require us to pick a non-trivial overload of
-/// `builtins.open` / `os.fdopen` / `Path.open`.
-fn is_mode_with_nontrivial_return_type<'db>(db: &'db dyn Db, mode: Type<'db>) -> bool {
-    // Return true for any mode that doesn't match typeshed's
-    // `OpenTextMode` type alias (<https://github.com/python/typeshed/blob/6937a9b193bfc2f0696452d58aad96d7627aa29a/stdlib/_typeshed/__init__.pyi#L220>).
-    mode.as_string_literal().is_none_or(|mode| {
-        !matches!(
-            mode.value(db),
-            "r+" | "+r"
-                | "rt+"
-                | "r+t"
-                | "+rt"
-                | "tr+"
-                | "t+r"
-                | "+tr"
-                | "w+"
-                | "+w"
-                | "wt+"
-                | "w+t"
-                | "+wt"
-                | "tw+"
-                | "t+w"
-                | "+tw"
-                | "a+"
-                | "+a"
-                | "at+"
-                | "a+t"
-                | "+at"
-                | "ta+"
-                | "t+a"
-                | "+ta"
-                | "x+"
-                | "+x"
-                | "xt+"
-                | "x+t"
-                | "+xt"
-                | "tx+"
-                | "t+x"
-                | "+tx"
-                | "w"
-                | "wt"
-                | "tw"
-                | "a"
-                | "at"
-                | "ta"
-                | "x"
-                | "xt"
-                | "tx"
-                | "r"
-                | "rt"
-                | "tr"
-                | "U"
-                | "rU"
-                | "Ur"
-                | "rtU"
-                | "rUt"
-                | "Urt"
-                | "trU"
-                | "tUr"
-                | "Utr"
-        )
-    })
-}
-
 fn signature_cycle_initial<'db>(
     _db: &'db dyn Db,
     _id: salsa::Id,
@@ -1266,16 +1204,6 @@ pub enum KnownFunction {
     DunderImport,
     /// `importlib.import_module`, which returns the submodule.
     ImportModule,
-    /// `builtins.open`
-    Open,
-
-    /// `os.fdopen`
-    Fdopen,
-
-    /// `tempfile.NamedTemporaryFile`
-    #[strum(serialize = "NamedTemporaryFile")]
-    NamedTemporaryFile,
-
     /// `typing(_extensions).final`
     Final,
     /// `typing(_extensions).disjoint_base`
@@ -1374,7 +1302,6 @@ impl KnownFunction {
             | Self::HasAttr
             | Self::Len
             | Self::Repr
-            | Self::Open
             | Self::DunderImport => module.is_builtins(),
             Self::AssertType
             | Self::AssertNever
@@ -1393,12 +1320,6 @@ impl KnownFunction {
             }
             Self::AbstractMethod => {
                 matches!(module, KnownModule::Abc)
-            }
-            Self::Fdopen => {
-                matches!(module, KnownModule::Os)
-            }
-            Self::NamedTemporaryFile => {
-                matches!(module, KnownModule::Tempfile)
             }
             Self::Dataclass | Self::Field => {
                 matches!(module, KnownModule::Dataclasses)
@@ -1493,6 +1414,12 @@ impl KnownFunction {
                         asserted_type = asserted_ty.display(db),
                         inferred_type = actual_ty.display(db),
                     ));
+
+                    diagnostic.set_concise_message(format_args!(
+                        "Type `{}` does not match asserted type `{}`",
+                        asserted_ty.display(db),
+                        actual_ty.display(db),
+                    ));
                 }
             }
 
@@ -1517,6 +1444,11 @@ impl KnownFunction {
                     diagnostic.info(format_args!(
                         "`Never` and `{inferred_type}` are not equivalent types",
                         inferred_type = actual_ty.display(db),
+                    ));
+
+                    diagnostic.set_concise_message(format_args!(
+                        "Type `{}` is not equivalent to `Never`",
+                        actual_ty.display(db),
                     ));
                 }
             }
@@ -1777,14 +1709,21 @@ impl KnownFunction {
                                 // `Any` can be used in `issubclass()` calls but not `isinstance()` calls
                                 Type::SpecialForm(SpecialFormType::Any)
                                     if function == KnownFunction::IsSubclass => {}
-                                Type::KnownInstance(KnownInstanceType::UnionType(union)) => {
-                                    for element in union.elements(db) {
-                                        find_invalid_elements(
-                                            db,
-                                            function,
-                                            *element,
-                                            invalid_elements,
-                                        );
+                                Type::KnownInstance(KnownInstanceType::UnionType(instance)) => {
+                                    match instance.value_expression_types(db) {
+                                        Ok(value_expression_types) => {
+                                            for element in value_expression_types {
+                                                find_invalid_elements(
+                                                    db,
+                                                    function,
+                                                    element,
+                                                    invalid_elements,
+                                                );
+                                            }
+                                        }
+                                        Err(_) => {
+                                            invalid_elements.push(ty);
+                                        }
                                     }
                                 }
                                 _ => invalid_elements.push(ty),
@@ -1869,38 +1808,6 @@ impl KnownFunction {
 
                 overload.set_return_type(Type::module_literal(db, file, module));
             }
-
-            KnownFunction::Open => {
-                // TODO: Temporary special-casing for `builtins.open` to avoid an excessive number of
-                // false positives in lieu of proper support for PEP-613 type aliases.
-                if let [_, Some(mode), ..] = parameter_types
-                    && is_mode_with_nontrivial_return_type(db, *mode)
-                {
-                    overload.set_return_type(todo_type!("`builtins.open` return type"));
-                }
-            }
-
-            KnownFunction::Fdopen => {
-                // TODO: Temporary special-casing for `os.fdopen` to avoid an excessive number of
-                // false positives in lieu of proper support for PEP-613 type aliases.
-                if let [_, Some(mode), ..] = parameter_types
-                    && is_mode_with_nontrivial_return_type(db, *mode)
-                {
-                    overload.set_return_type(todo_type!("`os.fdopen` return type"));
-                }
-            }
-
-            KnownFunction::NamedTemporaryFile => {
-                // TODO: Temporary special-casing for `tempfile.NamedTemporaryFile` to avoid an excessive number of
-                // false positives in lieu of proper support for PEP-613 type aliases.
-                if let [Some(mode), ..] = parameter_types
-                    && is_mode_with_nontrivial_return_type(db, *mode)
-                {
-                    overload
-                        .set_return_type(todo_type!("`tempfile.NamedTemporaryFile` return type"));
-                }
-            }
-
             _ => {}
         }
     }
@@ -1927,14 +1834,9 @@ pub(crate) mod tests {
                 | KnownFunction::IsInstance
                 | KnownFunction::HasAttr
                 | KnownFunction::IsSubclass
-                | KnownFunction::Open
                 | KnownFunction::DunderImport => KnownModule::Builtins,
 
                 KnownFunction::AbstractMethod => KnownModule::Abc,
-
-                KnownFunction::Fdopen => KnownModule::Os,
-
-                KnownFunction::NamedTemporaryFile => KnownModule::Tempfile,
 
                 KnownFunction::Dataclass | KnownFunction::Field => KnownModule::Dataclasses,
 

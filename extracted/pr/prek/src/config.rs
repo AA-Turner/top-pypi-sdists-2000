@@ -2,7 +2,6 @@ use std::collections::BTreeMap;
 use std::fmt::Display;
 use std::ops::{Deref, RangeInclusive};
 use std::path::Path;
-use std::str::FromStr;
 use std::sync::LazyLock;
 
 use anyhow::Result;
@@ -11,6 +10,7 @@ use itertools::Itertools;
 use prek_consts::{ALT_CONFIG_FILE, CONFIG_FILE};
 use rustc_hash::FxHashMap;
 use serde::{Deserialize, Deserializer, Serialize};
+use tracing::instrument;
 
 use crate::fs::Simplified;
 use crate::version;
@@ -18,7 +18,7 @@ use crate::warn_user;
 use crate::{identify, yaml};
 
 #[derive(Clone)]
-pub struct SerdeRegex(Regex);
+pub(crate) struct SerdeRegex(Regex);
 
 impl Deref for SerdeRegex {
     type Target = Regex;
@@ -45,7 +45,7 @@ impl<'de> Deserialize<'de> for SerdeRegex {
     }
 }
 
-static CONFIG_FILE_REGEX: LazyLock<SerdeRegex> = LazyLock::new(|| {
+pub(crate) static CONFIG_FILE_REGEX: LazyLock<SerdeRegex> = LazyLock::new(|| {
     let pattern = format!(
         "^{}|{}$",
         fancy_regex::escape(CONFIG_FILE),
@@ -116,7 +116,7 @@ impl Display for Language {
 
 #[derive(Debug, Clone, Copy, Default, Deserialize, clap::ValueEnum)]
 #[serde(rename_all = "kebab-case")]
-pub enum HookType {
+pub(crate) enum HookType {
     CommitMsg,
     PostCheckout,
     PostCommit,
@@ -173,7 +173,7 @@ impl Display for HookType {
     Debug, Clone, Copy, PartialEq, Eq, Default, Hash, Deserialize, Serialize, clap::ValueEnum,
 )]
 #[serde(rename_all = "kebab-case")]
-pub enum Stage {
+pub(crate) enum Stage {
     Manual,
     CommitMsg,
     PostCheckout,
@@ -248,7 +248,7 @@ impl Stage {
 
 /// Common hook options.
 #[derive(Debug, Clone, Default, Deserialize)]
-pub struct HookOptions {
+pub(crate) struct HookOptions {
     /// Not documented in the official docs.
     pub alias: Option<String>,
     /// The pattern of files to run on.
@@ -299,9 +299,12 @@ pub struct HookOptions {
     /// Print the output of the hook even if it passes.
     /// Default is false.
     pub verbose: Option<bool>,
+    /// The minimum version of prek required to run this hook.
+    #[serde(deserialize_with = "deserialize_and_validate_minimum_version", default)]
+    pub minimum_prek_version: Option<String>,
     #[serde(skip_serializing)]
     #[serde(flatten)]
-    _unused_keys: BTreeMap<String, serde_json::Value>,
+    pub _unused_keys: BTreeMap<String, serde_json::Value>,
 }
 
 impl HookOptions {
@@ -334,13 +337,14 @@ impl HookOptions {
             require_serial,
             stages,
             verbose,
+            minimum_prek_version,
         );
     }
 }
 
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub struct ManifestHook {
+pub(crate) struct ManifestHook {
     /// The id of the hook.
     pub id: String,
     /// The name of the hook.
@@ -356,7 +360,7 @@ pub struct ManifestHook {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "snake_case")]
 #[serde(transparent)]
-pub struct Manifest {
+pub(crate) struct Manifest {
     pub hooks: Vec<ManifestHook>,
 }
 
@@ -365,7 +369,7 @@ pub struct Manifest {
 /// All keys in manifest hook dict are valid in a config hook dict, but are optional.
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub struct RemoteHook {
+pub(crate) struct RemoteHook {
     /// The id of the hook.
     pub id: String,
     /// Override the name of the hook.
@@ -381,103 +385,41 @@ pub struct RemoteHook {
 /// A local hook in the configuration file.
 ///
 /// It's the same as the manifest hook definition.
-pub type LocalHook = ManifestHook;
-
-#[derive(Debug, Copy, Clone, Deserialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum MetaHookID {
-    CheckHooksApply,
-    CheckUselessExcludes,
-    Identity,
-}
-
-impl Display for MetaHookID {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let name = match self {
-            MetaHookID::CheckHooksApply => "check-hooks-apply",
-            MetaHookID::CheckUselessExcludes => "check-useless-excludes",
-            MetaHookID::Identity => "identity",
-        };
-        f.write_str(name)
-    }
-}
-
-impl FromStr for MetaHookID {
-    type Err = ();
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        match s {
-            "check-hooks-apply" => Ok(MetaHookID::CheckHooksApply),
-            "check-useless-excludes" => Ok(MetaHookID::CheckUselessExcludes),
-            "identity" => Ok(MetaHookID::Identity),
-            _ => Err(()),
-        }
-    }
-}
+pub(crate) type LocalHook = ManifestHook;
 
 /// A meta hook predefined in pre-commit.
 ///
 /// It's the same as the manifest hook definition but with only a few predefined id allowed.
 #[derive(Debug, Clone)]
-pub struct MetaHook(pub(crate) ManifestHook);
+pub(crate) struct MetaHook(pub(crate) ManifestHook);
 
 impl<'de> Deserialize<'de> for MetaHook {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: Deserializer<'de>,
     {
-        let hook = RemoteHook::deserialize(deserializer)?;
-
-        let id = MetaHookID::from_str(&hook.id).map_err(|()| {
-            serde::de::Error::custom(format!("unknown meta hook id `{}`", &hook.id))
+        let hook_options = RemoteHook::deserialize(deserializer)?;
+        let mut meta_hook = MetaHook::from_id(&hook_options.id).map_err(|()| {
+            serde::de::Error::custom(format!("unknown meta hook id `{}`", &hook_options.id))
         })?;
-        if hook.language.is_some_and(|l| l != Language::System) {
+
+        if hook_options.language.is_some_and(|l| l != Language::System) {
             return Err(serde::de::Error::custom(
                 "language must be `system` for meta hooks",
             ));
         }
-        if hook.entry.is_some() {
+        if hook_options.entry.is_some() {
             return Err(serde::de::Error::custom(
                 "entry is not allowed for meta hooks",
             ));
         }
 
-        let mut defaults = match id {
-            MetaHookID::CheckHooksApply => ManifestHook {
-                id: MetaHookID::CheckHooksApply.to_string(),
-                name: "Check hooks apply".to_string(),
-                language: Language::System,
-                entry: String::new(),
-                options: HookOptions {
-                    files: Some(CONFIG_FILE_REGEX.clone()),
-                    ..Default::default()
-                },
-            },
-            MetaHookID::CheckUselessExcludes => ManifestHook {
-                id: MetaHookID::CheckUselessExcludes.to_string(),
-                name: "Check useless excludes".to_string(),
-                language: Language::System,
-                entry: String::new(),
-                options: HookOptions {
-                    files: Some(CONFIG_FILE_REGEX.clone()),
-                    ..Default::default()
-                },
-            },
-            MetaHookID::Identity => ManifestHook {
-                id: MetaHookID::Identity.to_string(),
-                name: "identity".to_string(),
-                language: Language::System,
-                entry: String::new(),
-                options: HookOptions {
-                    verbose: Some(true),
-                    ..Default::default()
-                },
-            },
-        };
+        if let Some(name) = &hook_options.name {
+            meta_hook.0.name.clone_from(name);
+        }
+        meta_hook.0.options.update(&hook_options.options);
 
-        defaults.options.update(&hook.options);
-
-        Ok(MetaHook(defaults))
+        Ok(meta_hook)
     }
 }
 
@@ -487,8 +429,49 @@ impl From<MetaHook> for ManifestHook {
     }
 }
 
+/// A builtin hook predefined in prek.
+/// Basically the same as meta hooks, but defined under `builtin` repo, and do other non-meta checks.
+#[derive(Debug, Clone)]
+pub(crate) struct BuiltinHook(pub(crate) ManifestHook);
+
+impl<'de> Deserialize<'de> for BuiltinHook {
+    fn deserialize<D>(deserializer: D) -> std::result::Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let hook_options = RemoteHook::deserialize(deserializer)?;
+        let mut builtin_hook = BuiltinHook::from_id(&hook_options.id).map_err(|()| {
+            serde::de::Error::custom(format!("unknown builtin hook id `{}`", &hook_options.id))
+        })?;
+
+        if hook_options.language.is_some_and(|l| l != Language::System) {
+            return Err(serde::de::Error::custom(
+                "language must be `system` for builtin hooks",
+            ));
+        }
+        if hook_options.entry.is_some() {
+            return Err(serde::de::Error::custom(
+                "entry is not allowed for builtin hooks",
+            ));
+        }
+
+        if let Some(name) = &hook_options.name {
+            builtin_hook.0.name.clone_from(name);
+        }
+        builtin_hook.0.options.update(&hook_options.options);
+
+        Ok(builtin_hook)
+    }
+}
+
+impl From<BuiltinHook> for ManifestHook {
+    fn from(hook: BuiltinHook) -> Self {
+        hook.0
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RemoteRepo {
+pub(crate) struct RemoteRepo {
     pub repo: String,
     pub rev: String,
     #[serde(skip_serializing)]
@@ -532,7 +515,7 @@ impl Display for RemoteRepo {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct LocalRepo {
+pub(crate) struct LocalRepo {
     pub repo: String,
     pub hooks: Vec<LocalHook>,
     #[serde(skip_serializing)]
@@ -547,7 +530,7 @@ impl Display for LocalRepo {
 }
 
 #[derive(Debug, Clone, Deserialize)]
-pub struct MetaRepo {
+pub(crate) struct MetaRepo {
     pub repo: String,
     pub hooks: Vec<MetaHook>,
     #[serde(skip_serializing)]
@@ -561,11 +544,21 @@ impl Display for MetaRepo {
     }
 }
 
+#[derive(Debug, Clone, Deserialize)]
+pub(crate) struct BuiltinRepo {
+    pub repo: String,
+    pub hooks: Vec<BuiltinHook>,
+    #[serde(skip_serializing)]
+    #[serde(flatten)]
+    _unused_keys: BTreeMap<String, serde_json::Value>,
+}
+
 #[derive(Debug, Clone)]
-pub enum Repo {
+pub(crate) enum Repo {
     Remote(RemoteRepo),
     Local(LocalRepo),
     Meta(MetaRepo),
+    Builtin(BuiltinRepo),
 }
 
 impl<'de> Deserialize<'de> for Repo {
@@ -591,6 +584,11 @@ impl<'de> Deserialize<'de> for Repo {
                     .map_err(|e| serde::de::Error::custom(format!("Invalid meta repo: {e}")))?;
                 Ok(Repo::Meta(repo))
             }
+            "builtin" => {
+                let repo = BuiltinRepo::deserialize(repo_wire)
+                    .map_err(|e| serde::de::Error::custom(format!("Invalid builtin repo: {e}")))?;
+                Ok(Repo::Builtin(repo))
+            }
             _ => {
                 let repo = RemoteRepo::deserialize(repo_wire)
                     .map_err(|e| serde::de::Error::custom(format!("Invalid remote repo: {e}")))?;
@@ -604,7 +602,7 @@ impl<'de> Deserialize<'de> for Repo {
 // TODO: warn sensible regex
 #[derive(Debug, Clone, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub struct Config {
+pub(crate) struct Config {
     pub repos: Vec<Repo>,
     /// A list of `--hook-types` which will be used by default when running `prek install`.
     /// Default is `[pre-commit]`.
@@ -631,7 +629,7 @@ pub struct Config {
 }
 
 #[derive(Debug, thiserror::Error)]
-pub enum Error {
+pub(crate) enum Error {
     #[error("Config file not found: {0}")]
     NotFound(String),
 
@@ -722,6 +720,21 @@ fn collect_unused_paths(config: &Config) -> Vec<String> {
                     );
                 }
             }
+            Repo::Builtin(builtin) => {
+                push_unused_paths(
+                    &mut paths,
+                    &repo_prefix,
+                    builtin._unused_keys.keys().map(String::as_str),
+                );
+                for (hook_idx, hook) in builtin.hooks.iter().enumerate() {
+                    let hook_prefix = format!("{repo_prefix}.hooks[{hook_idx}]");
+                    push_unused_paths(
+                        &mut paths,
+                        &hook_prefix,
+                        hook.0.options._unused_keys.keys().map(String::as_str),
+                    );
+                }
+            }
         }
     }
 
@@ -755,7 +768,7 @@ fn warn_unused_paths(path: &Path, entries: &[String]) {
 }
 
 /// Read the configuration file from the given path.
-pub fn read_config(path: &Path) -> Result<Config, Error> {
+pub(crate) fn load_config(path: &Path) -> Result<Config, Error> {
     let content = match fs_err::read_to_string(path) {
         Ok(content) => content,
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => {
@@ -772,6 +785,14 @@ pub fn read_config(path: &Path) -> Result<Config, Error> {
 
     let config: Config = serde_yaml::from_value(config)
         .map_err(|e| Error::Yaml(path.user_display().to_string(), e))?;
+
+    Ok(config)
+}
+
+/// Read the configuration file from the given path, and warn about certain issues.
+#[instrument(level = "trace")]
+pub(crate) fn read_config(path: &Path) -> Result<Config, Error> {
+    let config = load_config(path)?;
 
     let unused_paths = collect_unused_paths(&config);
     warn_unused_paths(path, &unused_paths);
@@ -817,7 +838,7 @@ pub fn read_config(path: &Path) -> Result<Config, Error> {
 }
 
 /// Read the manifest file from the given path.
-pub fn read_manifest(path: &Path) -> Result<Manifest, Error> {
+pub(crate) fn read_manifest(path: &Path) -> Result<Manifest, Error> {
     let content = fs_err::read_to_string(path)?;
     let manifest = serde_yaml::from_str(&content)
         .map_err(|e| Error::Yaml(path.user_display().to_string(), e))?;
@@ -923,6 +944,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -997,6 +1019,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -1096,6 +1119,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -1209,6 +1233,7 @@ mod tests {
                                             require_serial: None,
                                             stages: None,
                                             verbose: None,
+                                            minimum_prek_version: None,
                                             _unused_keys: {},
                                         },
                                     },
@@ -1241,6 +1266,7 @@ mod tests {
                                             require_serial: None,
                                             stages: None,
                                             verbose: None,
+                                            minimum_prek_version: None,
                                             _unused_keys: {},
                                         },
                                     },
@@ -1271,6 +1297,7 @@ mod tests {
                                             verbose: Some(
                                                 true,
                                             ),
+                                            minimum_prek_version: None,
                                             _unused_keys: {},
                                         },
                                     },
@@ -1349,6 +1376,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -1377,6 +1405,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -1405,6 +1434,7 @@ mod tests {
                                         require_serial: None,
                                         stages: None,
                                         verbose: None,
+                                        minimum_prek_version: None,
                                         _unused_keys: {},
                                     },
                                 },
@@ -1485,6 +1515,19 @@ mod tests {
             minimum_prek_version: '10.0.0'
         "};
         let result = serde_yaml::from_str::<Config>(yaml);
+        assert!(result.is_err());
+
+        // Test that valid minimum_prek_version field works in hook config
+        let yaml = indoc::indoc! {r"
+          - repo: local
+            hooks:
+              - id: test-hook
+                name: Test Hook
+                entry: echo test
+                language: system
+                minimum_prek_version: '10.0.0'
+        "};
+        let result = serde_yaml::from_str::<Manifest>(yaml);
         assert!(result.is_err());
     }
 
@@ -1645,6 +1688,7 @@ mod tests {
                                     require_serial: None,
                                     stages: None,
                                     verbose: None,
+                                    minimum_prek_version: None,
                                     _unused_keys: {},
                                 },
                             },
@@ -1676,6 +1720,7 @@ mod tests {
                                     require_serial: None,
                                     stages: None,
                                     verbose: None,
+                                    minimum_prek_version: None,
                                     _unused_keys: {},
                                 },
                             },
@@ -1761,6 +1806,7 @@ mod tests {
                                         ],
                                     ),
                                     verbose: None,
+                                    minimum_prek_version: None,
                                     _unused_keys: {},
                                 },
                             },

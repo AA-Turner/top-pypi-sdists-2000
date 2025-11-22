@@ -378,6 +378,7 @@ class DocumentDBEventSourceConfigTypeDef(TypedDict):
 class ProvisionedPollerConfigTypeDef(TypedDict):
     MinimumPollers: NotRequired[int]
     MaximumPollers: NotRequired[int]
+    PollerGroupName: NotRequired[str]
 
 
 class ScalingConfigTypeDef(TypedDict):

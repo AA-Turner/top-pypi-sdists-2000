@@ -381,6 +381,8 @@ __all__ = (
     "InternetGatewayBlockModeType",
     "InternetGatewayExclusionModeType",
     "InternetGatewayExistsWaiterName",
+    "InterruptibleCapacityReservationAllocationStatusType",
+    "InterruptionTypeType",
     "IpAddressTypeType",
     "IpSourceType",
     "IpamAddressHistoryResourceTypeType",
@@ -1325,7 +1327,9 @@ InstanceGenerationType = Literal["current", "previous"]
 InstanceHealthStatusType = Literal["healthy", "unhealthy"]
 InstanceInterruptionBehaviorType = Literal["hibernate", "stop", "terminate"]
 InstanceLifecycleType = Literal["on-demand", "spot"]
-InstanceLifecycleTypeType = Literal["capacity-block", "scheduled", "spot"]
+InstanceLifecycleTypeType = Literal[
+    "capacity-block", "interruptible-capacity-reservation", "scheduled", "spot"
+]
 InstanceMatchCriteriaType = Literal["open", "targeted"]
 InstanceMetadataEndpointStateType = Literal["disabled", "enabled"]
 InstanceMetadataOptionsStateType = Literal["applied", "pending"]
@@ -2433,6 +2437,10 @@ InterfaceProtocolTypeType = Literal["GRE", "VLAN"]
 InternetGatewayBlockModeType = Literal["block-bidirectional", "block-ingress", "off"]
 InternetGatewayExclusionModeType = Literal["allow-bidirectional", "allow-egress"]
 InternetGatewayExistsWaiterName = Literal["internet_gateway_exists"]
+InterruptibleCapacityReservationAllocationStatusType = Literal[
+    "active", "canceled", "canceling", "failed", "pending", "updating"
+]
+InterruptionTypeType = Literal["adhoc"]
 IpAddressTypeType = Literal["dualstack", "ipv4", "ipv6"]
 IpSourceType = Literal["amazon", "byoip", "none"]
 IpamAddressHistoryResourceTypeType = Literal[
@@ -2660,7 +2668,7 @@ MacModificationTaskStateType = Literal["failed", "in-progress", "pending", "succ
 MacModificationTaskTypeType = Literal["sip-modification", "volume-ownership-delegation"]
 MacSystemIntegrityProtectionSettingStatusType = Literal["disabled", "enabled"]
 ManagedByType = Literal["account", "declarative-policy"]
-MarketTypeType = Literal["capacity-block", "spot"]
+MarketTypeType = Literal["capacity-block", "interruptible-capacity-reservation", "spot"]
 MembershipTypeType = Literal["igmp", "static"]
 MetadataDefaultHttpTokensStateType = Literal["no-preference", "optional", "required"]
 MetricType = Literal[
@@ -3332,6 +3340,7 @@ ServiceName = Literal[
     "comprehend",
     "comprehendmedical",
     "compute-optimizer",
+    "compute-optimizer-automation",
     "config",
     "connect",
     "connect-contact-lens",
