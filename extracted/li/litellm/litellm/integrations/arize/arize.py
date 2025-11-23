@@ -48,6 +48,7 @@ class ArizeLogger(OpenTelemetry):
         Raises:
             ValueError: If required environment variables are not set.
         """
+        space_id = os.environ.get("ARIZE_SPACE_ID")
         space_key = os.environ.get("ARIZE_SPACE_KEY")
         api_key = os.environ.get("ARIZE_API_KEY")
 
@@ -68,6 +69,7 @@ class ArizeLogger(OpenTelemetry):
             endpoint = "https://otlp.arize.com/v1"
 
         return ArizeConfig(
+            space_id=space_id,
             space_key=space_key,
             api_key=api_key,
             protocol=protocol,
@@ -115,9 +117,13 @@ class ArizeLogger(OpenTelemetry):
         try:
             config = self.get_arize_config()
 
-            if not config.space_key:
+            # Prefer ARIZE_SPACE_KEY, but fall back to ARIZE_SPACE_ID for backwards compatibility
+            effective_space_key = config.space_key or config.space_id
+
+            if not effective_space_key:
                 return {
                     "status": "unhealthy",
+                    # Tests (and users) expect the error message to reference ARIZE_SPACE_KEY
                     "error_message": "ARIZE_SPACE_KEY environment variable not set",
                 }
 
