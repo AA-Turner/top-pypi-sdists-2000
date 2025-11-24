@@ -5,9 +5,11 @@ import os
 import re
 import sys
 import json
+import stat
 import shutil
 import tarfile
 import platform
+import argparse
 import functools
 import sysconfig
 import subprocess
@@ -23,6 +25,14 @@ if sys.version_info < (3, 8):
 else:
     cached_property = functools.cached_property
 
+if sys.version_info < (3, 8):
+    class ExtendAction (argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            items = getattr(namespace, self.dest) or []
+            items.extend(values)
+            setattr(namespace, self.dest, items)
+else:
+    ExtendAction = None
 
 PDFIUM_MIN_REQ = 6635
 
@@ -52,7 +62,7 @@ ProjectDir        = Path(__file__).parents[1].resolve()
 DataDir           = ProjectDir / "data"
 DataDir_Bindings  = DataDir / "bindings"
 BindingsFile      = DataDir_Bindings / BindingsFN
-PatchDir          = ProjectDir / "pdfium_patches"
+PatchDir          = ProjectDir / "patches"
 ModuleDir_Raw     = ProjectDir / "src" / "pypdfium2_raw"
 ModuleDir_Helpers = ProjectDir / "src" / "pypdfium2"
 Changelog         = ProjectDir / "docs" / "devel" / "changelog.md"
@@ -114,8 +124,8 @@ class PlatNames:
     linux_musl_arm64 = SysNames.linux   + "_musl_arm64"
     android_arm64    = SysNames.android + "_arm64"       # device
     android_arm32    = SysNames.android + "_arm32"       # device
-    android_x64      = SysNames.android + "_x64"         # emulator
-    android_x86      = SysNames.android + "_x86"         # emulator
+    android_x64      = SysNames.android + "_x64"         # simulator
+    android_x86      = SysNames.android + "_x86"         # simulator
     ios_arm64_dev    = SysNames.ios     + "_arm64_dev"   # device
     ios_arm64_simu   = SysNames.ios     + "_arm64_simu"  # simulator
     ios_x64_simu     = SysNames.ios     + "_x64_simu"    # simulator
@@ -271,7 +281,7 @@ class _PdfiumVerClass:
     @cached_property
     def pinned(self):
         # comments are not permitted in JSON, so the reason for the post_pdfium pin (if set) goes here:
-        # verification requires pdfium-binaries >= 7415
+        # (not currently pinned)
         record = read_json(AR_RecordFile)
         return record["post_pdfium"] or record["pdfium"]
 
@@ -403,7 +413,6 @@ def _get_libc_info():
     
     name, ver = platform.libc_ver()
     if name.startswith("musl"):
-        # try to be future proof in case libc_ver() gets musl support but uses "muslc" rather than just "musl"
         name = "musl"
     elif name == "":
         import packaging._musllinux
@@ -468,6 +477,19 @@ class _host_platform:
             usr = os.getenv("PREFIX", "/data/data/com.termux/files/usr")
         return Path(usr)
     
+    @cached_property
+    def local_bin(self):
+        # Path.home()/".local"/"bin"
+        if sys.version_info >= (3, 10):
+            user_scheme = sysconfig.get_preferred_scheme("user")
+        elif os.name == "nt":
+            user_scheme = "nt_user"
+        elif sys.platform.startswith("darwin") and getattr(sys, "_framework", None):
+            user_scheme = "osx_framework_user"
+        else:
+            user_scheme = "posix_user"
+        return Path( sysconfig.get_path("scripts", scheme=user_scheme) )
+    
     def __repr__(self):
         info = f"{self._raw_system} {self._raw_machine}"
         if self._raw_system == "linux" and self._libc_name:
@@ -498,9 +520,6 @@ class _host_platform:
                 return PlatNames.darwin_x64
             elif self._raw_machine == "arm64":
                 return PlatNames.darwin_arm64
-            # see e.g. the table in https://github.com/pypa/packaging.python.org/pull/1804
-            elif self._raw_machine in ("i386", "ppc", "ppc64"):
-                raise RuntimeError(f"Unsupported legacy mac architecture: {self._raw_machine!r}")
         
         elif self._raw_system == "windows":
             self._system = SysNames.windows
@@ -565,7 +584,7 @@ def _manylinux_tag(arch, glibc="2_17"):
 def get_wheel_tag(pl_name):
     
     if pl_name == PlatNames.darwin_x64:
-        # pdfium-binaries/steps/05-configure.sh defines `mac_deployment_target = "11.0.0"`
+        # AOTW, pdfium-binaries/steps/05-configure.sh defines mac_deployment_target = "11.0.0"
         return "macosx_11_0_x86_64"
     elif pl_name == PlatNames.darwin_arm64:
         # macOS 11 is the first version available on arm64
@@ -590,23 +609,26 @@ def get_wheel_tag(pl_name):
     elif pl_name == PlatNames.linux_arm32:
         return _manylinux_tag("armv7l")
     
+    # pdfium-binaries statically link musl, so we can declare the lowest possible requirement.
+    # The builds have been confirmed to work in a musllinux_1_1 container, as of Nov 2025.
     elif pl_name == PlatNames.linux_musl_x64:
-        return "musllinux_1_2_x86_64"
+        return "musllinux_1_1_x86_64"
     elif pl_name == PlatNames.linux_musl_x86:
-        return "musllinux_1_2_i686"
+        return "musllinux_1_1_i686"
     elif pl_name == PlatNames.linux_musl_arm64:
-        return "musllinux_1_2_aarch64"
+        return "musllinux_1_1_aarch64"
     
     # Android - see PEP 738 # Packaging
     # We don't currently publish wheels for Android, but handle it in case we want to in the future (or if callers want to build their own wheels)
+    # AOTW, pdfium-binaries/steps/05-configure.sh defines default_min_sdk_version = 23
     elif pl_name == PlatNames.android_arm64:
-        return "android_21_arm64_v8a"
+        return "android_23_arm64_v8a"
     elif pl_name == PlatNames.android_arm32:
-        return "android_21_armeabi_v7a"
+        return "android_23_armeabi_v7a"
     elif pl_name == PlatNames.android_x64:
-        return "android_21_x86_64"
+        return "android_23_x86_64"
     elif pl_name == PlatNames.android_x86:
-        return "android_21_x86"
+        return "android_23_x86"
     
     # iOS - see PEP 730 # Packaging
     # We do not currently build wheels for iOS, but again, add the handlers so it could be done on demand. Bear in mind that the resulting iOS packages are currently completely untested. In particular, the PEP says
@@ -870,6 +892,16 @@ def git_apply_patch(patch, cwd, git_args=()):
     run_cmd(["git", *git_args, "apply", "--ignore-space-change", "--ignore-whitespace", "-v", patch], cwd=cwd, check=True)
 
 
+def git_clone_rev(url, rev, target_dir, depth=1):
+    # https://stackoverflow.com/questions/31278902/how-to-shallow-clone-a-specific-commit-with-depth-1
+    mkdir(target_dir)
+    depth_param = ["--depth", str(depth)] if depth else []
+    run_cmd(["git", "-c", "advice.defaultBranchName=false", "init"], cwd=target_dir)
+    run_cmd(["git", "remote", "add", "origin", url], cwd=target_dir)
+    run_cmd(["git", "fetch", *depth_param, "origin", rev], cwd=target_dir)
+    run_cmd(["git", "-c", "advice.detachedHead=false", "checkout", "FETCH_HEAD"], cwd=target_dir)
+
+
 def _to_gn(value):
     if isinstance(value, bool):
         return str(value).lower()
@@ -957,3 +989,41 @@ def pack_sourcebuild(
     write_pdfium_info(dest_dir, full_ver, origin=f"sourcebuild-{sub_target}", **post_ver)
     
     return full_ver, post_ver
+
+
+def bootstrap_ninja(skip_if_present=True):
+    if skip_if_present and shutil.which("ninja"):
+        return
+    # https://github.com/scikit-build/ninja-python-distributions
+    run_cmd([sys.executable, "-m", "pip", "install", "ninja"], cwd=None)
+
+def make_executable(path):
+    if sys.platform.startswith("win32"):
+        return
+    path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+def bootstrap_gn(target_dir=None, skip_if_present=True):
+    if skip_if_present and shutil.which("gn"):
+        return
+    
+    if target_dir is None:
+        target_dir = Host.local_bin
+    
+    gn_dir = ProjectDir/"sbuild"/"gn"
+    url = "https://gn.googlesource.com/gn/"
+    rev = "a0c5124a50608595a9aadebc4297e854ebd32c53"
+    if not gn_dir.exists():
+        git_clone_rev(url, rev, gn_dir, depth=1)
+        git_apply_patch(PatchDir/"gn_build.patch", cwd=gn_dir)
+    
+    os.environ["CXX"] = "g++"
+    run_cmd(["python3", "build/gen.py", "--no-last-commit-position", "--no-static-libstdc++", "--allow-warnings"], cwd=gn_dir)
+    run_cmd(["ninja", "-C", "out", "gn"], cwd=gn_dir)
+    del os.environ["CXX"]
+    
+    shutil.copyfile(gn_dir/"out"/"gn", target_dir/"gn")
+    make_executable(target_dir/"gn")
+
+def bootstrap_buildtools():
+    bootstrap_ninja()
+    bootstrap_gn()

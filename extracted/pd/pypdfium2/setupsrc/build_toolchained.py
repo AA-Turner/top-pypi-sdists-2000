@@ -2,9 +2,6 @@
 # SPDX-FileCopyrightText: 2025 geisserml <geisserml@gmail.com>
 # SPDX-License-Identifier: Apache-2.0 OR BSD-3-Clause
 
-# This script has been tested on Linux/macOS/Windows x86_64 on GH Actions CI
-# However, it does not currently work on Linux aarch64 natively, since Google's toolchain doesn't seem to support that. Cross-compilation (by setting target_cpu in config) should work, though.
-
 import os
 import sys
 import argparse
@@ -17,6 +14,8 @@ DepotToolsDir  = SBDir / "depot_tools"
 PDFiumDir      = SBDir / "pdfium"
 PDFiumOutDir = PDFiumDir / "out" / "Default"
 
+DEFAULT_MODE = Host.platform == PlatNames.linux_x64 or Host.system in (SysNames.windows, SysNames.darwin)
+PORTABLE_MODE = not DEFAULT_MODE
 
 # run `gn args --list out/Default/` for build config docs
 
@@ -31,18 +30,16 @@ DefaultConfig = {
     "pdf_enable_xfa": False,
     "pdf_use_skia": False,
 }
-
-SyslibsConfig = {
-    "use_sysroot": False,
-    "clang_use_chrome_plugins": False,
-    "use_system_freetype": True,
-    "use_system_lcms2": True,
-    "use_system_libjpeg": True,
-    "use_system_libopenjpeg2": True,
-    "use_system_libpng": True,
-    "use_system_zlib": True,
-    "use_system_libtiff": True,
-}
+if PORTABLE_MODE:
+    # TODO Would be great if we could enable the sysroot where available, to lower glibc requirement. However, this seems to conflict with the gcc/system libcxx options.
+    DefaultConfig.update({
+        "use_sysroot": False,
+        "clang_use_chrome_plugins": False,
+        # clang may or may not be available for the host in question, so let's just use GCC
+        "is_clang": False,
+        "use_custom_libcxx": False,
+        "use_libcxx_modules": False,
+    })
 
 if sys.platform.startswith("darwin"):
     DefaultConfig["mac_deployment_target"] = "11.0.0"
@@ -65,8 +62,6 @@ def dl_depottools(do_update):
         log("DepotTools: Download ...")
         run_cmd(["git", "clone", "--depth", "1", DepotToolsURL, DepotToolsDir], cwd=SBDir)
     
-    os.environ["PATH"] = str(DepotToolsDir) + os.pathsep + os.environ["PATH"]
-    
     return is_update
 
 
@@ -74,6 +69,9 @@ def dl_pdfium(GClient, do_update, revision, target_os):
     
     had_pdfium = PDFiumDir.exists()
     if not had_pdfium or (target_os and do_update):
+        if PORTABLE_MODE:
+            run_cmd([sys.executable, "-m", "pip", "install", "httplib2==0.22.0"], cwd=None)
+            bootstrap_buildtools()
         log("PDFium: configure ...")
         do_update = True
         extra_vars = []
@@ -82,15 +80,15 @@ def dl_pdfium(GClient, do_update, revision, target_os):
             # > By default, don't check out android. Will be overridden by gclient variables.
             # > TODO(crbug.com/875037): Remove this once the bug in gclient is fixed.
             extra_vars += ["--custom-var", "checkout_android=True"]
-        run_cmd([GClient, "config", "--custom-var", "checkout_configuration=minimal", *extra_vars, "--unmanaged", PdfiumURL], cwd=SBDir)
+        run_cmd([*GClient, "config", "--custom-var", "checkout_configuration=minimal", *extra_vars, "--unmanaged", PdfiumURL], cwd=SBDir, check=DEFAULT_MODE)
     
     if do_update:
         log("PDFium: download/sync ...")
-        args = [GClient, "sync"]
+        args = [*GClient, "sync"]
         if had_pdfium:
             args += ["-D", "--reset"]
         args += ["--revision", f"origin/{revision}", "--no-history", "--shallow"]
-        run_cmd(args, cwd=SBDir)
+        run_cmd(args, cwd=SBDir, check=DEFAULT_MODE)
     
     return do_update
 
@@ -113,38 +111,52 @@ def patch_pdfium(build_ver, target_os):
         git_apply_patch(PatchDir/"win"/"use_resources_rc.patch", PDFiumDir)
         git_apply_patch(PatchDir/"win"/"build.patch", PDFiumDir/"build")
         _create_resources_rc(build_ver)
+        if Host._raw_machine == "arm64":
+            git_apply_patch(PatchDir/"win"/"arm64_native.patch", PDFiumDir/"build")
     if target_os == "android":
         # without this patch, we end up with a tiny binary that has no symbols
         git_apply_patch(PatchDir/"android_crossbuild.patch", PDFiumDir/"build")
+    if PORTABLE_MODE:
+        # apply patch for older GN
+        git_apply_patch(PatchDir/"legacy_gn.patch", PDFiumDir/"build")
 
 
 def get_tool(name):
-    bin = DepotToolsDir / name
-    if sys.platform.startswith("win32"):
-        bin = bin.with_suffix(".bat")
-    return bin
+    if PORTABLE_MODE:
+        if name == "gclient":
+            args = (sys.executable, DepotToolsDir/f"{name}.py")
+        else:
+            args = (name, )
+    else:
+        bin = DepotToolsDir/name
+        if sys.platform.startswith("win32"):
+            bin = bin.with_suffix(".bat")
+        args = (bin, )
+    return args
 
 def configure(GN, config):
     mkdir(PDFiumOutDir)
     (PDFiumOutDir / "args.gn").write_text(config)
-    run_cmd([GN, "gen", PDFiumOutDir], cwd=PDFiumDir)
+    run_cmd([*GN, "gen", PDFiumOutDir], cwd=PDFiumDir)
 
 def build(Ninja, target):
-    run_cmd([Ninja, "-C", PDFiumOutDir, target], cwd=PDFiumDir)
+    run_cmd([*Ninja, "-C", PDFiumOutDir, target], cwd=PDFiumDir)
 
 
 def main(
         do_update    = False,
         build_ver    = None,
         build_target = None,
-        use_syslibs  = False,
         win_sdk_dir  = None,
         target_cpu   = None,
         target_os    = None,
     ):
     
-    # NOTE defaults handled internally to avoid duplication with parse_args()
+    if PORTABLE_MODE:
+        # cf. https://pkg.go.dev/go.chromium.org/luci/vpython#readme-configuration
+        os.environ["VPYTHON_BYPASS"] = "manually managed python not supported by chrome operations"
     
+    # defaults handled internally to avoid duplication with parse_args()
     if build_target is None:
         build_target = "pdfium"
     if build_ver is None:
@@ -152,33 +164,28 @@ def main(
     
     v_full, pdfium_rev, chromium_rev = handle_sbuild_vers(build_ver)
     
-    if sys.platform.startswith("win32"):
+    if Host.system == SysNames.windows:
         if win_sdk_dir is None:
             # Current GH Actions windows-latest
-            win_sdk_dir = Path(R"C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\x64")
+            sdk_cpu = "arm64" if Host._raw_machine == "arm64" else "x64"
+            win_sdk_dir = Path(fR"C:\Program Files (x86)\Windows Kits\10\bin\10.0.26100.0\{sdk_cpu}")
         assert win_sdk_dir.exists()
         os.environ["PATH"] += os.pathsep + str(win_sdk_dir)
         os.environ["DEPOT_TOOLS_WIN_TOOLCHAIN"] = "0"
     
     dl_depottools(do_update)
+    orig_path = os.environ["PATH"]
+    os.environ["PATH"] = str(DepotToolsDir) + os.pathsep + os.environ["PATH"]
     
     GClient = get_tool("gclient")
-    GN      = get_tool("gn")
-    Ninja   = get_tool("ninja")
-    
     did_pdfium_sync = dl_pdfium(GClient, do_update, pdfium_rev, target_os)
-    
+    if PORTABLE_MODE:
+        # remove depot_tools from PATH after checkout phase, gn/ninja wrappers don't work on unhandled platforms.
+        os.environ["PATH"] = orig_path
     if did_pdfium_sync:
         patch_pdfium(build_ver, target_os)
-    if use_syslibs:
-        assert not IGNORE_FULLVER
-        get_shimheaders_tool(PDFiumDir, rev=chromium_rev)
-        # alternatively, we could just copy build/linux/unbundle/icu.gn manually
-        run_cmd([sys.executable, "build/linux/unbundle/replace_gn_files.py", "--system-libraries", "icu"], cwd=PDFiumDir)
     
     config_dict = DefaultConfig.copy()
-    if use_syslibs:
-        config_dict.update(SyslibsConfig)
     
     # TODO compare target_cpu against host to determine whether it's actually cross
     # this is a bit difficult currently as we don't have a direct mapping between google and python-style CPU names
@@ -186,13 +193,22 @@ def main(
     if target_cpu:
         config_dict["target_cpu"] = target_cpu
         is_cross = True  # assumed
-        if is_cross and Host.system == SysNames.linux and not target_os:
-            run_cmd([sys.executable, "build/linux/sysroot_scripts/install-sysroot.py", "--arch", target_cpu], cwd=PDFiumDir)
+        if Host.system == SysNames.linux:
+            if not target_os:
+                run_cmd([sys.executable, "build/linux/sysroot_scripts/install-sysroot.py", "--arch", target_cpu], cwd=PDFiumDir)
+            if target_cpu == "ppc64le":
+                if did_pdfium_sync:
+                    git_apply_patch(PatchDir/"no_libclang_rt.patch", cwd=PDFiumDir/"build")
+                    git_apply_patch(PatchDir/"ppc64le_cross.patch", cwd=PDFiumDir/"build")
+                config_dict["sysroot"] = "//build/linux/debian_bullseye_ppc64el-sysroot"
+    
     if target_os:
         config_dict["target_os"] = target_os
         if target_os == "android":
             config_dict["default_min_sdk_version"] = 21
     
+    GN = get_tool("gn")
+    Ninja = get_tool("ninja")
     config_str = serialize_gn_config(config_dict)
     configure(GN, config_str)
     build(Ninja, build_target)
@@ -219,11 +235,6 @@ def parse_args(argv):
         "--target", "-t",
         dest = "build_target",
         help = "PDFium build target (defaults to `pdfium`). Use `pdfium_all` to also build tests."
-    )
-    parser.add_argument(
-        "--use-syslibs", "-l",
-        action = "store_true",
-        help = "Use system libraries instead of those bundled with PDFium. Make sure that freetype, lcms2, libjpeg, libopenjpeg2, libpng, zlib and icuuc are installed, and that $PKG_CONFIG_PATH is set correctly.",
     )
     parser.add_argument(
         "--win-sdk-dir",

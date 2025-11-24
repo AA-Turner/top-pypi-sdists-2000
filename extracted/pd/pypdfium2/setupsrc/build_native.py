@@ -44,7 +44,6 @@ DefaultConfig = {
     "pdf_enable_xfa": False,
     "pdf_use_skia": False,
     "pdf_use_partition_alloc": False,
-    # "sysroot": "/" might also work if you manually set the right PKG_CONFIG_PATH, e.g. /usr/lib64/pkgconfig
     "use_sysroot": False,
     "use_system_freetype": True,
     "pdf_bundle_freetype": False,
@@ -85,7 +84,7 @@ if IS_ANDROID:
         log(f"Warning: Unknown Android CPU {raw_cpu}")
 
 
-def _get_repo(url, target_dir, rev, reset=False, depth=1):
+def _get_repo(url, rev, target_dir, reset=False, depth=1):
     
     if target_dir.exists():
         if reset:
@@ -98,12 +97,7 @@ def _get_repo(url, target_dir, rev, reset=False, depth=1):
     if callable(rev):
         rev = rev()  # resolve deferred
     
-    # https://stackoverflow.com/questions/31278902/how-to-shallow-clone-a-specific-commit-with-depth-1
-    mkdir(target_dir)
-    run_cmd(["git", "init"], cwd=target_dir)
-    run_cmd(["git", "remote", "add", "origin", url], cwd=target_dir)
-    run_cmd(["git", "fetch", "--depth", str(depth), "origin", rev], cwd=target_dir)
-    run_cmd(["git", "checkout", "FETCH_HEAD"], cwd=target_dir)
+    git_clone_rev(url, rev, target_dir)
     
     return True
 
@@ -131,7 +125,7 @@ class _DeferredInfo:
 
 def _fetch_dep(info, name, target_dir, reset=False):
     # parse out DEPS revisions only when we actually need them
-    return _get_repo(DEPS_URLS[name], target_dir, rev=lambda: info.deps[name], reset=reset)
+    return _get_repo(DEPS_URLS[name], lambda: info.deps[name], target_dir, reset=reset)
 
 
 def autopatch(file, pattern, repl, is_regex, exp_count=None):
@@ -151,13 +145,13 @@ def autopatch_dir(dir, globexpr, pattern, repl, is_regex, exp_count=None):
         autopatch(file, pattern, repl, is_regex, exp_count)
 
 
-def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, reset, vendor_deps):
+def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, no_libclang_rt, reset, vendor_deps):
     
     assert not IGNORE_FULLVER
     full_ver, pdfium_rev, chromium_rev = handle_sbuild_vers(short_ver)
     
     # pass through reset only for the repositories we actually patch
-    do_patches = _get_repo(PDFIUM_URL, PDFIUM_DIR, rev=pdfium_rev, reset=reset)
+    do_patches = _get_repo(PDFIUM_URL, pdfium_rev, PDFIUM_DIR, reset=reset)
     if do_patches:
         autopatch_dir(
             PDFIUM_DIR/"public"/"cpp", "*.h",
@@ -190,11 +184,10 @@ def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, reset, v
     
     do_patches = _fetch_dep(deps_info, "build", PDFIUM_DIR/"build", reset=reset)
     if do_patches:
-        # siso.patch: Work around error about path_exists() being undefined.
-        # This happens with older versions of GN.
+        # legacy_gn.patch: Work around error about path_exists() being undefined. This happens with older versions of GN.
         # Recent GN binaries can be obtained from https://chrome-infra-packages.appspot.com/p/gn/gn
         # Note that merely calling depot_tools `gn` is not sufficient, as it is only a wrapper script looking for vendored GN in the target repository, and if not present (as in this case), falls back to system GN.
-        git_apply_patch(PatchDir/"siso.patch", cwd=PDFIUM_DIR/"build")
+        git_apply_patch(PatchDir/"legacy_gn.patch", cwd=PDFIUM_DIR/"build")
         if IS_ANDROID:
             # fix linkage step
             git_apply_patch(PatchDir/"android_build.patch", cwd=PDFIUM_DIR/"build")
@@ -218,6 +211,8 @@ def get_sources(deps_info, short_ver, with_tests, compiler, clang_path, reset, v
                 f'ldflags += [ "-fuse-ld={lld_path}" ]',
                 is_regex=False, exp_count=1,
             )
+            if no_libclang_rt:
+                git_apply_patch(PatchDir/"no_libclang_rt.patch", cwd=PDFIUM_DIR/"build")
     
     do_patches = _fetch_dep(deps_info, "abseil", PDFIUM_3RDPARTY/"abseil-cpp", reset=reset)
     if do_patches and (Host._raw_machine, Host._libc_name) == ("ppc64le", "musl"):
@@ -303,7 +298,7 @@ def setup_compiler(config, compiler, clang_path):
         assert False, f"Unhandled compiler {compiler}"
 
 
-def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_path=None, reset=False, vendor_deps=None):
+def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_path=None, no_libclang_rt=False, reset=False, vendor_deps=None):
     
     if build_ver is None:
         build_ver = SBUILD_NATIVE_PIN
@@ -313,7 +308,7 @@ def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_pat
         if shutil.which("gcc"):
             compiler = Compiler.gcc
         elif shutil.which("clang"):
-            log("gcc not available, will try clang. Note, you may need to set up some symlinks to match the clang directory layout expected by pdfium. Also, make sure libclang_rt builtins are installed.")
+            log("gcc not available, will try clang. Note, you may need to set up some symlinks to match the clang directory layout expected by pdfium. Also, make sure libclang_rt builtins are installed, or pass --no-libclang-rt.")
             compiler = Compiler.clang
         else:
             raise RuntimeError("Neither gcc nor clang installed.")
@@ -334,7 +329,7 @@ def main(build_ver=None, with_tests=False, n_jobs=None, compiler=None, clang_pat
     deps_info = _DeferredInfo(deps_fields)
     
     mkdir(SOURCES_DIR)
-    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_path, reset, vendor_deps)
+    full_ver = get_sources(deps_info, build_ver, with_tests, compiler, clang_path, no_libclang_rt, reset, vendor_deps)
     setup_compiler(config, compiler, clang_path)
     prepare(config, build_dir, vendor_deps)
     build(with_tests, build_dir, n_jobs)
@@ -348,6 +343,8 @@ def parse_args(argv):
     parser = argparse.ArgumentParser(
         description = "Build PDFium from source natively with system tools/libraries. This does not use Google's binary toolchain, so it should be portable across different Linux architectures. Whether this might also work on other OSes depends on PDFium's build system and the availability of a Linux-like system library environment.",
     )
+    if ExtendAction is not None:  # from base.py
+        parser.register("action", "extend", ExtendAction)
     parser.add_argument(
         "--version",
         dest = "build_ver",
@@ -381,6 +378,11 @@ def parse_args(argv):
         "--clang-path",
         type = lambda p: Path(p).expanduser().resolve(),
         help = "Path to clang release folder, without trailing slash. Passing `--compiler clang` is a pre-requisite. By default, we try '/usr' or similar, but your system's folder structure might not match the layout expected by pdfium. Consider creating symlinks as described in pypdfium2's README.md.",
+    )
+    parser.add_argument(
+        "--no-libclang-rt",
+        action = "store_true",
+        help = "If using clang, whether to patch pdfium so that it does not insist on libclang_rt.builtins.a, and will use the compiler's default instead (commonly libgcc).",
     )
     # The --vendor option is provided for cibuildwheel clients:
     # - libicudata pulled in from the system via `auditwheel repair` is quite big. Using vendored ICU reduces wheel size by about 10 MB (compressed).
