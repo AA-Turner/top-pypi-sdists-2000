@@ -15546,6 +15546,402 @@ class DataHubIngestionSourceSourceTypeClass(object):
     
     
     
+class DocumentContentsClass(DictWrapper):
+    """The contents of a document"""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DocumentContents")
+    def __init__(self,
+        text: str,
+    ):
+        super().__init__()
+        
+        self.text = text
+    
+    def _restore_defaults(self) -> None:
+        self.text = str()
+    
+    
+    @property
+    def text(self) -> str:
+        """The text contents of the document.
+    This needs to be added to semantic search! """
+        return self._inner_dict.get('text')  # type: ignore
+    
+    @text.setter
+    def text(self, value: str) -> None:
+        self._inner_dict['text'] = value
+    
+    
+class DocumentInfoClass(_Aspect):
+    """Information about a document"""
+
+
+    ASPECT_NAME = 'documentInfo'
+    ASPECT_INFO = {}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DocumentInfo")
+
+    def __init__(self,
+        status: "DocumentStatusClass",
+        contents: "DocumentContentsClass",
+        created: "AuditStampClass",
+        lastModified: "AuditStampClass",
+        customProperties: Optional[Dict[str, str]]=None,
+        title: Union[None, str]=None,
+        source: Union[None, "DocumentSourceClass"]=None,
+        relatedAssets: Union[None, List["RelatedAssetClass"]]=None,
+        relatedDocuments: Union[None, List["RelatedDocumentClass"]]=None,
+        parentDocument: Union[None, "ParentDocumentClass"]=None,
+        draftOf: Union[None, "DraftOfClass"]=None,
+    ):
+        super().__init__()
+        
+        if customProperties is None:
+            # default: {}
+            self.customProperties = dict()
+        else:
+            self.customProperties = customProperties
+        self.title = title
+        self.source = source
+        self.status = status
+        self.contents = contents
+        self.created = created
+        self.lastModified = lastModified
+        self.relatedAssets = relatedAssets
+        self.relatedDocuments = relatedDocuments
+        self.parentDocument = parentDocument
+        self.draftOf = draftOf
+    
+    def _restore_defaults(self) -> None:
+        self.customProperties = dict()
+        self.title = self.RECORD_SCHEMA.fields_dict["title"].default
+        self.source = self.RECORD_SCHEMA.fields_dict["source"].default
+        self.status = DocumentStatusClass._construct_with_defaults()
+        self.contents = DocumentContentsClass._construct_with_defaults()
+        self.created = AuditStampClass._construct_with_defaults()
+        self.lastModified = AuditStampClass._construct_with_defaults()
+        self.relatedAssets = self.RECORD_SCHEMA.fields_dict["relatedAssets"].default
+        self.relatedDocuments = self.RECORD_SCHEMA.fields_dict["relatedDocuments"].default
+        self.parentDocument = self.RECORD_SCHEMA.fields_dict["parentDocument"].default
+        self.draftOf = self.RECORD_SCHEMA.fields_dict["draftOf"].default
+    
+    
+    @property
+    def customProperties(self) -> Dict[str, str]:
+        """Custom property bag."""
+        return self._inner_dict.get('customProperties')  # type: ignore
+    
+    @customProperties.setter
+    def customProperties(self, value: Dict[str, str]) -> None:
+        self._inner_dict['customProperties'] = value
+    
+    
+    @property
+    def title(self) -> Union[None, str]:
+        """Optional title for the document. """
+        return self._inner_dict.get('title')  # type: ignore
+    
+    @title.setter
+    def title(self, value: Union[None, str]) -> None:
+        self._inner_dict['title'] = value
+    
+    
+    @property
+    def source(self) -> Union[None, "DocumentSourceClass"]:
+        """Information about the external source of this document. 
+    Only populated for third-party documents ingested from external systems."""
+        return self._inner_dict.get('source')  # type: ignore
+    
+    @source.setter
+    def source(self, value: Union[None, "DocumentSourceClass"]) -> None:
+        self._inner_dict['source'] = value
+    
+    
+    @property
+    def status(self) -> "DocumentStatusClass":
+        """Visibility status of the document (published, unpublished.)"""
+        return self._inner_dict.get('status')  # type: ignore
+    
+    @status.setter
+    def status(self, value: "DocumentStatusClass") -> None:
+        self._inner_dict['status'] = value
+    
+    
+    @property
+    def contents(self) -> "DocumentContentsClass":
+        """Content of the document"""
+        return self._inner_dict.get('contents')  # type: ignore
+    
+    @contents.setter
+    def contents(self, value: "DocumentContentsClass") -> None:
+        self._inner_dict['contents'] = value
+    
+    
+    @property
+    def created(self) -> "AuditStampClass":
+        """The time and actor who created the document"""
+        return self._inner_dict.get('created')  # type: ignore
+    
+    @created.setter
+    def created(self, value: "AuditStampClass") -> None:
+        self._inner_dict['created'] = value
+    
+    
+    @property
+    def lastModified(self) -> "AuditStampClass":
+        """The time and actor who last modified the document (any field)"""
+        return self._inner_dict.get('lastModified')  # type: ignore
+    
+    @lastModified.setter
+    def lastModified(self, value: "AuditStampClass") -> None:
+        self._inner_dict['lastModified'] = value
+    
+    
+    @property
+    def relatedAssets(self) -> Union[None, List["RelatedAssetClass"]]:
+        """Assets referenced by or related to this document. """
+        return self._inner_dict.get('relatedAssets')  # type: ignore
+    
+    @relatedAssets.setter
+    def relatedAssets(self, value: Union[None, List["RelatedAssetClass"]]) -> None:
+        self._inner_dict['relatedAssets'] = value
+    
+    
+    @property
+    def relatedDocuments(self) -> Union[None, List["RelatedDocumentClass"]]:
+        """Documents referenced by or related to this document. """
+        return self._inner_dict.get('relatedDocuments')  # type: ignore
+    
+    @relatedDocuments.setter
+    def relatedDocuments(self, value: Union[None, List["RelatedDocumentClass"]]) -> None:
+        self._inner_dict['relatedDocuments'] = value
+    
+    
+    @property
+    def parentDocument(self) -> Union[None, "ParentDocumentClass"]:
+        """Parent article for this asset. """
+        return self._inner_dict.get('parentDocument')  # type: ignore
+    
+    @parentDocument.setter
+    def parentDocument(self, value: Union[None, "ParentDocumentClass"]) -> None:
+        self._inner_dict['parentDocument'] = value
+    
+    
+    @property
+    def draftOf(self) -> Union[None, "DraftOfClass"]:
+        """If this document is a draft, the document it is a draft of.
+    When set, this document should be hidden from normal knowledge base browsing and search.
+    Only the published document (draftOf target) should be visible to end users."""
+        return self._inner_dict.get('draftOf')  # type: ignore
+    
+    @draftOf.setter
+    def draftOf(self, value: Union[None, "DraftOfClass"]) -> None:
+        self._inner_dict['draftOf'] = value
+    
+    
+class DocumentSourceClass(DictWrapper):
+    """Information about the source of a document, especially for externally sourced documents.
+    This record is embedded within DocumentInfo to track whether a document is first-party 
+    (created in DataHub) or third-party (ingested from external sources like Slack, Notion, etc.)"""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DocumentSource")
+    def __init__(self,
+        sourceType: Union[str, "DocumentSourceTypeClass"],
+        externalUrl: Union[None, str]=None,
+        externalId: Union[None, str]=None,
+    ):
+        super().__init__()
+        
+        self.sourceType = sourceType
+        self.externalUrl = externalUrl
+        self.externalId = externalId
+    
+    def _restore_defaults(self) -> None:
+        self.sourceType = DocumentSourceTypeClass.NATIVE
+        self.externalUrl = self.RECORD_SCHEMA.fields_dict["externalUrl"].default
+        self.externalId = self.RECORD_SCHEMA.fields_dict["externalId"].default
+    
+    
+    @property
+    def sourceType(self) -> Union[str, "DocumentSourceTypeClass"]:
+        """The type of the source (e.g., "Confluence", "Notion", "Google Docs", "SharePoint", "Slack")"""
+        return self._inner_dict.get('sourceType')  # type: ignore
+    
+    @sourceType.setter
+    def sourceType(self, value: Union[str, "DocumentSourceTypeClass"]) -> None:
+        self._inner_dict['sourceType'] = value
+    
+    
+    @property
+    def externalUrl(self) -> Union[None, str]:
+        """URL to the external source where this document originated"""
+        return self._inner_dict.get('externalUrl')  # type: ignore
+    
+    @externalUrl.setter
+    def externalUrl(self, value: Union[None, str]) -> None:
+        self._inner_dict['externalUrl'] = value
+    
+    
+    @property
+    def externalId(self) -> Union[None, str]:
+        """Unique identifier in the external system. Searchable in case we need to find ingested docs via filtering."""
+        return self._inner_dict.get('externalId')  # type: ignore
+    
+    @externalId.setter
+    def externalId(self, value: Union[None, str]) -> None:
+        self._inner_dict['externalId'] = value
+    
+    
+class DocumentSourceTypeClass(object):
+    # No docs available.
+    
+    NATIVE = "NATIVE"
+    """Created via the DataHub UI or API"""
+    
+    EXTERNAL = "EXTERNAL"
+    """External - The document was ingested from an external source. """
+    
+    
+    
+class DocumentStateClass(object):
+    """The state of a document"""
+    
+    PUBLISHED = "PUBLISHED"
+    """Document is published and visible to users"""
+    
+    UNPUBLISHED = "UNPUBLISHED"
+    """Document is not published publically. """
+    
+    
+    
+class DocumentStatusClass(DictWrapper):
+    """Visibility status information for a document"""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DocumentStatus")
+    def __init__(self,
+        state: Union[str, "DocumentStateClass"],
+    ):
+        super().__init__()
+        
+        self.state = state
+    
+    def _restore_defaults(self) -> None:
+        self.state = DocumentStateClass.PUBLISHED
+    
+    
+    @property
+    def state(self) -> Union[str, "DocumentStateClass"]:
+        """The current visibility state of the document"""
+        return self._inner_dict.get('state')  # type: ignore
+    
+    @state.setter
+    def state(self, value: Union[str, "DocumentStateClass"]) -> None:
+        self._inner_dict['state'] = value
+    
+    
+class DraftOfClass(DictWrapper):
+    """Indicates this document is a draft of another document.
+    Used to separate draft/versioning relationships from hierarchical parent/child relationships."""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.DraftOf")
+    def __init__(self,
+        document: str,
+    ):
+        super().__init__()
+        
+        self.document = document
+    
+    def _restore_defaults(self) -> None:
+        self.document = str()
+    
+    
+    @property
+    def document(self) -> str:
+        """The document that this document is a draft of.
+    When set, this document is a draft/proposed version of the referenced document.
+    Draft documents should have UNPUBLISHED status and not appear in normal knowledge base browsing."""
+        return self._inner_dict.get('document')  # type: ignore
+    
+    @document.setter
+    def document(self, value: str) -> None:
+        self._inner_dict['document'] = value
+    
+    
+class ParentDocumentClass(DictWrapper):
+    """The parent document of the document. """
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.ParentDocument")
+    def __init__(self,
+        document: str,
+    ):
+        super().__init__()
+        
+        self.document = document
+    
+    def _restore_defaults(self) -> None:
+        self.document = str()
+    
+    
+    @property
+    def document(self) -> str:
+        """The hierarchical parent document for this document. """
+        return self._inner_dict.get('document')  # type: ignore
+    
+    @document.setter
+    def document(self, value: str) -> None:
+        self._inner_dict['document'] = value
+    
+    
+class RelatedAssetClass(DictWrapper):
+    """A data asset referenced by a document."""
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.RelatedAsset")
+    def __init__(self,
+        asset: str,
+    ):
+        super().__init__()
+        
+        self.asset = asset
+    
+    def _restore_defaults(self) -> None:
+        self.asset = str()
+    
+    
+    @property
+    def asset(self) -> str:
+        """The asset referenced by or related to the document. """
+        return self._inner_dict.get('asset')  # type: ignore
+    
+    @asset.setter
+    def asset(self, value: str) -> None:
+        self._inner_dict['asset'] = value
+    
+    
+class RelatedDocumentClass(DictWrapper):
+    """An document referenced by or related to another document
+    Note that this does NOT include child documents. """
+    
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.knowledge.RelatedDocument")
+    def __init__(self,
+        document: str,
+    ):
+        super().__init__()
+        
+        self.document = document
+    
+    def _restore_defaults(self) -> None:
+        self.document = str()
+    
+    
+    @property
+    def document(self) -> str:
+        """The document referenced by or related to the document. """
+        return self._inner_dict.get('document')  # type: ignore
+    
+    @document.setter
+    def document(self, value: str) -> None:
+        self._inner_dict['document'] = value
+    
+    
 class LogicalParentClass(_Aspect):
     """Relates a physical asset to a logical model."""
 
@@ -16587,6 +16983,35 @@ class DatasetKeyClass(_Aspect):
     @origin.setter
     def origin(self, value: Union[str, "FabricTypeClass"]) -> None:
         self._inner_dict['origin'] = value
+    
+    
+class DocumentKeyClass(_Aspect):
+    """Key for a Document"""
+
+
+    ASPECT_NAME = 'documentKey'
+    ASPECT_INFO = {'keyForEntity': 'document', 'entityCategory': 'core', 'entityAspects': ['documentInfo', 'status', 'ownership', 'domains', 'structuredProperties', 'subTypes', 'dataPlatformInstance', 'browsePathsV2', 'globalTags', 'glossaryTerms']}
+    RECORD_SCHEMA = get_schema_type("com.linkedin.pegasus2avro.metadata.key.DocumentKey")
+
+    def __init__(self,
+        id: str,
+    ):
+        super().__init__()
+        
+        self.id = id
+    
+    def _restore_defaults(self) -> None:
+        self.id = str()
+    
+    
+    @property
+    def id(self) -> str:
+        """Unique identifier for the document."""
+        return self._inner_dict.get('id')  # type: ignore
+    
+    @id.setter
+    def id(self, value: str) -> None:
+        self._inner_dict['id'] = value
     
     
 class DomainKeyClass(_Aspect):
@@ -28058,6 +28483,16 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.ingestion.DataHubIngestionSourceSchedule': DataHubIngestionSourceScheduleClass,
     'com.linkedin.pegasus2avro.ingestion.DataHubIngestionSourceSource': DataHubIngestionSourceSourceClass,
     'com.linkedin.pegasus2avro.ingestion.DataHubIngestionSourceSourceType': DataHubIngestionSourceSourceTypeClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentContents': DocumentContentsClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentInfo': DocumentInfoClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentSource': DocumentSourceClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentSourceType': DocumentSourceTypeClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentState': DocumentStateClass,
+    'com.linkedin.pegasus2avro.knowledge.DocumentStatus': DocumentStatusClass,
+    'com.linkedin.pegasus2avro.knowledge.DraftOf': DraftOfClass,
+    'com.linkedin.pegasus2avro.knowledge.ParentDocument': ParentDocumentClass,
+    'com.linkedin.pegasus2avro.knowledge.RelatedAsset': RelatedAssetClass,
+    'com.linkedin.pegasus2avro.knowledge.RelatedDocument': RelatedDocumentClass,
     'com.linkedin.pegasus2avro.logical.LogicalParent': LogicalParentClass,
     'com.linkedin.pegasus2avro.metadata.key.AssertionKey': AssertionKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.ChartKey': ChartKeyClass,
@@ -28089,6 +28524,7 @@ __SCHEMA_TYPES = {
     'com.linkedin.pegasus2avro.metadata.key.DataProcessInstanceKey': DataProcessInstanceKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DataProcessKey': DataProcessKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DatasetKey': DatasetKeyClass,
+    'com.linkedin.pegasus2avro.metadata.key.DocumentKey': DocumentKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.DomainKey': DomainKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.ERModelRelationshipKey': ERModelRelationshipKeyClass,
     'com.linkedin.pegasus2avro.metadata.key.ExecutionRequestKey': ExecutionRequestKeyClass,
@@ -28585,6 +29021,16 @@ __SCHEMA_TYPES = {
     'DataHubIngestionSourceSchedule': DataHubIngestionSourceScheduleClass,
     'DataHubIngestionSourceSource': DataHubIngestionSourceSourceClass,
     'DataHubIngestionSourceSourceType': DataHubIngestionSourceSourceTypeClass,
+    'DocumentContents': DocumentContentsClass,
+    'DocumentInfo': DocumentInfoClass,
+    'DocumentSource': DocumentSourceClass,
+    'DocumentSourceType': DocumentSourceTypeClass,
+    'DocumentState': DocumentStateClass,
+    'DocumentStatus': DocumentStatusClass,
+    'DraftOf': DraftOfClass,
+    'ParentDocument': ParentDocumentClass,
+    'RelatedAsset': RelatedAssetClass,
+    'RelatedDocument': RelatedDocumentClass,
     'LogicalParent': LogicalParentClass,
     'AssertionKey': AssertionKeyClass,
     'ChartKey': ChartKeyClass,
@@ -28616,6 +29062,7 @@ __SCHEMA_TYPES = {
     'DataProcessInstanceKey': DataProcessInstanceKeyClass,
     'DataProcessKey': DataProcessKeyClass,
     'DatasetKey': DatasetKeyClass,
+    'DocumentKey': DocumentKeyClass,
     'DomainKey': DomainKeyClass,
     'ERModelRelationshipKey': ERModelRelationshipKeyClass,
     'ExecutionRequestKey': ExecutionRequestKeyClass,
@@ -28928,6 +29375,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     FormKeyClass,
     ContainerKeyClass,
     PostKeyClass,
+    DocumentKeyClass,
     ChartKeyClass,
     AssertionKeyClass,
     DataJobKeyClass,
@@ -29056,6 +29504,7 @@ ASPECT_CLASSES: List[Type[_Aspect]] = [
     GlossaryNodeInfoClass,
     GlossaryRelatedTermsClass,
     GlossaryTermInfoClass,
+    DocumentInfoClass,
     EditableERModelRelationshipPropertiesClass,
     ERModelRelationshipPropertiesClass,
     TestInfoClass,
@@ -29164,6 +29613,7 @@ class AspectBag(TypedDict, total=False):
     formKey: FormKeyClass
     containerKey: ContainerKeyClass
     postKey: PostKeyClass
+    documentKey: DocumentKeyClass
     chartKey: ChartKeyClass
     assertionKey: AssertionKeyClass
     dataJobKey: DataJobKeyClass
@@ -29292,6 +29742,7 @@ class AspectBag(TypedDict, total=False):
     glossaryNodeInfo: GlossaryNodeInfoClass
     glossaryRelatedTerms: GlossaryRelatedTermsClass
     glossaryTermInfo: GlossaryTermInfoClass
+    documentInfo: DocumentInfoClass
     editableERModelRelationshipProperties: EditableERModelRelationshipPropertiesClass
     erModelRelationshipProperties: ERModelRelationshipPropertiesClass
     testInfo: TestInfoClass
@@ -29334,6 +29785,7 @@ KEY_ASPECTS: Dict[str, Type[_Aspect]] = {
     'form': FormKeyClass,
     'container': ContainerKeyClass,
     'post': PostKeyClass,
+    'document': DocumentKeyClass,
     'chart': ChartKeyClass,
     'assertion': AssertionKeyClass,
     'dataJob': DataJobKeyClass,
@@ -29401,6 +29853,7 @@ ENTITY_TYPE_NAMES: List[str] = [
     'form',
     'container',
     'post',
+    'document',
     'chart',
     'assertion',
     'dataJob',
@@ -29465,6 +29918,7 @@ EntityTypeName = Literal[
     'form',
     'container',
     'post',
+    'document',
     'chart',
     'assertion',
     'dataJob',

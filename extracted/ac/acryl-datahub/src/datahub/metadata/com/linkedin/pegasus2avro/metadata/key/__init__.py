@@ -37,6 +37,7 @@ from ......schema_classes import DataPlatformKeyClass
 from ......schema_classes import DataProcessInstanceKeyClass
 from ......schema_classes import DataProcessKeyClass
 from ......schema_classes import DatasetKeyClass
+from ......schema_classes import DocumentKeyClass
 from ......schema_classes import DomainKeyClass
 from ......schema_classes import ERModelRelationshipKeyClass
 from ......schema_classes import ExecutionRequestKeyClass
@@ -94,6 +95,7 @@ DataPlatformKey = DataPlatformKeyClass
 DataProcessInstanceKey = DataProcessInstanceKeyClass
 DataProcessKey = DataProcessKeyClass
 DatasetKey = DatasetKeyClass
+DocumentKey = DocumentKeyClass
 DomainKey = DomainKeyClass
 ERModelRelationshipKey = ERModelRelationshipKeyClass
 ExecutionRequestKey = ExecutionRequestKeyClass

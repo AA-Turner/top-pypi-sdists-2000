@@ -923,8 +923,8 @@ appmesh.Mesh.from_mesh_name(self, "imported-mesh", "abc")
 
 ## IAM Grants
 
-`VirtualNode` and `VirtualGateway` provide `grantStreamAggregatedResources` methods that grant identities that are running
-Envoy access to stream generated config from App Mesh.
+`VirtualNode` and `VirtualGateway` have a `grants` property that provides a `streamAggregatedResources`
+methods that grant identities that are running Envoy access to stream generated config from App Mesh.
 
 ```python
 # mesh: appmesh.Mesh
@@ -933,9 +933,9 @@ gateway = appmesh.VirtualGateway(self, "testGateway", mesh=mesh)
 envoy_user = iam.User(self, "envoyUser")
 
 #
-# This will grant `grantStreamAggregatedResources` ONLY for this gateway.
+# This will grant `appmesh:StreamAggregatedResources` ONLY for this gateway.
 #
-gateway.grant_stream_aggregated_resources(envoy_user)
+gateway.grants.stream_aggregated_resources(envoy_user)
 ```
 
 ## Adding Resources to shared meshes
@@ -23480,7 +23480,11 @@ typing.cast(typing.Any, IVirtualGateway).__jsii_proxy_class__ = lambda : _IVirtu
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_appmesh.IVirtualNode")
-class IVirtualNode(_IResource_c80c4260, typing_extensions.Protocol):
+class IVirtualNode(
+    _IResource_c80c4260,
+    _IVirtualNodeRef_5162bf48,
+    typing_extensions.Protocol,
+):
     '''Interface which all VirtualNode based classes must implement.'''
 
     @builtins.property
@@ -23525,6 +23529,7 @@ class IVirtualNode(_IResource_c80c4260, typing_extensions.Protocol):
 
 class _IVirtualNodeProxy(
     jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(_IVirtualNodeRef_5162bf48), # type: ignore[misc]
 ):
     '''Interface which all VirtualNode based classes must implement.'''
 
@@ -28315,6 +28320,12 @@ class VirtualNode(
         return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
 
     @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> "VirtualNodeGrants":
+        '''Collection of grants for this Virtual Node.'''
+        return typing.cast("VirtualNodeGrants", jsii.get(self, "grants"))
+
+    @builtins.property
     @jsii.member(jsii_name="mesh")
     def mesh(self) -> IMesh:
         '''The Mesh which the VirtualNode belongs to.'''
@@ -28331,6 +28342,12 @@ class VirtualNode(
     def virtual_node_name(self) -> builtins.str:
         '''The name of the VirtualNode.'''
         return typing.cast(builtins.str, jsii.get(self, "virtualNodeName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="virtualNodeRef")
+    def virtual_node_ref(self) -> _VirtualNodeReference_668c47b3:
+        '''A reference to a VirtualNode resource.'''
+        return typing.cast(_VirtualNodeReference_668c47b3, jsii.get(self, "virtualNodeRef"))
 
 
 @jsii.data_type(

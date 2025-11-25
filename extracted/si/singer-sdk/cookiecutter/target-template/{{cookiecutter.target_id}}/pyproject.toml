@@ -31,9 +31,9 @@ license-files = [ "LICENSE" ]
 requires-python = ">=3.10"
 dependencies = [
     {%- if cookiecutter.faker_extra %}
-    "singer-sdk[faker]~=0.53.2",
+    "singer-sdk[faker]~=0.53.3",
     {%- else %}
-    "singer-sdk~=0.53.2",
+    "singer-sdk~=0.53.3",
     {%- endif %}
     {%- if cookiecutter.serialization_method == "SQL" %}
     "sqlalchemy~=2.0",
@@ -57,7 +57,7 @@ dev = [
     { include-group = "test" },
 ]
 test = [
-    "pytest>=8",
+    "pytest>=9",
     {%- if cookiecutter.include_ci_files == "GitHub" %}
     "pytest-github-actions-annotate-failures>=0.3",
     {%- endif %}
@@ -80,12 +80,18 @@ packages = [
 ]
 {%- endif %}
 
+[tool.pytest]
+minversion = "9.0"
+addopts = [
+    "--durations=10",
+]
+
 [tool.mypy]
 warn_unused_configs = true
 
 [tool.ruff]
 line-length = 100
-required-version = ">=0.13"
+required-version = ">=0.14"
 
 [tool.ruff.lint]
 future-annotations = true

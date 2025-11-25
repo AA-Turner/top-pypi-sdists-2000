@@ -82,6 +82,25 @@ class TestBedrockStandard(ChatModelUnitTests):
         super().test_init_streaming()
 
 
+def test_profile() -> None:
+    model = ChatBedrockConverse(
+        model="anthropic.claude-3-5-sonnet-20241022-v2:0",
+        region_name="us-west-2",
+    )
+    assert model.profile
+    assert not model.profile["reasoning_output"]
+
+    model = ChatBedrockConverse(
+        model="anthropic.claude-sonnet-4-20250514-v1:0",
+        region_name="us-west-2",
+    )
+    assert model.profile
+    assert model.profile["reasoning_output"]
+
+    model = ChatBedrockConverse(model="foo")
+    assert model.profile == {}
+
+
 class GetWeather(BaseModel):
     """Get the current weather in a given location"""
 
@@ -120,6 +139,7 @@ def test_anthropic_bind_tools_tool_choice() -> None:
         "anthropic.claude-3-7-sonnet-20250219-v1:0",
         "anthropic.claude-sonnet-4-20250514-v1:0",
         "anthropic.claude-opus-4-20250514-v1:0",
+        "anthropic.claude-haiku-4-5-20251001-v1:0",
     ],
 )
 def test_anthropic_thinking_bind_tools_tool_choice(thinking_model: str) -> None:
@@ -1621,8 +1641,23 @@ def test_model_kwargs() -> None:
     llm = ChatBedrockConverse(
         model="my-model",
         region_name="us-west-2",
+        system=["System message"],
         additional_model_request_fields={"foo": "bar"},
     )
+    assert llm.model_id == "my-model"
+    assert llm.region_name == "us-west-2"
+    assert llm.system == ["System message"]
+    assert llm.additional_model_request_fields == {"foo": "bar"}
+
+    with pytest.warns(
+        UserWarning,
+        match="uses 'additional_model_request_fields' instead of 'model_kwargs'",
+    ):
+        llm = ChatBedrockConverse(
+            model="my-model",
+            region_name="us-west-2",
+            model_kwargs={"foo": "bar"},  # type: ignore[call-arg]
+        )
     assert llm.model_id == "my-model"
     assert llm.region_name == "us-west-2"
     assert llm.additional_model_request_fields == {"foo": "bar"}
@@ -2050,6 +2085,63 @@ def test__messages_to_bedrock_preserves_whitespace_non_last_aimessage_blocks() -
         bedrock_messages[1]["content"][0]["text"]
         == "AI message with trailing whitespace    \n  \t  "
     )
+
+
+@pytest.mark.parametrize(
+    "system_prompt_parameter, expected_system",
+    [
+        # No system parameter → use only the system message from messages
+        (None, [{"text": "System message"}]),
+        # Simple string input → converted into a dict with text
+        (
+            ["System message from param"],
+            [
+                {"text": "System message from param"},
+                {"text": "System message"},
+            ],
+        ),
+        # Dict input → passed through as-is
+        (
+            [
+                {
+                    "text": "Structured system message",
+                    "guardContent": {"text": {"text": "guarded"}},
+                }
+            ],
+            [
+                {
+                    "text": "Structured system message",
+                    "guardContent": {"text": {"text": "guarded"}},
+                },
+                {"text": "System message"},
+            ],
+        ),
+        # Mixed string and dict → both should be handled correctly
+        (
+            [
+                "Simple system prompt",
+                {"text": "Advanced system prompt", "cachePoint": {"type": "default"}},
+            ],
+            [
+                {"text": "Simple system prompt"},
+                {"text": "Advanced system prompt", "cachePoint": {"type": "default"}},
+                {"text": "System message"},
+            ],
+        ),
+    ],
+)
+def test__messages_to_bedrock_appends_system_prompt_from_parameter(
+    system_prompt_parameter: List[str | Dict[str, Any]] | None,
+    expected_system: List[Dict[str, Any]],
+) -> None:
+    messages = [
+        SystemMessage(content="System message"),
+        HumanMessage(content="First human message"),
+    ]
+
+    _, actual_system = _messages_to_bedrock(messages, system_prompt_parameter)
+
+    assert actual_system == expected_system
 
 
 @mock.patch("langchain_aws.chat_models.bedrock_converse.create_aws_client")

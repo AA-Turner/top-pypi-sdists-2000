@@ -5590,7 +5590,7 @@ class RepositoryProps:
         :param removal_policy: Determine what happens to the repository when the resource/stack is deleted. Default: RemovalPolicy.Retain
         :param repository_name: Name for this repository. The repository name must start with a letter and can only contain lowercase letters, numbers, hyphens, underscores, and forward slashes. .. epigraph:: If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name. Default: Automatically generated name.
 
-        :exampleMetadata: infused
+        :exampleMetadata: fixture=default infused
 
         Example::
 
@@ -5833,19 +5833,23 @@ class Repository(
 ):
     '''Define an ECR repository.
 
-    :exampleMetadata: infused
+    :exampleMetadata: fixture=default infused
 
     Example::
 
         repository = ecr.Repository(self, "TestRepository",
             repository_name="test-agent-runtime"
         )
+        
         agent_runtime_artifact = agentcore.AgentRuntimeArtifact.from_ecr_repository(repository, "v1.0.0")
         
-        runtime = agentcore.Runtime(self, "MyAgentRuntime",
-            runtime_name="myAgent",
+        agentcore.Runtime(self, "test-runtime",
+            runtime_name="test_runtime",
             agent_runtime_artifact=agent_runtime_artifact,
-            authorizer_configuration=agentcore.RuntimeAuthorizerConfiguration.using_oAuth("https://github.com/.well-known/openid-configuration", "oauth_client_123")
+            lifecycle_configuration=agentcore.LifecycleConfiguration(
+                idle_runtime_session_timeout=Duration.minutes(10),
+                max_lifetime=Duration.hours(4)
+            )
         )
     '''
 

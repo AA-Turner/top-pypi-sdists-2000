@@ -39,28 +39,36 @@ from uuid import uuid4
 
 import certifi
 import urllib3
+from urllib3._collections import HTTPHeaderDict
 
 from minio import Minio
+from minio.checksum import Algorithm
 from minio.commonconfig import ENABLED, REPLACE, CopySource, SnowballObject
 from minio.datatypes import PostPolicy
 from minio.deleteobjects import DeleteObject
 from minio.error import S3Error
+from minio.helpers import HTTPQueryDict
 from minio.select import (CSVInputSerialization, CSVOutputSerialization,
                           SelectRequest)
 from minio.sse import SseCustomerKey
 from minio.time import to_http_header
 from minio.versioningconfig import SUSPENDED, VersioningConfig
 
-_CLIENT = None  # initialized in main().
-_TEST_FILE = None  # initialized in main().
-_LARGE_FILE = None  # initialized in main().
-_IS_AWS = None  # initialized in main().
+_client = None  # pylint: disable=invalid-name
+_test_file = None  # pylint: disable=invalid-name
+_large_file = None  # pylint: disable=invalid-name
+_is_aws = None  # pylint: disable=invalid-name
 KB = 1024
 MB = 1024 * KB
 HTTP = urllib3.PoolManager(
     cert_reqs='CERT_REQUIRED',
     ca_certs=os.environ.get('SSL_CERT_FILE') or certifi.where()
 )
+
+
+def _serialize(headers: HTTPHeaderDict) -> dict:
+    """Convert HTTPHeaderDict to dict."""
+    return {key: headers.getlist(key) for key in headers}
 
 
 def _gen_bucket_name():
@@ -167,20 +175,20 @@ def test_make_bucket_default_region(log_entry):
     }
 
     # Create a bucket with default bucket location
-    _call(log_entry, _CLIENT.make_bucket, bucket_name)
+    _call(log_entry, _client.make_bucket, bucket_name=bucket_name)
     # Check if bucket was created properly
-    _call(log_entry, _CLIENT.bucket_exists, bucket_name)
+    _call(log_entry, _client.bucket_exists, bucket_name=bucket_name)
     # Remove bucket
-    _call(log_entry, _CLIENT.remove_bucket, bucket_name)
+    _call(log_entry, _client.remove_bucket, bucket_name=bucket_name)
     # Test passes
-    log_entry["method"] = _CLIENT.make_bucket
+    log_entry["method"] = _client.make_bucket
 
 
 def test_make_bucket_with_region(log_entry):
     """Test make_bucket() with region."""
 
     # Only test make bucket with region against AWS S3
-    if not _IS_AWS:
+    if not _is_aws:
         return
 
     # Get a unique bucket_name
@@ -194,13 +202,18 @@ def test_make_bucket_with_region(log_entry):
     }
 
     # Create a bucket with default bucket location
-    _call(log_entry, _CLIENT.make_bucket, bucket_name, location)
+    _call(
+        log_entry,
+        _client.make_bucket,
+        bucket_name=bucket_name,
+        location=location,
+    )
     # Check if bucket was created properly
-    _call(log_entry, _CLIENT.bucket_exists, bucket_name)
+    _call(log_entry, _client.bucket_exists, bucket_name=bucket_name)
     # Remove bucket
-    _call(log_entry, _CLIENT.remove_bucket, bucket_name)
+    _call(log_entry, _client.remove_bucket, bucket_name=bucket_name)
     # Test passes
-    log_entry["method"] = _CLIENT.make_bucket
+    log_entry["method"] = _client.make_bucket
 
 
 def test_negative_make_bucket_invalid_name(  # pylint: disable=invalid-name
@@ -223,15 +236,15 @@ def test_negative_make_bucket_invalid_name(  # pylint: disable=invalid-name
         log_entry["args"]["bucket_name"] = name
         try:
             # Create a bucket with default bucket location
-            _call(log_entry, _CLIENT.make_bucket, name)
+            _call(log_entry, _client.make_bucket, bucket_name=name)
             # Check if bucket was created properly
-            _call(log_entry, _CLIENT.bucket_exists, name)
+            _call(log_entry, _client.bucket_exists, bucket_name=name)
             # Remove bucket
-            _call(log_entry, _CLIENT.remove_bucket, name)
+            _call(log_entry, _client.remove_bucket, bucket_name=name)
         except ValueError:
             pass
     # Test passes
-    log_entry["method"] = _CLIENT.make_bucket
+    log_entry["method"] = _client.make_bucket
     log_entry["args"]['bucket_name'] = invalid_bucket_name_list
 
 
@@ -242,10 +255,10 @@ def test_list_buckets(log_entry):
     bucket_name = _gen_bucket_name()
 
     # Create a bucket with default bucket location
-    _call(log_entry, _CLIENT.make_bucket, bucket_name)
+    _call(log_entry, _client.make_bucket, bucket_name=bucket_name)
 
     try:
-        buckets = _CLIENT.list_buckets()
+        buckets = _client.list_buckets()
         for bucket in buckets:
             # bucket object should be of a valid value.
             if bucket.name and bucket.creation_date:
@@ -253,7 +266,7 @@ def test_list_buckets(log_entry):
             raise ValueError('list_bucket api failure')
     finally:
         # Remove bucket
-        _call(log_entry, _CLIENT.remove_bucket, bucket_name)
+        _call(log_entry, _client.remove_bucket, bucket_name=bucket_name)
 
 
 def test_select_object_content(log_entry):
@@ -269,10 +282,14 @@ def test_select_object_content(log_entry):
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         content = io.BytesIO(b"col1,col2,col3\none,two,three\nX,Y,Z\n")
-        _CLIENT.put_object(bucket_name, csvfile, content,
-                           len(content.getvalue()))
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=csvfile,
+            data=content,
+            length=len(content.getvalue()),
+        )
 
         request = SelectRequest(
             "select * from s3object",
@@ -280,7 +297,11 @@ def test_select_object_content(log_entry):
             CSVOutputSerialization(),
             request_progress=True,
         )
-        data = _CLIENT.select_object_content(bucket_name, csvfile, request)
+        data = _client.select_object_content(
+            bucket_name=bucket_name,
+            object_name=csvfile,
+            request=request,
+        )
         # Get the records
         records = io.BytesIO()
         for data_bytes in data.stream(16):
@@ -294,24 +315,38 @@ def test_select_object_content(log_entry):
                 '"col1,col2,col3\none,two,three\nX,Y,Z\n"',
                 f"Received {records.getvalue().decode()}")
     finally:
-        _CLIENT.remove_object(bucket_name, csvfile)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=csvfile)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def _test_fput_object(bucket_name, object_name, filename, metadata, sse):
     """Test fput_object()."""
     try:
-        _CLIENT.make_bucket(bucket_name)
-        if _IS_AWS:
-            _CLIENT.fput_object(bucket_name, object_name, filename,
-                                metadata=metadata, sse=sse)
+        _client.make_bucket(bucket_name=bucket_name)
+        if _is_aws:
+            _client.fput_object(
+                bucket_name=bucket_name,
+                object_name=object_name,
+                file_path=filename,
+                user_metadata=metadata,
+                sse=sse,
+            )
         else:
-            _CLIENT.fput_object(bucket_name, object_name, filename, sse=sse)
+            _client.fput_object(
+                bucket_name=bucket_name,
+                object_name=object_name,
+                file_path=filename,
+                sse=sse,
+            )
 
-        _CLIENT.stat_object(bucket_name, object_name, ssec=sse)
+        _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            ssec=sse,
+        )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_fput_object_small_file(log_entry, sse=None):
@@ -323,16 +358,16 @@ def test_fput_object_small_file(log_entry, sse=None):
     # Get a unique bucket_name and object_name
     bucket_name = _gen_bucket_name()
     object_name = f"{uuid4()}-f"
-    metadata = {'x-amz-storage-class': 'STANDARD_IA'}
+    metadata = HTTPHeaderDict({'x-amz-storage-class': 'STANDARD_IA'})
 
     log_entry["args"] = {
         "bucket_name": bucket_name,
         "object_name": object_name,
-        "file_path": _TEST_FILE,
-        "metadata": metadata,
+        "file_path": _test_file,
+        "metadata": _serialize(metadata),
     }
 
-    _test_fput_object(bucket_name, object_name, _TEST_FILE, metadata, sse)
+    _test_fput_object(bucket_name, object_name, _test_file, metadata, sse)
 
 
 def test_fput_object_large_file(log_entry, sse=None):
@@ -344,17 +379,17 @@ def test_fput_object_large_file(log_entry, sse=None):
     # Get a unique bucket_name and object_name
     bucket_name = _gen_bucket_name()
     object_name = f"{uuid4()}-large"
-    metadata = {'x-amz-storage-class': 'STANDARD_IA'}
+    metadata = HTTPHeaderDict({'x-amz-storage-class': 'STANDARD_IA'})
 
     log_entry["args"] = {
         "bucket_name": bucket_name,
         "object_name": object_name,
-        "file_path": _LARGE_FILE,
-        "metadata": metadata,
+        "file_path": _large_file,
+        "metadata": _serialize(metadata),
     }
 
     # upload local large file through multipart.
-    _test_fput_object(bucket_name, object_name, _LARGE_FILE, metadata, sse)
+    _test_fput_object(bucket_name, object_name, _large_file, metadata, sse)
 
 
 def test_fput_object_with_content_type(  # pylint: disable=invalid-name
@@ -364,18 +399,18 @@ def test_fput_object_with_content_type(  # pylint: disable=invalid-name
     # Get a unique bucket_name and object_name
     bucket_name = _gen_bucket_name()
     object_name = f"{uuid4()}-f"
-    metadata = {'x-amz-storage-class': 'STANDARD_IA'}
+    metadata = HTTPHeaderDict({'x-amz-storage-class': 'STANDARD_IA'})
     content_type = 'application/octet-stream'
 
     log_entry["args"] = {
         "bucket_name": bucket_name,
         "object_name": object_name,
-        "file_path": _TEST_FILE,
-        "metadata": metadata,
+        "file_path": _test_file,
+        "metadata": _serialize(metadata),
         "content_type": content_type,
     }
 
-    _test_fput_object(bucket_name, object_name, _TEST_FILE, metadata, None)
+    _test_fput_object(bucket_name, object_name, _test_file, metadata, None)
 
 
 def _validate_stat(st_obj, expected_size, expected_meta, version_id=None):
@@ -441,21 +476,40 @@ def test_copy_object_no_copy_condition(  # pylint: disable=invalid-name
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size, sse=ssec)
-        _CLIENT.copy_object(
-            bucket_name, object_copy, sse=ssec,
-            source=CopySource(bucket_name, object_source, ssec=ssec_copy),
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+            sse=ssec,
         )
-        st_obj = _CLIENT.stat_object(bucket_name, object_copy, ssec=ssec)
+        _client.copy_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            sse=ssec,
+            source=CopySource(
+                bucket_name=bucket_name,
+                object_name=object_source,
+                ssec=ssec_copy,
+            ),
+        )
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            ssec=ssec,
+        )
         _validate_stat(st_obj, size, {})
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_copy_object_with_metadata(log_entry):
@@ -466,40 +520,57 @@ def test_copy_object_with_metadata(log_entry):
     object_name = f"{uuid4()}"
     object_source = object_name + "-source"
     object_copy = object_name + "-copy"
-    metadata = {
+    metadata = HTTPHeaderDict({
         "testing-string": "string",
-        "testing-int": 1,
-        10: 'value',
-    }
+        "testing-int": "1",
+        "10": 'value',
+    })
 
     log_entry["args"] = {
         "bucket_name": bucket_name,
         "object_source": object_source,
         "object_name": object_copy,
-        "metadata": metadata,
+        "metadata": _serialize(metadata),
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+        )
         # Perform a server side copy of an object
-        _CLIENT.copy_object(
-            bucket_name, object_copy, CopySource(bucket_name, object_source),
-            metadata=metadata, metadata_directive=REPLACE,
+        _client.copy_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            source=CopySource(
+                bucket_name=bucket_name,
+                object_name=object_source,
+            ),
+            user_metadata=metadata,
+            metadata_directive=REPLACE,
         )
         # Verification
-        st_obj = _CLIENT.stat_object(bucket_name, object_copy)
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+        )
         expected_metadata = {'x-amz-meta-testing-int': '1',
                              'x-amz-meta-testing-string': 'string',
                              'x-amz-meta-10': 'value'}
         _validate_stat(st_obj, size, expected_metadata)
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_copy_object_etag_match(log_entry):
@@ -518,26 +589,47 @@ def test_copy_object_etag_match(log_entry):
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+        )
         # Perform a server side copy of an object
-        _CLIENT.copy_object(
-            bucket_name, object_copy, CopySource(bucket_name, object_source),
+        _client.copy_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            source=CopySource(
+                bucket_name=bucket_name,
+                object_name=object_source,
+            ),
         )
         # Verification
-        source_etag = _CLIENT.stat_object(bucket_name, object_source).etag
+        source_etag = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        ).etag
         log_entry["args"]["conditions"] = {'set_match_etag': source_etag}
-        _CLIENT.copy_object(
-            bucket_name, object_copy,
-            CopySource(bucket_name, object_source, match_etag=source_etag),
+        _client.copy_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            source=CopySource(
+                bucket_name=bucket_name,
+                object_name=object_source,
+                match_etag=source_etag,
+            ),
         )
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_copy_object_negative_etag_match(  # pylint: disable=invalid-name
@@ -557,27 +649,40 @@ def test_copy_object_negative_etag_match(  # pylint: disable=invalid-name
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+        )
         try:
             # Perform a server side copy of an object
             # with incorrect pre-conditions and fail
             etag = 'test-etag'
             log_entry["args"]["conditions"] = {'set_match_etag': etag}
-            _CLIENT.copy_object(
-                bucket_name, object_copy,
-                CopySource(bucket_name, object_source, match_etag=etag),
+            _client.copy_object(
+                bucket_name=bucket_name,
+                object_name=object_copy,
+                source=CopySource(
+                    bucket_name=bucket_name,
+                    object_name=object_source,
+                    match_etag=etag,
+                ),
             )
         except S3Error as exc:
             if exc.code != "PreconditionFailed":
                 raise
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_copy_object_modified_since(log_entry):
@@ -596,29 +701,38 @@ def test_copy_object_modified_since(log_entry):
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+        )
         # Set up the 'modified_since' copy condition
         mod_since = datetime(2014, 4, 1, tzinfo=timezone.utc)
         log_entry["args"]["conditions"] = {
             'set_modified_since': to_http_header(mod_since)}
         # Perform a server side copy of an object
         # and expect the copy to complete successfully
-        _CLIENT.copy_object(
-            bucket_name, object_copy,
-            CopySource(
+        _client.copy_object(
+            bucket_name=bucket_name,
+            object_name=object_copy,
+            source=CopySource(
                 bucket_name=bucket_name,
                 object_name=object_source,
                 modified_since=mod_since,
             ),
         )
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_copy_object_unmodified_since(  # pylint: disable=invalid-name
@@ -638,11 +752,16 @@ def test_copy_object_unmodified_since(  # pylint: disable=invalid-name
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Upload a streaming object of 1 KiB
         size = 1 * KB
         reader = LimitedRandomReader(size)
-        _CLIENT.put_object(bucket_name, object_source, reader, size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+            data=reader,
+            length=size,
+        )
         # Set up the 'unmodified_since' copy condition
         unmod_since = datetime(2014, 4, 1, tzinfo=timezone.utc)
         log_entry["args"]["conditions"] = {
@@ -651,9 +770,10 @@ def test_copy_object_unmodified_since(  # pylint: disable=invalid-name
             # Perform a server side copy of an object and expect
             # the copy to fail since the creation/modification
             # time is now, way later than unmodification time, April 1st, 2014
-            _CLIENT.copy_object(
-                bucket_name, object_copy,
-                CopySource(
+            _client.copy_object(
+                bucket_name=bucket_name,
+                object_name=object_copy,
+                source=CopySource(
                     bucket_name=bucket_name,
                     object_name=object_source,
                     unmodified_since=unmod_since,
@@ -663,9 +783,12 @@ def test_copy_object_unmodified_since(  # pylint: disable=invalid-name
             if exc.code != "PreconditionFailed":
                 raise
     finally:
-        _CLIENT.remove_object(bucket_name, object_source)
-        _CLIENT.remove_object(bucket_name, object_copy)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_source,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_copy)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_put_object(log_entry, sse=None):
@@ -687,11 +810,21 @@ def test_put_object(log_entry, sse=None):
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         # Put/Upload a streaming object of 1 MiB
         reader = LimitedRandomReader(length)
-        _CLIENT.put_object(bucket_name, object_name, reader, length, sse=sse)
-        _CLIENT.stat_object(bucket_name, object_name, ssec=sse)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=reader,
+            length=length,
+            sse=sse,
+        )
+        _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            ssec=sse,
+        )
 
         # Put/Upload a streaming object of 11 MiB
         log_entry["args"]["length"] = length = 11 * MB
@@ -707,13 +840,23 @@ def test_put_object(log_entry, sse=None):
         log_entry["args"]["content_type"] = content_type = (
             "application/octet-stream")
         log_entry["args"]["object_name"] = object_name + "-metadata"
-        _CLIENT.put_object(bucket_name, object_name + "-metadata", reader,
-                           length, content_type, metadata, sse=sse)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-metadata",
+            data=reader,
+            length=length,
+            content_type=content_type,
+            user_metadata=metadata,
+            sse=sse,
+        )
         # Stat on the uploaded object to check if it exists
         # Fetch saved stat metadata on a previously uploaded object with
         # metadata.
-        st_obj = _CLIENT.stat_object(bucket_name, object_name + "-metadata",
-                                     ssec=sse)
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-metadata",
+            ssec=sse,
+        )
         normalized_meta = {
             key.lower(): value for key, value in (
                 st_obj.metadata or {}).items()
@@ -726,9 +869,12 @@ def test_put_object(log_entry, sse=None):
         if 'x-amz-meta-test-key' not in normalized_meta:
             raise ValueError("Metadata key 'x-amz-meta-test-key' not found")
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_object(bucket_name, object_name+'-metadata')
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name+'-metadata',
+        )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_negative_put_object_with_path_segment(  # pylint: disable=invalid-name
@@ -748,14 +894,127 @@ def test_negative_put_object_with_path_segment(  # pylint: disable=invalid-name
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
-        _CLIENT.put_object(bucket_name, object_name, io.BytesIO(b''), 0)
-        _CLIENT.remove_object(bucket_name, object_name)
+        _client.make_bucket(bucket_name=bucket_name)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=io.BytesIO(b''),
+            length=0,
+        )
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
     except S3Error as err:
         if err.code != 'XMinioInvalidObjectName':
             raise
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
+
+
+def test_put_object_multipart_with_checksum(  # pylint: disable=invalid-name
+        log_entry):
+    """Test put_object() multipart upload with checksum validation.
+
+    This test validates the AWS S3 compliant checksum implementation for
+    multipart uploads:
+    - CreateMultipartUpload receives algorithm header only (not values)
+    - UploadPart includes checksum value headers
+    - CompleteMultipartUpload includes checksums in XML body
+    """
+
+    # Get a unique bucket_name and object_name
+    bucket_name = _gen_bucket_name()
+    object_name = f"{uuid4()}-checksum"
+    object_name_sha256 = None  # Initialize for cleanup
+    # Use 6 MB to trigger multipart upload (> 5 MB threshold)
+    length = 6 * MB
+
+    log_entry["args"] = {
+        "bucket_name": bucket_name,
+        "object_name": object_name,
+        "length": length,
+        "data": "LimitedRandomReader(6 * MB)",
+        "checksum": "Algorithm.CRC32C",
+    }
+
+    try:
+        _client.make_bucket(bucket_name=bucket_name)
+
+        # Upload with CRC32C checksum - triggers multipart upload
+        reader = LimitedRandomReader(length)
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=reader,
+            length=length,
+            checksum=Algorithm.CRC32C,
+        )
+
+        # Verify upload succeeded and returned valid result
+        if not result.etag:
+            raise ValueError("Upload did not return valid ETag")
+
+        # Verify ETag indicates multipart upload (contains dash and part count)
+        if '-' not in result.etag:
+            raise ValueError(
+                f"Expected multipart ETag (with dash), got: {result.etag}")
+
+        # Stat the object to verify it exists and has correct size
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+        )
+
+        if st_obj.size != length:
+            raise ValueError(
+                f"Size mismatch: expected {length}, got {st_obj.size}")
+
+        # Test with SHA256 checksum algorithm
+        object_name_sha256 = f"{uuid4()}-checksum-sha256"
+        log_entry["args"]["object_name"] = object_name_sha256
+        log_entry["args"]["checksum"] = "Algorithm.SHA256"
+
+        reader = LimitedRandomReader(length)
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name_sha256,
+            data=reader,
+            length=length,
+            checksum=Algorithm.SHA256,
+        )
+
+        if not result.etag:
+            raise ValueError("Upload with SHA256 did not return valid ETag")
+
+        if '-' not in result.etag:
+            raise ValueError(
+                f"Expected multipart ETag for SHA256, got: {result.etag}")
+
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name_sha256,
+        )
+
+        if st_obj.size != length:
+            raise ValueError(
+                f"Size mismatch: expected {length}, got {st_obj.size}")
+
+    finally:
+        try:
+            _client.remove_object(
+                bucket_name=bucket_name, object_name=object_name)
+        except:  # pylint: disable=bare-except
+            pass
+        if object_name_sha256:
+            try:
+                _client.remove_object(
+                    bucket_name=bucket_name,
+                    object_name=object_name_sha256,
+                )
+            except:  # pylint: disable=bare-except
+                pass
+        try:
+            _client.remove_bucket(bucket_name=bucket_name)
+        except:  # pylint: disable=bare-except
+            pass
 
 
 def _test_stat_object(log_entry, sse=None, version_check=False):
@@ -779,20 +1038,28 @@ def _test_stat_object(log_entry, sse=None, version_check=False):
     version_id1 = None
     version_id2 = None
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
         # Put/Upload a streaming object of 1 MiB
         reader = LimitedRandomReader(length)
-        result = _CLIENT.put_object(
-            bucket_name, object_name, reader, length, sse=sse,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=reader,
+            length=length,
+            sse=sse,
         )
         version_id1 = result.version_id
-        _CLIENT.stat_object(
-            bucket_name, object_name, ssec=sse, version_id=version_id1,
+        _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            ssec=sse,
+            version_id=version_id1,
         )
 
         # Put/Upload a streaming object of 11 MiB
@@ -804,28 +1071,41 @@ def _test_stat_object(log_entry, sse=None, version_check=False):
         log_entry["args"]["content_type"] = content_type = (
             "application/octet-stream")
         log_entry["args"]["object_name"] = object_name + "-metadata"
-        result = _CLIENT.put_object(
-            bucket_name, object_name + "-metadata", reader,
-            length, content_type, metadata, sse=sse,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-metadata",
+            data=reader,
+            length=length,
+            content_type=content_type,
+            user_metadata=metadata,
+            sse=sse,
         )
         version_id2 = result.version_id
         # Stat on the uploaded object to check if it exists
         # Fetch saved stat metadata on a previously uploaded object with
         # metadata.
-        st_obj = _CLIENT.stat_object(
-            bucket_name, object_name + "-metadata",
-            ssec=sse, version_id=version_id2,
+        st_obj = _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-metadata",
+            ssec=sse,
+            version_id=version_id2,
         )
         # Verify the collected stat data.
         _validate_stat(
             st_obj, length, metadata, version_id=version_id2,
         )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name, version_id=version_id1)
-        _CLIENT.remove_object(
-            bucket_name, object_name+'-metadata', version_id=version_id2,
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=version_id1,
         )
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name+'-metadata',
+            version_id=version_id2,
+        )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_stat_object(log_entry, sse=None):
@@ -851,20 +1131,26 @@ def _test_remove_object(log_entry, version_check=False):
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
-        result = _CLIENT.put_object(
-            bucket_name, object_name, LimitedRandomReader(length), length,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(length),
+            length=length,
         )
-        _CLIENT.remove_object(
-            bucket_name, object_name, version_id=result.version_id,
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=result.version_id,
         )
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_remove_object(log_entry):
@@ -893,29 +1179,40 @@ def _test_get_object(log_entry, sse=None, version_check=False):
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     version_id = None
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
-        result = _CLIENT.put_object(
-            bucket_name, object_name, LimitedRandomReader(length),
-            length, sse=sse,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(length),
+            length=length,
+            sse=sse,
         )
         version_id = result.version_id
         # Get/Download a full object, iterate on response to save to disk
-        object_data = _CLIENT.get_object(
-            bucket_name, object_name, ssec=sse, version_id=version_id,
+        object_data = _client.get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            ssec=sse,
+            version_id=version_id,
         )
         newfile = 'newfile جديد'
         with open(newfile, 'wb') as file_data:
             shutil.copyfileobj(object_data, file_data)
         os.remove(newfile)
     finally:
-        _CLIENT.remove_object(bucket_name, object_name, version_id=version_id)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=version_id,
+        )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_get_object(log_entry, sse=None):
@@ -947,26 +1244,38 @@ def _test_fget_object(log_entry, sse=None, version_check=False):
         "file_path": tmpfile
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     version_id = None
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
-        result = _CLIENT.put_object(
-            bucket_name, object_name, LimitedRandomReader(length),
-            length, sse=sse,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(length),
+            length=length,
+            sse=sse,
         )
         version_id = result.version_id
         # Get/Download a full object and save locally at path
-        _CLIENT.fget_object(
-            bucket_name, object_name, tmpfile, ssec=sse, version_id=version_id,
+        _client.fget_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            file_path=tmpfile,
+            ssec=sse,
+            version_id=version_id,
         )
         os.remove(tmpfile)
     finally:
-        _CLIENT.remove_object(bucket_name, object_name, version_id=version_id)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=version_id,
+        )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_fget_object(log_entry, sse=None):
@@ -999,13 +1308,22 @@ def test_get_object_with_default_length(  # pylint: disable=invalid-name
         "offset": offset
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        _CLIENT.put_object(bucket_name, object_name,
-                           LimitedRandomReader(size), size, sse=sse)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+            sse=sse,
+        )
         # Get half of the object
-        object_data = _CLIENT.get_object(bucket_name, object_name,
-                                         offset=offset, ssec=sse)
+        object_data = _client.get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            offset=offset,
+            ssec=sse,
+        )
         newfile = 'newfile'
         with open(newfile, 'wb') as file_data:
             for data in object_data:
@@ -1016,8 +1334,8 @@ def test_get_object_with_default_length(  # pylint: disable=invalid-name
         if new_file_size != length:
             raise ValueError('Unexpected file size after running ')
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_get_partial_object(log_entry, sse=None):
@@ -1039,13 +1357,23 @@ def test_get_partial_object(log_entry, sse=None):
         "offset": offset
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        _CLIENT.put_object(bucket_name, object_name,
-                           LimitedRandomReader(size), size, sse=sse)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+            sse=sse,
+        )
         # Get half of the object
-        object_data = _CLIENT.get_object(bucket_name, object_name,
-                                         offset=offset, length=length, ssec=sse)
+        object_data = _client.get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            offset=offset,
+            length=length,
+            ssec=sse,
+        )
         newfile = 'newfile'
         with open(newfile, 'wb') as file_data:
             for data in object_data:
@@ -1056,8 +1384,8 @@ def test_get_partial_object(log_entry, sse=None):
         if new_file_size != length:
             raise ValueError('Unexpected file size after running ')
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def _test_list_objects(log_entry, use_api_v1=False, version_check=False):
@@ -1074,26 +1402,36 @@ def _test_list_objects(log_entry, use_api_v1=False, version_check=False):
         "recursive": is_recursive,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     version_id1 = None
     version_id2 = None
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
         size = 1 * KB
-        result = _CLIENT.put_object(
-            bucket_name, object_name + "-1", LimitedRandomReader(size), size,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-1",
+            data=LimitedRandomReader(size),
+            length=size,
         )
         version_id1 = result.version_id
-        result = _CLIENT.put_object(
-            bucket_name, object_name + "-2", LimitedRandomReader(size), size,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-2",
+            data=LimitedRandomReader(size),
+            length=size,
         )
         version_id2 = result.version_id
         # List all object paths in bucket.
-        objects = _CLIENT.list_objects(
-            bucket_name, '', is_recursive, include_version=version_check,
+        objects = _client.list_objects(
+            bucket_name=bucket_name,
+            prefix='',
+            recursive=is_recursive,
+            include_version=version_check,
             use_api_v1=use_api_v1,
         )
         for obj in objects:
@@ -1106,13 +1444,17 @@ def _test_list_objects(log_entry, use_api_v1=False, version_check=False):
                     f"got:{obj.version_id}"
                 )
     finally:
-        _CLIENT.remove_object(
-            bucket_name, object_name + "-1", version_id=version_id1,
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-1",
+            version_id=version_id1,
         )
-        _CLIENT.remove_object(
-            bucket_name, object_name + "-2", version_id=version_id2,
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name + "-2",
+            version_id=version_id2,
         )
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_list_objects_v1(log_entry):
@@ -1125,12 +1467,12 @@ def test_list_object_v1_versions(log_entry):
     _test_list_objects(log_entry, use_api_v1=True, version_check=True)
 
 
-def _test_list_objects_api(bucket_name, expected_no, *argv):
+def _test_list_objects_api(bucket_name, expected_no, **kwargs):
     """Test list_objects()."""
 
     # argv is composed of prefix and recursive arguments of
     # list_objects api. They are both supposed to be passed as strings.
-    objects = _CLIENT.list_objects(bucket_name, *argv)
+    objects = _client.list_objects(bucket_name=bucket_name, **kwargs)
 
     # expect all objects to be listed
     no_of_files = 0
@@ -1158,15 +1500,19 @@ def test_list_objects_with_prefix(log_entry):
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 1 * KB
         no_of_created_files = 4
         path_prefix = ""
         # Create files and directories
         for i in range(no_of_created_files):
-            _CLIENT.put_object(bucket_name, f"{path_prefix}{i}_{object_name}",
-                               LimitedRandomReader(size), size)
+            _client.put_object(
+                bucket_name=bucket_name,
+                object_name=f"{path_prefix}{i}_{object_name}",
+                data=LimitedRandomReader(size),
+                length=size,
+            )
             path_prefix = f"{path_prefix}{i}/"
 
         # Created files and directory structure
@@ -1184,7 +1530,9 @@ def test_list_objects_with_prefix(log_entry):
         # List objects recursively with NO prefix
         log_entry["args"]["prefix"] = prefix = ""  # no prefix
         log_entry["args"]["recursive"] = recursive = ""
-        _test_list_objects_api(bucket_name, no_of_created_files, prefix, True)
+        _test_list_objects_api(
+            bucket_name, no_of_created_files, prefix=prefix, recursive=True,
+        )
 
         # List objects at the top level with no prefix and no recursive option
         # Expect only the top 2 objects to be listed
@@ -1193,32 +1541,35 @@ def test_list_objects_with_prefix(log_entry):
         # List objects for '0' directory/prefix without recursive option
         # Expect 2 object (directory '0' and '0_' object) to be listed
         log_entry["args"]["prefix"] = prefix = "0"
-        _test_list_objects_api(bucket_name, 2, prefix)
+        _test_list_objects_api(bucket_name, 2, prefix=prefix)
 
         # List objects for '0/' directory/prefix without recursive option
         # Expect only 2 objects under directory '0/' to be listed,
         # non-recursive
         log_entry["args"]["prefix"] = prefix = "0/"
-        _test_list_objects_api(bucket_name, 2, prefix)
+        _test_list_objects_api(bucket_name, 2, prefix=prefix)
 
         # List objects for '0/' directory/prefix, recursively
         # Expect 2 objects to be listed
         log_entry["args"]["prefix"] = prefix = "0/"
         log_entry["args"]["recursive"] = recursive = "True"
-        _test_list_objects_api(bucket_name, 3, prefix, recursive)
+        _test_list_objects_api(
+            bucket_name, 3, prefix=prefix, recursive=recursive,
+        )
 
         # List object with '0/1/2/' directory/prefix, non-recursive
         # Expect the single object under directory '0/1/2/' to be listed
         log_entry["args"]["prefix"] = prefix = "0/1/2/"
-        _test_list_objects_api(bucket_name, 1, prefix)
+        _test_list_objects_api(bucket_name, 1, prefix=prefix)
     finally:
         path_prefix = ""
         for i in range(no_of_created_files):
-            _CLIENT.remove_object(
-                bucket_name, f"{path_prefix}{i}_{object_name}",
+            _client.remove_object(
+                bucket_name=bucket_name,
+                object_name=f"{path_prefix}{i}_{object_name}",
             )
             path_prefix = f"{path_prefix}{i}/"
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
     # Test passes
     log_entry["args"]["prefix"] = (
         "Several prefix/recursive combinations are tested")
@@ -1239,21 +1590,28 @@ def test_list_objects_with_1001_files(  # pylint: disable=invalid-name
         "object_name": f"{object_name}_0 ~ {0}_1000",
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 1 * KB
         no_of_created_files = 2000
         # Create files and directories
         for i in range(no_of_created_files):
-            _CLIENT.put_object(bucket_name, f"{object_name}_{i}",
-                               LimitedRandomReader(size), size)
+            _client.put_object(
+                bucket_name=bucket_name,
+                object_name=f"{object_name}_{i}",
+                data=LimitedRandomReader(size),
+                length=size,
+            )
 
         # List objects and check if 1001 files are returned
         _test_list_objects_api(bucket_name, no_of_created_files)
     finally:
         for i in range(no_of_created_files):
-            _CLIENT.remove_object(bucket_name, f"{object_name}_{i}")
-        _CLIENT.remove_bucket(bucket_name)
+            _client.remove_object(
+                bucket_name=bucket_name,
+                object_name=f"{object_name}_{i}",
+            )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_list_objects(log_entry):
@@ -1279,13 +1637,19 @@ def test_presigned_get_object_default_expiry(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 1 * KB
-        _CLIENT.put_object(bucket_name, object_name, LimitedRandomReader(size),
-                           size)
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+        )
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+        )
         response = HTTP.urlopen('GET', presigned_get_object_url)
         if response.status != 200:
             raise Exception(
@@ -1293,8 +1657,8 @@ def test_presigned_get_object_default_expiry(  # pylint: disable=invalid-name
                 f"code: {response.code}, error: {response.data}"
             )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_get_object_expiry(  # pylint: disable=invalid-name
@@ -1310,13 +1674,20 @@ def test_presigned_get_object_expiry(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 1 * KB
-        _CLIENT.put_object(bucket_name, object_name, LimitedRandomReader(size),
-                           size)
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name, timedelta(seconds=120))
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+        )
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            expires=timedelta(seconds=120),
+        )
         response = HTTP.urlopen('GET', presigned_get_object_url)
         if response.status != 200:
             raise Exception(
@@ -1342,8 +1713,11 @@ def test_presigned_get_object_expiry(  # pylint: disable=invalid-name
                 f"code: {response.code}, error: {response.data}"
             )
 
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name, timedelta(seconds=1))
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            expires=timedelta(seconds=1),
+        )
 
         # Wait for 2 seconds for the presigned url to expire
         time.sleep(2)
@@ -1359,8 +1733,8 @@ def test_presigned_get_object_expiry(  # pylint: disable=invalid-name
         if response.status == 200:
             raise ValueError('Presigned get url failed to expire!')
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_get_object_response_headers(  # pylint: disable=invalid-name
@@ -1380,17 +1754,25 @@ def test_presigned_get_object_response_headers(  # pylint: disable=invalid-name
         "content_language": content_language,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 1 * KB
-        _CLIENT.put_object(bucket_name, object_name, LimitedRandomReader(size),
-                           size)
-        response_headers = {
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+        )
+        extra_query_params = HTTPQueryDict({
             'response-content-type': content_type,
-            'response-content-language': content_language
-        }
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name, timedelta(seconds=120), response_headers)
+            'response-content-language': content_language,
+        })
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            expires=timedelta(seconds=120),
+            extra_query_params=extra_query_params,
+        )
 
         log_entry["args"]["presigned_get_object_url"] = (
             presigned_get_object_url)
@@ -1417,8 +1799,8 @@ def test_presigned_get_object_response_headers(  # pylint: disable=invalid-name
                 "code: {response.code}, error: {response.data}"
             )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_get_object_range(  # pylint: disable=invalid-name
@@ -1434,14 +1816,21 @@ def test_presigned_get_object_range(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         size = 556433  # on purpose its unaligned
-        _CLIENT.put_object(bucket_name, object_name, LimitedRandomReader(size),
-                           size)
+        _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
+        )
 
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name, timedelta(seconds=120))
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            expires=timedelta(seconds=120),
+        )
 
         log_entry["args"]["presigned_get_object_url"] = (
             presigned_get_object_url)
@@ -1462,8 +1851,8 @@ def test_presigned_get_object_range(  # pylint: disable=invalid-name
                 "code: {response.code}, error: {response.data}"
             )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_get_object_version(  # pylint: disable=invalid-name
@@ -1479,17 +1868,25 @@ def test_presigned_get_object_version(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     version_id = None
     try:
-        _CLIENT.set_bucket_versioning(bucket_name, VersioningConfig(ENABLED))
+        _client.set_bucket_versioning(
+            bucket_name=bucket_name,
+            config=VersioningConfig(ENABLED),
+        )
         size = 1 * KB
-        result = _CLIENT.put_object(
-            bucket_name, object_name, LimitedRandomReader(size), size,
+        result = _client.put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            data=LimitedRandomReader(size),
+            length=size,
         )
         version_id = result.version_id
-        presigned_get_object_url = _CLIENT.presigned_get_object(
-            bucket_name, object_name, version_id=version_id,
+        presigned_get_object_url = _client.presigned_get_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=version_id,
         )
         response = HTTP.urlopen('GET', presigned_get_object_url)
         if response.status != 200:
@@ -1498,8 +1895,12 @@ def test_presigned_get_object_version(  # pylint: disable=invalid-name
                 f"code: {response.code}, error: {response.data}"
             )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name, version_id=version_id)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            version_id=version_id,
+        )
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_put_object_default_expiry(  # pylint: disable=invalid-name
@@ -1515,10 +1916,12 @@ def test_presigned_put_object_default_expiry(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        presigned_put_object_url = _CLIENT.presigned_put_object(
-            bucket_name, object_name)
+        presigned_put_object_url = _client.presigned_put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+        )
         response = HTTP.urlopen('PUT',
                                 presigned_put_object_url,
                                 LimitedRandomReader(1 * KB))
@@ -1527,10 +1930,13 @@ def test_presigned_put_object_default_expiry(  # pylint: disable=invalid-name
                 f"Presigned PUT object URL {presigned_put_object_url} failed; "
                 f"code: {response.code}, error: {response.data}"
             )
-        _CLIENT.stat_object(bucket_name, object_name)
+        _client.stat_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+        )
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_put_object_expiry(  # pylint: disable=invalid-name
@@ -1546,10 +1952,13 @@ def test_presigned_put_object_expiry(  # pylint: disable=invalid-name
         "object_name": object_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        presigned_put_object_url = _CLIENT.presigned_put_object(
-            bucket_name, object_name, timedelta(seconds=1))
+        presigned_put_object_url = _client.presigned_put_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            expires=timedelta(seconds=1),
+        )
         # Wait for 2 seconds for the presigned url to expire
         time.sleep(2)
         response = HTTP.urlopen('PUT',
@@ -1558,8 +1967,8 @@ def test_presigned_put_object_expiry(  # pylint: disable=invalid-name
         if response.status == 200:
             raise ValueError('Presigned put url failed to expire!')
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_presigned_post_policy(log_entry):
@@ -1572,7 +1981,7 @@ def test_presigned_post_policy(log_entry):
         "bucket_name": bucket_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         no_of_days = 10
         prefix = 'objectPrefix/'
@@ -1589,9 +1998,9 @@ def test_presigned_post_policy(log_entry):
             "content_length_range": "64KiB to 10MiB",
             "Content-Type": "image/",
         }
-        _CLIENT.presigned_post_policy(policy)
+        _client.presigned_post_policy(policy=policy)
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_thread_safe(log_entry):
@@ -1602,15 +2011,19 @@ def test_thread_safe(log_entry):
         "bucket_name": bucket_name,
         "object_name": object_name,
     }
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
 
-    test_file_sha256sum = _get_sha256sum(_LARGE_FILE)
+    test_file_sha256sum = _get_sha256sum(_large_file)
     exceptions = []
 
     def get_object_and_check(index):
         local_file = f"copied_file_{index}"
         try:
-            _CLIENT.fget_object(bucket_name, object_name, local_file)
+            _client.fget_object(
+                bucket_name=bucket_name,
+                object_name=object_name,
+                file_path=local_file,
+            )
             if _get_sha256sum(local_file) != test_file_sha256sum:
                 raise ValueError(
                     "checksum mismatch on multi-threaded put/get objects")
@@ -1620,14 +2033,13 @@ def test_thread_safe(log_entry):
             _ = os.path.isfile(local_file) and os.remove(local_file)
 
     try:
-        thread_count = 5
+        _client.fput_object(
+            bucket_name=bucket_name,
+            object_name=object_name,
+            file_path=_large_file,
+        )
 
-        # Start threads for put object.
-        for _ in range(thread_count):
-            thread = Thread(target=_CLIENT.fput_object,
-                            args=(bucket_name, object_name, _LARGE_FILE))
-            thread.start()
-            thread.join()
+        thread_count = 5
 
         # Start threads for get object.
         threads = []
@@ -1641,8 +2053,8 @@ def test_thread_safe(log_entry):
         if exceptions:
             raise exceptions[0]
     finally:
-        _CLIENT.remove_object(bucket_name, object_name)
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name, object_name=object_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_get_bucket_policy(log_entry):
@@ -1653,14 +2065,14 @@ def test_get_bucket_policy(log_entry):
     log_entry["args"] = {
         "bucket_name": bucket_name,
     }
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        _CLIENT.get_bucket_policy(bucket_name)
+        _client.get_bucket_policy(bucket_name=bucket_name)
     except S3Error as exc:
         if exc.code != "NoSuchBucketPolicy":
             raise
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def _get_policy_actions(stat):
@@ -1678,7 +2090,8 @@ def _get_policy_actions(stat):
 
 def _validate_policy(bucket_name, policy):
     """Validate policy."""
-    policy_dict = json.loads(_CLIENT.get_bucket_policy(bucket_name))
+    policy_dict = json.loads(
+        _client.get_bucket_policy(bucket_name=bucket_name))
     actions = _get_policy_actions(policy_dict.get('Statement'))
     expected_actions = _get_policy_actions(policy.get('Statement'))
     return expected_actions == actions
@@ -1693,16 +2106,16 @@ def test_get_bucket_notification(log_entry):
         "bucket_name": bucket_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
-        config = _CLIENT.get_bucket_notification(bucket_name)
+        config = _client.get_bucket_notification(bucket_name=bucket_name)
         if (
                 config.cloud_func_config_list or config.queue_config_list or
                 config.topic_config_list
         ):
             raise ValueError("Failed to receive an empty bucket notification")
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_set_bucket_policy_readonly(log_entry):
@@ -1714,7 +2127,7 @@ def test_set_bucket_policy_readonly(log_entry):
         "bucket_name": bucket_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         # read-only policy
         policy = {
@@ -1744,12 +2157,15 @@ def test_set_bucket_policy_readonly(log_entry):
             ]
         }
         # Set read-only policy
-        _CLIENT.set_bucket_policy(bucket_name, json.dumps(policy))
+        _client.set_bucket_policy(
+            bucket_name=bucket_name,
+            policy=json.dumps(policy),
+        )
         # Validate if the policy is set correctly
         if not _validate_policy(bucket_name, policy):
             raise ValueError('Failed to set ReadOnly bucket policy')
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_set_bucket_policy_readwrite(  # pylint: disable=invalid-name
@@ -1762,7 +2178,7 @@ def test_set_bucket_policy_readwrite(  # pylint: disable=invalid-name
         "bucket_name": bucket_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     try:
         # Read-write policy
         policy = {
@@ -1803,12 +2219,15 @@ def test_set_bucket_policy_readwrite(  # pylint: disable=invalid-name
             ]
         }
         # Set read-write policy
-        _CLIENT.set_bucket_policy(bucket_name, json.dumps(policy))
+        _client.set_bucket_policy(
+            bucket_name=bucket_name,
+            policy=json.dumps(policy),
+        )
         # Validate if the policy is set correctly
         if not _validate_policy(bucket_name, policy):
             raise ValueError('Failed to set ReadOnly bucket policy')
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def _test_remove_objects(log_entry, version_check=False):
@@ -1820,20 +2239,24 @@ def _test_remove_objects(log_entry, version_check=False):
         "bucket_name": bucket_name,
     }
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
     object_names = []
     delete_object_list = []
     try:
         if version_check:
-            _CLIENT.set_bucket_versioning(
-                bucket_name, VersioningConfig(ENABLED),
+            _client.set_bucket_versioning(
+                bucket_name=bucket_name,
+                config=VersioningConfig(ENABLED),
             )
         size = 1 * KB
         # Upload some new objects to prepare for multi-object delete test.
         for i in range(10):
             object_name = f"prefix-{i}"
-            result = _CLIENT.put_object(
-                bucket_name, object_name, LimitedRandomReader(size), size,
+            result = _client.put_object(
+                bucket_name=bucket_name,
+                object_name=object_name,
+                data=LimitedRandomReader(size),
+                length=size,
             )
             object_names.append(
                 (object_name, result.version_id) if version_check
@@ -1847,15 +2270,21 @@ def _test_remove_objects(log_entry, version_check=False):
                 else DeleteObject(args[0], args[1])
             )
         # delete the objects in a single library call.
-        errs = _CLIENT.remove_objects(bucket_name, delete_object_list)
+        errs = _client.remove_objects(
+            bucket_name=bucket_name,
+            delete_object_list=delete_object_list,
+        )
         for err in errs:
             raise ValueError(f"Remove objects err: {err}")
     finally:
         # Try to clean everything to keep our server intact
-        errs = _CLIENT.remove_objects(bucket_name, delete_object_list)
+        errs = _client.remove_objects(
+            bucket_name=bucket_name,
+            delete_object_list=delete_object_list,
+        )
         for err in errs:
             raise ValueError(f"Remove objects err: {err}")
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def test_remove_objects(log_entry):
@@ -1873,21 +2302,21 @@ def test_remove_bucket(log_entry):
 
     # Get a unique bucket_name
     bucket_name = _gen_bucket_name()
-    if _IS_AWS:
+    if _is_aws:
         bucket_name += ".unique"
 
     log_entry["args"] = {
         "bucket_name": bucket_name,
     }
 
-    if _IS_AWS:
+    if _is_aws:
         log_entry["args"]["location"] = location = "us-east-1"
-        _CLIENT.make_bucket(bucket_name, location)
+        _client.make_bucket(bucket_name=bucket_name, location=location)
     else:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
 
     # Removing bucket. This operation will only work if your bucket is empty.
-    _CLIENT.remove_bucket(bucket_name)
+    _client.remove_bucket(bucket_name=bucket_name)
 
 
 def _test_upload_snowball_objects(log_entry, staging_filename=None):
@@ -1901,13 +2330,13 @@ def _test_upload_snowball_objects(log_entry, staging_filename=None):
     }
 
     try:
-        _CLIENT.make_bucket(bucket_name)
+        _client.make_bucket(bucket_name=bucket_name)
         size = 3 * MB
         reader1 = LimitedRandomReader(size)
         reader2 = LimitedRandomReader(size)
-        _CLIENT.upload_snowball_objects(
-            bucket_name,
-            [
+        _client.upload_snowball_objects(
+            bucket_name=bucket_name,
+            objects=[
                 SnowballObject("my-object1", data=io.BytesIO(b"py"), length=2),
                 SnowballObject(
                     "my-object2", data=reader1, length=size,
@@ -1921,10 +2350,13 @@ def _test_upload_snowball_objects(log_entry, staging_filename=None):
         )
         _test_list_objects_api(bucket_name, 3)
     finally:
-        _CLIENT.remove_object(bucket_name, "my-object1")
-        _CLIENT.remove_object(bucket_name, "my-object2")
-        _CLIENT.remove_object(bucket_name, "my-object3")
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_object(bucket_name=bucket_name,
+                              object_name="my-object1")
+        _client.remove_object(bucket_name=bucket_name,
+                              object_name="my-object2")
+        _client.remove_object(bucket_name=bucket_name,
+                              object_name="my-object3")
+        _client.remove_bucket(bucket_name=bucket_name)
         if staging_filename and os.path.exists(staging_filename):
             os.remove(staging_filename)
 
@@ -1953,18 +2385,18 @@ def test_set_get_bucket_versioning(log_entry):
 
     excl_prefixes = ['prefix1', 'prefix2']
 
-    _CLIENT.make_bucket(bucket_name)
+    _client.make_bucket(bucket_name=bucket_name)
 
     try:
         # Test all fields of versioning configuration
-        _CLIENT.set_bucket_versioning(
-            bucket_name,
-            VersioningConfig(status=ENABLED,
-                             exclude_folders=True,
-                             excluded_prefixes=excl_prefixes),
+        _client.set_bucket_versioning(
+            bucket_name=bucket_name,
+            config=VersioningConfig(status=ENABLED,
+                                    exclude_folders=True,
+                                    excluded_prefixes=excl_prefixes),
         )
 
-        vcfg = _CLIENT.get_bucket_versioning(bucket_name)
+        vcfg = _client.get_bucket_versioning(bucket_name=bucket_name)
         if vcfg.status != ENABLED:
             raise ValueError(f'(1) unexpected get_bucket_versioning result: '
                              f'status: {vcfg.status}')
@@ -1976,12 +2408,12 @@ def test_set_get_bucket_versioning(log_entry):
                              f'excluded_prefixes: {vcfg.excluded_prefixes}')
 
         # Disable all fields of versioning configuration
-        _CLIENT.set_bucket_versioning(
-            bucket_name,
-            VersioningConfig(status=SUSPENDED),
+        _client.set_bucket_versioning(
+            bucket_name=bucket_name,
+            config=VersioningConfig(status=SUSPENDED),
         )
 
-        vcfg = _CLIENT.get_bucket_versioning(bucket_name)
+        vcfg = _client.get_bucket_versioning(bucket_name=bucket_name)
         if vcfg.status != SUSPENDED:
             raise ValueError(f'(2) unexpected get_bucket_versioning result: '
                              f'status: {vcfg.status}')
@@ -1993,7 +2425,7 @@ def test_set_get_bucket_versioning(log_entry):
                              f'excluded_prefixes: {vcfg.excluded_prefixes}')
 
     finally:
-        _CLIENT.remove_bucket(bucket_name)
+        _client.remove_bucket(bucket_name=bucket_name)
 
 
 def main():
@@ -2001,7 +2433,7 @@ def main():
     Functional testing of minio python library.
     """
     # pylint: disable=global-statement
-    global _CLIENT, _TEST_FILE, _LARGE_FILE, _IS_AWS
+    global _client, _test_file, _large_file, _is_aws
 
     access_key = os.getenv('ACCESS_KEY')
     secret_key = os.getenv('SECRET_KEY')
@@ -2013,8 +2445,13 @@ def main():
         secret_key = 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
         secure = True
 
-    _CLIENT = Minio(server_endpoint, access_key, secret_key, secure=secure)
-    _IS_AWS = ".amazonaws.com" in server_endpoint
+    _client = Minio(
+        endpoint=server_endpoint,
+        access_key=access_key,
+        secret_key=secret_key,
+        secure=secure,
+    )
+    _is_aws = ".amazonaws.com" in server_endpoint
 
     # Check if we are running in the mint environment.
     data_dir = os.getenv('DATA_DIR', '/mint/data')
@@ -2026,18 +2463,18 @@ def main():
     )
 
     # Enable trace
-    # _CLIENT.trace_on(sys.stderr)
+    # _client.trace_on(sys.stderr)
 
-    _TEST_FILE = 'datafile-1-MB'
-    _LARGE_FILE = 'datafile-11-MB'
+    _test_file = 'datafile-1-MB'
+    _large_file = 'datafile-11-MB'
     if is_mint_env:
         # Choose data files
-        _TEST_FILE = os.path.join(data_dir, 'datafile-1-MB')
-        _LARGE_FILE = os.path.join(data_dir, 'datafile-11-MB')
+        _test_file = os.path.join(data_dir, 'datafile-1-MB')
+        _large_file = os.path.join(data_dir, 'datafile-11-MB')
     else:
-        with open(_TEST_FILE, 'wb') as file_data:
+        with open(_test_file, 'wb') as file_data:
             shutil.copyfileobj(LimitedRandomReader(1 * MB), file_data)
-        with open(_LARGE_FILE, 'wb') as file_data:
+        with open(_large_file, 'wb') as file_data:
             shutil.copyfileobj(LimitedRandomReader(11 * MB), file_data)
 
     ssec = None
@@ -2065,6 +2502,7 @@ def main():
             test_copy_object_unmodified_since: None,
             test_put_object: {"sse": ssec} if ssec else None,
             test_negative_put_object_with_path_segment: None,
+            test_put_object_multipart_with_checksum: None,
             test_stat_object: {"sse": ssec} if ssec else None,
             test_stat_object_version: {"sse": ssec} if ssec else None,
             test_get_object: {"sse": ssec} if ssec else None,
@@ -2141,8 +2579,8 @@ def main():
 
     # Remove temporary files.
     if not is_mint_env:
-        os.remove(_TEST_FILE)
-        os.remove(_LARGE_FILE)
+        os.remove(_test_file)
+        os.remove(_large_file)
 
 
 if __name__ == "__main__":

@@ -959,6 +959,62 @@ class PostUrn(_SpecificUrn):
         return self._entity_ids[0]
 
 if TYPE_CHECKING:
+    from datahub.metadata.schema_classes import DocumentKeyClass
+
+class DocumentUrn(_SpecificUrn):
+    ENTITY_TYPE: ClassVar[Literal["document"]] = "document"
+    _URN_PARTS: ClassVar[int] = 1
+
+    def __init__(self, id: Union["DocumentUrn", str], *, _allow_coercion: bool = True) -> None:
+        if _allow_coercion:
+            # Field coercion logic (if any is required).
+            if isinstance(id, str):
+                if id.startswith('urn:li:'):
+                    try:
+                        id = DocumentUrn.from_string(id)
+                    except InvalidUrnError:
+                        raise InvalidUrnError(f'Expecting a DocumentUrn but got {id}')
+                else:
+                    id = UrnEncoder.encode_string(id)
+
+        # Validation logic.
+        if not id:
+            raise InvalidUrnError("DocumentUrn id cannot be empty")
+        if isinstance(id, DocumentUrn):
+            id = id.id
+        elif isinstance(id, Urn):
+            raise InvalidUrnError(f'Expecting a DocumentUrn but got {id}')
+        if UrnEncoder.contains_reserved_char(id):
+            raise InvalidUrnError(f'DocumentUrn id contains reserved characters')
+
+        super().__init__(self.ENTITY_TYPE, [id])
+
+    @classmethod
+    def _parse_ids(cls, entity_ids: List[str]) -> "DocumentUrn":
+        if len(entity_ids) != cls._URN_PARTS:
+            raise InvalidUrnError(f"DocumentUrn should have {cls._URN_PARTS} parts, got {len(entity_ids)}: {entity_ids}")
+        return cls(id=entity_ids[0], _allow_coercion=False)
+
+    @classmethod
+    def underlying_key_aspect_type(cls) -> Type["DocumentKeyClass"]:
+        from datahub.metadata.schema_classes import DocumentKeyClass
+
+        return DocumentKeyClass
+
+    def to_key_aspect(self) -> "DocumentKeyClass":
+        from datahub.metadata.schema_classes import DocumentKeyClass
+
+        return DocumentKeyClass(id=self.id)
+
+    @classmethod
+    def from_key_aspect(cls, key_aspect: "DocumentKeyClass") -> "DocumentUrn":
+        return cls(id=key_aspect.id)
+
+    @property
+    def id(self) -> str:
+        return self._entity_ids[0]
+
+if TYPE_CHECKING:
     from datahub.metadata.schema_classes import ChartKeyClass
 
 class ChartUrn(_SpecificUrn):

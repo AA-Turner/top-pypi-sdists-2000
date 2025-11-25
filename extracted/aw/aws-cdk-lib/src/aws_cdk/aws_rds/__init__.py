@@ -3344,6 +3344,12 @@ class AuroraMysqlEngineVersion(
         return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_10_1"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_3_10_2")
+    def VER_3_10_2(cls) -> "AuroraMysqlEngineVersion":
+        '''Version "8.0.mysql_aurora.3.10.2".'''
+        return typing.cast("AuroraMysqlEngineVersion", jsii.sget(cls, "VER_3_10_2"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_3_11_0")
     def VER_3_11_0(cls) -> "AuroraMysqlEngineVersion":
         '''Version "8.0.mysql_aurora.3.11.0".'''
@@ -33702,6 +33708,12 @@ class MariaDbEngineVersion(
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_11_14"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_10_11_15")
+    def VER_10_11_15(cls) -> "MariaDbEngineVersion":
+        '''Version "10.11.15".'''
+        return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_11_15"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_11_4")
     def VER_10_11_4(cls) -> "MariaDbEngineVersion":
         '''(deprecated) Version "10.11.4".
@@ -34551,6 +34563,12 @@ class MariaDbEngineVersion(
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_6_23"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_10_6_24")
+    def VER_10_6_24(cls) -> "MariaDbEngineVersion":
+        '''Version "10.6.24".'''
+        return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_10_6_24"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_10_6_5")
     def VER_10_6_5(cls) -> "MariaDbEngineVersion":
         '''(deprecated) Version "10.6.5".
@@ -34612,6 +34630,12 @@ class MariaDbEngineVersion(
     def VER_11_4_8(cls) -> "MariaDbEngineVersion":
         '''Version "11.4.8".'''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_11_4_8"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_11_4_9")
+    def VER_11_4_9(cls) -> "MariaDbEngineVersion":
+        '''Version "11.4.9".'''
+        return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_11_4_9"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_11_8_3")
@@ -35376,6 +35400,12 @@ class MysqlEngineVersion(
     def VER_8_0_43(cls) -> "MysqlEngineVersion":
         '''Version "8.0.43".'''
         return typing.cast("MysqlEngineVersion", jsii.sget(cls, "VER_8_0_43"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_8_0_44")
+    def VER_8_0_44(cls) -> "MysqlEngineVersion":
+        '''Version "8.0.44".'''
+        return typing.cast("MysqlEngineVersion", jsii.sget(cls, "VER_8_0_44"))
 
     @jsii.python.classproperty
     @jsii.member(jsii_name="VER_8_4_3")

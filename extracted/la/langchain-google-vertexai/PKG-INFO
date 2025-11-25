@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-google-vertexai
-Version: 3.0.3
+Version: 3.1.0
 Summary: An integration package connecting Google VertexAI and LangChain
 Project-URL: Homepage, https://docs.langchain.com/oss/python/integrations/providers/google
 Project-URL: Documentation, https://reference.langchain.com/python/integrations/langchain_google_vertexai/
@@ -17,9 +17,9 @@ Requires-Dist: google-cloud-aiplatform<2.0.0,>=1.97.0
 Requires-Dist: google-cloud-storage<4.0.0,>=2.18.0
 Requires-Dist: httpx-sse<1.0.0,>=0.4.0
 Requires-Dist: httpx<1.0.0,>=0.28.0
-Requires-Dist: langchain-core<2.0.0,>=1.0.0
+Requires-Dist: langchain-core<2.0.0,>=1.1.0
 Requires-Dist: numexpr<3.0.0,>=2.8.6
-Requires-Dist: pyarrow<22.0.0,>=19.0.1
+Requires-Dist: pyarrow<23.0.0,>=19.0.1
 Requires-Dist: pydantic<3.0.0,>=2.9.0
 Requires-Dist: validators<1.0.0,>=0.22.0
 Provides-Extra: anthropic

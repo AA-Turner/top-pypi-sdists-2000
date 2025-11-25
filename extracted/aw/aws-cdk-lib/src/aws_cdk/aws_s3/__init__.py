@@ -4802,17 +4802,12 @@ class CfnBucket(
 
     Example::
 
-        # cfn_template: cfn_inc.CfnInclude
+        # Works across different resource types
+        bucket = s3.CfnBucket(scope, "Bucket")
+        Mixins.of(bucket).apply(EncryptionAtRest())
         
-        cfn_bucket = cfn_template.get_resource("Bucket")
-        
-        role = iam.Role(self, "Role",
-            assumed_by=iam.AnyPrincipal()
-        )
-        role.add_to_policy(iam.PolicyStatement(
-            actions=["s3:*"],
-            resources=[cfn_bucket.attr_arn]
-        ))
+        log_group = logs.CfnLogGroup(scope, "LogGroup")
+        Mixins.of(log_group).apply(EncryptionAtRest())
     '''
 
     def __init__(

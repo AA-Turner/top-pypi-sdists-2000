@@ -14667,7 +14667,8 @@ class EventSourceMappingOptions:
                 parallelization_factor=123,
                 provisioned_poller_config=lambda.ProvisionedPollerConfig(
                     maximum_pollers=123,
-                    minimum_pollers=123
+                    minimum_pollers=123,
+                    poller_group_name="pollerGroupName"
                 ),
                 report_batch_item_failures=False,
                 retry_attempts=123,
@@ -15189,7 +15190,8 @@ class EventSourceMappingProps(EventSourceMappingOptions):
                 parallelization_factor=123,
                 provisioned_poller_config=lambda.ProvisionedPollerConfig(
                     maximum_pollers=123,
-                    minimum_pollers=123
+                    minimum_pollers=123,
+                    poller_group_name="pollerGroupName"
                 ),
                 report_batch_item_failures=False,
                 retry_attempts=123,
@@ -22886,6 +22888,7 @@ class Permission:
     name_mapping={
         "maximum_pollers": "maximumPollers",
         "minimum_pollers": "minimumPollers",
+        "poller_group_name": "pollerGroupName",
     },
 )
 class ProvisionedPollerConfig:
@@ -22894,11 +22897,13 @@ class ProvisionedPollerConfig:
         *,
         maximum_pollers: typing.Optional[jsii.Number] = None,
         minimum_pollers: typing.Optional[jsii.Number] = None,
+        poller_group_name: typing.Optional[builtins.str] = None,
     ) -> None:
         '''(Amazon MSK and self-managed Apache Kafka only) The provisioned mode configuration for the event source.
 
         :param maximum_pollers: The maximum number of pollers that can be provisioned. Default: - 200
         :param minimum_pollers: The minimum number of pollers that should be provisioned. Default: - 1
+        :param poller_group_name: An optional identifier that groups multiple ESMs to share EPU capacity and reduce costs. ESMs with the same PollerGroupName share compute resources. Default: - not set, dedicated compute resource per event source.
 
         :exampleMetadata: fixture=_generated
 
@@ -22910,18 +22915,22 @@ class ProvisionedPollerConfig:
             
             provisioned_poller_config = lambda.ProvisionedPollerConfig(
                 maximum_pollers=123,
-                minimum_pollers=123
+                minimum_pollers=123,
+                poller_group_name="pollerGroupName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7daeb3a0360a4da1ad9a12a6a656f2d6c53d84bbebb9ef1e2273e4ca2dde8be0)
             check_type(argname="argument maximum_pollers", value=maximum_pollers, expected_type=type_hints["maximum_pollers"])
             check_type(argname="argument minimum_pollers", value=minimum_pollers, expected_type=type_hints["minimum_pollers"])
+            check_type(argname="argument poller_group_name", value=poller_group_name, expected_type=type_hints["poller_group_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if maximum_pollers is not None:
             self._values["maximum_pollers"] = maximum_pollers
         if minimum_pollers is not None:
             self._values["minimum_pollers"] = minimum_pollers
+        if poller_group_name is not None:
+            self._values["poller_group_name"] = poller_group_name
 
     @builtins.property
     def maximum_pollers(self) -> typing.Optional[jsii.Number]:
@@ -22940,6 +22949,18 @@ class ProvisionedPollerConfig:
         '''
         result = self._values.get("minimum_pollers")
         return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def poller_group_name(self) -> typing.Optional[builtins.str]:
+        '''An optional identifier that groups multiple ESMs to share EPU capacity and reduce costs.
+
+        ESMs with the same PollerGroupName share compute
+        resources.
+
+        :default: - not set, dedicated compute resource per event source.
+        '''
+        result = self._values.get("poller_group_name")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -25140,30 +25161,21 @@ class StartingPosition(enum.Enum):
 
     Example::
 
-        from aws_cdk.aws_lambda_event_sources import ManagedKafkaEventSource
-        from aws_cdk.aws_kms import Key
+        import aws_cdk.aws_dynamodb as dynamodb
+        from aws_cdk.aws_lambda_event_sources import DynamoEventSource, SqsDlq
         
-        # my_function: lambda.Function
+        # table: dynamodb.Table
+        
+        # fn: lambda.Function
         
         
-        # Your MSK cluster arn
-        cluster_arn = "arn:aws:kafka:us-east-1:0123456789019:cluster/SalesCluster/abcd1234-abcd-cafe-abab-9876543210ab-4"
-        
-        # The Kafka topic you want to subscribe to
-        topic = "some-cool-topic"
-        
-        # Your self managed KMS key
-        my_key = Key.from_key_arn(self, "SourceBucketEncryptionKey", "arn:aws:kms:us-east-1:123456789012:key/<key-id>")
-        my_function.add_event_source(ManagedKafkaEventSource(
-            cluster_arn=cluster_arn,
-            topic=topic,
+        dead_letter_queue = sqs.Queue(self, "deadLetterQueue")
+        fn.add_event_source(DynamoEventSource(table,
             starting_position=lambda_.StartingPosition.TRIM_HORIZON,
-            filters=[
-                lambda_.FilterCriteria.filter({
-                    "string_equals": lambda_.FilterRule.is_equal("test")
-                })
-            ],
-            filter_encryption=my_key
+            batch_size=5,
+            bisect_batch_on_error=True,
+            on_failure=SqsDlq(dead_letter_queue),
+            retry_attempts=10
         ))
     '''
 
@@ -28005,7 +28017,8 @@ class EventSourceMapping(
             parallelization_factor=123,
             provisioned_poller_config=lambda.ProvisionedPollerConfig(
                 maximum_pollers=123,
-                minimum_pollers=123
+                minimum_pollers=123,
+                poller_group_name="pollerGroupName"
             ),
             report_batch_item_failures=False,
             retry_attempts=123,
@@ -34167,6 +34180,7 @@ def _typecheckingstub__7daeb3a0360a4da1ad9a12a6a656f2d6c53d84bbebb9ef1e2273e4ca2
     *,
     maximum_pollers: typing.Optional[jsii.Number] = None,
     minimum_pollers: typing.Optional[jsii.Number] = None,
+    poller_group_name: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

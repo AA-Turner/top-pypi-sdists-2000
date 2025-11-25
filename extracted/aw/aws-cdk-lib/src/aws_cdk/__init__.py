@@ -8327,14 +8327,14 @@ class CfnRefElement(
     metaclass=jsii.JSIIAbstractClass,
     jsii_type="aws-cdk-lib.CfnRefElement",
 ):
-    '''Base class for referencable CloudFormation constructs which are not Resources.
+    '''Base class for referenceable CloudFormation constructs which are not Resources.
 
     These constructs are things like Conditions and Parameters, can be
     referenced by taking the ``.ref`` attribute.
 
     Resource constructs do not inherit from CfnRefElement because they have their
     own, more specific types returned from the .ref attribute. Also, some
-    resources aren't referencable at all (such as BucketPolicies or GatewayAttachments).
+    resources aren't referenceable at all (such as BucketPolicies or GatewayAttachments).
     '''
 
     def __init__(self, scope: _constructs_77d1e7e8.Construct, id: builtins.str) -> None:

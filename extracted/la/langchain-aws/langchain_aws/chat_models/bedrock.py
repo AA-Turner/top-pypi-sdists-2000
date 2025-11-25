@@ -24,6 +24,8 @@ from langchain_core.language_models import (
     BaseChatModel,
     LangSmithParams,
     LanguageModelInput,
+    ModelProfile,
+    ModelProfileRegistry,
 )
 from langchain_core.language_models.chat_models import generate_from_stream
 from langchain_core.messages import (
@@ -49,9 +51,11 @@ from langchain_core.utils.function_calling import convert_to_openai_tool
 from langchain_core.utils.pydantic import TypeBaseModel, is_basemodel_subclass
 from langchain_core.utils.utils import _build_model_kwargs
 from pydantic import BaseModel, ConfigDict, Field, model_validator
+from typing_extensions import Self
 
 from langchain_aws.chat_models._compat import _convert_from_v1_to_anthropic
 from langchain_aws.chat_models.bedrock_converse import ChatBedrockConverse
+from langchain_aws.data._profiles import _PROFILES
 from langchain_aws.function_calling import (
     AnthropicTool,
     ToolsOutputParser,
@@ -75,6 +79,14 @@ from langchain_aws.utils import (
 )
 
 logger = logging.getLogger(__name__)
+
+
+_MODEL_PROFILES = cast("ModelProfileRegistry", _PROFILES)
+
+
+def _get_default_model_profile(model_name: str) -> ModelProfile:
+    default = _MODEL_PROFILES.get(model_name) or {}
+    return default.copy()
 
 
 def _convert_one_message_to_text_llama(message: BaseMessage) -> str:
@@ -279,7 +291,7 @@ def convert_messages_to_prompt_writer(messages: List[BaseMessage]) -> str:
     """Convert a list of messages to a prompt for Writer."""
 
     return "\n".join(
-        [_convert_one_message_to_text_llama(message) for message in messages]
+        [_convert_one_message_to_text_writer(message) for message in messages]
     )
 
 
@@ -741,7 +753,7 @@ class ChatPromptAdapter:
     ]:
         if provider == "anthropic":
             return _format_anthropic_messages(messages)
-        elif provider == "openai":
+        elif provider in ("openai", "qwen"):
             return cast(List[Dict[str, Any]], convert_to_openai_messages(messages))
         raise NotImplementedError(
             f"Provider {provider} not supported for format_messages"
@@ -769,7 +781,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
     a sequence of characters that causes a model to stop generating a response. See
     https://docs.aws.amazon.com/bedrock/latest/APIReference/API_agent_InferenceConfiguration.html
     for more.
-    
+
     """
 
     @property
@@ -784,7 +796,11 @@ class ChatBedrock(BaseChatModel, BedrockBase):
 
     @classmethod
     def get_lc_namespace(cls) -> List[str]:
-        """Get the namespace of the langchain object."""
+        """Get the namespace of the langchain object.
+
+        Returns:
+            `["langchain", "chat_models", "bedrock"]`
+        """
         return ["langchain", "chat_models", "bedrock"]
 
     @model_validator(mode="before")
@@ -839,6 +855,14 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                 **model_kwargs,
             }
         return values
+
+    @model_validator(mode="after")
+    def _set_model_profile(self) -> Self:
+        """Set model profile if not overridden."""
+        if self.profile is None:
+            model_id = re.sub(r"^[A-Za-z]{2}\.", "", self.model_id)
+            self.profile = _get_default_model_profile(model_id)
+        return self
 
     @property
     def lc_attributes(self) -> Dict[str, Any]:
@@ -914,7 +938,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                     system = self.system_prompt_with_tools
             else:
                 system = system_str
-        elif provider == "openai":
+        elif provider in ("openai", "qwen"):
             formatted_messages = cast(
                 List[Dict[str, Any]],
                 ChatPromptAdapter.format_messages(provider, messages),
@@ -1060,7 +1084,7 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                 else:
                     system = system_str
                 citations_enabled = _citations_enabled(formatted_messages)
-            elif provider == "openai":
+            elif provider in ("openai", "qwen"):
                 formatted_messages = cast(
                     List[Dict[str, Any]],
                     ChatPromptAdapter.format_messages(provider, messages),
@@ -1231,7 +1255,12 @@ class ChatBedrock(BaseChatModel, BedrockBase):
             base_model = self._get_base_model()
             if any(
                 x in base_model
-                for x in ("claude-3-7-", "claude-opus-4-", "claude-sonnet-4-")
+                for x in (
+                    "claude-3-7-",
+                    "claude-opus-4-",
+                    "claude-sonnet-4-",
+                    "claude-haiku-4-",
+                )
             ) and thinking_in_params(self.model_kwargs or {}):
                 forced = False
                 if isinstance(tool_choice, bool):
@@ -1294,12 +1323,19 @@ class ChatBedrock(BaseChatModel, BedrockBase):
                 then the model output will be an object of that class. If a dict then
                 the model output will be a dict. With a Pydantic class the returned
                 attributes will be validated, whereas with a dict they will not be.
-            include_raw: If False then only the parsed structured output is returned. If
-                an error occurs during model output parsing it will be raised. If True
-                then both the raw model response (a BaseMessage) and the parsed model
-                response will be returned. If an error occurs during output parsing it
-                will be caught and returned as well. The final output is always a dict
-                with keys "raw", "parsed", and "parsing_error".
+            include_raw:
+                If `False` then only the parsed structured output is returned.
+
+                If an error occurs during model output parsing it will be raised.
+
+                If `True` then both the raw model response (a `BaseMessage`) and the
+                parsed model response will be returned.
+
+                If an error occurs during output parsing it will be caught and returned
+                as well.
+
+                The final output is always a `dict` with keys `'raw'`, `'parsed'`, and
+                `'parsing_error'`.
 
         Returns:
             A Runnable that takes any ChatModel input. The output type depends on

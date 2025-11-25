@@ -7685,6 +7685,59 @@ class HostedZoneAttributes:
         )
 
 
+class HostedZoneGrants(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_route53.HostedZoneGrants",
+):
+    '''Collection of grant methods for a INamedHostedZoneRef.
+
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_route53 as route53
+        
+        # named_hosted_zone_ref: route53.INamedHostedZoneRef
+        
+        hosted_zone_grants = route53.HostedZoneGrants.from_hosted_zone(named_hosted_zone_ref)
+    '''
+
+    @jsii.member(jsii_name="fromHostedZone")
+    @builtins.classmethod
+    def from_hosted_zone(cls, hosted_zone: "INamedHostedZoneRef") -> "HostedZoneGrants":
+        '''Creates grants for INamedHostedZoneRef.
+
+        :param hosted_zone: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5ff92cc89a407db790189517024612ad356516c9279c5587ed3d54c30ff8b66c)
+            check_type(argname="argument hosted_zone", value=hosted_zone, expected_type=type_hints["hosted_zone"])
+        return typing.cast("HostedZoneGrants", jsii.sinvoke(cls, "fromHostedZone", [hosted_zone]))
+
+    @jsii.member(jsii_name="delegation")
+    def delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant permissions to add delegation records to this zone.
+
+        :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b89c0b16bd4247e3bc59d7d9a2b918a0738ab4367a7cd428a28200b56497779)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        delegation_options = GrantDelegationOptions(
+            delegated_zone_names=delegated_zone_names
+        )
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "delegation", [grantee, delegation_options]))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_route53.HostedZoneProps",
     jsii_struct_bases=[CommonHostedZoneProps],
@@ -8079,132 +8132,13 @@ class _IHealthCheckProxy(
 typing.cast(typing.Any, IHealthCheck).__jsii_proxy_class__ = lambda : _IHealthCheckProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IHostedZone")
-class IHostedZone(_IResource_c80c4260, typing_extensions.Protocol):
-    '''Imported or created hosted zone.'''
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneArn")
-    def hosted_zone_arn(self) -> builtins.str:
-        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.
-
-        :attribute: true
-        '''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneId")
-    def hosted_zone_id(self) -> builtins.str:
-        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".
-
-        :attribute: true
-        '''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="zoneName")
-    def zone_name(self) -> builtins.str:
-        '''FQDN of this hosted zone.'''
-        ...
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneNameServers")
-    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
-
-        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
-
-        :attribute: true
-        '''
-        ...
-
-    @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(
-        self,
-        grantee: _IGrantable_71c4f5de,
-        *,
-        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
-        '''Grant permissions to add delegation records to this zone.
-
-        :param grantee: -
-        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
-        '''
-        ...
-
-
-class _IHostedZoneProxy(
-    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
-):
-    '''Imported or created hosted zone.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IHostedZone"
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneArn")
-    def hosted_zone_arn(self) -> builtins.str:
-        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.
-
-        :attribute: true
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "hostedZoneArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneId")
-    def hosted_zone_id(self) -> builtins.str:
-        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".
-
-        :attribute: true
-        '''
-        return typing.cast(builtins.str, jsii.get(self, "hostedZoneId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="zoneName")
-    def zone_name(self) -> builtins.str:
-        '''FQDN of this hosted zone.'''
-        return typing.cast(builtins.str, jsii.get(self, "zoneName"))
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneNameServers")
-    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
-
-        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
-
-        :attribute: true
-        '''
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "hostedZoneNameServers"))
-
-    @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(
-        self,
-        grantee: _IGrantable_71c4f5de,
-        *,
-        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
-        '''Grant permissions to add delegation records to this zone.
-
-        :param grantee: -
-        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18)
-            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
-
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IHostedZone).__jsii_proxy_class__ = lambda : _IHostedZoneProxy
-
-
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IKeySigningKey")
 class IKeySigningKey(_IResource_c80c4260, typing_extensions.Protocol):
     '''A Key Signing Key for a Route 53 Hosted Zone.'''
 
     @builtins.property
     @jsii.member(jsii_name="hostedZone")
-    def hosted_zone(self) -> IHostedZone:
+    def hosted_zone(self) -> "IHostedZone":
         '''The hosted zone that the key signing key signs.
 
         :attribute: true
@@ -8239,12 +8173,12 @@ class _IKeySigningKeyProxy(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZone")
-    def hosted_zone(self) -> IHostedZone:
+    def hosted_zone(self) -> "IHostedZone":
         '''The hosted zone that the key signing key signs.
 
         :attribute: true
         '''
-        return typing.cast(IHostedZone, jsii.get(self, "hostedZone"))
+        return typing.cast("IHostedZone", jsii.get(self, "hostedZone"))
 
     @builtins.property
     @jsii.member(jsii_name="keySigningKeyId")
@@ -8268,42 +8202,26 @@ class _IKeySigningKeyProxy(
 typing.cast(typing.Any, IKeySigningKey).__jsii_proxy_class__ = lambda : _IKeySigningKeyProxy
 
 
-@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IPrivateHostedZone")
-class IPrivateHostedZone(IHostedZone, typing_extensions.Protocol):
-    '''Represents a Route 53 private hosted zone.'''
+@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.INamedHostedZoneRef")
+class INamedHostedZoneRef(_IHostedZoneRef_156b310f, typing_extensions.Protocol):
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        ...
 
-    pass
 
-
-class _IPrivateHostedZoneProxy(
-    jsii.proxy_for(IHostedZone), # type: ignore[misc]
+class _INamedHostedZoneRefProxy(
+    jsii.proxy_for(_IHostedZoneRef_156b310f), # type: ignore[misc]
 ):
-    '''Represents a Route 53 private hosted zone.'''
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.INamedHostedZoneRef"
 
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IPrivateHostedZone"
-    pass
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "name"))
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IPrivateHostedZone).__jsii_proxy_class__ = lambda : _IPrivateHostedZoneProxy
-
-
-@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IPublicHostedZone")
-class IPublicHostedZone(IHostedZone, typing_extensions.Protocol):
-    '''Represents a Route 53 public hosted zone.'''
-
-    pass
-
-
-class _IPublicHostedZoneProxy(
-    jsii.proxy_for(IHostedZone), # type: ignore[misc]
-):
-    '''Represents a Route 53 public hosted zone.'''
-
-    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IPublicHostedZone"
-    pass
-
-# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
-typing.cast(typing.Any, IPublicHostedZone).__jsii_proxy_class__ = lambda : _IPublicHostedZoneProxy
+typing.cast(typing.Any, INamedHostedZoneRef).__jsii_proxy_class__ = lambda : _INamedHostedZoneRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IRecordSet")
@@ -8375,7 +8293,7 @@ class KeySigningKey(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        hosted_zone: IHostedZone,
+        hosted_zone: "IHostedZone",
         kms_key: _IKey_5f11635f,
         key_signing_key_name: typing.Optional[builtins.str] = None,
         status: typing.Optional["KeySigningKeyStatus"] = None,
@@ -8408,7 +8326,7 @@ class KeySigningKey(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
-        hosted_zone: IHostedZone,
+        hosted_zone: "IHostedZone",
         key_signing_key_name: builtins.str,
     ) -> IKeySigningKey:
         '''Imports a key signing key from its attributes.
@@ -8436,9 +8354,9 @@ class KeySigningKey(
 
     @builtins.property
     @jsii.member(jsii_name="hostedZone")
-    def hosted_zone(self) -> IHostedZone:
+    def hosted_zone(self) -> "IHostedZone":
         '''The hosted zone that the key signing key signs.'''
-        return typing.cast(IHostedZone, jsii.get(self, "hostedZone"))
+        return typing.cast("IHostedZone", jsii.get(self, "hostedZone"))
 
     @builtins.property
     @jsii.member(jsii_name="keySigningKeyId")
@@ -8465,7 +8383,7 @@ class KeySigningKeyAttributes:
     def __init__(
         self,
         *,
-        hosted_zone: IHostedZone,
+        hosted_zone: "IHostedZone",
         key_signing_key_name: builtins.str,
     ) -> None:
         '''The attributes of a key signing key.
@@ -8498,14 +8416,14 @@ class KeySigningKeyAttributes:
         }
 
     @builtins.property
-    def hosted_zone(self) -> IHostedZone:
+    def hosted_zone(self) -> "IHostedZone":
         '''The hosted zone that the key signing key signs.
 
         :attribute: true
         '''
         result = self._values.get("hosted_zone")
         assert result is not None, "Required property 'hosted_zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def key_signing_key_name(self) -> builtins.str:
@@ -8543,7 +8461,7 @@ class KeySigningKeyProps:
     def __init__(
         self,
         *,
-        hosted_zone: IHostedZone,
+        hosted_zone: "IHostedZone",
         kms_key: _IKey_5f11635f,
         key_signing_key_name: typing.Optional[builtins.str] = None,
         status: typing.Optional["KeySigningKeyStatus"] = None,
@@ -8585,11 +8503,11 @@ class KeySigningKeyProps:
             self._values["status"] = status
 
     @builtins.property
-    def hosted_zone(self) -> IHostedZone:
+    def hosted_zone(self) -> "IHostedZone":
         '''The hosted zone that this key will be used to sign.'''
         result = self._values.get("hosted_zone")
         assert result is not None, "Required property 'hosted_zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def kms_key(self) -> _IKey_5f11635f:
@@ -9203,7 +9121,7 @@ class RecordSet(
         *,
         record_type: "RecordType",
         target: "RecordTarget",
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -9292,7 +9210,7 @@ class RecordSetOptions:
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -9392,11 +9310,11 @@ class RecordSetOptions:
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -9576,7 +9494,7 @@ class RecordSetProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -9687,11 +9605,11 @@ class RecordSetProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -10105,7 +10023,7 @@ class SrvRecord(
         id: builtins.str,
         *,
         values: typing.Sequence[typing.Union["SrvRecordValue", typing.Dict[builtins.str, typing.Any]]],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -10187,7 +10105,7 @@ class SrvRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -10297,11 +10215,11 @@ class SrvRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -10606,7 +10524,7 @@ class SvcbRecord(
         id: builtins.str,
         *,
         values: typing.Sequence["SvcbRecordValue"],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -10688,7 +10606,7 @@ class SvcbRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -10794,11 +10712,11 @@ class SvcbRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -11239,7 +11157,7 @@ class TxtRecord(
         id: builtins.str,
         *,
         values: typing.Sequence[builtins.str],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -11321,7 +11239,7 @@ class TxtRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -11411,11 +11329,11 @@ class TxtRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -11608,7 +11526,7 @@ class VpcEndpointServiceDomainName(
         *,
         domain_name: builtins.str,
         endpoint_service: _IVPCEndpointServiceRef_90edcb87,
-        public_hosted_zone: IPublicHostedZone,
+        public_hosted_zone: "IPublicHostedZone",
     ) -> None:
         '''
         :param scope: -
@@ -11658,7 +11576,7 @@ class VpcEndpointServiceDomainNameProps:
         *,
         domain_name: builtins.str,
         endpoint_service: _IVPCEndpointServiceRef_90edcb87,
-        public_hosted_zone: IPublicHostedZone,
+        public_hosted_zone: "IPublicHostedZone",
     ) -> None:
         '''Properties to configure a VPC Endpoint Service domain name.
 
@@ -11714,11 +11632,11 @@ class VpcEndpointServiceDomainNameProps:
         return typing.cast(_IVPCEndpointServiceRef_90edcb87, result)
 
     @builtins.property
-    def public_hosted_zone(self) -> IPublicHostedZone:
+    def public_hosted_zone(self) -> "IPublicHostedZone":
         '''The public hosted zone to use for the domain.'''
         result = self._values.get("public_hosted_zone")
         assert result is not None, "Required property 'public_hosted_zone' is missing"
-        return typing.cast(IPublicHostedZone, result)
+        return typing.cast("IPublicHostedZone", result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -11849,7 +11767,7 @@ class ZoneDelegationRecord(
         id: builtins.str,
         *,
         name_servers: typing.Sequence[builtins.str],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -11931,7 +11849,7 @@ class ZoneDelegationRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -12036,11 +11954,11 @@ class ZoneDelegationRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -12313,7 +12231,7 @@ class ARecord(
         id: builtins.str,
         *,
         target: RecordTarget,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -12373,7 +12291,7 @@ class ARecord(
         id: builtins.str,
         *,
         target_dns: builtins.str,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -12463,7 +12381,7 @@ class ARecordAttrs(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -12550,11 +12468,11 @@ class ARecordAttrs(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -12740,7 +12658,7 @@ class ARecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -12831,11 +12749,11 @@ class ARecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -13027,7 +12945,7 @@ class AaaaRecord(
         id: builtins.str,
         *,
         target: RecordTarget,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -13109,7 +13027,7 @@ class AaaaRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -13196,11 +13114,11 @@ class AaaaRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -13385,7 +13303,7 @@ class CaaAmazonRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -13485,11 +13403,11 @@ class CaaAmazonRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -13696,7 +13614,7 @@ class CaaRecord(
         id: builtins.str,
         *,
         values: typing.Sequence[typing.Union[CaaRecordValue, typing.Dict[builtins.str, typing.Any]]],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -13778,7 +13696,7 @@ class CaaRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -13887,11 +13805,11 @@ class CaaRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -14106,7 +14024,7 @@ class CnameRecord(
         id: builtins.str,
         *,
         domain_name: builtins.str,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -14188,7 +14106,7 @@ class CnameRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -14298,11 +14216,11 @@ class CnameRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -14495,7 +14413,7 @@ class DsRecord(
         id: builtins.str,
         *,
         values: typing.Sequence[builtins.str],
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -14577,7 +14495,7 @@ class DsRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -14665,11 +14583,11 @@ class DsRecordProps(RecordSetOptions):
             self._values["weight"] = weight
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -14985,249 +14903,6 @@ class HealthCheck(
         return typing.cast(builtins.str, jsii.get(self, "healthCheckId"))
 
 
-@jsii.implements(IHostedZone)
-class HostedZone(
-    _Resource_45bc6135,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_route53.HostedZone",
-):
-    '''Container for records, and records contain information about how to route traffic for a specific domain, such as example.com and its subdomains (acme.example.com, zenith.example.com).
-
-    :exampleMetadata: infused
-
-    Example::
-
-        example_com = route53.HostedZone(self, "ExampleCom",
-            zone_name="example.com"
-        )
-        example_net = route53.HostedZone(self, "ExampleNet",
-            zone_name="example.net"
-        )
-        
-        cert = acm.Certificate(self, "Certificate",
-            domain_name="test.example.com",
-            subject_alternative_names=["cool.example.com", "test.example.net"],
-            validation=acm.CertificateValidation.from_dns_multi_zone({
-                "test.example.com": example_com,
-                "cool.example.com": example_com,
-                "test.example.net": example_net
-            })
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
-        zone_name: builtins.str,
-        add_trailing_dot: typing.Optional[builtins.bool] = None,
-        comment: typing.Optional[builtins.str] = None,
-        query_logs_log_group_arn: typing.Optional[builtins.str] = None,
-    ) -> None:
-        '''
-        :param scope: -
-        :param id: -
-        :param vpcs: A VPC that you want to associate with this hosted zone. When you specify this property, a private hosted zone will be created. You can associate additional VPCs to this private zone using ``addVpc(vpc)``. Default: public (no VPCs associated)
-        :param zone_name: The name of the domain. For resource record types that include a domain name, specify a fully qualified domain name.
-        :param add_trailing_dot: Whether to add a trailing dot to the zone name. Default: true
-        :param comment: Any comments that you want to include about the hosted zone. Default: none
-        :param query_logs_log_group_arn: The Amazon Resource Name (ARN) for the log group that you want Amazon Route 53 to send query logs to. Default: disabled
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__1e5b9f9d7aa4bc16fced3cc22e63b14cbf590c498be223e588483a72fb0b4233)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = HostedZoneProps(
-            vpcs=vpcs,
-            zone_name=zone_name,
-            add_trailing_dot=add_trailing_dot,
-            comment=comment,
-            query_logs_log_group_arn=query_logs_log_group_arn,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.member(jsii_name="fromHostedZoneAttributes")
-    @builtins.classmethod
-    def from_hosted_zone_attributes(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        hosted_zone_id: builtins.str,
-        zone_name: builtins.str,
-    ) -> IHostedZone:
-        '''Imports a hosted zone from another stack.
-
-        Use when both hosted zone ID and hosted zone name are known.
-
-        :param scope: the parent Construct for this Construct.
-        :param id: the logical name of this Construct.
-        :param hosted_zone_id: Identifier of the hosted zone.
-        :param zone_name: Name of the hosted zone.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__24a9e3565a26d4d6d8a3c0d4406ef8f6cce5e0e48dc1145dc090f7db4581c0ac)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        attrs = HostedZoneAttributes(
-            hosted_zone_id=hosted_zone_id, zone_name=zone_name
-        )
-
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneAttributes", [scope, id, attrs]))
-
-    @jsii.member(jsii_name="fromHostedZoneId")
-    @builtins.classmethod
-    def from_hosted_zone_id(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        hosted_zone_id: builtins.str,
-    ) -> IHostedZone:
-        '''Import a Route 53 hosted zone defined either outside the CDK, or in a different CDK stack.
-
-        Use when hosted zone ID is known. If a HostedZone is imported with this method the zoneName cannot be referenced.
-        If the zoneName is needed then the HostedZone should be imported with ``fromHostedZoneAttributes()`` or ``fromLookup()``
-
-        :param scope: the parent Construct for this Construct.
-        :param id: the logical name of this Construct.
-        :param hosted_zone_id: the ID of the hosted zone to import.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__dc5da03bfe3e7000e80ebfbe7cb3c5c23ab3e97f4e6c670a8eb0ef036d099c78)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-            check_type(argname="argument hosted_zone_id", value=hosted_zone_id, expected_type=type_hints["hosted_zone_id"])
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneId", [scope, id, hosted_zone_id]))
-
-    @jsii.member(jsii_name="fromLookup")
-    @builtins.classmethod
-    def from_lookup(
-        cls,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        domain_name: builtins.str,
-        private_zone: typing.Optional[builtins.bool] = None,
-        vpc_id: typing.Optional[builtins.str] = None,
-    ) -> IHostedZone:
-        '''Lookup a hosted zone in the current account/region based on query parameters.
-
-        Requires environment, you must specify env for the stack.
-
-        Use to easily query hosted zones.
-
-        :param scope: -
-        :param id: -
-        :param domain_name: The zone domain e.g. example.com.
-        :param private_zone: Whether the zone that is being looked up is a private hosted zone. Default: false
-        :param vpc_id: Specifies the ID of the VPC associated with a private hosted zone. If a VPC ID is provided and privateZone is false, no results will be returned and an error will be raised Default: - No VPC ID
-
-        :see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__bdb223a28519af08e8a4de265a9236844a06052261acd92d02cc9634acf56a8c)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        query = HostedZoneProviderProps(
-            domain_name=domain_name, private_zone=private_zone, vpc_id=vpc_id
-        )
-
-        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromLookup", [scope, id, query]))
-
-    @jsii.member(jsii_name="addVpc")
-    def add_vpc(self, vpc: _IVpc_f30d5663) -> None:
-        '''Add another VPC to this private hosted zone.
-
-        :param vpc: the other VPC to add.
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__5c63a3fccbc53f093c8e4d46a2848bf83b386d2ca5206e82ecd8ecd3d61a0ccb)
-            check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
-        return typing.cast(None, jsii.invoke(self, "addVpc", [vpc]))
-
-    @jsii.member(jsii_name="enableDnssec")
-    def enable_dnssec(
-        self,
-        *,
-        kms_key: _IKey_5f11635f,
-        key_signing_key_name: typing.Optional[builtins.str] = None,
-    ) -> IKeySigningKey:
-        '''Enable DNSSEC for this hosted zone.
-
-        This will create a key signing key with the given options and enable DNSSEC signing
-        for the hosted zone.
-
-        :param kms_key: The customer-managed KMS key that that will be used to sign the records. The KMS Key must be unique for each KSK within a hosted zone. Additionally, the KMS key must be an asymetric customer-managed key using the ECC_NIST_P256 algorithm.
-        :param key_signing_key_name: The name for the key signing key. This name must be unique within a hosted zone. Default: an autogenerated name
-        '''
-        options = ZoneSigningOptions(
-            kms_key=kms_key, key_signing_key_name=key_signing_key_name
-        )
-
-        return typing.cast(IKeySigningKey, jsii.invoke(self, "enableDnssec", [options]))
-
-    @jsii.member(jsii_name="grantDelegation")
-    def grant_delegation(
-        self,
-        grantee: _IGrantable_71c4f5de,
-        *,
-        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-    ) -> _Grant_a7ae64f8:
-        '''Grant permissions to add delegation records to this zone.
-
-        :param grantee: -
-        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5)
-            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
-        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
-
-        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneArn")
-    def hosted_zone_arn(self) -> builtins.str:
-        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.'''
-        return typing.cast(builtins.str, jsii.get(self, "hostedZoneArn"))
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneId")
-    def hosted_zone_id(self) -> builtins.str:
-        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".'''
-        return typing.cast(builtins.str, jsii.get(self, "hostedZoneId"))
-
-    @builtins.property
-    @jsii.member(jsii_name="vpcs")
-    def _vpcs(self) -> typing.List[CfnHostedZone.VPCProperty]:
-        '''VPCs to which this hosted zone will be added.'''
-        return typing.cast(typing.List[CfnHostedZone.VPCProperty], jsii.get(self, "vpcs"))
-
-    @builtins.property
-    @jsii.member(jsii_name="zoneName")
-    def zone_name(self) -> builtins.str:
-        '''FQDN of this hosted zone.'''
-        return typing.cast(builtins.str, jsii.get(self, "zoneName"))
-
-    @builtins.property
-    @jsii.member(jsii_name="hostedZoneNameServers")
-    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
-        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
-
-        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
-        '''
-        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "hostedZoneNameServers"))
-
-
 class HttpsRecord(
     RecordSet,
     metaclass=jsii.JSIIMeta,
@@ -15269,7 +14944,7 @@ class HttpsRecord(
         *,
         target: typing.Optional[RecordTarget] = None,
         values: typing.Optional[typing.Sequence[HttpsRecordValue]] = None,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -15354,7 +15029,7 @@ class HttpsRecordProps(RecordSetOptions):
     def __init__(
         self,
         *,
-        zone: IHostedZone,
+        zone: "IHostedZone",
         cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
         comment: typing.Optional[builtins.str] = None,
         delete_existing: typing.Optional[builtins.bool] = None,
@@ -15458,11 +15133,11 @@ class HttpsRecordProps(RecordSetOptions):
             self._values["values"] = values
 
     @builtins.property
-    def zone(self) -> IHostedZone:
+    def zone(self) -> "IHostedZone":
         '''The hosted zone in which to define the new record.'''
         result = self._values.get("zone")
         assert result is not None, "Required property 'zone' is missing"
-        return typing.cast(IHostedZone, result)
+        return typing.cast("IHostedZone", result)
 
     @builtins.property
     def cidr_routing_config(self) -> typing.Optional[CidrRoutingConfig]:
@@ -15811,6 +15486,164 @@ class HttpsRecordServiceModeProps(SvcbRecordServiceModeProps):
         return "HttpsRecordServiceModeProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IHostedZone")
+class IHostedZone(_IResource_c80c4260, INamedHostedZoneRef, typing_extensions.Protocol):
+    '''Imported or created hosted zone.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneArn")
+    def hosted_zone_arn(self) -> builtins.str:
+        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneId")
+    def hosted_zone_id(self) -> builtins.str:
+        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="zoneName")
+    def zone_name(self) -> builtins.str:
+        '''FQDN of this hosted zone.'''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneNameServers")
+    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
+
+        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
+
+        :attribute: true
+        '''
+        ...
+
+    @jsii.member(jsii_name="grantDelegation")
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant permissions to add delegation records to this zone.
+
+        :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
+        '''
+        ...
+
+
+class _IHostedZoneProxy(
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+    jsii.proxy_for(INamedHostedZoneRef), # type: ignore[misc]
+):
+    '''Imported or created hosted zone.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IHostedZone"
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneArn")
+    def hosted_zone_arn(self) -> builtins.str:
+        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "hostedZoneArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneId")
+    def hosted_zone_id(self) -> builtins.str:
+        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "hostedZoneId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="zoneName")
+    def zone_name(self) -> builtins.str:
+        '''FQDN of this hosted zone.'''
+        return typing.cast(builtins.str, jsii.get(self, "zoneName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneNameServers")
+    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
+
+        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
+
+        :attribute: true
+        '''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "hostedZoneNameServers"))
+
+    @jsii.member(jsii_name="grantDelegation")
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant permissions to add delegation records to this zone.
+
+        :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IHostedZone).__jsii_proxy_class__ = lambda : _IHostedZoneProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IPrivateHostedZone")
+class IPrivateHostedZone(IHostedZone, typing_extensions.Protocol):
+    '''Represents a Route 53 private hosted zone.'''
+
+    pass
+
+
+class _IPrivateHostedZoneProxy(
+    jsii.proxy_for(IHostedZone), # type: ignore[misc]
+):
+    '''Represents a Route 53 private hosted zone.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IPrivateHostedZone"
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IPrivateHostedZone).__jsii_proxy_class__ = lambda : _IPrivateHostedZoneProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.aws_route53.IPublicHostedZone")
+class IPublicHostedZone(IHostedZone, typing_extensions.Protocol):
+    '''Represents a Route 53 public hosted zone.'''
+
+    pass
+
+
+class _IPublicHostedZoneProxy(
+    jsii.proxy_for(IHostedZone), # type: ignore[misc]
+):
+    '''Represents a Route 53 public hosted zone.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_route53.IPublicHostedZone"
+    pass
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IPublicHostedZone).__jsii_proxy_class__ = lambda : _IPublicHostedZoneProxy
 
 
 class MxRecord(
@@ -16587,6 +16420,372 @@ class NsRecordProps(RecordSetOptions):
         )
 
 
+class CaaAmazonRecord(
+    CaaRecord,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_route53.CaaAmazonRecord",
+):
+    '''A DNS Amazon CAA record.
+
+    A CAA record to restrict certificate authorities allowed
+    to issue certificates for a domain to Amazon only.
+
+    :resource: AWS::Route53::RecordSet
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        import aws_cdk as cdk
+        from aws_cdk import aws_route53 as route53
+        
+        # cidr_routing_config: route53.CidrRoutingConfig
+        # geo_location: route53.GeoLocation
+        # health_check: route53.HealthCheck
+        # hosted_zone: route53.HostedZone
+        
+        caa_amazon_record = route53.CaaAmazonRecord(self, "MyCaaAmazonRecord",
+            zone=hosted_zone,
+        
+            # the properties below are optional
+            cidr_routing_config=cidr_routing_config,
+            comment="comment",
+            delete_existing=False,
+            geo_location=geo_location,
+            health_check=health_check,
+            multi_value_answer=False,
+            record_name="recordName",
+            region="region",
+            set_identifier="setIdentifier",
+            ttl=cdk.Duration.minutes(30),
+            weight=123
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        zone: IHostedZone,
+        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+        comment: typing.Optional[builtins.str] = None,
+        delete_existing: typing.Optional[builtins.bool] = None,
+        geo_location: typing.Optional[GeoLocation] = None,
+        health_check: typing.Optional[IHealthCheck] = None,
+        multi_value_answer: typing.Optional[builtins.bool] = None,
+        record_name: typing.Optional[builtins.str] = None,
+        region: typing.Optional[builtins.str] = None,
+        set_identifier: typing.Optional[builtins.str] = None,
+        ttl: typing.Optional[_Duration_4839e8c3] = None,
+        weight: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param zone: The hosted zone in which to define the new record.
+        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
+        :param comment: A comment to add on the record. Default: no comment
+        :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
+        :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
+        :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
+        :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
+        :param record_name: The subdomain name for this record. This should be relative to the zone root name. For example, if you want to create a record for acme.example.com, specify "acme". You can also specify the fully qualified domain name which terminates with a ".". For example, "acme.example.com.". Default: zone root
+        :param region: The Amazon EC2 Region where you created the resource that this resource record set refers to. The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer, and is referred to by an IP address or a DNS domain name, depending on the record type. When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets, Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region. Route 53 then returns the value that is associated with the selected resource record set. Default: - Do not set latency based routing
+        :param set_identifier: A string used to distinguish between different records with the same combination of DNS name and type. It can only be set when either weight or geoLocation is defined. This parameter must be between 1 and 128 characters in length. Default: - Auto generated string
+        :param ttl: The resource record cache time to live (TTL). Default: Duration.minutes(30)
+        :param weight: Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type. Route 53 then responds to queries based on the ratio of a resource's weight to the total. This value can be a number between 0 and 255. Default: - Do not set weighted routing
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb8ac94da)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CaaAmazonRecordProps(
+            zone=zone,
+            cidr_routing_config=cidr_routing_config,
+            comment=comment,
+            delete_existing=delete_existing,
+            geo_location=geo_location,
+            health_check=health_check,
+            multi_value_answer=multi_value_answer,
+            record_name=record_name,
+            region=region,
+            set_identifier=set_identifier,
+            ttl=ttl,
+            weight=weight,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+
+@jsii.implements(IHostedZone)
+class HostedZone(
+    _Resource_45bc6135,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_route53.HostedZone",
+):
+    '''Container for records, and records contain information about how to route traffic for a specific domain, such as example.com and its subdomains (acme.example.com, zenith.example.com).
+
+    :exampleMetadata: infused
+
+    Example::
+
+        example_com = route53.HostedZone(self, "ExampleCom",
+            zone_name="example.com"
+        )
+        example_net = route53.HostedZone(self, "ExampleNet",
+            zone_name="example.net"
+        )
+        
+        cert = acm.Certificate(self, "Certificate",
+            domain_name="test.example.com",
+            subject_alternative_names=["cool.example.com", "test.example.net"],
+            validation=acm.CertificateValidation.from_dns_multi_zone({
+                "test.example.com": example_com,
+                "cool.example.com": example_com,
+                "test.example.net": example_net
+            })
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
+        zone_name: builtins.str,
+        add_trailing_dot: typing.Optional[builtins.bool] = None,
+        comment: typing.Optional[builtins.str] = None,
+        query_logs_log_group_arn: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''
+        :param scope: -
+        :param id: -
+        :param vpcs: A VPC that you want to associate with this hosted zone. When you specify this property, a private hosted zone will be created. You can associate additional VPCs to this private zone using ``addVpc(vpc)``. Default: public (no VPCs associated)
+        :param zone_name: The name of the domain. For resource record types that include a domain name, specify a fully qualified domain name.
+        :param add_trailing_dot: Whether to add a trailing dot to the zone name. Default: true
+        :param comment: Any comments that you want to include about the hosted zone. Default: none
+        :param query_logs_log_group_arn: The Amazon Resource Name (ARN) for the log group that you want Amazon Route 53 to send query logs to. Default: disabled
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1e5b9f9d7aa4bc16fced3cc22e63b14cbf590c498be223e588483a72fb0b4233)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = HostedZoneProps(
+            vpcs=vpcs,
+            zone_name=zone_name,
+            add_trailing_dot=add_trailing_dot,
+            comment=comment,
+            query_logs_log_group_arn=query_logs_log_group_arn,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromHostedZoneAttributes")
+    @builtins.classmethod
+    def from_hosted_zone_attributes(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        hosted_zone_id: builtins.str,
+        zone_name: builtins.str,
+    ) -> IHostedZone:
+        '''Imports a hosted zone from another stack.
+
+        Use when both hosted zone ID and hosted zone name are known.
+
+        :param scope: the parent Construct for this Construct.
+        :param id: the logical name of this Construct.
+        :param hosted_zone_id: Identifier of the hosted zone.
+        :param zone_name: Name of the hosted zone.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24a9e3565a26d4d6d8a3c0d4406ef8f6cce5e0e48dc1145dc090f7db4581c0ac)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = HostedZoneAttributes(
+            hosted_zone_id=hosted_zone_id, zone_name=zone_name
+        )
+
+        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneAttributes", [scope, id, attrs]))
+
+    @jsii.member(jsii_name="fromHostedZoneId")
+    @builtins.classmethod
+    def from_hosted_zone_id(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        hosted_zone_id: builtins.str,
+    ) -> IHostedZone:
+        '''Import a Route 53 hosted zone defined either outside the CDK, or in a different CDK stack.
+
+        Use when hosted zone ID is known. If a HostedZone is imported with this method the zoneName cannot be referenced.
+        If the zoneName is needed then the HostedZone should be imported with ``fromHostedZoneAttributes()`` or ``fromLookup()``
+
+        :param scope: the parent Construct for this Construct.
+        :param id: the logical name of this Construct.
+        :param hosted_zone_id: the ID of the hosted zone to import.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc5da03bfe3e7000e80ebfbe7cb3c5c23ab3e97f4e6c670a8eb0ef036d099c78)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument hosted_zone_id", value=hosted_zone_id, expected_type=type_hints["hosted_zone_id"])
+        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromHostedZoneId", [scope, id, hosted_zone_id]))
+
+    @jsii.member(jsii_name="fromLookup")
+    @builtins.classmethod
+    def from_lookup(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        domain_name: builtins.str,
+        private_zone: typing.Optional[builtins.bool] = None,
+        vpc_id: typing.Optional[builtins.str] = None,
+    ) -> IHostedZone:
+        '''Lookup a hosted zone in the current account/region based on query parameters.
+
+        Requires environment, you must specify env for the stack.
+
+        Use to easily query hosted zones.
+
+        :param scope: -
+        :param id: -
+        :param domain_name: The zone domain e.g. example.com.
+        :param private_zone: Whether the zone that is being looked up is a private hosted zone. Default: false
+        :param vpc_id: Specifies the ID of the VPC associated with a private hosted zone. If a VPC ID is provided and privateZone is false, no results will be returned and an error will be raised Default: - No VPC ID
+
+        :see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bdb223a28519af08e8a4de265a9236844a06052261acd92d02cc9634acf56a8c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        query = HostedZoneProviderProps(
+            domain_name=domain_name, private_zone=private_zone, vpc_id=vpc_id
+        )
+
+        return typing.cast(IHostedZone, jsii.sinvoke(cls, "fromLookup", [scope, id, query]))
+
+    @jsii.member(jsii_name="addVpc")
+    def add_vpc(self, vpc: _IVpc_f30d5663) -> None:
+        '''Add another VPC to this private hosted zone.
+
+        :param vpc: the other VPC to add.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5c63a3fccbc53f093c8e4d46a2848bf83b386d2ca5206e82ecd8ecd3d61a0ccb)
+            check_type(argname="argument vpc", value=vpc, expected_type=type_hints["vpc"])
+        return typing.cast(None, jsii.invoke(self, "addVpc", [vpc]))
+
+    @jsii.member(jsii_name="enableDnssec")
+    def enable_dnssec(
+        self,
+        *,
+        kms_key: _IKey_5f11635f,
+        key_signing_key_name: typing.Optional[builtins.str] = None,
+    ) -> IKeySigningKey:
+        '''Enable DNSSEC for this hosted zone.
+
+        This will create a key signing key with the given options and enable DNSSEC signing
+        for the hosted zone.
+
+        :param kms_key: The customer-managed KMS key that that will be used to sign the records. The KMS Key must be unique for each KSK within a hosted zone. Additionally, the KMS key must be an asymetric customer-managed key using the ECC_NIST_P256 algorithm.
+        :param key_signing_key_name: The name for the key signing key. This name must be unique within a hosted zone. Default: an autogenerated name
+        '''
+        options = ZoneSigningOptions(
+            kms_key=kms_key, key_signing_key_name=key_signing_key_name
+        )
+
+        return typing.cast(IKeySigningKey, jsii.invoke(self, "enableDnssec", [options]))
+
+    @jsii.member(jsii_name="grantDelegation")
+    def grant_delegation(
+        self,
+        grantee: _IGrantable_71c4f5de,
+        *,
+        delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> _Grant_a7ae64f8:
+        '''Grant permissions to add delegation records to this zone.
+
+        :param grantee: -
+        :param delegated_zone_names: List of hosted zone names to allow delegation to in the grant permissions. If the delegated zone name contains an unresolved token, it must resolve to a zone name that satisfies the requirements according to the documentation: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/specifying-conditions-route53.html#route53_rrset_conditionkeys_normalization .. epigraph:: All letters must be lowercase. The DNS name must be without the trailing dot. Characters other than a–z, 0–9, - (hyphen), _ (underscore), and . (period, as a delimiter between labels) must use escape codes in the format \\three-digit octal code. For example, \\052 is the octal code for character *. Default: the grant allows delegation to any hosted zone
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5)
+            check_type(argname="argument grantee", value=grantee, expected_type=type_hints["grantee"])
+        options = GrantDelegationOptions(delegated_zone_names=delegated_zone_names)
+
+        return typing.cast(_Grant_a7ae64f8, jsii.invoke(self, "grantDelegation", [grantee, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="grants")
+    def grants(self) -> HostedZoneGrants:
+        '''Grants helper for this hosted zone.'''
+        return typing.cast(HostedZoneGrants, jsii.get(self, "grants"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneArn")
+    def hosted_zone_arn(self) -> builtins.str:
+        '''ARN of this hosted zone, such as arn:${Partition}:route53:::hostedzone/${Id}.'''
+        return typing.cast(builtins.str, jsii.get(self, "hostedZoneArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneId")
+    def hosted_zone_id(self) -> builtins.str:
+        '''ID of this hosted zone, such as "Z23ABC4XYZL05B".'''
+        return typing.cast(builtins.str, jsii.get(self, "hostedZoneId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneRef")
+    def hosted_zone_ref(self) -> _HostedZoneReference_1c756d37:
+        '''A reference to a HostedZone resource.'''
+        return typing.cast(_HostedZoneReference_1c756d37, jsii.get(self, "hostedZoneRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''FQDN of this hosted zone.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcs")
+    def _vpcs(self) -> typing.List[CfnHostedZone.VPCProperty]:
+        '''VPCs to which this hosted zone will be added.'''
+        return typing.cast(typing.List[CfnHostedZone.VPCProperty], jsii.get(self, "vpcs"))
+
+    @builtins.property
+    @jsii.member(jsii_name="zoneName")
+    def zone_name(self) -> builtins.str:
+        '''FQDN of this hosted zone.'''
+        return typing.cast(builtins.str, jsii.get(self, "zoneName"))
+
+    @builtins.property
+    @jsii.member(jsii_name="hostedZoneNameServers")
+    def hosted_zone_name_servers(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Returns the set of name servers for the specific hosted zone. For example: ns1.example.com.
+
+        This attribute will be undefined for private hosted zones or hosted zones imported from another stack.
+        '''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "hostedZoneNameServers"))
+
+
 @jsii.implements(IPrivateHostedZone)
 class PrivateHostedZone(
     HostedZone,
@@ -16883,111 +17082,6 @@ class PublicHostedZone(
         return typing.cast(typing.Optional[_Role_e8c6e11f], jsii.get(self, "crossAccountZoneDelegationRole"))
 
 
-class CaaAmazonRecord(
-    CaaRecord,
-    metaclass=jsii.JSIIMeta,
-    jsii_type="aws-cdk-lib.aws_route53.CaaAmazonRecord",
-):
-    '''A DNS Amazon CAA record.
-
-    A CAA record to restrict certificate authorities allowed
-    to issue certificates for a domain to Amazon only.
-
-    :resource: AWS::Route53::RecordSet
-    :exampleMetadata: fixture=_generated
-
-    Example::
-
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        import aws_cdk as cdk
-        from aws_cdk import aws_route53 as route53
-        
-        # cidr_routing_config: route53.CidrRoutingConfig
-        # geo_location: route53.GeoLocation
-        # health_check: route53.HealthCheck
-        # hosted_zone: route53.HostedZone
-        
-        caa_amazon_record = route53.CaaAmazonRecord(self, "MyCaaAmazonRecord",
-            zone=hosted_zone,
-        
-            # the properties below are optional
-            cidr_routing_config=cidr_routing_config,
-            comment="comment",
-            delete_existing=False,
-            geo_location=geo_location,
-            health_check=health_check,
-            multi_value_answer=False,
-            record_name="recordName",
-            region="region",
-            set_identifier="setIdentifier",
-            ttl=cdk.Duration.minutes(30),
-            weight=123
-        )
-    '''
-
-    def __init__(
-        self,
-        scope: _constructs_77d1e7e8.Construct,
-        id: builtins.str,
-        *,
-        zone: IHostedZone,
-        cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
-        comment: typing.Optional[builtins.str] = None,
-        delete_existing: typing.Optional[builtins.bool] = None,
-        geo_location: typing.Optional[GeoLocation] = None,
-        health_check: typing.Optional[IHealthCheck] = None,
-        multi_value_answer: typing.Optional[builtins.bool] = None,
-        record_name: typing.Optional[builtins.str] = None,
-        region: typing.Optional[builtins.str] = None,
-        set_identifier: typing.Optional[builtins.str] = None,
-        ttl: typing.Optional[_Duration_4839e8c3] = None,
-        weight: typing.Optional[jsii.Number] = None,
-    ) -> None:
-        '''
-        :param scope: -
-        :param id: -
-        :param zone: The hosted zone in which to define the new record.
-        :param cidr_routing_config: The object that is specified in resource record set object when you are linking a resource record set to a CIDR location. A LocationName with an asterisk “*” can be used to create a default CIDR record. CollectionId is still required for default record. Default: - No CIDR routing configured
-        :param comment: A comment to add on the record. Default: no comment
-        :param delete_existing: (deprecated) Whether to delete the same record set in the hosted zone if it already exists (dangerous!). This allows to deploy a new record set while minimizing the downtime because the new record set will be created immediately after the existing one is deleted. It also avoids "manual" actions to delete existing record sets. .. epigraph:: **N.B.:** this feature is dangerous, use with caution! It can only be used safely when ``deleteExisting`` is set to ``true`` as soon as the resource is added to the stack. Changing an existing Record Set's ``deleteExisting`` property from ``false -> true`` after deployment will delete the record! Default: false
-        :param geo_location: The geographical origin for this record to return DNS records based on the user's location.
-        :param health_check: The health check to associate with the record set. Route53 will return this record set in response to DNS queries only if the health check is passing. Default: - No health check configured
-        :param multi_value_answer: Whether to return multiple values, such as IP addresses for your web servers, in response to DNS queries. Default: false
-        :param record_name: The subdomain name for this record. This should be relative to the zone root name. For example, if you want to create a record for acme.example.com, specify "acme". You can also specify the fully qualified domain name which terminates with a ".". For example, "acme.example.com.". Default: zone root
-        :param region: The Amazon EC2 Region where you created the resource that this resource record set refers to. The resource typically is an AWS resource, such as an EC2 instance or an ELB load balancer, and is referred to by an IP address or a DNS domain name, depending on the record type. When Amazon Route 53 receives a DNS query for a domain name and type for which you have created latency resource record sets, Route 53 selects the latency resource record set that has the lowest latency between the end user and the associated Amazon EC2 Region. Route 53 then returns the value that is associated with the selected resource record set. Default: - Do not set latency based routing
-        :param set_identifier: A string used to distinguish between different records with the same combination of DNS name and type. It can only be set when either weight or geoLocation is defined. This parameter must be between 1 and 128 characters in length. Default: - Auto generated string
-        :param ttl: The resource record cache time to live (TTL). Default: Duration.minutes(30)
-        :param weight: Among resource record sets that have the same combination of DNS name and type, a value that determines the proportion of DNS queries that Amazon Route 53 responds to using the current resource record set. Route 53 calculates the sum of the weights for the resource record sets that have the same combination of DNS name and type. Route 53 then responds to queries based on the ratio of a resource's weight to the total. This value can be a number between 0 and 255. Default: - Do not set weighted routing
-        '''
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb8ac94da)
-            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
-            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
-        props = CaaAmazonRecordProps(
-            zone=zone,
-            cidr_routing_config=cidr_routing_config,
-            comment=comment,
-            delete_existing=delete_existing,
-            geo_location=geo_location,
-            health_check=health_check,
-            multi_value_answer=multi_value_answer,
-            record_name=record_name,
-            region=region,
-            set_identifier=set_identifier,
-            ttl=ttl,
-            weight=weight,
-        )
-
-        jsii.create(self.__class__, self, [scope, id, props])
-
-    @jsii.python.classproperty
-    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
-    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
-        '''Uniquely identifies this class.'''
-        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
-
-
 __all__ = [
     "ARecord",
     "ARecordAttrs",
@@ -17034,6 +17128,7 @@ __all__ = [
     "HealthCheckType",
     "HostedZone",
     "HostedZoneAttributes",
+    "HostedZoneGrants",
     "HostedZoneProps",
     "HostedZoneProviderProps",
     "HttpsRecord",
@@ -17044,6 +17139,7 @@ __all__ = [
     "IHealthCheck",
     "IHostedZone",
     "IKeySigningKey",
+    "INamedHostedZoneRef",
     "IPrivateHostedZone",
     "IPublicHostedZone",
     "IRecordSet",
@@ -17883,6 +17979,20 @@ def _typecheckingstub__e5fad1cc6999b94bd845480426db92d5bb3ac0208bca78f9cf984e5ce
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5ff92cc89a407db790189517024612ad356516c9279c5587ed3d54c30ff8b66c(
+    hosted_zone: INamedHostedZoneRef,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6b89c0b16bd4247e3bc59d7d9a2b918a0738ab4367a7cd428a28200b56497779(
+    grantee: _IGrantable_71c4f5de,
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f1711cf7af2ab26c7be8b7aad54fc7158d3e50d0205dd9b87989812878e88e96(
     *,
     zone_name: builtins.str,
@@ -17912,14 +18022,6 @@ def _typecheckingstub__00426d6aef7715125de0a287a45d208ba1f76ffc095e09ee726de5a15
 def _typecheckingstub__162b54c0ae9f493edc12c5cba6aa323333c184d03d9332edaab8e4f75c7f74cd(
     record: IRecordSet,
     zone: typing.Optional[IHostedZone] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18(
-    grantee: _IGrantable_71c4f5de,
-    *,
-    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18620,62 +18722,6 @@ def _typecheckingstub__1574196dfbdf91938d0e48950e72c34106f7e4b227441de8b8df48978
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__1e5b9f9d7aa4bc16fced3cc22e63b14cbf590c498be223e588483a72fb0b4233(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
-    zone_name: builtins.str,
-    add_trailing_dot: typing.Optional[builtins.bool] = None,
-    comment: typing.Optional[builtins.str] = None,
-    query_logs_log_group_arn: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__24a9e3565a26d4d6d8a3c0d4406ef8f6cce5e0e48dc1145dc090f7db4581c0ac(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    hosted_zone_id: builtins.str,
-    zone_name: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__dc5da03bfe3e7000e80ebfbe7cb3c5c23ab3e97f4e6c670a8eb0ef036d099c78(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    hosted_zone_id: builtins.str,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__bdb223a28519af08e8a4de265a9236844a06052261acd92d02cc9634acf56a8c(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    domain_name: builtins.str,
-    private_zone: typing.Optional[builtins.bool] = None,
-    vpc_id: typing.Optional[builtins.str] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__5c63a3fccbc53f093c8e4d46a2848bf83b386d2ca5206e82ecd8ecd3d61a0ccb(
-    vpc: _IVpc_f30d5663,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-def _typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5(
-    grantee: _IGrantable_71c4f5de,
-    *,
-    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
 def _typecheckingstub__ff083afb33933cff325e491e0f1834d5f30a115ee1b13b2886599061ee8f59fc(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -18728,6 +18774,14 @@ def _typecheckingstub__979e830ad3373e7fc0d0343a2f25a869ffc9da95f9a63de3403250963
     port: typing.Optional[jsii.Number] = None,
     priority: typing.Optional[jsii.Number] = None,
     target_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__97ae48bcbfd92ef96c96db6d1d972ddd9b889f01bba1ab2a3819d9faa9eb4a18(
+    grantee: _IGrantable_71c4f5de,
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -18812,6 +18866,82 @@ def _typecheckingstub__33cda5fac8572316158161da713e2ceea9d3f7f56b5ee9a2a25acf331
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb8ac94da(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    zone: IHostedZone,
+    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
+    comment: typing.Optional[builtins.str] = None,
+    delete_existing: typing.Optional[builtins.bool] = None,
+    geo_location: typing.Optional[GeoLocation] = None,
+    health_check: typing.Optional[IHealthCheck] = None,
+    multi_value_answer: typing.Optional[builtins.bool] = None,
+    record_name: typing.Optional[builtins.str] = None,
+    region: typing.Optional[builtins.str] = None,
+    set_identifier: typing.Optional[builtins.str] = None,
+    ttl: typing.Optional[_Duration_4839e8c3] = None,
+    weight: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1e5b9f9d7aa4bc16fced3cc22e63b14cbf590c498be223e588483a72fb0b4233(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    vpcs: typing.Optional[typing.Sequence[_IVpc_f30d5663]] = None,
+    zone_name: builtins.str,
+    add_trailing_dot: typing.Optional[builtins.bool] = None,
+    comment: typing.Optional[builtins.str] = None,
+    query_logs_log_group_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24a9e3565a26d4d6d8a3c0d4406ef8f6cce5e0e48dc1145dc090f7db4581c0ac(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    hosted_zone_id: builtins.str,
+    zone_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc5da03bfe3e7000e80ebfbe7cb3c5c23ab3e97f4e6c670a8eb0ef036d099c78(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    hosted_zone_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bdb223a28519af08e8a4de265a9236844a06052261acd92d02cc9634acf56a8c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    domain_name: builtins.str,
+    private_zone: typing.Optional[builtins.bool] = None,
+    vpc_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5c63a3fccbc53f093c8e4d46a2848bf83b386d2ca5206e82ecd8ecd3d61a0ccb(
+    vpc: _IVpc_f30d5663,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e256ece77d93011f031e05a119f03b248a4b68d267c298052b0cea131943ab5(
+    grantee: _IGrantable_71c4f5de,
+    *,
+    delegated_zone_names: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b5513b0f840f5eafaeee3e3a9c7776204d075ee417c3cce2c38a14213814eb75(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -18891,25 +19021,5 @@ def _typecheckingstub__c3e8e9627c25114e462dc3af379684d0d3fba38262bae897187e8d8fa
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__f189380057459afbeff6d38749625e3756c4572dec90f74ca7a400dcb8ac94da(
-    scope: _constructs_77d1e7e8.Construct,
-    id: builtins.str,
-    *,
-    zone: IHostedZone,
-    cidr_routing_config: typing.Optional[CidrRoutingConfig] = None,
-    comment: typing.Optional[builtins.str] = None,
-    delete_existing: typing.Optional[builtins.bool] = None,
-    geo_location: typing.Optional[GeoLocation] = None,
-    health_check: typing.Optional[IHealthCheck] = None,
-    multi_value_answer: typing.Optional[builtins.bool] = None,
-    record_name: typing.Optional[builtins.str] = None,
-    region: typing.Optional[builtins.str] = None,
-    set_identifier: typing.Optional[builtins.str] = None,
-    ttl: typing.Optional[_Duration_4839e8c3] = None,
-    weight: typing.Optional[jsii.Number] = None,
-) -> None:
-    """Type checking stubs"""
-    pass
-
-for cls in [IAliasRecordTarget, IHealthCheck, IHostedZone, IKeySigningKey, IPrivateHostedZone, IPublicHostedZone, IRecordSet]:
+for cls in [IAliasRecordTarget, IHealthCheck, IHostedZone, IKeySigningKey, INamedHostedZoneRef, IPrivateHostedZone, IPublicHostedZone, IRecordSet]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

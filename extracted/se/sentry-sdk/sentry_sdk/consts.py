@@ -465,6 +465,12 @@ class SPANDATA:
     Example: "The weather in Paris is rainy and overcast, with temperatures around 57°F"
     """
 
+    GEN_AI_EMBEDDINGS_INPUT = "gen_ai.embeddings.input"
+    """
+    The input to the embeddings operation.
+    Example: "Hello!"
+    """
+
     GEN_AI_OPERATION_NAME = "gen_ai.operation.name"
     """
     The name of the operation being performed.
@@ -1442,4 +1448,4 @@ DEFAULT_OPTIONS = _get_default_options()
 del _get_default_options
 
 
-VERSION = "2.45.0"
+VERSION = "2.46.0"

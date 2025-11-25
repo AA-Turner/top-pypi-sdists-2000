@@ -3880,31 +3880,16 @@ class CfnLogGroup(
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-logs-loggroup.html
     :cloudformationResource: AWS::Logs::LogGroup
-    :exampleMetadata: fixture=_generated
+    :exampleMetadata: infused
 
     Example::
 
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_logs as logs
+        # Works across different resource types
+        bucket = s3.CfnBucket(scope, "Bucket")
+        Mixins.of(bucket).apply(EncryptionAtRest())
         
-        # data_protection_policy: Any
-        # field_index_policies: Any
-        # resource_policy_document: Any
-        
-        cfn_log_group = logs.CfnLogGroup(self, "MyCfnLogGroup",
-            data_protection_policy=data_protection_policy,
-            field_index_policies=[field_index_policies],
-            kms_key_id="kmsKeyId",
-            log_group_class="logGroupClass",
-            log_group_name="logGroupName",
-            resource_policy_document=resource_policy_document,
-            retention_in_days=123,
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )]
-        )
+        log_group = logs.CfnLogGroup(scope, "LogGroup")
+        Mixins.of(log_group).apply(EncryptionAtRest())
     '''
 
     def __init__(

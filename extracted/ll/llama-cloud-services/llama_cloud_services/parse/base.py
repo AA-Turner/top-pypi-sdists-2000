@@ -536,6 +536,10 @@ class LlamaParse(BasePydanticReader):
         default=None,
         description="A prefix to add to the page footer in the output markdown.",
     )
+    extract_printed_page_number: Optional[bool] = Field(
+        default=None,
+        description="Whether to extract the printed page numbers from pages in the document.",
+    )
 
     # Deprecated
     bounding_box: Optional[str] = Field(
@@ -1048,6 +1052,9 @@ class LlamaParse(BasePydanticReader):
             data[
                 "markdown_table_multiline_header_separator"
             ] = self.markdown_table_multiline_header_separator
+
+        if self.extract_printed_page_number is not None:
+            data["extract_printed_page_number"] = self.extract_printed_page_number
 
         # Deprecated
         if self.bounding_box is not None:

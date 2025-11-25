@@ -250,6 +250,19 @@ class Page(SafeBaseModel):
     slideSpeakerNotes: Optional[str] = Field(
         default=None, description="The speaker notes for the slide."
     )
+    confidence: Optional[float] = Field(
+        default=None, description="The confidence of the page parsing."
+    )
+    printedPageNumber: Optional[str] = Field(
+        default=None,
+        description="The printed page number on the page, if found and extractPrintedPageNumber is set to true.",
+    )
+    pageHeaderMarkdown: Optional[str] = Field(
+        default=None, description="The page header in markdown format."
+    )
+    pageFooterMarkdown: Optional[str] = Field(
+        default=None, description="The page footer in markdown format."
+    )
 
 
 class JobResult(SafeBaseModel):

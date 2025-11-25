@@ -41,6 +41,7 @@ from vertexai.language_models import (
 )
 
 from langchain_google_vertexai._base import _get_prediction_client
+from langchain_google_vertexai._compat import _convert_from_v1_to_vertex
 from langchain_google_vertexai._image_utils import ImageBytesLoader
 from langchain_google_vertexai.chat_models import (
     ChatVertexAI,
@@ -351,6 +352,23 @@ def test_init_client_with_custom_model_kwargs() -> None:
 
     default_params = llm._default_params
     assert default_params["thinking"] == {"type": "enabled", "budget_tokens": 1024}
+
+
+def test_profile() -> None:
+    model = ChatVertexAI(
+        model="gemini-2.0-flash", project="test-project", location="moon-dark1"
+    )
+    assert model.profile
+    assert not model.profile["reasoning_output"]
+
+    model = ChatVertexAI(
+        model="gemini-2.5-flash", project="test-project", location="moon-dark1"
+    )
+    assert model.profile
+    assert model.profile["reasoning_output"]
+
+    model = ChatVertexAI(model="foo", project="test-project", location="moon-dark1")
+    assert model.profile == {}
 
 
 @pytest.mark.parametrize(
@@ -1819,3 +1837,220 @@ def test_thinking_budget_in_invocation_params() -> None:
     assert "include_thoughts" in invocation_params
     assert invocation_params["thinking_budget"] == 500
     assert invocation_params["include_thoughts"] is False
+
+
+def test_json_mode_with_pydantic_v2_fieldinfo_serialization() -> None:
+    """Test that json_mode uses serialization mode for Pydantic v2 model_json_schema.
+
+    This ensures that FieldInfo objects are properly serialized when generating
+    the JSON schema for structured output in json_mode. Using mode='serialization'
+    is semantically correct since the schema describes the model's output format,
+    not its input validation rules.
+    """
+    from pydantic import Field
+
+    class TestModel(BaseModel):
+        """Test model with Pydantic v2 FieldInfo metadata."""
+
+        name: str = Field(description="Person's name")
+        age: int = Field(gt=0, le=150, description="Person's age")
+
+    llm = ChatVertexAI(model_name="gemini-2.5-flash", project="test-project")
+
+    # This should not raise any errors when creating structured output
+    structured_llm = llm.with_structured_output(TestModel, method="json_mode")
+    assert structured_llm is not None
+
+    # Verify that model_json_schema works with mode='serialization'
+    schema = TestModel.model_json_schema(mode="serialization")
+    assert "properties" in schema
+    assert "name" in schema["properties"]
+    assert "age" in schema["properties"]
+    # Verify field metadata is preserved
+    assert "description" in schema["properties"]["name"]
+    assert schema["properties"]["name"]["description"] == "Person's name"
+
+
+def test_json_mode_pydantic_v1_backward_compatibility() -> None:
+    """Test that Pydantic v1 models continue to work with json_mode.
+
+    This ensures backward compatibility - Pydantic v1 models use schema()
+    method while v2 models use model_json_schema(mode='serialization').
+    """
+    from pydantic.v1 import BaseModel as BaseModelV1
+
+    class V1Model(BaseModelV1):
+        """Test model using Pydantic v1 API."""
+
+        name: str
+        age: int
+
+    llm = ChatVertexAI(model_name="gemini-2.5-flash", project="test-project")
+
+    # V1 models should work without issues
+    structured_llm = llm.with_structured_output(V1Model, method="json_mode")
+    assert structured_llm is not None
+
+    # Verify V1 model uses schema() method, not model_json_schema()
+    assert hasattr(V1Model, "schema")
+    assert not hasattr(V1Model, "model_json_schema")
+
+    # Verify schema generation works
+    schema = V1Model.schema()
+    assert "properties" in schema
+    assert "name" in schema["properties"]
+    assert "age" in schema["properties"]
+
+
+def test_thought_signature_conversion() -> None:
+    # Test ReasoningContentBlock with signature
+    reasoning_block = {
+        "type": "reasoning",
+        "reasoning": "Let me think about this...",
+        "extras": {"signature": "signature123"},
+    }
+    result = _convert_from_v1_to_vertex(
+        [reasoning_block],  # type: ignore[list-item]
+        "google_vertexai",
+    )
+    expected = [
+        {
+            "type": "thinking",
+            "thinking": "Let me think about this...",
+            "thought_signature": "signature123",
+        }
+    ]
+    assert result == expected
+
+    # Test ReasoningContentBlock without signature (should NOT be skipped now)
+    reasoning_without_sig = {
+        "type": "reasoning",
+        "reasoning": "Thinking without signature...",
+        "extras": {},
+    }
+    result = _convert_from_v1_to_vertex(
+        [reasoning_without_sig],  # type: ignore[list-item]
+        "google_vertexai",
+    )
+    expected_no_sig = [
+        {
+            "type": "thinking",
+            "thinking": "Thinking without signature...",
+        }
+    ]
+    assert result == expected_no_sig
+
+    # Test function_call_signature block
+    sig_block = {
+        "type": "function_call_signature",
+        "signature": "sig123",
+        "index": 0,
+    }
+    result = _convert_from_v1_to_vertex(
+        [sig_block],  # type: ignore[list-item]
+        "google_vertexai",
+    )
+    expected_sig = [sig_block]
+    assert result == expected_sig
+
+    # Test TextContentBlock with signature
+    text_block = {
+        "type": "text",
+        "text": "Hello world",
+        "extras": {"signature": "text_sig_123"},
+    }
+    result = _convert_from_v1_to_vertex(
+        [text_block],  # type: ignore[list-item]
+        "google_vertexai",
+    )
+    expected_text = [
+        {
+            "type": "text",
+            "text": "Hello world",
+            "thought_signature": "text_sig_123",
+        }
+    ]
+    assert result == expected_text
+
+
+def test_parse_chat_history_uses_index_for_signature() -> None:
+    """Test _parse_chat_history uses the index field to map signatures to tool calls."""
+    sig_bytes = b"dummy_signature"
+    sig_b64 = base64.b64encode(sig_bytes).decode("ascii")
+
+    # Content with reasoning block (index 0) and signature block (index 1)
+    # The signature block points to tool call index 0
+    content = [
+        {"type": "reasoning", "reasoning": "I should use the tool."},
+        {"type": "function_call_signature", "signature": sig_b64, "index": 0},
+    ]
+
+    tool_calls = [{"name": "my_tool", "args": {"param": "value"}, "id": "call_1"}]
+
+    message = AIMessage(content=content, tool_calls=tool_calls)  # type: ignore[arg-type]
+
+    message.response_metadata["output_version"] = "v1"
+    message.response_metadata["model_provider"] = (
+        "google_genai"  # Simulate genai message
+    )
+
+    # Mock ImageBytesLoader
+    mock_loader = MagicMock(spec=ImageBytesLoader)
+
+    # Parse the history
+    _, formatted_messages = _parse_chat_history_gemini([message], mock_loader)
+
+    # Check the result
+    model_content = formatted_messages[0]
+    assert model_content.role == "model"
+    assert len(model_content.parts) == 2  # thinking + function_call
+
+    # Part 0 is thinking
+    assert model_content.parts[0].thought is True
+    assert model_content.parts[0].text == "I should use the tool."
+
+    # Part 1 is function_call
+    part = model_content.parts[1]
+
+    # Check if function_call is present
+    assert part.function_call is not None
+    assert part.function_call.name == "my_tool"
+
+    # Check if thought_signature is correctly attached
+    assert part.thought_signature == sig_bytes
+
+
+def test_parse_chat_history_with_text_signature() -> None:
+    """Test _parse_chat_history handles text blocks with signatures."""
+    sig_bytes = b"text_signature"
+    sig_b64 = base64.b64encode(sig_bytes).decode("ascii")
+
+    # Content with reasoning block and text block with signature
+    content = [
+        {"type": "reasoning", "reasoning": "Thinking..."},
+        {"type": "text", "text": "Final answer", "extras": {"signature": sig_b64}},
+    ]
+
+    message = AIMessage(content=content)  # type: ignore[arg-type]
+
+    message.response_metadata["output_version"] = "v1"
+    message.response_metadata["model_provider"] = "google_genai"
+
+    # Mock ImageBytesLoader
+    mock_loader = MagicMock(spec=ImageBytesLoader)
+
+    # Parse the history
+    _, formatted_messages = _parse_chat_history_gemini([message], mock_loader)
+
+    # Check the result
+    model_content = formatted_messages[0]
+    assert model_content.role == "model"
+    assert len(model_content.parts) == 2
+
+    # Part 0 is thinking
+    assert model_content.parts[0].thought is True
+
+    # Part 1 is text with signature
+    part = model_content.parts[1]
+    assert part.text == "Final answer"
+    assert part.thought_signature == sig_bytes

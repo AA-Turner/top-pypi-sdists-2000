@@ -1,3 +1,5 @@
+"""DEPRECATED"""
+
 from collections.abc import Sequence
 
 import google.cloud.aiplatform_v1beta1.types as gapic
@@ -46,7 +48,7 @@ def _create_structured_runnable_extra_step(
     prompt: BasePromptTemplate | None = None,
 ) -> Runnable:
     names = [
-        schema.model_json_schema()["title"]
+        schema.model_json_schema(mode="serialization")["title"]
         if hasattr(schema, "model_json_schema")
         else schema.schema()["title"]
         for schema in functions
