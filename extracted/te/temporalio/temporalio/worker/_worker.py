@@ -38,7 +38,7 @@ from temporalio.common import (
 from ._activity import SharedStateManager, _ActivityWorker
 from ._interceptor import Interceptor
 from ._nexus import _NexusWorker
-from ._plugin import Plugin, _RootPlugin
+from ._plugin import Plugin
 from ._tuning import WorkerTuner
 from ._workflow import _WorkflowWorker
 from ._workflow_instance import UnsandboxedWorkflowRunner, WorkflowRunner
@@ -203,9 +203,11 @@ class Worker:
                 interceptors already on the client that also implement
                 :py:class:`Interceptor` are prepended to this list and should
                 not be explicitly given here.
-            build_id: Unique identifier for the current runtime. This is best
-                set as a hash of all code and should change only when code does.
-                If unset, a best-effort identifier is generated.
+            build_id: A unique identifier for the current runtime, ideally provided as a
+                representation of the complete source code. If not explicitly set, the system
+                automatically generates a best-effort identifier by traversing and computing
+                hashes of all modules in the codebase. In very large codebases this automatic
+                process may significantly increase initialization time.
                 Exclusive with `deployment_config`.
                 WARNING: Deprecated. Use `deployment_config` instead.
             identity: Identity for this worker client. If unset, the client
@@ -228,8 +230,6 @@ class Worker:
 
                 Defaults to fixed-size 100 slots for each slot kind if unset and none of the
                 max_* arguments are provided.
-
-                WARNING: This argument is experimental
             max_concurrent_workflow_task_polls: Maximum number of concurrent
                 poll workflow task requests we will perform at a time on this worker's task queue.
                 Must be set to at least two if ``max_cached_workflows`` is nonzero.
@@ -377,12 +377,9 @@ class Worker:
                 )
         plugins = plugins_from_client + list(plugins)
 
-        root_plugin: Plugin = _RootPlugin()
-        for plugin in reversed(plugins):
-            plugin.init_worker_plugin(root_plugin)
-            root_plugin = plugin
-        config = root_plugin.configure_worker(config)
-        self._plugin = root_plugin
+        self.plugins = plugins
+        for plugin in plugins:
+            config = plugin.configure_worker(config)
 
         self._init_from_config(client, config)
 
@@ -558,6 +555,8 @@ class Worker:
                 maximum=config["max_concurrent_activity_task_polls"]
             )
 
+        deduped_plugin_names = list(set([plugin.name() for plugin in self.plugins]))
+
         # Create bridge worker last. We have empirically observed that if it is
         # created before an error is raised from the activity worker
         # constructor, a deadlock/hang will occur presumably while trying to
@@ -579,6 +578,14 @@ class Worker:
                 # will not proceed properly.
                 no_remote_activities=config["no_remote_activities"]
                 or not config["activities"],
+                task_types=temporalio.bridge.worker.WorkerTaskTypes(
+                    enable_workflows=self._workflow_worker is not None,
+                    enable_local_activities=self._activity_worker is not None
+                    and self._workflow_worker is not None,
+                    enable_remote_activities=self._activity_worker is not None
+                    and not config["no_remote_activities"],
+                    enable_nexus=self._nexus_worker is not None,
+                ),
                 sticky_queue_schedule_to_start_timeout_millis=int(
                     1000
                     * config["sticky_queue_schedule_to_start_timeout"].total_seconds()
@@ -612,6 +619,7 @@ class Worker:
                 nexus_task_poller_behavior=config[
                     "nexus_task_poller_behavior"
                 ]._to_bridge(),
+                plugins=deduped_plugin_names,
             ),
         )
 
@@ -690,7 +698,15 @@ class Worker:
         also cancel the shutdown process. Therefore users are encouraged to use
         explicit shutdown instead.
         """
-        await self._plugin.run_worker(self)
+
+        def make_lambda(plugin, next):
+            return lambda w: plugin.run_worker(w, next)
+
+        next_function = lambda w: w._run()
+        for plugin in reversed(self.plugins):
+            next_function = make_lambda(plugin, next_function)
+
+        await next_function(self)
 
     async def _run(self):
         # Eagerly validate which will do a namespace check in Core
@@ -867,6 +883,7 @@ class WorkerConfig(TypedDict, total=False):
     nexus_task_executor: Optional[concurrent.futures.Executor]
     workflow_runner: WorkflowRunner
     unsandboxed_workflow_runner: WorkflowRunner
+    plugins: Sequence[Plugin]
     interceptors: Sequence[Interceptor]
     build_id: Optional[str]
     identity: Optional[str]

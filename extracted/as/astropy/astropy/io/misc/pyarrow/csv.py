@@ -6,13 +6,13 @@ This module provides functionality to read CSV files into Astropy Tables using P
 import datetime
 import io
 import os
-from contextlib import ExitStack
 from typing import TYPE_CHECKING, BinaryIO, Literal, Union
 
 import numpy as np
 from numpy.typing import DTypeLike, NDArray
 
 from astropy.utils.compat.optional_deps import HAS_PYARROW
+from astropy.utils.data import get_readable_fileobj
 
 if TYPE_CHECKING:
     import pyarrow
@@ -159,15 +159,14 @@ def read_csv(
         include_names, dtypes, null_values, timestamp_parsers
     )
 
-    table_pa = csv.read_csv(
-        input_file,
-        parse_options=parse_options,
-        read_options=read_options,
-        convert_options=convert_options,
-    )
-    table_apt = convert_pa_table_to_astropy_table(table_pa)
-
-    return table_apt
+    with get_readable_fileobj(input_file, encoding="binary") as f:
+        table_pa = csv.read_csv(
+            f,
+            parse_options=parse_options,
+            read_options=read_options,
+            convert_options=convert_options,
+        )
+    return convert_pa_table_to_astropy_table(table_pa)
 
 
 def check_has_pyarrow():
@@ -336,8 +335,7 @@ def convert_pa_table_to_astropy_table(table_pa) -> "Table":
         name: convert_pa_array_to_numpy(col)
         for name, col in zip(table_pa.column_names, table_pa.itercolumns())
     }
-    out = Table(columns, copy=False)
-    return out
+    return Table(columns, copy=False)
 
 
 def strip_comment_lines(
@@ -391,29 +389,26 @@ def strip_comment_lines(
     """
     comment_encode = comment.encode(encoding)
 
-    with ExitStack() as stack:
-        if isinstance(input_file, (str, os.PathLike)):
-            input_file = stack.enter_context(open(input_file, "rb"))
-
+    with get_readable_fileobj(input_file, encoding="binary") as f:
         if header_start in (None, 0) and data_start is None:
             idx_last_comment = -1
-            for idx, line in enumerate(input_file):
+            for idx, line in enumerate(f):
                 if line.lstrip().startswith(comment_encode):
                     if idx - idx_last_comment == 1:
                         idx_last_comment = idx
                     else:
                         # Gap between comment lines, need to reset input file handle and
                         # break out to the logic below.
-                        input_file.seek(0)
+                        f.seek(0)
                         break
             else:
-                input_file.seek(0)
+                f.seek(0)
                 return None, idx_last_comment + 1
 
         # If we get here, we need to read the whole file and remove comment lines and
         # write into an output BytesIO file.
         output = io.BytesIO()
-        for idx, line in enumerate(input_file):
+        for idx, line in enumerate(f):
             if not line.lstrip().startswith(comment_encode):
                 output.write(line)
 

@@ -13,7 +13,7 @@ from abc import ABC, abstractmethod
 from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
-from enum import Enum, IntEnum
+from enum import Enum, Flag, IntEnum, auto
 from functools import partial
 from random import Random
 from typing import (
@@ -61,7 +61,6 @@ import temporalio.nexus
 import temporalio.workflow
 from temporalio.nexus._util import ServiceHandlerT
 
-from .api.failure.v1.message_pb2 import Failure
 from .types import (
     AnyType,
     CallableAsyncNoParam,
@@ -859,12 +858,13 @@ class _Runtime(ABC):
         self,
         endpoint: str,
         service: str,
-        operation: Union[nexusrpc.Operation[InputT, OutputT], str, Callable[..., Any]],
+        operation: nexusrpc.Operation[InputT, OutputT] | str | Callable[..., Any],
         input: Any,
-        output_type: Optional[Type[OutputT]],
-        schedule_to_close_timeout: Optional[timedelta],
+        output_type: Type[OutputT] | None,
+        schedule_to_close_timeout: timedelta | None,
         cancellation_type: temporalio.workflow.NexusOperationCancellationType,
-        headers: Optional[Mapping[str, str]],
+        headers: Mapping[str, str] | None,
+        summary: str | None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     @abstractmethod
@@ -1148,6 +1148,7 @@ def patched(id: str) -> bool:
 def payload_converter() -> temporalio.converter.PayloadConverter:
     """Get the payload converter for the current workflow.
 
+    The returned converter has :py:class:`temporalio.converter.WorkflowSerializationContext` set.
     This is often used for dynamic workflows/signals/queries to convert
     payloads.
     """
@@ -1410,6 +1411,20 @@ async def wait_condition(
 _sandbox_unrestricted = threading.local()
 _in_sandbox = threading.local()
 _imports_passed_through = threading.local()
+_sandbox_import_notification_policy_override = threading.local()
+
+
+class SandboxImportNotificationPolicy(Flag):
+    """Defines the behavior taken when modules are imported into the sandbox after the workflow is initially loaded or unintentionally missing from the passthrough list."""
+
+    SILENT = auto()
+    """Allow imports that do not violate sandbox restrictions and no warnings are generated."""
+    WARN_ON_DYNAMIC_IMPORT = auto()
+    """Allows dynamic imports that do not violate sandbox restrictions but issues a warning when an import is triggered in the sandbox after initial workflow load."""
+    WARN_ON_UNINTENTIONAL_PASSTHROUGH = auto()
+    """Allows imports that do not violate sandbox restrictions but issues a warning when an import is triggered in the sandbox that was unintentionally passed through."""
+    RAISE_ON_UNINTENTIONAL_PASSTHROUGH = auto()
+    """Raise an error when an import is triggered in the sandbox that was unintentionally passed through."""
 
 
 class unsafe:
@@ -1497,6 +1512,35 @@ class unsafe:
             yield None
         finally:
             _imports_passed_through.value = False
+
+    @staticmethod
+    def current_import_notification_policy_override() -> (
+        Optional[SandboxImportNotificationPolicy]
+    ):
+        """Gets the current import notification policy override if one is set."""
+        applied_policy = getattr(
+            _sandbox_import_notification_policy_override,
+            "value",
+            None,
+        )
+        return applied_policy
+
+    @staticmethod
+    @contextmanager
+    def sandbox_import_notification_policy(
+        policy: SandboxImportNotificationPolicy,
+    ) -> Iterator[None]:
+        """Context manager to apply the given import notification policy."""
+        original_policy = _sandbox_import_notification_policy_override.value = getattr(
+            _sandbox_import_notification_policy_override,
+            "value",
+            None,
+        )
+        _sandbox_import_notification_policy_override.value = policy
+        try:
+            yield None
+        finally:
+            _sandbox_import_notification_policy_override.value = original_policy
 
 
 class LoggerAdapter(logging.LoggerAdapter):
@@ -2210,7 +2254,7 @@ def start_activity(
     *,
     args: Sequence[Any] = [],
     task_queue: Optional[str] = None,
-    result_type: Optional[Type] = None,
+    result_type: Optional[type] = None,
     schedule_to_close_timeout: Optional[timedelta] = None,
     schedule_to_start_timeout: Optional[timedelta] = None,
     start_to_close_timeout: Optional[timedelta] = None,
@@ -2230,7 +2274,7 @@ def start_activity(
     *,
     args: Sequence[Any] = [],
     task_queue: Optional[str] = None,
-    result_type: Optional[Type] = None,
+    result_type: Optional[type] = None,
     schedule_to_close_timeout: Optional[timedelta] = None,
     schedule_to_start_timeout: Optional[timedelta] = None,
     start_to_close_timeout: Optional[timedelta] = None,
@@ -2426,7 +2470,7 @@ async def execute_activity(
     *,
     args: Sequence[Any] = [],
     task_queue: Optional[str] = None,
-    result_type: Optional[Type] = None,
+    result_type: Optional[type] = None,
     schedule_to_close_timeout: Optional[timedelta] = None,
     schedule_to_start_timeout: Optional[timedelta] = None,
     start_to_close_timeout: Optional[timedelta] = None,
@@ -2446,7 +2490,7 @@ async def execute_activity(
     *,
     args: Sequence[Any] = [],
     task_queue: Optional[str] = None,
-    result_type: Optional[Type] = None,
+    result_type: Optional[type] = None,
     schedule_to_close_timeout: Optional[timedelta] = None,
     schedule_to_start_timeout: Optional[timedelta] = None,
     start_to_close_timeout: Optional[timedelta] = None,
@@ -5303,10 +5347,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: nexusrpc.Operation[InputT, OutputT],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     # Overload for string operation name
@@ -5317,10 +5362,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: str,
         input: Any,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     # Overload for workflow_run_operation methods
@@ -5334,10 +5380,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     # Overload for sync_operation methods (async def)
@@ -5351,10 +5398,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     # Overload for sync_operation methods (def)
@@ -5368,10 +5416,28 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
+    ) -> NexusOperationHandle[OutputT]: ...
+
+    # Overload for operation_handler
+    @overload
+    @abstractmethod
+    async def start_operation(
+        self,
+        operation: Callable[
+            [ServiceHandlerT], nexusrpc.handler.OperationHandler[InputT, OutputT]
+        ],
+        input: InputT,
+        *,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
+        cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> NexusOperationHandle[OutputT]: ...
 
     @abstractmethod
@@ -5380,10 +5446,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: Any,
         input: Any,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> Any:
         """Start a Nexus operation and return its handle.
 
@@ -5410,10 +5477,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: nexusrpc.Operation[InputT, OutputT],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> OutputT: ...
 
     # Overload for string operation name
@@ -5424,10 +5492,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: str,
         input: Any,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> OutputT: ...
 
     # Overload for workflow_run_operation methods
@@ -5441,10 +5510,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> OutputT: ...
 
     # TODO(nexus-preview): in practice, both these overloads match an async def sync
@@ -5461,10 +5531,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> OutputT: ...
 
     # Overload for sync_operation methods (def)
@@ -5478,10 +5549,29 @@ class NexusClient(ABC, Generic[ServiceT]):
         ],
         input: InputT,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
+    ) -> OutputT: ...
+
+    # Overload for operation_handler
+    @overload
+    @abstractmethod
+    async def execute_operation(
+        self,
+        operation: Callable[
+            [ServiceT],
+            nexusrpc.handler.OperationHandler[InputT, OutputT],
+        ],
+        input: InputT,
+        *,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
+        cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> OutputT: ...
 
     @abstractmethod
@@ -5490,10 +5580,11 @@ class NexusClient(ABC, Generic[ServiceT]):
         operation: Any,
         input: Any,
         *,
-        output_type: Optional[Type[OutputT]] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> Any:
         """Execute a Nexus operation and return its result.
 
@@ -5542,10 +5633,11 @@ class _NexusClient(NexusClient[ServiceT]):
         operation: Any,
         input: Any,
         *,
-        output_type: Optional[Type] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> Any:
         return (
             await temporalio.workflow._Runtime.current().workflow_start_nexus_operation(
@@ -5557,6 +5649,7 @@ class _NexusClient(NexusClient[ServiceT]):
                 schedule_to_close_timeout=schedule_to_close_timeout,
                 cancellation_type=cancellation_type,
                 headers=headers,
+                summary=summary,
             )
         )
 
@@ -5565,10 +5658,11 @@ class _NexusClient(NexusClient[ServiceT]):
         operation: Any,
         input: Any,
         *,
-        output_type: Optional[Type] = None,
-        schedule_to_close_timeout: Optional[timedelta] = None,
+        output_type: Type[OutputT] | None = None,
+        schedule_to_close_timeout: timedelta | None = None,
         cancellation_type: NexusOperationCancellationType = NexusOperationCancellationType.WAIT_COMPLETED,
-        headers: Optional[Mapping[str, str]] = None,
+        headers: Mapping[str, str] | None = None,
+        summary: str | None = None,
     ) -> Any:
         handle = await self.start_operation(
             operation,
@@ -5577,6 +5671,7 @@ class _NexusClient(NexusClient[ServiceT]):
             schedule_to_close_timeout=schedule_to_close_timeout,
             cancellation_type=cancellation_type,
             headers=headers,
+            summary=summary,
         )
         return await handle
 

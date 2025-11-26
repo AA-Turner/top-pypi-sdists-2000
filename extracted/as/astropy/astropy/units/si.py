@@ -9,7 +9,7 @@ This package defines the SI units.  They are also available in
 import numpy as np
 
 from .core import CompositeUnit, def_unit
-from .utils import generate_dunder_all, generate_unit_summary
+from .docgen import generate_dunder_all, generate_unit_summary
 
 __all__: list[str] = []  #  Units are added at the end
 
@@ -89,7 +89,6 @@ def_unit(
     1000 * cm**3.0,
     namespace=_ns,
     prefixes=True,
-    format={"latex": r"\mathcal{l}", "unicode": "ℓ"},
     doc="liter: metric unit of volume",
 )
 
@@ -168,7 +167,6 @@ def_unit(
     ["s", "second"],
     namespace=_ns,
     prefixes=True,
-    exclude_prefixes=["a"],
     doc="second: base unit of time in SI.",
 )
 def_unit(

@@ -16,6 +16,7 @@
 import contextlib
 import json
 import os
+import sys
 import tempfile
 from typing import Callable, Dict, List, NamedTuple, Optional
 import unittest
@@ -100,6 +101,50 @@ class ExecutorTest(parameterized.TestCase):
         self.assertEqual({'parameterValues': {
             'Output': 'Hello, KFP'
         }}, output_metadata)
+
+    def test_builtin_generic_list_parameter(self):
+        if sys.version_info < (3, 9):
+            self.skipTest('Built-in generics require Python >= 3.9')
+
+        executor_input = """\
+        {
+          "inputs": {
+            "parameterValues": {
+              "num_list": [1, 2, 3]
+            }
+          },
+          "outputs": {
+            "outputFile": "%(test_dir)s/output_metadata.json"
+          }
+        }
+        """
+
+        def test_func(num_list: list[int]) -> None:
+            self.assertEqual(num_list, [1, 2, 3])
+
+        self.execute_and_load_output_metadata(test_func, executor_input)
+
+    def test_builtin_generic_dict_parameter(self):
+        if sys.version_info < (3, 9):
+            self.skipTest('Built-in generics require Python >= 3.9')
+
+        executor_input = """\
+        {
+          "inputs": {
+            "parameterValues": {
+              "mapping": {"a": 1, "b": 2}
+            }
+          },
+          "outputs": {
+            "outputFile": "%(test_dir)s/output_metadata.json"
+          }
+        }
+        """
+
+        def test_func(mapping: dict[str, int]) -> None:
+            self.assertEqual(mapping, {'a': 1, 'b': 2})
+
+        self.execute_and_load_output_metadata(test_func, executor_input)
 
     def test_input_artifact_custom_type(self):
         executor_input = """\
@@ -318,6 +363,8 @@ class ExecutorTest(parameterized.TestCase):
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
                                 'new-uri',
+                            'custom_path':
+                                '',
                             'metadata': {
                                 'key_1': 'value_1',
                                 'key_2': 2,
@@ -645,7 +692,9 @@ class ExecutorTest(parameterized.TestCase):
                             'name':
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
-                                'gs://some-bucket/output'
+                                'gs://some-bucket/output',
+                            'custom_path':
+                                ''
                         }]
                     }
                 },
@@ -702,7 +751,9 @@ class ExecutorTest(parameterized.TestCase):
                             'name':
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
-                                'gs://some-bucket/output'
+                                'gs://some-bucket/output',
+                            'custom_path':
+                                ''
                         }]
                     }
                 },
@@ -815,7 +866,9 @@ class ExecutorTest(parameterized.TestCase):
                                 'name':
                                     'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                                 'uri':
-                                    'gs://some-bucket/output_dataset'
+                                    'gs://some-bucket/output_dataset',
+                                'custom_path':
+                                    ''
                             }]
                         }
                     },
@@ -1054,6 +1107,8 @@ class ExecutorTest(parameterized.TestCase):
                                 '',
                             'uri':
                                 'gs://mlpipeline/v2/artifacts/my-test-pipeline-beta/b2b0cdee-b15c-48ff-b8bc-a394ae46c854/train/model',
+                            'custom_path':
+                                '',
                             'metadata': {
                                 'accuracy': 0.9
                             }
@@ -1288,6 +1343,8 @@ class ExecutorTest(parameterized.TestCase):
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
                                 'gs://manually_specified_bucket/foo',
+                            'custom_path':
+                                '',
                             'metadata': {
                                 'data': 123
                             }
@@ -1339,6 +1396,8 @@ class ExecutorTest(parameterized.TestCase):
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
                                 'gs://another_bucket/my_artifact',
+                            'custom_path':
+                                '',
                             'metadata': {
                                 'data': 123
                             }
@@ -1408,6 +1467,8 @@ class ExecutorTest(parameterized.TestCase):
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/123',
                             'uri':
                                 'gs://another_bucket/artifact',
+                            'custom_path':
+                                '',
                             'metadata': {
                                 'data': 123
                             }
@@ -1419,6 +1480,8 @@ class ExecutorTest(parameterized.TestCase):
                                 'projects/123/locations/us-central1/metadataStores/default/artifacts/321',
                             'uri':
                                 'gs://another_bucket/dataset',
+                            'custom_path':
+                                '',
                             'metadata': {}
                         }]
                     }

@@ -4,7 +4,6 @@
 
 import re
 import warnings
-from itertools import product
 
 import numpy as np
 import pytest
@@ -31,8 +30,7 @@ from astropy.units import Quantity, UnitsWarning
 from astropy.utils import iers
 from astropy.utils.data import get_pkg_data_filename
 from astropy.utils.exceptions import AstropyDeprecationWarning, AstropyUserWarning
-from astropy.wcs._wcs import __version__ as wcsver
-from astropy.wcs.wcs import WCS, FITSFixedWarning, NoConvergence, Sip
+from astropy.wcs.wcs import WCS, WCSLIB_VERSION, FITSFixedWarning, NoConvergence, Sip
 from astropy.wcs.wcsapi.fitswcs import VELOCITY_FRAMES, custom_ctype_to_ucd_mapping
 
 ###############################################################################
@@ -584,7 +582,7 @@ OBSGEO-B= -70
 OBSGEO-H= 2530
 """
 
-if Version(wcsver) >= Version("7.1"):
+if Version(WCSLIB_VERSION) >= Version("7.1"):
     HEADER_TIME_1D += "DATEREF = '1995-10-12T14:24:00'\n"
 
 
@@ -1087,10 +1085,8 @@ def test_spectralcoord_frame(header_spectral_frames):
             assert_quantity_allclose(sc.quantity, sc_check.quantity)
 
 
-@pytest.mark.parametrize(
-    ("ctype3", "observer"),
-    product(["ZOPT", "BETA", "VELO", "VRAD", "VOPT"], [False, True]),
-)
+@pytest.mark.parametrize("ctype3", ["ZOPT", "BETA", "VELO", "VRAD", "VOPT"])
+@pytest.mark.parametrize("observer", [False, True])
 def test_different_ctypes(header_spectral_frames, ctype3, observer):
     header = header_spectral_frames.copy()
     header["CTYPE3"] = ctype3
@@ -1152,7 +1148,13 @@ def test_non_convergence_warning():
 
     # at last check that world_to_pixel_values raises a warning but returns
     # the same 'low accuray' result
-    with pytest.warns(UserWarning):
+    with pytest.warns(
+        UserWarning,
+        match=(
+            r"^'WCS.all_world2pix' failed to converge to the requested accuracy\.\n"
+            r"After 20 iterations, the solution is diverging at least for one input point\.$"
+        ),
+    ):
         assert_allclose(wcs.world_to_pixel_values(test_pos_x, test_pos_y), expected)
 
 
@@ -1173,10 +1175,8 @@ def header_spectral_1d():
     return Header.fromstring(HEADER_SPECTRAL_1D, sep="\n")
 
 
-@pytest.mark.parametrize(
-    ("ctype1", "observer"),
-    product(["ZOPT", "BETA", "VELO", "VRAD", "VOPT"], [False, True]),
-)
+@pytest.mark.parametrize("ctype1", ["ZOPT", "BETA", "VELO", "VRAD", "VOPT"])
+@pytest.mark.parametrize("observer", [False, True])
 def test_spectral_1d(header_spectral_1d, ctype1, observer):
     # This is a regression test for issues that happened with 1-d WCS
     # where the target is not defined but observer is.
@@ -1582,3 +1582,73 @@ def test_restfrq_restwav():
         ),
     ):
         scoord3 = wcs.pixel_to_world(5)
+
+
+def test_array_index_conversions_arrays_1d():
+    # Regression test for a bug that caused world_to_array_index to return lists
+    # instead of Numpy arrays - 1D version
+
+    wcs = WCS(naxis=1)
+    wcs.wcs.ctype = ("FREQ",)
+
+    coord = SpectralCoord([10, 12], unit="Hz")
+
+    with pytest.warns(AstropyUserWarning, match="No observer defined on WCS"):
+        i = wcs.world_to_array_index(coord)
+    assert isinstance(i, np.ndarray)
+
+    with pytest.warns(AstropyUserWarning, match="No observer defined on WCS"):
+        x = wcs.world_to_pixel(coord)
+    assert isinstance(x, np.ndarray)
+
+
+def test_array_index_conversions_arrays_2d():
+    # Regression test for a bug that caused world_to_array_index to return lists
+    # instead of Numpy arrays - 2D versions
+
+    wcs = WCS(naxis=2)
+    wcs.wcs.ctype = "RA---TAN", "DEC--TAN"
+
+    coord = SkyCoord([10, 12], [20, 22], unit="deg", frame="icrs")
+
+    i, j = wcs.world_to_array_index(coord)
+    assert isinstance(i, np.ndarray)
+    assert isinstance(j, np.ndarray)
+
+    x, y = wcs.world_to_pixel(coord)
+    assert isinstance(x, np.ndarray)
+    assert isinstance(x, np.ndarray)
+
+
+def test_array_index_conversions_scalars_1d():
+    # And check that things works properly for scalars (1D)
+
+    wcs = WCS(naxis=1)
+    wcs.wcs.ctype = ("FREQ",)
+
+    coord = SpectralCoord(10, unit="Hz")
+
+    with pytest.warns(AstropyUserWarning, match="No observer defined on WCS"):
+        i = wcs.world_to_array_index(coord)
+    assert isinstance(i, np.ndarray) and i.ndim == 0
+
+    with pytest.warns(AstropyUserWarning, match="No observer defined on WCS"):
+        x = wcs.world_to_pixel(coord)
+    assert isinstance(x, np.ndarray) and x.ndim == 0
+
+
+def test_array_index_conversions_scalars_2d():
+    # And check that things works properly for scalars (2D)
+
+    wcs = WCS(naxis=2)
+    wcs.wcs.ctype = "RA---TAN", "DEC--TAN"
+
+    scoord = SkyCoord(10, 20, unit="deg", frame="icrs")
+
+    i, j = wcs.world_to_array_index(scoord)
+    assert isinstance(i, np.ndarray) and i.ndim == 0
+    assert isinstance(j, np.ndarray) and j.ndim == 0
+
+    x, y = wcs.world_to_pixel(scoord)
+    assert isinstance(x, np.ndarray) and x.ndim == 0
+    assert isinstance(y, np.ndarray) and y.ndim == 0

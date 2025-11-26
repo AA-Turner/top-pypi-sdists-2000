@@ -720,21 +720,29 @@ def test_pickle_unrecognized_unit():
 
 
 @pytest.mark.parametrize(
-    "name",
+    "name,message",
     [
-        pytest.param("h", id="simple_conflict"),
-        pytest.param("ʰ", id="NFKC_normalization"),
+        pytest.param(
+            "h",
+            r"^the namespace already uses the name 'h' for Unit\(\"h\"\)$",
+            id="simple_conflict",
+        ),
+        pytest.param(
+            "ʰ",
+            (
+                "^the namespace already uses the NFKC normalized name 'h' for "
+                r'Unit\("h"\)'
+                "\n\nSee "
+                "https://docs.python.org/3/reference/lexical_analysis.html#identifiers "
+                r"for more information\.$"
+            ),
+            id="NFKC_normalization",
+        ),
     ],
 )
-def test_duplicate_define(name):
+def test_duplicate_define(name, message):
     namespace = {"h": u.h}
-    with pytest.raises(
-        ValueError,
-        match=(
-            "^Object with NFKC normalized name 'h' already exists in given namespace "
-            r'\(Unit\("h"\)\)\.$'
-        ),
-    ):
+    with pytest.raises(ValueError, match=message):
         u.def_unit(name, u.hourangle, namespace=namespace)
 
 
@@ -1031,33 +1039,6 @@ def test_enable_unit_groupings():
         assert imperial.inch in u.m.find_equivalent_units()
 
 
-def test_unit_summary_prefixes():
-    """
-    Test for a few units that the unit summary table correctly reports
-    whether or not that unit supports prefixes.
-
-    Regression test for https://github.com/astropy/astropy/issues/3835
-    """
-
-    from astropy.units import astrophys
-
-    for summary in utils._iter_unit_summary(astrophys.__dict__):
-        unit, _, _, _, prefixes = summary
-
-        if unit.name == "lyr":
-            assert prefixes
-        elif unit.name == "pc":
-            assert prefixes
-        elif unit.name == "barn":
-            assert prefixes
-        elif unit.name == "cycle":
-            assert prefixes == "No"
-        elif unit.name == "spat":
-            assert prefixes == "No"
-        elif unit.name == "vox":
-            assert prefixes == "Yes"
-
-
 def test_raise_to_negative_power():
     """Test that order of bases is changed when raising to negative power.
 
@@ -1309,3 +1290,10 @@ def test_required_by_vounit_parsing(unit):
 @required_by_vounit_parametrization
 def test_required_by_vounit_not_in_find_equivalent_units(unit):
     assert unit not in unit.represents.bases[0].find_equivalent_units()
+
+
+@pytest.mark.parametrize("format_", ["cds", "fits", "generic", "ogip", "vounit"])
+def test_parsing_as(format_):
+    # The symbol for the attosecond is "as", which can be problematic because it
+    # happens to be a Python keyword.
+    assert u.Unit("as", format=format_) == u.attosecond

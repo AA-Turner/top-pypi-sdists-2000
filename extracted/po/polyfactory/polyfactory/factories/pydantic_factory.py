@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import warnings
 from collections.abc import Mapping
 from contextlib import suppress
 from datetime import timezone
@@ -83,10 +84,12 @@ except ImportError:
     from pydantic_core import PydanticUndefined as UndefinedV2
     from pydantic_core import to_json
 
-    import pydantic.v1 as pydantic_v1  # type: ignore[no-redef]
-    from pydantic.v1 import BaseModel as BaseModelV1  # type: ignore[assignment]
-    from pydantic.v1.color import Color  # type: ignore[assignment]
-    from pydantic.v1.fields import DeferredType, ModelField, Undefined
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", message=".*Pydantic V1.*", category=UserWarning)
+        import pydantic.v1 as pydantic_v1  # type: ignore[no-redef]
+        from pydantic.v1 import BaseModel as BaseModelV1  # type: ignore[assignment]
+        from pydantic.v1.color import Color  # type: ignore[assignment]
+        from pydantic.v1.fields import DeferredType, ModelField, Undefined
 
 
 if TYPE_CHECKING:
@@ -125,6 +128,7 @@ class PydanticFieldMeta(FieldMeta):
         children: list[FieldMeta] | None = None,
         constraints: PydanticConstraints | None = None,
         examples: list[Any] | None = None,
+        required: bool = True,
     ) -> None:
         super().__init__(
             name=name,
@@ -132,6 +136,7 @@ class PydanticFieldMeta(FieldMeta):
             default=default,
             children=children,
             constraints=constraints,
+            required=required,
         )
         self.examples = examples
 
@@ -220,10 +225,11 @@ class PydanticFieldMeta(FieldMeta):
         return result
 
     @classmethod
-    def from_model_field(  # pragma: no cover
+    def from_model_field(
         cls,
         model_field: ModelField,  # pyright: ignore[reportGeneralTypeIssues]
         use_alias: bool,
+        required: bool = True,
     ) -> PydanticFieldMeta:
         """Create an instance from a pydantic model field.
         :param model_field: A pydantic ModelField.
@@ -332,6 +338,7 @@ class PydanticFieldMeta(FieldMeta):
             default=default_value,
             constraints=cast("PydanticConstraints", {k: v for k, v in constraints.items() if v is not None}) or None,
             examples=examples,
+            required=required,
         )
 
     if not _IS_PYDANTIC_V1:

@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "jsonpath-python"
-version = "1.1.1"
-description = "A more powerful JSONPath implementation in modern python"
+version = "1.1.4"
+description = "A lightweight and powerful JSONPath implementation for Python"
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "sean2077", email = "sean2077@users.noreply.github.com" }]
@@ -92,9 +92,28 @@ help = "Run linter"
 cmd = "pytest"
 help = "Run tests"
 
-[tool.poe.tasks.test-perf]
-cmd = "pytest -m perf -v --benchmark-autosave --benchmark-histogram"
-help = "Run performance tests"
+[tool.poe.tasks.perf]
+sequence = [
+  { cmd = "pytest tests/test_performance.py --benchmark-only --benchmark-autosave --benchmark-histogram --benchmark-compare" },
+  { cmd = "python scripts/save_benchmark.py latest" },
+  { cmd = "python scripts/compare_benchmarks.py" },
+]
+help = "Run performance tests, save to benchmarks/ with latest suffix"
+
+[tool.poe.tasks.perf-version]
+sequence = [
+  { cmd = "pytest tests/test_performance.py --benchmark-only --benchmark-autosave --benchmark-histogram --benchmark-compare" },
+  { cmd = "python scripts/save_benchmark.py" },
+]
+help = "Run performance tests, save to benchmarks/ with version suffix"
+
+[tool.poe.tasks.perf-compare]
+cmd = "python scripts/compare_benchmarks.py"
+help = "Compare benchmark-latest.json with newest version benchmark"
+
+[tool.poe.tasks.perf-list]
+cmd = "pytest-benchmark list"
+help = "List all saved benchmarks"
 
 [tool.poe.tasks.update-deps]
 cmd = "uv sync --all-extras --upgrade --index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple/"

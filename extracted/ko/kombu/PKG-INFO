@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: kombu
-Version: 5.6.0
+Version: 5.6.1
 Summary: Messaging library for Python.
 Home-page: https://kombu.readthedocs.io
 Author: Ask Solem

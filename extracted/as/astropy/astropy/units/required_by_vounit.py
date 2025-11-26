@@ -10,7 +10,7 @@ possible for the non-prefixed unit, ``astropy.units.solMass``.
 
 from . import astrophys
 from .core import _add_prefixes
-from .utils import (
+from .docgen import (
     generate_dunder_all,
     generate_prefixonly_unit_summary,
     generate_unit_summary,

@@ -1,6 +1,6 @@
 # Licensed under a 3-clause BSD style license - see LICENSE.rst
 import warnings
-from contextlib import nullcontext
+from unittest.mock import MagicMock
 
 import matplotlib as mpl
 import numpy as np
@@ -25,7 +25,7 @@ from astropy.visualization.wcsaxes.ticklabels import TickLabels
 from astropy.visualization.wcsaxes.transforms import CurvedTransform
 from astropy.visualization.wcsaxes.utils import get_coord_meta
 from astropy.wcs import WCS
-from astropy.wcs.wcsapi import BaseLowLevelWCS, HighLevelWCSWrapper, SlicedLowLevelWCS
+from astropy.wcs.wcsapi import HighLevelWCSWrapper, SlicedLowLevelWCS
 
 ft_version = Version(mpl.ft2font.__freetype_version__)
 FREETYPE_261 = ft_version == Version("2.6.1")
@@ -33,8 +33,6 @@ FREETYPE_261 = ft_version == Version("2.6.1")
 # We cannot use matplotlib.checkdep_usetex() anymore, see
 # https://github.com/matplotlib/matplotlib/issues/23244
 TEX_UNAVAILABLE = True
-
-MATPLOTLIB_LT_3_7 = Version(mpl.__version__) < Version("3.7")
 
 
 def test_grid_regression(ignore_matplotlibrc):
@@ -342,16 +340,7 @@ def test_contour_empty():
     fig = Figure()
     ax = WCSAxes(fig, [0.1, 0.1, 0.8, 0.8])
     fig.add_axes(ax)
-
-    if MATPLOTLIB_LT_3_7:
-        ctx = pytest.warns(
-            UserWarning, match="No contour levels were found within the data range"
-        )
-    else:
-        ctx = nullcontext()
-
-    with ctx:
-        ax.contour(np.zeros((4, 4)), transform=ax.get_transform("world"))
+    ax.contour(np.zeros((4, 4)), transform=ax.get_transform("world"))
 
 
 def test_iterate_coords(ignore_matplotlibrc):
@@ -533,7 +522,7 @@ def test_simplify_labels_minus_sign(
     if usetex and TEX_UNAVAILABLE:
         pytest.skip("TeX is unavailable")
 
-    ticklabels = TickLabels(None)
+    ticklabels = TickLabels(frame=MagicMock())
     expected_labels = []
     for i in range(1, 6):
         label = label_str.format(i)
@@ -784,7 +773,7 @@ def test_simplify_cases(before, after):
     # Regression test for a bug that caused the simplification to not work
     # correctly in the presence of dollar signs in LaTeX strings.
 
-    ticklabels = TickLabels(None)
+    ticklabels = TickLabels(frame=MagicMock())
     expected_labels = []
 
     for i, label in enumerate(before):
@@ -801,55 +790,6 @@ def test_simplify_cases(before, after):
     assert ticklabels.text["axis"] == after
 
 
-class ArcminWCS(BaseLowLevelWCS):
-    def __init__(self, wcs_deg):
-        self.wcs_deg = wcs_deg
-
-    @property
-    def pixel_n_dim(self):
-        return 2
-
-    @property
-    def world_n_dim(self):
-        return 2
-
-    @property
-    def world_axis_physical_types(self):
-        return [
-            "pos.eq.ra",
-            "pos.eq.dec",
-        ]
-
-    @property
-    def world_axis_units(self):
-        return ["arcmin", "arcmin"]
-
-    @property
-    def world_axis_names(self):
-        return ["RA", "DEC"]
-
-    def pixel_to_world_values(self, *pixel_arrays):
-        world = self.wcs_deg.pixel_to_world_values(*pixel_arrays)
-        return world[0] * 60, world[1] * 60
-
-    def world_to_pixel_values(self, *world_arrays):
-        world = world_arrays[0] / 60, world_arrays[1] / 60
-        return self.wcs_deg.world_to_pixel_values(*world_arrays)
-
-    @property
-    def world_axis_object_components(self):
-        return [
-            ("celestial", 0, "spherical.lon.arcmin"),
-            ("celestial", 1, "spherical.lat.arcmin"),
-        ]
-
-    @property
-    def world_axis_object_classes(self):
-        return {
-            "celestial": (SkyCoord, (), {"unit": "arcmin"}),
-        }
-
-
 def test_get_transform_unit_mismatch():
     """
     Regression test for a bug that caused get_transform to ignore differences
@@ -858,14 +798,19 @@ def test_get_transform_unit_mismatch():
     https://github.com/astropy/astropy/issues/18246
     """
 
-    wcs_deg = WCS(naxis=2)
+    wcs_deg = WCS(naxis=2, preserve_units=True)
     wcs_deg.wcs.ctype = "RA---TAN", "DEC--TAN"
     wcs_deg.wcs.crval = 20, 30
     wcs_deg.wcs.cunit = "deg", "deg"
     wcs_deg.wcs.crpix = 1, 1
     wcs_deg.wcs.cdelt = 1 / 60, 1 / 60
 
-    wcs_arcmin = ArcminWCS(wcs_deg)
+    wcs_arcmin = WCS(naxis=2, preserve_units=True)
+    wcs_arcmin.wcs.ctype = "RA---TAN", "DEC--TAN"
+    wcs_arcmin.wcs.crval = 1200, 1800
+    wcs_arcmin.wcs.cunit = "arcmin", "arcmin"
+    wcs_arcmin.wcs.crpix = 1, 1
+    wcs_arcmin.wcs.cdelt = 1, 1
 
     fig = Figure(figsize=(6, 6))
     ax = fig.add_subplot(projection=wcs_arcmin)

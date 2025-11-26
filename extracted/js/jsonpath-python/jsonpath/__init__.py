@@ -2,11 +2,12 @@
 JSONPath
 ========
 
-A more powerful JSONPath implementation in modern python.
+A lightweight and powerful JSONPath implementation for Python.
 """
 
-__version__ = "1.1.1"
-__author__ = "sean2077"
+from importlib.metadata import version
+
+__version__ = version("jsonpath-python")
 
 from .jsonpath import ExprSyntaxError, JSONPath, JSONPathTypeError, compile, search
 

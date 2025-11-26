@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from datetime import timedelta
 from typing import Any, Callable, Literal, Optional, Protocol, Union, runtime_checkable
 
-from typing_extensions import TypeAlias
+from typing_extensions import Self, TypeAlias
 
 import temporalio.bridge.worker
 from temporalio.common import WorkerDeploymentVersion
@@ -27,11 +27,7 @@ class FixedSizeSlotSupplier:
 
 @dataclass(frozen=True)
 class ResourceBasedTunerConfig:
-    """Options for a :py:class:`ResourceBasedTuner` or a :py:class:`ResourceBasedSlotSupplier`.
-
-    .. warning::
-        The resource based tuner is currently experimental.
-    """
+    """Options for a :py:class:`ResourceBasedTuner` or a :py:class:`ResourceBasedSlotSupplier`."""
 
     target_memory_usage: float
     """A value between 0 and 1 that represents the target (system) memory usage. It's not recommended
@@ -44,11 +40,7 @@ class ResourceBasedTunerConfig:
 
 @dataclass(frozen=True)
 class ResourceBasedSlotConfig:
-    """Options for a specific slot type being used with a :py:class:`ResourceBasedSlotSupplier`.
-
-    .. warning::
-        The resource based tuner is currently experimental.
-    """
+    """Options for a specific slot type being used with a :py:class:`ResourceBasedSlotSupplier`."""
 
     minimum_slots: Optional[int] = None
     """Amount of slots that will be issued regardless of any other checks. Defaults to 5 for workflows and 1 for
@@ -65,11 +57,7 @@ class ResourceBasedSlotConfig:
 
 @dataclass(frozen=True)
 class ResourceBasedSlotSupplier:
-    """A slot supplier that will dynamically adjust the number of slots based on resource usage.
-
-    .. warning::
-        The resource based tuner is currently experimental.
-    """
+    """A slot supplier that will dynamically adjust the number of slots based on resource usage."""
 
     slot_config: ResourceBasedSlotConfig
     tuner_config: ResourceBasedTunerConfig
@@ -81,9 +69,6 @@ class SlotPermit:
     """A permit to use a slot for a workflow/activity/local activity task.
 
     You can inherit from this class to add your own data to the permit.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
     """
 
     pass
@@ -91,11 +76,7 @@ class SlotPermit:
 
 # WARNING: This must match Rust worker::SlotReserveCtx
 class SlotReserveContext(Protocol):
-    """Context for reserving a slot from a :py:class:`CustomSlotSupplier`.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Context for reserving a slot from a :py:class:`CustomSlotSupplier`."""
 
     slot_type: Literal["workflow", "activity", "local-activity"]
     """The type of slot trying to be reserved. Always one of "workflow", "activity", or "local-activity"."""
@@ -118,11 +99,7 @@ class SlotReserveContext(Protocol):
 # WARNING: This must match Rust worker::WorkflowSlotInfo
 @runtime_checkable
 class WorkflowSlotInfo(Protocol):
-    """Info about a workflow task slot usage.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Info about a workflow task slot usage."""
 
     workflow_type: str
     is_sticky: bool
@@ -131,11 +108,7 @@ class WorkflowSlotInfo(Protocol):
 # WARNING: This must match Rust worker::ActivitySlotInfo
 @runtime_checkable
 class ActivitySlotInfo(Protocol):
-    """Info about an activity task slot usage.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Info about an activity task slot usage."""
 
     activity_type: str
 
@@ -143,11 +116,7 @@ class ActivitySlotInfo(Protocol):
 # WARNING: This must match Rust worker::LocalActivitySlotInfo
 @runtime_checkable
 class LocalActivitySlotInfo(Protocol):
-    """Info about a local activity task slot usage.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Info about a local activity task slot usage."""
 
     activity_type: str
 
@@ -155,11 +124,7 @@ class LocalActivitySlotInfo(Protocol):
 # WARNING: This must match Rust worker::NexusSlotInfo
 @runtime_checkable
 class NexusSlotInfo(Protocol):
-    """Info about a nexus task slot usage.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Info about a nexus task slot usage."""
 
     service: str
     operation: str
@@ -173,11 +138,7 @@ SlotInfo: TypeAlias = Union[
 # WARNING: This must match Rust worker::SlotMarkUsedCtx
 @dataclass(frozen=True)
 class SlotMarkUsedContext(Protocol):
-    """Context for marking a slot used from a :py:class:`CustomSlotSupplier`.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Context for marking a slot used from a :py:class:`CustomSlotSupplier`."""
 
     slot_info: SlotInfo
     """Info about the task that will be using the slot."""
@@ -188,11 +149,7 @@ class SlotMarkUsedContext(Protocol):
 # WARNING: This must match Rust worker::SlotReleaseCtx
 @dataclass(frozen=True)
 class SlotReleaseContext:
-    """Context for releasing a slot from a :py:class:`CustomSlotSupplier`.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """Context for releasing a slot from a :py:class:`CustomSlotSupplier`."""
 
     slot_info: Optional[SlotInfo]
     """Info about the task that will be using the slot. May be None if the slot was never used."""
@@ -201,11 +158,7 @@ class SlotReleaseContext:
 
 
 class CustomSlotSupplier(ABC):
-    """This class can be implemented to provide custom slot supplier behavior.
-
-    .. warning::
-        Custom slot suppliers are currently experimental.
-    """
+    """This class can be implemented to provide custom slot supplier behavior."""
 
     @abstractmethod
     async def reserve_slot(self, ctx: SlotReserveContext) -> SlotPermit:
@@ -357,8 +310,9 @@ def _to_bridge_slot_supplier(
 class WorkerTuner(ABC):
     """WorkerTuners allow for the dynamic customization of some aspects of worker configuration"""
 
-    @staticmethod
+    @classmethod
     def create_resource_based(
+        cls,
         *,
         target_memory_usage: float,
         target_cpu_usage: float,
@@ -388,8 +342,9 @@ class WorkerTuner(ABC):
             nexus,
         )
 
-    @staticmethod
+    @classmethod
     def create_fixed(
+        cls,
         *,
         workflow_slots: Optional[int] = None,
         activity_slots: Optional[int] = None,
@@ -409,8 +364,9 @@ class WorkerTuner(ABC):
             FixedSizeSlotSupplier(nexus_slots if nexus_slots else 100),
         )
 
-    @staticmethod
+    @classmethod
     def create_composite(
+        cls,
         *,
         workflow_supplier: SlotSupplier,
         activity_supplier: SlotSupplier,

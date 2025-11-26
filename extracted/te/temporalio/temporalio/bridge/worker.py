@@ -7,11 +7,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import (
-    TYPE_CHECKING,
     Awaitable,
     Callable,
     List,
-    Mapping,
     MutableSequence,
     Optional,
     Sequence,
@@ -20,7 +18,6 @@ from typing import (
     Union,
 )
 
-import google.protobuf.internal.containers
 from typing_extensions import TypeAlias
 
 import temporalio.api.common.v1
@@ -35,12 +32,13 @@ import temporalio.bridge.runtime
 import temporalio.bridge.temporal_sdk_bridge
 import temporalio.converter
 import temporalio.exceptions
-from temporalio.api.common.v1.message_pb2 import Payload, Payloads
-from temporalio.bridge._visitor import PayloadVisitor, VisitorFunctions
+from temporalio.api.common.v1.message_pb2 import Payload
+from temporalio.bridge._visitor import VisitorFunctions
 from temporalio.bridge.temporal_sdk_bridge import (
     CustomSlotSupplier as BridgeCustomSlotSupplier,
 )
 from temporalio.bridge.temporal_sdk_bridge import PollShutdownError  # type: ignore
+from temporalio.worker._command_aware_visitor import CommandAwarePayloadVisitor
 
 
 @dataclass
@@ -57,6 +55,7 @@ class WorkerConfig:
     nonsticky_to_sticky_poll_ratio: float
     activity_task_poller_behavior: PollerBehavior
     no_remote_activities: bool
+    task_types: WorkerTaskTypes
     sticky_queue_schedule_to_start_timeout_millis: int
     max_heartbeat_throttle_interval_millis: int
     default_heartbeat_throttle_interval_millis: int
@@ -66,6 +65,7 @@ class WorkerConfig:
     nondeterminism_as_workflow_fail: bool
     nondeterminism_as_workflow_fail_for_types: Set[str]
     nexus_task_poller_behavior: PollerBehavior
+    plugins: Sequence[str]
 
 
 @dataclass
@@ -169,6 +169,16 @@ class TunerHolder:
     activity_slot_supplier: SlotSupplier
     local_activity_slot_supplier: SlotSupplier
     nexus_slot_supplier: SlotSupplier
+
+
+@dataclass
+class WorkerTaskTypes:
+    """Python representation of the Rust struct for worker task types"""
+
+    enable_workflows: bool
+    enable_local_activities: bool
+    enable_remote_activities: bool
+    enable_nexus: bool
 
 
 class Worker:
@@ -299,22 +309,22 @@ class _Visitor(VisitorFunctions):
 
 
 async def decode_activation(
-    act: temporalio.bridge.proto.workflow_activation.WorkflowActivation,
+    activation: temporalio.bridge.proto.workflow_activation.WorkflowActivation,
     codec: temporalio.converter.PayloadCodec,
     decode_headers: bool,
 ) -> None:
-    """Decode the given activation with the codec."""
-    await PayloadVisitor(
+    """Decode all payloads in the activation."""
+    await CommandAwarePayloadVisitor(
         skip_search_attributes=True, skip_headers=not decode_headers
-    ).visit(_Visitor(codec.decode), act)
+    ).visit(_Visitor(codec.decode), activation)
 
 
 async def encode_completion(
-    comp: temporalio.bridge.proto.workflow_completion.WorkflowActivationCompletion,
+    completion: temporalio.bridge.proto.workflow_completion.WorkflowActivationCompletion,
     codec: temporalio.converter.PayloadCodec,
     encode_headers: bool,
 ) -> None:
-    """Recursively encode the given completion with the codec."""
-    await PayloadVisitor(
+    """Encode all payloads in the completion."""
+    await CommandAwarePayloadVisitor(
         skip_search_attributes=True, skip_headers=not encode_headers
-    ).visit(_Visitor(codec.encode), comp)
+    ).visit(_Visitor(codec.encode), completion)

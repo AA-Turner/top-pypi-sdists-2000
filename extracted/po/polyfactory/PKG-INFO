@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: polyfactory
-Version: 3.0.0
+Version: 3.1.0
 Summary: Mock data generation factories
 Project-URL: Issue Tracker, https://github.com/litestar-org/polyfactory/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc
 Project-URL: Changelog, https://github.com/litestar-org/polyfactory/releases/
@@ -53,7 +53,7 @@ Requires-Dist: odmantic; extra == 'full'
 Requires-Dist: pydantic; extra == 'full'
 Requires-Dist: sqlalchemy; extra == 'full'
 Provides-Extra: msgspec
-Requires-Dist: msgspec; extra == 'msgspec'
+Requires-Dist: msgspec>=0.20.0; extra == 'msgspec'
 Provides-Extra: odmantic
 Requires-Dist: odmantic<1.0.0; extra == 'odmantic'
 Requires-Dist: pydantic[email]; extra == 'odmantic'

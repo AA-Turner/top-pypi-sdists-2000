@@ -48,7 +48,7 @@ from ._completions import (
     argcomplete_namespace,
     handle_completions,
 )
-from ._deprecated import ParserDeprecations, deprecated_skip_check
+from ._deprecated import ParserDeprecations, deprecated_skip_check, deprecated_yaml_comments
 from ._formatters import DefaultHelpFormatter, empty_help, get_env_var
 from ._jsonnet import ActionJsonnet
 from ._jsonschema import ActionJsonSchema
@@ -242,7 +242,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         dump_header: Optional[list[str]] = None,
         default_config_files: Optional[list[Union[str, os.PathLike]]] = None,
         default_env: bool = False,
-        default_meta: bool = True,
         **kwargs,
     ) -> None:
         """Initializer for ArgumentParser instance.
@@ -261,7 +260,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             dump_header: Header to include as comment when dumping a config object.
             default_config_files: Default config file locations, e.g. ``['~/.config/myapp/*.yaml']``.
             default_env: Set the default value on whether to parse environment variables.
-            default_meta: Set the default value on whether to include metadata in config objects.
         """
         super().__init__(*args, formatter_class=formatter_class, logger=logger, **kwargs)
         self._group_class = get_argument_group_class(self)
@@ -271,7 +269,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         self.required_args: set[str] = set()
         self.save_path_content: set[str] = set()
         self.default_config_files = default_config_files
-        self.default_meta = default_meta
         self.default_env = default_env
         self.env_prefix = env_prefix
         self.parser_mode = parser_mode
@@ -340,7 +337,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         cfg: Namespace,
         env: Optional[bool],
         defaults: bool,
-        with_meta: Optional[bool],
         skip_validation: bool,
         skip_required: bool = False,
         skip_subcommands: bool = False,
@@ -352,7 +348,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             cfg: The configuration object.
             env: Whether to merge with the parsed environment, None to use parser's default.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
             skip_validation: Whether to skip validation of configuration.
             skip_required: Whether to skip check of required arguments.
             skip_subcommands: Whether to skip subcommand processing.
@@ -387,9 +382,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             if not skip_validation:
                 self.validate(cfg, skip_required=skip_required)
 
-        if not (with_meta or (with_meta is None and self._default_meta)):
-            cfg = cfg.clone(with_meta=False)
-
         return cfg
 
     def _parse_defaults_and_environ(
@@ -417,7 +409,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         namespace: Optional[Namespace] = None,
         env: Optional[bool] = None,
         defaults: bool = True,
-        with_meta: Optional[bool] = None,
         **kwargs,
     ) -> Namespace:
         """Parses command line argument strings.
@@ -430,7 +421,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             args: List of arguments to parse or None to use sys.argv.
             env: Whether to merge with the parsed environment, None to use parser's default.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
 
         Returns:
             A config object with all parsed values.
@@ -465,7 +455,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                 cfg=cfg,
                 env=env,
                 defaults=defaults,
-                with_meta=with_meta,
                 skip_validation=skip_validation,
             )
 
@@ -481,7 +470,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         cfg_base: Optional[Namespace] = None,
         env: Optional[bool] = None,
         defaults: bool = True,
-        with_meta: Optional[bool] = None,
         **kwargs,
     ) -> Namespace:
         """Parses configuration given as an object.
@@ -490,7 +478,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             cfg_obj: The configuration object.
             env: Whether to merge with the parsed environment, None to use parser's default.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
 
         Returns:
             A config object with all parsed values.
@@ -513,7 +500,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                 cfg=cfg,
                 env=env,
                 defaults=defaults,
-                with_meta=with_meta,
                 skip_validation=skip_validation,
                 skip_required=skip_required,
             )
@@ -558,7 +544,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         self,
         env: Optional[dict[str, str]] = None,
         defaults: bool = True,
-        with_meta: Optional[bool] = None,
         **kwargs,
     ) -> Namespace:
         """Parses environment variables.
@@ -566,7 +551,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         Args:
             env: The environment object to use, if None `os.environ` is used.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
 
         Returns:
             A config object with all parsed values.
@@ -582,7 +566,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             kwargs = {
                 "env": True,
                 "defaults": defaults,
-                "with_meta": with_meta,
                 "skip_validation": skip_validation,
                 "skip_subcommands": skip_subcommands,
             }
@@ -603,7 +586,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         ext_vars: Optional[dict] = None,
         env: Optional[bool] = None,
         defaults: bool = True,
-        with_meta: Optional[bool] = None,
         **kwargs,
     ) -> Namespace:
         """Parses a configuration file given its path.
@@ -613,7 +595,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             ext_vars: Optional external variables used for parsing jsonnet.
             env: Whether to merge with the parsed environment, None to use parser's default.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
 
         Returns:
             A config object with all parsed values.
@@ -625,12 +606,11 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         with change_to_path_dir(fpath):
             cfg_str = fpath.get_content()
             parsed_cfg = self.parse_string(
-                cfg_str,
-                os.path.basename(cfg_path),
-                ext_vars,
-                env,
-                defaults,
-                with_meta,
+                cfg_str=cfg_str,
+                cfg_path=os.path.basename(cfg_path),
+                ext_vars=ext_vars,
+                env=env,
+                defaults=defaults,
                 **kwargs,
             )
 
@@ -644,7 +624,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         ext_vars: Optional[dict] = None,
         env: Optional[bool] = None,
         defaults: bool = True,
-        with_meta: Optional[bool] = None,
         **kwargs,
     ) -> Namespace:
         """Parses configuration given as a string.
@@ -655,7 +634,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             ext_vars: Optional external variables used for parsing jsonnet.
             env: Whether to merge with the parsed environment, None to use parser's default.
             defaults: Whether to merge with the parser's defaults.
-            with_meta: Whether to include metadata in config object, None to use parser's default.
 
         Returns:
             A config object with all parsed values.
@@ -679,7 +657,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                 cfg=cfg,
                 env=env,
                 defaults=defaults,
-                with_meta=with_meta,
                 skip_validation=skip_validation,
                 fail_no_subcommand=fail_no_subcommand,
             )
@@ -762,7 +739,7 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         skip_none: bool = True,
         skip_default: bool = False,
         skip_validation: bool = False,
-        yaml_comments: bool = False,
+        with_comments: bool = False,
         skip_link_targets: bool = True,
         **kwargs,
     ) -> str:
@@ -776,7 +753,7 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
             skip_none: Whether to exclude entries whose value is None.
             skip_default: Whether to exclude entries whose value is the same as the default.
             skip_validation: Whether to skip parser checking.
-            yaml_comments: Whether to add help content as comments. ``yaml_comments=True`` implies ``format='yaml'``.
+            with_comments: Whether to add help content as comments. Currently only supported for ``format='yaml'``.
             skip_link_targets: Whether to exclude link targets.
 
         Returns:
@@ -785,7 +762,9 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         Raises:
             TypeError: If any of the values of cfg is invalid according to the parser.
         """
+        with_comments = deprecated_yaml_comments(kwargs, with_comments)
         skip_validation = deprecated_skip_check(ArgumentParser.dump, kwargs, skip_validation)
+
         check_valid_dump_format(format)
 
         cfg = cfg.clone(with_meta=False)
@@ -809,7 +788,7 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                 self._dump_delete_default_entries(cfg_dict, defaults.as_dict())
 
         with parser_context(parent_parser=self):
-            return dump_using_format(self, cfg_dict, "yaml_comments" if yaml_comments else format)
+            return dump_using_format(self, cfg_dict, dump_format=format, with_comments=with_comments)
 
     def _dump_cleanup_actions(self, cfg, actions, dump_kwargs, prefix=""):
         skip_none = dump_kwargs["skip_none"]
@@ -1051,7 +1030,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                             cfg=cfg,
                             env=False,
                             defaults=False,
-                            with_meta=None,
                             skip_validation=skip_validation,
                             skip_required=True,
                         )
@@ -1084,7 +1062,15 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         elif debug_mode_active():
             self._logger.debug("Debug enabled, thus raising exception instead of exit.")
             raise argument_error(message) from ex
-        self.print_usage(sys.stderr)
+
+        parser = getattr(ex, "subcommand_parser", None) or self
+        parser.print_usage(sys.stderr)
+
+        help_action = next((a for a in parser._actions if isinstance(a, argparse._HelpAction)), None)
+        if help_action:
+            prog = parser.prog.replace(" [options]", "")
+            sys.stderr.write(f"tip: For details of accepted options run: {prog} {help_action.option_strings[-1]}\n")
+
         sys.stderr.write(f"error: {message}\n")
         self.exit(2)
 
@@ -1123,7 +1109,7 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                         raise TypeError
                 except (KeyError, TypeError) as ex:
                     raise TypeError(
-                        f'Key "{prefix}{reqkey}" is required but not included in config object or its value is None.'
+                        f"Option '{prefix}{reqkey}' is required but not provided or its value is None."
                     ) from ex
             subcommand, subparser = _ActionSubCommands.get_subcommand(parser, cfg, fail_no_subcommand=False)
             if subcommand is not None and subparser is not None:
@@ -1156,24 +1142,25 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
                 else:
                     if isinstance(parent_action, _ActionSubCommands) and "." in key:
                         subcommand, subkey = split_key_root(key)
-                        raise NSKeyError(f"Subcommand '{subcommand}' does not accept nested key '{subkey}'")
+                        ex = NSKeyError(f"Subcommand '{subcommand}' does not accept option '{subkey}'")
+                        ex.subcommand_parser = parent_action._name_parser_map[subcommand]
+                        raise ex
                     group_key = next((g for g in self.groups if key.startswith(g + ".")), None)
                     if group_key:
                         subkey = key[len(group_key) + 1 :]
-                        raise NSKeyError(f"Group '{group_key}' does not accept nested key '{subkey}'")
-                    raise NSKeyError(f"Key '{key}' is not expected")
+                        raise NSKeyError(f"Group '{group_key}' does not accept option '{subkey}'")
+                    if self._subcommands_action:
+                        if cfg.get(self._subcommands_action.dest):
+                            subcommand = f"'{cfg[self._subcommands_action.dest]}'"
+                        else:
+                            subcommand = f"{{{list(self._subcommands_action.choices)[0]},...}}"
+                        raise NSKeyError(f"Option '{key}' is not accepted before subcommand {subcommand}")
+                    raise NSKeyError(f"Option '{key}' is not accepted")
 
-        try:
-            with parser_context(load_value_mode=self.parser_mode):
-                check_values(cfg)
-            if not skip_required and not lenient_check.get():
-                check_required(cfg, self, prefix)
-        except (TypeError, KeyError) as ex:
-            prefix = "Validation failed: "
-            message = ex.args[0]
-            if prefix not in message:
-                message = prefix + message
-            raise type(ex)(message) from ex
+        with parser_context(load_value_mode=self.parser_mode):
+            check_values(cfg)
+        if not skip_required and not lenient_check.get():
+            check_required(cfg, self, prefix)
 
     def add_instantiator(
         self,
@@ -1545,25 +1532,6 @@ class ArgumentParser(ParserDeprecations, ActionsContainer, ArgumentLinking, Logg
         if self._subcommands_action:
             for subparser in self._subcommands_action._name_parser_map.values():
                 subparser.default_env = self._default_env
-
-    @property
-    def default_meta(self) -> bool:
-        """Whether by default metadata is included in config objects.
-
-        :getter: Returns the current default metadata setting.
-        :setter: Sets the default metadata setting.
-
-        Raises:
-            ValueError: If an invalid value is given.
-        """
-        return self._default_meta
-
-    @default_meta.setter
-    def default_meta(self, default_meta: bool):
-        if isinstance(default_meta, bool):
-            self._default_meta = default_meta
-        else:
-            raise ValueError("default_meta expects a boolean.")
 
     @property
     def env_prefix(self) -> Union[bool, str]:

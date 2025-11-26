@@ -43,17 +43,19 @@ fitters = [
 
 
 @pytest.mark.skipif(not HAS_SCIPY, reason="requires scipy")
-@pytest.mark.parametrize("fitter", fitters)
-def test_custom_model(fitter, amplitude=4, frequency=1):
-    fitter = fitter()
+@pytest.mark.parametrize("fitter_factory", fitters)
+def test_custom_model(fitter_factory):
+    fitter = fitter_factory()
+    amplitude = 4
+    frequency = 1
 
-    def sine_model(x, amplitude=4, frequency=1):
+    def sine_model(x, amplitude=amplitude, frequency=frequency):
         """
         Model function
         """
         return amplitude * np.sin(2 * np.pi * frequency * x)
 
-    def sine_deriv(x, amplitude=4, frequency=1):
+    def sine_deriv(x, amplitude=amplitude, frequency=frequency):
         """
         Jacobian of model function, e.g. derivative of the function with
         respect to the *parameters*
@@ -726,6 +728,17 @@ def test_tabular_interp_1d():
     assert_quantity_allclose(model(xnew), ans1)
     assert_quantity_allclose(model(xnew.to(u.nm)), ans1)
     assert model.bounding_box == (0 * u.nm, 4 * u.nm)
+
+    # Test with no units on points.
+    model = LookupTable(points=points, lookup_table=values * u.nJy)
+    assert_quantity_allclose(model(xnew), ans1)
+    assert_quantity_allclose(model(xnew.to(u.nm)), ans1)
+    assert model.bounding_box == (0, 4)
+
+    model = LookupTable(points=points, lookup_table=values * u.nJy, method="nearest")
+    assert_quantity_allclose(model(xnew), np.array([1, 10, 10, 2, -3]) * u.nJy)
+    assert_quantity_allclose(model(xnew.to(u.nm)), np.array([1, 10, 10, 2, -3]) * u.nJy)
+    assert model.bounding_box == (0, 4)
 
     # Test fill value unit conversion and unitless input on table with unit
     model = LookupTable(

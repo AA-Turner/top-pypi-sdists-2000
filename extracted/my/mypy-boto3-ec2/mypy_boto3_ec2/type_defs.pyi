@@ -262,6 +262,8 @@ from .literals import (
     MoveStatusType,
     MulticastSupportValueType,
     NatGatewayAddressStatusType,
+    NatGatewayApplianceModifyStateType,
+    NatGatewayApplianceStateType,
     NatGatewayStateType,
     NetworkInterfaceAttributeType,
     NetworkInterfaceCreationTypeType,
@@ -2555,6 +2557,7 @@ __all__ = (
     "MoveCapacityReservationInstancesResultTypeDef",
     "MovingAddressStatusTypeDef",
     "NatGatewayAddressTypeDef",
+    "NatGatewayAttachedApplianceTypeDef",
     "NatGatewayTypeDef",
     "NativeApplicationOidcOptionsTypeDef",
     "NetworkAclAssociationTypeDef",
@@ -7284,6 +7287,19 @@ class MoveCapacityReservationInstancesRequestTypeDef(TypedDict):
     InstanceCount: int
     DryRun: NotRequired[bool]
     ClientToken: NotRequired[str]
+
+NatGatewayAttachedApplianceTypeDef = TypedDict(
+    "NatGatewayAttachedApplianceTypeDef",
+    {
+        "Type": NotRequired[Literal["network-firewall-proxy"]],
+        "ApplianceArn": NotRequired[str],
+        "VpcEndpointId": NotRequired[str],
+        "AttachmentState": NotRequired[NatGatewayApplianceStateType],
+        "ModificationState": NotRequired[NatGatewayApplianceModifyStateType],
+        "FailureCode": NotRequired[str],
+        "FailureMessage": NotRequired[str],
+    },
+)
 
 class ProvisionedBandwidthTypeDef(TypedDict):
     ProvisionTime: NotRequired[datetime]
@@ -14379,6 +14395,7 @@ class NatGatewayTypeDef(TypedDict):
     AvailabilityMode: NotRequired[AvailabilityModeType]
     AutoScalingIps: NotRequired[AutoScalingIpsStateType]
     AutoProvisionZones: NotRequired[AutoProvisionZonesStateType]
+    AttachedAppliances: NotRequired[list[NatGatewayAttachedApplianceTypeDef]]
     RouteTableId: NotRequired[str]
 
 class NetworkInfoTypeDef(TypedDict):

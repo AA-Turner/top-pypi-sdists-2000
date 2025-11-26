@@ -18,7 +18,7 @@ from typing import TYPE_CHECKING, Any, Final, Literal, NamedTuple, Self, Union, 
 import numpy as np
 
 from astropy.utils.compat import COPY_IF_NEEDED
-from astropy.utils.decorators import deprecated, lazyproperty
+from astropy.utils.decorators import deprecated
 from astropy.utils.exceptions import AstropyDeprecationWarning, AstropyWarning
 
 from .errors import UnitConversionError, UnitParserWarning, UnitsError, UnitsWarning
@@ -143,7 +143,11 @@ class UnitBase:
         return [1]
 
     def to_string(
-        self, format: type["astropy.units.format.Base"] | str | None = None, **kwargs
+        self,
+        format: type["astropy.units.format.Base"] | str | None = None,
+        *,
+        deprecations: Literal["silent", "warn", "raise", "convert"] = "warn",
+        **kwargs,
     ) -> str:
         r"""Output the unit in the given format as a string.
 
@@ -152,7 +156,10 @@ class UnitBase:
         format : `astropy.units.format.Base` subclass or str or None
             The name of a format or a formatter class.  If not
             provided (or `None`), defaults to the generic format.
-
+        deprecations : {"warn", "silent", "raise", "convert"}, optional, keyword-only
+            Whether deprecated units should emit a warning, be handled
+            silently or raise an error. The "convert" option replaces
+            the deprecated unit if possible and emits a warning otherwise.
         **kwargs
             Further options forwarded to the formatter. Currently
             recognized is ``fraction``, which can take the following values:
@@ -190,12 +197,13 @@ class UnitBase:
         from .format import get_format
 
         try:
-            return get_format(format).to_string(self, **kwargs)
+            formatter = get_format(format)
         except (TypeError, ValueError) as err:
             from .format import known_formats
 
             err.add_note(known_formats())
             raise err
+        return formatter.to_string(self, deprecations=deprecations, **kwargs)
 
     def __format__(self, format_spec: str) -> str:
         try:
@@ -771,7 +779,7 @@ class UnitBase:
             for subcomposed in composed_list:
                 results.append((len(subcomposed.bases), subcomposed, tunit))
 
-        if len(results):
+        if results:
             results.sort(key=operator.itemgetter(0))
 
             min_length = results[0][0]
@@ -953,14 +961,14 @@ class UnitBase:
             key=lambda x: len(set(x.bases).difference(system.bases)),
         )
 
-    @lazyproperty
+    @cached_property
     def si(self) -> "UnitBase":
         """The unit expressed in terms of SI units."""
         from . import si
 
         return self.to_system(si)[0]
 
-    @lazyproperty
+    @cached_property
     def cgs(self) -> "UnitBase":
         """The unit expressed in terms of CGS units."""
         from . import cgs
@@ -1838,12 +1846,20 @@ class NamedUnit(UnitBase):
 
         # Loop through all of the names first, to ensure all of them
         # are new, then add them all as a single "transaction" below.
-        for name in (unicodedata.normalize("NFKC", name) for name in self._names):
-            if name in namespace and self != namespace[name]:
-                raise ValueError(
-                    f"Object with NFKC normalized name {name!r} already exists in "
-                    f"given namespace ({namespace[name]!r})."
+        for name in self._names:
+            nfkc_name = unicodedata.normalize("NFKC", name)
+            if nfkc_name in namespace and self != (obj := namespace[nfkc_name]):
+                msg = (
+                    f"the namespace already uses the name {name!r} for {obj!r}"
+                    if name == nfkc_name
+                    else (
+                        "the namespace already uses the NFKC normalized name "
+                        f"{nfkc_name!r} for {obj!r}\n\nSee "
+                        "https://docs.python.org/3/reference/lexical_analysis.html#identifiers "
+                        "for more information."
+                    )
                 )
+                raise ValueError(msg)
 
         for name in self._names:
             namespace[name] = self
@@ -1958,6 +1974,10 @@ class UnrecognizedUnit(IrreducibleUnit):
     __pow__ = __truediv__ = __rtruediv__ = __mul__ = __rmul__ = _unrecognized_operator
     __lt__ = __gt__ = __le__ = __ge__ = __neg__ = _unrecognized_operator
 
+    def __hash__(self):
+        # __hash__ isn't inherited in classes with a custom __eq__ method
+        return self._hash
+
     def __eq__(self, other):
         try:
             other = Unit(other, parse_strict="silent")
@@ -2033,10 +2053,10 @@ class _UnitMetaClass(type):
                 s = s.decode("ascii")
 
             try:
-                return f._validate_unit(s, detailed_exception=False)  # Try a shortcut
-            except (AttributeError, ValueError):
+                return f._validate_unit(s)  # Try a shortcut
+            except (AttributeError, KeyError):
                 # No `f._validate_unit()` (AttributeError)
-                # or `s` was a composite unit (ValueError).
+                # or `s` was a composite unit (KeyError).
                 pass
 
             try:

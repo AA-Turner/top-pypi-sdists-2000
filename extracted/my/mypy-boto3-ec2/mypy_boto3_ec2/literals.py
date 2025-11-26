@@ -462,6 +462,9 @@ __all__ = (
     "MoveStatusType",
     "MulticastSupportValueType",
     "NatGatewayAddressStatusType",
+    "NatGatewayApplianceModifyStateType",
+    "NatGatewayApplianceStateType",
+    "NatGatewayApplianceTypeType",
     "NatGatewayAvailableWaiterName",
     "NatGatewayDeletedWaiterName",
     "NatGatewayStateType",
@@ -2724,6 +2727,11 @@ MulticastSupportValueType = Literal["disable", "enable"]
 NatGatewayAddressStatusType = Literal[
     "assigning", "associating", "disassociating", "failed", "succeeded", "unassigning"
 ]
+NatGatewayApplianceModifyStateType = Literal["completed", "failed", "modifying"]
+NatGatewayApplianceStateType = Literal[
+    "attach-failed", "attached", "attaching", "detach-failed", "detached", "detaching"
+]
+NatGatewayApplianceTypeType = Literal["network-firewall-proxy"]
 NatGatewayAvailableWaiterName = Literal["nat_gateway_available"]
 NatGatewayDeletedWaiterName = Literal["nat_gateway_deleted"]
 NatGatewayStateType = Literal["available", "deleted", "deleting", "failed", "pending"]
