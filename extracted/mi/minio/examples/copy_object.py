@@ -20,41 +20,38 @@ from minio import Minio
 from minio.commonconfig import REPLACE, CopySource
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 # copy an object from a bucket to another.
 result = client.copy_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    source=CopySource(
-        bucket_name="my-sourcebucket", object_name="my-sourceobject",
-    ),
+    "my-bucket",
+    "my-object",
+    CopySource("my-sourcebucket", "my-sourceobject"),
 )
 print(result.object_name, result.version_id)
 
 # copy an object with condition.
 result = client.copy_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    source=CopySource(
-        bucket_name="my-sourcebucket",
-        object_name="my-sourceobject",
+    "my-bucket",
+    "my-object",
+    CopySource(
+        "my-sourcebucket",
+        "my-sourceobject",
         modified_since=datetime(2014, 4, 1, tzinfo=timezone.utc),
     ),
 )
 print(result.object_name, result.version_id)
 
 # copy an object from a bucket with replacing metadata.
+metadata = {"test_meta_key": "test_meta_value"}
 result = client.copy_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    source=CopySource(
-        bucket_name="my-sourcebucket", object_name="my-sourceobject",
-    ),
-    user_metadata={"test_meta_key": "test_meta_value"},
+    "my-bucket",
+    "my-object",
+    CopySource("my-sourcebucket", "my-sourceobject"),
+    metadata=metadata,
     metadata_directive=REPLACE,
 )
 print(result.object_name, result.version_id)

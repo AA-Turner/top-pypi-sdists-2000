@@ -1368,6 +1368,51 @@ class _IStreamingDistributionRefProxy(
 typing.cast(typing.Any, IStreamingDistributionRef).__jsii_proxy_class__ = lambda : _IStreamingDistributionRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.ITrustStoreRef")
+class ITrustStoreRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a TrustStore.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="trustStoreRef")
+    def trust_store_ref(self) -> "TrustStoreReference":
+        '''(experimental) A reference to a TrustStore resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ITrustStoreRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a TrustStore.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_cloudfront.ITrustStoreRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="trustStoreRef")
+    def trust_store_ref(self) -> "TrustStoreReference":
+        '''(experimental) A reference to a TrustStore resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("TrustStoreReference", jsii.get(self, "trustStoreRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ITrustStoreRef).__jsii_proxy_class__ = lambda : _ITrustStoreRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.IVpcOriginRef")
 class IVpcOriginRef(
     _constructs_77d1e7e8.IConstruct,
@@ -1874,6 +1919,74 @@ class StreamingDistributionReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.TrustStoreReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "trust_store_arn": "trustStoreArn",
+        "trust_store_id": "trustStoreId",
+    },
+)
+class TrustStoreReference:
+    def __init__(
+        self,
+        *,
+        trust_store_arn: builtins.str,
+        trust_store_id: builtins.str,
+    ) -> None:
+        '''A reference to a TrustStore resource.
+
+        :param trust_store_arn: The ARN of the TrustStore resource.
+        :param trust_store_id: The Id of the TrustStore resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            
+            trust_store_reference = interfaces_aws_cloudfront.TrustStoreReference(
+                trust_store_arn="trustStoreArn",
+                trust_store_id="trustStoreId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ea92e634c7fa221353c2d687de12f6ab13af0db86b5e21a3c35016b0e6bd651)
+            check_type(argname="argument trust_store_arn", value=trust_store_arn, expected_type=type_hints["trust_store_arn"])
+            check_type(argname="argument trust_store_id", value=trust_store_id, expected_type=type_hints["trust_store_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "trust_store_arn": trust_store_arn,
+            "trust_store_id": trust_store_id,
+        }
+
+    @builtins.property
+    def trust_store_arn(self) -> builtins.str:
+        '''The ARN of the TrustStore resource.'''
+        result = self._values.get("trust_store_arn")
+        assert result is not None, "Required property 'trust_store_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def trust_store_id(self) -> builtins.str:
+        '''The Id of the TrustStore resource.'''
+        result = self._values.get("trust_store_id")
+        assert result is not None, "Required property 'trust_store_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TrustStoreReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_cloudfront.VpcOriginReference",
     jsii_struct_bases=[],
     name_mapping={"vpc_origin_arn": "vpcOriginArn", "vpc_origin_id": "vpcOriginId"},
@@ -1966,6 +2079,7 @@ __all__ = [
     "IRealtimeLogConfigRef",
     "IResponseHeadersPolicyRef",
     "IStreamingDistributionRef",
+    "ITrustStoreRef",
     "IVpcOriginRef",
     "KeyGroupReference",
     "KeyValueStoreReference",
@@ -1976,6 +2090,7 @@ __all__ = [
     "RealtimeLogConfigReference",
     "ResponseHeadersPolicyReference",
     "StreamingDistributionReference",
+    "TrustStoreReference",
     "VpcOriginReference",
 ]
 
@@ -2111,6 +2226,14 @@ def _typecheckingstub__7b0342b4ece7f7cd84a2ff3923fb6055994a168bcd5e993a8ba1befb6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4ea92e634c7fa221353c2d687de12f6ab13af0db86b5e21a3c35016b0e6bd651(
+    *,
+    trust_store_arn: builtins.str,
+    trust_store_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__69b032e15f12676ea4499a1b53874c8d182ed57bcf8be49701395b5cf79741f1(
     *,
     vpc_origin_arn: builtins.str,
@@ -2119,5 +2242,5 @@ def _typecheckingstub__69b032e15f12676ea4499a1b53874c8d182ed57bcf8be49701395b5cf
     """Type checking stubs"""
     pass
 
-for cls in [IAnycastIpListRef, ICachePolicyRef, ICloudFrontOriginAccessIdentityRef, IConnectionFunctionRef, IConnectionGroupRef, IContinuousDeploymentPolicyRef, IDistributionRef, IDistributionTenantRef, IFunctionRef, IKeyGroupRef, IKeyValueStoreRef, IMonitoringSubscriptionRef, IOriginAccessControlRef, IOriginRequestPolicyRef, IPublicKeyRef, IRealtimeLogConfigRef, IResponseHeadersPolicyRef, IStreamingDistributionRef, IVpcOriginRef]:
+for cls in [IAnycastIpListRef, ICachePolicyRef, ICloudFrontOriginAccessIdentityRef, IConnectionFunctionRef, IConnectionGroupRef, IContinuousDeploymentPolicyRef, IDistributionRef, IDistributionTenantRef, IFunctionRef, IKeyGroupRef, IKeyValueStoreRef, IMonitoringSubscriptionRef, IOriginAccessControlRef, IOriginRequestPolicyRef, IPublicKeyRef, IRealtimeLogConfigRef, IResponseHeadersPolicyRef, IStreamingDistributionRef, ITrustStoreRef, IVpcOriginRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

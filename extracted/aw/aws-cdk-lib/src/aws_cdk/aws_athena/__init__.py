@@ -1660,6 +1660,23 @@ class CfnWorkGroup(
                     kms_key="kmsKey"
                 ),
                 enforce_work_group_configuration=False,
+                engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                    additional_configs={
+                        "additional_configs_key": "additionalConfigs"
+                    },
+                    classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                        name="name",
+                        properties={
+                            "properties_key": "properties"
+                        }
+                    )],
+                    coordinator_dpu_size=123,
+                    default_executor_dpu_size=123,
+                    max_concurrent_dpus=123,
+                    spark_properties={
+                        "spark_properties_key": "sparkProperties"
+                    }
+                ),
                 engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                     effective_engine_version="effectiveEngineVersion",
                     selected_engine_version="selectedEngineVersion"
@@ -1669,6 +1686,25 @@ class CfnWorkGroup(
                     enabled=False,
                     encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                         kms_key="kmsKey"
+                    )
+                ),
+                monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                    cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                        enabled=False,
+                        log_group="logGroup",
+                        log_stream_name_prefix="logStreamNamePrefix",
+                        log_types={
+                            "log_types_key": ["logTypes"]
+                        }
+                    ),
+                    managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey"
+                    ),
+                    s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey",
+                        log_location="logLocation"
                     )
                 ),
                 publish_cloud_watch_metrics_enabled=False,
@@ -1694,6 +1730,23 @@ class CfnWorkGroup(
                     kms_key="kmsKey"
                 ),
                 enforce_work_group_configuration=False,
+                engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                    additional_configs={
+                        "additional_configs_key": "additionalConfigs"
+                    },
+                    classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                        name="name",
+                        properties={
+                            "properties_key": "properties"
+                        }
+                    )],
+                    coordinator_dpu_size=123,
+                    default_executor_dpu_size=123,
+                    max_concurrent_dpus=123,
+                    spark_properties={
+                        "spark_properties_key": "sparkProperties"
+                    }
+                ),
                 engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                     effective_engine_version="effectiveEngineVersion",
                     selected_engine_version="selectedEngineVersion"
@@ -1703,6 +1756,25 @@ class CfnWorkGroup(
                     enabled=False,
                     encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                         kms_key="kmsKey"
+                    )
+                ),
+                monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                    cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                        enabled=False,
+                        log_group="logGroup",
+                        log_stream_name_prefix="logStreamNamePrefix",
+                        log_types={
+                            "log_types_key": ["logTypes"]
+                        }
+                    ),
+                    managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey"
+                    ),
+                    s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey",
+                        log_location="logLocation"
                     )
                 ),
                 publish_cloud_watch_metrics_enabled=False,
@@ -2055,6 +2127,191 @@ class CfnWorkGroup(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.ClassificationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "properties": "properties"},
+    )
+    class ClassificationProperty:
+        def __init__(
+            self,
+            *,
+            name: typing.Optional[builtins.str] = None,
+            properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''A classification refers to a set of specific configurations.
+
+            :param name: The name of the configuration classification.
+            :param properties: A set of properties specified within a configuration classification.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-classification.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                classification_property = athena.CfnWorkGroup.ClassificationProperty(
+                    name="name",
+                    properties={
+                        "properties_key": "properties"
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__55a719924f1051c27f16cdae0bef656c3f2bf9dd5c5267f88d57e9e1dcd0289a)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument properties", value=properties, expected_type=type_hints["properties"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if name is not None:
+                self._values["name"] = name
+            if properties is not None:
+                self._values["properties"] = properties
+
+        @builtins.property
+        def name(self) -> typing.Optional[builtins.str]:
+            '''The name of the configuration classification.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-classification.html#cfn-athena-workgroup-classification-name
+            '''
+            result = self._values.get("name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def properties(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''A set of properties specified within a configuration classification.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-classification.html#cfn-athena-workgroup-classification-properties
+            '''
+            result = self._values.get("properties")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ClassificationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "enabled": "enabled",
+            "log_group": "logGroup",
+            "log_stream_name_prefix": "logStreamNamePrefix",
+            "log_types": "logTypes",
+        },
+    )
+    class CloudWatchLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            log_group: typing.Optional[builtins.str] = None,
+            log_stream_name_prefix: typing.Optional[builtins.str] = None,
+            log_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]]] = None,
+        ) -> None:
+            '''Configuration settings for delivering logs to Amazon CloudWatch log groups.
+
+            :param enabled: Enables CloudWatch logging.
+            :param log_group: The name of the log group in Amazon CloudWatch Logs where you want to publish your logs.
+            :param log_stream_name_prefix: Prefix for the CloudWatch log stream name.
+            :param log_types: The types of logs that you want to publish to CloudWatch.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                cloud_watch_logging_configuration_property = athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                    enabled=False,
+                    log_group="logGroup",
+                    log_stream_name_prefix="logStreamNamePrefix",
+                    log_types={
+                        "log_types_key": ["logTypes"]
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1aecd1bb35851d34e703c11fb7616a85613b63a74383a472d06b0bf34aecd480)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument log_group", value=log_group, expected_type=type_hints["log_group"])
+                check_type(argname="argument log_stream_name_prefix", value=log_stream_name_prefix, expected_type=type_hints["log_stream_name_prefix"])
+                check_type(argname="argument log_types", value=log_types, expected_type=type_hints["log_types"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enabled is not None:
+                self._values["enabled"] = enabled
+            if log_group is not None:
+                self._values["log_group"] = log_group
+            if log_stream_name_prefix is not None:
+                self._values["log_stream_name_prefix"] = log_stream_name_prefix
+            if log_types is not None:
+                self._values["log_types"] = log_types
+
+        @builtins.property
+        def enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Enables CloudWatch logging.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-enabled
+            '''
+            result = self._values.get("enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def log_group(self) -> typing.Optional[builtins.str]:
+            '''The name of the log group in Amazon CloudWatch Logs where you want to publish your logs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-loggroup
+            '''
+            result = self._values.get("log_group")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def log_stream_name_prefix(self) -> typing.Optional[builtins.str]:
+            '''Prefix for the CloudWatch log stream name.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-logstreamnameprefix
+            '''
+            result = self._values.get("log_stream_name_prefix")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def log_types(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]]:
+            '''The types of logs that you want to publish to CloudWatch.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-cloudwatchloggingconfiguration.html#cfn-athena-workgroup-cloudwatchloggingconfiguration-logtypes
+            '''
+            result = self._values.get("log_types")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.List[builtins.str]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CloudWatchLoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.CustomerContentEncryptionConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={"kms_key": "kmsKey"},
@@ -2184,6 +2441,164 @@ class CfnWorkGroup(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.EngineConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "additional_configs": "additionalConfigs",
+            "classifications": "classifications",
+            "coordinator_dpu_size": "coordinatorDpuSize",
+            "default_executor_dpu_size": "defaultExecutorDpuSize",
+            "max_concurrent_dpus": "maxConcurrentDpus",
+            "spark_properties": "sparkProperties",
+        },
+    )
+    class EngineConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            additional_configs: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            classifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ClassificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            coordinator_dpu_size: typing.Optional[jsii.Number] = None,
+            default_executor_dpu_size: typing.Optional[jsii.Number] = None,
+            max_concurrent_dpus: typing.Optional[jsii.Number] = None,
+            spark_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''The engine configuration for running queries.
+
+            :param additional_configs: Contains additional notebook engine MAP<string, string> parameter mappings in the form of key-value pairs. To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the StartSessionRequest$NotebookVersion field, and then add a key named NotebookId to AdditionalConfigs that has the value of the Athena notebook ID.
+            :param classifications: The configuration classifications that can be specified for the engine.
+            :param coordinator_dpu_size: The number of DPUs to use for the coordinator. A coordinator is a special executor that orchestrates processing work and manages other executors in a notebook session. The default is 1.
+            :param default_executor_dpu_size: The default number of DPUs to use for executors. An executor is the smallest unit of compute that a notebook session can request from Athena. The default is 1.
+            :param max_concurrent_dpus: The maximum number of DPUs that can run concurrently.
+            :param spark_properties: Specifies custom jar files and Spark properties for use cases like cluster encryption, table formats, and general Spark tuning.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                engine_configuration_property = athena.CfnWorkGroup.EngineConfigurationProperty(
+                    additional_configs={
+                        "additional_configs_key": "additionalConfigs"
+                    },
+                    classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                        name="name",
+                        properties={
+                            "properties_key": "properties"
+                        }
+                    )],
+                    coordinator_dpu_size=123,
+                    default_executor_dpu_size=123,
+                    max_concurrent_dpus=123,
+                    spark_properties={
+                        "spark_properties_key": "sparkProperties"
+                    }
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7db16b4a91e2a7d8e37d2a78d99d1f8f7ac00698770fd9725457188e1b99978f)
+                check_type(argname="argument additional_configs", value=additional_configs, expected_type=type_hints["additional_configs"])
+                check_type(argname="argument classifications", value=classifications, expected_type=type_hints["classifications"])
+                check_type(argname="argument coordinator_dpu_size", value=coordinator_dpu_size, expected_type=type_hints["coordinator_dpu_size"])
+                check_type(argname="argument default_executor_dpu_size", value=default_executor_dpu_size, expected_type=type_hints["default_executor_dpu_size"])
+                check_type(argname="argument max_concurrent_dpus", value=max_concurrent_dpus, expected_type=type_hints["max_concurrent_dpus"])
+                check_type(argname="argument spark_properties", value=spark_properties, expected_type=type_hints["spark_properties"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if additional_configs is not None:
+                self._values["additional_configs"] = additional_configs
+            if classifications is not None:
+                self._values["classifications"] = classifications
+            if coordinator_dpu_size is not None:
+                self._values["coordinator_dpu_size"] = coordinator_dpu_size
+            if default_executor_dpu_size is not None:
+                self._values["default_executor_dpu_size"] = default_executor_dpu_size
+            if max_concurrent_dpus is not None:
+                self._values["max_concurrent_dpus"] = max_concurrent_dpus
+            if spark_properties is not None:
+                self._values["spark_properties"] = spark_properties
+
+        @builtins.property
+        def additional_configs(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''Contains additional notebook engine MAP<string, string> parameter mappings in the form of key-value pairs.
+
+            To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the StartSessionRequest$NotebookVersion field, and then add a key named NotebookId to AdditionalConfigs that has the value of the Athena notebook ID.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-additionalconfigs
+            '''
+            result = self._values.get("additional_configs")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def classifications(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ClassificationProperty"]]]]:
+            '''The configuration classifications that can be specified for the engine.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-classifications
+            '''
+            result = self._values.get("classifications")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ClassificationProperty"]]]], result)
+
+        @builtins.property
+        def coordinator_dpu_size(self) -> typing.Optional[jsii.Number]:
+            '''The number of DPUs to use for the coordinator.
+
+            A coordinator is a special executor that orchestrates processing work and manages other executors in a notebook session. The default is 1.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-coordinatordpusize
+            '''
+            result = self._values.get("coordinator_dpu_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def default_executor_dpu_size(self) -> typing.Optional[jsii.Number]:
+            '''The default number of DPUs to use for executors.
+
+            An executor is the smallest unit of compute that a notebook session can request from Athena. The default is 1.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-defaultexecutordpusize
+            '''
+            result = self._values.get("default_executor_dpu_size")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_concurrent_dpus(self) -> typing.Optional[jsii.Number]:
+            '''The maximum number of DPUs that can run concurrently.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-maxconcurrentdpus
+            '''
+            result = self._values.get("max_concurrent_dpus")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def spark_properties(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''Specifies custom jar files and Spark properties for use cases like cluster encryption, table formats, and general Spark tuning.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-sparkproperties
+            '''
+            result = self._values.get("spark_properties")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EngineConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.EngineVersionProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2257,6 +2672,78 @@ class CfnWorkGroup(
 
         def __repr__(self) -> str:
             return "EngineVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.ManagedLoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"enabled": "enabled", "kms_key": "kmsKey"},
+    )
+    class ManagedLoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            kms_key: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for managed log persistence.
+
+            :param enabled: Enables managed log persistence.
+            :param kms_key: The KMS key ARN to encrypt the logs stored in managed log persistence.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                managed_logging_configuration_property = athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                    enabled=False,
+                    kms_key="kmsKey"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2ab736dafa2db34ac11c3ca8d9bd903accadbd575b93d4e0a4b07a64b95c5f91)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enabled is not None:
+                self._values["enabled"] = enabled
+            if kms_key is not None:
+                self._values["kms_key"] = kms_key
+
+        @builtins.property
+        def enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Enables managed log persistence.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html#cfn-athena-workgroup-managedloggingconfiguration-enabled
+            '''
+            result = self._values.get("enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def kms_key(self) -> typing.Optional[builtins.str]:
+            '''The KMS key ARN to encrypt the logs stored in managed log persistence.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html#cfn-athena-workgroup-managedloggingconfiguration-kmskey
+            '''
+            result = self._values.get("kms_key")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ManagedLoggingConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2393,6 +2880,115 @@ class CfnWorkGroup(
 
         def __repr__(self) -> str:
             return "ManagedStorageEncryptionConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.MonitoringConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "cloud_watch_logging_configuration": "cloudWatchLoggingConfiguration",
+            "managed_logging_configuration": "managedLoggingConfiguration",
+            "s3_logging_configuration": "s3LoggingConfiguration",
+        },
+    )
+    class MonitoringConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            cloud_watch_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CloudWatchLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            managed_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedLoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.S3LoggingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
+
+            :param cloud_watch_logging_configuration: Configuration settings for delivering logs to Amazon CloudWatch log groups.
+            :param managed_logging_configuration: Configuration settings for managed log persistence.
+            :param s3_logging_configuration: Configuration settings for delivering logs to Amazon S3 buckets.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                monitoring_configuration_property = athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                    cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                        enabled=False,
+                        log_group="logGroup",
+                        log_stream_name_prefix="logStreamNamePrefix",
+                        log_types={
+                            "log_types_key": ["logTypes"]
+                        }
+                    ),
+                    managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey"
+                    ),
+                    s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                        enabled=False,
+                        kms_key="kmsKey",
+                        log_location="logLocation"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__e307d373748ace599c7bcfd957a611e3f3dd142f93350d8d4e5a787d08268f73)
+                check_type(argname="argument cloud_watch_logging_configuration", value=cloud_watch_logging_configuration, expected_type=type_hints["cloud_watch_logging_configuration"])
+                check_type(argname="argument managed_logging_configuration", value=managed_logging_configuration, expected_type=type_hints["managed_logging_configuration"])
+                check_type(argname="argument s3_logging_configuration", value=s3_logging_configuration, expected_type=type_hints["s3_logging_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if cloud_watch_logging_configuration is not None:
+                self._values["cloud_watch_logging_configuration"] = cloud_watch_logging_configuration
+            if managed_logging_configuration is not None:
+                self._values["managed_logging_configuration"] = managed_logging_configuration
+            if s3_logging_configuration is not None:
+                self._values["s3_logging_configuration"] = s3_logging_configuration
+
+        @builtins.property
+        def cloud_watch_logging_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]]:
+            '''Configuration settings for delivering logs to Amazon CloudWatch log groups.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-cloudwatchloggingconfiguration
+            '''
+            result = self._values.get("cloud_watch_logging_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.CloudWatchLoggingConfigurationProperty"]], result)
+
+        @builtins.property
+        def managed_logging_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedLoggingConfigurationProperty"]]:
+            '''Configuration settings for managed log persistence.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-managedloggingconfiguration
+            '''
+            result = self._values.get("managed_logging_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedLoggingConfigurationProperty"]], result)
+
+        @builtins.property
+        def s3_logging_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.S3LoggingConfigurationProperty"]]:
+            '''Configuration settings for delivering logs to Amazon S3 buckets.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-monitoringconfiguration.html#cfn-athena-workgroup-monitoringconfiguration-s3loggingconfiguration
+            '''
+            result = self._values.get("s3_logging_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.S3LoggingConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MonitoringConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -2723,6 +3319,97 @@ class CfnWorkGroup(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.S3LoggingConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "enabled": "enabled",
+            "kms_key": "kmsKey",
+            "log_location": "logLocation",
+        },
+    )
+    class S3LoggingConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            kms_key: typing.Optional[builtins.str] = None,
+            log_location: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for delivering logs to Amazon S3 buckets.
+
+            :param enabled: Enables S3 log delivery.
+            :param kms_key: The KMS key ARN to encrypt the logs published to the given Amazon S3 destination.
+            :param log_location: The Amazon S3 destination URI for log publishing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-s3loggingconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_athena as athena
+                
+                s3_logging_configuration_property = athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                    enabled=False,
+                    kms_key="kmsKey",
+                    log_location="logLocation"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__60801b8d6e3d9f27cea59f1abb9cb023bfa5d5b39f87137e3c2ec90f2d58ee40)
+                check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
+                check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
+                check_type(argname="argument log_location", value=log_location, expected_type=type_hints["log_location"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enabled is not None:
+                self._values["enabled"] = enabled
+            if kms_key is not None:
+                self._values["kms_key"] = kms_key
+            if log_location is not None:
+                self._values["log_location"] = log_location
+
+        @builtins.property
+        def enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Enables S3 log delivery.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-s3loggingconfiguration.html#cfn-athena-workgroup-s3loggingconfiguration-enabled
+            '''
+            result = self._values.get("enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def kms_key(self) -> typing.Optional[builtins.str]:
+            '''The KMS key ARN to encrypt the logs published to the given Amazon S3 destination.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-s3loggingconfiguration.html#cfn-athena-workgroup-s3loggingconfiguration-kmskey
+            '''
+            result = self._values.get("kms_key")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def log_location(self) -> typing.Optional[builtins.str]:
+            '''The Amazon S3 destination URI for log publishing.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-s3loggingconfiguration.html#cfn-athena-workgroup-s3loggingconfiguration-loglocation
+            '''
+            result = self._values.get("log_location")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3LoggingConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_athena.CfnWorkGroup.WorkGroupConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2730,9 +3417,11 @@ class CfnWorkGroup(
             "bytes_scanned_cutoff_per_query": "bytesScannedCutoffPerQuery",
             "customer_content_encryption_configuration": "customerContentEncryptionConfiguration",
             "enforce_work_group_configuration": "enforceWorkGroupConfiguration",
+            "engine_configuration": "engineConfiguration",
             "engine_version": "engineVersion",
             "execution_role": "executionRole",
             "managed_query_results_configuration": "managedQueryResultsConfiguration",
+            "monitoring_configuration": "monitoringConfiguration",
             "publish_cloud_watch_metrics_enabled": "publishCloudWatchMetricsEnabled",
             "requester_pays_enabled": "requesterPaysEnabled",
             "result_configuration": "resultConfiguration",
@@ -2746,9 +3435,11 @@ class CfnWorkGroup(
             bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
             customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role: typing.Optional[builtins.str] = None,
             managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ResultConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2761,9 +3452,11 @@ class CfnWorkGroup(
             :param bytes_scanned_cutoff_per_query: The upper limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan. No default is defined. .. epigraph:: This property currently supports integer types. Support for long values is planned.
             :param customer_content_encryption_configuration: Specifies the KMS key that is used to encrypt the user's data stores in Athena. This setting does not apply to Athena SQL workgroups.
             :param enforce_work_group_configuration: If set to "true", the settings for the workgroup override client-side settings. If set to "false", client-side settings are used. For more information, see `Override client-side settings <https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html>`_ .
+            :param engine_configuration: The engine configuration for running queries.
             :param engine_version: The engine version that all queries running on the workgroup use.
             :param execution_role: Role used to access user resources in an Athena for Apache Spark session. This property applies only to Spark-enabled workgroups in Athena.
             :param managed_query_results_configuration: The configuration for storing results in Athena owned storage, which includes whether this feature is enabled; whether encryption configuration, if any, is used for encrypting query results.
+            :param monitoring_configuration: Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
             :param publish_cloud_watch_metrics_enabled: Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
             :param requester_pays_enabled: If set to ``true`` , allows members assigned to a workgroup to reference Amazon S3 Requester Pays buckets in queries. If set to ``false`` , workgroup members cannot query data from Requester Pays buckets, and queries that retrieve data from Requester Pays buckets cause an error. The default is ``false`` . For more information about Requester Pays buckets, see `Requester Pays Buckets <https://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html>`_ in the *Amazon Simple Storage Service Developer Guide* .
             :param result_configuration: Specifies the location in Amazon S3 where query results are stored and the encryption option, if any, used for query results. For more information, see `Work with query results and recent queries <https://docs.aws.amazon.com/athena/latest/ug/querying.html>`_ .
@@ -2784,6 +3477,23 @@ class CfnWorkGroup(
                         kms_key="kmsKey"
                     ),
                     enforce_work_group_configuration=False,
+                    engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                        additional_configs={
+                            "additional_configs_key": "additionalConfigs"
+                        },
+                        classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                            name="name",
+                            properties={
+                                "properties_key": "properties"
+                            }
+                        )],
+                        coordinator_dpu_size=123,
+                        default_executor_dpu_size=123,
+                        max_concurrent_dpus=123,
+                        spark_properties={
+                            "spark_properties_key": "sparkProperties"
+                        }
+                    ),
                     engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                         effective_engine_version="effectiveEngineVersion",
                         selected_engine_version="selectedEngineVersion"
@@ -2793,6 +3503,25 @@ class CfnWorkGroup(
                         enabled=False,
                         encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                             kms_key="kmsKey"
+                        )
+                    ),
+                    monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                        cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                            enabled=False,
+                            log_group="logGroup",
+                            log_stream_name_prefix="logStreamNamePrefix",
+                            log_types={
+                                "log_types_key": ["logTypes"]
+                            }
+                        ),
+                        managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey"
+                        ),
+                        s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey",
+                            log_location="logLocation"
                         )
                     ),
                     publish_cloud_watch_metrics_enabled=False,
@@ -2818,9 +3547,11 @@ class CfnWorkGroup(
                 check_type(argname="argument bytes_scanned_cutoff_per_query", value=bytes_scanned_cutoff_per_query, expected_type=type_hints["bytes_scanned_cutoff_per_query"])
                 check_type(argname="argument customer_content_encryption_configuration", value=customer_content_encryption_configuration, expected_type=type_hints["customer_content_encryption_configuration"])
                 check_type(argname="argument enforce_work_group_configuration", value=enforce_work_group_configuration, expected_type=type_hints["enforce_work_group_configuration"])
+                check_type(argname="argument engine_configuration", value=engine_configuration, expected_type=type_hints["engine_configuration"])
                 check_type(argname="argument engine_version", value=engine_version, expected_type=type_hints["engine_version"])
                 check_type(argname="argument execution_role", value=execution_role, expected_type=type_hints["execution_role"])
                 check_type(argname="argument managed_query_results_configuration", value=managed_query_results_configuration, expected_type=type_hints["managed_query_results_configuration"])
+                check_type(argname="argument monitoring_configuration", value=monitoring_configuration, expected_type=type_hints["monitoring_configuration"])
                 check_type(argname="argument publish_cloud_watch_metrics_enabled", value=publish_cloud_watch_metrics_enabled, expected_type=type_hints["publish_cloud_watch_metrics_enabled"])
                 check_type(argname="argument requester_pays_enabled", value=requester_pays_enabled, expected_type=type_hints["requester_pays_enabled"])
                 check_type(argname="argument result_configuration", value=result_configuration, expected_type=type_hints["result_configuration"])
@@ -2833,12 +3564,16 @@ class CfnWorkGroup(
                 self._values["customer_content_encryption_configuration"] = customer_content_encryption_configuration
             if enforce_work_group_configuration is not None:
                 self._values["enforce_work_group_configuration"] = enforce_work_group_configuration
+            if engine_configuration is not None:
+                self._values["engine_configuration"] = engine_configuration
             if engine_version is not None:
                 self._values["engine_version"] = engine_version
             if execution_role is not None:
                 self._values["execution_role"] = execution_role
             if managed_query_results_configuration is not None:
                 self._values["managed_query_results_configuration"] = managed_query_results_configuration
+            if monitoring_configuration is not None:
+                self._values["monitoring_configuration"] = monitoring_configuration
             if publish_cloud_watch_metrics_enabled is not None:
                 self._values["publish_cloud_watch_metrics_enabled"] = publish_cloud_watch_metrics_enabled
             if requester_pays_enabled is not None:
@@ -2896,6 +3631,17 @@ class CfnWorkGroup(
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
         @builtins.property
+        def engine_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]]:
+            '''The engine configuration for running queries.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-engineconfiguration
+            '''
+            result = self._values.get("engine_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]], result)
+
+        @builtins.property
         def engine_version(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]]:
@@ -2929,6 +3675,17 @@ class CfnWorkGroup(
             '''
             result = self._values.get("managed_query_results_configuration")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
+
+        @builtins.property
+        def monitoring_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]]:
+            '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfiguration.html#cfn-athena-workgroup-workgroupconfiguration-monitoringconfiguration
+            '''
+            result = self._values.get("monitoring_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def publish_cloud_watch_metrics_enabled(
@@ -2986,9 +3743,11 @@ class CfnWorkGroup(
             "bytes_scanned_cutoff_per_query": "bytesScannedCutoffPerQuery",
             "customer_content_encryption_configuration": "customerContentEncryptionConfiguration",
             "enforce_work_group_configuration": "enforceWorkGroupConfiguration",
+            "engine_configuration": "engineConfiguration",
             "engine_version": "engineVersion",
             "execution_role": "executionRole",
             "managed_query_results_configuration": "managedQueryResultsConfiguration",
+            "monitoring_configuration": "monitoringConfiguration",
             "publish_cloud_watch_metrics_enabled": "publishCloudWatchMetricsEnabled",
             "remove_bytes_scanned_cutoff_per_query": "removeBytesScannedCutoffPerQuery",
             "remove_customer_content_encryption_configuration": "removeCustomerContentEncryptionConfiguration",
@@ -3004,9 +3763,11 @@ class CfnWorkGroup(
             bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
             customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.CustomerContentEncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.EngineVersionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             execution_role: typing.Optional[builtins.str] = None,
             managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.ManagedQueryResultsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnWorkGroup.MonitoringConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             remove_bytes_scanned_cutoff_per_query: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             remove_customer_content_encryption_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -3019,9 +3780,11 @@ class CfnWorkGroup(
             :param bytes_scanned_cutoff_per_query: The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.
             :param customer_content_encryption_configuration: Indicates the KMS key for encrypting notebook content.
             :param enforce_work_group_configuration: If set to "true", the settings for the workgroup override client-side settings. If set to "false", client-side settings are used
+            :param engine_configuration: The engine configuration for running queries.
             :param engine_version: The Athena engine version for running queries.
-            :param execution_role: Execution Role ARN required to run Athena Spark Calculations.
+            :param execution_role: The ARN of the execution role used to access user resources for Spark sessions and Identity Center enabled workgroups. This property applies only to Spark enabled workgroups and Identity Center enabled workgroups.
             :param managed_query_results_configuration: The configuration for the managed query results and encryption option. ResultConfiguration and ManagedQueryResultsConfiguration cannot be set at the same time
+            :param monitoring_configuration: Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
             :param publish_cloud_watch_metrics_enabled: Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.
             :param remove_bytes_scanned_cutoff_per_query: Indicates that the data usage control limit per query is removed.
             :param remove_customer_content_encryption_configuration: 
@@ -3044,6 +3807,23 @@ class CfnWorkGroup(
                         kms_key="kmsKey"
                     ),
                     enforce_work_group_configuration=False,
+                    engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                        additional_configs={
+                            "additional_configs_key": "additionalConfigs"
+                        },
+                        classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                            name="name",
+                            properties={
+                                "properties_key": "properties"
+                            }
+                        )],
+                        coordinator_dpu_size=123,
+                        default_executor_dpu_size=123,
+                        max_concurrent_dpus=123,
+                        spark_properties={
+                            "spark_properties_key": "sparkProperties"
+                        }
+                    ),
                     engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                         effective_engine_version="effectiveEngineVersion",
                         selected_engine_version="selectedEngineVersion"
@@ -3053,6 +3833,25 @@ class CfnWorkGroup(
                         enabled=False,
                         encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                             kms_key="kmsKey"
+                        )
+                    ),
+                    monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                        cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                            enabled=False,
+                            log_group="logGroup",
+                            log_stream_name_prefix="logStreamNamePrefix",
+                            log_types={
+                                "log_types_key": ["logTypes"]
+                            }
+                        ),
+                        managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey"
+                        ),
+                        s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey",
+                            log_location="logLocation"
                         )
                     ),
                     publish_cloud_watch_metrics_enabled=False,
@@ -3084,9 +3883,11 @@ class CfnWorkGroup(
                 check_type(argname="argument bytes_scanned_cutoff_per_query", value=bytes_scanned_cutoff_per_query, expected_type=type_hints["bytes_scanned_cutoff_per_query"])
                 check_type(argname="argument customer_content_encryption_configuration", value=customer_content_encryption_configuration, expected_type=type_hints["customer_content_encryption_configuration"])
                 check_type(argname="argument enforce_work_group_configuration", value=enforce_work_group_configuration, expected_type=type_hints["enforce_work_group_configuration"])
+                check_type(argname="argument engine_configuration", value=engine_configuration, expected_type=type_hints["engine_configuration"])
                 check_type(argname="argument engine_version", value=engine_version, expected_type=type_hints["engine_version"])
                 check_type(argname="argument execution_role", value=execution_role, expected_type=type_hints["execution_role"])
                 check_type(argname="argument managed_query_results_configuration", value=managed_query_results_configuration, expected_type=type_hints["managed_query_results_configuration"])
+                check_type(argname="argument monitoring_configuration", value=monitoring_configuration, expected_type=type_hints["monitoring_configuration"])
                 check_type(argname="argument publish_cloud_watch_metrics_enabled", value=publish_cloud_watch_metrics_enabled, expected_type=type_hints["publish_cloud_watch_metrics_enabled"])
                 check_type(argname="argument remove_bytes_scanned_cutoff_per_query", value=remove_bytes_scanned_cutoff_per_query, expected_type=type_hints["remove_bytes_scanned_cutoff_per_query"])
                 check_type(argname="argument remove_customer_content_encryption_configuration", value=remove_customer_content_encryption_configuration, expected_type=type_hints["remove_customer_content_encryption_configuration"])
@@ -3101,12 +3902,16 @@ class CfnWorkGroup(
                 self._values["customer_content_encryption_configuration"] = customer_content_encryption_configuration
             if enforce_work_group_configuration is not None:
                 self._values["enforce_work_group_configuration"] = enforce_work_group_configuration
+            if engine_configuration is not None:
+                self._values["engine_configuration"] = engine_configuration
             if engine_version is not None:
                 self._values["engine_version"] = engine_version
             if execution_role is not None:
                 self._values["execution_role"] = execution_role
             if managed_query_results_configuration is not None:
                 self._values["managed_query_results_configuration"] = managed_query_results_configuration
+            if monitoring_configuration is not None:
+                self._values["monitoring_configuration"] = monitoring_configuration
             if publish_cloud_watch_metrics_enabled is not None:
                 self._values["publish_cloud_watch_metrics_enabled"] = publish_cloud_watch_metrics_enabled
             if remove_bytes_scanned_cutoff_per_query is not None:
@@ -3161,6 +3966,17 @@ class CfnWorkGroup(
             return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
         @builtins.property
+        def engine_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]]:
+            '''The engine configuration for running queries.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-engineconfiguration
+            '''
+            result = self._values.get("engine_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineConfigurationProperty"]], result)
+
+        @builtins.property
         def engine_version(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.EngineVersionProperty"]]:
@@ -3173,7 +3989,9 @@ class CfnWorkGroup(
 
         @builtins.property
         def execution_role(self) -> typing.Optional[builtins.str]:
-            '''Execution Role ARN required to run Athena Spark Calculations.
+            '''The ARN of the execution role used to access user resources for Spark sessions and Identity Center enabled workgroups.
+
+            This property applies only to Spark enabled workgroups and Identity Center enabled workgroups.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-executionrole
             '''
@@ -3192,6 +4010,17 @@ class CfnWorkGroup(
             '''
             result = self._values.get("managed_query_results_configuration")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.ManagedQueryResultsConfigurationProperty"]], result)
+
+        @builtins.property
+        def monitoring_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]]:
+            '''Contains the configuration settings for managed log persistence, delivering logs to Amazon S3 buckets, Amazon CloudWatch log groups etc.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-workgroupconfigurationupdates.html#cfn-athena-workgroup-workgroupconfigurationupdates-monitoringconfiguration
+            '''
+            result = self._values.get("monitoring_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnWorkGroup.MonitoringConfigurationProperty"]], result)
 
         @builtins.property
         def publish_cloud_watch_metrics_enabled(
@@ -3325,6 +4154,23 @@ class CfnWorkGroupProps:
                         kms_key="kmsKey"
                     ),
                     enforce_work_group_configuration=False,
+                    engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                        additional_configs={
+                            "additional_configs_key": "additionalConfigs"
+                        },
+                        classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                            name="name",
+                            properties={
+                                "properties_key": "properties"
+                            }
+                        )],
+                        coordinator_dpu_size=123,
+                        default_executor_dpu_size=123,
+                        max_concurrent_dpus=123,
+                        spark_properties={
+                            "spark_properties_key": "sparkProperties"
+                        }
+                    ),
                     engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                         effective_engine_version="effectiveEngineVersion",
                         selected_engine_version="selectedEngineVersion"
@@ -3334,6 +4180,25 @@ class CfnWorkGroupProps:
                         enabled=False,
                         encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                             kms_key="kmsKey"
+                        )
+                    ),
+                    monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                        cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                            enabled=False,
+                            log_group="logGroup",
+                            log_stream_name_prefix="logStreamNamePrefix",
+                            log_types={
+                                "log_types_key": ["logTypes"]
+                            }
+                        ),
+                        managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey"
+                        ),
+                        s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey",
+                            log_location="logLocation"
                         )
                     ),
                     publish_cloud_watch_metrics_enabled=False,
@@ -3359,6 +4224,23 @@ class CfnWorkGroupProps:
                         kms_key="kmsKey"
                     ),
                     enforce_work_group_configuration=False,
+                    engine_configuration=athena.CfnWorkGroup.EngineConfigurationProperty(
+                        additional_configs={
+                            "additional_configs_key": "additionalConfigs"
+                        },
+                        classifications=[athena.CfnWorkGroup.ClassificationProperty(
+                            name="name",
+                            properties={
+                                "properties_key": "properties"
+                            }
+                        )],
+                        coordinator_dpu_size=123,
+                        default_executor_dpu_size=123,
+                        max_concurrent_dpus=123,
+                        spark_properties={
+                            "spark_properties_key": "sparkProperties"
+                        }
+                    ),
                     engine_version=athena.CfnWorkGroup.EngineVersionProperty(
                         effective_engine_version="effectiveEngineVersion",
                         selected_engine_version="selectedEngineVersion"
@@ -3368,6 +4250,25 @@ class CfnWorkGroupProps:
                         enabled=False,
                         encryption_configuration=athena.CfnWorkGroup.ManagedStorageEncryptionConfigurationProperty(
                             kms_key="kmsKey"
+                        )
+                    ),
+                    monitoring_configuration=athena.CfnWorkGroup.MonitoringConfigurationProperty(
+                        cloud_watch_logging_configuration=athena.CfnWorkGroup.CloudWatchLoggingConfigurationProperty(
+                            enabled=False,
+                            log_group="logGroup",
+                            log_stream_name_prefix="logStreamNamePrefix",
+                            log_types={
+                                "log_types_key": ["logTypes"]
+                            }
+                        ),
+                        managed_logging_configuration=athena.CfnWorkGroup.ManagedLoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey"
+                        ),
+                        s3_logging_configuration=athena.CfnWorkGroup.S3LoggingConfigurationProperty(
+                            enabled=False,
+                            kms_key="kmsKey",
+                            log_location="logLocation"
                         )
                     ),
                     publish_cloud_watch_metrics_enabled=False,
@@ -3919,6 +4820,24 @@ def _typecheckingstub__5d08c097512b882cb470dc37bf746c41eaf32d76443ec31f122bf7863
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__55a719924f1051c27f16cdae0bef656c3f2bf9dd5c5267f88d57e9e1dcd0289a(
+    *,
+    name: typing.Optional[builtins.str] = None,
+    properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1aecd1bb35851d34e703c11fb7616a85613b63a74383a472d06b0bf34aecd480(
+    *,
+    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    log_group: typing.Optional[builtins.str] = None,
+    log_stream_name_prefix: typing.Optional[builtins.str] = None,
+    log_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e3480ab9bdaef6bae695825b3df3eae10d42fc973ee85c1e9d372a5012990c61(
     *,
     kms_key: builtins.str,
@@ -3934,10 +4853,30 @@ def _typecheckingstub__fa79fae7a2ac9eacbed710d8ee5a01ad03c3b9f537094d9f71d622a0b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7db16b4a91e2a7d8e37d2a78d99d1f8f7ac00698770fd9725457188e1b99978f(
+    *,
+    additional_configs: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    classifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.ClassificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    coordinator_dpu_size: typing.Optional[jsii.Number] = None,
+    default_executor_dpu_size: typing.Optional[jsii.Number] = None,
+    max_concurrent_dpus: typing.Optional[jsii.Number] = None,
+    spark_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__89f0b78a82f24ece8384b490252230129c42a711fdb038b4ecd645d321ca82e1(
     *,
     effective_engine_version: typing.Optional[builtins.str] = None,
     selected_engine_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ab736dafa2db34ac11c3ca8d9bd903accadbd575b93d4e0a4b07a64b95c5f91(
+    *,
+    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    kms_key: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3953,6 +4892,15 @@ def _typecheckingstub__f6c4d2e9be468cb69e158be7cc0f67bd537760da2f65bdfea130a3adc
 def _typecheckingstub__53549459074bb1d23e4ee2a6fd045c500008070dfc2015833edc260380222a02(
     *,
     kms_key: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e307d373748ace599c7bcfd957a611e3f3dd142f93350d8d4e5a787d08268f73(
+    *,
+    cloud_watch_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.CloudWatchLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    managed_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.ManagedLoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    s3_logging_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.S3LoggingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3981,15 +4929,26 @@ def _typecheckingstub__dfde88e9cbba4fc81da00b04c8cc63d678d91113cf67503da9a7475c7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60801b8d6e3d9f27cea59f1abb9cb023bfa5d5b39f87137e3c2ec90f2d58ee40(
+    *,
+    enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    kms_key: typing.Optional[builtins.str] = None,
+    log_location: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5bc58a8f7fc071c8f6e3cf6044079ec303e9ba8521ef96ca98c62cfdd175a6a8(
     *,
     additional_configuration: typing.Optional[builtins.str] = None,
     bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
     customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.CustomerContentEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.EngineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.EngineVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     execution_role: typing.Optional[builtins.str] = None,
     managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.ManagedQueryResultsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.MonitoringConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     requester_pays_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     result_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.ResultConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4003,9 +4962,11 @@ def _typecheckingstub__6d600654f5aa48cb49fd4baf2a677e5f7725dcfa1249836427c1d9f65
     bytes_scanned_cutoff_per_query: typing.Optional[jsii.Number] = None,
     customer_content_encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.CustomerContentEncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     enforce_work_group_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    engine_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.EngineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     engine_version: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.EngineVersionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     execution_role: typing.Optional[builtins.str] = None,
     managed_query_results_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.ManagedQueryResultsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    monitoring_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnWorkGroup.MonitoringConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     publish_cloud_watch_metrics_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     remove_bytes_scanned_cutoff_per_query: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     remove_customer_content_encryption_configuration: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,

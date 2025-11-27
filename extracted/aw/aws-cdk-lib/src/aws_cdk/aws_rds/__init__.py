@@ -4506,6 +4506,12 @@ class AuroraPostgresEngineVersion(
         return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_16_1"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_16_10")
+    def VER_16_10(cls) -> "AuroraPostgresEngineVersion":
+        '''Version "16.10".'''
+        return typing.cast("AuroraPostgresEngineVersion", jsii.sget(cls, "VER_16_10"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="VER_16_2")
     def VER_16_2(cls) -> "AuroraPostgresEngineVersion":
         '''Version "16.2".'''

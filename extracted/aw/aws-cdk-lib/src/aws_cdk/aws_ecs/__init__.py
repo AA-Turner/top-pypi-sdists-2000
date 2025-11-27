@@ -2485,9 +2485,11 @@ from ..interfaces.aws_ecs import (
     CapacityProviderReference as _CapacityProviderReference_8f5b3a97,
     ClusterCapacityProviderAssociationsReference as _ClusterCapacityProviderAssociationsReference_cd3177fa,
     ClusterReference as _ClusterReference_91201a3a,
+    ExpressGatewayServiceReference as _ExpressGatewayServiceReference_e96d24a4,
     ICapacityProviderRef as _ICapacityProviderRef_2d421d38,
     IClusterCapacityProviderAssociationsRef as _IClusterCapacityProviderAssociationsRef_e242d7db,
     IClusterRef as _IClusterRef_7ad11494,
+    IExpressGatewayServiceRef as _IExpressGatewayServiceRef_5fb21ea1,
     IPrimaryTaskSetRef as _IPrimaryTaskSetRef_4bfb7e88,
     IServiceRef as _IServiceRef_adcb3d02,
     ITaskDefinitionRef as _ITaskDefinitionRef_8091fc1c,
@@ -11149,6 +11151,1603 @@ class CfnClusterProps:
 
     def __repr__(self) -> str:
         return "CfnClusterProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IExpressGatewayServiceRef_5fb21ea1, _ITaggableV2_4e6798f8)
+class CfnExpressGatewayService(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService",
+):
+    '''Resource Type definition for AWS::ECS::ExpressGatewayService.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html
+    :cloudformationResource: AWS::ECS::ExpressGatewayService
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ecs as ecs
+        
+        cfn_express_gateway_service = ecs.CfnExpressGatewayService(self, "MyCfnExpressGatewayService",
+            execution_role_arn="executionRoleArn",
+            infrastructure_role_arn="infrastructureRoleArn",
+            primary_container=ecs.CfnExpressGatewayService.ExpressGatewayContainerProperty(
+                image="image",
+        
+                # the properties below are optional
+                aws_logs_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty(
+                    log_group="logGroup",
+                    log_stream_prefix="logStreamPrefix"
+                ),
+                command=["command"],
+                container_port=123,
+                environment=[ecs.CfnExpressGatewayService.KeyValuePairProperty(
+                    name="name",
+                    value="value"
+                )],
+                repository_credentials=ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty(
+                    credentials_parameter="credentialsParameter"
+                ),
+                secrets=[ecs.CfnExpressGatewayService.SecretProperty(
+                    name="name",
+                    value_from="valueFrom"
+                )]
+            ),
+        
+            # the properties below are optional
+            cluster="cluster",
+            cpu="cpu",
+            health_check_path="healthCheckPath",
+            memory="memory",
+            network_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty(
+                security_groups=["securityGroups"],
+                subnets=["subnets"]
+            ),
+            scaling_target=ecs.CfnExpressGatewayService.ExpressGatewayScalingTargetProperty(
+                auto_scaling_metric="autoScalingMetric",
+                auto_scaling_target_value=123,
+                max_task_count=123,
+                min_task_count=123
+            ),
+            service_name="serviceName",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )],
+            task_role_arn="taskRoleArn"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        execution_role_arn: builtins.str,
+        infrastructure_role_arn: builtins.str,
+        primary_container: typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayContainerProperty", typing.Dict[builtins.str, typing.Any]]],
+        cluster: typing.Optional[builtins.str] = None,
+        cpu: typing.Optional[builtins.str] = None,
+        health_check_path: typing.Optional[builtins.str] = None,
+        memory: typing.Optional[builtins.str] = None,
+        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayScalingTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_role_arn: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Create a new ``AWS::ECS::ExpressGatewayService``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param execution_role_arn: 
+        :param infrastructure_role_arn: 
+        :param primary_container: 
+        :param cluster: Default: - "default"
+        :param cpu: Default: - "256"
+        :param health_check_path: Default: - "HTTP:80/ping"
+        :param memory: Default: - "512"
+        :param network_configuration: 
+        :param scaling_target: 
+        :param service_name: 
+        :param tags: 
+        :param task_role_arn: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__425c9356d4d802d61310648c0d6d347423435aee47505e8809a3756d7fa8882a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnExpressGatewayServiceProps(
+            execution_role_arn=execution_role_arn,
+            infrastructure_role_arn=infrastructure_role_arn,
+            primary_container=primary_container,
+            cluster=cluster,
+            cpu=cpu,
+            health_check_path=health_check_path,
+            memory=memory,
+            network_configuration=network_configuration,
+            scaling_target=scaling_target,
+            service_name=service_name,
+            tags=tags,
+            task_role_arn=task_role_arn,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0f17f2ba2f4aff1608aa985374f8bc3e6fc86829ce3162054e73a175f15a620e)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9b38fef5963e449090a2643d23642a37554ce8d6ab6d51840f5cc94b3c01a91c)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrActiveConfigurations")
+    def attr_active_configurations(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: ActiveConfigurations
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrActiveConfigurations"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrServiceArn")
+    def attr_service_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: ServiceArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrServiceArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedAt")
+    def attr_updated_at(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: UpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="expressGatewayServiceRef")
+    def express_gateway_service_ref(self) -> _ExpressGatewayServiceReference_e96d24a4:
+        '''A reference to a ExpressGatewayService resource.'''
+        return typing.cast(_ExpressGatewayServiceReference_e96d24a4, jsii.get(self, "expressGatewayServiceRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="executionRoleArn")
+    def execution_role_arn(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "executionRoleArn"))
+
+    @execution_role_arn.setter
+    def execution_role_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__637bce22245aa12c373d7b20519a600a7e4f1c4c03aef46f1a57e88fa6060e67)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "executionRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="infrastructureRoleArn")
+    def infrastructure_role_arn(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "infrastructureRoleArn"))
+
+    @infrastructure_role_arn.setter
+    def infrastructure_role_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eff22b309ea10c165d9a460ba2fbd373401ccc733b4c8397e8ddbe3eb3f26307)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "infrastructureRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="primaryContainer")
+    def primary_container(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"], jsii.get(self, "primaryContainer"))
+
+    @primary_container.setter
+    def primary_container(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7fe6f250bf2fb20286b14eb55e7761d55e43b72f4f1d86681314a6e400d9a2b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "primaryContainer", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="cluster")
+    def cluster(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cluster"))
+
+    @cluster.setter
+    def cluster(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c7efec554438d48af214d79fd32ae38f1bc7627d237f3b49c8ac9005eeb59afc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "cluster", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="cpu")
+    def cpu(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cpu"))
+
+    @cpu.setter
+    def cpu(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__99f73f0eb514ba487ee694fcae963e9c9d1d0c1c21397e35a5ad5c2a5a1a1e33)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "cpu", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="healthCheckPath")
+    def health_check_path(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "healthCheckPath"))
+
+    @health_check_path.setter
+    def health_check_path(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__536542c6bfd5aae5d187764124c6f6faa8e06f754b01169f548818435b0d67fd)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "healthCheckPath", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="memory")
+    def memory(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "memory"))
+
+    @memory.setter
+    def memory(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e7b25349b9a02fc3f376080b94af9b2abe376a63fcbf1ff87a258d2923d0edf)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "memory", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="networkConfiguration")
+    def network_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]], jsii.get(self, "networkConfiguration"))
+
+    @network_configuration.setter
+    def network_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78fb2cc5c092561263ce039c05ea030268c745ee80f6600db514de8bd16b758a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "networkConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="scalingTarget")
+    def scaling_target(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]], jsii.get(self, "scalingTarget"))
+
+    @scaling_target.setter
+    def scaling_target(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__937cd26ada9a0c07b14e2f5f34476df5b6deab76ec84145d314aa1d67d50f444)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "scalingTarget", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="serviceName")
+    def service_name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "serviceName"))
+
+    @service_name.setter
+    def service_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f56e54f898155aed3e7c546d7bd8f54891fab02504122af46c390cc95a2b1617)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "serviceName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8c8cabcc5e25799af73e48c053c775a27363ed8b7b285d9e687a614b30007fa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="taskRoleArn")
+    def task_role_arn(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "taskRoleArn"))
+
+    @task_role_arn.setter
+    def task_role_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8dcd9e0dc41434d3dc2a8ba0e5f68e57c6ec82141cd4f5a723b1444aed343a5b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "taskRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayContainerProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "image": "image",
+            "aws_logs_configuration": "awsLogsConfiguration",
+            "command": "command",
+            "container_port": "containerPort",
+            "environment": "environment",
+            "repository_credentials": "repositoryCredentials",
+            "secrets": "secrets",
+        },
+    )
+    class ExpressGatewayContainerProperty:
+        def __init__(
+            self,
+            *,
+            image: builtins.str,
+            aws_logs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            command: typing.Optional[typing.Sequence[builtins.str]] = None,
+            container_port: typing.Optional[jsii.Number] = None,
+            environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.KeyValuePairProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            repository_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            secrets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.SecretProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param image: 
+            :param aws_logs_configuration: 
+            :param command: 
+            :param container_port: Default: - 80
+            :param environment: 
+            :param repository_credentials: 
+            :param secrets: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_container_property = ecs.CfnExpressGatewayService.ExpressGatewayContainerProperty(
+                    image="image",
+                
+                    # the properties below are optional
+                    aws_logs_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty(
+                        log_group="logGroup",
+                        log_stream_prefix="logStreamPrefix"
+                    ),
+                    command=["command"],
+                    container_port=123,
+                    environment=[ecs.CfnExpressGatewayService.KeyValuePairProperty(
+                        name="name",
+                        value="value"
+                    )],
+                    repository_credentials=ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty(
+                        credentials_parameter="credentialsParameter"
+                    ),
+                    secrets=[ecs.CfnExpressGatewayService.SecretProperty(
+                        name="name",
+                        value_from="valueFrom"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ebacf65a5186a4d92950013560186503f7271126a4d275ab389aea82e011a34b)
+                check_type(argname="argument image", value=image, expected_type=type_hints["image"])
+                check_type(argname="argument aws_logs_configuration", value=aws_logs_configuration, expected_type=type_hints["aws_logs_configuration"])
+                check_type(argname="argument command", value=command, expected_type=type_hints["command"])
+                check_type(argname="argument container_port", value=container_port, expected_type=type_hints["container_port"])
+                check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
+                check_type(argname="argument repository_credentials", value=repository_credentials, expected_type=type_hints["repository_credentials"])
+                check_type(argname="argument secrets", value=secrets, expected_type=type_hints["secrets"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "image": image,
+            }
+            if aws_logs_configuration is not None:
+                self._values["aws_logs_configuration"] = aws_logs_configuration
+            if command is not None:
+                self._values["command"] = command
+            if container_port is not None:
+                self._values["container_port"] = container_port
+            if environment is not None:
+                self._values["environment"] = environment
+            if repository_credentials is not None:
+                self._values["repository_credentials"] = repository_credentials
+            if secrets is not None:
+                self._values["secrets"] = secrets
+
+        @builtins.property
+        def image(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-image
+            '''
+            result = self._values.get("image")
+            assert result is not None, "Required property 'image' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def aws_logs_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-awslogsconfiguration
+            '''
+            result = self._values.get("aws_logs_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty"]], result)
+
+        @builtins.property
+        def command(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-command
+            '''
+            result = self._values.get("command")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def container_port(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 80
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-containerport
+            '''
+            result = self._values.get("container_port")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def environment(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.KeyValuePairProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-environment
+            '''
+            result = self._values.get("environment")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.KeyValuePairProperty"]]]], result)
+
+        @builtins.property
+        def repository_credentials(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-repositorycredentials
+            '''
+            result = self._values.get("repository_credentials")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty"]], result)
+
+        @builtins.property
+        def secrets(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.SecretProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-secrets
+            '''
+            result = self._values.get("secrets")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.SecretProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayContainerProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"credentials_parameter": "credentialsParameter"},
+    )
+    class ExpressGatewayRepositoryCredentialsProperty:
+        def __init__(self, *, credentials_parameter: builtins.str) -> None:
+            '''
+            :param credentials_parameter: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayrepositorycredentials.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_repository_credentials_property = ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty(
+                    credentials_parameter="credentialsParameter"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f4c5b2a9b6268bdbfa533552fa30175aee7aad0ee80010e7028d950d25d8d8cd)
+                check_type(argname="argument credentials_parameter", value=credentials_parameter, expected_type=type_hints["credentials_parameter"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "credentials_parameter": credentials_parameter,
+            }
+
+        @builtins.property
+        def credentials_parameter(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayrepositorycredentials.html#cfn-ecs-expressgatewayservice-expressgatewayrepositorycredentials-credentialsparameter
+            '''
+            result = self._values.get("credentials_parameter")
+            assert result is not None, "Required property 'credentials_parameter' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayRepositoryCredentialsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayScalingTargetProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "auto_scaling_metric": "autoScalingMetric",
+            "auto_scaling_target_value": "autoScalingTargetValue",
+            "max_task_count": "maxTaskCount",
+            "min_task_count": "minTaskCount",
+        },
+    )
+    class ExpressGatewayScalingTargetProperty:
+        def __init__(
+            self,
+            *,
+            auto_scaling_metric: typing.Optional[builtins.str] = None,
+            auto_scaling_target_value: typing.Optional[jsii.Number] = None,
+            max_task_count: typing.Optional[jsii.Number] = None,
+            min_task_count: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param auto_scaling_metric: Default: - "AVERAGE_CPU"
+            :param auto_scaling_target_value: Default: - 60
+            :param max_task_count: Default: - 1
+            :param min_task_count: Default: - 1
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_scaling_target_property = ecs.CfnExpressGatewayService.ExpressGatewayScalingTargetProperty(
+                    auto_scaling_metric="autoScalingMetric",
+                    auto_scaling_target_value=123,
+                    max_task_count=123,
+                    min_task_count=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ebb449aa2198d962d6ca4697a9034f4522d8adaf209fe23935f0bb8e04d9ce8c)
+                check_type(argname="argument auto_scaling_metric", value=auto_scaling_metric, expected_type=type_hints["auto_scaling_metric"])
+                check_type(argname="argument auto_scaling_target_value", value=auto_scaling_target_value, expected_type=type_hints["auto_scaling_target_value"])
+                check_type(argname="argument max_task_count", value=max_task_count, expected_type=type_hints["max_task_count"])
+                check_type(argname="argument min_task_count", value=min_task_count, expected_type=type_hints["min_task_count"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if auto_scaling_metric is not None:
+                self._values["auto_scaling_metric"] = auto_scaling_metric
+            if auto_scaling_target_value is not None:
+                self._values["auto_scaling_target_value"] = auto_scaling_target_value
+            if max_task_count is not None:
+                self._values["max_task_count"] = max_task_count
+            if min_task_count is not None:
+                self._values["min_task_count"] = min_task_count
+
+        @builtins.property
+        def auto_scaling_metric(self) -> typing.Optional[builtins.str]:
+            '''
+            :default: - "AVERAGE_CPU"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-autoscalingmetric
+            '''
+            result = self._values.get("auto_scaling_metric")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def auto_scaling_target_value(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 60
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-autoscalingtargetvalue
+            '''
+            result = self._values.get("auto_scaling_target_value")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_task_count(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 1
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-maxtaskcount
+            '''
+            result = self._values.get("max_task_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_task_count(self) -> typing.Optional[jsii.Number]:
+            '''
+            :default: - 1
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-mintaskcount
+            '''
+            result = self._values.get("min_task_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayScalingTargetProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"log_group": "logGroup", "log_stream_prefix": "logStreamPrefix"},
+    )
+    class ExpressGatewayServiceAwsLogsConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            log_group: builtins.str,
+            log_stream_prefix: builtins.str,
+        ) -> None:
+            '''
+            :param log_group: 
+            :param log_stream_prefix: Default: - "ecs"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_service_aws_logs_configuration_property = ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty(
+                    log_group="logGroup",
+                    log_stream_prefix="logStreamPrefix"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a78d22eafb25fefadada8919a4feae3bd9ce0be0817f51b09440035b49c897ed)
+                check_type(argname="argument log_group", value=log_group, expected_type=type_hints["log_group"])
+                check_type(argname="argument log_stream_prefix", value=log_stream_prefix, expected_type=type_hints["log_stream_prefix"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "log_group": log_group,
+                "log_stream_prefix": log_stream_prefix,
+            }
+
+        @builtins.property
+        def log_group(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration-loggroup
+            '''
+            result = self._values.get("log_group")
+            assert result is not None, "Required property 'log_group' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def log_stream_prefix(self) -> builtins.str:
+            '''
+            :default: - "ecs"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration-logstreamprefix
+            '''
+            result = self._values.get("log_stream_prefix")
+            assert result is not None, "Required property 'log_stream_prefix' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayServiceAwsLogsConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayServiceConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "cpu": "cpu",
+            "created_at": "createdAt",
+            "execution_role_arn": "executionRoleArn",
+            "health_check_path": "healthCheckPath",
+            "ingress_paths": "ingressPaths",
+            "memory": "memory",
+            "network_configuration": "networkConfiguration",
+            "primary_container": "primaryContainer",
+            "scaling_target": "scalingTarget",
+            "service_revision_arn": "serviceRevisionArn",
+            "task_role_arn": "taskRoleArn",
+        },
+    )
+    class ExpressGatewayServiceConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            cpu: typing.Optional[builtins.str] = None,
+            created_at: typing.Optional[builtins.str] = None,
+            execution_role_arn: typing.Optional[builtins.str] = None,
+            health_check_path: typing.Optional[builtins.str] = None,
+            ingress_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.IngressPathSummaryProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            memory: typing.Optional[builtins.str] = None,
+            network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            primary_container: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayContainerProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayScalingTargetProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_revision_arn: typing.Optional[builtins.str] = None,
+            task_role_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param cpu: 
+            :param created_at: 
+            :param execution_role_arn: 
+            :param health_check_path: 
+            :param ingress_paths: 
+            :param memory: 
+            :param network_configuration: 
+            :param primary_container: 
+            :param scaling_target: 
+            :param service_revision_arn: 
+            :param task_role_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_service_configuration_property = ecs.CfnExpressGatewayService.ExpressGatewayServiceConfigurationProperty(
+                    cpu="cpu",
+                    created_at="createdAt",
+                    execution_role_arn="executionRoleArn",
+                    health_check_path="healthCheckPath",
+                    ingress_paths=[ecs.CfnExpressGatewayService.IngressPathSummaryProperty(
+                        access_type="accessType",
+                        endpoint="endpoint"
+                    )],
+                    memory="memory",
+                    network_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty(
+                        security_groups=["securityGroups"],
+                        subnets=["subnets"]
+                    ),
+                    primary_container=ecs.CfnExpressGatewayService.ExpressGatewayContainerProperty(
+                        image="image",
+                
+                        # the properties below are optional
+                        aws_logs_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty(
+                            log_group="logGroup",
+                            log_stream_prefix="logStreamPrefix"
+                        ),
+                        command=["command"],
+                        container_port=123,
+                        environment=[ecs.CfnExpressGatewayService.KeyValuePairProperty(
+                            name="name",
+                            value="value"
+                        )],
+                        repository_credentials=ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty(
+                            credentials_parameter="credentialsParameter"
+                        ),
+                        secrets=[ecs.CfnExpressGatewayService.SecretProperty(
+                            name="name",
+                            value_from="valueFrom"
+                        )]
+                    ),
+                    scaling_target=ecs.CfnExpressGatewayService.ExpressGatewayScalingTargetProperty(
+                        auto_scaling_metric="autoScalingMetric",
+                        auto_scaling_target_value=123,
+                        max_task_count=123,
+                        min_task_count=123
+                    ),
+                    service_revision_arn="serviceRevisionArn",
+                    task_role_arn="taskRoleArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4120dc054e718ad97ec42154f450aaef50f6258e0cc8bd17ecdb913e95ae2e7a)
+                check_type(argname="argument cpu", value=cpu, expected_type=type_hints["cpu"])
+                check_type(argname="argument created_at", value=created_at, expected_type=type_hints["created_at"])
+                check_type(argname="argument execution_role_arn", value=execution_role_arn, expected_type=type_hints["execution_role_arn"])
+                check_type(argname="argument health_check_path", value=health_check_path, expected_type=type_hints["health_check_path"])
+                check_type(argname="argument ingress_paths", value=ingress_paths, expected_type=type_hints["ingress_paths"])
+                check_type(argname="argument memory", value=memory, expected_type=type_hints["memory"])
+                check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
+                check_type(argname="argument primary_container", value=primary_container, expected_type=type_hints["primary_container"])
+                check_type(argname="argument scaling_target", value=scaling_target, expected_type=type_hints["scaling_target"])
+                check_type(argname="argument service_revision_arn", value=service_revision_arn, expected_type=type_hints["service_revision_arn"])
+                check_type(argname="argument task_role_arn", value=task_role_arn, expected_type=type_hints["task_role_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if cpu is not None:
+                self._values["cpu"] = cpu
+            if created_at is not None:
+                self._values["created_at"] = created_at
+            if execution_role_arn is not None:
+                self._values["execution_role_arn"] = execution_role_arn
+            if health_check_path is not None:
+                self._values["health_check_path"] = health_check_path
+            if ingress_paths is not None:
+                self._values["ingress_paths"] = ingress_paths
+            if memory is not None:
+                self._values["memory"] = memory
+            if network_configuration is not None:
+                self._values["network_configuration"] = network_configuration
+            if primary_container is not None:
+                self._values["primary_container"] = primary_container
+            if scaling_target is not None:
+                self._values["scaling_target"] = scaling_target
+            if service_revision_arn is not None:
+                self._values["service_revision_arn"] = service_revision_arn
+            if task_role_arn is not None:
+                self._values["task_role_arn"] = task_role_arn
+
+        @builtins.property
+        def cpu(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-cpu
+            '''
+            result = self._values.get("cpu")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def created_at(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-createdat
+            '''
+            result = self._values.get("created_at")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def execution_role_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-executionrolearn
+            '''
+            result = self._values.get("execution_role_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def health_check_path(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-healthcheckpath
+            '''
+            result = self._values.get("health_check_path")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ingress_paths(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.IngressPathSummaryProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-ingresspaths
+            '''
+            result = self._values.get("ingress_paths")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.IngressPathSummaryProperty"]]]], result)
+
+        @builtins.property
+        def memory(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-memory
+            '''
+            result = self._values.get("memory")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def network_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-networkconfiguration
+            '''
+            result = self._values.get("network_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]], result)
+
+        @builtins.property
+        def primary_container(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-primarycontainer
+            '''
+            result = self._values.get("primary_container")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"]], result)
+
+        @builtins.property
+        def scaling_target(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-scalingtarget
+            '''
+            result = self._values.get("scaling_target")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]], result)
+
+        @builtins.property
+        def service_revision_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-servicerevisionarn
+            '''
+            result = self._values.get("service_revision_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def task_role_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-taskrolearn
+            '''
+            result = self._values.get("task_role_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayServiceConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"security_groups": "securityGroups", "subnets": "subnets"},
+    )
+    class ExpressGatewayServiceNetworkConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+            subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param security_groups: 
+            :param subnets: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_service_network_configuration_property = ecs.CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty(
+                    security_groups=["securityGroups"],
+                    subnets=["subnets"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d2defb0339d06d71da19e47cb8f71464e762979849093b661b17dff52ae5842c)
+                check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+                check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if security_groups is not None:
+                self._values["security_groups"] = security_groups
+            if subnets is not None:
+                self._values["subnets"] = subnets
+
+        @builtins.property
+        def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration-securitygroups
+            '''
+            result = self._values.get("security_groups")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def subnets(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration-subnets
+            '''
+            result = self._values.get("subnets")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayServiceNetworkConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.ExpressGatewayServiceStatusProperty",
+        jsii_struct_bases=[],
+        name_mapping={"status_code": "statusCode"},
+    )
+    class ExpressGatewayServiceStatusProperty:
+        def __init__(
+            self,
+            *,
+            status_code: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param status_code: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicestatus.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                express_gateway_service_status_property = ecs.CfnExpressGatewayService.ExpressGatewayServiceStatusProperty(
+                    status_code="statusCode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__29cbf41fb98bd013c6b61f6833b6b8769ee3ba5f2f8c109f6b9f8a31ad066426)
+                check_type(argname="argument status_code", value=status_code, expected_type=type_hints["status_code"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if status_code is not None:
+                self._values["status_code"] = status_code
+
+        @builtins.property
+        def status_code(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicestatus.html#cfn-ecs-expressgatewayservice-expressgatewayservicestatus-statuscode
+            '''
+            result = self._values.get("status_code")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExpressGatewayServiceStatusProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.IngressPathSummaryProperty",
+        jsii_struct_bases=[],
+        name_mapping={"access_type": "accessType", "endpoint": "endpoint"},
+    )
+    class IngressPathSummaryProperty:
+        def __init__(
+            self,
+            *,
+            access_type: typing.Optional[builtins.str] = None,
+            endpoint: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param access_type: 
+            :param endpoint: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                ingress_path_summary_property = ecs.CfnExpressGatewayService.IngressPathSummaryProperty(
+                    access_type="accessType",
+                    endpoint="endpoint"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a394d999f5098234abb0b79c25cb032136cb36a1bfdb57f7805f4a3da62c322f)
+                check_type(argname="argument access_type", value=access_type, expected_type=type_hints["access_type"])
+                check_type(argname="argument endpoint", value=endpoint, expected_type=type_hints["endpoint"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if access_type is not None:
+                self._values["access_type"] = access_type
+            if endpoint is not None:
+                self._values["endpoint"] = endpoint
+
+        @builtins.property
+        def access_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html#cfn-ecs-expressgatewayservice-ingresspathsummary-accesstype
+            '''
+            result = self._values.get("access_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def endpoint(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html#cfn-ecs-expressgatewayservice-ingresspathsummary-endpoint
+            '''
+            result = self._values.get("endpoint")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "IngressPathSummaryProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.KeyValuePairProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "value": "value"},
+    )
+    class KeyValuePairProperty:
+        def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
+            '''
+            :param name: 
+            :param value: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                key_value_pair_property = ecs.CfnExpressGatewayService.KeyValuePairProperty(
+                    name="name",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5252e30d8fa2e62a4ab61a67f1f1bece0e2e25aa8361093f29d97dc08fe621fe)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "value": value,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html#cfn-ecs-expressgatewayservice-keyvaluepair-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html#cfn-ecs-expressgatewayservice-keyvaluepair-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "KeyValuePairProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService.SecretProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "value_from": "valueFrom"},
+    )
+    class SecretProperty:
+        def __init__(self, *, name: builtins.str, value_from: builtins.str) -> None:
+            '''
+            :param name: 
+            :param value_from: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecs as ecs
+                
+                secret_property = ecs.CfnExpressGatewayService.SecretProperty(
+                    name="name",
+                    value_from="valueFrom"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5590425eeae2a9cca6bb977efaa0ea5b9039a3d7e70fa7fd399eb60f38e86c56)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument value_from", value=value_from, expected_type=type_hints["value_from"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "value_from": value_from,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html#cfn-ecs-expressgatewayservice-secret-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value_from(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html#cfn-ecs-expressgatewayservice-secret-valuefrom
+            '''
+            result = self._values.get("value_from")
+            assert result is not None, "Required property 'value_from' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SecretProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayServiceProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "execution_role_arn": "executionRoleArn",
+        "infrastructure_role_arn": "infrastructureRoleArn",
+        "primary_container": "primaryContainer",
+        "cluster": "cluster",
+        "cpu": "cpu",
+        "health_check_path": "healthCheckPath",
+        "memory": "memory",
+        "network_configuration": "networkConfiguration",
+        "scaling_target": "scalingTarget",
+        "service_name": "serviceName",
+        "tags": "tags",
+        "task_role_arn": "taskRoleArn",
+    },
+)
+class CfnExpressGatewayServiceProps:
+    def __init__(
+        self,
+        *,
+        execution_role_arn: builtins.str,
+        infrastructure_role_arn: builtins.str,
+        primary_container: typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayContainerProperty, typing.Dict[builtins.str, typing.Any]]],
+        cluster: typing.Optional[builtins.str] = None,
+        cpu: typing.Optional[builtins.str] = None,
+        health_check_path: typing.Optional[builtins.str] = None,
+        memory: typing.Optional[builtins.str] = None,
+        network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayScalingTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        service_name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        task_role_arn: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnExpressGatewayService``.
+
+        :param execution_role_arn: 
+        :param infrastructure_role_arn: 
+        :param primary_container: 
+        :param cluster: Default: - "default"
+        :param cpu: Default: - "256"
+        :param health_check_path: Default: - "HTTP:80/ping"
+        :param memory: Default: - "512"
+        :param network_configuration: 
+        :param scaling_target: 
+        :param service_name: 
+        :param tags: 
+        :param task_role_arn: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ecs as ecs
+            
+            cfn_express_gateway_service_props = ecs.CfnExpressGatewayServiceProps(
+                execution_role_arn="executionRoleArn",
+                infrastructure_role_arn="infrastructureRoleArn",
+                primary_container=ecs.CfnExpressGatewayService.ExpressGatewayContainerProperty(
+                    image="image",
+            
+                    # the properties below are optional
+                    aws_logs_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty(
+                        log_group="logGroup",
+                        log_stream_prefix="logStreamPrefix"
+                    ),
+                    command=["command"],
+                    container_port=123,
+                    environment=[ecs.CfnExpressGatewayService.KeyValuePairProperty(
+                        name="name",
+                        value="value"
+                    )],
+                    repository_credentials=ecs.CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty(
+                        credentials_parameter="credentialsParameter"
+                    ),
+                    secrets=[ecs.CfnExpressGatewayService.SecretProperty(
+                        name="name",
+                        value_from="valueFrom"
+                    )]
+                ),
+            
+                # the properties below are optional
+                cluster="cluster",
+                cpu="cpu",
+                health_check_path="healthCheckPath",
+                memory="memory",
+                network_configuration=ecs.CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty(
+                    security_groups=["securityGroups"],
+                    subnets=["subnets"]
+                ),
+                scaling_target=ecs.CfnExpressGatewayService.ExpressGatewayScalingTargetProperty(
+                    auto_scaling_metric="autoScalingMetric",
+                    auto_scaling_target_value=123,
+                    max_task_count=123,
+                    min_task_count=123
+                ),
+                service_name="serviceName",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                task_role_arn="taskRoleArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__337693d6fbb064a2f20a4ee1281f001daa4e9f6fbb294025b13194634baec468)
+            check_type(argname="argument execution_role_arn", value=execution_role_arn, expected_type=type_hints["execution_role_arn"])
+            check_type(argname="argument infrastructure_role_arn", value=infrastructure_role_arn, expected_type=type_hints["infrastructure_role_arn"])
+            check_type(argname="argument primary_container", value=primary_container, expected_type=type_hints["primary_container"])
+            check_type(argname="argument cluster", value=cluster, expected_type=type_hints["cluster"])
+            check_type(argname="argument cpu", value=cpu, expected_type=type_hints["cpu"])
+            check_type(argname="argument health_check_path", value=health_check_path, expected_type=type_hints["health_check_path"])
+            check_type(argname="argument memory", value=memory, expected_type=type_hints["memory"])
+            check_type(argname="argument network_configuration", value=network_configuration, expected_type=type_hints["network_configuration"])
+            check_type(argname="argument scaling_target", value=scaling_target, expected_type=type_hints["scaling_target"])
+            check_type(argname="argument service_name", value=service_name, expected_type=type_hints["service_name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument task_role_arn", value=task_role_arn, expected_type=type_hints["task_role_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "execution_role_arn": execution_role_arn,
+            "infrastructure_role_arn": infrastructure_role_arn,
+            "primary_container": primary_container,
+        }
+        if cluster is not None:
+            self._values["cluster"] = cluster
+        if cpu is not None:
+            self._values["cpu"] = cpu
+        if health_check_path is not None:
+            self._values["health_check_path"] = health_check_path
+        if memory is not None:
+            self._values["memory"] = memory
+        if network_configuration is not None:
+            self._values["network_configuration"] = network_configuration
+        if scaling_target is not None:
+            self._values["scaling_target"] = scaling_target
+        if service_name is not None:
+            self._values["service_name"] = service_name
+        if tags is not None:
+            self._values["tags"] = tags
+        if task_role_arn is not None:
+            self._values["task_role_arn"] = task_role_arn
+
+    @builtins.property
+    def execution_role_arn(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-executionrolearn
+        '''
+        result = self._values.get("execution_role_arn")
+        assert result is not None, "Required property 'execution_role_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def infrastructure_role_arn(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-infrastructurerolearn
+        '''
+        result = self._values.get("infrastructure_role_arn")
+        assert result is not None, "Required property 'infrastructure_role_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def primary_container(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayContainerProperty]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-primarycontainer
+        '''
+        result = self._values.get("primary_container")
+        assert result is not None, "Required property 'primary_container' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayContainerProperty], result)
+
+    @builtins.property
+    def cluster(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "default"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-cluster
+        '''
+        result = self._values.get("cluster")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def cpu(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "256"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-cpu
+        '''
+        result = self._values.get("cpu")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def health_check_path(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "HTTP:80/ping"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-healthcheckpath
+        '''
+        result = self._values.get("health_check_path")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def memory(self) -> typing.Optional[builtins.str]:
+        '''
+        :default: - "512"
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-memory
+        '''
+        result = self._values.get("memory")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def network_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-networkconfiguration
+        '''
+        result = self._values.get("network_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty]], result)
+
+    @builtins.property
+    def scaling_target(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayScalingTargetProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-scalingtarget
+        '''
+        result = self._values.get("scaling_target")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayScalingTargetProperty]], result)
+
+    @builtins.property
+    def service_name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-servicename
+        '''
+        result = self._values.get("service_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def task_role_arn(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-taskrolearn
+        '''
+        result = self._values.get("task_role_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnExpressGatewayServiceProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -48816,6 +50415,8 @@ __all__ = [
     "CfnClusterCapacityProviderAssociations",
     "CfnClusterCapacityProviderAssociationsProps",
     "CfnClusterProps",
+    "CfnExpressGatewayService",
+    "CfnExpressGatewayServiceProps",
     "CfnPrimaryTaskSet",
     "CfnPrimaryTaskSetProps",
     "CfnService",
@@ -49786,6 +51387,222 @@ def _typecheckingstub__a7ff73a79103ae391f3b72b66851726ce38d98e8f5615c045aee9f3b8
     default_capacity_provider_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.CapacityProviderStrategyItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     service_connect_defaults: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ServiceConnectDefaultsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__425c9356d4d802d61310648c0d6d347423435aee47505e8809a3756d7fa8882a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    execution_role_arn: builtins.str,
+    infrastructure_role_arn: builtins.str,
+    primary_container: typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayContainerProperty, typing.Dict[builtins.str, typing.Any]]],
+    cluster: typing.Optional[builtins.str] = None,
+    cpu: typing.Optional[builtins.str] = None,
+    health_check_path: typing.Optional[builtins.str] = None,
+    memory: typing.Optional[builtins.str] = None,
+    network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayScalingTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    service_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    task_role_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0f17f2ba2f4aff1608aa985374f8bc3e6fc86829ce3162054e73a175f15a620e(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9b38fef5963e449090a2643d23642a37554ce8d6ab6d51840f5cc94b3c01a91c(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__637bce22245aa12c373d7b20519a600a7e4f1c4c03aef46f1a57e88fa6060e67(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eff22b309ea10c165d9a460ba2fbd373401ccc733b4c8397e8ddbe3eb3f26307(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7fe6f250bf2fb20286b14eb55e7761d55e43b72f4f1d86681314a6e400d9a2b(
+    value: typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayContainerProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c7efec554438d48af214d79fd32ae38f1bc7627d237f3b49c8ac9005eeb59afc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__99f73f0eb514ba487ee694fcae963e9c9d1d0c1c21397e35a5ad5c2a5a1a1e33(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__536542c6bfd5aae5d187764124c6f6faa8e06f754b01169f548818435b0d67fd(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6e7b25349b9a02fc3f376080b94af9b2abe376a63fcbf1ff87a258d2923d0edf(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78fb2cc5c092561263ce039c05ea030268c745ee80f6600db514de8bd16b758a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__937cd26ada9a0c07b14e2f5f34476df5b6deab76ec84145d314aa1d67d50f444(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayScalingTargetProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f56e54f898155aed3e7c546d7bd8f54891fab02504122af46c390cc95a2b1617(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8c8cabcc5e25799af73e48c053c775a27363ed8b7b285d9e687a614b30007fa(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8dcd9e0dc41434d3dc2a8ba0e5f68e57c6ec82141cd4f5a723b1444aed343a5b(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ebacf65a5186a4d92950013560186503f7271126a4d275ab389aea82e011a34b(
+    *,
+    image: builtins.str,
+    aws_logs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    command: typing.Optional[typing.Sequence[builtins.str]] = None,
+    container_port: typing.Optional[jsii.Number] = None,
+    environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.KeyValuePairProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    repository_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    secrets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.SecretProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f4c5b2a9b6268bdbfa533552fa30175aee7aad0ee80010e7028d950d25d8d8cd(
+    *,
+    credentials_parameter: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ebb449aa2198d962d6ca4697a9034f4522d8adaf209fe23935f0bb8e04d9ce8c(
+    *,
+    auto_scaling_metric: typing.Optional[builtins.str] = None,
+    auto_scaling_target_value: typing.Optional[jsii.Number] = None,
+    max_task_count: typing.Optional[jsii.Number] = None,
+    min_task_count: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a78d22eafb25fefadada8919a4feae3bd9ce0be0817f51b09440035b49c897ed(
+    *,
+    log_group: builtins.str,
+    log_stream_prefix: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4120dc054e718ad97ec42154f450aaef50f6258e0cc8bd17ecdb913e95ae2e7a(
+    *,
+    cpu: typing.Optional[builtins.str] = None,
+    created_at: typing.Optional[builtins.str] = None,
+    execution_role_arn: typing.Optional[builtins.str] = None,
+    health_check_path: typing.Optional[builtins.str] = None,
+    ingress_paths: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.IngressPathSummaryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    memory: typing.Optional[builtins.str] = None,
+    network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    primary_container: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayContainerProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayScalingTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    service_revision_arn: typing.Optional[builtins.str] = None,
+    task_role_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d2defb0339d06d71da19e47cb8f71464e762979849093b661b17dff52ae5842c(
+    *,
+    security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
+    subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__29cbf41fb98bd013c6b61f6833b6b8769ee3ba5f2f8c109f6b9f8a31ad066426(
+    *,
+    status_code: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a394d999f5098234abb0b79c25cb032136cb36a1bfdb57f7805f4a3da62c322f(
+    *,
+    access_type: typing.Optional[builtins.str] = None,
+    endpoint: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5252e30d8fa2e62a4ab61a67f1f1bece0e2e25aa8361093f29d97dc08fe621fe(
+    *,
+    name: builtins.str,
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5590425eeae2a9cca6bb977efaa0ea5b9039a3d7e70fa7fd399eb60f38e86c56(
+    *,
+    name: builtins.str,
+    value_from: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__337693d6fbb064a2f20a4ee1281f001daa4e9f6fbb294025b13194634baec468(
+    *,
+    execution_role_arn: builtins.str,
+    infrastructure_role_arn: builtins.str,
+    primary_container: typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayContainerProperty, typing.Dict[builtins.str, typing.Any]]],
+    cluster: typing.Optional[builtins.str] = None,
+    cpu: typing.Optional[builtins.str] = None,
+    health_check_path: typing.Optional[builtins.str] = None,
+    memory: typing.Optional[builtins.str] = None,
+    network_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    scaling_target: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnExpressGatewayService.ExpressGatewayScalingTargetProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    service_name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    task_role_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

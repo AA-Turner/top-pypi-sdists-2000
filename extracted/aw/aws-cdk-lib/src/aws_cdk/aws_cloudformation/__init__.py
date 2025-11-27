@@ -6233,6 +6233,7 @@ class CfnStackSet(
             # the properties below are optional
             administration_role_arn="administrationRoleArn",
             auto_deployment=cloudformation.CfnStackSet.AutoDeploymentProperty(
+                depends_on=["dependsOn"],
                 enabled=False,
                 retain_stacks_on_account_removal=False
             ),
@@ -6618,6 +6619,7 @@ class CfnStackSet(
         jsii_type="aws-cdk-lib.aws_cloudformation.CfnStackSet.AutoDeploymentProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "depends_on": "dependsOn",
             "enabled": "enabled",
             "retain_stacks_on_account_removal": "retainStacksOnAccountRemoval",
         },
@@ -6626,6 +6628,7 @@ class CfnStackSet(
         def __init__(
             self,
             *,
+            depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
             enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
@@ -6633,6 +6636,7 @@ class CfnStackSet(
 
             For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* .
 
+            :param depends_on: A list of StackSet ARNs that this StackSet depends on for auto-deployment operations. When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
             :param enabled: If set to ``true`` , StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions. If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions.
             :param retain_stacks_on_account_removal: If set to ``true`` , stack resources are retained when an account is removed from a target organization or OU. If set to ``false`` , stack resources are deleted. Specify only if ``Enabled`` is set to ``True`` .
 
@@ -6646,19 +6650,34 @@ class CfnStackSet(
                 from aws_cdk import aws_cloudformation as cloudformation
                 
                 auto_deployment_property = cloudformation.CfnStackSet.AutoDeploymentProperty(
+                    depends_on=["dependsOn"],
                     enabled=False,
                     retain_stacks_on_account_removal=False
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__6d35ac6b73134a404538c458ab31c0ee390b738200afdd1d40919aa276c32879)
+                check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
                 check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
                 check_type(argname="argument retain_stacks_on_account_removal", value=retain_stacks_on_account_removal, expected_type=type_hints["retain_stacks_on_account_removal"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if depends_on is not None:
+                self._values["depends_on"] = depends_on
             if enabled is not None:
                 self._values["enabled"] = enabled
             if retain_stacks_on_account_removal is not None:
                 self._values["retain_stacks_on_account_removal"] = retain_stacks_on_account_removal
+
+        @builtins.property
+        def depends_on(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of StackSet ARNs that this StackSet depends on for auto-deployment operations.
+
+            When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-autodeployment.html#cfn-cloudformation-stackset-autodeployment-dependson
+            '''
+            result = self._values.get("depends_on")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def enabled(
@@ -7334,6 +7353,7 @@ class CfnStackSetProps:
                 # the properties below are optional
                 administration_role_arn="administrationRoleArn",
                 auto_deployment=cloudformation.CfnStackSet.AutoDeploymentProperty(
+                    depends_on=["dependsOn"],
                     enabled=False,
                     retain_stacks_on_account_removal=False
                 ),
@@ -9788,6 +9808,7 @@ def _typecheckingstub__9a294c8f5426fcf440746cb77033834a63ea811fbda12ac428bfda350
 
 def _typecheckingstub__6d35ac6b73134a404538c458ab31c0ee390b738200afdd1d40919aa276c32879(
     *,
+    depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
 ) -> None:

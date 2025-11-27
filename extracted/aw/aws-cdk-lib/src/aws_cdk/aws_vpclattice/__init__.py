@@ -645,7 +645,9 @@ class CfnDomainVerification(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_vpclattice.CfnDomainVerification",
 ):
-    '''Creates a Lattice Domain Verification.
+    '''A domain name verification is an entity that allows you to prove your ownership of a given domain.
+
+    When you create a domain verification using CloudFormation, use a waiter to make sure the domain verification is complete before you create a service network resource association, a VPC endpoint, or a service network VPC association with this domain.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html
     :cloudformationResource: AWS::VpcLattice::DomainVerification
@@ -680,8 +682,8 @@ class CfnDomainVerification(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param domain_name: 
-        :param tags: 
+        :param domain_name: The domain name being verified.
+        :param tags: The tags associated with the domain verification.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e087b5ebdfc61e8611a8aecc13f27453c5d334d80ba357b19a41a8c67e1475cb)
@@ -738,7 +740,8 @@ class CfnDomainVerification(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the domain verification.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -746,7 +749,8 @@ class CfnDomainVerification(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''
+        '''The ID of the domain verification.
+
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -754,7 +758,8 @@ class CfnDomainVerification(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The current status of the domain verification process.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -787,6 +792,7 @@ class CfnDomainVerification(
     @builtins.property
     @jsii.member(jsii_name="domainName")
     def domain_name(self) -> builtins.str:
+        '''The domain name being verified.'''
         return typing.cast(builtins.str, jsii.get(self, "domainName"))
 
     @domain_name.setter
@@ -799,6 +805,7 @@ class CfnDomainVerification(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The tags associated with the domain verification.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -820,9 +827,10 @@ class CfnDomainVerification(
             name: typing.Optional[builtins.str] = None,
             value: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param name: 
-            :param value: 
+            '''Configuration for TXT record-based domain verification method.
+
+            :param name: The name of the TXT record that must be created for domain verification.
+            :param value: The value that must be added to the TXT record for domain verification.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html
             :exampleMetadata: fixture=_generated
@@ -850,7 +858,8 @@ class CfnDomainVerification(
 
         @builtins.property
         def name(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The name of the TXT record that must be created for domain verification.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html#cfn-vpclattice-domainverification-txtmethodconfig-name
             '''
             result = self._values.get("name")
@@ -858,7 +867,8 @@ class CfnDomainVerification(
 
         @builtins.property
         def value(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The value that must be added to the TXT record for domain verification.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-domainverification-txtmethodconfig.html#cfn-vpclattice-domainverification-txtmethodconfig-value
             '''
             result = self._values.get("value")
@@ -890,8 +900,8 @@ class CfnDomainVerificationProps:
     ) -> None:
         '''Properties for defining a ``CfnDomainVerification``.
 
-        :param domain_name: 
-        :param tags: 
+        :param domain_name: The domain name being verified.
+        :param tags: The tags associated with the domain verification.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html
         :exampleMetadata: fixture=_generated
@@ -924,7 +934,8 @@ class CfnDomainVerificationProps:
 
     @builtins.property
     def domain_name(self) -> builtins.str:
-        '''
+        '''The domain name being verified.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html#cfn-vpclattice-domainverification-domainname
         '''
         result = self._values.get("domain_name")
@@ -933,7 +944,8 @@ class CfnDomainVerificationProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''The tags associated with the domain verification.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-domainverification.html#cfn-vpclattice-domainverification-tags
         '''
         result = self._values.get("tags")
@@ -1743,9 +1755,9 @@ class CfnResourceConfiguration(
         :param name: The name of the resource configuration.
         :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
-        :param custom_domain_name: 
-        :param domain_verification_id: 
-        :param group_domain: 
+        :param custom_domain_name: The custom domain name.
+        :param domain_verification_id: The domain verification ID.
+        :param group_domain: (GROUP) The group domain for a group resource configuration. Any domains that you create for the child resource are subdomains of the group domain. Child resources inherit the verification status of the domain.
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
@@ -1905,6 +1917,7 @@ class CfnResourceConfiguration(
     @builtins.property
     @jsii.member(jsii_name="customDomainName")
     def custom_domain_name(self) -> typing.Optional[builtins.str]:
+        '''The custom domain name.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "customDomainName"))
 
     @custom_domain_name.setter
@@ -1917,6 +1930,7 @@ class CfnResourceConfiguration(
     @builtins.property
     @jsii.member(jsii_name="domainVerificationId")
     def domain_verification_id(self) -> typing.Optional[builtins.str]:
+        '''The domain verification ID.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "domainVerificationId"))
 
     @domain_verification_id.setter
@@ -1929,6 +1943,7 @@ class CfnResourceConfiguration(
     @builtins.property
     @jsii.member(jsii_name="groupDomain")
     def group_domain(self) -> typing.Optional[builtins.str]:
+        '''(GROUP) The group domain for a group resource configuration.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "groupDomain"))
 
     @group_domain.setter
@@ -2256,9 +2271,9 @@ class CfnResourceConfigurationProps:
         :param name: The name of the resource configuration.
         :param resource_configuration_type: The type of resource configuration. A resource configuration can be one of the following types:. - *SINGLE* - A single resource. - *GROUP* - A group of resources. You must create a group resource configuration before you create a child resource configuration. - *CHILD* - A single resource that is part of a group resource configuration. - *ARN* - An AWS resource.
         :param allow_association_to_sharable_service_network: Specifies whether the resource configuration can be associated with a sharable service network.
-        :param custom_domain_name: 
-        :param domain_verification_id: 
-        :param group_domain: 
+        :param custom_domain_name: The custom domain name.
+        :param domain_verification_id: The domain verification ID.
+        :param group_domain: (GROUP) The group domain for a group resource configuration. Any domains that you create for the child resource are subdomains of the group domain. Child resources inherit the verification status of the domain.
         :param port_ranges: (SINGLE, GROUP, CHILD) The TCP port ranges that a consumer can use to access a resource configuration (for example: 1-65535). You can separate port ranges using commas (for example: 1,2,22-30).
         :param protocol_type: (SINGLE, GROUP) The protocol accepted by the resource configuration.
         :param resource_configuration_auth_type: The auth type for the resource configuration.
@@ -2384,7 +2399,8 @@ class CfnResourceConfigurationProps:
 
     @builtins.property
     def custom_domain_name(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The custom domain name.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-customdomainname
         '''
         result = self._values.get("custom_domain_name")
@@ -2392,7 +2408,8 @@ class CfnResourceConfigurationProps:
 
     @builtins.property
     def domain_verification_id(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The domain verification ID.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-domainverificationid
         '''
         result = self._values.get("domain_verification_id")
@@ -2400,7 +2417,10 @@ class CfnResourceConfigurationProps:
 
     @builtins.property
     def group_domain(self) -> typing.Optional[builtins.str]:
-        '''
+        '''(GROUP) The group domain for a group resource configuration.
+
+        Any domains that you create for the child resource are subdomains of the group domain. Child resources inherit the verification status of the domain.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-resourceconfiguration.html#cfn-vpclattice-resourceconfiguration-groupdomain
         '''
         result = self._values.get("group_domain")
@@ -5200,7 +5220,7 @@ class CfnServiceNetworkResourceAssociation(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param private_dns_enabled: 
+        :param private_dns_enabled: Indicates if private DNS is enabled for the service network resource association.
         :param resource_configuration_id: The ID of the resource configuration associated with the service network.
         :param service_network_id: The ID of the service network associated with the resource configuration.
         :param tags: A key-value pair to associate with a resource.
@@ -5304,6 +5324,7 @@ class CfnServiceNetworkResourceAssociation(
     def private_dns_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates if private DNS is enabled for the service network resource association.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "privateDnsEnabled"))
 
     @private_dns_enabled.setter
@@ -5377,7 +5398,7 @@ class CfnServiceNetworkResourceAssociationProps:
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkResourceAssociation``.
 
-        :param private_dns_enabled: 
+        :param private_dns_enabled: Indicates if private DNS is enabled for the service network resource association.
         :param resource_configuration_id: The ID of the resource configuration associated with the service network.
         :param service_network_id: The ID of the service network associated with the resource configuration.
         :param tags: A key-value pair to associate with a resource.
@@ -5421,7 +5442,8 @@ class CfnServiceNetworkResourceAssociationProps:
     def private_dns_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''
+        '''Indicates if private DNS is enabled for the service network resource association.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkresourceassociation.html#cfn-vpclattice-servicenetworkresourceassociation-privatednsenabled
         '''
         result = self._values.get("private_dns_enabled")
@@ -6011,8 +6033,8 @@ class CfnServiceNetworkVpcAssociation(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param dns_options: 
-        :param private_dns_enabled: 
+        :param dns_options: The DNS options for the service network VPC association.
+        :param private_dns_enabled: Indicates if private DNS is enabled for the service network VPC association.
         :param security_group_ids: The IDs of the security groups. Security groups aren't added by default. You can add a security group to apply network level controls to control which resources in a VPC are allowed to access the service network and its services. For more information, see `Control traffic to resources using security groups <https://docs.aws.amazon.com//vpc/latest/userguide/VPC_SecurityGroups.html>`_ in the *Amazon VPC User Guide* .
         :param service_network_identifier: The ID or ARN of the service network. You must use an ARN if the resources are in different accounts.
         :param tags: The tags for the association.
@@ -6173,6 +6195,7 @@ class CfnServiceNetworkVpcAssociation(
     def dns_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]]:
+        '''The DNS options for the service network VPC association.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnServiceNetworkVpcAssociation.DnsOptionsProperty"]], jsii.get(self, "dnsOptions"))
 
     @dns_options.setter
@@ -6190,6 +6213,7 @@ class CfnServiceNetworkVpcAssociation(
     def private_dns_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''Indicates if private DNS is enabled for the service network VPC association.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "privateDnsEnabled"))
 
     @private_dns_enabled.setter
@@ -6272,9 +6296,10 @@ class CfnServiceNetworkVpcAssociation(
             private_dns_preference: typing.Optional[builtins.str] = None,
             private_dns_specified_domains: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param private_dns_preference: 
-            :param private_dns_specified_domains: 
+            '''The DNS configuration options.
+
+            :param private_dns_preference: The preference for which private domains have a private hosted zone created for and associated with the specified VPC. Only supported when private DNS is enabled and when the VPC endpoint type is ServiceNetwork or Resource.
+            :param private_dns_specified_domains: Indicates which of the private domains to create private hosted zones for and associate with the specified VPC. Only supported when private DNS is enabled and the private DNS preference is ``VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS`` or ``SPECIFIED_DOMAINS_ONLY`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-servicenetworkvpcassociation-dnsoptions.html
             :exampleMetadata: fixture=_generated
@@ -6302,7 +6327,10 @@ class CfnServiceNetworkVpcAssociation(
 
         @builtins.property
         def private_dns_preference(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The preference for which private domains have a private hosted zone created for and associated with the specified VPC.
+
+            Only supported when private DNS is enabled and when the VPC endpoint type is ServiceNetwork or Resource.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-servicenetworkvpcassociation-dnsoptions.html#cfn-vpclattice-servicenetworkvpcassociation-dnsoptions-privatednspreference
             '''
             result = self._values.get("private_dns_preference")
@@ -6312,7 +6340,10 @@ class CfnServiceNetworkVpcAssociation(
         def private_dns_specified_domains(
             self,
         ) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''Indicates which of the private domains to create private hosted zones for and associate with the specified VPC.
+
+            Only supported when private DNS is enabled and the private DNS preference is ``VERIFIED_DOMAINS_AND_SPECIFIED_DOMAINS`` or ``SPECIFIED_DOMAINS_ONLY`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-vpclattice-servicenetworkvpcassociation-dnsoptions.html#cfn-vpclattice-servicenetworkvpcassociation-dnsoptions-privatednsspecifieddomains
             '''
             result = self._values.get("private_dns_specified_domains")
@@ -6355,8 +6386,8 @@ class CfnServiceNetworkVpcAssociationProps:
     ) -> None:
         '''Properties for defining a ``CfnServiceNetworkVpcAssociation``.
 
-        :param dns_options: 
-        :param private_dns_enabled: 
+        :param dns_options: The DNS options for the service network VPC association.
+        :param private_dns_enabled: Indicates if private DNS is enabled for the service network VPC association.
         :param security_group_ids: The IDs of the security groups. Security groups aren't added by default. You can add a security group to apply network level controls to control which resources in a VPC are allowed to access the service network and its services. For more information, see `Control traffic to resources using security groups <https://docs.aws.amazon.com//vpc/latest/userguide/VPC_SecurityGroups.html>`_ in the *Amazon VPC User Guide* .
         :param service_network_identifier: The ID or ARN of the service network. You must use an ARN if the resources are in different accounts.
         :param tags: The tags for the association.
@@ -6412,7 +6443,8 @@ class CfnServiceNetworkVpcAssociationProps:
     def dns_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnServiceNetworkVpcAssociation.DnsOptionsProperty]]:
-        '''
+        '''The DNS options for the service network VPC association.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkvpcassociation.html#cfn-vpclattice-servicenetworkvpcassociation-dnsoptions
         '''
         result = self._values.get("dns_options")
@@ -6422,7 +6454,8 @@ class CfnServiceNetworkVpcAssociationProps:
     def private_dns_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''
+        '''Indicates if private DNS is enabled for the service network VPC association.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-vpclattice-servicenetworkvpcassociation.html#cfn-vpclattice-servicenetworkvpcassociation-privatednsenabled
         '''
         result = self._values.get("private_dns_enabled")

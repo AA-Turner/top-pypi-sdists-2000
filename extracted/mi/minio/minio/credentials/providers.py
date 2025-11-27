@@ -36,7 +36,6 @@ from urllib.parse import urlencode, urlsplit, urlunsplit
 from xml.etree import ElementTree as ET
 
 import certifi
-from urllib3._collections import HTTPHeaderDict
 from urllib3.poolmanager import PoolManager
 
 try:
@@ -77,7 +76,7 @@ def _urlopen(
         method: str,
         url: str,
         body: Optional[str | bytes] = None,
-        headers: Optional[HTTPHeaderDict] = None,
+        headers: Optional[dict[str, str | list[str] | tuple[str]]] = None,
 ) -> BaseHTTPResponse:
     """Wrapper of urlopen() handles HTTP status code."""
     res = http_client.urlopen(method, url, body=body, headers=headers)
@@ -174,16 +173,15 @@ class AssumeRoleProvider(Provider):
             return self._credentials
 
         utctime = utcnow()
-        headers = HTTPHeaderDict({
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Host": self._host,
-            "X-Amz-Date": to_amz_date(utctime),
-        })
         headers = sign_v4_sts(
             method="POST",
             url=self._url,
             region=self._region,
-            headers=headers,
+            headers={
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Host": self._host,
+                "X-Amz-Date": to_amz_date(utctime),
+            },
             credentials=Credentials(
                 access_key=self._access_key,
                 secret_key=self._secret_key,
@@ -446,7 +444,7 @@ class IamAwsProvider(Provider):
     def fetch(
         self,
         url: str,
-        headers: Optional[HTTPHeaderDict] = None,
+        headers: Optional[dict[str, str | list[str] | tuple[str]]] = None,
     ) -> Credentials:
         """Fetch credentials from EC2/ECS."""
         res = _urlopen(self._http_client, "GET", url, headers=headers)
@@ -492,14 +490,11 @@ class IamAwsProvider(Provider):
             self._credentials = provider.retrieve()
             return cast(Credentials, self._credentials)
 
-        headers: Optional[HTTPHeaderDict] = None
+        headers: Optional[dict[str, str | list[str] | tuple[str]]] = None
         if self._relative_uri:
             if not url:
                 url = "http://169.254.170.2" + self._relative_uri
-            headers = (
-                HTTPHeaderDict({"Authorization": self._token})
-                if self._token else None
-            )
+            headers = {"Authorization": self._token} if self._token else None
         elif self._full_uri:
             token = self._token
             if self._token_file:
@@ -510,28 +505,20 @@ class IamAwsProvider(Provider):
                 if not url:
                     url = self._full_uri
                     _check_loopback_host(url)
-            headers = (
-                HTTPHeaderDict({"Authorization": token}) if token else None
-            )
+            headers = {"Authorization": token} if token else None
         else:
             if not url:
                 url = "http://169.254.169.254"
 
             # Get IMDS Token
-            headers = HTTPHeaderDict(
-                {"X-aws-ec2-metadata-token-ttl-seconds": "21600"},
-            )
             res = _urlopen(
                 self._http_client,
                 "PUT",
                 url+"/latest/api/token",
-                headers=headers,
+                headers={"X-aws-ec2-metadata-token-ttl-seconds": "21600"},
             )
             token = res.data.decode("utf-8")
-            headers = (
-                HTTPHeaderDict({"X-aws-ec2-metadata-token": token})
-                if token else None
-            )
+            headers = {"X-aws-ec2-metadata-token": token} if token else None
 
             # Get role name
             url = urlunsplit(
@@ -554,9 +541,8 @@ class IamAwsProvider(Provider):
 class LdapIdentityProvider(Provider):
     """Credential provider using AssumeRoleWithLDAPIdentity API."""
 
-    def __init__(
+    def __init__(  # pylint: disable=too-many-positional-arguments
             self,
-            *,
             sts_endpoint: str,
             ldap_username: str,
             ldap_password: str,

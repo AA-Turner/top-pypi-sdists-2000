@@ -131,11 +131,20 @@ class CfnCluster(
                     secret_arn="secretArn",
                     secret_version="secretVersion"
                 ),
+                jwt_auth=pcs.CfnCluster.JwtAuthProperty(
+                    jwt_key=pcs.CfnCluster.JwtKeyProperty(
+                        secret_arn="secretArn",
+                        secret_version="secretVersion"
+                    )
+                ),
                 scale_down_idle_time_in_seconds=123,
                 slurm_custom_settings=[pcs.CfnCluster.SlurmCustomSettingProperty(
                     parameter_name="parameterName",
                     parameter_value="parameterValue"
-                )]
+                )],
+                slurm_rest=pcs.CfnCluster.SlurmRestProperty(
+                    mode="mode"
+                )
             ),
             tags={
                 "tags_key": "tags"
@@ -749,6 +758,137 @@ class CfnCluster(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.JwtAuthProperty",
+        jsii_struct_bases=[],
+        name_mapping={"jwt_key": "jwtKey"},
+    )
+    class JwtAuthProperty:
+        def __init__(
+            self,
+            *,
+            jwt_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JwtKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''JWT authentication configuration for Slurm.
+
+            :param jwt_key: JWT key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtauth.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                jwt_auth_property = pcs.CfnCluster.JwtAuthProperty(
+                    jwt_key=pcs.CfnCluster.JwtKeyProperty(
+                        secret_arn="secretArn",
+                        secret_version="secretVersion"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__236bf4962a17b5f62f726414888f2d90b16def3b9cbd12c66bcd10550eea826c)
+                check_type(argname="argument jwt_key", value=jwt_key, expected_type=type_hints["jwt_key"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if jwt_key is not None:
+                self._values["jwt_key"] = jwt_key
+
+        @builtins.property
+        def jwt_key(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtKeyProperty"]]:
+            '''JWT key configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtauth.html#cfn-pcs-cluster-jwtauth-jwtkey
+            '''
+            result = self._values.get("jwt_key")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtKeyProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtAuthProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.JwtKeyProperty",
+        jsii_struct_bases=[],
+        name_mapping={"secret_arn": "secretArn", "secret_version": "secretVersion"},
+    )
+    class JwtKeyProperty:
+        def __init__(
+            self,
+            *,
+            secret_arn: builtins.str,
+            secret_version: builtins.str,
+        ) -> None:
+            '''JWT key configuration.
+
+            :param secret_arn: The Amazon Resource Name (ARN) of the JWT key secret.
+            :param secret_version: The version of the JWT key secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                jwt_key_property = pcs.CfnCluster.JwtKeyProperty(
+                    secret_arn="secretArn",
+                    secret_version="secretVersion"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__16a8b2f4c91068705c8bc58c4236eb32d231a232a1f8ba650d8550e7bf736802)
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+                check_type(argname="argument secret_version", value=secret_version, expected_type=type_hints["secret_version"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "secret_arn": secret_arn,
+                "secret_version": secret_version,
+            }
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''The Amazon Resource Name (ARN) of the JWT key secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html#cfn-pcs-cluster-jwtkey-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_version(self) -> builtins.str:
+            '''The version of the JWT key secret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html#cfn-pcs-cluster-jwtkey-secretversion
+            '''
+            result = self._values.get("secret_version")
+            assert result is not None, "Required property 'secret_version' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JwtKeyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.NetworkingProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -934,8 +1074,10 @@ class CfnCluster(
         name_mapping={
             "accounting": "accounting",
             "auth_key": "authKey",
+            "jwt_auth": "jwtAuth",
             "scale_down_idle_time_in_seconds": "scaleDownIdleTimeInSeconds",
             "slurm_custom_settings": "slurmCustomSettings",
+            "slurm_rest": "slurmRest",
         },
     )
     class SlurmConfigurationProperty:
@@ -944,15 +1086,19 @@ class CfnCluster(
             *,
             accounting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccountingProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             auth_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AuthKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            jwt_auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JwtAuthProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             scale_down_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
             slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmCustomSettingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            slurm_rest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.SlurmRestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Additional options related to the Slurm scheduler.
 
             :param accounting: The accounting configuration includes configurable settings for Slurm accounting.
             :param auth_key: The shared Slurm key for authentication, also known as the *cluster secret* .
+            :param jwt_auth: JWT authentication configuration for Slurm.
             :param scale_down_idle_time_in_seconds: The time (in seconds) before an idle node is scaled down. Default: ``600``
             :param slurm_custom_settings: Additional Slurm-specific configuration that directly maps to Slurm settings.
+            :param slurm_rest: The SlurmRest configuration includes configurable settings for Slurm Rest.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -974,28 +1120,43 @@ class CfnCluster(
                         secret_arn="secretArn",
                         secret_version="secretVersion"
                     ),
+                    jwt_auth=pcs.CfnCluster.JwtAuthProperty(
+                        jwt_key=pcs.CfnCluster.JwtKeyProperty(
+                            secret_arn="secretArn",
+                            secret_version="secretVersion"
+                        )
+                    ),
                     scale_down_idle_time_in_seconds=123,
                     slurm_custom_settings=[pcs.CfnCluster.SlurmCustomSettingProperty(
                         parameter_name="parameterName",
                         parameter_value="parameterValue"
-                    )]
+                    )],
+                    slurm_rest=pcs.CfnCluster.SlurmRestProperty(
+                        mode="mode"
+                    )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__e6bb8855a5cf237041c92e56f09fd1b1d2d40c49f363bfde280100fbfd6f137f)
                 check_type(argname="argument accounting", value=accounting, expected_type=type_hints["accounting"])
                 check_type(argname="argument auth_key", value=auth_key, expected_type=type_hints["auth_key"])
+                check_type(argname="argument jwt_auth", value=jwt_auth, expected_type=type_hints["jwt_auth"])
                 check_type(argname="argument scale_down_idle_time_in_seconds", value=scale_down_idle_time_in_seconds, expected_type=type_hints["scale_down_idle_time_in_seconds"])
                 check_type(argname="argument slurm_custom_settings", value=slurm_custom_settings, expected_type=type_hints["slurm_custom_settings"])
+                check_type(argname="argument slurm_rest", value=slurm_rest, expected_type=type_hints["slurm_rest"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if accounting is not None:
                 self._values["accounting"] = accounting
             if auth_key is not None:
                 self._values["auth_key"] = auth_key
+            if jwt_auth is not None:
+                self._values["jwt_auth"] = jwt_auth
             if scale_down_idle_time_in_seconds is not None:
                 self._values["scale_down_idle_time_in_seconds"] = scale_down_idle_time_in_seconds
             if slurm_custom_settings is not None:
                 self._values["slurm_custom_settings"] = slurm_custom_settings
+            if slurm_rest is not None:
+                self._values["slurm_rest"] = slurm_rest
 
         @builtins.property
         def accounting(
@@ -1020,6 +1181,17 @@ class CfnCluster(
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.AuthKeyProperty"]], result)
 
         @builtins.property
+        def jwt_auth(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtAuthProperty"]]:
+            '''JWT authentication configuration for Slurm.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-jwtauth
+            '''
+            result = self._values.get("jwt_auth")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtAuthProperty"]], result)
+
+        @builtins.property
         def scale_down_idle_time_in_seconds(self) -> typing.Optional[jsii.Number]:
             '''The time (in seconds) before an idle node is scaled down.
 
@@ -1040,6 +1212,17 @@ class CfnCluster(
             '''
             result = self._values.get("slurm_custom_settings")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmCustomSettingProperty"]]]], result)
+
+        @builtins.property
+        def slurm_rest(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmRestProperty"]]:
+            '''The SlurmRest configuration includes configurable settings for Slurm Rest.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-slurmrest
+            '''
+            result = self._values.get("slurm_rest")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmRestProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -1132,6 +1315,62 @@ class CfnCluster(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_pcs.CfnCluster.SlurmRestProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mode": "mode"},
+    )
+    class SlurmRestProperty:
+        def __init__(self, *, mode: builtins.str) -> None:
+            '''The SlurmRest configuration includes configurable settings for Slurm Rest.
+
+            :param mode: The default value is ``STANDARD``. A value of ``STANDARD`` means that Slurm Rest is enabled. Default: - "NONE"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmrest.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_pcs as pcs
+                
+                slurm_rest_property = pcs.CfnCluster.SlurmRestProperty(
+                    mode="mode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__dee485401e4f46d2d16739316420d1c1cc2ba6becf56d1e02bee193a7be77eb7)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "mode": mode,
+            }
+
+        @builtins.property
+        def mode(self) -> builtins.str:
+            '''The default value is ``STANDARD``.
+
+            A value of ``STANDARD`` means that Slurm Rest is enabled.
+
+            :default: - "NONE"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmrest.html#cfn-pcs-cluster-slurmrest-mode
+            '''
+            result = self._values.get("mode")
+            assert result is not None, "Required property 'mode' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SlurmRestProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_pcs.CfnClusterProps",
@@ -1199,11 +1438,20 @@ class CfnClusterProps:
                         secret_arn="secretArn",
                         secret_version="secretVersion"
                     ),
+                    jwt_auth=pcs.CfnCluster.JwtAuthProperty(
+                        jwt_key=pcs.CfnCluster.JwtKeyProperty(
+                            secret_arn="secretArn",
+                            secret_version="secretVersion"
+                        )
+                    ),
                     scale_down_idle_time_in_seconds=123,
                     slurm_custom_settings=[pcs.CfnCluster.SlurmCustomSettingProperty(
                         parameter_name="parameterName",
                         parameter_value="parameterValue"
-                    )]
+                    )],
+                    slurm_rest=pcs.CfnCluster.SlurmRestProperty(
+                        mode="mode"
+                    )
                 ),
                 tags={
                     "tags_key": "tags"
@@ -3224,6 +3472,21 @@ def _typecheckingstub__b9e127e61b0ea75f45a99bba1dcc51875a9ecf36ea91f697889ebe4cb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__236bf4962a17b5f62f726414888f2d90b16def3b9cbd12c66bcd10550eea826c(
+    *,
+    jwt_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.JwtKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__16a8b2f4c91068705c8bc58c4236eb32d231a232a1f8ba650d8550e7bf736802(
+    *,
+    secret_arn: builtins.str,
+    secret_version: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__82c7f3d28e2ed0d063467ea787c6cfc31c28d4c5f26ef1ddf71940887dea9d1f(
     *,
     network_type: typing.Optional[builtins.str] = None,
@@ -3245,8 +3508,10 @@ def _typecheckingstub__e6bb8855a5cf237041c92e56f09fd1b1d2d40c49f363bfde280100fbf
     *,
     accounting: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccountingProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     auth_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AuthKeyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    jwt_auth: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.JwtAuthProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scale_down_idle_time_in_seconds: typing.Optional[jsii.Number] = None,
     slurm_custom_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SlurmCustomSettingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    slurm_rest: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.SlurmRestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3255,6 +3520,13 @@ def _typecheckingstub__b9d168abcd7adc19d99485fc5db81c30bba87bb255608ac3a4487d1a1
     *,
     parameter_name: builtins.str,
     parameter_value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dee485401e4f46d2d16739316420d1c1cc2ba6becf56d1e02bee193a7be77eb7(
+    *,
+    mode: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -17,11 +17,9 @@
 from minio import Minio
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
-client.disable_object_legal_hold(
-    bucket_name="my-bucket", object_name="my-object",
-)
+client.disable_object_legal_hold("my-bucket", "my-object")

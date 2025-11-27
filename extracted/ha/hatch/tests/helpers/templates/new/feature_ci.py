@@ -8,7 +8,7 @@ def get_files(**kwargs):
     files = [File(Path(f.path), f.contents) for f in get_template_files(**kwargs)]
     files.append(
         File(
-            Path('.github', 'workflows', 'test.yml'),
+            Path(".github", "workflows", "test.yml"),
             """\
 name: test
 
@@ -34,7 +34,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
 
     steps:
     - uses: actions/checkout@v3

@@ -1,5 +1,6 @@
 use std::ops::Deref;
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use std::sync::Arc;
 
 use anyhow::Context;
@@ -143,13 +144,14 @@ impl LanguageImpl for Golang {
             let mut output = Cmd::new(&entry[0], "go hook")
                 .current_dir(hook.work_dir())
                 .args(&entry[1..])
-                .env("PATH", &new_path)
+                .env(EnvVars::PATH, &new_path)
                 .env(EnvVars::GOTOOLCHAIN, "local")
                 .env(EnvVars::GOBIN, &go_bin)
                 .envs(go_envs.iter().copied())
                 .args(&hook.args)
                 .args(batch)
                 .check(false)
+                .stdin(Stdio::null())
                 .pty_output()
                 .await?;
 

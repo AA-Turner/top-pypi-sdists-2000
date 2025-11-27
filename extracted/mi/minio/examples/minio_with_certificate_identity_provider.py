@@ -28,13 +28,11 @@ cert_file = "/path/to/client.pem"
 key_file = "/path/to/client.key"
 
 provider = CertificateIdentityProvider(
-    sts_endpoint=sts_endpoint,
-    cert_file=cert_file,
-    key_file=key_file,
+    sts_endpoint, cert_file=cert_file, key_file=key_file,
 )
 
-client = Minio(endpoint="MINIO-HOST:MINIO-PORT", credentials=provider)
+client = Minio("MINIO-HOST:MINIO-PORT", credentials=provider)
 
 # Get information of an object.
-stat = client.stat_object(bucket_name="my-bucket", object_name="my-object")
+stat = client.stat_object("my-bucket", "my-object")
 print(stat)

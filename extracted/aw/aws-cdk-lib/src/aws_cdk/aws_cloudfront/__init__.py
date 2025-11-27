@@ -1712,6 +1712,7 @@ from ..interfaces.aws_cloudfront import (
     IRealtimeLogConfigRef as _IRealtimeLogConfigRef_83cc214a,
     IResponseHeadersPolicyRef as _IResponseHeadersPolicyRef_25ee5061,
     IStreamingDistributionRef as _IStreamingDistributionRef_94d6d779,
+    ITrustStoreRef as _ITrustStoreRef_c9036746,
     IVpcOriginRef as _IVpcOriginRef_4a31f77c,
     KeyGroupReference as _KeyGroupReference_d904f6f1,
     KeyValueStoreReference as _KeyValueStoreReference_0ba0c49f,
@@ -1722,6 +1723,7 @@ from ..interfaces.aws_cloudfront import (
     RealtimeLogConfigReference as _RealtimeLogConfigReference_30646e4d,
     ResponseHeadersPolicyReference as _ResponseHeadersPolicyReference_bad4201b,
     StreamingDistributionReference as _StreamingDistributionReference_cce28c26,
+    TrustStoreReference as _TrustStoreReference_842fa5e4,
     VpcOriginReference as _VpcOriginReference_e93e6a73,
 )
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
@@ -7691,6 +7693,56 @@ class CfnDistribution(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.ConnectionFunctionAssociationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"id": "id"},
+    )
+    class ConnectionFunctionAssociationProperty:
+        def __init__(self, *, id: builtins.str) -> None:
+            '''
+            :param id: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-connectionfunctionassociation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                connection_function_association_property = cloudfront.CfnDistribution.ConnectionFunctionAssociationProperty(
+                    id="id"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__367579c3716b840c803cd1a2af6e9e817c060b94dc7e54a5e50b25a109669795)
+                check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "id": id,
+            }
+
+        @builtins.property
+        def id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-connectionfunctionassociation.html#cfn-cloudfront-distribution-connectionfunctionassociation-id
+            '''
+            result = self._values.get("id")
+            assert result is not None, "Required property 'id' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ConnectionFunctionAssociationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.CookiesProperty",
         jsii_struct_bases=[],
         name_mapping={"forward": "forward", "whitelisted_names": "whitelistedNames"},
@@ -8734,6 +8786,7 @@ class CfnDistribution(
             "cache_behaviors": "cacheBehaviors",
             "cnam_es": "cnamEs",
             "comment": "comment",
+            "connection_function_association": "connectionFunctionAssociation",
             "connection_mode": "connectionMode",
             "continuous_deployment_policy_id": "continuousDeploymentPolicyId",
             "custom_error_responses": "customErrorResponses",
@@ -8750,6 +8803,7 @@ class CfnDistribution(
             "staging": "staging",
             "tenant_config": "tenantConfig",
             "viewer_certificate": "viewerCertificate",
+            "viewer_mtls_config": "viewerMtlsConfig",
             "web_acl_id": "webAclId",
         },
     )
@@ -8764,6 +8818,7 @@ class CfnDistribution(
             cache_behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CacheBehaviorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
             cnam_es: typing.Optional[typing.Sequence[builtins.str]] = None,
             comment: typing.Optional[builtins.str] = None,
+            connection_function_association: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ConnectionFunctionAssociationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             connection_mode: typing.Optional[builtins.str] = None,
             continuous_deployment_policy_id: typing.Optional[builtins.str] = None,
             custom_error_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.CustomErrorResponseProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -8780,6 +8835,7 @@ class CfnDistribution(
             staging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             tenant_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.TenantConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             viewer_certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ViewerCertificateProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            viewer_mtls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.ViewerMtlsConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             web_acl_id: typing.Optional[builtins.str] = None,
         ) -> None:
             '''A distribution configuration.
@@ -8791,6 +8847,7 @@ class CfnDistribution(
             :param cache_behaviors: A complex type that contains zero or more ``CacheBehavior`` elements.
             :param cnam_es: An alias for the CloudFront distribution's domain name. .. epigraph:: This property is legacy. We recommend that you use `Aliases <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-aliases>`_ instead.
             :param comment: A comment to describe the distribution. The comment cannot be longer than 128 characters. Default: - ""
+            :param connection_function_association: 
             :param connection_mode: This field specifies whether the connection mode is through a standard distribution (direct) or a multi-tenant distribution with distribution tenants (tenant-only).
             :param continuous_deployment_policy_id: .. epigraph:: This field only supports standard distributions. You can't specify this field for multi-tenant distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . The identifier of a continuous deployment policy. For more information, see ``CreateContinuousDeploymentPolicy`` .
             :param custom_error_responses: A complex type that controls the following:. - Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. - How long CloudFront caches HTTP status codes in the 4xx and 5xx range. For more information about custom error pages, see `Customizing Error Responses <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -8807,6 +8864,7 @@ class CfnDistribution(
             :param staging: .. epigraph:: This field only supports standard distributions. You can't specify this field for multi-tenant distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . A Boolean that indicates whether this is a staging distribution. When this value is ``true`` , this is a staging distribution. When this value is ``false`` , this is not a staging distribution.
             :param tenant_config: .. epigraph:: This field only supports multi-tenant distributions. You can't specify this field for standard distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . A distribution tenant configuration.
             :param viewer_certificate: A complex type that determines the distribution's SSL/TLS configuration for communicating with viewers.
+            :param viewer_mtls_config: 
             :param web_acl_id: .. epigraph:: Multi-tenant distributions only support AWS WAF V2 web ACLs. A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution. To specify a web ACL created using the latest version of AWS WAF , use the ACL ARN, for example ``arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`` . To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example ``a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`` . AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to CloudFront, and lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, CloudFront responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You can also configure CloudFront to return a custom error page when a request is blocked. For more information about AWS WAF , see the `AWS WAF Developer Guide <https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html>`_ . Default: - ""
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html
@@ -8905,6 +8963,7 @@ class CfnDistribution(
                 check_type(argname="argument cache_behaviors", value=cache_behaviors, expected_type=type_hints["cache_behaviors"])
                 check_type(argname="argument cnam_es", value=cnam_es, expected_type=type_hints["cnam_es"])
                 check_type(argname="argument comment", value=comment, expected_type=type_hints["comment"])
+                check_type(argname="argument connection_function_association", value=connection_function_association, expected_type=type_hints["connection_function_association"])
                 check_type(argname="argument connection_mode", value=connection_mode, expected_type=type_hints["connection_mode"])
                 check_type(argname="argument continuous_deployment_policy_id", value=continuous_deployment_policy_id, expected_type=type_hints["continuous_deployment_policy_id"])
                 check_type(argname="argument custom_error_responses", value=custom_error_responses, expected_type=type_hints["custom_error_responses"])
@@ -8921,6 +8980,7 @@ class CfnDistribution(
                 check_type(argname="argument staging", value=staging, expected_type=type_hints["staging"])
                 check_type(argname="argument tenant_config", value=tenant_config, expected_type=type_hints["tenant_config"])
                 check_type(argname="argument viewer_certificate", value=viewer_certificate, expected_type=type_hints["viewer_certificate"])
+                check_type(argname="argument viewer_mtls_config", value=viewer_mtls_config, expected_type=type_hints["viewer_mtls_config"])
                 check_type(argname="argument web_acl_id", value=web_acl_id, expected_type=type_hints["web_acl_id"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "default_cache_behavior": default_cache_behavior,
@@ -8936,6 +8996,8 @@ class CfnDistribution(
                 self._values["cnam_es"] = cnam_es
             if comment is not None:
                 self._values["comment"] = comment
+            if connection_function_association is not None:
+                self._values["connection_function_association"] = connection_function_association
             if connection_mode is not None:
                 self._values["connection_mode"] = connection_mode
             if continuous_deployment_policy_id is not None:
@@ -8968,6 +9030,8 @@ class CfnDistribution(
                 self._values["tenant_config"] = tenant_config
             if viewer_certificate is not None:
                 self._values["viewer_certificate"] = viewer_certificate
+            if viewer_mtls_config is not None:
+                self._values["viewer_mtls_config"] = viewer_mtls_config
             if web_acl_id is not None:
                 self._values["web_acl_id"] = web_acl_id
 
@@ -9061,6 +9125,16 @@ class CfnDistribution(
             '''
             result = self._values.get("comment")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def connection_function_association(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ConnectionFunctionAssociationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-connectionfunctionassociation
+            '''
+            result = self._values.get("connection_function_association")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ConnectionFunctionAssociationProperty"]], result)
 
         @builtins.property
         def connection_mode(self) -> typing.Optional[builtins.str]:
@@ -9315,6 +9389,16 @@ class CfnDistribution(
             '''
             result = self._values.get("viewer_certificate")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerCertificateProperty"]], result)
+
+        @builtins.property
+        def viewer_mtls_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerMtlsConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-viewermtlsconfig
+            '''
+            result = self._values.get("viewer_mtls_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerMtlsConfigProperty"]], result)
 
         @builtins.property
         def web_acl_id(self) -> typing.Optional[builtins.str]:
@@ -11529,6 +11613,98 @@ class CfnDistribution(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.TrustStoreConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "trust_store_id": "trustStoreId",
+            "advertise_trust_store_ca_names": "advertiseTrustStoreCaNames",
+            "ignore_certificate_expiry": "ignoreCertificateExpiry",
+        },
+    )
+    class TrustStoreConfigProperty:
+        def __init__(
+            self,
+            *,
+            trust_store_id: builtins.str,
+            advertise_trust_store_ca_names: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            ignore_certificate_expiry: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''
+            :param trust_store_id: 
+            :param advertise_trust_store_ca_names: 
+            :param ignore_certificate_expiry: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                trust_store_config_property = cloudfront.CfnDistribution.TrustStoreConfigProperty(
+                    trust_store_id="trustStoreId",
+                
+                    # the properties below are optional
+                    advertise_trust_store_ca_names=False,
+                    ignore_certificate_expiry=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__99aff1164889efddfdb7c07a58fbe95339eef62a96a28589573ad78dbdd8194e)
+                check_type(argname="argument trust_store_id", value=trust_store_id, expected_type=type_hints["trust_store_id"])
+                check_type(argname="argument advertise_trust_store_ca_names", value=advertise_trust_store_ca_names, expected_type=type_hints["advertise_trust_store_ca_names"])
+                check_type(argname="argument ignore_certificate_expiry", value=ignore_certificate_expiry, expected_type=type_hints["ignore_certificate_expiry"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "trust_store_id": trust_store_id,
+            }
+            if advertise_trust_store_ca_names is not None:
+                self._values["advertise_trust_store_ca_names"] = advertise_trust_store_ca_names
+            if ignore_certificate_expiry is not None:
+                self._values["ignore_certificate_expiry"] = ignore_certificate_expiry
+
+        @builtins.property
+        def trust_store_id(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-truststoreid
+            '''
+            result = self._values.get("trust_store_id")
+            assert result is not None, "Required property 'trust_store_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def advertise_trust_store_ca_names(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-advertisetruststorecanames
+            '''
+            result = self._values.get("advertise_trust_store_ca_names")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def ignore_certificate_expiry(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-ignorecertificateexpiry
+            '''
+            result = self._values.get("ignore_certificate_expiry")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TrustStoreConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.ViewerCertificateProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -11708,6 +11884,81 @@ class CfnDistribution(
 
         def __repr__(self) -> str:
             return "ViewerCertificateProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnDistribution.ViewerMtlsConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"mode": "mode", "trust_store_config": "trustStoreConfig"},
+    )
+    class ViewerMtlsConfigProperty:
+        def __init__(
+            self,
+            *,
+            mode: typing.Optional[builtins.str] = None,
+            trust_store_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.TrustStoreConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param mode: 
+            :param trust_store_config: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                viewer_mtls_config_property = cloudfront.CfnDistribution.ViewerMtlsConfigProperty(
+                    mode="mode",
+                    trust_store_config=cloudfront.CfnDistribution.TrustStoreConfigProperty(
+                        trust_store_id="trustStoreId",
+                
+                        # the properties below are optional
+                        advertise_trust_store_ca_names=False,
+                        ignore_certificate_expiry=False
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c5ed872f668dbafb32a1a91527908fde0724cead61dcd16d95cc7d930b823757)
+                check_type(argname="argument mode", value=mode, expected_type=type_hints["mode"])
+                check_type(argname="argument trust_store_config", value=trust_store_config, expected_type=type_hints["trust_store_config"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if mode is not None:
+                self._values["mode"] = mode
+            if trust_store_config is not None:
+                self._values["trust_store_config"] = trust_store_config
+
+        @builtins.property
+        def mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html#cfn-cloudfront-distribution-viewermtlsconfig-mode
+            '''
+            result = self._values.get("mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def trust_store_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TrustStoreConfigProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html#cfn-cloudfront-distribution-viewermtlsconfig-truststoreconfig
+            '''
+            result = self._values.get("trust_store_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TrustStoreConfigProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ViewerMtlsConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -11958,6 +12209,9 @@ class CfnDistributionProps:
                     )],
                     cnam_es=["cnamEs"],
                     comment="comment",
+                    connection_function_association=cloudfront.CfnDistribution.ConnectionFunctionAssociationProperty(
+                        id="id"
+                    ),
                     connection_mode="connectionMode",
                     continuous_deployment_policy_id="continuousDeploymentPolicyId",
                     custom_error_responses=[cloudfront.CfnDistribution.CustomErrorResponseProperty(
@@ -12086,6 +12340,16 @@ class CfnDistributionProps:
                         iam_certificate_id="iamCertificateId",
                         minimum_protocol_version="minimumProtocolVersion",
                         ssl_support_method="sslSupportMethod"
+                    ),
+                    viewer_mtls_config=cloudfront.CfnDistribution.ViewerMtlsConfigProperty(
+                        mode="mode",
+                        trust_store_config=cloudfront.CfnDistribution.TrustStoreConfigProperty(
+                            trust_store_id="trustStoreId",
+            
+                            # the properties below are optional
+                            advertise_trust_store_ca_names=False,
+                            ignore_certificate_expiry=False
+                        )
                     ),
                     web_acl_id="webAclId"
                 ),
@@ -19419,6 +19683,509 @@ class CfnStreamingDistributionProps:
 
     def __repr__(self) -> str:
         return "CfnStreamingDistributionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITrustStoreRef_c9036746, _ITaggableV2_4e6798f8)
+class CfnTrustStore(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_cloudfront.CfnTrustStore",
+):
+    '''Resource Type definition for AWS::CloudFront::TrustStore.
+
+    TrustStores contain CA certificates for mTLS authentication and can be associated with CloudFront distributions.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html
+    :cloudformationResource: AWS::CloudFront::TrustStore
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_cloudfront as cloudfront
+        
+        cfn_trust_store = cloudfront.CfnTrustStore(self, "MyCfnTrustStore",
+            name="name",
+        
+            # the properties below are optional
+            ca_certificates_bundle_source=cloudfront.CfnTrustStore.CaCertificatesBundleSourceProperty(
+                ca_certificates_bundle_s3_location=cloudfront.CfnTrustStore.CaCertificatesBundleS3LocationProperty(
+                    bucket="bucket",
+                    key="key",
+                    region="region",
+        
+                    # the properties below are optional
+                    version="version"
+                )
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        name: builtins.str,
+        ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustStore.CaCertificatesBundleSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::CloudFront::TrustStore``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param name: A unique name to identify the trust store.
+        :param ca_certificates_bundle_source: 
+        :param tags: Key-value pairs for resource tagging.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__824ae12ab63f13e1c8bb7e88dd932be69b78f01ef525902840d651274bbde9e3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnTrustStoreProps(
+            name=name,
+            ca_certificates_bundle_source=ca_certificates_bundle_source,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTrustStore")
+    @builtins.classmethod
+    def arn_for_trust_store(cls, resource: _ITrustStoreRef_c9036746) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b9e57bf3350f28fbc10218a8171ecfd89e650b38bf751d3a97d2eaef4923d761)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustStore", [resource]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__70b8c48a9efbe8008e3b44e85650405247e70cd53d8d4210419274c1b5f64c5e)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1f6ec068856b53c90469838a470ca51f5bed52f9f8cf052d0ebf8ae30c35ded)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the trust store.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrETag")
+    def attr_e_tag(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: ETag
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrETag"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrId")
+    def attr_id(self) -> builtins.str:
+        '''The unique identifier for the trust store.
+
+        :cloudformationAttribute: Id
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModifiedTime")
+    def attr_last_modified_time(self) -> builtins.str:
+        '''The last modification timestamp of the trust store PEM file.
+
+        :cloudformationAttribute: LastModifiedTime
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastModifiedTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrNumberOfCaCertificates")
+    def attr_number_of_ca_certificates(self) -> jsii.Number:
+        '''The number of CA certificates in the trust store PEM file.
+
+        :cloudformationAttribute: NumberOfCaCertificates
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "attrNumberOfCaCertificates"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''Current status of the trust store.
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="trustStoreRef")
+    def trust_store_ref(self) -> _TrustStoreReference_842fa5e4:
+        '''A reference to a TrustStore resource.'''
+        return typing.cast(_TrustStoreReference_842fa5e4, jsii.get(self, "trustStoreRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''A unique name to identify the trust store.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3cff4ad62bdd9b19fb1a62d7a0bee5ad7a83138acdf52336edda9683763fd872)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="caCertificatesBundleSource")
+    def ca_certificates_bundle_source(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]], jsii.get(self, "caCertificatesBundleSource"))
+
+    @ca_certificates_bundle_source.setter
+    def ca_certificates_bundle_source(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__66149a337b49bef3f17a72be067686394c884438665fe2a91d2956adb0d7e84a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "caCertificatesBundleSource", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs for resource tagging.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8891d288761cbb98e0953cae118faa2d9e32c0832073d4be7c5ae3579a20ff68)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnTrustStore.CaCertificatesBundleS3LocationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "bucket": "bucket",
+            "key": "key",
+            "region": "region",
+            "version": "version",
+        },
+    )
+    class CaCertificatesBundleS3LocationProperty:
+        def __init__(
+            self,
+            *,
+            bucket: builtins.str,
+            key: builtins.str,
+            region: builtins.str,
+            version: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param bucket: The S3 bucket containing the CA certificates bundle PEM file.
+            :param key: The S3 object key of the CA certificates bundle PEM file.
+            :param region: The S3 bucket region.
+            :param version: The S3 object version of the CA certificates bundle PEM file.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                ca_certificates_bundle_s3_location_property = cloudfront.CfnTrustStore.CaCertificatesBundleS3LocationProperty(
+                    bucket="bucket",
+                    key="key",
+                    region="region",
+                
+                    # the properties below are optional
+                    version="version"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__355f2ec44e7b3162453457888355bdef7f6bdb7e962effccdbfec8d9d687a3e2)
+                check_type(argname="argument bucket", value=bucket, expected_type=type_hints["bucket"])
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument region", value=region, expected_type=type_hints["region"])
+                check_type(argname="argument version", value=version, expected_type=type_hints["version"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "bucket": bucket,
+                "key": key,
+                "region": region,
+            }
+            if version is not None:
+                self._values["version"] = version
+
+        @builtins.property
+        def bucket(self) -> builtins.str:
+            '''The S3 bucket containing the CA certificates bundle PEM file.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-bucket
+            '''
+            result = self._values.get("bucket")
+            assert result is not None, "Required property 'bucket' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def key(self) -> builtins.str:
+            '''The S3 object key of the CA certificates bundle PEM file.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-key
+            '''
+            result = self._values.get("key")
+            assert result is not None, "Required property 'key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def region(self) -> builtins.str:
+            '''The S3 bucket region.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-region
+            '''
+            result = self._values.get("region")
+            assert result is not None, "Required property 'region' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def version(self) -> typing.Optional[builtins.str]:
+            '''The S3 object version of the CA certificates bundle PEM file.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-version
+            '''
+            result = self._values.get("version")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CaCertificatesBundleS3LocationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudfront.CfnTrustStore.CaCertificatesBundleSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "ca_certificates_bundle_s3_location": "caCertificatesBundleS3Location",
+        },
+    )
+    class CaCertificatesBundleSourceProperty:
+        def __init__(
+            self,
+            *,
+            ca_certificates_bundle_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustStore.CaCertificatesBundleS3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param ca_certificates_bundle_s3_location: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundlesource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudfront as cloudfront
+                
+                ca_certificates_bundle_source_property = cloudfront.CfnTrustStore.CaCertificatesBundleSourceProperty(
+                    ca_certificates_bundle_s3_location=cloudfront.CfnTrustStore.CaCertificatesBundleS3LocationProperty(
+                        bucket="bucket",
+                        key="key",
+                        region="region",
+                
+                        # the properties below are optional
+                        version="version"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__acbcb034c1368a7d1c5df9eebb9336e469583532a9c9e1634dfba27006275775)
+                check_type(argname="argument ca_certificates_bundle_s3_location", value=ca_certificates_bundle_s3_location, expected_type=type_hints["ca_certificates_bundle_s3_location"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "ca_certificates_bundle_s3_location": ca_certificates_bundle_s3_location,
+            }
+
+        @builtins.property
+        def ca_certificates_bundle_s3_location(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleS3LocationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundlesource.html#cfn-cloudfront-truststore-cacertificatesbundlesource-cacertificatesbundles3location
+            '''
+            result = self._values.get("ca_certificates_bundle_s3_location")
+            assert result is not None, "Required property 'ca_certificates_bundle_s3_location' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleS3LocationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CaCertificatesBundleSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_cloudfront.CfnTrustStoreProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "ca_certificates_bundle_source": "caCertificatesBundleSource",
+        "tags": "tags",
+    },
+)
+class CfnTrustStoreProps:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStore.CaCertificatesBundleSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTrustStore``.
+
+        :param name: A unique name to identify the trust store.
+        :param ca_certificates_bundle_source: 
+        :param tags: Key-value pairs for resource tagging.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_cloudfront as cloudfront
+            
+            cfn_trust_store_props = cloudfront.CfnTrustStoreProps(
+                name="name",
+            
+                # the properties below are optional
+                ca_certificates_bundle_source=cloudfront.CfnTrustStore.CaCertificatesBundleSourceProperty(
+                    ca_certificates_bundle_s3_location=cloudfront.CfnTrustStore.CaCertificatesBundleS3LocationProperty(
+                        bucket="bucket",
+                        key="key",
+                        region="region",
+            
+                        # the properties below are optional
+                        version="version"
+                    )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c1104e79874eeaadad4125c86fbf512ecd074d8f45e15bdffef6439a53c9c326)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument ca_certificates_bundle_source", value=ca_certificates_bundle_source, expected_type=type_hints["ca_certificates_bundle_source"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+        }
+        if ca_certificates_bundle_source is not None:
+            self._values["ca_certificates_bundle_source"] = ca_certificates_bundle_source
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''A unique name to identify the trust store.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def ca_certificates_bundle_source(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-cacertificatesbundlesource
+        '''
+        result = self._values.get("ca_certificates_bundle_source")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Key-value pairs for resource tagging.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTrustStoreProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -31034,6 +31801,8 @@ __all__ = [
     "CfnResponseHeadersPolicyProps",
     "CfnStreamingDistribution",
     "CfnStreamingDistributionProps",
+    "CfnTrustStore",
+    "CfnTrustStoreProps",
     "CfnVpcOrigin",
     "CfnVpcOriginProps",
     "CloudFrontAllowedCachedMethods",
@@ -31784,6 +32553,13 @@ def _typecheckingstub__40fab044003cdf2432d623590b2a89d0545d13047f180f029d22adc95
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__367579c3716b840c803cd1a2af6e9e817c060b94dc7e54a5e50b25a109669795(
+    *,
+    id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e44b3a9bc1a7e09b4dab8efd6baa05a8a81a531ccffdb2ea115b073bdbbb25e0(
     *,
     forward: builtins.str,
@@ -31857,6 +32633,7 @@ def _typecheckingstub__924aa31797d5562075c15043a82632c8afbc217d476fdf805d7efea10
     cache_behaviors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.CacheBehaviorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     cnam_es: typing.Optional[typing.Sequence[builtins.str]] = None,
     comment: typing.Optional[builtins.str] = None,
+    connection_function_association: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.ConnectionFunctionAssociationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     connection_mode: typing.Optional[builtins.str] = None,
     continuous_deployment_policy_id: typing.Optional[builtins.str] = None,
     custom_error_responses: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.CustomErrorResponseProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -31873,6 +32650,7 @@ def _typecheckingstub__924aa31797d5562075c15043a82632c8afbc217d476fdf805d7efea10
     staging: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tenant_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.TenantConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     viewer_certificate: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.ViewerCertificateProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    viewer_mtls_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.ViewerMtlsConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     web_acl_id: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
@@ -32069,6 +32847,15 @@ def _typecheckingstub__d2edbb1e96d7cdd1ba9da9c2eb778117b7b4726ec0bcf6cf55c64bbbd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__99aff1164889efddfdb7c07a58fbe95339eef62a96a28589573ad78dbdd8194e(
+    *,
+    trust_store_id: builtins.str,
+    advertise_trust_store_ca_names: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    ignore_certificate_expiry: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__511560286b35778c69f3d2a23120607f1ab2e58901f0c1ba7acd75a338eb699e(
     *,
     acm_certificate_arn: typing.Optional[builtins.str] = None,
@@ -32076,6 +32863,14 @@ def _typecheckingstub__511560286b35778c69f3d2a23120607f1ab2e58901f0c1ba7acd75a33
     iam_certificate_id: typing.Optional[builtins.str] = None,
     minimum_protocol_version: typing.Optional[builtins.str] = None,
     ssl_support_method: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c5ed872f668dbafb32a1a91527908fde0724cead61dcd16d95cc7d930b823757(
+    *,
+    mode: typing.Optional[builtins.str] = None,
+    trust_store_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDistribution.TrustStoreConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33013,6 +33808,79 @@ def _typecheckingstub__49f382fbeca6f3ca4b73ecf7372c7a177aa462053b1953cff5b08a7fe
 def _typecheckingstub__eb98a63a577b61baa6128a211026a41a13348dc9752d07118d9db5c63108ad97(
     *,
     streaming_distribution_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStreamingDistribution.StreamingDistributionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__824ae12ab63f13e1c8bb7e88dd932be69b78f01ef525902840d651274bbde9e3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    name: builtins.str,
+    ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStore.CaCertificatesBundleSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b9e57bf3350f28fbc10218a8171ecfd89e650b38bf751d3a97d2eaef4923d761(
+    resource: _ITrustStoreRef_c9036746,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__70b8c48a9efbe8008e3b44e85650405247e70cd53d8d4210419274c1b5f64c5e(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e1f6ec068856b53c90469838a470ca51f5bed52f9f8cf052d0ebf8ae30c35ded(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3cff4ad62bdd9b19fb1a62d7a0bee5ad7a83138acdf52336edda9683763fd872(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__66149a337b49bef3f17a72be067686394c884438665fe2a91d2956adb0d7e84a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8891d288761cbb98e0953cae118faa2d9e32c0832073d4be7c5ae3579a20ff68(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__355f2ec44e7b3162453457888355bdef7f6bdb7e962effccdbfec8d9d687a3e2(
+    *,
+    bucket: builtins.str,
+    key: builtins.str,
+    region: builtins.str,
+    version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__acbcb034c1368a7d1c5df9eebb9336e469583532a9c9e1634dfba27006275775(
+    *,
+    ca_certificates_bundle_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStore.CaCertificatesBundleS3LocationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c1104e79874eeaadad4125c86fbf512ecd074d8f45e15bdffef6439a53c9c326(
+    *,
+    name: builtins.str,
+    ca_certificates_bundle_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStore.CaCertificatesBundleSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

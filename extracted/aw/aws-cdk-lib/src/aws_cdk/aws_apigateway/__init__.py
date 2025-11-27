@@ -18,6 +18,9 @@ running on AWS Lambda, or any web application.
   * [AWS Lambda-backed APIs](#aws-lambda-backed-apis)
   * [AWS StepFunctions backed APIs](#aws-stepfunctions-backed-apis)
   * [Integration Targets](#integration-targets)
+
+    * [Response Streaming](#response-streaming)
+    * [Lambda Integration Permissions](#lambda-integration-permissions)
   * [Usage Plan & API Keys](#usage-plan--api-keys)
 
     * [Adding an API Key to an imported RestApi](#adding-an-api-key-to-an-imported-restapi)
@@ -455,6 +458,21 @@ get_message_integration = apigateway.AwsIntegration(
     service="sqs",
     path="queueName",
     region="eu-west-1"
+)
+```
+
+### Response Streaming
+
+Integrations support response streaming, which allows responses to be streamed back to clients.
+This is useful for large payloads or when you want to start sending data before the entire response is ready.
+
+To enable response streaming, set `ResponseTransferMode.STREAM` to the `responseTransferMode` option:
+
+```python
+# handler: lambda.Function
+
+apigateway.LambdaIntegration(handler,
+    response_transfer_mode=apigateway.ResponseTransferMode.STREAM
 )
 ```
 
@@ -8122,7 +8140,7 @@ class CfnDomainName(
         :param id: Construct identifier for this resource (unique in its scope).
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your DomainName.
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
@@ -8332,6 +8350,7 @@ class CfnDomainName(
     @builtins.property
     @jsii.member(jsii_name="endpointAccessMode")
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''The endpoint access mode for your DomainName.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
 
     @endpoint_access_mode.setter
@@ -8948,7 +8967,7 @@ class CfnDomainNameProps:
 
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by edge-optimized endpoint or private endpoint for this domain name. Certificate Manager is the only supported source.
         :param domain_name: The custom domain name as an API host name, for example, ``my-api.example.com`` .
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your DomainName.
         :param endpoint_configuration: The endpoint configuration of this DomainName showing the endpoint types and IP address types of the domain name.
         :param mutual_tls_authentication: The mutual TLS authentication configuration for a custom domain name. If specified, API Gateway performs two-way authentication between the client and the server. Clients must present a trusted certificate to access your API.
         :param ownership_verification_certificate_arn: The ARN of the public certificate issued by ACM to validate ownership of your custom domain. Only required when configuring mutual TLS and using an ACM imported or private CA certificate ARN as the RegionalCertificateArn.
@@ -9044,7 +9063,8 @@ class CfnDomainNameProps:
 
     @builtins.property
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The endpoint access mode for your DomainName.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainname.html#cfn-apigateway-domainname-endpointaccessmode
         '''
         result = self._values.get("endpoint_access_mode")
@@ -9201,7 +9221,7 @@ class CfnDomainNameV2(
         :param id: Construct identifier for this resource (unique in its scope).
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by the private endpoint for this domain name. AWS Certificate Manager is the only supported source.
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your DomainName.
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
@@ -9319,6 +9339,7 @@ class CfnDomainNameV2(
     @builtins.property
     @jsii.member(jsii_name="endpointAccessMode")
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''The endpoint access mode for your DomainName.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
 
     @endpoint_access_mode.setter
@@ -9504,7 +9525,7 @@ class CfnDomainNameV2Props:
 
         :param certificate_arn: The reference to an AWS -managed certificate that will be used by the private endpoint for this domain name. AWS Certificate Manager is the only supported source.
         :param domain_name: Represents a custom domain name as a user-friendly host name of an API (RestApi).
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your DomainName.
         :param endpoint_configuration: The endpoint configuration to indicate the types of endpoints an API (RestApi) or its custom domain name (DomainName) has and the IP address types that can invoke it.
         :param policy: A stringified JSON policy document that applies to the ``execute-api`` service for this DomainName regardless of the caller and Method configuration. You can use ``Fn::ToJsonString`` to enter your ``policy`` . For more information, see `Fn::ToJsonString <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ToJsonString.html>`_ .
         :param routing_mode: The routing mode for this domain name. The routing mode determines how API Gateway sends traffic from your custom domain name to your private APIs. Default: - "BASE_PATH_MAPPING_ONLY"
@@ -9589,7 +9610,8 @@ class CfnDomainNameV2Props:
 
     @builtins.property
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The endpoint access mode for your DomainName.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-domainnamev2.html#cfn-apigateway-domainnamev2-endpointaccessmode
         '''
         result = self._values.get("endpoint_access_mode")
@@ -10430,11 +10452,11 @@ class CfnMethod(
             :param credentials: Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string ``arn:aws:iam::\\*:user/\\*`` . To use resource-based permissions on supported AWS services, specify null.
             :param integration_http_method: Specifies the integration's HTTP method type. For the Type property, if you specify ``MOCK`` , this property is optional. For Lambda integrations, you must set the integration method to ``POST`` . For all other types, you must specify this property.
             :param integration_responses: Specifies the integration's responses.
-            :param integration_target: 
+            :param integration_target: The ALB or NLB listener to send the request to. Only supported for private integrations that use VPC links V2.
             :param passthrough_behavior: Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in ``requestTemplates`` . The valid value is one of the following: ``WHEN_NO_MATCH`` : passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. ``WHEN_NO_TEMPLATES`` : passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP 415 Unsupported Media Type response. ``NEVER`` : rejects the method request with an HTTP 415 Unsupported Media Type response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request.
             :param request_parameters: A key-value map specifying request parameters that are passed from the method request to the back end. The key is an integration request parameter name and the associated value is a method request parameter value or static value that must be enclosed within single quotes and pre-encoded as required by the back end. The method request parameter value must match the pattern of ``method.request.{location}.{name}`` , where ``location`` is ``querystring`` , ``path`` , or ``header`` and ``name`` must be a valid and unique method request parameter name.
             :param request_templates: Represents a map of Velocity templates that are applied on the request payload based on the value of the Content-Type header sent by the client. The content type value is the key in this map, and the template (as a String) is the value.
-            :param response_transfer_mode: Default: - "BUFFERED"
+            :param response_transfer_mode: The response transfer mode of the integration. Use ``STREAM`` to have API Gateway stream response your back to you or use ``BUFFERED`` to have API Gateway wait to receive the complete response before beginning transmission. Default: - "BUFFERED"
             :param timeout_in_millis: Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds. You can increase the default value to longer than 29 seconds for Regional or private APIs only.
             :param uri: Specifies Uniform Resource Identifier (URI) of the integration endpoint. For ``HTTP`` or ``HTTP_PROXY`` integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the RFC-3986 specification for standard integrations. If ``connectionType`` is ``VPC_LINK`` specify the Network Load Balancer DNS name. For ``AWS`` or ``AWS_PROXY`` integrations, the URI is of the form ``arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service_api}`` . Here, {Region} is the API Gateway region (e.g., us-east-1); {service} is the name of the integrated AWS service (e.g., s3); and {subdomain} is a designated subdomain supported by certain AWS service for fast host-name lookup. action can be used for an AWS service action-based API, using an Action={name}&{p1}={v1}&p2={v2}... query string. The ensuing {service_api} refers to a supported action {name} plus any required input parameters. Alternatively, path can be used for an AWS service path-based API. The ensuing service_api refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of GetObject, the uri can be either ``arn:aws:apigateway:us-west-2:s3:action/GetObject&Bucket={bucket}&Key={key}`` or ``arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}``
 
@@ -10638,7 +10660,10 @@ class CfnMethod(
 
         @builtins.property
         def integration_target(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ALB or NLB listener to send the request to.
+
+            Only supported for private integrations that use VPC links V2.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-integrationtarget
             '''
             result = self._values.get("integration_target")
@@ -10683,7 +10708,10 @@ class CfnMethod(
 
         @builtins.property
         def response_transfer_mode(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The response transfer mode of the integration.
+
+            Use ``STREAM`` to have API Gateway stream response your back to you or use ``BUFFERED`` to have API Gateway wait to receive the complete response before beginning transmission.
+
             :default: - "BUFFERED"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-apigateway-method-integration.html#cfn-apigateway-method-integration-responsetransfermode
@@ -12229,7 +12257,7 @@ class CfnRestApi(
         :param clone_from: The ID of the RestApi that you want to clone from.
         :param description: The description of the RestApi.
         :param disable_execute_api_endpoint: Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint. By default, clients can invoke your API with the default ``https://{api_id}.execute-api.{region}.amazonaws.com`` endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your RestApi.
         :param endpoint_configuration: A list of the endpoint types and IP address types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.
         :param fail_on_warnings: A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered. The default value is ``false`` .
         :param minimum_compression_size: A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.
@@ -12237,7 +12265,7 @@ class CfnRestApi(
         :param name: The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.
         :param parameters: Custom header parameters as part of the request. For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'`` .
         :param policy: A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``""`` as delimiter and values of ``"execute-api:/"`` and ``"*"`` .
-        :param security_policy: 
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this RestApi.
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
         '''
         if __debug__:
@@ -12470,6 +12498,7 @@ class CfnRestApi(
     @builtins.property
     @jsii.member(jsii_name="endpointAccessMode")
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
+        '''The endpoint access mode for your RestApi.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "endpointAccessMode"))
 
     @endpoint_access_mode.setter
@@ -12588,6 +12617,7 @@ class CfnRestApi(
     @builtins.property
     @jsii.member(jsii_name="securityPolicy")
     def security_policy(self) -> typing.Optional[builtins.str]:
+        '''The Transport Layer Security (TLS) version + cipher suite for this RestApi.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "securityPolicy"))
 
     @security_policy.setter
@@ -12873,7 +12903,7 @@ class CfnRestApiProps:
         :param clone_from: The ID of the RestApi that you want to clone from.
         :param description: The description of the RestApi.
         :param disable_execute_api_endpoint: Specifies whether clients can invoke your API by using the default ``execute-api`` endpoint. By default, clients can invoke your API with the default ``https://{api_id}.execute-api.{region}.amazonaws.com`` endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint
-        :param endpoint_access_mode: 
+        :param endpoint_access_mode: The endpoint access mode for your RestApi.
         :param endpoint_configuration: A list of the endpoint types and IP address types of the API. Use this property when creating an API. When importing an existing API, specify the endpoint configuration types using the ``Parameters`` property.
         :param fail_on_warnings: A query parameter to indicate whether to rollback the API update ( ``true`` ) or not ( ``false`` ) when a warning is encountered. The default value is ``false`` .
         :param minimum_compression_size: A nullable integer that is used to enable compression (with non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable compression (with a null value) on an API. When compression is enabled, compression or decompression is not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.
@@ -12881,7 +12911,7 @@ class CfnRestApiProps:
         :param name: The name of the RestApi. A name is required if the REST API is not based on an OpenAPI specification.
         :param parameters: Custom header parameters as part of the request. For example, to exclude DocumentationParts from an imported API, set ``ignore=documentation`` as a ``parameters`` value, as in the AWS CLI command of ``aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json'`` .
         :param policy: A policy document that contains the permissions for the ``RestApi`` resource. To set the ARN for the policy, use the ``!Join`` intrinsic function with ``""`` as delimiter and values of ``"execute-api:/"`` and ``"*"`` .
-        :param security_policy: 
+        :param security_policy: The Transport Layer Security (TLS) version + cipher suite for this RestApi.
         :param tags: The key-value map of strings. The valid character set is [a-zA-Z+-=._:/]. The tag key can be up to 128 characters and must not start with ``aws:`` . The tag value can be up to 256 characters.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html
@@ -13064,7 +13094,8 @@ class CfnRestApiProps:
 
     @builtins.property
     def endpoint_access_mode(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The endpoint access mode for your RestApi.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-endpointaccessmode
         '''
         result = self._values.get("endpoint_access_mode")
@@ -13165,7 +13196,8 @@ class CfnRestApiProps:
 
     @builtins.property
     def security_policy(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The Transport Layer Security (TLS) version + cipher suite for this RestApi.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-apigateway-restapi.html#cfn-apigateway-restapi-securitypolicy
         '''
         result = self._values.get("security_policy")
@@ -17032,6 +17064,7 @@ class HttpIntegrationProps:
                     request_templates={
                         "request_templates_key": "requestTemplates"
                     },
+                    response_transfer_mode=apigateway.ResponseTransferMode.BUFFERED,
                     timeout=cdk.Duration.minutes(30),
                     vpc_link=vpc_link
                 ),
@@ -18469,6 +18502,7 @@ class IntegrationConfig:
                     request_templates={
                         "request_templates_key": "requestTemplates"
                     },
+                    response_transfer_mode=apigateway.ResponseTransferMode.BUFFERED,
                     timeout=cdk.Duration.minutes(30),
                     vpc_link=vpc_link
                 ),
@@ -18574,6 +18608,7 @@ class IntegrationConfig:
         "passthrough_behavior": "passthroughBehavior",
         "request_parameters": "requestParameters",
         "request_templates": "requestTemplates",
+        "response_transfer_mode": "responseTransferMode",
         "timeout": "timeout",
         "vpc_link": "vpcLink",
     },
@@ -18592,6 +18627,7 @@ class IntegrationOptions:
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> None:
@@ -18606,6 +18642,7 @@ class IntegrationOptions:
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
 
@@ -18683,6 +18720,7 @@ class IntegrationOptions:
             check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
             check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
             check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
+            check_type(argname="argument response_transfer_mode", value=response_transfer_mode, expected_type=type_hints["response_transfer_mode"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument vpc_link", value=vpc_link, expected_type=type_hints["vpc_link"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -18706,6 +18744,8 @@ class IntegrationOptions:
             self._values["request_parameters"] = request_parameters
         if request_templates is not None:
             self._values["request_templates"] = request_templates
+        if response_transfer_mode is not None:
+            self._values["response_transfer_mode"] = response_transfer_mode
         if timeout is not None:
             self._values["timeout"] = timeout
         if vpc_link is not None:
@@ -18831,6 +18871,17 @@ class IntegrationOptions:
         '''
         result = self._values.get("request_templates")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def response_transfer_mode(self) -> typing.Optional["ResponseTransferMode"]:
+        '''The response transfer mode for the integration.
+
+        To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
+
+        :default: ResponseTransferMode.BUFFERED
+        '''
+        result = self._values.get("response_transfer_mode")
+        return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -20113,6 +20164,7 @@ class LambdaAuthorizerProps:
         "passthrough_behavior": "passthroughBehavior",
         "request_parameters": "requestParameters",
         "request_templates": "requestTemplates",
+        "response_transfer_mode": "responseTransferMode",
         "timeout": "timeout",
         "vpc_link": "vpcLink",
         "allow_test_invoke": "allowTestInvoke",
@@ -20134,6 +20186,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
         allow_test_invoke: typing.Optional[builtins.bool] = None,
@@ -20151,6 +20204,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
         :param allow_test_invoke: Allow invoking method from AWS Console UI (for testing purposes). This will add another permission to the AWS Lambda resource policy which will allow the ``test-invoke-stage`` stage to invoke this handler. If this is set to ``false``, the function will only be usable from the deployment endpoint. Note that this property is ignored when ``scopePermissionToMethod`` is ``false``. Default: true
@@ -20161,19 +20215,16 @@ class LambdaIntegrationOptions(IntegrationOptions):
 
         Example::
 
-            # book: apigateway.Resource
             # backend: lambda.Function
             
             
-            get_book_integration = apigateway.LambdaIntegration(backend,
-                scope_permission_to_method=False
+            api = apigateway.LambdaRestApi(self, "myapi",
+                handler=backend,
+                integration_options=apigateway.LambdaIntegrationOptions(
+                    allow_test_invoke=False,
+                    timeout=Duration.seconds(1)
+                )
             )
-            create_book_integration = apigateway.LambdaIntegration(backend,
-                scope_permission_to_method=False
-            )
-            
-            book.add_method("GET", get_book_integration)
-            book.add_method("POST", create_book_integration)
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ce30eee1096e0566120e3d64f9e65409fa005cc047656a224902fd86cd15c8b0)
@@ -20187,6 +20238,7 @@ class LambdaIntegrationOptions(IntegrationOptions):
             check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
             check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
             check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
+            check_type(argname="argument response_transfer_mode", value=response_transfer_mode, expected_type=type_hints["response_transfer_mode"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument vpc_link", value=vpc_link, expected_type=type_hints["vpc_link"])
             check_type(argname="argument allow_test_invoke", value=allow_test_invoke, expected_type=type_hints["allow_test_invoke"])
@@ -20213,6 +20265,8 @@ class LambdaIntegrationOptions(IntegrationOptions):
             self._values["request_parameters"] = request_parameters
         if request_templates is not None:
             self._values["request_templates"] = request_templates
+        if response_transfer_mode is not None:
+            self._values["response_transfer_mode"] = response_transfer_mode
         if timeout is not None:
             self._values["timeout"] = timeout
         if vpc_link is not None:
@@ -20344,6 +20398,17 @@ class LambdaIntegrationOptions(IntegrationOptions):
         '''
         result = self._values.get("request_templates")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def response_transfer_mode(self) -> typing.Optional["ResponseTransferMode"]:
+        '''The response transfer mode for the integration.
+
+        To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
+
+        :default: ResponseTransferMode.BUFFERED
+        '''
+        result = self._values.get("response_transfer_mode")
+        return typing.cast(typing.Optional["ResponseTransferMode"], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -21981,6 +22046,7 @@ class MockIntegration(
         passthrough_behavior: typing.Optional["PassthroughBehavior"] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional["ResponseTransferMode"] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> None:
@@ -21995,6 +22061,7 @@ class MockIntegration(
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
         '''
@@ -22009,6 +22076,7 @@ class MockIntegration(
             passthrough_behavior=passthrough_behavior,
             request_parameters=request_parameters,
             request_templates=request_templates,
+            response_transfer_mode=response_transfer_mode,
             timeout=timeout,
             vpc_link=vpc_link,
         )
@@ -24341,6 +24409,30 @@ class ResourceProps(ResourceOptions):
         )
 
 
+@jsii.enum(jsii_type="aws-cdk-lib.aws_apigateway.ResponseTransferMode")
+class ResponseTransferMode(enum.Enum):
+    '''The response transfer mode of the integration.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        # handler: lambda.Function
+        
+        apigateway.LambdaIntegration(handler,
+            response_transfer_mode=apigateway.ResponseTransferMode.STREAM
+        )
+    '''
+
+    BUFFERED = "BUFFERED"
+    '''API Gateway waits to receive the complete response before beginning transmission.'''
+    STREAM = "STREAM"
+    '''API Gateway streams the response back to you as it is received from the integration.
+
+    This is only supported for AWS_PROXY and HTTP_PROXY integration types.
+    '''
+
+
 class ResponseType(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_apigateway.ResponseType",
@@ -26474,6 +26566,7 @@ class S3ApiDefinition(
         "passthrough_behavior": "passthroughBehavior",
         "request_parameters": "requestParameters",
         "request_templates": "requestTemplates",
+        "response_transfer_mode": "responseTransferMode",
         "timeout": "timeout",
         "vpc_link": "vpcLink",
     },
@@ -26492,6 +26585,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> None:
@@ -26507,6 +26601,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
 
@@ -26550,6 +26645,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
                 request_templates={
                     "request_templates_key": "requestTemplates"
                 },
+                response_transfer_mode=apigateway.ResponseTransferMode.BUFFERED,
                 timeout=cdk.Duration.minutes(30),
                 vpc_link=vpc_link
             )
@@ -26566,6 +26662,7 @@ class SagemakerIntegrationOptions(IntegrationOptions):
             check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
             check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
             check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
+            check_type(argname="argument response_transfer_mode", value=response_transfer_mode, expected_type=type_hints["response_transfer_mode"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument vpc_link", value=vpc_link, expected_type=type_hints["vpc_link"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -26589,6 +26686,8 @@ class SagemakerIntegrationOptions(IntegrationOptions):
             self._values["request_parameters"] = request_parameters
         if request_templates is not None:
             self._values["request_templates"] = request_templates
+        if response_transfer_mode is not None:
+            self._values["response_transfer_mode"] = response_transfer_mode
         if timeout is not None:
             self._values["timeout"] = timeout
         if vpc_link is not None:
@@ -26714,6 +26813,17 @@ class SagemakerIntegrationOptions(IntegrationOptions):
         '''
         result = self._values.get("request_templates")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def response_transfer_mode(self) -> typing.Optional[ResponseTransferMode]:
+        '''The response transfer mode for the integration.
+
+        To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
+
+        :default: ResponseTransferMode.BUFFERED
+        '''
+        result = self._values.get("response_transfer_mode")
+        return typing.cast(typing.Optional[ResponseTransferMode], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -28700,6 +28810,7 @@ class StageProps(StageOptions):
         "passthrough_behavior": "passthroughBehavior",
         "request_parameters": "requestParameters",
         "request_templates": "requestTemplates",
+        "response_transfer_mode": "responseTransferMode",
         "timeout": "timeout",
         "vpc_link": "vpcLink",
         "authorizer": "authorizer",
@@ -28724,6 +28835,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
         authorizer: typing.Optional[builtins.bool] = None,
@@ -28745,6 +28857,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
         :param authorizer: If the whole authorizer object, including custom context values should be in the execution input. The execution input will include a new key ``authorizer``: { "body": {}, "authorizer": { "key": "value" } } Default: false
@@ -28818,6 +28931,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
                 request_templates={
                     "request_templates_key": "requestTemplates"
                 },
+                response_transfer_mode=apigateway.ResponseTransferMode.BUFFERED,
                 timeout=cdk.Duration.minutes(30),
                 use_default_method_responses=False,
                 vpc_link=vpc_link
@@ -28837,6 +28951,7 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
             check_type(argname="argument passthrough_behavior", value=passthrough_behavior, expected_type=type_hints["passthrough_behavior"])
             check_type(argname="argument request_parameters", value=request_parameters, expected_type=type_hints["request_parameters"])
             check_type(argname="argument request_templates", value=request_templates, expected_type=type_hints["request_templates"])
+            check_type(argname="argument response_transfer_mode", value=response_transfer_mode, expected_type=type_hints["response_transfer_mode"])
             check_type(argname="argument timeout", value=timeout, expected_type=type_hints["timeout"])
             check_type(argname="argument vpc_link", value=vpc_link, expected_type=type_hints["vpc_link"])
             check_type(argname="argument authorizer", value=authorizer, expected_type=type_hints["authorizer"])
@@ -28866,6 +28981,8 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
             self._values["request_parameters"] = request_parameters
         if request_templates is not None:
             self._values["request_templates"] = request_templates
+        if response_transfer_mode is not None:
+            self._values["response_transfer_mode"] = response_transfer_mode
         if timeout is not None:
             self._values["timeout"] = timeout
         if vpc_link is not None:
@@ -29003,6 +29120,17 @@ class StepFunctionsExecutionIntegrationOptions(IntegrationOptions):
         '''
         result = self._values.get("request_templates")
         return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    @builtins.property
+    def response_transfer_mode(self) -> typing.Optional[ResponseTransferMode]:
+        '''The response transfer mode for the integration.
+
+        To enable response streaming, set this value to ``ResponseTransferMode.STREAM``.
+
+        :default: ResponseTransferMode.BUFFERED
+        '''
+        result = self._values.get("response_transfer_mode")
+        return typing.cast(typing.Optional[ResponseTransferMode], result)
 
     @builtins.property
     def timeout(self) -> typing.Optional[_Duration_4839e8c3]:
@@ -29187,6 +29315,7 @@ class StepFunctionsIntegration(
         passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> "AwsIntegration":
@@ -29209,6 +29338,7 @@ class StepFunctionsIntegration(
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
 
@@ -29244,6 +29374,7 @@ class StepFunctionsIntegration(
             passthrough_behavior=passthrough_behavior,
             request_parameters=request_parameters,
             request_templates=request_templates,
+            response_transfer_mode=response_transfer_mode,
             timeout=timeout,
             vpc_link=vpc_link,
         )
@@ -31971,6 +32102,7 @@ class LambdaIntegration(
         passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> None:
@@ -31989,6 +32121,7 @@ class LambdaIntegration(
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
         '''
@@ -32009,6 +32142,7 @@ class LambdaIntegration(
             passthrough_behavior=passthrough_behavior,
             request_parameters=request_parameters,
             request_templates=request_templates,
+            response_transfer_mode=response_transfer_mode,
             timeout=timeout,
             vpc_link=vpc_link,
         )
@@ -33703,6 +33837,7 @@ class SagemakerIntegration(
         passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
         request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+        response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
         timeout: typing.Optional[_Duration_4839e8c3] = None,
         vpc_link: typing.Optional[IVpcLink] = None,
     ) -> None:
@@ -33718,6 +33853,7 @@ class SagemakerIntegration(
         :param passthrough_behavior: Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the requestTemplates property on the Integration resource. There are three valid values: WHEN_NO_MATCH, WHEN_NO_TEMPLATES, and NEVER.
         :param request_parameters: The request parameters that API Gateway sends with the backend request. Specify request parameters as key-value pairs (string-to-string mappings), with a destination as the key and a source as the value. Specify the destination by using the following pattern integration.request.location.name, where location is querystring, path, or header, and name is a valid, unique parameter name. The source must be an existing method request parameter or a static value. You must enclose static values in single quotation marks and pre-encode these values based on their destination in the request.
         :param request_templates: A map of Apache Velocity templates that are applied on the request payload. The template that API Gateway uses is based on the value of the Content-Type header that's sent by the client. The content type value is the key, and the template is the value (specified as a string), such as the following snippet:: { "application/json": "{ \\"statusCode\\": 200 }" }
+        :param response_transfer_mode: The response transfer mode for the integration. To enable response streaming, set this value to ``ResponseTransferMode.STREAM``. Default: ResponseTransferMode.BUFFERED
         :param timeout: The maximum amount of time an integration will run before it returns without a response. By default, the value must be between 50 milliseconds and 29 seconds. The upper bound can be increased for regional and private Rest APIs only, via a quota increase request for your acccount. This increase might require a reduction in your account-level throttle quota limit. See {@link https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html Amazon API Gateway quotas} for more details. Default: Duration.seconds(29)
         :param vpc_link: The VpcLink used for the integration. Required if connectionType is VPC_LINK
         '''
@@ -33735,6 +33871,7 @@ class SagemakerIntegration(
             passthrough_behavior=passthrough_behavior,
             request_parameters=request_parameters,
             request_templates=request_templates,
+            response_transfer_mode=response_transfer_mode,
             timeout=timeout,
             vpc_link=vpc_link,
         )
@@ -34585,6 +34722,7 @@ __all__ = [
     "ResourceBase",
     "ResourceOptions",
     "ResourceProps",
+    "ResponseTransferMode",
     "ResponseType",
     "RestApi",
     "RestApiAttributes",
@@ -37120,6 +37258,7 @@ def _typecheckingstub__2d8fe5f6bdc4536c27b3cea965d20260495a3bdffbb6422a7b5ce7299
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
 ) -> None:
@@ -37226,6 +37365,7 @@ def _typecheckingstub__ce30eee1096e0566120e3d64f9e65409fa005cc047656a224902fd86c
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
     allow_test_invoke: typing.Optional[builtins.bool] = None,
@@ -37943,6 +38083,7 @@ def _typecheckingstub__93b1e863bb497fcef8812bdd26b18640acc2f2181f2c2b8c93e2f279a
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
 ) -> None:
@@ -38128,6 +38269,7 @@ def _typecheckingstub__094cca7f2849b06817b96f168120517c37264ccf722a88cdfe604e52a
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
     authorizer: typing.Optional[builtins.bool] = None,
@@ -38159,6 +38301,7 @@ def _typecheckingstub__54acdc0c71f7767a0425f4d96f5ef53212479041ed7983dc6353d5a32
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
 ) -> None:
@@ -38526,6 +38669,7 @@ def _typecheckingstub__5e5180800d8c68a79e025f16a87f0381973d727e2296f047786dc6bbc
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
 ) -> None:
@@ -38750,6 +38894,7 @@ def _typecheckingstub__d2e28fbc4cf23b8af8415c85c3b3fef473c187c8b6a1d16ed48d739ac
     passthrough_behavior: typing.Optional[PassthroughBehavior] = None,
     request_parameters: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     request_templates: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    response_transfer_mode: typing.Optional[ResponseTransferMode] = None,
     timeout: typing.Optional[_Duration_4839e8c3] = None,
     vpc_link: typing.Optional[IVpcLink] = None,
 ) -> None:

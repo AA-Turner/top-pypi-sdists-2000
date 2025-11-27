@@ -17,14 +17,12 @@
 from minio import Minio
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
-if client.is_object_legal_hold_enabled(
-        bucket_name="my-bucket", object_name="my-object",
-):
+if client.is_object_legal_hold_enabled("my-bucket", "my-object"):
     print("legal hold is enabled on my-object")
 else:
     print("legal hold is not enabled on my-object")

@@ -145,27 +145,26 @@ class GetURLTests(TestCase):
         self.assertRaises(TypeError, Minio, 10)
 
     def test_minio_requires_hostname(self):
-        with self.assertRaises(ValueError):
-            Minio(endpoint='http://')
+        self.assertRaises(ValueError, Minio, 'http://')
 
 
 class UserAgentTests(TestCase):
     def test_default_user_agent(self):
-        client = Minio(endpoint='localhost')
+        client = Minio('localhost')
         self.assertEqual(client._user_agent, _DEFAULT_USER_AGENT)
 
     def test_set_app_info(self):
-        client = Minio(endpoint='localhost')
+        client = Minio('localhost')
         expected_user_agent = _DEFAULT_USER_AGENT + ' hello/' + minio_version
         client.set_app_info('hello', minio_version)
         self.assertEqual(client._user_agent, expected_user_agent)
 
     def test_set_app_info_requires_non_empty_name(self):
-        client = Minio(endpoint='localhost:9000')
+        client = Minio('localhost:9000')
         self.assertRaises(ValueError, client.set_app_info, '', minio_version)
 
     def test_set_app_info_requires_non_empty_version(self):
-        client = Minio(endpoint='localhost:9000')
+        client = Minio('localhost:9000')
         self.assertRaises(ValueError, client.set_app_info, 'hello', '')
 
 
@@ -176,7 +175,7 @@ class GetRegionTests(TestCase):
 
     def test_region_us_west(self):
         region = BaseURL('https://s3-us-west-1.amazonaws.com', None).region
-        self.assertEqual(region, None)
+        self.assertEqual(region, "")
 
     def test_region_with_dot(self):
         region = BaseURL('https://s3.us-west-1.amazonaws.com', None).region
@@ -190,7 +189,7 @@ class GetRegionTests(TestCase):
 
     def test_region_us_east(self):
         region = BaseURL('http://s3.amazonaws.com', None).region
-        self.assertEqual(region, None)
+        self.assertEqual(region, "")
 
     def test_invalid_value(self):
         self.assertRaises(ValueError, BaseURL, None, None)

@@ -20,19 +20,19 @@ from minio.replicationconfig import (DeleteMarkerReplication, Destination,
                                      ReplicationConfig, Rule)
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 config = ReplicationConfig(
-    role="REPLACE-WITH-ACTUAL-ROLE",
-    rules=[
+    "REPLACE-WITH-ACTUAL-ROLE",
+    [
         Rule(
-            destination=Destination(
+            Destination(
                 "REPLACE-WITH-ACTUAL-DESTINATION-BUCKET-ARN",
             ),
-            status=ENABLED,
+            ENABLED,
             delete_marker_replication=DeleteMarkerReplication(
                 DISABLED,
             ),
@@ -47,4 +47,4 @@ config = ReplicationConfig(
         ),
     ],
 )
-client.set_bucket_replication(bucket_name="my-bucket", config=config)
+client.set_bucket_replication("my-bucket", config)

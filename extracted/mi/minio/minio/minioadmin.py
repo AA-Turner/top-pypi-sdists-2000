@@ -45,8 +45,9 @@ from .credentials import Provider
 from .crypto import decrypt, encrypt
 from .datatypes import PeerInfo, PeerSite, SiteReplicationStatusOptions
 from .error import MinioAdminException
-from .helpers import (_DEFAULT_USER_AGENT, _REGION_REGEX, HTTPQueryDict,
-                      _parse_url, headers_to_strings, sha256_hash, url_replace)
+from .helpers import (_DEFAULT_USER_AGENT, _REGION_REGEX, DictType, _parse_url,
+                      headers_to_strings, queryencode, sha256_hash,
+                      url_replace)
 from .signer import sign_v4_s3
 
 
@@ -166,7 +167,7 @@ class MinioAdmin:
             *,
             method: str,
             command: _COMMAND,
-            query_params: Optional[HTTPQueryDict] = None,
+            query_params: Optional[DictType] = None,
             body: Optional[bytes] = None,
             preload_content: bool = True,
     ) -> BaseHTTPResponse:
@@ -174,18 +175,24 @@ class MinioAdmin:
         creds = self._provider.retrieve()
 
         url = url_replace(url=self._url, path="/minio/admin/v3/"+command.value)
-        query = None if query_params is None else str(query_params)
-        url = url_replace(url=url, query=query)
+        query = []
+        for key, values in sorted((query_params or {}).items()):
+            values = values if isinstance(values, (list, tuple)) else [values]
+            query += [
+                f"{queryencode(key)}={queryencode(value)}"
+                for value in sorted(values)
+            ]
+        url = url_replace(url=url, query="&".join(query))
 
         content_sha256 = sha256_hash(body)
         date = time.utcnow()
-        headers = HTTPHeaderDict({
+        headers: DictType = {
             "Host": url.netloc,
             "User-Agent": self._user_agent,
             "x-amz-date": time.to_amz_date(date),
             "x-amz-content-sha256": content_sha256,
             "Content-Type": "application/octet-stream"
-        })
+        }
         if creds.session_token:
             headers["X-Amz-Security-Token"] = creds.session_token
         if body:
@@ -289,7 +296,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.SERVICE,
-            query_params=HTTPQueryDict({"action": "restart"}),
+            query_params={"action": "restart"}
         )
         return response.data.decode()
 
@@ -298,7 +305,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.SERVICE,
-            query_params=HTTPQueryDict({"action": "stop"}),
+            query_params={"action": "stop"}
         )
         return response.data.decode()
 
@@ -307,7 +314,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.UPDATE,
-            query_params=HTTPQueryDict({"updateURL": ""}),
+            query_params={"updateURL": ""}
         )
         return response.data.decode()
 
@@ -321,13 +328,10 @@ class MinioAdmin:
 
     def account_info(self, prefix_usage: bool = False) -> str:
         """Get usage information for the authenticating account"""
-        query_params = (
-            HTTPQueryDict({"prefix-usage": "true"}) if prefix_usage else None
-        )
         response = self._url_open(
             method="GET",
             command=_COMMAND.ACCOUNT_INFO,
-            query_params=query_params,
+            query_params={"prefix-usage": "true"} if prefix_usage else None,
         )
         return response.data.decode()
 
@@ -338,32 +342,26 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.ADD_USER,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
             body=encrypt(body, self._provider.retrieve().secret_key),
         )
         return response.data.decode()
 
     def user_disable(self, access_key: str) -> str:
         """Disable user."""
-        query_params = HTTPQueryDict(
-            {"accessKey": access_key, "status": "disabled"},
-        )
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SET_USER_STATUS,
-            query_params=query_params,
+            query_params={"accessKey": access_key, "status": "disabled"}
         )
         return response.data.decode()
 
     def user_enable(self, access_key: str) -> str:
         """Enable user."""
-        query_params = HTTPQueryDict(
-            {"accessKey": access_key, "status": "enabled"},
-        )
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SET_USER_STATUS,
-            query_params=query_params,
+            query_params={"accessKey": access_key, "status": "enabled"}
         )
         return response.data.decode()
 
@@ -372,7 +370,7 @@ class MinioAdmin:
         response = self._url_open(
             method="DELETE",
             command=_COMMAND.REMOVE_USER,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
         )
         return response.data.decode()
 
@@ -381,7 +379,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.USER_INFO,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
         )
         return response.data.decode()
 
@@ -397,7 +395,7 @@ class MinioAdmin:
         )
         return plain_data.decode()
 
-    def group_add(self, group_name: str, members: list[str]) -> str:
+    def group_add(self, group_name: str, members: str) -> str:
         """Add users a new or existing group."""
         body = json.dumps({
             "group": group_name,
@@ -413,25 +411,19 @@ class MinioAdmin:
 
     def group_disable(self, group_name: str) -> str:
         """Disable group."""
-        query_params = HTTPQueryDict(
-            {"group": group_name, "status": "disabled"},
-        )
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SET_GROUP_STATUS,
-            query_params=query_params,
+            query_params={"group": group_name, "status": "disabled"}
         )
         return response.data.decode()
 
     def group_enable(self, group_name: str) -> str:
         """Enable group."""
-        query_params = HTTPQueryDict(
-            {"group": group_name, "status": "enabled"},
-        )
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SET_GROUP_STATUS,
-            query_params=query_params,
+            query_params={"group": group_name, "status": "enabled"}
         )
         return response.data.decode()
 
@@ -460,7 +452,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.GROUP_INFO,
-            query_params=HTTPQueryDict({"group": group_name}),
+            query_params={"group": group_name},
         )
         return response.data.decode()
 
@@ -487,7 +479,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.ADD_CANNED_POLICY,
-            query_params=HTTPQueryDict({"name": policy_name}),
+            query_params={"name": policy_name},
             body=body,
         )
         return response.data.decode()
@@ -497,7 +489,7 @@ class MinioAdmin:
         response = self._url_open(
             method="DELETE",
             command=_COMMAND.REMOVE_CANNED_POLICY,
-            query_params=HTTPQueryDict({"name": policy_name}),
+            query_params={"name": policy_name},
         )
         return response.data.decode()
 
@@ -506,7 +498,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.CANNED_POLICY_INFO,
-            query_params=HTTPQueryDict({"name": policy_name}),
+            query_params={"name": policy_name},
         )
         return response.data.decode()
 
@@ -526,17 +518,12 @@ class MinioAdmin:
     ) -> str:
         """Set IAM policy on a user or group."""
         if (user is not None) ^ (group is not None):
-            query_params = HTTPQueryDict(
-                {
-                    "userOrGroup": cast(str, user or group),
-                    "isGroup": "true" if group else "false",
-                    "policyName": policy_name,
-                },
-            )
             response = self._url_open(
                 method="PUT",
                 command=_COMMAND.SET_USER_OR_GROUP_POLICY,
-                query_params=query_params,
+                query_params={"userOrGroup": cast(str, user or group),
+                              "isGroup": "true" if group else "false",
+                              "policyName": policy_name},
             )
             return response.data.decode()
         raise ValueError("either user or group must be set")
@@ -558,7 +545,7 @@ class MinioAdmin:
             response = self._url_open(
                 method="GET",
                 command=_COMMAND.GET_CONFIG,
-                query_params=HTTPQueryDict({"key": key or "", "subSys": ""}),
+                query_params={"key": key or "", "subSys": ""},
                 preload_content=False,
             )
             if key is None:
@@ -606,7 +593,7 @@ class MinioAdmin:
             response = self._url_open(
                 method="GET",
                 command=_COMMAND.LIST_CONFIG_HISTORY,
-                query_params=HTTPQueryDict({"count": "10"}),
+                query_params={"count": "10"},
                 preload_content=False,
             )
             plain_text = decrypt(
@@ -623,7 +610,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.RESOTRE_CONFIG_HISTORY,
-            query_params=HTTPQueryDict({"restoreId": restore_id}),
+            query_params={"restoreId": restore_id}
         )
         return response.data.decode()
 
@@ -635,7 +622,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.START_PROFILE,
-            query_params=HTTPQueryDict({"profilerType;": ",".join(profilers)}),
+            query_params={"profilerType;": ",".join(profilers)},
         )
         return response.data.decode()
 
@@ -652,7 +639,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.CREATE_KMS_KEY,
-            query_params=HTTPQueryDict({"key-id": key or ""}),
+            query_params={"key-id": key or ""},
         )
         return response.data.decode()
 
@@ -661,7 +648,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.GET_KMS_KEY_STATUS,
-            query_params=HTTPQueryDict({"key-id": key or ""}),
+            query_params={"key-id": key or ""}
         )
         return response.data.decode()
 
@@ -672,7 +659,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SITE_REPLICATION_ADD,
-            query_params=HTTPQueryDict({"api-version": "1"}),
+            query_params={"api-version": "1"},
             body=encrypt(body, self._provider.retrieve().secret_key),
         )
         return response.data.decode()
@@ -693,7 +680,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.SITE_REPLICATION_STATUS,
-            query_params=options.to_query_params(),
+            query_params=cast(DictType, options.to_query_params()),
         )
         return response.data.decode()
 
@@ -703,7 +690,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SITE_REPLICATION_EDIT,
-            query_params=HTTPQueryDict({"api-version": "1"}),
+            query_params={"api-version": "1"},
             body=encrypt(body, self._provider.retrieve().secret_key),
         )
         return response.data.decode()
@@ -725,7 +712,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SITE_REPLICATION_REMOVE,
-            query_params=HTTPQueryDict({"api-version": "1"}),
+            query_params={"api-version": "1"},
             body=encrypt(body, self._provider.retrieve().secret_key),
         )
         return response.data.decode()
@@ -736,7 +723,7 @@ class MinioAdmin:
         response = self._url_open(
             method="PUT",
             command=_COMMAND.SET_BUCKET_QUOTA,
-            query_params=HTTPQueryDict({"bucket": bucket}),
+            query_params={"bucket": bucket},
             body=body
         )
         return response.data.decode()
@@ -750,7 +737,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.GET_BUCKET_QUOTA,
-            query_params=HTTPQueryDict({"bucket": bucket}),
+            query_params={"bucket": bucket}
         )
         return response.data.decode()
 
@@ -767,7 +754,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.SERVICE_ACCOUNT_INFO,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
             preload_content=False,
         )
         plain_data = decrypt(
@@ -780,7 +767,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.SERVICE_ACCOUNT_LIST,
-            query_params=HTTPQueryDict({"user": user}),
+            query_params={"user": user},
             preload_content=False,
         )
         plain_data = decrypt(
@@ -794,7 +781,6 @@ class MinioAdmin:
                             secret_key: Optional[str] = None,
                             name: Optional[str] = None,
                             description: Optional[str] = None,
-                            target_user: Optional[str] = None,
                             policy: Optional[dict] = None,
                             policy_file: Optional[str | os.PathLike] = None,
                             expiration: Optional[str] = None,
@@ -817,8 +803,6 @@ class MinioAdmin:
             data["name"] = name
         if description:
             data["description"] = description
-        if target_user:
-            data["targetUser"] = target_user
         if policy_file:
             with open(policy_file, encoding="utf-8") as file:
                 data["policy"] = json.load(file)
@@ -881,7 +865,7 @@ class MinioAdmin:
         response = self._url_open(
             method="POST",
             command=_COMMAND.SERVICE_ACCOUNT_UPDATE,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
             body=encrypt(body, self._provider.retrieve().secret_key),
         )
         return response.data.decode()
@@ -891,7 +875,7 @@ class MinioAdmin:
         response = self._url_open(
             method="DELETE",
             command=_COMMAND.SERVICE_ACCOUNT_DELETE,
-            query_params=HTTPQueryDict({"accessKey": access_key}),
+            query_params={"accessKey": access_key},
         )
         return response.data.decode()
 
@@ -958,13 +942,10 @@ class MinioAdmin:
             list_type: str,
     ) -> str:
         """List service accounts belonging to the specified user."""
-        query_params = HTTPQueryDict(
-            {"userDN": user_dn, "listType": list_type},
-        )
         response = self._url_open(
             method="GET",
             command=_COMMAND.IDP_LDAP_LIST_ACCESS_KEYS,
-            query_params=query_params,
+            query_params={"userDN": user_dn, "listType": list_type},
             preload_content=False,
         )
         plain_data = decrypt(
@@ -986,7 +967,7 @@ class MinioAdmin:
         response = self._url_open(
             method="GET",
             command=_COMMAND.IDP_LDAP_LIST_ACCESS_KEYS_BULK,
-            query_params=HTTPQueryDict({"listType": list_type, key: value}),
+            query_params={"listType": list_type, key: value},
             preload_content=False,
         )
         plain_data = decrypt(
@@ -1023,13 +1004,10 @@ class MinioAdmin:
             policies: list[str],
     ) -> str:
         """Get builtin policy entities."""
-        query_params = HTTPQueryDict(
-            {"user": users, "group": groups, "policy": policies},
-        )
         response = self._url_open(
             method="GET",
             command=_COMMAND.IDP_BUILTIN_POLICY_ENTITIES,
-            query_params=query_params,
+            query_params={"user": users, "group": groups, "policy": policies},
             preload_content=False,
         )
         plain_data = decrypt(

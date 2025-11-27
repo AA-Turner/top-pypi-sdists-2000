@@ -195,9 +195,9 @@ impl Cmd {
         }
 
         let (mut pty, pts) = prek_pty::open()?;
-        let (stdin, stdout, stderr) = pts.setup_subprocess()?;
+        let (_, stdout, stderr) = pts.setup_subprocess()?;
 
-        self.inner.stdin(stdin);
+        self.inner.stdin(Stdio::null());
         self.inner.stdout(stdout);
         self.inner.stderr(stderr);
 
@@ -482,7 +482,7 @@ impl Display for Cmd {
             }
             write!(f, " {}", arg.to_string_lossy())?;
             len += arg.len() + 1;
-            if len > 100 {
+            if len > 120 {
                 write!(f, " [...]",)?;
                 break;
             }

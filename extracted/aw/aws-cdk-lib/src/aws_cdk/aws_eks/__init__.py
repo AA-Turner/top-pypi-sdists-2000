@@ -6269,7 +6269,7 @@ class CfnCluster(
 
     The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as ``etcd`` and the API server. The control plane runs in an account managed by AWS , and the Kubernetes API is exposed by the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single tenant and unique. It runs on its own set of Amazon EC2 instances.
 
-    The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the nodes (for example, to support ``kubectl exec`` , ``logs`` , and ``proxy`` data flows).
+    The cluster control plane is provisioned across multiple Availability Zones and fronted by an ELB Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the nodes (for example, to support ``kubectl exec`` , ``logs`` , and ``proxy`` data flows).
 
     Amazon EKS nodes run in your AWS account and connect to your cluster's control plane over the Kubernetes API server endpoint and a certificate file that is created for your cluster.
 
@@ -6314,6 +6314,9 @@ class CfnCluster(
                 enabled=False,
                 node_pools=["nodePools"],
                 node_role_arn="nodeRoleArn"
+            ),
+            control_plane_scaling_config=eks.CfnCluster.ControlPlaneScalingConfigProperty(
+                tier="tier"
             ),
             deletion_protection=False,
             encryption_config=[eks.CfnCluster.EncryptionConfigProperty(
@@ -6387,6 +6390,7 @@ class CfnCluster(
         access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.AccessConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ComputeConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ControlPlaneScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -6410,6 +6414,7 @@ class CfnCluster(
         :param access_config: The access configuration for the cluster.
         :param bootstrap_self_managed_addons: If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed. The default networking add-ons include ``vpc-cni`` , ``coredns`` , and ``kube-proxy`` . Use this option when you plan to install third-party alternative add-ons or self-manage the default networking add-ons.
         :param compute_config: Indicates the current configuration of the compute capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account. For more information, see EKS Auto Mode compute capability in the *Amazon EKS User Guide* .
+        :param control_plane_scaling_config: Configuration for provisioned control plane scaling.
         :param deletion_protection: The current deletion protection setting for the cluster. When ``true`` , deletion protection is enabled and the cluster cannot be deleted until protection is disabled. When ``false`` , the cluster can be deleted normally. This setting only applies to clusters in an active state.
         :param encryption_config: The encryption configuration for the cluster.
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
@@ -6434,6 +6439,7 @@ class CfnCluster(
             access_config=access_config,
             bootstrap_self_managed_addons=bootstrap_self_managed_addons,
             compute_config=compute_config,
+            control_plane_scaling_config=control_plane_scaling_config,
             deletion_protection=deletion_protection,
             encryption_config=encryption_config,
             force=force,
@@ -6715,6 +6721,24 @@ class CfnCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__5d35f88b28db161e1414d604c41ffc1d10fcf76351a0503d110f81158a8e15ca)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "computeConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="controlPlaneScalingConfig")
+    def control_plane_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]]:
+        '''Configuration for provisioned control plane scaling.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]], jsii.get(self, "controlPlaneScalingConfig"))
+
+    @control_plane_scaling_config.setter
+    def control_plane_scaling_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4436ea4cc18d196aa3ff9d13eb20f342735d0595592ac8760060155ddcb0a250)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "controlPlaneScalingConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="deletionProtection")
@@ -7293,6 +7317,57 @@ class CfnCluster(
 
         def __repr__(self) -> str:
             return "ControlPlanePlacementProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCluster.ControlPlaneScalingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"tier": "tier"},
+    )
+    class ControlPlaneScalingConfigProperty:
+        def __init__(self, *, tier: typing.Optional[builtins.str] = None) -> None:
+            '''Configuration for provisioned control plane scaling.
+
+            :param tier: The scaling tier for the provisioned control plane.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-controlplanescalingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                control_plane_scaling_config_property = eks.CfnCluster.ControlPlaneScalingConfigProperty(
+                    tier="tier"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7bb17cf34c4e7ec854117e30e45277f3c379475592d98a5dd9a2844587983d9a)
+                check_type(argname="argument tier", value=tier, expected_type=type_hints["tier"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if tier is not None:
+                self._values["tier"] = tier
+
+        @builtins.property
+        def tier(self) -> typing.Optional[builtins.str]:
+            '''The scaling tier for the provisioned control plane.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-controlplanescalingconfig.html#cfn-eks-cluster-controlplanescalingconfig-tier
+            '''
+            result = self._values.get("tier")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ControlPlaneScalingConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8431,6 +8506,7 @@ class CfnCluster(
         "access_config": "accessConfig",
         "bootstrap_self_managed_addons": "bootstrapSelfManagedAddons",
         "compute_config": "computeConfig",
+        "control_plane_scaling_config": "controlPlaneScalingConfig",
         "deletion_protection": "deletionProtection",
         "encryption_config": "encryptionConfig",
         "force": "force",
@@ -8455,6 +8531,7 @@ class CfnClusterProps:
         access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ControlPlaneScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -8476,6 +8553,7 @@ class CfnClusterProps:
         :param access_config: The access configuration for the cluster.
         :param bootstrap_self_managed_addons: If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed. The default networking add-ons include ``vpc-cni`` , ``coredns`` , and ``kube-proxy`` . Use this option when you plan to install third-party alternative add-ons or self-manage the default networking add-ons.
         :param compute_config: Indicates the current configuration of the compute capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account. For more information, see EKS Auto Mode compute capability in the *Amazon EKS User Guide* .
+        :param control_plane_scaling_config: Configuration for provisioned control plane scaling.
         :param deletion_protection: The current deletion protection setting for the cluster. When ``true`` , deletion protection is enabled and the cluster cannot be deleted until protection is disabled. When ``false`` , the cluster can be deleted normally. This setting only applies to clusters in an active state.
         :param encryption_config: The encryption configuration for the cluster.
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
@@ -8521,6 +8599,9 @@ class CfnClusterProps:
                     enabled=False,
                     node_pools=["nodePools"],
                     node_role_arn="nodeRoleArn"
+                ),
+                control_plane_scaling_config=eks.CfnCluster.ControlPlaneScalingConfigProperty(
+                    tier="tier"
                 ),
                 deletion_protection=False,
                 encryption_config=[eks.CfnCluster.EncryptionConfigProperty(
@@ -8590,6 +8671,7 @@ class CfnClusterProps:
             check_type(argname="argument access_config", value=access_config, expected_type=type_hints["access_config"])
             check_type(argname="argument bootstrap_self_managed_addons", value=bootstrap_self_managed_addons, expected_type=type_hints["bootstrap_self_managed_addons"])
             check_type(argname="argument compute_config", value=compute_config, expected_type=type_hints["compute_config"])
+            check_type(argname="argument control_plane_scaling_config", value=control_plane_scaling_config, expected_type=type_hints["control_plane_scaling_config"])
             check_type(argname="argument deletion_protection", value=deletion_protection, expected_type=type_hints["deletion_protection"])
             check_type(argname="argument encryption_config", value=encryption_config, expected_type=type_hints["encryption_config"])
             check_type(argname="argument force", value=force, expected_type=type_hints["force"])
@@ -8613,6 +8695,8 @@ class CfnClusterProps:
             self._values["bootstrap_self_managed_addons"] = bootstrap_self_managed_addons
         if compute_config is not None:
             self._values["compute_config"] = compute_config
+        if control_plane_scaling_config is not None:
+            self._values["control_plane_scaling_config"] = control_plane_scaling_config
         if deletion_protection is not None:
             self._values["deletion_protection"] = deletion_protection
         if encryption_config is not None:
@@ -8704,6 +8788,17 @@ class CfnClusterProps:
         '''
         result = self._values.get("compute_config")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ComputeConfigProperty]], result)
+
+    @builtins.property
+    def control_plane_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]]:
+        '''Configuration for provisioned control plane scaling.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-controlplanescalingconfig
+        '''
+        result = self._values.get("control_plane_scaling_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]], result)
 
     @builtins.property
     def deletion_protection(
@@ -10053,7 +10148,7 @@ class CfnNodegroup(
 
     For later updates, you will only be able to update a node group using a launch template only if it was originally deployed with a launch template. Additionally, the launch template ID or name must match what was used when the node group was created. You can update the launch template version with necessary changes. For more information about using launch templates, see `Customizing managed nodes with launch templates <https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html>`_ .
 
-    An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. For more information, see `Managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html>`_ in the *Amazon EKS User Guide* .
+    An Amazon EKS managed node group is an Amazon EC2 Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. For more information, see `Managed node groups <https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html>`_ in the *Amazon EKS User Guide* .
     .. epigraph::
 
        Windows AMI types are only supported for commercial AWS Regions that support Windows on Amazon EKS.
@@ -11051,7 +11146,7 @@ class CfnNodegroup(
             max_size: typing.Optional[jsii.Number] = None,
             min_size: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group.
+            '''An object representing the scaling configuration details for the Amazon EC2 Auto Scaling group that is associated with your node group.
 
             When creating a node group, you must specify all or none of the properties. When updating a node group, you can specify any or none of the properties.
 
@@ -23091,6 +23186,7 @@ def _typecheckingstub__d3e62a858014f3867f3039d1328d57223fb0d16e3fb6d1e2d79279938
     access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ControlPlaneScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -23168,6 +23264,12 @@ def _typecheckingstub__1b3725246139251af199def1d548b17a13e8ddd4df825377563ea01cd
 
 def _typecheckingstub__5d35f88b28db161e1414d604c41ffc1d10fcf76351a0503d110f81158a8e15ca(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ComputeConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4436ea4cc18d196aa3ff9d13eb20f342735d0595592ac8760060155ddcb0a250(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23288,6 +23390,13 @@ def _typecheckingstub__d660e36a8e8c346e58bf586d09e62d3f36938b9cb7b40e9842c007af8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7bb17cf34c4e7ec854117e30e45277f3c379475592d98a5dd9a2844587983d9a(
+    *,
+    tier: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__41c8959626c6cd4c3ff5a15cfb2de0bea1a0b654c1bd2e0a62c4841ab19277cc(
     *,
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -23404,6 +23513,7 @@ def _typecheckingstub__270f142a59c249328ab174c5b0484cfdae6e3110ab52578dbe783d6f8
     access_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.AccessConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bootstrap_self_managed_addons: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     compute_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ComputeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    control_plane_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ControlPlaneScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     deletion_protection: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     encryption_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     force: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,

@@ -362,18 +362,22 @@ from ..aws_iam import (
 from ..interfaces.aws_ecr import (
     IPublicRepositoryRef as _IPublicRepositoryRef_fef651e6,
     IPullThroughCacheRuleRef as _IPullThroughCacheRuleRef_6d4698a2,
+    IPullTimeUpdateExclusionRef as _IPullTimeUpdateExclusionRef_4c002da0,
     IRegistryPolicyRef as _IRegistryPolicyRef_42ef4743,
     IRegistryScanningConfigurationRef as _IRegistryScanningConfigurationRef_777252de,
     IReplicationConfigurationRef as _IReplicationConfigurationRef_a2ce7034,
     IRepositoryCreationTemplateRef as _IRepositoryCreationTemplateRef_b7cd8f39,
     IRepositoryRef as _IRepositoryRef_f3b81117,
+    ISigningConfigurationRef as _ISigningConfigurationRef_0c353858,
     PublicRepositoryReference as _PublicRepositoryReference_b2001418,
     PullThroughCacheRuleReference as _PullThroughCacheRuleReference_c998144d,
+    PullTimeUpdateExclusionReference as _PullTimeUpdateExclusionReference_61dc265f,
     RegistryPolicyReference as _RegistryPolicyReference_2d2e9fdc,
     RegistryScanningConfigurationReference as _RegistryScanningConfigurationReference_4b2666f2,
     ReplicationConfigurationReference as _ReplicationConfigurationReference_d963555d,
     RepositoryCreationTemplateReference as _RepositoryCreationTemplateReference_4a34e559,
     RepositoryReference as _RepositoryReference_af4d81f0,
+    SigningConfigurationReference as _SigningConfigurationReference_56e7e84d,
 )
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 
@@ -1209,6 +1213,160 @@ class CfnPullThroughCacheRuleProps:
 
     def __repr__(self) -> str:
         return "CfnPullThroughCacheRuleProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IPullTimeUpdateExclusionRef_4c002da0)
+class CfnPullTimeUpdateExclusion(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecr.CfnPullTimeUpdateExclusion",
+):
+    '''Resource Type definition for AWS::ECR::PullTimeUpdateExclusion controls the exclusion configuration for ecr image pull time update.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html
+    :cloudformationResource: AWS::ECR::PullTimeUpdateExclusion
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ecr as ecr
+        
+        cfn_pull_time_update_exclusion = ecr.CfnPullTimeUpdateExclusion(self, "MyCfnPullTimeUpdateExclusion",
+            principal_arn="principalArn"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        principal_arn: builtins.str,
+    ) -> None:
+        '''Create a new ``AWS::ECR::PullTimeUpdateExclusion``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param principal_arn: Principal arn that should not update image pull times.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e6255980647f29ac8e203692be6da643c7ebf04a23199750b76c7298cd92795f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnPullTimeUpdateExclusionProps(principal_arn=principal_arn)
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__10ff65c5f542ca588c9c426fdec6b6e57a95f212760a4d24b0929c1c8bfc2b3a)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e71e62ac171cdd2ab4610431a1d83c48bce797e4e244cce90f3d5f8c6b89f134)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="pullTimeUpdateExclusionRef")
+    def pull_time_update_exclusion_ref(
+        self,
+    ) -> _PullTimeUpdateExclusionReference_61dc265f:
+        '''A reference to a PullTimeUpdateExclusion resource.'''
+        return typing.cast(_PullTimeUpdateExclusionReference_61dc265f, jsii.get(self, "pullTimeUpdateExclusionRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="principalArn")
+    def principal_arn(self) -> builtins.str:
+        '''Principal arn that should not update image pull times.'''
+        return typing.cast(builtins.str, jsii.get(self, "principalArn"))
+
+    @principal_arn.setter
+    def principal_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1c3d8a9551adf64adbe37dbb04d37a06b4b49ef252e4f98bd23938d7a698bd7e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "principalArn", value) # pyright: ignore[reportArgumentType]
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ecr.CfnPullTimeUpdateExclusionProps",
+    jsii_struct_bases=[],
+    name_mapping={"principal_arn": "principalArn"},
+)
+class CfnPullTimeUpdateExclusionProps:
+    def __init__(self, *, principal_arn: builtins.str) -> None:
+        '''Properties for defining a ``CfnPullTimeUpdateExclusion``.
+
+        :param principal_arn: Principal arn that should not update image pull times.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ecr as ecr
+            
+            cfn_pull_time_update_exclusion_props = ecr.CfnPullTimeUpdateExclusionProps(
+                principal_arn="principalArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3d052c6f52c54c511a5aafdf72a4c6364fb5b88c81f66d958eac6220ed443b5a)
+            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "principal_arn": principal_arn,
+        }
+
+    @builtins.property
+    def principal_arn(self) -> builtins.str:
+        '''Principal arn that should not update image pull times.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html#cfn-ecr-pulltimeupdateexclusion-principalarn
+        '''
+        result = self._values.get("principal_arn")
+        assert result is not None, "Required property 'principal_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnPullTimeUpdateExclusionProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -3844,6 +4002,342 @@ class CfnRepositoryProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _ISigningConfigurationRef_0c353858)
+class CfnSigningConfiguration(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_ecr.CfnSigningConfiguration",
+):
+    '''The AWS::ECR::SigningConfiguration resource creates or updates the signing configuration for an Amazon ECR registry.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html
+    :cloudformationResource: AWS::ECR::SigningConfiguration
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_ecr as ecr
+        
+        cfn_signing_configuration = ecr.CfnSigningConfiguration(self, "MyCfnSigningConfiguration",
+            rules=[ecr.CfnSigningConfiguration.RuleProperty(
+                signing_profile_arn="signingProfileArn",
+        
+                # the properties below are optional
+                repository_filters=[ecr.CfnSigningConfiguration.RepositoryFilterProperty(
+                    filter="filter",
+                    filter_type="filterType"
+                )]
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningConfiguration.RuleProperty", typing.Dict[builtins.str, typing.Any]]]]],
+    ) -> None:
+        '''Create a new ``AWS::ECR::SigningConfiguration``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param rules: Array of signing rules that define which repositories should be signed and with which signing profiles.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8f20ec4657cd146c0a7e33dfdc0f7d958c63808be594382cc1c8b832f54fe8a4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnSigningConfigurationProps(rules=rules)
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c7cb13a791d6edd150d33a424d85c9e0868d9ad35bcce061c68072d0e0ab9a44)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__023965728e28fcf57693949bcc410da35ebea17213b68ac14ddbd03bf2a799ae)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrRegistryId")
+    def attr_registry_id(self) -> builtins.str:
+        '''12-digit AWS account ID of the ECR registry.
+
+        :cloudformationAttribute: RegistryId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrRegistryId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="signingConfigurationRef")
+    def signing_configuration_ref(self) -> _SigningConfigurationReference_56e7e84d:
+        '''A reference to a SigningConfiguration resource.'''
+        return typing.cast(_SigningConfigurationReference_56e7e84d, jsii.get(self, "signingConfigurationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="rules")
+    def rules(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]]:
+        '''Array of signing rules that define which repositories should be signed and with which signing profiles.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]], jsii.get(self, "rules"))
+
+    @rules.setter
+    def rules(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a4bcef62f5b0eb74ec0fd850761728249600513301f24cd3b16b7fc93b8db93a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "rules", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecr.CfnSigningConfiguration.RepositoryFilterProperty",
+        jsii_struct_bases=[],
+        name_mapping={"filter": "filter", "filter_type": "filterType"},
+    )
+    class RepositoryFilterProperty:
+        def __init__(self, *, filter: builtins.str, filter_type: builtins.str) -> None:
+            '''An array of objects representing the details of a repository filter.
+
+            :param filter: Repository name pattern (supports '*' wildcard).
+            :param filter_type: Type of repository filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecr as ecr
+                
+                repository_filter_property = ecr.CfnSigningConfiguration.RepositoryFilterProperty(
+                    filter="filter",
+                    filter_type="filterType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a8fbe0910d3e8a4220a616d58d1164e59e14d806a43213b1e16da05fee49ff3f)
+                check_type(argname="argument filter", value=filter, expected_type=type_hints["filter"])
+                check_type(argname="argument filter_type", value=filter_type, expected_type=type_hints["filter_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "filter": filter,
+                "filter_type": filter_type,
+            }
+
+        @builtins.property
+        def filter(self) -> builtins.str:
+            '''Repository name pattern (supports '*' wildcard).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html#cfn-ecr-signingconfiguration-repositoryfilter-filter
+            '''
+            result = self._values.get("filter")
+            assert result is not None, "Required property 'filter' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def filter_type(self) -> builtins.str:
+            '''Type of repository filter.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html#cfn-ecr-signingconfiguration-repositoryfilter-filtertype
+            '''
+            result = self._values.get("filter_type")
+            assert result is not None, "Required property 'filter_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RepositoryFilterProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_ecr.CfnSigningConfiguration.RuleProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "signing_profile_arn": "signingProfileArn",
+            "repository_filters": "repositoryFilters",
+        },
+    )
+    class RuleProperty:
+        def __init__(
+            self,
+            *,
+            signing_profile_arn: builtins.str,
+            repository_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param signing_profile_arn: AWS Signer signing profile ARN to use for matched repositories.
+            :param repository_filters: Optional array of repository filters. If omitted, the rule matches all repositories. If provided, must contain at least one filter. Empty arrays are not allowed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_ecr as ecr
+                
+                rule_property = ecr.CfnSigningConfiguration.RuleProperty(
+                    signing_profile_arn="signingProfileArn",
+                
+                    # the properties below are optional
+                    repository_filters=[ecr.CfnSigningConfiguration.RepositoryFilterProperty(
+                        filter="filter",
+                        filter_type="filterType"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2306287dfaf53816c996b679f6795adf1b5cbe05605c8685f73e2a9516c16957)
+                check_type(argname="argument signing_profile_arn", value=signing_profile_arn, expected_type=type_hints["signing_profile_arn"])
+                check_type(argname="argument repository_filters", value=repository_filters, expected_type=type_hints["repository_filters"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "signing_profile_arn": signing_profile_arn,
+            }
+            if repository_filters is not None:
+                self._values["repository_filters"] = repository_filters
+
+        @builtins.property
+        def signing_profile_arn(self) -> builtins.str:
+            '''AWS Signer signing profile ARN to use for matched repositories.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html#cfn-ecr-signingconfiguration-rule-signingprofilearn
+            '''
+            result = self._values.get("signing_profile_arn")
+            assert result is not None, "Required property 'signing_profile_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def repository_filters(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RepositoryFilterProperty"]]]]:
+            '''Optional array of repository filters.
+
+            If omitted, the rule matches all repositories. If provided, must contain at least one filter. Empty arrays are not allowed.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html#cfn-ecr-signingconfiguration-rule-repositoryfilters
+            '''
+            result = self._values.get("repository_filters")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RepositoryFilterProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RuleProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_ecr.CfnSigningConfigurationProps",
+    jsii_struct_bases=[],
+    name_mapping={"rules": "rules"},
+)
+class CfnSigningConfigurationProps:
+    def __init__(
+        self,
+        *,
+        rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    ) -> None:
+        '''Properties for defining a ``CfnSigningConfiguration``.
+
+        :param rules: Array of signing rules that define which repositories should be signed and with which signing profiles.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_ecr as ecr
+            
+            cfn_signing_configuration_props = ecr.CfnSigningConfigurationProps(
+                rules=[ecr.CfnSigningConfiguration.RuleProperty(
+                    signing_profile_arn="signingProfileArn",
+            
+                    # the properties below are optional
+                    repository_filters=[ecr.CfnSigningConfiguration.RepositoryFilterProperty(
+                        filter="filter",
+                        filter_type="filterType"
+                    )]
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__852cfe5a252c5cea1762366bf0b721b756c19dc5b55de25493e8802a027f4734)
+            check_type(argname="argument rules", value=rules, expected_type=type_hints["rules"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "rules": rules,
+        }
+
+    @builtins.property
+    def rules(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]]:
+        '''Array of signing rules that define which repositories should be signed and with which signing profiles.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html#cfn-ecr-signingconfiguration-rules
+        '''
+        result = self._values.get("rules")
+        assert result is not None, "Required property 'rules' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnSigningConfigurationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_ecr.IRepository")
 class IRepository(_IResource_c80c4260, typing_extensions.Protocol):
     '''Represents an ECR repository.'''
@@ -6100,6 +6594,8 @@ __all__ = [
     "CfnPublicRepositoryProps",
     "CfnPullThroughCacheRule",
     "CfnPullThroughCacheRuleProps",
+    "CfnPullTimeUpdateExclusion",
+    "CfnPullTimeUpdateExclusionProps",
     "CfnRegistryPolicy",
     "CfnRegistryPolicyProps",
     "CfnRegistryScanningConfiguration",
@@ -6110,6 +6606,8 @@ __all__ = [
     "CfnRepositoryCreationTemplate",
     "CfnRepositoryCreationTemplateProps",
     "CfnRepositoryProps",
+    "CfnSigningConfiguration",
+    "CfnSigningConfigurationProps",
     "IRepository",
     "ImageTagMutabilityExclusionFilter",
     "LifecycleRule",
@@ -6295,6 +6793,40 @@ def _typecheckingstub__e53d5495feeae3bec08dd309eceed79d390d73c31e234c306abd812ec
     upstream_registry: typing.Optional[builtins.str] = None,
     upstream_registry_url: typing.Optional[builtins.str] = None,
     upstream_repository_prefix: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e6255980647f29ac8e203692be6da643c7ebf04a23199750b76c7298cd92795f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    principal_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__10ff65c5f542ca588c9c426fdec6b6e57a95f212760a4d24b0929c1c8bfc2b3a(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e71e62ac171cdd2ab4610431a1d83c48bce797e4e244cce90f3d5f8c6b89f134(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1c3d8a9551adf64adbe37dbb04d37a06b4b49ef252e4f98bd23938d7a698bd7e(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3d052c6f52c54c511a5aafdf72a4c6364fb5b88c81f66d958eac6220ed443b5a(
+    *,
+    principal_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6725,6 +7257,56 @@ def _typecheckingstub__6887f05f59c4e061f761607002ffdf5b7ad09f76abbf4b7be49513c3e
     repository_name: typing.Optional[builtins.str] = None,
     repository_policy_text: typing.Any = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8f20ec4657cd146c0a7e33dfdc0f7d958c63808be594382cc1c8b832f54fe8a4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c7cb13a791d6edd150d33a424d85c9e0868d9ad35bcce061c68072d0e0ab9a44(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__023965728e28fcf57693949bcc410da35ebea17213b68ac14ddbd03bf2a799ae(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a4bcef62f5b0eb74ec0fd850761728249600513301f24cd3b16b7fc93b8db93a(
+    value: typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a8fbe0910d3e8a4220a616d58d1164e59e14d806a43213b1e16da05fee49ff3f(
+    *,
+    filter: builtins.str,
+    filter_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2306287dfaf53816c996b679f6795adf1b5cbe05605c8685f73e2a9516c16957(
+    *,
+    signing_profile_arn: builtins.str,
+    repository_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RepositoryFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__852cfe5a252c5cea1762366bf0b721b756c19dc5b55de25493e8802a027f4734(
+    *,
+    rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
 ) -> None:
     """Type checking stubs"""
     pass

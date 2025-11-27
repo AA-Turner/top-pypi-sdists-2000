@@ -631,7 +631,11 @@ class CfnTable(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            warm_throughput=cassandra.CfnTable.WarmThroughputProperty(
+                read_units_per_second=123,
+                write_units_per_second=123
+            )
         )
     '''
 
@@ -654,6 +658,7 @@ class CfnTable(
         replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.ReplicaSpecificationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.WarmThroughputProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Cassandra::Table``.
 
@@ -673,6 +678,7 @@ class CfnTable(
         :param replica_specifications: The AWS Region specific settings of a multi-Region table. For a multi-Region table, you can configure the table's read capacity differently per AWS Region. You can do this by configuring the following parameters. - ``region`` : The Region where these settings are applied. (Required) - ``readCapacityUnits`` : The provisioned read capacity units. (Optional) - ``readCapacityAutoScaling`` : The read capacity auto scaling settings for the table. (Optional)
         :param table_name: The name of the table to be created. The table name is case sensitive. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the table name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacing this resource. You can perform updates that require no interruption or some interruption. If you must replace the resource, specify a new name. *Length constraints:* Minimum length of 3. Maximum length of 255. *Pattern:* ``^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$``
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param warm_throughput: Warm throughput configuration for the table.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__9d6fd025c7c0c8d4a27519b568ec6952b027c14ffb932a0cd5e53f0aae4270b3)
@@ -693,6 +699,7 @@ class CfnTable(
             replica_specifications=replica_specifications,
             table_name=table_name,
             tags=tags,
+            warm_throughput=warm_throughput,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -975,6 +982,24 @@ class CfnTable(
             type_hints = typing.get_type_hints(_typecheckingstub__4224e4814f153e9978b91f35f9c02cfe00615e65fb97b060775097a1c70669ec)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="warmThroughput")
+    def warm_throughput(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]]:
+        '''Warm throughput configuration for the table.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]], jsii.get(self, "warmThroughput"))
+
+    @warm_throughput.setter
+    def warm_throughput(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.WarmThroughputProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d19ce0025aaac972492a134560945d75be6baf85bf80420a89312af74503253a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "warmThroughput", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cassandra.CfnTable.AutoScalingSettingProperty",
@@ -2057,6 +2082,77 @@ class CfnTable(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cassandra.CfnTable.WarmThroughputProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "read_units_per_second": "readUnitsPerSecond",
+            "write_units_per_second": "writeUnitsPerSecond",
+        },
+    )
+    class WarmThroughputProperty:
+        def __init__(
+            self,
+            *,
+            read_units_per_second: typing.Optional[jsii.Number] = None,
+            write_units_per_second: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Warm throughput configuration for the table.
+
+            :param read_units_per_second: 
+            :param write_units_per_second: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-warmthroughput.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cassandra as cassandra
+                
+                warm_throughput_property = cassandra.CfnTable.WarmThroughputProperty(
+                    read_units_per_second=123,
+                    write_units_per_second=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5044427f1672fe40b6b5636bb30c339d66328ff056888017655a33683812a4ee)
+                check_type(argname="argument read_units_per_second", value=read_units_per_second, expected_type=type_hints["read_units_per_second"])
+                check_type(argname="argument write_units_per_second", value=write_units_per_second, expected_type=type_hints["write_units_per_second"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if read_units_per_second is not None:
+                self._values["read_units_per_second"] = read_units_per_second
+            if write_units_per_second is not None:
+                self._values["write_units_per_second"] = write_units_per_second
+
+        @builtins.property
+        def read_units_per_second(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-warmthroughput.html#cfn-cassandra-table-warmthroughput-readunitspersecond
+            '''
+            result = self._values.get("read_units_per_second")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def write_units_per_second(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cassandra-table-warmthroughput.html#cfn-cassandra-table-warmthroughput-writeunitspersecond
+            '''
+            result = self._values.get("write_units_per_second")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "WarmThroughputProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_cassandra.CfnTableProps",
@@ -2076,6 +2172,7 @@ class CfnTable(
         "replica_specifications": "replicaSpecifications",
         "table_name": "tableName",
         "tags": "tags",
+        "warm_throughput": "warmThroughput",
     },
 )
 class CfnTableProps:
@@ -2096,6 +2193,7 @@ class CfnTableProps:
         replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         table_name: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnTable``.
 
@@ -2113,6 +2211,7 @@ class CfnTableProps:
         :param replica_specifications: The AWS Region specific settings of a multi-Region table. For a multi-Region table, you can configure the table's read capacity differently per AWS Region. You can do this by configuring the following parameters. - ``region`` : The Region where these settings are applied. (Required) - ``readCapacityUnits`` : The provisioned read capacity units. (Optional) - ``readCapacityAutoScaling`` : The read capacity auto scaling settings for the table. (Optional)
         :param table_name: The name of the table to be created. The table name is case sensitive. If you don't specify a name, AWS CloudFormation generates a unique ID and uses that ID for the table name. For more information, see `Name type <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-name.html>`_ . .. epigraph:: If you specify a name, you can't perform updates that require replacing this resource. You can perform updates that require no interruption or some interruption. If you must replace the resource, specify a new name. *Length constraints:* Minimum length of 3. Maximum length of 255. *Pattern:* ``^[a-zA-Z0-9][a-zA-Z0-9_]{1,47}$``
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
+        :param warm_throughput: Warm throughput configuration for the table.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html
         :exampleMetadata: fixture=_generated
@@ -2229,7 +2328,11 @@ class CfnTableProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                warm_throughput=cassandra.CfnTable.WarmThroughputProperty(
+                    read_units_per_second=123,
+                    write_units_per_second=123
+                )
             )
         '''
         if __debug__:
@@ -2248,6 +2351,7 @@ class CfnTableProps:
             check_type(argname="argument replica_specifications", value=replica_specifications, expected_type=type_hints["replica_specifications"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument warm_throughput", value=warm_throughput, expected_type=type_hints["warm_throughput"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "keyspace_name": keyspace_name,
             "partition_key_columns": partition_key_columns,
@@ -2276,6 +2380,8 @@ class CfnTableProps:
             self._values["table_name"] = table_name
         if tags is not None:
             self._values["tags"] = tags
+        if warm_throughput is not None:
+            self._values["warm_throughput"] = warm_throughput
 
     @builtins.property
     def keyspace_name(self) -> builtins.str:
@@ -2475,6 +2581,17 @@ class CfnTableProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def warm_throughput(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]]:
+        '''Warm throughput configuration for the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cassandra-table.html#cfn-cassandra-table-warmthroughput
+        '''
+        result = self._values.get("warm_throughput")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2964,6 +3081,7 @@ def _typecheckingstub__9d6fd025c7c0c8d4a27519b568ec6952b027c14ffb932a0cd5e53f0aa
     replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     table_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3064,6 +3182,12 @@ def _typecheckingstub__4224e4814f153e9978b91f35f9c02cfe00615e65fb97b060775097a1c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d19ce0025aaac972492a134560945d75be6baf85bf80420a89312af74503253a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.WarmThroughputProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2cb141a7c7ed6b1d9a39228641414ac62a7d79767996c73fe4911e45faa92ffd(
     *,
     auto_scaling_disabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -3157,6 +3281,14 @@ def _typecheckingstub__23200b02c7e7d1fd9b0336257d7f6dd749b95e0adc13464370ca6af1b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5044427f1672fe40b6b5636bb30c339d66328ff056888017655a33683812a4ee(
+    *,
+    read_units_per_second: typing.Optional[jsii.Number] = None,
+    write_units_per_second: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bd1ff29b1ec22382a7c3d14031657668106b0fcd843c06a96897bcadf10ffa92(
     *,
     keyspace_name: builtins.str,
@@ -3173,6 +3305,7 @@ def _typecheckingstub__bd1ff29b1ec22382a7c3d14031657668106b0fcd843c06a96897bcadf
     replica_specifications: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.ReplicaSpecificationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     table_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    warm_throughput: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.WarmThroughputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

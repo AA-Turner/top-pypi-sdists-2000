@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use std::sync::Arc;
 
 use anyhow::{Context, Result};
@@ -109,8 +110,8 @@ impl LanguageImpl for Ruby {
             .output()
             .await?;
 
-        let version_str = String::from_utf8(output.stdout)?.trim().to_string();
-        let actual_version = semver::Version::parse(&version_str)
+        let version_str = str::from_utf8(&output.stdout)?.trim();
+        let actual_version = semver::Version::parse(version_str)
             .with_context(|| format!("Failed to parse Ruby version: {version_str}"))?;
 
         if actual_version != info.language_version {
@@ -171,6 +172,7 @@ impl LanguageImpl for Ruby {
                 .args(&hook.args)
                 .args(batch)
                 .check(false)
+                .stdin(Stdio::null())
                 .pty_output()
                 .await?;
 

@@ -1,6 +1,7 @@
 use std::borrow::Cow;
 use std::env::consts::EXE_EXTENSION;
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use std::sync::Arc;
 
 use anyhow::{Context, Result};
@@ -112,7 +113,7 @@ impl LanguageImpl for Node {
                 .arg("--no-audit")
                 .arg("--install-links")
                 .args(&*deps)
-                .env("PATH", new_path)
+                .env(EnvVars::PATH, new_path)
                 .env(EnvVars::NPM_CONFIG_PREFIX, &info.env_path)
                 .env_remove(EnvVars::NPM_CONFIG_USERCONFIG)
                 .env(EnvVars::NODE_PATH, &lib_dir)
@@ -162,13 +163,14 @@ impl LanguageImpl for Node {
             let mut output = Cmd::new(&entry[0], "node hook")
                 .current_dir(hook.work_dir())
                 .args(&entry[1..])
-                .env("PATH", &new_path)
+                .env(EnvVars::PATH, &new_path)
                 .env(EnvVars::NPM_CONFIG_PREFIX, env_dir)
                 .env_remove(EnvVars::NPM_CONFIG_USERCONFIG)
                 .env(EnvVars::NODE_PATH, lib_dir(env_dir))
                 .args(&hook.args)
                 .args(batch)
                 .check(false)
+                .stdin(Stdio::null())
                 .pty_output()
                 .await?;
 

@@ -182,6 +182,19 @@ class Prepare:
                 fields=[],
                 description=struct.description,
             )
+
+            if struct.params:
+                for k, v in struct.params.items():
+                    kv_pair = common_types.KeyValuePair(
+                        key=str(k) if k != "mmap_enabled" else "mmap.enabled",
+                        value=(
+                            orjson.dumps(v).decode(Config.EncodeProtocol)
+                            if not isinstance(v, str)
+                            else str(v)
+                        ),
+                    )
+                    struct_schema.type_params.append(kv_pair)
+
             for f in struct.fields:
                 # Convert struct field types to backend representation
                 # As struct itself only support array type, so all it's fields are array type
@@ -530,6 +543,10 @@ class Prepare:
             struct_sub_field_info: Two-level dict [struct_name][field_name] -> field info
             struct_sub_fields_data: Two-level dict [struct_name][field_name] -> FieldData
         """
+        # Convert numpy ndarray to list if needed
+        if isinstance(values, np.ndarray):
+            values = values.tolist()
+
         if not isinstance(values, list):
             msg = f"Field '{field_name}': Expected list, got {type(values).__name__}"
             raise TypeError(msg)
@@ -1465,6 +1482,12 @@ class Prepare:
         if param.get("analyzer_name") is not None:
             search_params["analyzer_name"] = param["analyzer_name"]
 
+        if kwargs.get("timezone") is not None:
+            search_params["timezone"] = kwargs["timezone"]
+
+        if kwargs.get("time_fields") is not None:
+            search_params["time_fields"] = kwargs["time_fields"]
+
         search_params["params"] = get_params(param)
 
         req_params = [
@@ -1899,6 +1922,14 @@ class Prepare:
         offset = kwargs.get("offset")
         if offset is not None:
             req.query_params.append(common_types.KeyValuePair(key="offset", value=str(offset)))
+
+        timezone = kwargs.get("timezone")
+        if timezone is not None:
+            req.query_params.append(common_types.KeyValuePair(key="timezone", value=timezone))
+
+        timefileds = kwargs.get("time_fields")
+        if timefileds is not None:
+            req.query_params.append(common_types.KeyValuePair(key="time_fields", value=timefileds))
 
         ignore_growing = kwargs.get("ignore_growing", False)
         stop_reduce_for_best = kwargs.get(REDUCE_STOP_FOR_BEST, False)

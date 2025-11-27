@@ -3046,6 +3046,10 @@ class CfnTrail(
                 # the properties below are optional
                 name="name"
             )],
+            aggregation_configurations=[cloudtrail.CfnTrail.AggregationConfigurationProperty(
+                event_category="eventCategory",
+                templates=["templates"]
+            )],
             cloud_watch_logs_log_group_arn="cloudWatchLogsLogGroupArn",
             cloud_watch_logs_role_arn="cloudWatchLogsRoleArn",
             enable_log_file_validation=False,
@@ -3086,6 +3090,7 @@ class CfnTrail(
         is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
         s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
         advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrail.AdvancedEventSelectorProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        aggregation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrail.AggregationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
         cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -3107,6 +3112,7 @@ class CfnTrail(
         :param is_logging: Whether the CloudTrail trail is currently logging AWS API calls.
         :param s3_bucket_name: Specifies the name of the Amazon S3 bucket designated for publishing log files. See `Amazon S3 Bucket naming rules <https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html>`_ .
         :param advanced_event_selectors: Specifies the settings for advanced event selectors. You can use advanced event selectors to log management events, data events for all resource types, and network activity events. You can add advanced event selectors, and conditions for your advanced event selectors, up to a maximum of 500 values for all conditions and selectors on a trail. You can use either ``AdvancedEventSelectors`` or ``EventSelectors`` , but not both. If you apply ``AdvancedEventSelectors`` to a trail, any existing ``EventSelectors`` are overwritten. For more information about advanced event selectors, see `Logging data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html>`_ and `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* .
+        :param aggregation_configurations: Specifies the aggregation configuration to aggregate CloudTrail Events. A maximum of 1 aggregation configuration is allowed.
         :param cloud_watch_logs_log_group_arn: Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs are delivered. You must use a log group that exists in your account. To enable CloudWatch Logs delivery, you must provide values for ``CloudWatchLogsLogGroupArn`` and ``CloudWatchLogsRoleArn`` . .. epigraph:: If you previously enabled CloudWatch Logs delivery and want to disable CloudWatch Logs delivery, you must set the values of the ``CloudWatchLogsRoleArn`` and ``CloudWatchLogsLogGroupArn`` fields to ``""`` .
         :param cloud_watch_logs_role_arn: Specifies the role for the CloudWatch Logs endpoint to assume to write to a user's log group. You must use a role that exists in your account. To enable CloudWatch Logs delivery, you must provide values for ``CloudWatchLogsLogGroupArn`` and ``CloudWatchLogsRoleArn`` . .. epigraph:: If you previously enabled CloudWatch Logs delivery and want to disable CloudWatch Logs delivery, you must set the values of the ``CloudWatchLogsRoleArn`` and ``CloudWatchLogsLogGroupArn`` fields to ``""`` .
         :param enable_log_file_validation: Specifies whether log file validation is enabled. The default is false. .. epigraph:: When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail does not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.
@@ -3129,6 +3135,7 @@ class CfnTrail(
             is_logging=is_logging,
             s3_bucket_name=s3_bucket_name,
             advanced_event_selectors=advanced_event_selectors,
+            aggregation_configurations=aggregation_configurations,
             cloud_watch_logs_log_group_arn=cloud_watch_logs_log_group_arn,
             cloud_watch_logs_role_arn=cloud_watch_logs_role_arn,
             enable_log_file_validation=enable_log_file_validation,
@@ -3310,6 +3317,24 @@ class CfnTrail(
             type_hints = typing.get_type_hints(_typecheckingstub__ae10dc28d41ecf82427e4cef4ce27f9c40933974aaf57ffd8e73f19c06621f53)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "advancedEventSelectors", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="aggregationConfigurations")
+    def aggregation_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrail.AggregationConfigurationProperty"]]]]:
+        '''Specifies the aggregation configuration to aggregate CloudTrail Events.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrail.AggregationConfigurationProperty"]]]], jsii.get(self, "aggregationConfigurations"))
+
+    @aggregation_configurations.setter
+    def aggregation_configurations(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnTrail.AggregationConfigurationProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__014de64173a82b38bfbf2ea8f096afb536717ff0c1b982465211c09ace5929f1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "aggregationConfigurations", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="cloudWatchLogsLogGroupArn")
@@ -3859,6 +3884,77 @@ class CfnTrail(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_cloudtrail.CfnTrail.AggregationConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"event_category": "eventCategory", "templates": "templates"},
+    )
+    class AggregationConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            event_category: builtins.str,
+            templates: typing.Sequence[builtins.str],
+        ) -> None:
+            '''Configure to add aggregation rules to aggregate CloudTrail Events.
+
+            :param event_category: The category of events to be aggregated.
+            :param templates: Contains all templates in an aggregation configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-aggregationconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_cloudtrail as cloudtrail
+                
+                aggregation_configuration_property = cloudtrail.CfnTrail.AggregationConfigurationProperty(
+                    event_category="eventCategory",
+                    templates=["templates"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3e84f4c10db2460430ae27276d91d01d54dc5d780d885c60762987b42e8abe19)
+                check_type(argname="argument event_category", value=event_category, expected_type=type_hints["event_category"])
+                check_type(argname="argument templates", value=templates, expected_type=type_hints["templates"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "event_category": event_category,
+                "templates": templates,
+            }
+
+        @builtins.property
+        def event_category(self) -> builtins.str:
+            '''The category of events to be aggregated.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-aggregationconfiguration.html#cfn-cloudtrail-trail-aggregationconfiguration-eventcategory
+            '''
+            result = self._values.get("event_category")
+            assert result is not None, "Required property 'event_category' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def templates(self) -> typing.List[builtins.str]:
+            '''Contains all templates in an aggregation configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudtrail-trail-aggregationconfiguration.html#cfn-cloudtrail-trail-aggregationconfiguration-templates
+            '''
+            result = self._values.get("templates")
+            assert result is not None, "Required property 'templates' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AggregationConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_cloudtrail.CfnTrail.DataResourceProperty",
         jsii_struct_bases=[],
         name_mapping={"type": "type", "values": "values"},
@@ -4213,6 +4309,7 @@ class CfnTrail(
         "is_logging": "isLogging",
         "s3_bucket_name": "s3BucketName",
         "advanced_event_selectors": "advancedEventSelectors",
+        "aggregation_configurations": "aggregationConfigurations",
         "cloud_watch_logs_log_group_arn": "cloudWatchLogsLogGroupArn",
         "cloud_watch_logs_role_arn": "cloudWatchLogsRoleArn",
         "enable_log_file_validation": "enableLogFileValidation",
@@ -4235,6 +4332,7 @@ class CfnTrailProps:
         is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
         s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
         advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        aggregation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AggregationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
         cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
         enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -4254,6 +4352,7 @@ class CfnTrailProps:
         :param is_logging: Whether the CloudTrail trail is currently logging AWS API calls.
         :param s3_bucket_name: Specifies the name of the Amazon S3 bucket designated for publishing log files. See `Amazon S3 Bucket naming rules <https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html>`_ .
         :param advanced_event_selectors: Specifies the settings for advanced event selectors. You can use advanced event selectors to log management events, data events for all resource types, and network activity events. You can add advanced event selectors, and conditions for your advanced event selectors, up to a maximum of 500 values for all conditions and selectors on a trail. You can use either ``AdvancedEventSelectors`` or ``EventSelectors`` , but not both. If you apply ``AdvancedEventSelectors`` to a trail, any existing ``EventSelectors`` are overwritten. For more information about advanced event selectors, see `Logging data events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-data-events-with-cloudtrail.html>`_ and `Logging network activity events <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-network-events-with-cloudtrail.html>`_ in the *AWS CloudTrail User Guide* .
+        :param aggregation_configurations: Specifies the aggregation configuration to aggregate CloudTrail Events. A maximum of 1 aggregation configuration is allowed.
         :param cloud_watch_logs_log_group_arn: Specifies a log group name using an Amazon Resource Name (ARN), a unique identifier that represents the log group to which CloudTrail logs are delivered. You must use a log group that exists in your account. To enable CloudWatch Logs delivery, you must provide values for ``CloudWatchLogsLogGroupArn`` and ``CloudWatchLogsRoleArn`` . .. epigraph:: If you previously enabled CloudWatch Logs delivery and want to disable CloudWatch Logs delivery, you must set the values of the ``CloudWatchLogsRoleArn`` and ``CloudWatchLogsLogGroupArn`` fields to ``""`` .
         :param cloud_watch_logs_role_arn: Specifies the role for the CloudWatch Logs endpoint to assume to write to a user's log group. You must use a role that exists in your account. To enable CloudWatch Logs delivery, you must provide values for ``CloudWatchLogsLogGroupArn`` and ``CloudWatchLogsRoleArn`` . .. epigraph:: If you previously enabled CloudWatch Logs delivery and want to disable CloudWatch Logs delivery, you must set the values of the ``CloudWatchLogsRoleArn`` and ``CloudWatchLogsLogGroupArn`` fields to ``""`` .
         :param enable_log_file_validation: Specifies whether log file validation is enabled. The default is false. .. epigraph:: When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail does not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.
@@ -4298,6 +4397,10 @@ class CfnTrailProps:
                     # the properties below are optional
                     name="name"
                 )],
+                aggregation_configurations=[cloudtrail.CfnTrail.AggregationConfigurationProperty(
+                    event_category="eventCategory",
+                    templates=["templates"]
+                )],
                 cloud_watch_logs_log_group_arn="cloudWatchLogsLogGroupArn",
                 cloud_watch_logs_role_arn="cloudWatchLogsRoleArn",
                 enable_log_file_validation=False,
@@ -4334,6 +4437,7 @@ class CfnTrailProps:
             check_type(argname="argument is_logging", value=is_logging, expected_type=type_hints["is_logging"])
             check_type(argname="argument s3_bucket_name", value=s3_bucket_name, expected_type=type_hints["s3_bucket_name"])
             check_type(argname="argument advanced_event_selectors", value=advanced_event_selectors, expected_type=type_hints["advanced_event_selectors"])
+            check_type(argname="argument aggregation_configurations", value=aggregation_configurations, expected_type=type_hints["aggregation_configurations"])
             check_type(argname="argument cloud_watch_logs_log_group_arn", value=cloud_watch_logs_log_group_arn, expected_type=type_hints["cloud_watch_logs_log_group_arn"])
             check_type(argname="argument cloud_watch_logs_role_arn", value=cloud_watch_logs_role_arn, expected_type=type_hints["cloud_watch_logs_role_arn"])
             check_type(argname="argument enable_log_file_validation", value=enable_log_file_validation, expected_type=type_hints["enable_log_file_validation"])
@@ -4353,6 +4457,8 @@ class CfnTrailProps:
         }
         if advanced_event_selectors is not None:
             self._values["advanced_event_selectors"] = advanced_event_selectors
+        if aggregation_configurations is not None:
+            self._values["aggregation_configurations"] = aggregation_configurations
         if cloud_watch_logs_log_group_arn is not None:
             self._values["cloud_watch_logs_log_group_arn"] = cloud_watch_logs_log_group_arn
         if cloud_watch_logs_role_arn is not None:
@@ -4416,6 +4522,19 @@ class CfnTrailProps:
         '''
         result = self._values.get("advanced_event_selectors")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AdvancedEventSelectorProperty]]]], result)
+
+    @builtins.property
+    def aggregation_configurations(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AggregationConfigurationProperty]]]]:
+        '''Specifies the aggregation configuration to aggregate CloudTrail Events.
+
+        A maximum of 1 aggregation configuration is allowed.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudtrail-trail.html#cfn-cloudtrail-trail-aggregationconfigurations
+        '''
+        result = self._values.get("aggregation_configurations")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AggregationConfigurationProperty]]]], result)
 
     @builtins.property
     def cloud_watch_logs_log_group_arn(
@@ -5860,6 +5979,7 @@ def _typecheckingstub__2259d5765ec84e4697f55f0d491871f1aa010feb94b3445a33a9e4b9f
     is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
     s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
     advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    aggregation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AggregationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
     cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -5925,6 +6045,12 @@ def _typecheckingstub__950bb01f69a31c7f47512f3a4330d4ce5db85c66795a79936ef3af33a
 
 def _typecheckingstub__ae10dc28d41ecf82427e4cef4ce27f9c40933974aaf57ffd8e73f19c06621f53(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AdvancedEventSelectorProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__014de64173a82b38bfbf2ea8f096afb536717ff0c1b982465211c09ace5929f1(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnTrail.AggregationConfigurationProperty]]]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6028,6 +6154,14 @@ def _typecheckingstub__ec8d9a5e1a3e1eac8b87551fd80e338cfe5e5578a88b45c91f7b6ae91
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3e84f4c10db2460430ae27276d91d01d54dc5d780d885c60762987b42e8abe19(
+    *,
+    event_category: builtins.str,
+    templates: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__eba75230621acc9cbcd78ccb16505dcc1e9707f9ce1d5b5c64f36220a2fbd761(
     *,
     type: builtins.str,
@@ -6059,6 +6193,7 @@ def _typecheckingstub__fe29eec9c2fc5386dadc73c14bab1f4c61dc9a7cd9ad26812bf169694
     is_logging: typing.Union[builtins.bool, _IResolvable_da3f097b],
     s3_bucket_name: typing.Union[builtins.str, _IBucketRef_3debe44e],
     advanced_event_selectors: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AdvancedEventSelectorProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    aggregation_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrail.AggregationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     cloud_watch_logs_log_group_arn: typing.Optional[typing.Union[builtins.str, _ILogGroupRef_874d025a]] = None,
     cloud_watch_logs_role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
     enable_log_file_validation: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,

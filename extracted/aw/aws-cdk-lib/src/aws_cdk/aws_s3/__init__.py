@@ -4802,12 +4802,17 @@ class CfnBucket(
 
     Example::
 
-        # Works across different resource types
-        bucket = s3.CfnBucket(scope, "Bucket")
-        Mixins.of(bucket).apply(EncryptionAtRest())
+        # cfn_template: cfn_inc.CfnInclude
         
-        log_group = logs.CfnLogGroup(scope, "LogGroup")
-        Mixins.of(log_group).apply(EncryptionAtRest())
+        cfn_bucket = cfn_template.get_resource("Bucket")
+        
+        role = iam.Role(self, "Role",
+            assumed_by=iam.AnyPrincipal()
+        )
+        role.add_to_policy(iam.PolicyStatement(
+            actions=["s3:*"],
+            resources=[cfn_bucket.attr_arn]
+        ))
     '''
 
     def __init__(
@@ -4815,6 +4820,7 @@ class CfnBucket(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        abac_status: typing.Optional[builtins.str] = None,
         accelerate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.AccelerateConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         access_control: typing.Optional[builtins.str] = None,
         analytics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.AnalyticsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -4842,6 +4848,7 @@ class CfnBucket(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param abac_status: 
         :param accelerate_configuration: Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see `Amazon S3 Transfer Acceleration <https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html>`_ in the *Amazon S3 User Guide* .
         :param access_control: .. epigraph:: This is a legacy property, and it is not recommended for most use cases. A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and we recommend that you keep ACLs disabled. For more information, see `Controlling object ownership <https://docs.aws.amazon.com//AmazonS3/latest/userguide/about-object-ownership.html>`_ in the *Amazon S3 User Guide* . A canned access control list (ACL) that grants predefined permissions to the bucket. For more information about canned ACLs, see `Canned ACL <https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`_ in the *Amazon S3 User Guide* . S3 buckets are created with ACLs disabled by default. Therefore, unless you explicitly set the `AWS::S3::OwnershipControls <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-ownershipcontrols.html>`_ property to enable ACLs, your resource will fail to deploy with any value other than Private. Use cases requiring ACLs are uncommon. The majority of access control configurations can be successfully and more easily achieved with bucket policies. For more information, see `AWS::S3::BucketPolicy <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html>`_ . For examples of common policy configurations, including S3 Server Access Logs buckets and more, see `Bucket policy examples <https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html>`_ in the *Amazon S3 User Guide* .
         :param analytics_configurations: Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.
@@ -4870,6 +4877,7 @@ class CfnBucket(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnBucketProps(
+            abac_status=abac_status,
             accelerate_configuration=accelerate_configuration,
             access_control=access_control,
             analytics_configurations=analytics_configurations,
@@ -5133,6 +5141,18 @@ class CfnBucket(
     def tags(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
         return typing.cast(_TagManager_0a598cb3, jsii.get(self, "tags"))
+
+    @builtins.property
+    @jsii.member(jsii_name="abacStatus")
+    def abac_status(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "abacStatus"))
+
+    @abac_status.setter
+    def abac_status(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__92baa0bc4d53477790fe6d9d6d1b13a7af7864f4f5f24655f9edeb432b94ee13)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "abacStatus", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="accelerateConfiguration")
@@ -5813,6 +5833,60 @@ class CfnBucket(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3.CfnBucket.BlockedEncryptionTypesProperty",
+        jsii_struct_bases=[],
+        name_mapping={"encryption_type": "encryptionType"},
+    )
+    class BlockedEncryptionTypesProperty:
+        def __init__(
+            self,
+            *,
+            encryption_type: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param encryption_type: List of encryption types.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-blockedencryptiontypes.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3 as s3
+                
+                blocked_encryption_types_property = s3.CfnBucket.BlockedEncryptionTypesProperty(
+                    encryption_type=["encryptionType"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ca8516e6217fff7a0e14490606e78fd9a861181ec3dda3919d1c54cb5d94ccf4)
+                check_type(argname="argument encryption_type", value=encryption_type, expected_type=type_hints["encryption_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if encryption_type is not None:
+                self._values["encryption_type"] = encryption_type
+
+        @builtins.property
+        def encryption_type(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''List of encryption types.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-blockedencryptiontypes.html#cfn-s3-bucket-blockedencryptiontypes-encryptiontype
+            '''
+            result = self._values.get("encryption_type")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "BlockedEncryptionTypesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_s3.CfnBucket.BucketEncryptionProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -5842,6 +5916,9 @@ class CfnBucket(
                 
                 bucket_encryption_property = s3.CfnBucket.BucketEncryptionProperty(
                     server_side_encryption_configuration=[s3.CfnBucket.ServerSideEncryptionRuleProperty(
+                        blocked_encryption_types=s3.CfnBucket.BlockedEncryptionTypesProperty(
+                            encryption_type=["encryptionType"]
+                        ),
                         bucket_key_enabled=False,
                         server_side_encryption_by_default=s3.CfnBucket.ServerSideEncryptionByDefaultProperty(
                             sse_algorithm="sseAlgorithm",
@@ -11199,6 +11276,7 @@ class CfnBucket(
         jsii_type="aws-cdk-lib.aws_s3.CfnBucket.ServerSideEncryptionRuleProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "blocked_encryption_types": "blockedEncryptionTypes",
             "bucket_key_enabled": "bucketKeyEnabled",
             "server_side_encryption_by_default": "serverSideEncryptionByDefault",
         },
@@ -11207,6 +11285,7 @@ class CfnBucket(
         def __init__(
             self,
             *,
+            blocked_encryption_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.BlockedEncryptionTypesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             bucket_key_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             server_side_encryption_by_default: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnBucket.ServerSideEncryptionByDefaultProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -11217,6 +11296,7 @@ class CfnBucket(
                - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS  resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
                - *Directory buckets* - When you specify an `AWS  customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.
 
+            :param blocked_encryption_types: 
             :param bucket_key_enabled: Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the ``BucketKeyEnabled`` element to ``true`` causes Amazon S3 to use an S3 Bucket Key. By default, S3 Bucket Key is not enabled. For more information, see `Amazon S3 Bucket Keys <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html>`_ in the *Amazon S3 User Guide* .
             :param server_side_encryption_by_default: Specifies the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.
 
@@ -11230,6 +11310,9 @@ class CfnBucket(
                 from aws_cdk import aws_s3 as s3
                 
                 server_side_encryption_rule_property = s3.CfnBucket.ServerSideEncryptionRuleProperty(
+                    blocked_encryption_types=s3.CfnBucket.BlockedEncryptionTypesProperty(
+                        encryption_type=["encryptionType"]
+                    ),
                     bucket_key_enabled=False,
                     server_side_encryption_by_default=s3.CfnBucket.ServerSideEncryptionByDefaultProperty(
                         sse_algorithm="sseAlgorithm",
@@ -11241,13 +11324,26 @@ class CfnBucket(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__7399915f1276596bc8e7756f9e88de474daddad877ba1ac818fe73e149c7728c)
+                check_type(argname="argument blocked_encryption_types", value=blocked_encryption_types, expected_type=type_hints["blocked_encryption_types"])
                 check_type(argname="argument bucket_key_enabled", value=bucket_key_enabled, expected_type=type_hints["bucket_key_enabled"])
                 check_type(argname="argument server_side_encryption_by_default", value=server_side_encryption_by_default, expected_type=type_hints["server_side_encryption_by_default"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if blocked_encryption_types is not None:
+                self._values["blocked_encryption_types"] = blocked_encryption_types
             if bucket_key_enabled is not None:
                 self._values["bucket_key_enabled"] = bucket_key_enabled
             if server_side_encryption_by_default is not None:
                 self._values["server_side_encryption_by_default"] = server_side_encryption_by_default
+
+        @builtins.property
+        def blocked_encryption_types(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.BlockedEncryptionTypesProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-serversideencryptionrule.html#cfn-s3-bucket-serversideencryptionrule-blockedencryptiontypes
+            '''
+            result = self._values.get("blocked_encryption_types")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.BlockedEncryptionTypesProperty"]], result)
 
         @builtins.property
         def bucket_key_enabled(
@@ -12365,6 +12461,7 @@ class CfnBucketPolicyProps:
     jsii_type="aws-cdk-lib.aws_s3.CfnBucketProps",
     jsii_struct_bases=[],
     name_mapping={
+        "abac_status": "abacStatus",
         "accelerate_configuration": "accelerateConfiguration",
         "access_control": "accessControl",
         "analytics_configurations": "analyticsConfigurations",
@@ -12393,6 +12490,7 @@ class CfnBucketProps:
     def __init__(
         self,
         *,
+        abac_status: typing.Optional[builtins.str] = None,
         accelerate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AccelerateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         access_control: typing.Optional[builtins.str] = None,
         analytics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AnalyticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -12418,6 +12516,7 @@ class CfnBucketProps:
     ) -> None:
         '''Properties for defining a ``CfnBucket``.
 
+        :param abac_status: 
         :param accelerate_configuration: Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see `Amazon S3 Transfer Acceleration <https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html>`_ in the *Amazon S3 User Guide* .
         :param access_control: .. epigraph:: This is a legacy property, and it is not recommended for most use cases. A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and we recommend that you keep ACLs disabled. For more information, see `Controlling object ownership <https://docs.aws.amazon.com//AmazonS3/latest/userguide/about-object-ownership.html>`_ in the *Amazon S3 User Guide* . A canned access control list (ACL) that grants predefined permissions to the bucket. For more information about canned ACLs, see `Canned ACL <https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`_ in the *Amazon S3 User Guide* . S3 buckets are created with ACLs disabled by default. Therefore, unless you explicitly set the `AWS::S3::OwnershipControls <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-ownershipcontrols.html>`_ property to enable ACLs, your resource will fail to deploy with any value other than Private. Use cases requiring ACLs are uncommon. The majority of access control configurations can be successfully and more easily achieved with bucket policies. For more information, see `AWS::S3::BucketPolicy <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html>`_ . For examples of common policy configurations, including S3 Server Access Logs buckets and more, see `Bucket policy examples <https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html>`_ in the *Amazon S3 User Guide* .
         :param analytics_configurations: Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.
@@ -12458,6 +12557,7 @@ class CfnBucketProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__658a4165ec8804b9770871bbb27764713f55dc53e9c9e990dca120e7713b6fd8)
+            check_type(argname="argument abac_status", value=abac_status, expected_type=type_hints["abac_status"])
             check_type(argname="argument accelerate_configuration", value=accelerate_configuration, expected_type=type_hints["accelerate_configuration"])
             check_type(argname="argument access_control", value=access_control, expected_type=type_hints["access_control"])
             check_type(argname="argument analytics_configurations", value=analytics_configurations, expected_type=type_hints["analytics_configurations"])
@@ -12481,6 +12581,8 @@ class CfnBucketProps:
             check_type(argname="argument versioning_configuration", value=versioning_configuration, expected_type=type_hints["versioning_configuration"])
             check_type(argname="argument website_configuration", value=website_configuration, expected_type=type_hints["website_configuration"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if abac_status is not None:
+            self._values["abac_status"] = abac_status
         if accelerate_configuration is not None:
             self._values["accelerate_configuration"] = accelerate_configuration
         if access_control is not None:
@@ -12525,6 +12627,14 @@ class CfnBucketProps:
             self._values["versioning_configuration"] = versioning_configuration
         if website_configuration is not None:
             self._values["website_configuration"] = website_configuration
+
+    @builtins.property
+    def abac_status(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-bucket.html#cfn-s3-bucket-abacstatus
+        '''
+        result = self._values.get("abac_status")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def accelerate_configuration(
@@ -23429,6 +23539,7 @@ def _typecheckingstub__0cfa39e37f5fa17b8234ce2f712ef5cf3bf2c262914967924c19a67f6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    abac_status: typing.Optional[builtins.str] = None,
     accelerate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AccelerateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     access_control: typing.Optional[builtins.str] = None,
     analytics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AnalyticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -23485,6 +23596,12 @@ def _typecheckingstub__176de3038f1db142ab99b5462bff80dea14e125a51ef31e58c268c52b
 
 def _typecheckingstub__7c6f7eab06b1bc3b7d95aafe9c7e878df8baa3e63b0ddb95c0555dda7fc11188(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92baa0bc4d53477790fe6d9d6d1b13a7af7864f4f5f24655f9edeb432b94ee13(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23648,6 +23765,13 @@ def _typecheckingstub__05695abd70e28eaf41950817748f37845347f7c9dafcf363988c515ef
     storage_class_analysis: typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.StorageClassAnalysisProperty, typing.Dict[builtins.str, typing.Any]]],
     prefix: typing.Optional[builtins.str] = None,
     tag_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.TagFilterProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ca8516e6217fff7a0e14490606e78fd9a861181ec3dda3919d1c54cb5d94ccf4(
+    *,
+    encryption_type: typing.Optional[typing.Sequence[builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24110,6 +24234,7 @@ def _typecheckingstub__3229cd2c18436533dcead472d0996d4ebdc1c905ed61303c4f652cc5f
 
 def _typecheckingstub__7399915f1276596bc8e7756f9e88de474daddad877ba1ac818fe73e149c7728c(
     *,
+    blocked_encryption_types: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.BlockedEncryptionTypesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     bucket_key_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     server_side_encryption_by_default: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.ServerSideEncryptionByDefaultProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -24241,6 +24366,7 @@ def _typecheckingstub__4e45362293c11bec4f214faabdb065f61ae05bd217411f39deaf7c82a
 
 def _typecheckingstub__658a4165ec8804b9770871bbb27764713f55dc53e9c9e990dca120e7713b6fd8(
     *,
+    abac_status: typing.Optional[builtins.str] = None,
     accelerate_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AccelerateConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     access_control: typing.Optional[builtins.str] = None,
     analytics_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBucket.AnalyticsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

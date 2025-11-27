@@ -1,4 +1,5 @@
 use std::path::{Path, PathBuf};
+use std::process::Stdio;
 use std::sync::Arc;
 
 use anyhow::{Context, Result};
@@ -144,12 +145,13 @@ impl LanguageImpl for Lua {
             let mut output = Cmd::new(&entry[0], "run lua command")
                 .current_dir(hook.work_dir())
                 .args(&entry[1..])
-                .env("PATH", &new_path)
+                .env(EnvVars::PATH, &new_path)
                 .env(EnvVars::LUA_PATH, &lua_path)
                 .env(EnvVars::LUA_CPATH, &lua_cpath)
                 .args(&hook.args)
                 .args(batch)
                 .check(false)
+                .stdin(Stdio::null())
                 .pty_output()
                 .await?;
 

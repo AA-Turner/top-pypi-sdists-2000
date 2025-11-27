@@ -143,6 +143,7 @@ class CfnAppMonitor(
             ),
             domain="domain",
             domain_list=["domainList"],
+            platform="platform",
             resource_policy=rum.CfnAppMonitor.ResourcePolicyProperty(
                 policy_document="policyDocument",
         
@@ -168,6 +169,7 @@ class CfnAppMonitor(
         deobfuscation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppMonitor.DeobfuscationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         domain: typing.Optional[builtins.str] = None,
         domain_list: typing.Optional[typing.Sequence[builtins.str]] = None,
+        platform: typing.Optional[builtins.str] = None,
         resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnAppMonitor.ResourcePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -182,6 +184,7 @@ class CfnAppMonitor(
         :param deobfuscation_configuration: A structure that contains the configuration for how an app monitor can deobfuscate stack traces.
         :param domain: The top-level internet domain name for which your application has administrative authority. This parameter or the ``DomainList`` parameter is required.
         :param domain_list: List the domain names for which your application has administrative authority. This parameter or the ``Domain`` parameter is required. You can have a minimum of 1 and a maximum of 5 ``Domain`` under ``DomainList`` . Each ``Domain`` must be a minimum length of 1 and a maximum of 253 characters.
+        :param platform: 
         :param resource_policy: Use this structure to assign a resource-based policy to a CloudWatch RUM app monitor to control access to it. Each app monitor can have one resource-based policy. The maximum size of the policy is 4 KB. To learn more about using resource policies with RUM, see `Using resource-based policies with CloudWatch RUM <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-resource-policies.html>`_ .
         :param tags: Assigns one or more tags (key-value pairs) to the app monitor. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters. You can associate as many as 50 tags with an app monitor. For more information, see `Tagging AWS resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ .
         '''
@@ -197,6 +200,7 @@ class CfnAppMonitor(
             deobfuscation_configuration=deobfuscation_configuration,
             domain=domain,
             domain_list=domain_list,
+            platform=platform,
             resource_policy=resource_policy,
             tags=tags,
         )
@@ -372,6 +376,18 @@ class CfnAppMonitor(
             type_hints = typing.get_type_hints(_typecheckingstub__0f86b0a9a53fb7afe4df111651fb954ae88b1fcdc7037dc764fa0b071918819c)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "domainList", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="platform")
+    def platform(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "platform"))
+
+    @platform.setter
+    def platform(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c49ccee18d2cf43e0e175570c2535ca63b556d284f2db826f7db6d065136888b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "platform", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="resourcePolicy")
@@ -1241,6 +1257,7 @@ class CfnAppMonitor(
         "deobfuscation_configuration": "deobfuscationConfiguration",
         "domain": "domain",
         "domain_list": "domainList",
+        "platform": "platform",
         "resource_policy": "resourcePolicy",
         "tags": "tags",
     },
@@ -1256,6 +1273,7 @@ class CfnAppMonitorProps:
         deobfuscation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.DeobfuscationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         domain: typing.Optional[builtins.str] = None,
         domain_list: typing.Optional[typing.Sequence[builtins.str]] = None,
+        platform: typing.Optional[builtins.str] = None,
         resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1268,6 +1286,7 @@ class CfnAppMonitorProps:
         :param deobfuscation_configuration: A structure that contains the configuration for how an app monitor can deobfuscate stack traces.
         :param domain: The top-level internet domain name for which your application has administrative authority. This parameter or the ``DomainList`` parameter is required.
         :param domain_list: List the domain names for which your application has administrative authority. This parameter or the ``Domain`` parameter is required. You can have a minimum of 1 and a maximum of 5 ``Domain`` under ``DomainList`` . Each ``Domain`` must be a minimum length of 1 and a maximum of 253 characters.
+        :param platform: 
         :param resource_policy: Use this structure to assign a resource-based policy to a CloudWatch RUM app monitor to control access to it. Each app monitor can have one resource-based policy. The maximum size of the policy is 4 KB. To learn more about using resource policies with RUM, see `Using resource-based policies with CloudWatch RUM <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM-resource-policies.html>`_ .
         :param tags: Assigns one or more tags (key-value pairs) to the app monitor. Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values. Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters. You can associate as many as 50 tags with an app monitor. For more information, see `Tagging AWS resources <https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html>`_ .
 
@@ -1328,6 +1347,7 @@ class CfnAppMonitorProps:
                 ),
                 domain="domain",
                 domain_list=["domainList"],
+                platform="platform",
                 resource_policy=rum.CfnAppMonitor.ResourcePolicyProperty(
                     policy_document="policyDocument",
             
@@ -1349,6 +1369,7 @@ class CfnAppMonitorProps:
             check_type(argname="argument deobfuscation_configuration", value=deobfuscation_configuration, expected_type=type_hints["deobfuscation_configuration"])
             check_type(argname="argument domain", value=domain, expected_type=type_hints["domain"])
             check_type(argname="argument domain_list", value=domain_list, expected_type=type_hints["domain_list"])
+            check_type(argname="argument platform", value=platform, expected_type=type_hints["platform"])
             check_type(argname="argument resource_policy", value=resource_policy, expected_type=type_hints["resource_policy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1366,6 +1387,8 @@ class CfnAppMonitorProps:
             self._values["domain"] = domain
         if domain_list is not None:
             self._values["domain_list"] = domain_list
+        if platform is not None:
+            self._values["platform"] = platform
         if resource_policy is not None:
             self._values["resource_policy"] = resource_policy
         if tags is not None:
@@ -1460,6 +1483,14 @@ class CfnAppMonitorProps:
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
+    def platform(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rum-appmonitor.html#cfn-rum-appmonitor-platform
+        '''
+        result = self._values.get("platform")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
     def resource_policy(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnAppMonitor.ResourcePolicyProperty]]:
@@ -1519,6 +1550,7 @@ def _typecheckingstub__be8f88e750c0e7122a036d486a439c075fc32835a9e8ecd39a432f9d8
     deobfuscation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.DeobfuscationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain: typing.Optional[builtins.str] = None,
     domain_list: typing.Optional[typing.Sequence[builtins.str]] = None,
+    platform: typing.Optional[builtins.str] = None,
     resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -1575,6 +1607,12 @@ def _typecheckingstub__0456aa4886c478c5fc3157398096bfee936719f2df864f6df5d0d99df
 
 def _typecheckingstub__0f86b0a9a53fb7afe4df111651fb954ae88b1fcdc7037dc764fa0b071918819c(
     value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c49ccee18d2cf43e0e175570c2535ca63b556d284f2db826f7db6d065136888b(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1668,6 +1706,7 @@ def _typecheckingstub__2caf0433822b63bd4f9fca8828d4497f8e2d6471cd21d40d16fd3657d
     deobfuscation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.DeobfuscationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     domain: typing.Optional[builtins.str] = None,
     domain_list: typing.Optional[typing.Sequence[builtins.str]] = None,
+    platform: typing.Optional[builtins.str] = None,
     resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:

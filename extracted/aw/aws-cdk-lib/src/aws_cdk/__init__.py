@@ -2006,6 +2006,102 @@ from .interfaces.aws_iam import IRoleRef as _IRoleRef_8400221f
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.AWSEventMetadataProps",
+    jsii_struct_bases=[],
+    name_mapping={"region": "region", "resources": "resources", "version": "version"},
+)
+class AWSEventMetadataProps:
+    def __init__(
+        self,
+        *,
+        region: typing.Optional[typing.Sequence[builtins.str]] = None,
+        resources: typing.Optional[typing.Sequence[builtins.str]] = None,
+        version: typing.Optional[typing.Sequence[builtins.str]] = None,
+    ) -> None:
+        '''Properties for AWS EventBridge event metadata.
+
+        :param region: Identifies the AWS region where the event originated. Default: - No filtering on region
+        :param resources: This JSON array contains ARNs that identify resources that are involved in the event. Inclusion of these ARNs is at the discretion of the service. For example, Amazon EC2 instance state-changes include Amazon EC2 instance ARNs, Auto Scaling events include ARNs for both instances and Auto Scaling groups, but API calls with AWS CloudTrail do not include resource ARNs. Default: - No filtering on resource
+        :param version: By default, this is set to 0 (zero) in all events. Default: - No filtering on version
+
+        :exampleMetadata: infused
+
+        Example::
+
+            from aws_cdk.mixins_preview.aws_s3.events import BucketEvents
+            
+            # bucket: s3.Bucket
+            
+            bucket_events = BucketEvents.from_bucket(bucket)
+            
+            pattern = bucket_events.object_created_pattern(
+                event_metadata=AWSEventMetadataProps(
+                    region=["us-east-1", "us-west-2"],
+                    version=["0"]
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61ff01594fca944c5be657263f73148214d4e08f5f84d8fbb9ad71c63fde54e8)
+            check_type(argname="argument region", value=region, expected_type=type_hints["region"])
+            check_type(argname="argument resources", value=resources, expected_type=type_hints["resources"])
+            check_type(argname="argument version", value=version, expected_type=type_hints["version"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if region is not None:
+            self._values["region"] = region
+        if resources is not None:
+            self._values["resources"] = resources
+        if version is not None:
+            self._values["version"] = version
+
+    @builtins.property
+    def region(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''Identifies the AWS region where the event originated.
+
+        :default: - No filtering on region
+        '''
+        result = self._values.get("region")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def resources(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''This JSON array contains ARNs that identify resources that are involved in the event.
+
+        Inclusion of these ARNs is at the discretion of the
+        service.
+
+        For example, Amazon EC2 instance state-changes include Amazon EC2
+        instance ARNs, Auto Scaling events include ARNs for both instances and
+        Auto Scaling groups, but API calls with AWS CloudTrail do not include
+        resource ARNs.
+
+        :default: - No filtering on resource
+        '''
+        result = self._values.get("resources")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def version(self) -> typing.Optional[typing.List[builtins.str]]:
+        '''By default, this is set to 0 (zero) in all events.
+
+        :default: - No filtering on version
+        '''
+        result = self._values.get("version")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "AWSEventMetadataProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.AddDockerImageAssetOptions",
     jsii_struct_bases=[],
     name_mapping={"display_name": "displayName"},
@@ -9686,6 +9782,7 @@ class CfnStackSetProps:
                 # the properties below are optional
                 administration_role_arn="administrationRoleArn",
                 auto_deployment=cdk.CfnStackSet.AutoDeploymentProperty(
+                    depends_on=["dependsOn"],
                     enabled=False,
                     retain_stacks_on_account_removal=False
                 ),
@@ -34340,6 +34437,7 @@ class CfnStackSet(
             # the properties below are optional
             administration_role_arn="administrationRoleArn",
             auto_deployment=cdk.CfnStackSet.AutoDeploymentProperty(
+                depends_on=["dependsOn"],
                 enabled=False,
                 retain_stacks_on_account_removal=False
             ),
@@ -34725,6 +34823,7 @@ class CfnStackSet(
         jsii_type="aws-cdk-lib.CfnStackSet.AutoDeploymentProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "depends_on": "dependsOn",
             "enabled": "enabled",
             "retain_stacks_on_account_removal": "retainStacksOnAccountRemoval",
         },
@@ -34733,6 +34832,7 @@ class CfnStackSet(
         def __init__(
             self,
             *,
+            depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
             enabled: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
             retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
         ) -> None:
@@ -34740,6 +34840,7 @@ class CfnStackSet(
 
             For more information, see `Enable or disable automatic deployments for StackSets in AWS Organizations <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-orgs-manage-auto-deployment.html>`_ in the *CloudFormation User Guide* .
 
+            :param depends_on: A list of StackSet ARNs that this StackSet depends on for auto-deployment operations. When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
             :param enabled: If set to ``true`` , StackSets automatically deploys additional stack instances to AWS Organizations accounts that are added to a target organization or organizational unit (OU) in the specified Regions. If an account is removed from a target organization or OU, StackSets deletes stack instances from the account in the specified Regions.
             :param retain_stacks_on_account_removal: If set to ``true`` , stack resources are retained when an account is removed from a target organization or OU. If set to ``false`` , stack resources are deleted. Specify only if ``Enabled`` is set to ``True`` .
 
@@ -34753,19 +34854,34 @@ class CfnStackSet(
                 import aws_cdk as cdk
                 
                 auto_deployment_property = cdk.CfnStackSet.AutoDeploymentProperty(
+                    depends_on=["dependsOn"],
                     enabled=False,
                     retain_stacks_on_account_removal=False
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__abc773582753bb943e2458330475daf26644638e7e52b8f88fbe6acc9b7d51ac)
+                check_type(argname="argument depends_on", value=depends_on, expected_type=type_hints["depends_on"])
                 check_type(argname="argument enabled", value=enabled, expected_type=type_hints["enabled"])
                 check_type(argname="argument retain_stacks_on_account_removal", value=retain_stacks_on_account_removal, expected_type=type_hints["retain_stacks_on_account_removal"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if depends_on is not None:
+                self._values["depends_on"] = depends_on
             if enabled is not None:
                 self._values["enabled"] = enabled
             if retain_stacks_on_account_removal is not None:
                 self._values["retain_stacks_on_account_removal"] = retain_stacks_on_account_removal
+
+        @builtins.property
+        def depends_on(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of StackSet ARNs that this StackSet depends on for auto-deployment operations.
+
+            When auto-deployment is triggered, operations will be sequenced to ensure all dependencies complete successfully before this StackSet's operation begins.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudformation-stackset-autodeployment.html#cfn-cloudformation-stackset-autodeployment-dependson
+            '''
+            result = self._values.get("depends_on")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
         @builtins.property
         def enabled(self) -> typing.Optional[typing.Union[builtins.bool, IResolvable]]:
@@ -38331,6 +38447,7 @@ class BootstraplessSynthesizer(
 
 
 __all__ = [
+    "AWSEventMetadataProps",
     "AddDockerImageAssetOptions",
     "AddFileAssetOptions",
     "Annotations",
@@ -39201,6 +39318,15 @@ from . import lambda_layer_node_proxy_agent
 from . import pipelines
 from . import region_info
 from . import triggers
+
+def _typecheckingstub__61ff01594fca944c5be657263f73148214d4e08f5f84d8fbb9ad71c63fde54e8(
+    *,
+    region: typing.Optional[typing.Sequence[builtins.str]] = None,
+    resources: typing.Optional[typing.Sequence[builtins.str]] = None,
+    version: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
 
 def _typecheckingstub__5a1ac212aad6af3e005718717aa2d00b8a797e24b74644f38d11d9f5ced18b43(
     *,
@@ -43545,6 +43671,7 @@ def _typecheckingstub__1b399e4d1c79d187fa3878cff5a39cacae8d986c447bd9f405dcd4d1f
 
 def _typecheckingstub__abc773582753bb943e2458330475daf26644638e7e52b8f88fbe6acc9b7d51ac(
     *,
+    depends_on: typing.Optional[typing.Sequence[builtins.str]] = None,
     enabled: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
     retain_stacks_on_account_removal: typing.Optional[typing.Union[builtins.bool, IResolvable]] = None,
 ) -> None:

@@ -19,48 +19,33 @@ from minio.commonconfig import ComposeSource
 from minio.sse import SseS3
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 sources = [
-    ComposeSource(
-        bucket_name="my-job-bucket", object_name="my-object-part-one",
-    ),
-    ComposeSource(
-        bucket_name="my-job-bucket", object_name="my-object-part-two",
-    ),
-    ComposeSource(
-        bucket_name="my-job-bucket", object_name="my-object-part-three",
-    ),
+    ComposeSource("my-job-bucket", "my-object-part-one"),
+    ComposeSource("my-job-bucket", "my-object-part-two"),
+    ComposeSource("my-job-bucket", "my-object-part-three"),
 ]
 
 # Create my-bucket/my-object by combining source object
 # list.
-result = client.compose_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    sources=sources,
-)
+result = client.compose_object("my-bucket", "my-object", sources)
 print(result.object_name, result.version_id)
 
 # Create my-bucket/my-object with user metadata by combining
 # source object list.
 result = client.compose_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    sources=sources,
-    user_metadata={"test_meta_key": "test_meta_value"},
+    "my-bucket",
+    "my-object",
+    sources,
+    metadata={"test_meta_key": "test_meta_value"},
 )
 print(result.object_name, result.version_id)
 
 # Create my-bucket/my-object with user metadata and
 # server-side encryption by combining source object list.
-client.compose_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    sources=sources,
-    sse=SseS3(),
-)
+client.compose_object("my-bucket", "my-object", sources, sse=SseS3())
 print(result.object_name, result.version_id)

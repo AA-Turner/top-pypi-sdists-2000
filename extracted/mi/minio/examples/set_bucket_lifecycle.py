@@ -19,7 +19,7 @@ from minio.commonconfig import ENABLED, Filter
 from minio.lifecycleconfig import Expiration, LifecycleConfig, Rule, Transition
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
@@ -27,17 +27,17 @@ client = Minio(
 config = LifecycleConfig(
     [
         Rule(
-            status=ENABLED,
+            ENABLED,
             rule_filter=Filter(prefix="documents/"),
             rule_id="rule1",
             transition=Transition(days=30, storage_class="GLACIER"),
         ),
         Rule(
-            status=ENABLED,
+            ENABLED,
             rule_filter=Filter(prefix="logs/"),
             rule_id="rule2",
             expiration=Expiration(days=365),
         ),
     ],
 )
-client.set_bucket_lifecycle(bucket_name="my-bucket", config=config)
+client.set_bucket_lifecycle("my-bucket", config)

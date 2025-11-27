@@ -25,25 +25,17 @@ from .minio_mocks import MockConnection, MockResponse
 
 class StatObject(TestCase):
     def test_object_is_string(self):
-        client = Minio(endpoint='localhost:9000')
-        with self.assertRaises(TypeError):
-            client.remove_object(bucket_name='hello', object_name=1234)
+        client = Minio('localhost:9000')
+        self.assertRaises(TypeError, client.remove_object, 'hello', 1234)
 
     def test_object_is_not_empty_string(self):
-        client = Minio(endpoint='localhost:9000')
-        with self.assertRaises(ValueError):
-            client.remove_object(
-                bucket_name='hello',
-                object_name='  \t \n  ',
-            )
+        client = Minio('localhost:9000')
+        self.assertRaises(ValueError, client.remove_object,
+                          'hello', '  \t \n  ')
 
     def test_remove_bucket_invalid_name(self):
-        client = Minio(endpoint='localhost:9000')
-        with self.assertRaises(ValueError):
-            client.remove_object(
-                bucket_name='AB*CD',
-                object_name='world',
-            )
+        client = Minio('localhost:9000')
+        self.assertRaises(ValueError, client.remove_object, 'AB*CD', 'world')
 
     @mock.patch('urllib3.PoolManager')
     def test_remove_object_works(self, mock_connection):
@@ -54,8 +46,5 @@ class StatObject(TestCase):
                          'https://localhost:9000/hello/world',
                          {'User-Agent': _DEFAULT_USER_AGENT}, 204)
         )
-        client = Minio(endpoint='localhost:9000')
-        client.remove_object(
-            bucket_name='hello',
-            object_name='world',
-        )
+        client = Minio('localhost:9000')
+        client.remove_object('hello', 'world')

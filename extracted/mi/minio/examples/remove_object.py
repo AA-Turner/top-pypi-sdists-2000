@@ -17,17 +17,16 @@
 from minio import Minio
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 # Remove object.
-client.remove_object(bucket_name="my-bucket", object_name="my-object")
+client.remove_object("my-bucket", "my-object")
 
 # Remove version of an object.
 client.remove_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
+    "my-bucket", "my-object",
     version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
 )

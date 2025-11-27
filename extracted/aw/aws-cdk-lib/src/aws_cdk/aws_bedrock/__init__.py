@@ -5840,11 +5840,27 @@ class CfnDataAutomationProject(
                     ),
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 ),
                 document=bedrock.CfnDataAutomationProject.DocumentOverrideConfigurationProperty(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     ),
                     splitter=bedrock.CfnDataAutomationProject.SplitterConfigurationProperty(
                         state="state"
@@ -5853,6 +5869,14 @@ class CfnDataAutomationProject(
                 image=bedrock.CfnDataAutomationProject.ImageOverrideConfigurationProperty(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 ),
                 modality_routing=bedrock.CfnDataAutomationProject.ModalityRoutingConfigurationProperty(
@@ -5864,10 +5888,19 @@ class CfnDataAutomationProject(
                 video=bedrock.CfnDataAutomationProject.VideoOverrideConfigurationProperty(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 )
             ),
             project_description="projectDescription",
+            project_type="projectType",
             standard_output_configuration=bedrock.CfnDataAutomationProject.StandardOutputConfigurationProperty(
                 audio=bedrock.CfnDataAutomationProject.AudioStandardOutputConfigurationProperty(
                     extraction=bedrock.CfnDataAutomationProject.AudioStandardExtractionProperty(
@@ -5973,6 +6006,7 @@ class CfnDataAutomationProject(
         kms_key_id: typing.Optional[builtins.str] = None,
         override_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.OverrideConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         project_description: typing.Optional[builtins.str] = None,
+        project_type: typing.Optional[builtins.str] = None,
         standard_output_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.StandardOutputConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -5986,6 +6020,7 @@ class CfnDataAutomationProject(
         :param kms_key_id: The AWS key to use for encryption.
         :param override_configuration: Additional settings for the project.
         :param project_description: The project's description.
+        :param project_type: Type of the DataAutomationProject - Sync or Async.
         :param standard_output_configuration: The project's standard output configuration.
         :param tags: List of Tags.
         '''
@@ -6000,6 +6035,7 @@ class CfnDataAutomationProject(
             kms_key_id=kms_key_id,
             override_configuration=override_configuration,
             project_description=project_description,
+            project_type=project_type,
             standard_output_configuration=standard_output_configuration,
             tags=tags,
         )
@@ -6190,6 +6226,19 @@ class CfnDataAutomationProject(
             type_hints = typing.get_type_hints(_typecheckingstub__66994affd3d7455a04b67bd84c11b22239237bd8483bb056b944d0895b576b11)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "projectDescription", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="projectType")
+    def project_type(self) -> typing.Optional[builtins.str]:
+        '''Type of the DataAutomationProject - Sync or Async.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "projectType"))
+
+    @project_type.setter
+    def project_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5c85af68db4f3f78e2b0a5f811d1ca35ea9b2fa54af0c06ec65742efe0968075)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "projectType", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="standardOutputConfiguration")
@@ -6408,10 +6457,13 @@ class CfnDataAutomationProject(
             identify_multiple_languages: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             input_languages: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param generative_output_language: 
-            :param identify_multiple_languages: 
-            :param input_languages: 
+            '''This allows you to set the input and output language of your audio.
+
+            The input language can be set to any of the languages supported by Bedrock Data Automation. The output can either be set to english or whatever the dominant language is of the audio, determined by the language spoken for the most seconds.
+
+            :param generative_output_language: The output language of your processing results. This can either be set to ``EN`` (English) or ``DEFAULT`` which will output the results in the dominant language of the audio. The dominant language is determined as the language in the audio, spoken the longest in the input audio.
+            :param identify_multiple_languages: The toggle determining if you want to detect multiple languages from your audio.
+            :param input_languages: The input language of your audio. This can be set to any of the currently supported languages via the language codes.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -6443,7 +6495,10 @@ class CfnDataAutomationProject(
 
         @builtins.property
         def generative_output_language(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The output language of your processing results.
+
+            This can either be set to ``EN`` (English) or ``DEFAULT`` which will output the results in the dominant language of the audio. The dominant language is determined as the language in the audio, spoken the longest in the input audio.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-generativeoutputlanguage
             '''
             result = self._values.get("generative_output_language")
@@ -6453,7 +6508,8 @@ class CfnDataAutomationProject(
         def identify_multiple_languages(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''The toggle determining if you want to detect multiple languages from your audio.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-identifymultiplelanguages
             '''
             result = self._values.get("identify_multiple_languages")
@@ -6461,7 +6517,10 @@ class CfnDataAutomationProject(
 
         @builtins.property
         def input_languages(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The input language of your audio.
+
+            This can be set to any of the currently supported languages via the language codes.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiolanguageconfiguration.html#cfn-bedrock-dataautomationproject-audiolanguageconfiguration-inputlanguages
             '''
             result = self._values.get("input_languages")
@@ -6484,6 +6543,7 @@ class CfnDataAutomationProject(
         name_mapping={
             "language_configuration": "languageConfiguration",
             "modality_processing": "modalityProcessing",
+            "sensitive_data_configuration": "sensitiveDataConfiguration",
         },
     )
     class AudioOverrideConfigurationProperty:
@@ -6492,11 +6552,13 @@ class CfnDataAutomationProject(
             *,
             language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.AudioLanguageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ModalityProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SensitiveDataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Sets whether your project will process audio or not.
 
-            :param language_configuration: 
+            :param language_configuration: The output and input language configuration for your audio.
             :param modality_processing: Sets modality processing for audio files. All modalities are enabled by default.
+            :param sensitive_data_configuration: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiooverrideconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -6515,6 +6577,14 @@ class CfnDataAutomationProject(
                     ),
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 )
             '''
@@ -6522,17 +6592,21 @@ class CfnDataAutomationProject(
                 type_hints = typing.get_type_hints(_typecheckingstub__9fa0ddf34ba99d172292ec01a5b59e05e41939ae214f174146b2d694461955ce)
                 check_type(argname="argument language_configuration", value=language_configuration, expected_type=type_hints["language_configuration"])
                 check_type(argname="argument modality_processing", value=modality_processing, expected_type=type_hints["modality_processing"])
+                check_type(argname="argument sensitive_data_configuration", value=sensitive_data_configuration, expected_type=type_hints["sensitive_data_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if language_configuration is not None:
                 self._values["language_configuration"] = language_configuration
             if modality_processing is not None:
                 self._values["modality_processing"] = modality_processing
+            if sensitive_data_configuration is not None:
+                self._values["sensitive_data_configuration"] = sensitive_data_configuration
 
         @builtins.property
         def language_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.AudioLanguageConfigurationProperty"]]:
-            '''
+            '''The output and input language configuration for your audio.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiooverrideconfiguration.html#cfn-bedrock-dataautomationproject-audiooverrideconfiguration-languageconfiguration
             '''
             result = self._values.get("language_configuration")
@@ -6550,6 +6624,16 @@ class CfnDataAutomationProject(
             '''
             result = self._values.get("modality_processing")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ModalityProcessingConfigurationProperty"]], result)
+
+        @builtins.property
+        def sensitive_data_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-audiooverrideconfiguration.html#cfn-bedrock-dataautomationproject-audiooverrideconfiguration-sensitivedataconfiguration
+            '''
+            result = self._values.get("sensitive_data_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -7317,6 +7401,7 @@ class CfnDataAutomationProject(
         jsii_struct_bases=[],
         name_mapping={
             "modality_processing": "modalityProcessing",
+            "sensitive_data_configuration": "sensitiveDataConfiguration",
             "splitter": "splitter",
         },
     )
@@ -7325,11 +7410,13 @@ class CfnDataAutomationProject(
             self,
             *,
             modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ModalityProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SensitiveDataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             splitter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SplitterConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Additional settings for a project.
 
             :param modality_processing: Sets modality processing for document files. All modalities are enabled by default.
+            :param sensitive_data_configuration: 
             :param splitter: Whether document splitter is enabled for a project.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-documentoverrideconfiguration.html
@@ -7345,6 +7432,14 @@ class CfnDataAutomationProject(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
                     ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
+                    ),
                     splitter=bedrock.CfnDataAutomationProject.SplitterConfigurationProperty(
                         state="state"
                     )
@@ -7353,10 +7448,13 @@ class CfnDataAutomationProject(
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__ce28bbcdad808c3d79746aae815f4706b7c664e45cfa21e90b91fef9b498a905)
                 check_type(argname="argument modality_processing", value=modality_processing, expected_type=type_hints["modality_processing"])
+                check_type(argname="argument sensitive_data_configuration", value=sensitive_data_configuration, expected_type=type_hints["sensitive_data_configuration"])
                 check_type(argname="argument splitter", value=splitter, expected_type=type_hints["splitter"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if modality_processing is not None:
                 self._values["modality_processing"] = modality_processing
+            if sensitive_data_configuration is not None:
+                self._values["sensitive_data_configuration"] = sensitive_data_configuration
             if splitter is not None:
                 self._values["splitter"] = splitter
 
@@ -7372,6 +7470,16 @@ class CfnDataAutomationProject(
             '''
             result = self._values.get("modality_processing")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ModalityProcessingConfigurationProperty"]], result)
+
+        @builtins.property
+        def sensitive_data_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-documentoverrideconfiguration.html#cfn-bedrock-dataautomationproject-documentoverrideconfiguration-sensitivedataconfiguration
+            '''
+            result = self._values.get("sensitive_data_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]], result)
 
         @builtins.property
         def splitter(
@@ -7765,17 +7873,22 @@ class CfnDataAutomationProject(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.ImageOverrideConfigurationProperty",
         jsii_struct_bases=[],
-        name_mapping={"modality_processing": "modalityProcessing"},
+        name_mapping={
+            "modality_processing": "modalityProcessing",
+            "sensitive_data_configuration": "sensitiveDataConfiguration",
+        },
     )
     class ImageOverrideConfigurationProperty:
         def __init__(
             self,
             *,
             modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ModalityProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SensitiveDataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Sets whether your project will process images or not.
 
             :param modality_processing: Sets modality processing for image files. All modalities are enabled by default.
+            :param sensitive_data_configuration: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-imageoverrideconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -7789,15 +7902,26 @@ class CfnDataAutomationProject(
                 image_override_configuration_property = bedrock.CfnDataAutomationProject.ImageOverrideConfigurationProperty(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__34a681e35d658a2a736af34f5e6af8631d8d4b6f6f0a517e671c60fc315ac32b)
                 check_type(argname="argument modality_processing", value=modality_processing, expected_type=type_hints["modality_processing"])
+                check_type(argname="argument sensitive_data_configuration", value=sensitive_data_configuration, expected_type=type_hints["sensitive_data_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if modality_processing is not None:
                 self._values["modality_processing"] = modality_processing
+            if sensitive_data_configuration is not None:
+                self._values["sensitive_data_configuration"] = sensitive_data_configuration
 
         @builtins.property
         def modality_processing(
@@ -7811,6 +7935,16 @@ class CfnDataAutomationProject(
             '''
             result = self._values.get("modality_processing")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ModalityProcessingConfigurationProperty"]], result)
+
+        @builtins.property
+        def sensitive_data_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-imageoverrideconfiguration.html#cfn-bedrock-dataautomationproject-imageoverrideconfiguration-sensitivedataconfiguration
+            '''
+            result = self._values.get("sensitive_data_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -8272,11 +8406,27 @@ class CfnDataAutomationProject(
                         ),
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     ),
                     document=bedrock.CfnDataAutomationProject.DocumentOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         ),
                         splitter=bedrock.CfnDataAutomationProject.SplitterConfigurationProperty(
                             state="state"
@@ -8285,6 +8435,14 @@ class CfnDataAutomationProject(
                     image=bedrock.CfnDataAutomationProject.ImageOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     ),
                     modality_routing=bedrock.CfnDataAutomationProject.ModalityRoutingConfigurationProperty(
@@ -8296,6 +8454,14 @@ class CfnDataAutomationProject(
                     video=bedrock.CfnDataAutomationProject.VideoOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     )
                 )
@@ -8382,6 +8548,166 @@ class CfnDataAutomationProject(
 
         def __repr__(self) -> str:
             return "OverrideConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "pii_entity_types": "piiEntityTypes",
+            "redaction_mask_mode": "redactionMaskMode",
+        },
+    )
+    class PIIEntitiesConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            pii_entity_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            redaction_mask_mode: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param pii_entity_types: 
+            :param redaction_mask_mode: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-piientitiesconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                p_iIEntities_configuration_property = bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                    pii_entity_types=["piiEntityTypes"],
+                    redaction_mask_mode="redactionMaskMode"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__946b34734834d9f2772f96ea98e9b8eb8bea9723c5fd0dd8bf98f09a89b59b89)
+                check_type(argname="argument pii_entity_types", value=pii_entity_types, expected_type=type_hints["pii_entity_types"])
+                check_type(argname="argument redaction_mask_mode", value=redaction_mask_mode, expected_type=type_hints["redaction_mask_mode"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if pii_entity_types is not None:
+                self._values["pii_entity_types"] = pii_entity_types
+            if redaction_mask_mode is not None:
+                self._values["redaction_mask_mode"] = redaction_mask_mode
+
+        @builtins.property
+        def pii_entity_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-piientitiesconfiguration.html#cfn-bedrock-dataautomationproject-piientitiesconfiguration-piientitytypes
+            '''
+            result = self._values.get("pii_entity_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def redaction_mask_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-piientitiesconfiguration.html#cfn-bedrock-dataautomationproject-piientitiesconfiguration-redactionmaskmode
+            '''
+            result = self._values.get("redaction_mask_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "PIIEntitiesConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "detection_mode": "detectionMode",
+            "detection_scope": "detectionScope",
+            "pii_entities_configuration": "piiEntitiesConfiguration",
+        },
+    )
+    class SensitiveDataConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            detection_mode: typing.Optional[builtins.str] = None,
+            detection_scope: typing.Optional[typing.Sequence[builtins.str]] = None,
+            pii_entities_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.PIIEntitiesConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param detection_mode: 
+            :param detection_scope: 
+            :param pii_entities_configuration: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-sensitivedataconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                sensitive_data_configuration_property = bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                    detection_mode="detectionMode",
+                    detection_scope=["detectionScope"],
+                    pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                        pii_entity_types=["piiEntityTypes"],
+                        redaction_mask_mode="redactionMaskMode"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__dd750813b43dcc2ff4a370f73e15dca26a60e4860e25dd4ad74e1e578fc6ef60)
+                check_type(argname="argument detection_mode", value=detection_mode, expected_type=type_hints["detection_mode"])
+                check_type(argname="argument detection_scope", value=detection_scope, expected_type=type_hints["detection_scope"])
+                check_type(argname="argument pii_entities_configuration", value=pii_entities_configuration, expected_type=type_hints["pii_entities_configuration"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if detection_mode is not None:
+                self._values["detection_mode"] = detection_mode
+            if detection_scope is not None:
+                self._values["detection_scope"] = detection_scope
+            if pii_entities_configuration is not None:
+                self._values["pii_entities_configuration"] = pii_entities_configuration
+
+        @builtins.property
+        def detection_mode(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-sensitivedataconfiguration.html#cfn-bedrock-dataautomationproject-sensitivedataconfiguration-detectionmode
+            '''
+            result = self._values.get("detection_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def detection_scope(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-sensitivedataconfiguration.html#cfn-bedrock-dataautomationproject-sensitivedataconfiguration-detectionscope
+            '''
+            result = self._values.get("detection_scope")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def pii_entities_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.PIIEntitiesConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-sensitivedataconfiguration.html#cfn-bedrock-dataautomationproject-sensitivedataconfiguration-piientitiesconfiguration
+            '''
+            result = self._values.get("pii_entities_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.PIIEntitiesConfigurationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SensitiveDataConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -8901,17 +9227,22 @@ class CfnDataAutomationProject(
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnDataAutomationProject.VideoOverrideConfigurationProperty",
         jsii_struct_bases=[],
-        name_mapping={"modality_processing": "modalityProcessing"},
+        name_mapping={
+            "modality_processing": "modalityProcessing",
+            "sensitive_data_configuration": "sensitiveDataConfiguration",
+        },
     )
     class VideoOverrideConfigurationProperty:
         def __init__(
             self,
             *,
             modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.ModalityProcessingConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataAutomationProject.SensitiveDataConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Sets whether your project will process videos or not.
 
             :param modality_processing: Sets modality processing for video files. All modalities are enabled by default.
+            :param sensitive_data_configuration: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-videooverrideconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -8925,15 +9256,26 @@ class CfnDataAutomationProject(
                 video_override_configuration_property = bedrock.CfnDataAutomationProject.VideoOverrideConfigurationProperty(
                     modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                         state="state"
+                    ),
+                    sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                        detection_mode="detectionMode",
+                        detection_scope=["detectionScope"],
+                        pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                            pii_entity_types=["piiEntityTypes"],
+                            redaction_mask_mode="redactionMaskMode"
+                        )
                     )
                 )
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__d7326051e3b843174754054dc13d916d949edba4f6f11b266a8a0efb8d081b53)
                 check_type(argname="argument modality_processing", value=modality_processing, expected_type=type_hints["modality_processing"])
+                check_type(argname="argument sensitive_data_configuration", value=sensitive_data_configuration, expected_type=type_hints["sensitive_data_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if modality_processing is not None:
                 self._values["modality_processing"] = modality_processing
+            if sensitive_data_configuration is not None:
+                self._values["sensitive_data_configuration"] = sensitive_data_configuration
 
         @builtins.property
         def modality_processing(
@@ -8947,6 +9289,16 @@ class CfnDataAutomationProject(
             '''
             result = self._values.get("modality_processing")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.ModalityProcessingConfigurationProperty"]], result)
+
+        @builtins.property
+        def sensitive_data_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-dataautomationproject-videooverrideconfiguration.html#cfn-bedrock-dataautomationproject-videooverrideconfiguration-sensitivedataconfiguration
+            '''
+            result = self._values.get("sensitive_data_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataAutomationProject.SensitiveDataConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -9217,6 +9569,7 @@ class CfnDataAutomationProject(
         "kms_key_id": "kmsKeyId",
         "override_configuration": "overrideConfiguration",
         "project_description": "projectDescription",
+        "project_type": "projectType",
         "standard_output_configuration": "standardOutputConfiguration",
         "tags": "tags",
     },
@@ -9231,6 +9584,7 @@ class CfnDataAutomationProjectProps:
         kms_key_id: typing.Optional[builtins.str] = None,
         override_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.OverrideConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         project_description: typing.Optional[builtins.str] = None,
+        project_type: typing.Optional[builtins.str] = None,
         standard_output_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.StandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -9242,6 +9596,7 @@ class CfnDataAutomationProjectProps:
         :param kms_key_id: The AWS key to use for encryption.
         :param override_configuration: Additional settings for the project.
         :param project_description: The project's description.
+        :param project_type: Type of the DataAutomationProject - Sync or Async.
         :param standard_output_configuration: The project's standard output configuration.
         :param tags: List of Tags.
 
@@ -9280,11 +9635,27 @@ class CfnDataAutomationProjectProps:
                         ),
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     ),
                     document=bedrock.CfnDataAutomationProject.DocumentOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         ),
                         splitter=bedrock.CfnDataAutomationProject.SplitterConfigurationProperty(
                             state="state"
@@ -9293,6 +9664,14 @@ class CfnDataAutomationProjectProps:
                     image=bedrock.CfnDataAutomationProject.ImageOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     ),
                     modality_routing=bedrock.CfnDataAutomationProject.ModalityRoutingConfigurationProperty(
@@ -9304,10 +9683,19 @@ class CfnDataAutomationProjectProps:
                     video=bedrock.CfnDataAutomationProject.VideoOverrideConfigurationProperty(
                         modality_processing=bedrock.CfnDataAutomationProject.ModalityProcessingConfigurationProperty(
                             state="state"
+                        ),
+                        sensitive_data_configuration=bedrock.CfnDataAutomationProject.SensitiveDataConfigurationProperty(
+                            detection_mode="detectionMode",
+                            detection_scope=["detectionScope"],
+                            pii_entities_configuration=bedrock.CfnDataAutomationProject.PIIEntitiesConfigurationProperty(
+                                pii_entity_types=["piiEntityTypes"],
+                                redaction_mask_mode="redactionMaskMode"
+                            )
                         )
                     )
                 ),
                 project_description="projectDescription",
+                project_type="projectType",
                 standard_output_configuration=bedrock.CfnDataAutomationProject.StandardOutputConfigurationProperty(
                     audio=bedrock.CfnDataAutomationProject.AudioStandardOutputConfigurationProperty(
                         extraction=bedrock.CfnDataAutomationProject.AudioStandardExtractionProperty(
@@ -9409,6 +9797,7 @@ class CfnDataAutomationProjectProps:
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument override_configuration", value=override_configuration, expected_type=type_hints["override_configuration"])
             check_type(argname="argument project_description", value=project_description, expected_type=type_hints["project_description"])
+            check_type(argname="argument project_type", value=project_type, expected_type=type_hints["project_type"])
             check_type(argname="argument standard_output_configuration", value=standard_output_configuration, expected_type=type_hints["standard_output_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -9424,6 +9813,8 @@ class CfnDataAutomationProjectProps:
             self._values["override_configuration"] = override_configuration
         if project_description is not None:
             self._values["project_description"] = project_description
+        if project_type is not None:
+            self._values["project_type"] = project_type
         if standard_output_configuration is not None:
             self._values["standard_output_configuration"] = standard_output_configuration
         if tags is not None:
@@ -9488,6 +9879,15 @@ class CfnDataAutomationProjectProps:
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-dataautomationproject.html#cfn-bedrock-dataautomationproject-projectdescription
         '''
         result = self._values.get("project_description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def project_type(self) -> typing.Optional[builtins.str]:
+        '''Type of the DataAutomationProject - Sync or Async.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-bedrock-dataautomationproject.html#cfn-bedrock-dataautomationproject-projecttype
+        '''
+        result = self._values.get("project_type")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -28809,6 +29209,11 @@ class CfnKnowledgeBase(
                     ),
                     resource_arn="resourceArn",
                     table_name="tableName"
+                ),
+                s3_vectors_configuration=bedrock.CfnKnowledgeBase.S3VectorsConfigurationProperty(
+                    index_arn="indexArn",
+                    index_name="indexName",
+                    vector_bucket_arn="vectorBucketArn"
                 )
             ),
             tags={
@@ -32088,6 +32493,101 @@ class CfnKnowledgeBase(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_bedrock.CfnKnowledgeBase.S3VectorsConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "index_arn": "indexArn",
+            "index_name": "indexName",
+            "vector_bucket_arn": "vectorBucketArn",
+        },
+    )
+    class S3VectorsConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            index_arn: typing.Optional[builtins.str] = None,
+            index_name: typing.Optional[builtins.str] = None,
+            vector_bucket_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Contains the storage configuration of the knowledge base for S3 vectors.
+
+            :param index_arn: The Amazon Resource Name (ARN) of the vector index used for the knowledge base. This ARN identifies the specific vector index resource within Amazon Bedrock.
+            :param index_name: The name of the vector index used for the knowledge base. This name identifies the vector index within the Amazon Bedrock service.
+            :param vector_bucket_arn: The Amazon Resource Name (ARN) of the S3 bucket where vector embeddings are stored. This bucket contains the vector data used by the knowledge base.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-s3vectorsconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_bedrock as bedrock
+                
+                s3_vectors_configuration_property = bedrock.CfnKnowledgeBase.S3VectorsConfigurationProperty(
+                    index_arn="indexArn",
+                    index_name="indexName",
+                    vector_bucket_arn="vectorBucketArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__638cd4d3303a0666aea5072d29fe2f34811ed6da22ead5b9a3531548e7577db9)
+                check_type(argname="argument index_arn", value=index_arn, expected_type=type_hints["index_arn"])
+                check_type(argname="argument index_name", value=index_name, expected_type=type_hints["index_name"])
+                check_type(argname="argument vector_bucket_arn", value=vector_bucket_arn, expected_type=type_hints["vector_bucket_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if index_arn is not None:
+                self._values["index_arn"] = index_arn
+            if index_name is not None:
+                self._values["index_name"] = index_name
+            if vector_bucket_arn is not None:
+                self._values["vector_bucket_arn"] = vector_bucket_arn
+
+        @builtins.property
+        def index_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the vector index used for the knowledge base.
+
+            This ARN identifies the specific vector index resource within Amazon Bedrock.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-s3vectorsconfiguration.html#cfn-bedrock-knowledgebase-s3vectorsconfiguration-indexarn
+            '''
+            result = self._values.get("index_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def index_name(self) -> typing.Optional[builtins.str]:
+            '''The name of the vector index used for the knowledge base.
+
+            This name identifies the vector index within the Amazon Bedrock service.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-s3vectorsconfiguration.html#cfn-bedrock-knowledgebase-s3vectorsconfiguration-indexname
+            '''
+            result = self._values.get("index_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def vector_bucket_arn(self) -> typing.Optional[builtins.str]:
+            '''The Amazon Resource Name (ARN) of the S3 bucket where vector embeddings are stored.
+
+            This bucket contains the vector data used by the knowledge base.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-s3vectorsconfiguration.html#cfn-bedrock-knowledgebase-s3vectorsconfiguration-vectorbucketarn
+            '''
+            result = self._values.get("vector_bucket_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3VectorsConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_bedrock.CfnKnowledgeBase.SqlKnowledgeBaseConfigurationProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -32237,6 +32737,7 @@ class CfnKnowledgeBase(
             "opensearch_serverless_configuration": "opensearchServerlessConfiguration",
             "pinecone_configuration": "pineconeConfiguration",
             "rds_configuration": "rdsConfiguration",
+            "s3_vectors_configuration": "s3VectorsConfiguration",
         },
     )
     class StorageConfigurationProperty:
@@ -32250,6 +32751,7 @@ class CfnKnowledgeBase(
             opensearch_serverless_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.OpenSearchServerlessConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             pinecone_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.PineconeConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             rds_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.RdsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            s3_vectors_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnKnowledgeBase.S3VectorsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''Contains the storage configuration of the knowledge base.
 
@@ -32260,6 +32762,7 @@ class CfnKnowledgeBase(
             :param opensearch_serverless_configuration: Contains the storage configuration of the knowledge base in Amazon OpenSearch Service.
             :param pinecone_configuration: Contains the storage configuration of the knowledge base in Pinecone.
             :param rds_configuration: Contains details about the storage configuration of the knowledge base in Amazon RDS. For more information, see `Create a vector index in Amazon RDS <https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base-setup-rds.html>`_ .
+            :param s3_vectors_configuration: Contains the storage configuration of the knowledge base for S3 vectors.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-storageconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -32341,6 +32844,11 @@ class CfnKnowledgeBase(
                         ),
                         resource_arn="resourceArn",
                         table_name="tableName"
+                    ),
+                    s3_vectors_configuration=bedrock.CfnKnowledgeBase.S3VectorsConfigurationProperty(
+                        index_arn="indexArn",
+                        index_name="indexName",
+                        vector_bucket_arn="vectorBucketArn"
                     )
                 )
             '''
@@ -32353,6 +32861,7 @@ class CfnKnowledgeBase(
                 check_type(argname="argument opensearch_serverless_configuration", value=opensearch_serverless_configuration, expected_type=type_hints["opensearch_serverless_configuration"])
                 check_type(argname="argument pinecone_configuration", value=pinecone_configuration, expected_type=type_hints["pinecone_configuration"])
                 check_type(argname="argument rds_configuration", value=rds_configuration, expected_type=type_hints["rds_configuration"])
+                check_type(argname="argument s3_vectors_configuration", value=s3_vectors_configuration, expected_type=type_hints["s3_vectors_configuration"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "type": type,
             }
@@ -32368,6 +32877,8 @@ class CfnKnowledgeBase(
                 self._values["pinecone_configuration"] = pinecone_configuration
             if rds_configuration is not None:
                 self._values["rds_configuration"] = rds_configuration
+            if s3_vectors_configuration is not None:
+                self._values["s3_vectors_configuration"] = s3_vectors_configuration
 
         @builtins.property
         def type(self) -> builtins.str:
@@ -32450,6 +32961,17 @@ class CfnKnowledgeBase(
             '''
             result = self._values.get("rds_configuration")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.RdsConfigurationProperty"]], result)
+
+        @builtins.property
+        def s3_vectors_configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.S3VectorsConfigurationProperty"]]:
+            '''Contains the storage configuration of the knowledge base for S3 vectors.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-bedrock-knowledgebase-storageconfiguration.html#cfn-bedrock-knowledgebase-storageconfiguration-s3vectorsconfiguration
+            '''
+            result = self._values.get("s3_vectors_configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnKnowledgeBase.S3VectorsConfigurationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -32936,6 +33458,11 @@ class CfnKnowledgeBaseProps:
                         ),
                         resource_arn="resourceArn",
                         table_name="tableName"
+                    ),
+                    s3_vectors_configuration=bedrock.CfnKnowledgeBase.S3VectorsConfigurationProperty(
+                        index_arn="indexArn",
+                        index_name="indexName",
+                        vector_bucket_arn="vectorBucketArn"
                     )
                 ),
                 tags={
@@ -38304,6 +38831,12 @@ class FoundationModelIdentifier(
         return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_OPUS_4_20250514_V1_0"))
 
     @jsii.python.classproperty
+    @jsii.member(jsii_name="ANTHROPIC_CLAUDE_OPUS_4_5_20251101_V1_0")
+    def ANTHROPIC_CLAUDE_OPUS_4_5_20251101_V1_0(cls) -> "FoundationModelIdentifier":
+        '''Base model "anthropic.claude-opus-4-5-20251101-v1:0".'''
+        return typing.cast("FoundationModelIdentifier", jsii.sget(cls, "ANTHROPIC_CLAUDE_OPUS_4_5_20251101_V1_0"))
+
+    @jsii.python.classproperty
     @jsii.member(jsii_name="ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0")
     def ANTHROPIC_CLAUDE_SONNET_4_20250514_V1_0(cls) -> "FoundationModelIdentifier":
         '''Base model "anthropic.claude-sonnet-4-20250514-v1:0".'''
@@ -39838,6 +40371,7 @@ def _typecheckingstub__48d1f11084a27a96045646e74a00baea90ff4f5c949a72220c866f3e0
     kms_key_id: typing.Optional[builtins.str] = None,
     override_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.OverrideConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     project_description: typing.Optional[builtins.str] = None,
+    project_type: typing.Optional[builtins.str] = None,
     standard_output_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.StandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -39892,6 +40426,12 @@ def _typecheckingstub__66994affd3d7455a04b67bd84c11b22239237bd8483bb056b944d0895
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5c85af68db4f3f78e2b0a5f811d1ca35ea9b2fa54af0c06ec65742efe0968075(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__58c4ae46198661b93f5957013f1db0f24086f81fb07595882186ae75392677a8(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataAutomationProject.StandardOutputConfigurationProperty]],
 ) -> None:
@@ -39933,6 +40473,7 @@ def _typecheckingstub__9fa0ddf34ba99d172292ec01a5b59e05e41939ae214f174146b2d6944
     *,
     language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.AudioLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ModalityProcessingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SensitiveDataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -40022,6 +40563,7 @@ def _typecheckingstub__b22792c9c0de4d07e8431f8ac3df8e64d6ae45cf4035db3f065789509
 def _typecheckingstub__ce28bbcdad808c3d79746aae815f4706b7c664e45cfa21e90b91fef9b498a905(
     *,
     modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ModalityProcessingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SensitiveDataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     splitter: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SplitterConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -40069,6 +40611,7 @@ def _typecheckingstub__b889c5cec633874cf38a0cca25d340045efc344323f8c1f47b451c984
 def _typecheckingstub__34a681e35d658a2a736af34f5e6af8631d8d4b6f6f0a517e671c60fc315ac32b(
     *,
     modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ModalityProcessingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SensitiveDataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -40125,6 +40668,23 @@ def _typecheckingstub__400a92e228907b33f71ad10276a9ad472a21d517da3941d1621dda605
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__946b34734834d9f2772f96ea98e9b8eb8bea9723c5fd0dd8bf98f09a89b59b89(
+    *,
+    pii_entity_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    redaction_mask_mode: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dd750813b43dcc2ff4a370f73e15dca26a60e4860e25dd4ad74e1e578fc6ef60(
+    *,
+    detection_mode: typing.Optional[builtins.str] = None,
+    detection_scope: typing.Optional[typing.Sequence[builtins.str]] = None,
+    pii_entities_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.PIIEntitiesConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__725244e9aa37705dc01f5ef13c43668850d124b3c4788e4cf95166bc4ec818cf(
     *,
     state: builtins.str,
@@ -40175,6 +40735,7 @@ def _typecheckingstub__e8ab6d9031c06e119e307ce6230035cf42009ab028973d67c75234758
 def _typecheckingstub__d7326051e3b843174754054dc13d916d949edba4f6f11b266a8a0efb8d081b53(
     *,
     modality_processing: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.ModalityProcessingConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    sensitive_data_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.SensitiveDataConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -40211,6 +40772,7 @@ def _typecheckingstub__acae67d63fc78195ace949c20ad8c3209d7c1972a999616c83dd5f909
     kms_key_id: typing.Optional[builtins.str] = None,
     override_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.OverrideConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     project_description: typing.Optional[builtins.str] = None,
+    project_type: typing.Optional[builtins.str] = None,
     standard_output_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataAutomationProject.StandardOutputConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -42390,6 +42952,15 @@ def _typecheckingstub__2d65bf934dc283aa920ce8366929ceeb84863f6a3de2b775a4f2d2ee0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__638cd4d3303a0666aea5072d29fe2f34811ed6da22ead5b9a3531548e7577db9(
+    *,
+    index_arn: typing.Optional[builtins.str] = None,
+    index_name: typing.Optional[builtins.str] = None,
+    vector_bucket_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__859a2388b8dce18b70af579c281f226f3fd2e03785d55377afa53e160de89368(
     *,
     type: builtins.str,
@@ -42407,6 +42978,7 @@ def _typecheckingstub__fa4cccae88d65689f5f3cabcb8393a082af16eb90d7613332a03867c3
     opensearch_serverless_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.OpenSearchServerlessConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     pinecone_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.PineconeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rds_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.RdsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    s3_vectors_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnKnowledgeBase.S3VectorsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -7694,7 +7694,7 @@ class CfnFunction(
         :param runtime_management_config: Sets the runtime management configuration for a function's version. For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
         :param snap_start: The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
         :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
-        :param tenancy_config: 
+        :param tenancy_config: The function's tenant isolation configuration settings. Determines whether the Lambda function runs on a shared or dedicated infrastructure per unique tenant.
         :param timeout: The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds. For more information, see `Lambda execution environment <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html>`_ .
         :param tracing_config: Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .
         :param vpc_config: For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can access resources and the internet only through that VPC. For more information, see `Configuring a Lambda function to access resources in a VPC <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
@@ -8224,6 +8224,7 @@ class CfnFunction(
     def tenancy_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]]:
+        '''The function's tenant isolation configuration settings.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.TenancyConfigProperty"]], jsii.get(self, "tenancyConfig"))
 
     @tenancy_config.setter
@@ -9107,8 +9108,11 @@ class CfnFunction(
     )
     class TenancyConfigProperty:
         def __init__(self, *, tenant_isolation_mode: builtins.str) -> None:
-            '''
-            :param tenant_isolation_mode: Determines how your Lambda function isolates execution environments between tenants.
+            '''Specifies the tenant isolation mode configuration for a Lambda function.
+
+            This allows you to configure specific tenant isolation strategies for your function invocations. Tenant isolation configuration cannot be modified after function creation.
+
+            :param tenant_isolation_mode: Tenant isolation mode allows for invocation to be sent to a corresponding execution environment dedicated to a specific tenant ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-tenancyconfig.html
             :exampleMetadata: fixture=_generated
@@ -9132,7 +9136,7 @@ class CfnFunction(
 
         @builtins.property
         def tenant_isolation_mode(self) -> builtins.str:
-            '''Determines how your Lambda function isolates execution environments between tenants.
+            '''Tenant isolation mode allows for invocation to be sent to a corresponding execution environment dedicated to a specific tenant ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-tenancyconfig.html#cfn-lambda-function-tenancyconfig-tenantisolationmode
             '''
@@ -9391,7 +9395,7 @@ class CfnFunctionProps:
         :param runtime_management_config: Sets the runtime management configuration for a function's version. For more information, see `Runtime updates <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>`_ .
         :param snap_start: The function's `AWS Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart.html>`_ setting.
         :param tags: A list of `tags <https://docs.aws.amazon.com/lambda/latest/dg/tagging.html>`_ to apply to the function. .. epigraph:: You must have the ``lambda:TagResource`` , ``lambda:UntagResource`` , and ``lambda:ListTags`` permissions for your `IAM principal <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html>`_ to manage the CloudFormation stack. If you don't have these permissions, there might be unexpected behavior with stack-level tags propagating to the resource during resource creation and update.
-        :param tenancy_config: 
+        :param tenancy_config: The function's tenant isolation configuration settings. Determines whether the Lambda function runs on a shared or dedicated infrastructure per unique tenant.
         :param timeout: The amount of time (in seconds) that Lambda allows a function to run before stopping it. The default is 3 seconds. The maximum allowed value is 900 seconds. For more information, see `Lambda execution environment <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html>`_ .
         :param tracing_config: Set ``Mode`` to ``Active`` to sample and trace a subset of incoming requests with `X-Ray <https://docs.aws.amazon.com/lambda/latest/dg/services-xray.html>`_ .
         :param vpc_config: For network connectivity to AWS resources in a VPC, specify a list of security groups and subnets in the VPC. When you connect a function to a VPC, it can access resources and the internet only through that VPC. For more information, see `Configuring a Lambda function to access resources in a VPC <https://docs.aws.amazon.com/lambda/latest/dg/configuration-vpc.html>`_ .
@@ -9849,7 +9853,10 @@ class CfnFunctionProps:
     def tenancy_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.TenancyConfigProperty]]:
-        '''
+        '''The function's tenant isolation configuration settings.
+
+        Determines whether the Lambda function runs on a shared or dedicated infrastructure per unique tenant.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-tenancyconfig
         '''
         result = self._values.get("tenancy_config")
@@ -23057,30 +23064,24 @@ class Runtime(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_lambda.Runtime
     If you need to use a runtime name that doesn't exist as a static member, you
     can instantiate a ``Runtime`` object, e.g: ``new Runtime('nodejs99.99')``.
 
-    :exampleMetadata: fixture=default infused
+    :exampleMetadata: infused
 
     Example::
 
-        # Create or reference an existing L1 CfnApplicationInferenceProfile
-        cfn_profile = aws_bedrock_cfn.CfnApplicationInferenceProfile(self, "CfnProfile",
-            inference_profile_name="my-cfn-profile",
-            model_source=aws_bedrock_cfn.CfnApplicationInferenceProfile.InferenceProfileModelSourceProperty(
-                copy_from=bedrock.BedrockFoundationModel.ANTHROPIC_CLAUDE_3_5_SONNET_V1_0.invokable_arn
-            ),
-            description="Profile created via L1 construct"
+        my_function_handler = lambda_.Function(self, "MyFunction",
+            code=lambda_.Code.from_asset("resource/myfunction"),
+            runtime=lambda_.Runtime.NODEJS_LATEST,
+            handler="index.handler"
         )
         
-        # Import the L1 construct as an L2 ApplicationInferenceProfile
-        imported_from_cfn = bedrock.ApplicationInferenceProfile.from_cfn_application_inference_profile(cfn_profile)
-        
-        # Grant permissions to use the imported profile
-        lambda_function = lambda_.Function(self, "MyFunction",
-            runtime=lambda_.Runtime.PYTHON_3_11,
-            handler="index.handler",
-            code=lambda_.Code.from_inline("def handler(event, context): return \"Hello\"")
+        event_rule = cloudtrail.Trail.on_event(self, "MyCloudWatchEvent",
+            target=targets.LambdaFunction(my_function_handler)
         )
         
-        imported_from_cfn.grant_profile_usage(lambda_function)
+        event_rule.add_event_pattern(
+            account=["123456789012"],
+            source=["aws.s3"]
+        )
     '''
 
     def __init__(

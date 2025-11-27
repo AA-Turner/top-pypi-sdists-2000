@@ -17,13 +17,13 @@
 from minio import Minio
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 with client.listen_bucket_notification(
-    bucket_name="my-bucket",
+    "my-bucket",
     prefix="my-prefix/",
     events=["s3:ObjectCreated:*", "s3:ObjectRemoved:*"],
 ) as events:

@@ -48,9 +48,8 @@ class GetBucketPolicyTest(TestCase):
                 content=error.encode()
             )
         )
-        client = Minio(endpoint='localhost:9000')
-        with self.assertRaises(S3Error):
-            client.get_bucket_policy(bucket_name=bucket_name)
+        client = Minio('localhost:9000')
+        self.assertRaises(S3Error, client.get_bucket_policy, bucket_name)
 
     @mock.patch('urllib3.PoolManager')
     def test_get_policy_for_existent_bucket(self, mock_connection):
@@ -92,6 +91,6 @@ class GetBucketPolicyTest(TestCase):
                 content=mock_data
             )
         )
-        client = Minio(endpoint='localhost:9000')
-        response = client.get_bucket_policy(bucket_name=bucket_name)
+        client = Minio('localhost:9000')
+        response = client.get_bucket_policy(bucket_name)
         self.assertEqual(response, mock_data.decode())

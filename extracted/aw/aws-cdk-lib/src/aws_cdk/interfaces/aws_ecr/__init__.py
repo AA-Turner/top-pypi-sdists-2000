@@ -124,6 +124,51 @@ class _IPullThroughCacheRuleRefProxy(
 typing.cast(typing.Any, IPullThroughCacheRuleRef).__jsii_proxy_class__ = lambda : _IPullThroughCacheRuleRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ecr.IPullTimeUpdateExclusionRef")
+class IPullTimeUpdateExclusionRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a PullTimeUpdateExclusion.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="pullTimeUpdateExclusionRef")
+    def pull_time_update_exclusion_ref(self) -> "PullTimeUpdateExclusionReference":
+        '''(experimental) A reference to a PullTimeUpdateExclusion resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IPullTimeUpdateExclusionRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a PullTimeUpdateExclusion.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ecr.IPullTimeUpdateExclusionRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="pullTimeUpdateExclusionRef")
+    def pull_time_update_exclusion_ref(self) -> "PullTimeUpdateExclusionReference":
+        '''(experimental) A reference to a PullTimeUpdateExclusion resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("PullTimeUpdateExclusionReference", jsii.get(self, "pullTimeUpdateExclusionRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IPullTimeUpdateExclusionRef).__jsii_proxy_class__ = lambda : _IPullTimeUpdateExclusionRefProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ecr.IRegistryPolicyRef")
 class IRegistryPolicyRef(
     _constructs_77d1e7e8.IConstruct,
@@ -359,6 +404,51 @@ class _IRepositoryRefProxy(
 typing.cast(typing.Any, IRepositoryRef).__jsii_proxy_class__ = lambda : _IRepositoryRefProxy
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ecr.ISigningConfigurationRef")
+class ISigningConfigurationRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a SigningConfiguration.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="signingConfigurationRef")
+    def signing_configuration_ref(self) -> "SigningConfigurationReference":
+        '''(experimental) A reference to a SigningConfiguration resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ISigningConfigurationRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a SigningConfiguration.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ecr.ISigningConfigurationRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="signingConfigurationRef")
+    def signing_configuration_ref(self) -> "SigningConfigurationReference":
+        '''(experimental) A reference to a SigningConfiguration resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("SigningConfigurationReference", jsii.get(self, "signingConfigurationRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ISigningConfigurationRef).__jsii_proxy_class__ = lambda : _ISigningConfigurationRefProxy
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ecr.PublicRepositoryReference",
     jsii_struct_bases=[],
@@ -472,6 +562,55 @@ class PullThroughCacheRuleReference:
 
     def __repr__(self) -> str:
         return "PullThroughCacheRuleReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ecr.PullTimeUpdateExclusionReference",
+    jsii_struct_bases=[],
+    name_mapping={"principal_arn": "principalArn"},
+)
+class PullTimeUpdateExclusionReference:
+    def __init__(self, *, principal_arn: builtins.str) -> None:
+        '''A reference to a PullTimeUpdateExclusion resource.
+
+        :param principal_arn: The PrincipalArn of the PullTimeUpdateExclusion resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            
+            pull_time_update_exclusion_reference = interfaces_aws_ecr.PullTimeUpdateExclusionReference(
+                principal_arn="principalArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__330a03e1fa55fb9c9d03472c69de74e957ac563c8d7dc720929d2a24569ea675)
+            check_type(argname="argument principal_arn", value=principal_arn, expected_type=type_hints["principal_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "principal_arn": principal_arn,
+        }
+
+    @builtins.property
+    def principal_arn(self) -> builtins.str:
+        '''The PrincipalArn of the PullTimeUpdateExclusion resource.'''
+        result = self._values.get("principal_arn")
+        assert result is not None, "Required property 'principal_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "PullTimeUpdateExclusionReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -740,21 +879,74 @@ class RepositoryReference:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ecr.SigningConfigurationReference",
+    jsii_struct_bases=[],
+    name_mapping={"registry_id": "registryId"},
+)
+class SigningConfigurationReference:
+    def __init__(self, *, registry_id: builtins.str) -> None:
+        '''A reference to a SigningConfiguration resource.
+
+        :param registry_id: The RegistryId of the SigningConfiguration resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            
+            signing_configuration_reference = interfaces_aws_ecr.SigningConfigurationReference(
+                registry_id="registryId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ca5da87623cd8967a68263b6732601acb2deab8aca8c22890cdd5142d8a3a9d)
+            check_type(argname="argument registry_id", value=registry_id, expected_type=type_hints["registry_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "registry_id": registry_id,
+        }
+
+    @builtins.property
+    def registry_id(self) -> builtins.str:
+        '''The RegistryId of the SigningConfiguration resource.'''
+        result = self._values.get("registry_id")
+        assert result is not None, "Required property 'registry_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "SigningConfigurationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 __all__ = [
     "IPublicRepositoryRef",
     "IPullThroughCacheRuleRef",
+    "IPullTimeUpdateExclusionRef",
     "IRegistryPolicyRef",
     "IRegistryScanningConfigurationRef",
     "IReplicationConfigurationRef",
     "IRepositoryCreationTemplateRef",
     "IRepositoryRef",
+    "ISigningConfigurationRef",
     "PublicRepositoryReference",
     "PullThroughCacheRuleReference",
+    "PullTimeUpdateExclusionReference",
     "RegistryPolicyReference",
     "RegistryScanningConfigurationReference",
     "ReplicationConfigurationReference",
     "RepositoryCreationTemplateReference",
     "RepositoryReference",
+    "SigningConfigurationReference",
 ]
 
 publication.publish()
@@ -770,6 +962,13 @@ def _typecheckingstub__ebfd2912489ae24385c01d2d04e3310cbb4346432c48a1318317144a8
 def _typecheckingstub__145dab6c3bc935d0a97f691c737a910e8ba1300b79792f40d3dfb1008511c177(
     *,
     ecr_repository_prefix: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__330a03e1fa55fb9c9d03472c69de74e957ac563c8d7dc720929d2a24569ea675(
+    *,
+    principal_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -810,5 +1009,12 @@ def _typecheckingstub__66f32cea5ccda62bfe26a5f38558d87cb2981e17b98568d84bbddab15
     """Type checking stubs"""
     pass
 
-for cls in [IPublicRepositoryRef, IPullThroughCacheRuleRef, IRegistryPolicyRef, IRegistryScanningConfigurationRef, IReplicationConfigurationRef, IRepositoryCreationTemplateRef, IRepositoryRef]:
+def _typecheckingstub__7ca5da87623cd8967a68263b6732601acb2deab8aca8c22890cdd5142d8a3a9d(
+    *,
+    registry_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+for cls in [IPublicRepositoryRef, IPullThroughCacheRuleRef, IPullTimeUpdateExclusionRef, IRegistryPolicyRef, IRegistryScanningConfigurationRef, IReplicationConfigurationRef, IRepositoryCreationTemplateRef, IRepositoryRef, ISigningConfigurationRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

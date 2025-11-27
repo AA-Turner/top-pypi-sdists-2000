@@ -126,8 +126,8 @@ class CfnAnomalyMonitor(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param monitor_name: The name of the monitor.
-        :param monitor_type: The possible type values.
-        :param monitor_dimension: The dimensions to evaluate.
+        :param monitor_type: The type of the monitor. Set this to ``DIMENSIONAL`` for an AWS managed monitor. AWS managed monitors automatically track up to the top 5,000 values by cost within a dimension of your choosing. Each dimension value is evaluated independently. If you start incurring cost in a new value of your chosen dimension, it will automatically be analyzed by an AWS managed monitor. Set this to ``CUSTOM`` for a customer managed monitor. Customer managed monitors let you select specific dimension values that get monitored in aggregate. For more information about monitor types, see `Monitor types <https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html#monitor-type-def>`_ in the *Billing and Cost Management User Guide* .
+        :param monitor_dimension: For customer managed monitors, do not specify this field. For AWS managed monitors, this field controls which cost dimension is automatically analyzed by the monitor. For ``TAG`` and ``COST_CATEGORY`` dimensions, you must also specify MonitorSpecification to configure the specific tag or cost category key to analyze.
         :param monitor_specification: The array of ``MonitorSpecification`` in JSON array format. For instance, you can use ``MonitorSpecification`` to specify a tag, Cost Category, or linked account for your custom anomaly monitor. For further information, see the `Examples <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalymonitor.html#aws-resource-ce-anomalymonitor--examples>`_ section of this page.
         :param resource_tags: Tags to assign to monitor.
         '''
@@ -253,7 +253,7 @@ class CfnAnomalyMonitor(
     @builtins.property
     @jsii.member(jsii_name="monitorType")
     def monitor_type(self) -> builtins.str:
-        '''The possible type values.'''
+        '''The type of the monitor.'''
         return typing.cast(builtins.str, jsii.get(self, "monitorType"))
 
     @monitor_type.setter
@@ -266,7 +266,7 @@ class CfnAnomalyMonitor(
     @builtins.property
     @jsii.member(jsii_name="monitorDimension")
     def monitor_dimension(self) -> typing.Optional[builtins.str]:
-        '''The dimensions to evaluate.'''
+        '''For customer managed monitors, do not specify this field.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "monitorDimension"))
 
     @monitor_dimension.setter
@@ -402,8 +402,8 @@ class CfnAnomalyMonitorProps:
         '''Properties for defining a ``CfnAnomalyMonitor``.
 
         :param monitor_name: The name of the monitor.
-        :param monitor_type: The possible type values.
-        :param monitor_dimension: The dimensions to evaluate.
+        :param monitor_type: The type of the monitor. Set this to ``DIMENSIONAL`` for an AWS managed monitor. AWS managed monitors automatically track up to the top 5,000 values by cost within a dimension of your choosing. Each dimension value is evaluated independently. If you start incurring cost in a new value of your chosen dimension, it will automatically be analyzed by an AWS managed monitor. Set this to ``CUSTOM`` for a customer managed monitor. Customer managed monitors let you select specific dimension values that get monitored in aggregate. For more information about monitor types, see `Monitor types <https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html#monitor-type-def>`_ in the *Billing and Cost Management User Guide* .
+        :param monitor_dimension: For customer managed monitors, do not specify this field. For AWS managed monitors, this field controls which cost dimension is automatically analyzed by the monitor. For ``TAG`` and ``COST_CATEGORY`` dimensions, you must also specify MonitorSpecification to configure the specific tag or cost category key to analyze.
         :param monitor_specification: The array of ``MonitorSpecification`` in JSON array format. For instance, you can use ``MonitorSpecification`` to specify a tag, Cost Category, or linked account for your custom anomaly monitor. For further information, see the `Examples <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalymonitor.html#aws-resource-ce-anomalymonitor--examples>`_ section of this page.
         :param resource_tags: Tags to assign to monitor.
 
@@ -459,7 +459,13 @@ class CfnAnomalyMonitorProps:
 
     @builtins.property
     def monitor_type(self) -> builtins.str:
-        '''The possible type values.
+        '''The type of the monitor.
+
+        Set this to ``DIMENSIONAL`` for an AWS managed monitor. AWS managed monitors automatically track up to the top 5,000 values by cost within a dimension of your choosing. Each dimension value is evaluated independently. If you start incurring cost in a new value of your chosen dimension, it will automatically be analyzed by an AWS managed monitor.
+
+        Set this to ``CUSTOM`` for a customer managed monitor. Customer managed monitors let you select specific dimension values that get monitored in aggregate.
+
+        For more information about monitor types, see `Monitor types <https://docs.aws.amazon.com/cost-management/latest/userguide/getting-started-ad.html#monitor-type-def>`_ in the *Billing and Cost Management User Guide* .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalymonitor.html#cfn-ce-anomalymonitor-monitortype
         '''
@@ -469,7 +475,9 @@ class CfnAnomalyMonitorProps:
 
     @builtins.property
     def monitor_dimension(self) -> typing.Optional[builtins.str]:
-        '''The dimensions to evaluate.
+        '''For customer managed monitors, do not specify this field.
+
+        For AWS managed monitors, this field controls which cost dimension is automatically analyzed by the monitor. For ``TAG`` and ``COST_CATEGORY`` dimensions, you must also specify MonitorSpecification to configure the specific tag or cost category key to analyze.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ce-anomalymonitor.html#cfn-ce-anomalymonitor-monitordimension
         '''

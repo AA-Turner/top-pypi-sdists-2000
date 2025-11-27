@@ -4843,6 +4843,108 @@ typing.cast(typing.Any, ITransitGatewayConnectRef).__jsii_proxy_class__ = lambda
 
 
 @jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.ITransitGatewayMeteringPolicyEntryRef"
+)
+class ITransitGatewayMeteringPolicyEntryRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a TransitGatewayMeteringPolicyEntry.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="transitGatewayMeteringPolicyEntryRef")
+    def transit_gateway_metering_policy_entry_ref(
+        self,
+    ) -> "TransitGatewayMeteringPolicyEntryReference":
+        '''(experimental) A reference to a TransitGatewayMeteringPolicyEntry resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ITransitGatewayMeteringPolicyEntryRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a TransitGatewayMeteringPolicyEntry.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ec2.ITransitGatewayMeteringPolicyEntryRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="transitGatewayMeteringPolicyEntryRef")
+    def transit_gateway_metering_policy_entry_ref(
+        self,
+    ) -> "TransitGatewayMeteringPolicyEntryReference":
+        '''(experimental) A reference to a TransitGatewayMeteringPolicyEntry resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("TransitGatewayMeteringPolicyEntryReference", jsii.get(self, "transitGatewayMeteringPolicyEntryRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ITransitGatewayMeteringPolicyEntryRef).__jsii_proxy_class__ = lambda : _ITransitGatewayMeteringPolicyEntryRefProxy
+
+
+@jsii.interface(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.ITransitGatewayMeteringPolicyRef"
+)
+class ITransitGatewayMeteringPolicyRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a TransitGatewayMeteringPolicy.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="transitGatewayMeteringPolicyRef")
+    def transit_gateway_metering_policy_ref(
+        self,
+    ) -> "TransitGatewayMeteringPolicyReference":
+        '''(experimental) A reference to a TransitGatewayMeteringPolicy resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ITransitGatewayMeteringPolicyRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a TransitGatewayMeteringPolicy.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ec2.ITransitGatewayMeteringPolicyRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="transitGatewayMeteringPolicyRef")
+    def transit_gateway_metering_policy_ref(
+        self,
+    ) -> "TransitGatewayMeteringPolicyReference":
+        '''(experimental) A reference to a TransitGatewayMeteringPolicy resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("TransitGatewayMeteringPolicyReference", jsii.get(self, "transitGatewayMeteringPolicyRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ITransitGatewayMeteringPolicyRef).__jsii_proxy_class__ = lambda : _ITransitGatewayMeteringPolicyRefProxy
+
+
+@jsii.interface(
     jsii_type="aws-cdk-lib.interfaces.aws_ec2.ITransitGatewayMulticastDomainAssociationRef"
 )
 class ITransitGatewayMulticastDomainAssociationRef(
@@ -5579,6 +5681,51 @@ class _IVPCDHCPOptionsAssociationRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IVPCDHCPOptionsAssociationRef).__jsii_proxy_class__ = lambda : _IVPCDHCPOptionsAssociationRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_ec2.IVPCEncryptionControlRef")
+class IVPCEncryptionControlRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a VPCEncryptionControl.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcEncryptionControlRef")
+    def vpc_encryption_control_ref(self) -> "VPCEncryptionControlReference":
+        '''(experimental) A reference to a VPCEncryptionControl resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IVPCEncryptionControlRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a VPCEncryptionControl.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_ec2.IVPCEncryptionControlRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcEncryptionControlRef")
+    def vpc_encryption_control_ref(self) -> "VPCEncryptionControlReference":
+        '''(experimental) A reference to a VPCEncryptionControl resource.
+
+        :stability: experimental
+        '''
+        return typing.cast("VPCEncryptionControlReference", jsii.get(self, "vpcEncryptionControlRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IVPCEncryptionControlRef).__jsii_proxy_class__ = lambda : _IVPCEncryptionControlRefProxy
 
 
 @jsii.interface(
@@ -9146,6 +9293,125 @@ class TransitGatewayConnectReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.TransitGatewayMeteringPolicyEntryReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "policy_rule_number": "policyRuleNumber",
+        "transit_gateway_metering_policy_id": "transitGatewayMeteringPolicyId",
+    },
+)
+class TransitGatewayMeteringPolicyEntryReference:
+    def __init__(
+        self,
+        *,
+        policy_rule_number: builtins.str,
+        transit_gateway_metering_policy_id: builtins.str,
+    ) -> None:
+        '''A reference to a TransitGatewayMeteringPolicyEntry resource.
+
+        :param policy_rule_number: The PolicyRuleNumber of the TransitGatewayMeteringPolicyEntry resource.
+        :param transit_gateway_metering_policy_id: The TransitGatewayMeteringPolicyId of the TransitGatewayMeteringPolicyEntry resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            
+            transit_gateway_metering_policy_entry_reference = interfaces_aws_ec2.TransitGatewayMeteringPolicyEntryReference(
+                policy_rule_number="policyRuleNumber",
+                transit_gateway_metering_policy_id="transitGatewayMeteringPolicyId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1b5ab879ac9cab67aeb0a61553565ffea8f306e89f552a533dfd930f59d7ed24)
+            check_type(argname="argument policy_rule_number", value=policy_rule_number, expected_type=type_hints["policy_rule_number"])
+            check_type(argname="argument transit_gateway_metering_policy_id", value=transit_gateway_metering_policy_id, expected_type=type_hints["transit_gateway_metering_policy_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "policy_rule_number": policy_rule_number,
+            "transit_gateway_metering_policy_id": transit_gateway_metering_policy_id,
+        }
+
+    @builtins.property
+    def policy_rule_number(self) -> builtins.str:
+        '''The PolicyRuleNumber of the TransitGatewayMeteringPolicyEntry resource.'''
+        result = self._values.get("policy_rule_number")
+        assert result is not None, "Required property 'policy_rule_number' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def transit_gateway_metering_policy_id(self) -> builtins.str:
+        '''The TransitGatewayMeteringPolicyId of the TransitGatewayMeteringPolicyEntry resource.'''
+        result = self._values.get("transit_gateway_metering_policy_id")
+        assert result is not None, "Required property 'transit_gateway_metering_policy_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TransitGatewayMeteringPolicyEntryReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.TransitGatewayMeteringPolicyReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "transit_gateway_metering_policy_id": "transitGatewayMeteringPolicyId",
+    },
+)
+class TransitGatewayMeteringPolicyReference:
+    def __init__(self, *, transit_gateway_metering_policy_id: builtins.str) -> None:
+        '''A reference to a TransitGatewayMeteringPolicy resource.
+
+        :param transit_gateway_metering_policy_id: The TransitGatewayMeteringPolicyId of the TransitGatewayMeteringPolicy resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            
+            transit_gateway_metering_policy_reference = interfaces_aws_ec2.TransitGatewayMeteringPolicyReference(
+                transit_gateway_metering_policy_id="transitGatewayMeteringPolicyId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01cc92df7f25b3e6a54bc6e93fbabb355be5b5f7dec1c6e4fc273e7f663f7d38)
+            check_type(argname="argument transit_gateway_metering_policy_id", value=transit_gateway_metering_policy_id, expected_type=type_hints["transit_gateway_metering_policy_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "transit_gateway_metering_policy_id": transit_gateway_metering_policy_id,
+        }
+
+    @builtins.property
+    def transit_gateway_metering_policy_id(self) -> builtins.str:
+        '''The TransitGatewayMeteringPolicyId of the TransitGatewayMeteringPolicy resource.'''
+        result = self._values.get("transit_gateway_metering_policy_id")
+        assert result is not None, "Required property 'transit_gateway_metering_policy_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "TransitGatewayMeteringPolicyReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ec2.TransitGatewayMulticastDomainAssociationReference",
     jsii_struct_bases=[],
     name_mapping={
@@ -10096,6 +10362,55 @@ class VPCDHCPOptionsAssociationReference:
 
     def __repr__(self) -> str:
         return "VPCDHCPOptionsAssociationReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_ec2.VPCEncryptionControlReference",
+    jsii_struct_bases=[],
+    name_mapping={"vpc_encryption_control_id": "vpcEncryptionControlId"},
+)
+class VPCEncryptionControlReference:
+    def __init__(self, *, vpc_encryption_control_id: builtins.str) -> None:
+        '''A reference to a VPCEncryptionControl resource.
+
+        :param vpc_encryption_control_id: The VpcEncryptionControlId of the VPCEncryptionControl resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            
+            v_pCEncryption_control_reference = interfaces_aws_ec2.VPCEncryptionControlReference(
+                vpc_encryption_control_id="vpcEncryptionControlId"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50ed3ca4369a94bd67b33fd9728c1616ecc391d119a17b6a19ab268a1aca8e83)
+            check_type(argname="argument vpc_encryption_control_id", value=vpc_encryption_control_id, expected_type=type_hints["vpc_encryption_control_id"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "vpc_encryption_control_id": vpc_encryption_control_id,
+        }
+
+    @builtins.property
+    def vpc_encryption_control_id(self) -> builtins.str:
+        '''The VpcEncryptionControlId of the VPCEncryptionControl resource.'''
+        result = self._values.get("vpc_encryption_control_id")
+        assert result is not None, "Required property 'vpc_encryption_control_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "VPCEncryptionControlReference(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -11150,6 +11465,8 @@ __all__ = [
     "ITransitGatewayAttachmentRef",
     "ITransitGatewayConnectPeerRef",
     "ITransitGatewayConnectRef",
+    "ITransitGatewayMeteringPolicyEntryRef",
+    "ITransitGatewayMeteringPolicyRef",
     "ITransitGatewayMulticastDomainAssociationRef",
     "ITransitGatewayMulticastDomainRef",
     "ITransitGatewayMulticastGroupMemberRef",
@@ -11165,6 +11482,7 @@ __all__ = [
     "IVPCBlockPublicAccessOptionsRef",
     "IVPCCidrBlockRef",
     "IVPCDHCPOptionsAssociationRef",
+    "IVPCEncryptionControlRef",
     "IVPCEndpointConnectionNotificationRef",
     "IVPCEndpointRef",
     "IVPCEndpointServicePermissionsRef",
@@ -11232,6 +11550,8 @@ __all__ = [
     "TransitGatewayAttachmentReference",
     "TransitGatewayConnectPeerReference",
     "TransitGatewayConnectReference",
+    "TransitGatewayMeteringPolicyEntryReference",
+    "TransitGatewayMeteringPolicyReference",
     "TransitGatewayMulticastDomainAssociationReference",
     "TransitGatewayMulticastDomainReference",
     "TransitGatewayMulticastGroupMemberReference",
@@ -11247,6 +11567,7 @@ __all__ = [
     "VPCBlockPublicAccessOptionsReference",
     "VPCCidrBlockReference",
     "VPCDHCPOptionsAssociationReference",
+    "VPCEncryptionControlReference",
     "VPCEndpointConnectionNotificationReference",
     "VPCEndpointReference",
     "VPCEndpointServicePermissionsReference",
@@ -11814,6 +12135,21 @@ def _typecheckingstub__e8890329f7e30c11a4944c99fc332973f5280ac00a0222b1631d4e50b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1b5ab879ac9cab67aeb0a61553565ffea8f306e89f552a533dfd930f59d7ed24(
+    *,
+    policy_rule_number: builtins.str,
+    transit_gateway_metering_policy_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01cc92df7f25b3e6a54bc6e93fbabb355be5b5f7dec1c6e4fc273e7f663f7d38(
+    *,
+    transit_gateway_metering_policy_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__095a9cdfacf328704a9d19f22212da96cbb6e9c6e1ec4bc67d2a0d960e1ec805(
     *,
     subnet_id: builtins.str,
@@ -11928,6 +12264,13 @@ def _typecheckingstub__28adc76405810a691e2dce4b43c95660c0222b01d8b1608d5d87395da
     *,
     dhcp_options_id: builtins.str,
     vpc_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__50ed3ca4369a94bd67b33fd9728c1616ecc391d119a17b6a19ab268a1aca8e83(
+    *,
+    vpc_encryption_control_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12062,5 +12405,5 @@ def _typecheckingstub__5bdce5af9d1e135e7564b00f4d9b2945ac4e23e3d35d3e993e24d29db
     """Type checking stubs"""
     pass
 
-for cls in [ICapacityManagerDataExportRef, ICapacityReservationFleetRef, ICapacityReservationRef, ICarrierGatewayRef, IClientVpnAuthorizationRuleRef, IClientVpnEndpointRef, IClientVpnRouteRef, IClientVpnTargetNetworkAssociationRef, ICustomerGatewayRef, IDHCPOptionsRef, IEC2FleetRef, IEIPAssociationRef, IEIPRef, IEgressOnlyInternetGatewayRef, IEnclaveCertificateIamRoleAssociationRef, IFlowLogRef, IGatewayRouteTableAssociationRef, IHostRef, IIPAMAllocationRef, IIPAMPoolCidrRef, IIPAMPoolRef, IIPAMRef, IIPAMResourceDiscoveryAssociationRef, IIPAMResourceDiscoveryRef, IIPAMScopeRef, IInstanceConnectEndpointRef, IInstanceRef, IInternetGatewayRef, IIpPoolRouteTableAssociationRef, IKeyPairRef, ILaunchTemplateRef, ILocalGatewayRouteRef, ILocalGatewayRouteTableRef, ILocalGatewayRouteTableVPCAssociationRef, ILocalGatewayRouteTableVirtualInterfaceGroupAssociationRef, ILocalGatewayVirtualInterfaceGroupRef, ILocalGatewayVirtualInterfaceRef, INatGatewayRef, INetworkAclEntryRef, INetworkAclRef, INetworkInsightsAccessScopeAnalysisRef, INetworkInsightsAccessScopeRef, INetworkInsightsAnalysisRef, INetworkInsightsPathRef, INetworkInterfaceAttachmentRef, INetworkInterfacePermissionRef, INetworkInterfaceRef, INetworkPerformanceMetricSubscriptionRef, IPlacementGroupRef, IPrefixListRef, IRouteRef, IRouteServerAssociationRef, IRouteServerEndpointRef, IRouteServerPeerRef, IRouteServerPropagationRef, IRouteServerRef, IRouteTableRef, ISecurityGroupEgressRef, ISecurityGroupIngressRef, ISecurityGroupRef, ISecurityGroupVpcAssociationRef, ISnapshotBlockPublicAccessRef, ISpotFleetRef, ISubnetCidrBlockRef, ISubnetNetworkAclAssociationRef, ISubnetRef, ISubnetRouteTableAssociationRef, ITrafficMirrorFilterRef, ITrafficMirrorFilterRuleRef, ITrafficMirrorSessionRef, ITrafficMirrorTargetRef, ITransitGatewayAttachmentRef, ITransitGatewayConnectPeerRef, ITransitGatewayConnectRef, ITransitGatewayMulticastDomainAssociationRef, ITransitGatewayMulticastDomainRef, ITransitGatewayMulticastGroupMemberRef, ITransitGatewayMulticastGroupSourceRef, ITransitGatewayPeeringAttachmentRef, ITransitGatewayRef, ITransitGatewayRouteRef, ITransitGatewayRouteTableAssociationRef, ITransitGatewayRouteTablePropagationRef, ITransitGatewayRouteTableRef, ITransitGatewayVpcAttachmentRef, IVPCBlockPublicAccessExclusionRef, IVPCBlockPublicAccessOptionsRef, IVPCCidrBlockRef, IVPCDHCPOptionsAssociationRef, IVPCEndpointConnectionNotificationRef, IVPCEndpointRef, IVPCEndpointServicePermissionsRef, IVPCEndpointServiceRef, IVPCGatewayAttachmentRef, IVPCPeeringConnectionRef, IVPCRef, IVPNConcentratorRef, IVPNConnectionRef, IVPNConnectionRouteRef, IVPNGatewayRef, IVPNGatewayRoutePropagationRef, IVerifiedAccessEndpointRef, IVerifiedAccessGroupRef, IVerifiedAccessInstanceRef, IVerifiedAccessTrustProviderRef, IVolumeAttachmentRef, IVolumeRef]:
+for cls in [ICapacityManagerDataExportRef, ICapacityReservationFleetRef, ICapacityReservationRef, ICarrierGatewayRef, IClientVpnAuthorizationRuleRef, IClientVpnEndpointRef, IClientVpnRouteRef, IClientVpnTargetNetworkAssociationRef, ICustomerGatewayRef, IDHCPOptionsRef, IEC2FleetRef, IEIPAssociationRef, IEIPRef, IEgressOnlyInternetGatewayRef, IEnclaveCertificateIamRoleAssociationRef, IFlowLogRef, IGatewayRouteTableAssociationRef, IHostRef, IIPAMAllocationRef, IIPAMPoolCidrRef, IIPAMPoolRef, IIPAMRef, IIPAMResourceDiscoveryAssociationRef, IIPAMResourceDiscoveryRef, IIPAMScopeRef, IInstanceConnectEndpointRef, IInstanceRef, IInternetGatewayRef, IIpPoolRouteTableAssociationRef, IKeyPairRef, ILaunchTemplateRef, ILocalGatewayRouteRef, ILocalGatewayRouteTableRef, ILocalGatewayRouteTableVPCAssociationRef, ILocalGatewayRouteTableVirtualInterfaceGroupAssociationRef, ILocalGatewayVirtualInterfaceGroupRef, ILocalGatewayVirtualInterfaceRef, INatGatewayRef, INetworkAclEntryRef, INetworkAclRef, INetworkInsightsAccessScopeAnalysisRef, INetworkInsightsAccessScopeRef, INetworkInsightsAnalysisRef, INetworkInsightsPathRef, INetworkInterfaceAttachmentRef, INetworkInterfacePermissionRef, INetworkInterfaceRef, INetworkPerformanceMetricSubscriptionRef, IPlacementGroupRef, IPrefixListRef, IRouteRef, IRouteServerAssociationRef, IRouteServerEndpointRef, IRouteServerPeerRef, IRouteServerPropagationRef, IRouteServerRef, IRouteTableRef, ISecurityGroupEgressRef, ISecurityGroupIngressRef, ISecurityGroupRef, ISecurityGroupVpcAssociationRef, ISnapshotBlockPublicAccessRef, ISpotFleetRef, ISubnetCidrBlockRef, ISubnetNetworkAclAssociationRef, ISubnetRef, ISubnetRouteTableAssociationRef, ITrafficMirrorFilterRef, ITrafficMirrorFilterRuleRef, ITrafficMirrorSessionRef, ITrafficMirrorTargetRef, ITransitGatewayAttachmentRef, ITransitGatewayConnectPeerRef, ITransitGatewayConnectRef, ITransitGatewayMeteringPolicyEntryRef, ITransitGatewayMeteringPolicyRef, ITransitGatewayMulticastDomainAssociationRef, ITransitGatewayMulticastDomainRef, ITransitGatewayMulticastGroupMemberRef, ITransitGatewayMulticastGroupSourceRef, ITransitGatewayPeeringAttachmentRef, ITransitGatewayRef, ITransitGatewayRouteRef, ITransitGatewayRouteTableAssociationRef, ITransitGatewayRouteTablePropagationRef, ITransitGatewayRouteTableRef, ITransitGatewayVpcAttachmentRef, IVPCBlockPublicAccessExclusionRef, IVPCBlockPublicAccessOptionsRef, IVPCCidrBlockRef, IVPCDHCPOptionsAssociationRef, IVPCEncryptionControlRef, IVPCEndpointConnectionNotificationRef, IVPCEndpointRef, IVPCEndpointServicePermissionsRef, IVPCEndpointServiceRef, IVPCGatewayAttachmentRef, IVPCPeeringConnectionRef, IVPCRef, IVPNConcentratorRef, IVPNConnectionRef, IVPNConnectionRouteRef, IVPNGatewayRef, IVPNGatewayRoutePropagationRef, IVerifiedAccessEndpointRef, IVerifiedAccessGroupRef, IVerifiedAccessInstanceRef, IVerifiedAccessTrustProviderRef, IVolumeAttachmentRef, IVolumeRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

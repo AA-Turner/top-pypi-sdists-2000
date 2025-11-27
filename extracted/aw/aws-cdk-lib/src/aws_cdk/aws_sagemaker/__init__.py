@@ -1736,6 +1736,9 @@ class CfnCluster(
         # The values are placeholders you should change.
         from aws_cdk import aws_sagemaker as sagemaker
         
+        # on_demand: Any
+        # spot: Any
+        
         cfn_cluster = sagemaker.CfnCluster(self, "MyCfnCluster",
             auto_scaling=sagemaker.CfnCluster.ClusterAutoScalingConfigProperty(
                 mode="mode",
@@ -1756,6 +1759,10 @@ class CfnCluster(
                 ),
         
                 # the properties below are optional
+                capacity_requirements=sagemaker.CfnCluster.ClusterCapacityRequirementsProperty(
+                    on_demand=on_demand,
+                    spot=spot
+                ),
                 current_count=123,
                 image_id="imageId",
                 instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
@@ -1765,6 +1772,18 @@ class CfnCluster(
                         volume_size_in_gb=123
                     )
                 )],
+                kubernetes_config=sagemaker.CfnCluster.ClusterKubernetesConfigProperty(
+                    labels={
+                        "labels_key": "labels"
+                    },
+                    taints=[sagemaker.CfnCluster.ClusterKubernetesTaintProperty(
+                        effect="effect",
+                        key="key",
+        
+                        # the properties below are optional
+                        value="value"
+                    )]
+                ),
                 on_start_deep_health_checks=["onStartDeepHealthChecks"],
                 override_vpc_config=sagemaker.CfnCluster.VpcConfigProperty(
                     security_group_ids=["securityGroupIds"],
@@ -2369,6 +2388,79 @@ class CfnCluster(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterCapacityRequirementsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"on_demand": "onDemand", "spot": "spot"},
+    )
+    class ClusterCapacityRequirementsProperty:
+        def __init__(
+            self,
+            *,
+            on_demand: typing.Any = None,
+            spot: typing.Any = None,
+        ) -> None:
+            '''Specifies the capacity requirements configuration for an instance group.
+
+            :param on_demand: Options for OnDemand capacity.
+            :param spot: Options for Spot capacity.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clustercapacityrequirements.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                # on_demand: Any
+                # spot: Any
+                
+                cluster_capacity_requirements_property = sagemaker.CfnCluster.ClusterCapacityRequirementsProperty(
+                    on_demand=on_demand,
+                    spot=spot
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__cc7ebd927b56a460fefdf909fa564532aec35079af11e0179347b1ab619d8979)
+                check_type(argname="argument on_demand", value=on_demand, expected_type=type_hints["on_demand"])
+                check_type(argname="argument spot", value=spot, expected_type=type_hints["spot"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if on_demand is not None:
+                self._values["on_demand"] = on_demand
+            if spot is not None:
+                self._values["spot"] = spot
+
+        @builtins.property
+        def on_demand(self) -> typing.Any:
+            '''Options for OnDemand capacity.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clustercapacityrequirements.html#cfn-sagemaker-cluster-clustercapacityrequirements-ondemand
+            '''
+            result = self._values.get("on_demand")
+            return typing.cast(typing.Any, result)
+
+        @builtins.property
+        def spot(self) -> typing.Any:
+            '''Options for Spot capacity.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clustercapacityrequirements.html#cfn-sagemaker-cluster-clustercapacityrequirements-spot
+            '''
+            result = self._values.get("spot")
+            return typing.cast(typing.Any, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ClusterCapacityRequirementsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterEbsVolumeConfigProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -2484,9 +2576,11 @@ class CfnCluster(
             "instance_group_name": "instanceGroupName",
             "instance_type": "instanceType",
             "life_cycle_config": "lifeCycleConfig",
+            "capacity_requirements": "capacityRequirements",
             "current_count": "currentCount",
             "image_id": "imageId",
             "instance_storage_configs": "instanceStorageConfigs",
+            "kubernetes_config": "kubernetesConfig",
             "on_start_deep_health_checks": "onStartDeepHealthChecks",
             "override_vpc_config": "overrideVpcConfig",
             "scheduled_update_config": "scheduledUpdateConfig",
@@ -2503,9 +2597,11 @@ class CfnCluster(
             instance_group_name: builtins.str,
             instance_type: builtins.str,
             life_cycle_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterLifeCycleConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+            capacity_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterCapacityRequirementsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             current_count: typing.Optional[jsii.Number] = None,
             image_id: typing.Optional[builtins.str] = None,
             instance_storage_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterInstanceStorageConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            kubernetes_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterKubernetesConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             on_start_deep_health_checks: typing.Optional[typing.Sequence[builtins.str]] = None,
             override_vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.VpcConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             scheduled_update_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ScheduledUpdateConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -2519,9 +2615,11 @@ class CfnCluster(
             :param instance_group_name: The name of the instance group of a SageMaker HyperPod cluster.
             :param instance_type: The instance type of the instance group of a SageMaker HyperPod cluster.
             :param life_cycle_config: The lifecycle configuration for a SageMaker HyperPod cluster.
+            :param capacity_requirements: Specifies the capacity requirements configuration for an instance group.
             :param current_count: The number of instances that are currently in the instance group of a SageMaker HyperPod cluster.
             :param image_id: AMI Id to be used for launching EC2 instances - HyperPodPublicAmiId or CustomAmiId.
             :param instance_storage_configs: The configurations of additional storage specified to the instance group where the instance (node) is launched.
+            :param kubernetes_config: Kubernetes configuration for cluster nodes including labels and taints.
             :param on_start_deep_health_checks: A flag indicating whether deep health checks should be performed when the HyperPod cluster instance group is created or updated. Deep health checks are comprehensive, invasive tests that validate the health of the underlying hardware and infrastructure components.
             :param override_vpc_config: The customized Amazon VPC configuration at the instance group level that overrides the default Amazon VPC configuration of the SageMaker HyperPod cluster.
             :param scheduled_update_config: The configuration object of the schedule that SageMaker follows when updating the AMI.
@@ -2537,6 +2635,9 @@ class CfnCluster(
                 # The values are placeholders you should change.
                 from aws_cdk import aws_sagemaker as sagemaker
                 
+                # on_demand: Any
+                # spot: Any
+                
                 cluster_instance_group_property = sagemaker.CfnCluster.ClusterInstanceGroupProperty(
                     execution_role="executionRole",
                     instance_count=123,
@@ -2548,6 +2649,10 @@ class CfnCluster(
                     ),
                 
                     # the properties below are optional
+                    capacity_requirements=sagemaker.CfnCluster.ClusterCapacityRequirementsProperty(
+                        on_demand=on_demand,
+                        spot=spot
+                    ),
                     current_count=123,
                     image_id="imageId",
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
@@ -2557,6 +2662,18 @@ class CfnCluster(
                             volume_size_in_gb=123
                         )
                     )],
+                    kubernetes_config=sagemaker.CfnCluster.ClusterKubernetesConfigProperty(
+                        labels={
+                            "labels_key": "labels"
+                        },
+                        taints=[sagemaker.CfnCluster.ClusterKubernetesTaintProperty(
+                            effect="effect",
+                            key="key",
+                
+                            # the properties below are optional
+                            value="value"
+                        )]
+                    ),
                     on_start_deep_health_checks=["onStartDeepHealthChecks"],
                     override_vpc_config=sagemaker.CfnCluster.VpcConfigProperty(
                         security_group_ids=["securityGroupIds"],
@@ -2596,9 +2713,11 @@ class CfnCluster(
                 check_type(argname="argument instance_group_name", value=instance_group_name, expected_type=type_hints["instance_group_name"])
                 check_type(argname="argument instance_type", value=instance_type, expected_type=type_hints["instance_type"])
                 check_type(argname="argument life_cycle_config", value=life_cycle_config, expected_type=type_hints["life_cycle_config"])
+                check_type(argname="argument capacity_requirements", value=capacity_requirements, expected_type=type_hints["capacity_requirements"])
                 check_type(argname="argument current_count", value=current_count, expected_type=type_hints["current_count"])
                 check_type(argname="argument image_id", value=image_id, expected_type=type_hints["image_id"])
                 check_type(argname="argument instance_storage_configs", value=instance_storage_configs, expected_type=type_hints["instance_storage_configs"])
+                check_type(argname="argument kubernetes_config", value=kubernetes_config, expected_type=type_hints["kubernetes_config"])
                 check_type(argname="argument on_start_deep_health_checks", value=on_start_deep_health_checks, expected_type=type_hints["on_start_deep_health_checks"])
                 check_type(argname="argument override_vpc_config", value=override_vpc_config, expected_type=type_hints["override_vpc_config"])
                 check_type(argname="argument scheduled_update_config", value=scheduled_update_config, expected_type=type_hints["scheduled_update_config"])
@@ -2611,12 +2730,16 @@ class CfnCluster(
                 "instance_type": instance_type,
                 "life_cycle_config": life_cycle_config,
             }
+            if capacity_requirements is not None:
+                self._values["capacity_requirements"] = capacity_requirements
             if current_count is not None:
                 self._values["current_count"] = current_count
             if image_id is not None:
                 self._values["image_id"] = image_id
             if instance_storage_configs is not None:
                 self._values["instance_storage_configs"] = instance_storage_configs
+            if kubernetes_config is not None:
+                self._values["kubernetes_config"] = kubernetes_config
             if on_start_deep_health_checks is not None:
                 self._values["on_start_deep_health_checks"] = on_start_deep_health_checks
             if override_vpc_config is not None:
@@ -2681,6 +2804,17 @@ class CfnCluster(
             return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterLifeCycleConfigProperty"], result)
 
         @builtins.property
+        def capacity_requirements(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterCapacityRequirementsProperty"]]:
+            '''Specifies the capacity requirements configuration for an instance group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterinstancegroup.html#cfn-sagemaker-cluster-clusterinstancegroup-capacityrequirements
+            '''
+            result = self._values.get("capacity_requirements")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterCapacityRequirementsProperty"]], result)
+
+        @builtins.property
         def current_count(self) -> typing.Optional[jsii.Number]:
             '''The number of instances that are currently in the instance group of a SageMaker HyperPod cluster.
 
@@ -2708,6 +2842,17 @@ class CfnCluster(
             '''
             result = self._values.get("instance_storage_configs")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterInstanceStorageConfigProperty"]]]], result)
+
+        @builtins.property
+        def kubernetes_config(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterKubernetesConfigProperty"]]:
+            '''Kubernetes configuration for cluster nodes including labels and taints.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterinstancegroup.html#cfn-sagemaker-cluster-clusterinstancegroup-kubernetesconfig
+            '''
+            result = self._values.get("kubernetes_config")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterKubernetesConfigProperty"]], result)
 
         @builtins.property
         def on_start_deep_health_checks(
@@ -2837,6 +2982,178 @@ class CfnCluster(
 
         def __repr__(self) -> str:
             return "ClusterInstanceStorageConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterKubernetesConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"labels": "labels", "taints": "taints"},
+    )
+    class ClusterKubernetesConfigProperty:
+        def __init__(
+            self,
+            *,
+            labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+            taints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.ClusterKubernetesTaintProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''Kubernetes configuration for cluster nodes including labels and taints.
+
+            :param labels: A map of Kubernetes labels to apply to cluster nodes.
+            :param taints: A list of Kubernetes taints to apply to cluster nodes. Maximum of 50 taints.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetesconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                cluster_kubernetes_config_property = sagemaker.CfnCluster.ClusterKubernetesConfigProperty(
+                    labels={
+                        "labels_key": "labels"
+                    },
+                    taints=[sagemaker.CfnCluster.ClusterKubernetesTaintProperty(
+                        effect="effect",
+                        key="key",
+                
+                        # the properties below are optional
+                        value="value"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__f5927607ea6d6ff01a0f035e8bd449c5cdc52208b93b59ce415bc238b5ff9d28)
+                check_type(argname="argument labels", value=labels, expected_type=type_hints["labels"])
+                check_type(argname="argument taints", value=taints, expected_type=type_hints["taints"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if labels is not None:
+                self._values["labels"] = labels
+            if taints is not None:
+                self._values["taints"] = taints
+
+        @builtins.property
+        def labels(
+            self,
+        ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
+            '''A map of Kubernetes labels to apply to cluster nodes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetesconfig.html#cfn-sagemaker-cluster-clusterkubernetesconfig-labels
+            '''
+            result = self._values.get("labels")
+            return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def taints(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterKubernetesTaintProperty"]]]]:
+            '''A list of Kubernetes taints to apply to cluster nodes.
+
+            Maximum of 50 taints.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetesconfig.html#cfn-sagemaker-cluster-clusterkubernetesconfig-taints
+            '''
+            result = self._values.get("taints")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCluster.ClusterKubernetesTaintProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ClusterKubernetesConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_sagemaker.CfnCluster.ClusterKubernetesTaintProperty",
+        jsii_struct_bases=[],
+        name_mapping={"effect": "effect", "key": "key", "value": "value"},
+    )
+    class ClusterKubernetesTaintProperty:
+        def __init__(
+            self,
+            *,
+            effect: builtins.str,
+            key: builtins.str,
+            value: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''A Kubernetes taint to apply to cluster nodes.
+
+            :param effect: The effect of the taint.
+            :param key: The key of the taint.
+            :param value: The value of the taint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetestaint.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_sagemaker as sagemaker
+                
+                cluster_kubernetes_taint_property = sagemaker.CfnCluster.ClusterKubernetesTaintProperty(
+                    effect="effect",
+                    key="key",
+                
+                    # the properties below are optional
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1d0383cb8099439eaf261aa1516edd0bee7f57743dd02fc3f1d8db1b4b642e4c)
+                check_type(argname="argument effect", value=effect, expected_type=type_hints["effect"])
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "effect": effect,
+                "key": key,
+            }
+            if value is not None:
+                self._values["value"] = value
+
+        @builtins.property
+        def effect(self) -> builtins.str:
+            '''The effect of the taint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetestaint.html#cfn-sagemaker-cluster-clusterkubernetestaint-effect
+            '''
+            result = self._values.get("effect")
+            assert result is not None, "Required property 'effect' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def key(self) -> builtins.str:
+            '''The key of the taint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetestaint.html#cfn-sagemaker-cluster-clusterkubernetestaint-key
+            '''
+            result = self._values.get("key")
+            assert result is not None, "Required property 'key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> typing.Optional[builtins.str]:
+            '''The value of the taint.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sagemaker-cluster-clusterkubernetestaint.html#cfn-sagemaker-cluster-clusterkubernetestaint-value
+            '''
+            result = self._values.get("value")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ClusterKubernetesTaintProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -3914,6 +4231,9 @@ class CfnClusterProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_sagemaker as sagemaker
             
+            # on_demand: Any
+            # spot: Any
+            
             cfn_cluster_props = sagemaker.CfnClusterProps(
                 auto_scaling=sagemaker.CfnCluster.ClusterAutoScalingConfigProperty(
                     mode="mode",
@@ -3934,6 +4254,10 @@ class CfnClusterProps:
                     ),
             
                     # the properties below are optional
+                    capacity_requirements=sagemaker.CfnCluster.ClusterCapacityRequirementsProperty(
+                        on_demand=on_demand,
+                        spot=spot
+                    ),
                     current_count=123,
                     image_id="imageId",
                     instance_storage_configs=[sagemaker.CfnCluster.ClusterInstanceStorageConfigProperty(
@@ -3943,6 +4267,18 @@ class CfnClusterProps:
                             volume_size_in_gb=123
                         )
                     )],
+                    kubernetes_config=sagemaker.CfnCluster.ClusterKubernetesConfigProperty(
+                        labels={
+                            "labels_key": "labels"
+                        },
+                        taints=[sagemaker.CfnCluster.ClusterKubernetesTaintProperty(
+                            effect="effect",
+                            key="key",
+            
+                            # the properties below are optional
+                            value="value"
+                        )]
+                    ),
                     on_start_deep_health_checks=["onStartDeepHealthChecks"],
                     override_vpc_config=sagemaker.CfnCluster.VpcConfigProperty(
                         security_group_ids=["securityGroupIds"],
@@ -56565,6 +56901,14 @@ def _typecheckingstub__ae932894a770df5cce53186dfdfa1f99ae9aedbf1a8f0d35bc6a0d5b6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cc7ebd927b56a460fefdf909fa564532aec35079af11e0179347b1ab619d8979(
+    *,
+    on_demand: typing.Any = None,
+    spot: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9c3cafd59fbc880606685f87e0e67d5a5ce5428cfebf3db8838122cd54c4a361(
     *,
     root_volume: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
@@ -56581,9 +56925,11 @@ def _typecheckingstub__3a19719ba9f3f785eebfbcc6ee996f6178944dfe9cbd5d5cdf73341bd
     instance_group_name: builtins.str,
     instance_type: builtins.str,
     life_cycle_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterLifeCycleConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    capacity_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterCapacityRequirementsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     current_count: typing.Optional[jsii.Number] = None,
     image_id: typing.Optional[builtins.str] = None,
     instance_storage_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterInstanceStorageConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    kubernetes_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterKubernetesConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     on_start_deep_health_checks: typing.Optional[typing.Sequence[builtins.str]] = None,
     override_vpc_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.VpcConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scheduled_update_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ScheduledUpdateConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -56596,6 +56942,23 @@ def _typecheckingstub__3a19719ba9f3f785eebfbcc6ee996f6178944dfe9cbd5d5cdf73341bd
 def _typecheckingstub__43caf7c774c2545f8cff945a7d450e1acd83d6c11b7011b4cab6d25bea696218(
     *,
     ebs_volume_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterEbsVolumeConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f5927607ea6d6ff01a0f035e8bd449c5cdc52208b93b59ce415bc238b5ff9d28(
+    *,
+    labels: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
+    taints: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCluster.ClusterKubernetesTaintProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1d0383cb8099439eaf261aa1516edd0bee7f57743dd02fc3f1d8db1b4b642e4c(
+    *,
+    effect: builtins.str,
+    key: builtins.str,
+    value: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

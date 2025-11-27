@@ -62,6 +62,7 @@ from .. import (
     CfnResource as _CfnResource_9df397a6,
     CfnTag as _CfnTag_f6864754,
     IInspectable as _IInspectable_c2943556,
+    IResolvable as _IResolvable_da3f097b,
     ITaggable as _ITaggable_36806126,
     TagManager as _TagManager_0a598cb3,
     TreeInspector as _TreeInspector_488e0dd5,
@@ -406,6 +407,9 @@ class CfnStream(
             kms_key_id="kmsKeyId",
             media_type="mediaType",
             name="name",
+            stream_storage_configuration=kinesisvideo.CfnStream.StreamStorageConfigurationProperty(
+                default_storage_tier="defaultStorageTier"
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -423,6 +427,7 @@ class CfnStream(
         kms_key_id: typing.Optional[builtins.str] = None,
         media_type: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
+        stream_storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStream.StreamStorageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::KinesisVideo::Stream``.
@@ -434,6 +439,7 @@ class CfnStream(
         :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
+        :param stream_storage_configuration: Configuration for the storage tier of the Kinesis Video Stream.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
         if __debug__:
@@ -446,6 +452,7 @@ class CfnStream(
             kms_key_id=kms_key_id,
             media_type=media_type,
             name=name,
+            stream_storage_configuration=stream_storage_configuration,
             tags=tags,
         )
 
@@ -584,6 +591,24 @@ class CfnStream(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="streamStorageConfiguration")
+    def stream_storage_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamStorageConfigurationProperty"]]:
+        '''Configuration for the storage tier of the Kinesis Video Stream.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamStorageConfigurationProperty"]], jsii.get(self, "streamStorageConfiguration"))
+
+    @stream_storage_configuration.setter
+    def stream_storage_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamStorageConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__353e31ad55994ee34db35f925ed1ba94ca68ffb3ce97ad064feb40830721c5c9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "streamStorageConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
         '''An array of key-value pairs to apply to this resource.'''
@@ -596,6 +621,65 @@ class CfnStream(
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_kinesisvideo.CfnStream.StreamStorageConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"default_storage_tier": "defaultStorageTier"},
+    )
+    class StreamStorageConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            default_storage_tier: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration for the storage tier of the Kinesis Video Stream.
+
+            :param default_storage_tier: The storage tier for the Kinesis Video Stream. Determines the storage class used for stream data. Default: - "HOT"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisvideo-stream-streamstorageconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_kinesisvideo as kinesisvideo
+                
+                stream_storage_configuration_property = kinesisvideo.CfnStream.StreamStorageConfigurationProperty(
+                    default_storage_tier="defaultStorageTier"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a0b7b767c6dc68700d380e90c6d53c4b73ae75797443dc5990f82cd0fd0ed319)
+                check_type(argname="argument default_storage_tier", value=default_storage_tier, expected_type=type_hints["default_storage_tier"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if default_storage_tier is not None:
+                self._values["default_storage_tier"] = default_storage_tier
+
+        @builtins.property
+        def default_storage_tier(self) -> typing.Optional[builtins.str]:
+            '''The storage tier for the Kinesis Video Stream.
+
+            Determines the storage class used for stream data.
+
+            :default: - "HOT"
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisvideo-stream-streamstorageconfiguration.html#cfn-kinesisvideo-stream-streamstorageconfiguration-defaultstoragetier
+            '''
+            result = self._values.get("default_storage_tier")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StreamStorageConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_kinesisvideo.CfnStreamProps",
@@ -606,6 +690,7 @@ class CfnStream(
         "kms_key_id": "kmsKeyId",
         "media_type": "mediaType",
         "name": "name",
+        "stream_storage_configuration": "streamStorageConfiguration",
         "tags": "tags",
     },
 )
@@ -618,6 +703,7 @@ class CfnStreamProps:
         kms_key_id: typing.Optional[builtins.str] = None,
         media_type: typing.Optional[builtins.str] = None,
         name: typing.Optional[builtins.str] = None,
+        stream_storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnStream``.
@@ -627,6 +713,7 @@ class CfnStreamProps:
         :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
+        :param stream_storage_configuration: Configuration for the storage tier of the Kinesis Video Stream.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisvideo-stream.html
@@ -644,6 +731,9 @@ class CfnStreamProps:
                 kms_key_id="kmsKeyId",
                 media_type="mediaType",
                 name="name",
+                stream_storage_configuration=kinesisvideo.CfnStream.StreamStorageConfigurationProperty(
+                    default_storage_tier="defaultStorageTier"
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -657,6 +747,7 @@ class CfnStreamProps:
             check_type(argname="argument kms_key_id", value=kms_key_id, expected_type=type_hints["kms_key_id"])
             check_type(argname="argument media_type", value=media_type, expected_type=type_hints["media_type"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument stream_storage_configuration", value=stream_storage_configuration, expected_type=type_hints["stream_storage_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if data_retention_in_hours is not None:
@@ -669,6 +760,8 @@ class CfnStreamProps:
             self._values["media_type"] = media_type
         if name is not None:
             self._values["name"] = name
+        if stream_storage_configuration is not None:
+            self._values["stream_storage_configuration"] = stream_storage_configuration
         if tags is not None:
             self._values["tags"] = tags
 
@@ -716,6 +809,17 @@ class CfnStreamProps:
         '''
         result = self._values.get("name")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def stream_storage_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamStorageConfigurationProperty]]:
+        '''Configuration for the storage tier of the Kinesis Video Stream.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisvideo-stream.html#cfn-kinesisvideo-stream-streamstorageconfiguration
+        '''
+        result = self._values.get("stream_storage_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamStorageConfigurationProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -822,6 +926,7 @@ def _typecheckingstub__9ec46ef966c55301f1d7f90935a5a7340c3d7ee98963234b59d16d191
     kms_key_id: typing.Optional[builtins.str] = None,
     media_type: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
+    stream_storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -875,8 +980,21 @@ def _typecheckingstub__42f11c245ea7a28ba3c7727c31351ffc7b0f10775943c038ec944523d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__353e31ad55994ee34db35f925ed1ba94ca68ffb3ce97ad064feb40830721c5c9(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamStorageConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__916b61187a1fea0754be9981eeeb345ba75e61b6417bbde10d8246657f4cff69(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a0b7b767c6dc68700d380e90c6d53c4b73ae75797443dc5990f82cd0fd0ed319(
+    *,
+    default_storage_tier: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -888,6 +1006,7 @@ def _typecheckingstub__99fe3ebad84d54122e4e37ffa968edc213c9518bca26ea24531a78c1f
     kms_key_id: typing.Optional[builtins.str] = None,
     media_type: typing.Optional[builtins.str] = None,
     name: typing.Optional[builtins.str] = None,
+    stream_storage_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStream.StreamStorageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

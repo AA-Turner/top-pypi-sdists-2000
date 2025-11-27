@@ -3251,7 +3251,7 @@ class CfnFlow(
             secret_arn: typing.Optional[builtins.str] = None,
             url: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Information about the encryption of the flow.
+            '''Encryption information.
 
             :param role_arn: The ARN of the role that you created during setup (when you set up MediaConnect as a trusted entity).
             :param algorithm: The type of algorithm that is used for static key encryption (such as aes128, aes192, or aes256). If you are using SPEKE or SRT-password encryption, this property must be left blank.
@@ -5183,8 +5183,8 @@ class CfnFlow(
             :param min_latency: The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.
             :param name: The name of the source.
             :param protocol: The protocol that is used by the source. AWS CloudFormation does not currently support CDI or ST 2110 JPEG XS source protocols. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
-            :param router_integration_state: 
-            :param router_integration_transit_decryption: The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+            :param router_integration_state: Indicates if router integration is enabled or disabled on the flow source.
+            :param router_integration_transit_decryption: The decryption configuration for the flow source when router integration is enabled.
             :param sender_control_port: The port that the flow uses to send outbound requests to initiate connection with the sender.
             :param sender_ip_address: The IP address that the flow communicates with to initiate connection with the sender.
             :param source_arn: The ARN of the source.
@@ -5486,7 +5486,8 @@ class CfnFlow(
 
         @builtins.property
         def router_integration_state(self) -> typing.Optional[builtins.str]:
-            '''
+            '''Indicates if router integration is enabled or disabled on the flow source.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-flow-source.html#cfn-mediaconnect-flow-source-routerintegrationstate
             '''
             result = self._values.get("router_integration_state")
@@ -5496,7 +5497,7 @@ class CfnFlow(
         def router_integration_transit_decryption(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlow.FlowTransitEncryptionProperty"]]:
-            '''The configuration that defines how content is encrypted during transit between the MediaConnect router and a MediaConnect flow.
+            '''The decryption configuration for the flow source when router integration is enabled.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-mediaconnect-flow-source.html#cfn-mediaconnect-flow-source-routerintegrationtransitdecryption
             '''
@@ -5953,7 +5954,7 @@ class CfnFlowEntitlement(
         :param name: The name of the entitlement. This value must be unique within the current flow.
         :param subscribers: The AWS account IDs that you want to share your content with. The receiving accounts (subscribers) will be allowed to create their own flows using your content as the source.
         :param data_transfer_subscriber_fee_percent: The percentage of the entitlement data transfer fee that you want the subscriber to be responsible for. Default: - 0
-        :param encryption: Information about the encryption of the flow.
+        :param encryption: Encryption information.
         :param entitlement_status: An indication of whether the new entitlement should be enabled or disabled as soon as it is created. If you don’t specify the entitlementStatus field in your request, MediaConnect sets it to ENABLED.
         '''
         if __debug__:
@@ -6095,7 +6096,7 @@ class CfnFlowEntitlement(
     def encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowEntitlement.EncryptionProperty"]]:
-        '''Information about the encryption of the flow.'''
+        '''Encryption information.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowEntitlement.EncryptionProperty"]], jsii.get(self, "encryption"))
 
     @encryption.setter
@@ -6150,7 +6151,7 @@ class CfnFlowEntitlement(
             secret_arn: typing.Optional[builtins.str] = None,
             url: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Information about the encryption of the flow.
+            '''Encryption information.
 
             :param algorithm: The type of algorithm that is used for static key encryption (such as aes128, aes192, or aes256). If you are using SPEKE or SRT-password encryption, this property must be left blank.
             :param role_arn: The ARN of the role that you created during setup (when you set up MediaConnect as a trusted entity).
@@ -6360,7 +6361,7 @@ class CfnFlowEntitlementProps:
         :param name: The name of the entitlement. This value must be unique within the current flow.
         :param subscribers: The AWS account IDs that you want to share your content with. The receiving accounts (subscribers) will be allowed to create their own flows using your content as the source.
         :param data_transfer_subscriber_fee_percent: The percentage of the entitlement data transfer fee that you want the subscriber to be responsible for. Default: - 0
-        :param encryption: Information about the encryption of the flow.
+        :param encryption: Encryption information.
         :param entitlement_status: An indication of whether the new entitlement should be enabled or disabled as soon as it is created. If you don’t specify the entitlementStatus field in your request, MediaConnect sets it to ENABLED.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowentitlement.html
@@ -6479,7 +6480,7 @@ class CfnFlowEntitlementProps:
     def encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowEntitlement.EncryptionProperty]]:
-        '''Information about the encryption of the flow.
+        '''Encryption information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowentitlement.html#cfn-mediaconnect-flowentitlement-encryption
         '''
@@ -6641,7 +6642,7 @@ class CfnFlowOutput(
         :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param remote_id: The remote ID for the Zixi-pull stream.
         :param router_integration_state: 
-        :param router_integration_transit_encryption: Information about the encryption of the flow.
+        :param router_integration_transit_encryption: Encryption information.
         :param smoothing_latency: The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
         :param stream_id: The stream ID that you want to use for this transport. This parameter applies only to Zixi and SRT caller-based streams.
         :param vpc_interface_attachment: The name of the VPC interface attachment to use for this output.
@@ -6950,7 +6951,7 @@ class CfnFlowOutput(
     def router_integration_transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowOutput.FlowTransitEncryptionProperty"]]:
-        '''Information about the encryption of the flow.'''
+        '''Encryption information.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFlowOutput.FlowTransitEncryptionProperty"]], jsii.get(self, "routerIntegrationTransitEncryption"))
 
     @router_integration_transit_encryption.setter
@@ -7202,7 +7203,7 @@ class CfnFlowOutput(
             algorithm: typing.Optional[builtins.str] = None,
             key_type: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Information about the encryption of the flow.
+            '''Encryption information.
 
             :param role_arn: The ARN of the role that you created during setup (when you set up MediaConnect as a trusted entity).
             :param secret_arn: The ARN of the secret that you created in AWS Secrets Manager to store the encryption key. This parameter is required for static key encryption and is not valid for SPEKE encryption.
@@ -7830,7 +7831,7 @@ class CfnFlowOutputProps:
         :param protocol: The protocol to use for the output. .. epigraph:: AWS Elemental MediaConnect no longer supports the Fujitsu QoS protocol. This reference is maintained for legacy purposes only.
         :param remote_id: The remote ID for the Zixi-pull stream.
         :param router_integration_state: 
-        :param router_integration_transit_encryption: Information about the encryption of the flow.
+        :param router_integration_transit_encryption: Encryption information.
         :param smoothing_latency: The smoothing latency in milliseconds for RIST, RTP, and RTP-FEC streams.
         :param stream_id: The stream ID that you want to use for this transport. This parameter applies only to Zixi and SRT caller-based streams.
         :param vpc_interface_attachment: The name of the VPC interface attachment to use for this output.
@@ -8141,7 +8142,7 @@ class CfnFlowOutputProps:
     def router_integration_transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFlowOutput.FlowTransitEncryptionProperty]]:
-        '''Information about the encryption of the flow.
+        '''Encryption information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-flowoutput.html#cfn-mediaconnect-flowoutput-routerintegrationtransitencryption
         '''
@@ -9034,7 +9035,7 @@ class CfnFlowSource(
             secret_arn: typing.Optional[builtins.str] = None,
             url: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Information about the encryption of the flow.
+            '''Encryption information.
 
             :param role_arn: The ARN of the role that you created during setup (when you set up MediaConnect as a trusted entity).
             :param algorithm: The type of algorithm that is used for static key encryption (such as aes128, aes192, or aes256). If you are using SPEKE or SRT-password encryption, this property must be left blank.
@@ -10590,13 +10591,13 @@ class CfnRouterInput(
         :param configuration: The configuration settings for a router input.
         :param maximum_bitrate: The maximum bitrate for the router input.
         :param name: The name of the router input.
-        :param routing_scope: 
-        :param tier: 
-        :param availability_zone: The Availability Zone where you want to create the router input. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
-        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
-        :param region_name: The AWS Region for the router input. Defaults to the current region if not specified.
+        :param routing_scope: Indicates whether the router input is configured for Regional or global routing.
+        :param tier: The tier level of the router input.
+        :param availability_zone: The Availability Zone of the router input.
+        :param maintenance_configuration: The maintenance configuration settings applied to this router input.
+        :param region_name: The AWS Region where the router input is located.
         :param tags: Key-value pairs that can be used to tag and organize this router input.
-        :param transit_encryption: Information about the encryption of the flow.
+        :param transit_encryption: Encryption information.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8fa24b13aaffdcfc1e47f3ced2e884afe1fe974cb91ceb3f0702e3ed196e0855)
@@ -10661,7 +10662,8 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the router input.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -10687,7 +10689,8 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="attrInputType")
     def attr_input_type(self) -> builtins.str:
-        '''
+        '''The type of the router input.
+
         :cloudformationAttribute: InputType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrInputType"))
@@ -10704,7 +10707,8 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="attrMaintenanceType")
     def attr_maintenance_type(self) -> builtins.str:
-        '''
+        '''The type of maintenance configuration applied to this router input.
+
         :cloudformationAttribute: MaintenanceType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrMaintenanceType"))
@@ -10721,7 +10725,8 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="attrState")
     def attr_state(self) -> builtins.str:
-        '''
+        '''The current state of the router input.
+
         :cloudformationAttribute: State
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrState"))
@@ -10799,6 +10804,7 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="routingScope")
     def routing_scope(self) -> builtins.str:
+        '''Indicates whether the router input is configured for Regional or global routing.'''
         return typing.cast(builtins.str, jsii.get(self, "routingScope"))
 
     @routing_scope.setter
@@ -10811,6 +10817,7 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="tier")
     def tier(self) -> builtins.str:
+        '''The tier level of the router input.'''
         return typing.cast(builtins.str, jsii.get(self, "tier"))
 
     @tier.setter
@@ -10823,7 +10830,7 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="availabilityZone")
     def availability_zone(self) -> typing.Optional[builtins.str]:
-        '''The Availability Zone where you want to create the router input.'''
+        '''The Availability Zone of the router input.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "availabilityZone"))
 
     @availability_zone.setter
@@ -10838,7 +10845,7 @@ class CfnRouterInput(
     def maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MaintenanceConfigurationProperty"]]:
-        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.'''
+        '''The maintenance configuration settings applied to this router input.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.MaintenanceConfigurationProperty"]], jsii.get(self, "maintenanceConfiguration"))
 
     @maintenance_configuration.setter
@@ -10854,7 +10861,7 @@ class CfnRouterInput(
     @builtins.property
     @jsii.member(jsii_name="regionName")
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router input.'''
+        '''The AWS Region where the router input is located.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "regionName"))
 
     @region_name.setter
@@ -10882,7 +10889,7 @@ class CfnRouterInput(
     def transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionProperty"]]:
-        '''Information about the encryption of the flow.'''
+        '''Encryption information.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterInput.RouterInputTransitEncryptionProperty"]], jsii.get(self, "transitEncryption"))
 
     @transit_encryption.setter
@@ -12995,13 +13002,13 @@ class CfnRouterInputProps:
         :param configuration: The configuration settings for a router input.
         :param maximum_bitrate: The maximum bitrate for the router input.
         :param name: The name of the router input.
-        :param routing_scope: 
-        :param tier: 
-        :param availability_zone: The Availability Zone where you want to create the router input. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
-        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
-        :param region_name: The AWS Region for the router input. Defaults to the current region if not specified.
+        :param routing_scope: Indicates whether the router input is configured for Regional or global routing.
+        :param tier: The tier level of the router input.
+        :param availability_zone: The Availability Zone of the router input.
+        :param maintenance_configuration: The maintenance configuration settings applied to this router input.
+        :param region_name: The AWS Region where the router input is located.
         :param tags: Key-value pairs that can be used to tag and organize this router input.
-        :param transit_encryption: Information about the encryption of the flow.
+        :param transit_encryption: Encryption information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html
         :exampleMetadata: fixture=_generated
@@ -13238,7 +13245,8 @@ class CfnRouterInputProps:
 
     @builtins.property
     def routing_scope(self) -> builtins.str:
-        '''
+        '''Indicates whether the router input is configured for Regional or global routing.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-routingscope
         '''
         result = self._values.get("routing_scope")
@@ -13247,7 +13255,8 @@ class CfnRouterInputProps:
 
     @builtins.property
     def tier(self) -> builtins.str:
-        '''
+        '''The tier level of the router input.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-tier
         '''
         result = self._values.get("tier")
@@ -13256,9 +13265,7 @@ class CfnRouterInputProps:
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
-        '''The Availability Zone where you want to create the router input.
-
-        This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        '''The Availability Zone of the router input.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-availabilityzone
         '''
@@ -13269,7 +13276,7 @@ class CfnRouterInputProps:
     def maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.MaintenanceConfigurationProperty]]:
-        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        '''The maintenance configuration settings applied to this router input.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-maintenanceconfiguration
         '''
@@ -13278,9 +13285,7 @@ class CfnRouterInputProps:
 
     @builtins.property
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router input.
-
-        Defaults to the current region if not specified.
+        '''The AWS Region where the router input is located.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-regionname
         '''
@@ -13300,7 +13305,7 @@ class CfnRouterInputProps:
     def transit_encryption(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterInput.RouterInputTransitEncryptionProperty]]:
-        '''Information about the encryption of the flow.
+        '''Encryption information.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routerinput.html#cfn-mediaconnect-routerinput-transitencryption
         '''
@@ -13376,7 +13381,7 @@ class CfnRouterNetworkInterface(
         :param id: Construct identifier for this resource (unique in its scope).
         :param configuration: The configuration settings for a router network interface.
         :param name: The name of the router network interface.
-        :param region_name: The AWS Region for the router network interface. Defaults to the current region if not specified.
+        :param region_name: The AWS Region where the router network interface is located.
         :param tags: Key-value pairs that can be used to tag and organize this router network interface.
         '''
         if __debug__:
@@ -13436,7 +13441,8 @@ class CfnRouterNetworkInterface(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the router network interface.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -13480,7 +13486,8 @@ class CfnRouterNetworkInterface(
     @builtins.property
     @jsii.member(jsii_name="attrNetworkInterfaceType")
     def attr_network_interface_type(self) -> builtins.str:
-        '''
+        '''The type of the router network interface.
+
         :cloudformationAttribute: NetworkInterfaceType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrNetworkInterfaceType"))
@@ -13488,7 +13495,8 @@ class CfnRouterNetworkInterface(
     @builtins.property
     @jsii.member(jsii_name="attrState")
     def attr_state(self) -> builtins.str:
-        '''
+        '''The current state of the router network interface.
+
         :cloudformationAttribute: State
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrState"))
@@ -13553,7 +13561,7 @@ class CfnRouterNetworkInterface(
     @builtins.property
     @jsii.member(jsii_name="regionName")
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router network interface.'''
+        '''The AWS Region where the router network interface is located.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "regionName"))
 
     @region_name.setter
@@ -13866,7 +13874,7 @@ class CfnRouterNetworkInterfaceProps:
 
         :param configuration: The configuration settings for a router network interface.
         :param name: The name of the router network interface.
-        :param region_name: The AWS Region for the router network interface. Defaults to the current region if not specified.
+        :param region_name: The AWS Region where the router network interface is located.
         :param tags: Key-value pairs that can be used to tag and organize this router network interface.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routernetworkinterface.html
@@ -13939,9 +13947,7 @@ class CfnRouterNetworkInterfaceProps:
 
     @builtins.property
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router network interface.
-
-        Defaults to the current region if not specified.
+        '''The AWS Region where the router network interface is located.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routernetworkinterface.html#cfn-mediaconnect-routernetworkinterface-regionname
         '''
@@ -14118,12 +14124,12 @@ class CfnRouterOutput(
         :param configuration: The configuration settings for a router output.
         :param maximum_bitrate: The maximum bitrate for the router output.
         :param name: The name of the router output.
-        :param routing_scope: 
-        :param tier: 
-        :param availability_zone: The Availability Zone where you want to create the router output. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
-        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
-        :param region_name: The AWS Region for the router output. Defaults to the current region if not specified.
-        :param tags: Key-value pairs that can be used to tag this router output.
+        :param routing_scope: Indicates whether the router output is configured for Regional or global routing.
+        :param tier: The tier level of the router output.
+        :param availability_zone: The Availability Zone of the router output.
+        :param maintenance_configuration: The maintenance configuration settings applied to this router output.
+        :param region_name: The AWS Region where the router output is located.
+        :param tags: Key-value pairs that can be used to tag and organize this router output.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d0723832b1d0cb17f5bcd9018d140834abd5e94bc96fb3fb67d22f77fb5439c3)
@@ -14190,7 +14196,8 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''
+        '''The Amazon Resource Name (ARN) of the router output.
+
         :cloudformationAttribute: Arn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrArn"))
@@ -14225,7 +14232,8 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="attrMaintenanceType")
     def attr_maintenance_type(self) -> builtins.str:
-        '''
+        '''The type of maintenance configuration applied to this router output.
+
         :cloudformationAttribute: MaintenanceType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrMaintenanceType"))
@@ -14233,7 +14241,8 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="attrOutputType")
     def attr_output_type(self) -> builtins.str:
-        '''
+        '''The type of the router output.
+
         :cloudformationAttribute: OutputType
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrOutputType"))
@@ -14241,7 +14250,8 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="attrRoutedState")
     def attr_routed_state(self) -> builtins.str:
-        '''
+        '''The current state of the association between the router output and its input.
+
         :cloudformationAttribute: RoutedState
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrRoutedState"))
@@ -14249,7 +14259,8 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="attrState")
     def attr_state(self) -> builtins.str:
-        '''
+        '''The overall state of the router output.
+
         :cloudformationAttribute: State
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrState"))
@@ -14327,6 +14338,7 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="routingScope")
     def routing_scope(self) -> builtins.str:
+        '''Indicates whether the router output is configured for Regional or global routing.'''
         return typing.cast(builtins.str, jsii.get(self, "routingScope"))
 
     @routing_scope.setter
@@ -14339,6 +14351,7 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="tier")
     def tier(self) -> builtins.str:
+        '''The tier level of the router output.'''
         return typing.cast(builtins.str, jsii.get(self, "tier"))
 
     @tier.setter
@@ -14351,7 +14364,7 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="availabilityZone")
     def availability_zone(self) -> typing.Optional[builtins.str]:
-        '''The Availability Zone where you want to create the router output.'''
+        '''The Availability Zone of the router output.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "availabilityZone"))
 
     @availability_zone.setter
@@ -14366,7 +14379,7 @@ class CfnRouterOutput(
     def maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MaintenanceConfigurationProperty"]]:
-        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.'''
+        '''The maintenance configuration settings applied to this router output.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnRouterOutput.MaintenanceConfigurationProperty"]], jsii.get(self, "maintenanceConfiguration"))
 
     @maintenance_configuration.setter
@@ -14382,7 +14395,7 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="regionName")
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router output.'''
+        '''The AWS Region where the router output is located.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "regionName"))
 
     @region_name.setter
@@ -14395,7 +14408,7 @@ class CfnRouterOutput(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Key-value pairs that can be used to tag this router output.'''
+        '''Key-value pairs that can be used to tag and organize this router output.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -16092,12 +16105,12 @@ class CfnRouterOutputProps:
         :param configuration: The configuration settings for a router output.
         :param maximum_bitrate: The maximum bitrate for the router output.
         :param name: The name of the router output.
-        :param routing_scope: 
-        :param tier: 
-        :param availability_zone: The Availability Zone where you want to create the router output. This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
-        :param maintenance_configuration: The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
-        :param region_name: The AWS Region for the router output. Defaults to the current region if not specified.
-        :param tags: Key-value pairs that can be used to tag this router output.
+        :param routing_scope: Indicates whether the router output is configured for Regional or global routing.
+        :param tier: The tier level of the router output.
+        :param availability_zone: The Availability Zone of the router output.
+        :param maintenance_configuration: The maintenance configuration settings applied to this router output.
+        :param region_name: The AWS Region where the router output is located.
+        :param tags: Key-value pairs that can be used to tag and organize this router output.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html
         :exampleMetadata: fixture=_generated
@@ -16277,7 +16290,8 @@ class CfnRouterOutputProps:
 
     @builtins.property
     def routing_scope(self) -> builtins.str:
-        '''
+        '''Indicates whether the router output is configured for Regional or global routing.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-routingscope
         '''
         result = self._values.get("routing_scope")
@@ -16286,7 +16300,8 @@ class CfnRouterOutputProps:
 
     @builtins.property
     def tier(self) -> builtins.str:
-        '''
+        '''The tier level of the router output.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-tier
         '''
         result = self._values.get("tier")
@@ -16295,9 +16310,7 @@ class CfnRouterOutputProps:
 
     @builtins.property
     def availability_zone(self) -> typing.Optional[builtins.str]:
-        '''The Availability Zone where you want to create the router output.
-
-        This must be a valid Availability Zone for the region specified by regionName, or the current region if no regionName is provided.
+        '''The Availability Zone of the router output.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-availabilityzone
         '''
@@ -16308,7 +16321,7 @@ class CfnRouterOutputProps:
     def maintenance_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRouterOutput.MaintenanceConfigurationProperty]]:
-        '''The configuration settings for maintenance operations, including preferred maintenance windows and schedules.
+        '''The maintenance configuration settings applied to this router output.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-maintenanceconfiguration
         '''
@@ -16317,9 +16330,7 @@ class CfnRouterOutputProps:
 
     @builtins.property
     def region_name(self) -> typing.Optional[builtins.str]:
-        '''The AWS Region for the router output.
-
-        Defaults to the current region if not specified.
+        '''The AWS Region where the router output is located.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-regionname
         '''
@@ -16328,7 +16339,7 @@ class CfnRouterOutputProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Key-value pairs that can be used to tag this router output.
+        '''Key-value pairs that can be used to tag and organize this router output.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-mediaconnect-routeroutput.html#cfn-mediaconnect-routeroutput-tags
         '''

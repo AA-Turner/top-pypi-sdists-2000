@@ -21,27 +21,20 @@ from minio import Minio
 from minio.commonconfig import SnowballObject
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 client.upload_snowball_objects(
-    bucket_name="my-bucket",
-    objects=[
+    "my-bucket",
+    [
+        SnowballObject("my-object1", filename="/etc/hostname"),
         SnowballObject(
-            object_name="my-object1",
-            filename="/etc/hostname",
+            "my-object2", data=io.BytesIO(b"hello"), length=5,
         ),
         SnowballObject(
-            object_name="my-object2",
-            data=io.BytesIO(b"hello"),
-            length=5,
-        ),
-        SnowballObject(
-            object_name="my-object3",
-            data=io.BytesIO(b"world"),
-            length=5,
+            "my-object3", data=io.BytesIO(b"world"), length=5,
             mod_time=datetime.now(),
         ),
     ],

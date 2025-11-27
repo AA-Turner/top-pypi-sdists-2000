@@ -265,7 +265,7 @@ class CfnCluster(
     @builtins.property
     @jsii.member(jsii_name="attrEndpoint")
     def attr_endpoint(self) -> builtins.str:
-        '''The DSQL cluster endpoint.
+        '''The connection endpoint for the created cluster.
 
         :cloudformationAttribute: Endpoint
         '''

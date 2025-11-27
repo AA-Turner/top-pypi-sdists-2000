@@ -23,80 +23,74 @@ from minio.retention import Retention
 from minio.sse import SseCustomerKey, SseKMS, SseS3
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
 # Upload data.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with content-type.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     content_type="application/csv",
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with metadata.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
-    user_metadata={"My-Project": "one"},
+    "my-bucket", "my-object", "my-filename",
+    metadata={"My-Project": "one"},
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with customer key type of server-side encryption.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     sse=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with KMS type of server-side encryption.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     sse=SseKMS("KMS-KEY-ID", {"Key1": "Value1", "Key2": "Value2"}),
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with S3 type of server-side encryption.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     sse=SseS3(),
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with tags, retention and legal-hold.
@@ -106,26 +100,24 @@ date = datetime.utcnow().replace(
 tags = Tags(for_object=True)
 tags["User"] = "jsmith"
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     tags=tags,
     retention=Retention(GOVERNANCE, date),
     legal_hold=True,
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )
 
 # Upload data with progress bar.
 result = client.fput_object(
-    bucket_name="my-bucket",
-    object_name="my-object",
-    file_path="my-filename",
+    "my-bucket", "my-object", "my-filename",
     progress=Progress(),
 )
 print(
-    f"created {result.object_name} object; etag: {result.etag}, "
-    f"version-id: {result.version_id}",
+    "created {0} object; etag: {1}, version-id: {2}".format(
+        result.object_name, result.etag, result.version_id,
+    ),
 )

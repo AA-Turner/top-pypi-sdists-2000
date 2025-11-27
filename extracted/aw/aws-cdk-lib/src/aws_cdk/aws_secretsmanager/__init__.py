@@ -752,6 +752,11 @@ class CfnRotationSchedule(
             secret_id="secretId",
         
             # the properties below are optional
+            external_secret_rotation_metadata=[secretsmanager.CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty(
+                key="key",
+                value="value"
+            )],
+            external_secret_rotation_role_arn="externalSecretRotationRoleArn",
             hosted_rotation_lambda=secretsmanager.CfnRotationSchedule.HostedRotationLambdaProperty(
                 rotation_type="rotationType",
         
@@ -783,6 +788,8 @@ class CfnRotationSchedule(
         id: builtins.str,
         *,
         secret_id: builtins.str,
+        external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
         hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnRotationSchedule.HostedRotationLambdaProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         rotation_lambda_arn: typing.Optional[builtins.str] = None,
@@ -793,6 +800,8 @@ class CfnRotationSchedule(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param secret_id: The ARN or name of the secret to rotate. This is unique for each rotation schedule definition. To reference a secret also created in this template, use the `Ref <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html>`_ function with the secret's logical ID.
+        :param external_secret_rotation_metadata: The list of metadata needed to successfully rotate a managed external secret.
+        :param external_secret_rotation_role_arn: The ARN of the IAM role that is used by Secrets Manager to rotate a managed external secret.
         :param hosted_rotation_lambda: Creates a new Lambda rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ . To use a rotation function that already exists, specify ``RotationLambdaARN`` instead. You must specify ``Transform: AWS::SecretsManager-2024-09-16`` at the beginning of the CloudFormation template. Transforms are macros hosted by AWS CloudFormation that help you create and manage complex infrastructure. The ``Transform: AWS::SecretsManager-2024-09-16`` transform automatically extends the CloudFormation stack to include a nested stack (of type ``AWS::CloudFormation::Stack`` ), which then creates and updates on your behalf during subsequent stack operations, the appropriate rotation Lambda function for your database or service. For general information on transforms, see the `AWS CloudFormation documentation. <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-reference.html>`_ For Amazon RDS master user credentials, see `AWS::RDS::DBCluster MasterUserSecret <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbcluster-masterusersecret.html>`_ . For Amazon Redshift admin user credentials, see `AWS::Redshift::Cluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html>`_ .
         :param rotate_immediately_on_update: Determines whether to rotate the secret immediately or wait until the next scheduled rotation window when the rotation schedule is updated. The rotation schedule is defined in ``RotationRules`` . The default for ``RotateImmediatelyOnUpdate`` is ``true`` . If you don't specify this value, Secrets Manager rotates the secret immediately. If you set ``RotateImmediatelyOnUpdate`` to ``false`` , Secrets Manager tests the rotation configuration by running the ```testSecret`` step <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_how.html>`_ of the Lambda rotation function. This test creates an ``AWSPENDING`` version of the secret and then removes it. .. epigraph:: When changing an existing rotation schedule and setting ``RotateImmediatelyOnUpdate`` to ``false`` : - If using ``AutomaticallyAfterDays`` or a ``ScheduleExpression`` with ``rate()`` , the previously scheduled rotation might still occur. - To prevent unintended rotations, use a ``ScheduleExpression`` with ``cron()`` for granular control over rotation windows. Rotation is an asynchronous process. For more information, see `How rotation works <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_how.html>`_ .
         :param rotation_lambda_arn: The ARN of an existing Lambda rotation function. To specify a rotation function that is also defined in this template, use the `Ref <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html>`_ function. For Amazon RDS master user credentials, see `AWS::RDS::DBCluster MasterUserSecret <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbcluster-masterusersecret.html>`_ . For Amazon Redshift admin user credentials, see `AWS::Redshift::Cluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html>`_ . To create a new rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ , specify ``HostedRotationLambda`` instead.
@@ -804,6 +813,8 @@ class CfnRotationSchedule(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnRotationScheduleProps(
             secret_id=secret_id,
+            external_secret_rotation_metadata=external_secret_rotation_metadata,
+            external_secret_rotation_role_arn=external_secret_rotation_role_arn,
             hosted_rotation_lambda=hosted_rotation_lambda,
             rotate_immediately_on_update=rotate_immediately_on_update,
             rotation_lambda_arn=rotation_lambda_arn,
@@ -879,6 +890,40 @@ class CfnRotationSchedule(
         jsii.set(self, "secretId", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="externalSecretRotationMetadata")
+    def external_secret_rotation_metadata(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]]:
+        '''The list of metadata needed to successfully rotate a managed external secret.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]], jsii.get(self, "externalSecretRotationMetadata"))
+
+    @external_secret_rotation_metadata.setter
+    def external_secret_rotation_metadata(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a137dbdb2b8bf5b81e3be66ca1a95e203ab984fc427ebe6079f0ed9df6c8ebf4)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "externalSecretRotationMetadata", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="externalSecretRotationRoleArn")
+    def external_secret_rotation_role_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the IAM role that is used by Secrets Manager to rotate a managed external secret.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "externalSecretRotationRoleArn"))
+
+    @external_secret_rotation_role_arn.setter
+    def external_secret_rotation_role_arn(
+        self,
+        value: typing.Optional[builtins.str],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__826ff8ecec050649dbf462747d667aaa66aac5516b3c8556c860b61ae994491c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "externalSecretRotationRoleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="hostedRotationLambda")
     def hosted_rotation_lambda(
         self,
@@ -944,6 +989,78 @@ class CfnRotationSchedule(
             type_hints = typing.get_type_hints(_typecheckingstub__1ae1bb268119d43a6dbbcc451761eef4982447d7465d9e1cb05714ac78eeae51)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "rotationRules", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_secretsmanager.CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty",
+        jsii_struct_bases=[],
+        name_mapping={"key": "key", "value": "value"},
+    )
+    class ExternalSecretRotationMetadataItemProperty:
+        def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
+            '''The metadata needed to successfully rotate a managed external secret.
+
+            Each metadata item is a key and value pair of strings in a JSON text string.
+
+            :param key: The key name of the metadata item. You can specify a value that's 1 to 256 characters in length.
+            :param value: The value for the metadata item. You can specify a value that's 1 to 2048 characters in length.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_secretsmanager as secretsmanager
+                
+                external_secret_rotation_metadata_item_property = secretsmanager.CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty(
+                    key="key",
+                    value="value"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__67cc7dcfb3eb2c60c4e838750ad1383e5685d6abebe5f340e1fdf0c81ea18e85)
+                check_type(argname="argument key", value=key, expected_type=type_hints["key"])
+                check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "key": key,
+                "value": value,
+            }
+
+        @builtins.property
+        def key(self) -> builtins.str:
+            '''The key name of the metadata item.
+
+            You can specify a value that's 1 to 256 characters in length.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadataitem-key
+            '''
+            result = self._values.get("key")
+            assert result is not None, "Required property 'key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def value(self) -> builtins.str:
+            '''The value for the metadata item.
+
+            You can specify a value that's 1 to 2048 characters in length.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadataitem-value
+            '''
+            result = self._values.get("value")
+            assert result is not None, "Required property 'value' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ExternalSecretRotationMetadataItemProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_secretsmanager.CfnRotationSchedule.HostedRotationLambdaProperty",
@@ -1342,6 +1459,8 @@ class CfnRotationSchedule(
     jsii_struct_bases=[],
     name_mapping={
         "secret_id": "secretId",
+        "external_secret_rotation_metadata": "externalSecretRotationMetadata",
+        "external_secret_rotation_role_arn": "externalSecretRotationRoleArn",
         "hosted_rotation_lambda": "hostedRotationLambda",
         "rotate_immediately_on_update": "rotateImmediatelyOnUpdate",
         "rotation_lambda_arn": "rotationLambdaArn",
@@ -1353,6 +1472,8 @@ class CfnRotationScheduleProps:
         self,
         *,
         secret_id: builtins.str,
+        external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
         hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.HostedRotationLambdaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         rotation_lambda_arn: typing.Optional[builtins.str] = None,
@@ -1361,6 +1482,8 @@ class CfnRotationScheduleProps:
         '''Properties for defining a ``CfnRotationSchedule``.
 
         :param secret_id: The ARN or name of the secret to rotate. This is unique for each rotation schedule definition. To reference a secret also created in this template, use the `Ref <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html>`_ function with the secret's logical ID.
+        :param external_secret_rotation_metadata: The list of metadata needed to successfully rotate a managed external secret.
+        :param external_secret_rotation_role_arn: The ARN of the IAM role that is used by Secrets Manager to rotate a managed external secret.
         :param hosted_rotation_lambda: Creates a new Lambda rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ . To use a rotation function that already exists, specify ``RotationLambdaARN`` instead. You must specify ``Transform: AWS::SecretsManager-2024-09-16`` at the beginning of the CloudFormation template. Transforms are macros hosted by AWS CloudFormation that help you create and manage complex infrastructure. The ``Transform: AWS::SecretsManager-2024-09-16`` transform automatically extends the CloudFormation stack to include a nested stack (of type ``AWS::CloudFormation::Stack`` ), which then creates and updates on your behalf during subsequent stack operations, the appropriate rotation Lambda function for your database or service. For general information on transforms, see the `AWS CloudFormation documentation. <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-reference.html>`_ For Amazon RDS master user credentials, see `AWS::RDS::DBCluster MasterUserSecret <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbcluster-masterusersecret.html>`_ . For Amazon Redshift admin user credentials, see `AWS::Redshift::Cluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html>`_ .
         :param rotate_immediately_on_update: Determines whether to rotate the secret immediately or wait until the next scheduled rotation window when the rotation schedule is updated. The rotation schedule is defined in ``RotationRules`` . The default for ``RotateImmediatelyOnUpdate`` is ``true`` . If you don't specify this value, Secrets Manager rotates the secret immediately. If you set ``RotateImmediatelyOnUpdate`` to ``false`` , Secrets Manager tests the rotation configuration by running the ```testSecret`` step <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_how.html>`_ of the Lambda rotation function. This test creates an ``AWSPENDING`` version of the secret and then removes it. .. epigraph:: When changing an existing rotation schedule and setting ``RotateImmediatelyOnUpdate`` to ``false`` : - If using ``AutomaticallyAfterDays`` or a ``ScheduleExpression`` with ``rate()`` , the previously scheduled rotation might still occur. - To prevent unintended rotations, use a ``ScheduleExpression`` with ``cron()`` for granular control over rotation windows. Rotation is an asynchronous process. For more information, see `How rotation works <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotate-secrets_how.html>`_ .
         :param rotation_lambda_arn: The ARN of an existing Lambda rotation function. To specify a rotation function that is also defined in this template, use the `Ref <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/intrinsic-function-reference-ref.html>`_ function. For Amazon RDS master user credentials, see `AWS::RDS::DBCluster MasterUserSecret <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rds-dbcluster-masterusersecret.html>`_ . For Amazon Redshift admin user credentials, see `AWS::Redshift::Cluster <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-redshift-cluster.html>`_ . To create a new rotation function based on one of the `Secrets Manager rotation function templates <https://docs.aws.amazon.com/secretsmanager/latest/userguide/reference_available-rotation-templates.html>`_ , specify ``HostedRotationLambda`` instead.
@@ -1379,6 +1502,11 @@ class CfnRotationScheduleProps:
                 secret_id="secretId",
             
                 # the properties below are optional
+                external_secret_rotation_metadata=[secretsmanager.CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty(
+                    key="key",
+                    value="value"
+                )],
+                external_secret_rotation_role_arn="externalSecretRotationRoleArn",
                 hosted_rotation_lambda=secretsmanager.CfnRotationSchedule.HostedRotationLambdaProperty(
                     rotation_type="rotationType",
             
@@ -1406,6 +1534,8 @@ class CfnRotationScheduleProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ceb941109ded6374b3623fce5a39b1744d18841728c64d4e5f2e3941d295c8f0)
             check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
+            check_type(argname="argument external_secret_rotation_metadata", value=external_secret_rotation_metadata, expected_type=type_hints["external_secret_rotation_metadata"])
+            check_type(argname="argument external_secret_rotation_role_arn", value=external_secret_rotation_role_arn, expected_type=type_hints["external_secret_rotation_role_arn"])
             check_type(argname="argument hosted_rotation_lambda", value=hosted_rotation_lambda, expected_type=type_hints["hosted_rotation_lambda"])
             check_type(argname="argument rotate_immediately_on_update", value=rotate_immediately_on_update, expected_type=type_hints["rotate_immediately_on_update"])
             check_type(argname="argument rotation_lambda_arn", value=rotation_lambda_arn, expected_type=type_hints["rotation_lambda_arn"])
@@ -1413,6 +1543,10 @@ class CfnRotationScheduleProps:
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "secret_id": secret_id,
         }
+        if external_secret_rotation_metadata is not None:
+            self._values["external_secret_rotation_metadata"] = external_secret_rotation_metadata
+        if external_secret_rotation_role_arn is not None:
+            self._values["external_secret_rotation_role_arn"] = external_secret_rotation_role_arn
         if hosted_rotation_lambda is not None:
             self._values["hosted_rotation_lambda"] = hosted_rotation_lambda
         if rotate_immediately_on_update is not None:
@@ -1433,6 +1567,26 @@ class CfnRotationScheduleProps:
         result = self._values.get("secret_id")
         assert result is not None, "Required property 'secret_id' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def external_secret_rotation_metadata(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty]]]]:
+        '''The list of metadata needed to successfully rotate a managed external secret.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadata
+        '''
+        result = self._values.get("external_secret_rotation_metadata")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty]]]], result)
+
+    @builtins.property
+    def external_secret_rotation_role_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the IAM role that is used by Secrets Manager to rotate a managed external secret.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-rotationschedule.html#cfn-secretsmanager-rotationschedule-externalsecretrotationrolearn
+        '''
+        result = self._values.get("external_secret_rotation_role_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
     def hosted_rotation_lambda(
@@ -1572,7 +1726,8 @@ class CfnSecret(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            type="type"
         )
     '''
 
@@ -1588,6 +1743,7 @@ class CfnSecret(
         replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSecret.ReplicaRegionProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Create a new ``AWS::SecretsManager::Secret``.
 
@@ -1600,6 +1756,7 @@ class CfnSecret(
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
         :param tags: A list of tags to attach to the secret. Each tag is a key and value pair of strings in a JSON text string, for example: ``[{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}]`` Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". Stack-level tags, tags you apply to the CloudFormation stack, are also attached to the secret. If you check tags in permissions policies as part of your security strategy, then adding or removing a tag can change permissions. If the completion of this operation would result in you losing your permissions for this secret, then Secrets Manager blocks the operation and returns an ``Access Denied`` error. For more information, see `Control access to secrets using tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#tag-secrets-abac>`_ and `Limit access to identities with tags that match secrets' tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#auth-and-access_tags2>`_ . For information about how to format a JSON parameter for the various command line tool environments, see `Using JSON for Parameters <https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json>`_ . If your command-line tool or SDK requires quotation marks around the parameter, you should use single quotes to avoid confusion with the double quotes required in the JSON text. The following restrictions apply to tags: - Maximum number of tags per secret: 50 - Maximum key length: 127 Unicode characters in UTF-8 - Maximum value length: 255 Unicode characters in UTF-8 - Tag keys and values are case sensitive. - Do not use the ``aws:`` prefix in your tag names or values because AWS reserves it for AWS use. You can't edit or delete tag names or values with this prefix. Tags with this prefix do not count against your tags per secret limit. - If you use your tagging schema across multiple services and resources, other services might have restrictions on allowed characters. Generally allowed characters: letters, spaces, and numbers representable in UTF-8, plus the following special characters: + - = . _ : /
+        :param type: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__85d618e732c6b1f020908289780221a8947553437136d3d13945c0f22642cf97)
@@ -1613,6 +1770,7 @@ class CfnSecret(
             replica_regions=replica_regions,
             secret_string=secret_string,
             tags=tags,
+            type=type,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -1805,6 +1963,18 @@ class CfnSecret(
             type_hints = typing.get_type_hints(_typecheckingstub__6527b124c6c9c6b9e2adcab3d3441c54cfa7c9d19a5dd471a056cab26b59cd2b)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="type")
+    def type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "type"))
+
+    @type.setter
+    def type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ac9a6ca47cf74b6a1326cfbcee97733e8514cd3a987237230dc6695b14451b74)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "type", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_secretsmanager.CfnSecret.GenerateSecretStringProperty",
@@ -2128,6 +2298,7 @@ class CfnSecret(
         "replica_regions": "replicaRegions",
         "secret_string": "secretString",
         "tags": "tags",
+        "type": "type",
     },
 )
 class CfnSecretProps:
@@ -2141,6 +2312,7 @@ class CfnSecretProps:
         replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         secret_string: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        type: typing.Optional[builtins.str] = None,
     ) -> None:
         '''Properties for defining a ``CfnSecret``.
 
@@ -2151,6 +2323,7 @@ class CfnSecretProps:
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
         :param tags: A list of tags to attach to the secret. Each tag is a key and value pair of strings in a JSON text string, for example: ``[{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}]`` Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". Stack-level tags, tags you apply to the CloudFormation stack, are also attached to the secret. If you check tags in permissions policies as part of your security strategy, then adding or removing a tag can change permissions. If the completion of this operation would result in you losing your permissions for this secret, then Secrets Manager blocks the operation and returns an ``Access Denied`` error. For more information, see `Control access to secrets using tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#tag-secrets-abac>`_ and `Limit access to identities with tags that match secrets' tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#auth-and-access_tags2>`_ . For information about how to format a JSON parameter for the various command line tool environments, see `Using JSON for Parameters <https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json>`_ . If your command-line tool or SDK requires quotation marks around the parameter, you should use single quotes to avoid confusion with the double quotes required in the JSON text. The following restrictions apply to tags: - Maximum number of tags per secret: 50 - Maximum key length: 127 Unicode characters in UTF-8 - Maximum value length: 255 Unicode characters in UTF-8 - Tag keys and values are case sensitive. - Do not use the ``aws:`` prefix in your tag names or values because AWS reserves it for AWS use. You can't edit or delete tag names or values with this prefix. Tags with this prefix do not count against your tags per secret limit. - If you use your tagging schema across multiple services and resources, other services might have restrictions on allowed characters. Generally allowed characters: letters, spaces, and numbers representable in UTF-8, plus the following special characters: + - = . _ : /
+        :param type: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html
         :exampleMetadata: fixture=_generated
@@ -2187,7 +2360,8 @@ class CfnSecretProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                type="type"
             )
         '''
         if __debug__:
@@ -2199,6 +2373,7 @@ class CfnSecretProps:
             check_type(argname="argument replica_regions", value=replica_regions, expected_type=type_hints["replica_regions"])
             check_type(argname="argument secret_string", value=secret_string, expected_type=type_hints["secret_string"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument type", value=type, expected_type=type_hints["type"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
         if description is not None:
             self._values["description"] = description
@@ -2214,6 +2389,8 @@ class CfnSecretProps:
             self._values["secret_string"] = secret_string
         if tags is not None:
             self._values["tags"] = tags
+        if type is not None:
+            self._values["type"] = type
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
@@ -2323,6 +2500,14 @@ class CfnSecretProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-type
+        '''
+        result = self._values.get("type")
+        return typing.cast(typing.Optional[builtins.str], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -6447,6 +6632,8 @@ def _typecheckingstub__7b6c1ae14c467b88b6b0e8e2da843e829b14564b0df4f6b16f07a7260
     id: builtins.str,
     *,
     secret_id: builtins.str,
+    external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
     hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.HostedRotationLambdaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     rotation_lambda_arn: typing.Optional[builtins.str] = None,
@@ -6473,6 +6660,18 @@ def _typecheckingstub__e4179c1d837fdef45167ceaccb9df9077d60370390a4a3f9894ffabc6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a137dbdb2b8bf5b81e3be66ca1a95e203ab984fc427ebe6079f0ed9df6c8ebf4(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__826ff8ecec050649dbf462747d667aaa66aac5516b3c8556c860b61ae994491c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d6ac8fdda0fa8c417961c6fd7e6417f93af36b5af165e9b05ab8fcc0d73d0a1e(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.HostedRotationLambdaProperty]],
 ) -> None:
@@ -6493,6 +6692,14 @@ def _typecheckingstub__219376bf04bb8ca9821c0927769a2f84c8feb1f3df1024e9d69fa2ddc
 
 def _typecheckingstub__1ae1bb268119d43a6dbbcc451761eef4982447d7465d9e1cb05714ac78eeae51(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnRotationSchedule.RotationRulesProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67cc7dcfb3eb2c60c4e838750ad1383e5685d6abebe5f340e1fdf0c81ea18e85(
+    *,
+    key: builtins.str,
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6526,6 +6733,8 @@ def _typecheckingstub__6ed8007f583ad38fb1a732d3e293d1e025eeebc01945a63dfb1770dd5
 def _typecheckingstub__ceb941109ded6374b3623fce5a39b1744d18841728c64d4e5f2e3941d295c8f0(
     *,
     secret_id: builtins.str,
+    external_secret_rotation_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.ExternalSecretRotationMetadataItemProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    external_secret_rotation_role_arn: typing.Optional[builtins.str] = None,
     hosted_rotation_lambda: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.HostedRotationLambdaProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     rotation_lambda_arn: typing.Optional[builtins.str] = None,
@@ -6545,6 +6754,7 @@ def _typecheckingstub__85d618e732c6b1f020908289780221a8947553437136d3d13945c0f22
     replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     secret_string: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6617,6 +6827,12 @@ def _typecheckingstub__6527b124c6c9c6b9e2adcab3d3441c54cfa7c9d19a5dd471a056cab26
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ac9a6ca47cf74b6a1326cfbcee97733e8514cd3a987237230dc6695b14451b74(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ed19557eb7ab9e470b0fafe554b1c1bca876b49de07ade921587fa31a98ec5af(
     *,
     exclude_characters: typing.Optional[builtins.str] = None,
@@ -6650,6 +6866,7 @@ def _typecheckingstub__022fe4500a72a14309ab1a3b32c45d84b045a2044531ddfa942aeb33f
     replica_regions: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecret.ReplicaRegionProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     secret_string: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    type: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

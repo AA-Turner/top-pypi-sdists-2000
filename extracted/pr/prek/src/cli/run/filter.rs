@@ -4,11 +4,10 @@ use anyhow::{Context, Result};
 use fancy_regex::Regex;
 use itertools::{Either, Itertools};
 use path_clean::PathClean;
-use rayon::iter::{IntoParallelRefIterator, ParallelBridge, ParallelIterator};
+use prek_consts::env_vars::EnvVars;
+use rayon::iter::{IntoParallelRefIterator, ParallelIterator};
 use rustc_hash::FxHashSet;
 use tracing::{debug, error, instrument};
-
-use prek_consts::env_vars::EnvVars;
 
 use crate::config::Stage;
 use crate::git::GIT_ROOT;
@@ -43,10 +42,6 @@ impl<'a> FilenameFilter<'a> {
             }
         }
         true
-    }
-
-    pub(crate) fn for_hook(hook: &'a Hook) -> Self {
-        Self::new(hook.files.as_deref(), hook.exclude.as_deref())
     }
 }
 
@@ -102,20 +97,15 @@ impl<'a> FileFilter<'a> {
         );
 
         // TODO: support orphaned project, which does not share files with its parent project.
-        let mut filenames = filenames
-            .enumerate()
-            .par_bridge()
-            .map(|(i, p)| (i, p.as_path()))
-            .filter(|(_, filename)| filter.filter(filename))
+        let filenames = filenames
+            .map(PathBuf::as_path)
             // Collect files that are inside the hook project directory.
-            .filter(|(_, filename)| filename.starts_with(project.relative_path()))
+            .filter(|filename| filename.starts_with(project.relative_path()))
+            .filter(|filename| filter.filter(filename))
             .collect::<Vec<_>>();
 
-        // Keep filename order consistent
-        filenames.sort_by_key(|&(i, _)| i);
-
         Self {
-            filenames: filenames.into_iter().map(|(_, p)| p).collect(),
+            filenames,
             filename_prefix: project.relative_path(),
         }
     }
@@ -152,7 +142,8 @@ impl<'a> FileFilter<'a> {
     #[instrument(level = "trace", skip_all, fields(hook = ?hook.id))]
     pub(crate) fn for_hook(&self, hook: &Hook) -> Vec<&Path> {
         // Filter by hook `files` and `exclude` patterns.
-        let filter = FilenameFilter::for_hook(hook);
+        let filter = FilenameFilter::new(hook.files.as_deref(), hook.exclude.as_deref());
+
         let filenames = self.filenames.par_iter().filter(|filename| {
             if let Ok(stripped) = filename.strip_prefix(self.filename_prefix) {
                 filter.filter(stripped)

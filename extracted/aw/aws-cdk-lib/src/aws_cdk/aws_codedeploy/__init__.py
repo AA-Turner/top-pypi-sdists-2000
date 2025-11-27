@@ -2651,7 +2651,7 @@ class CfnDeploymentGroup(
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
         :param tags: The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
-        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
+        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
         :param trigger_configurations: Information about triggers associated with the deployment group. Duplicates are not allowed
         '''
         if __debug__:
@@ -3035,7 +3035,7 @@ class CfnDeploymentGroup(
     def termination_hook_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group.'''
+        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "terminationHookEnabled"))
 
     @termination_hook_enabled.setter
@@ -4208,7 +4208,7 @@ class CfnDeploymentGroup(
         def __init__(self, *, action: typing.Optional[builtins.str] = None) -> None:
             '''Information about the instances that belong to the replacement environment in a blue/green deployment.
 
-            :param action: The method used to add instances to a replacement environment. - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually. - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.
+            :param action: The method used to add instances to a replacement environment. - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually. - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Amazon EC2 Auto Scaling group to define and create instances in a new Amazon EC2 Auto Scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-greenfleetprovisioningoption.html
             :exampleMetadata: fixture=_generated
@@ -4235,7 +4235,7 @@ class CfnDeploymentGroup(
             '''The method used to add instances to a replacement environment.
 
             - ``DISCOVER_EXISTING`` : Use instances that already exist or will be created manually.
-            - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.
+            - ``COPY_AUTO_SCALING_GROUP`` : Use settings from a specified Amazon EC2 Auto Scaling group to define and create instances in a new Amazon EC2 Auto Scaling group.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-codedeploy-deploymentgroup-greenfleetprovisioningoption.html#cfn-codedeploy-deploymentgroup-greenfleetprovisioningoption-action
             '''
@@ -5246,7 +5246,7 @@ class CfnDeploymentGroupProps:
         :param on_premises_tag_set: Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all the tag groups. You can specify ``OnPremisesInstanceTagFilters`` or ``OnPremisesInstanceTagSet`` , but not both.
         :param outdated_instances_strategy: Indicates what happens when new Amazon EC2 instances are launched mid-deployment and do not receive the deployed application revision. If this option is set to ``UPDATE`` or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new Amazon EC2 instances. If this option is set to ``IGNORE`` , CodeDeploy does not initiate a deployment to update the new Amazon EC2 instances. This may result in instances having different revisions.
         :param tags: The metadata that you apply to CodeDeploy deployment groups to help you organize and categorize them. Each tag consists of a key and an optional value, both of which you define.
-        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
+        :param termination_hook_enabled: Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group. For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
         :param trigger_configurations: Information about triggers associated with the deployment group. Duplicates are not allowed
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-codedeploy-deploymentgroup.html
@@ -5680,7 +5680,7 @@ class CfnDeploymentGroupProps:
     def termination_hook_enabled(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Auto Scaling group.
+        '''Indicates whether the deployment group was configured to have CodeDeploy install a termination hook into an Amazon EC2 Auto Scaling group.
 
         For more information about the termination hook, see `How Amazon EC2 Auto Scaling works with CodeDeploy <https://docs.aws.amazon.com//codedeploy/latest/userguide/integrations-aws-auto-scaling.html#integrations-aws-auto-scaling-behaviors>`_ in the *AWS CodeDeploy User Guide* .
 

@@ -787,7 +787,7 @@ class CfnOrganizationalUnit(
 
     If the request includes tags, then the requester must have the ``organizations:TagResource`` permission.
 
-    This operation can be called only from the organization's management account.
+    You can only call this operation from the management account.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-organizations-organizationalunit.html
     :cloudformationResource: AWS::Organizations::OrganizationalUnit

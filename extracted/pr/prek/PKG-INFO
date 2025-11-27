@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.18
+Version: 0.2.19
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -80,7 +80,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.18/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.19/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -88,7 +88,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.18/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.19/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -329,6 +329,7 @@ prek is pretty new, but it is already being used or recommend by some projects a
 - [iceberg-python](https://github.com/apache/iceberg-python/pull/2533)
 - [msgspec](https://github.com/jcrist/msgspec/pull/918)
 - [humanize](https://github.com/python-humanize/humanize/pull/276)
+- [nf-core](https://github.com/nf-core/tools/pull/3899)
 
 <!-- why:end -->
 

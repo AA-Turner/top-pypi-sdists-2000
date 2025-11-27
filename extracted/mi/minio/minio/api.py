@@ -21,6 +21,7 @@
 # pylint: disable=too-many-public-methods
 # pylint: disable=too-many-statements
 # pylint: disable=too-many-locals
+# pylint: disable=too-many-positional-arguments
 
 """
 Simple Storage Service (aka S3) client to perform bucket and object operations.
@@ -28,7 +29,6 @@ Simple Storage Service (aka S3) client to perform bucket and object operations.
 
 from __future__ import absolute_import, annotations
 
-import io
 import itertools
 import json
 import os
@@ -37,8 +37,9 @@ from collections.abc import Iterable
 from datetime import datetime, timedelta
 from io import BytesIO
 from random import random
-from typing import Any, BinaryIO, Iterator, Optional, TextIO, Union, cast
-from urllib.parse import quote, urlencode, urlunsplit
+from typing import (Any, BinaryIO, Iterator, Optional, TextIO, Tuple, Union,
+                    cast)
+from urllib.parse import urlunsplit
 from xml.etree import ElementTree as ET
 
 import certifi
@@ -54,13 +55,9 @@ except ImportError:
 from urllib3.util import Timeout
 
 from . import time
-from .checksum import (MD5, SHA256, UNSIGNED_PAYLOAD, ZERO_MD5_HASH,
-                       ZERO_SHA256_HASH, Algorithm, base64_string,
-                       base64_string_to_sum, hex_string, make_headers,
-                       new_hashers)
 from .commonconfig import (COPY, REPLACE, ComposeSource, CopySource,
                            SnowballObject, Tags)
-from .credentials import StaticProvider
+from .credentials import Credentials, StaticProvider
 from .credentials.providers import Provider
 from .datatypes import (Bucket, CompleteMultipartUploadResult, EventIterable,
                         ListAllMyBucketsResult, ListMultipartUploadsResult,
@@ -71,11 +68,11 @@ from .deleteobjects import (DeleteError, DeleteObject, DeleteRequest,
 from .error import InvalidResponseError, S3Error, ServerError
 from .helpers import (_DEFAULT_USER_AGENT, MAX_MULTIPART_COUNT,
                       MAX_MULTIPART_OBJECT_SIZE, MAX_PART_SIZE, MIN_PART_SIZE,
-                      BaseURL, HTTPQueryDict, ObjectWriteResult, ProgressType,
-                      RegionMap, ThreadPool, check_bucket_name,
-                      check_object_name, check_sse, check_ssec, get_part_info,
+                      BaseURL, DictType, ObjectWriteResult, ProgressType,
+                      ThreadPool, check_bucket_name, check_object_name,
+                      check_sse, check_ssec, genheaders, get_part_info,
                       headers_to_strings, is_valid_policy_type, makedirs,
-                      normalize_headers, queryencode, read_part_data)
+                      md5sum_hash, queryencode, read_part_data, sha256_hash)
 from .legalhold import LegalHold
 from .lifecycleconfig import LifecycleConfig
 from .notificationconfig import NotificationConfig
@@ -87,7 +84,6 @@ from .signer import presign_v4, sign_v4_s3
 from .sse import Sse, SseCustomerKey
 from .sseconfig import SSEConfig
 from .tagging import Tagging
-from .time import to_http_header, to_iso8601utc
 from .versioningconfig import VersioningConfig
 from .xml import Element, SubElement, findtext, getbytes, marshal, unmarshal
 
@@ -96,8 +92,42 @@ class Minio:
     """
     Simple Storage Service (aka S3) client to perform bucket and object
     operations.
+
+    :param endpoint: Hostname of a S3 service.
+    :param access_key: Access key (aka user ID) of your account in S3 service.
+    :param secret_key: Secret Key (aka password) of your account in S3 service.
+    :param session_token: Session token of your account in S3 service.
+    :param secure: Flag to indicate to use secure (TLS) connection to S3
+        service or not.
+    :param region: Region name of buckets in S3 service.
+    :param http_client: Customized HTTP client.
+    :param credentials: Credentials provider of your account in S3 service.
+    :param cert_check: Flag to indicate to verify SSL certificate or not.
+    :return: :class:`Minio <Minio>` object
+
+    Example::
+        # Create client with anonymous access.
+        client = Minio("play.min.io")
+
+        # Create client with access and secret key.
+        client = Minio("s3.amazonaws.com", "ACCESS-KEY", "SECRET-KEY")
+
+        # Create client with access key and secret key with specific region.
+        client = Minio(
+            "play.minio.io:9000",
+            access_key="Q3AM3UQ867SPQQA43P2F",
+            secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
+            region="my-region",
+        )
+
+    **NOTE on concurrent usage:** `Minio` object is thread safe when using
+    the Python `threading` library. Specifically, it is **NOT** safe to share
+    it between multiple processes, for example when using
+    `multiprocessing.Pool`. The solution is simply to create a new `Minio`
+    object in each process, and not share it between processes.
+
     """
-    _region_map: RegionMap
+    _region_map: dict[str, str]
     _base_url: BaseURL
     _user_agent: str
     _trace_stream: Optional[TextIO]
@@ -106,7 +136,6 @@ class Minio:
 
     def __init__(
             self,
-            *,
             endpoint: str,
             access_key: Optional[str] = None,
             secret_key: Optional[str] = None,
@@ -117,94 +146,13 @@ class Minio:
             credentials: Optional[Provider] = None,
             cert_check: bool = True,
     ):
-        """
-        Initializes a new Minio client object.
-
-        Args:
-            endpoint (str):
-                Hostname of an S3 service.
-
-            access_key (Optional[str], default=None):
-                Access key (aka user ID) of your account in the S3 service.
-
-            secret_key (Optional[str], default=None):
-                Secret key (aka password) of your account in the S3 service.
-
-            session_token (Optional[str], default=None):
-                Session token of your account in the S3 service.
-
-            secure (bool, default=True):
-                Flag to indicate whether to use a secure (TLS) connection
-                to the S3 service.
-
-            region (Optional[str], default=None):
-                Region name of buckets in the S3 service.
-
-            http_client (Optional[urllib3.PoolManager], default=None):
-                Customized HTTP client.
-
-            credentials (Optional[Provider], default=None):
-                Credentials provider of your account in the S3 service.
-
-            cert_check (bool, default=True):
-                Flag to enable/disable server certificate validation
-                for HTTPS connections.
-
-        Notes:
-            The `Minio` object is thread-safe when used with the Python
-            `threading` library. However, it is **not** safe to share it
-            between multiple processes, for example when using
-            `multiprocessing.Pool`. To avoid issues, create a new `Minio`
-            object in each process instead of sharing it.
-
-        Example:
-            >>> from minio import Minio
-            >>>
-            >>> # Create client with anonymous access
-            >>> client = Minio(endpoint="play.min.io")
-            >>>
-            >>> # Create client with access and secret key
-            >>> client = Minio(
-            ...     endpoint="s3.amazonaws.com",
-            ...     access_key="ACCESS-KEY",
-            ...     secret_key="SECRET-KEY",
-            ... )
-            >>>
-            >>> # Create client with specific region
-            >>> client = Minio(
-            ...     endpoint="play.minio.io:9000",
-            ...     access_key="Q3AM3UQ867SPQQA43P2F",
-            ...     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
-            ...     region="my-region",
-            ... )
-            >>>
-            >>> # Create client with custom HTTP client using proxy
-            >>> import urllib3
-            >>> client = Minio(
-            ...     endpoint="SERVER:PORT",
-            ...     access_key="ACCESS_KEY",
-            ...     secret_key="SECRET_KEY",
-            ...     secure=True,
-            ...     http_client=urllib3.ProxyManager(
-            ...         "https://PROXYSERVER:PROXYPORT/",
-            ...         timeout=urllib3.Timeout.DEFAULT_TIMEOUT,
-            ...         cert_reqs="CERT_REQUIRED",
-            ...         retries=urllib3.Retry(
-            ...             total=5,
-            ...             backoff_factor=0.2,
-            ...             status_forcelist=[500, 502, 503, 504],
-            ...         ),
-            ...     ),
-            ... )
-        """
         # Validate http client has correct base class.
         if http_client and not isinstance(http_client, urllib3.PoolManager):
-            raise TypeError(
-                "HTTP client should be urllib3.PoolManager like object, "
-                f"got {type(http_client).__name__}",
+            raise ValueError(
+                "HTTP client should be instance of `urllib3.PoolManager`"
             )
 
-        self._region_map = RegionMap()
+        self._region_map = {}
         self._base_url = BaseURL(
             ("https://" if secure else "http://") + endpoint,
             region,
@@ -235,67 +183,6 @@ class Minio:
         if hasattr(self, "_http"):  # Only required for unit test run
             self._http.clear()
 
-    @staticmethod
-    def _gen_read_headers(
-            *,
-            ssec: Optional[SseCustomerKey] = None,
-            offset: int = 0,
-            length: Optional[int] = None,
-            match_etag: Optional[str] = None,
-            not_match_etag: Optional[str] = None,
-            modified_since: Optional[datetime] = None,
-            unmodified_since: Optional[datetime] = None,
-            fetch_checksum: bool = False,
-    ) -> HTTPHeaderDict:
-        """Generates conditional headers for get/head object."""
-        headers = HTTPHeaderDict()
-        if ssec:
-            headers.extend(ssec.headers())
-        if offset or length:
-            end = (offset + length - 1) if length else ""
-            headers['Range'] = f"bytes={offset}-{end}"
-        if match_etag:
-            headers["if-match"] = match_etag
-        if not_match_etag:
-            headers["if-none-match"] = not_match_etag
-        if modified_since:
-            headers["if-modified-since"] = to_http_header(modified_since)
-        if unmodified_since:
-            headers["if-unmodified-since"] = to_http_header(unmodified_since)
-        if fetch_checksum:
-            headers["x-amz-checksum-mode"] = "ENABLED"
-        return headers
-
-    @staticmethod
-    def _gen_write_headers(
-            *,
-            headers: Optional[HTTPHeaderDict] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
-            sse: Optional[Sse] = None,
-            tags: Optional[Tags] = None,
-            retention: Optional[Retention] = None,
-            legal_hold: bool = False,
-    ) -> HTTPHeaderDict:
-        """Generate headers for given parameters."""
-        headers = headers.copy() if headers else HTTPHeaderDict()
-        if user_metadata:
-            headers.extend(user_metadata)
-        headers = normalize_headers(headers)
-        if sse:
-            headers.extend(sse.headers())
-        if tags:
-            headers["x-amz-tagging"] = urlencode(
-                list(tags.items()), quote_via=quote,
-            )
-        if retention and retention.mode:
-            headers["x-amz-object-lock-mode"] = retention.mode
-            headers["x-amz-object-lock-retain-until-date"] = cast(
-                str, to_iso8601utc(retention.retain_until_date),
-            )
-        if legal_hold:
-            headers["x-amz-object-lock-legal-hold"] = "ON"
-        return headers
-
     def _handle_redirect_response(
             self,
             method: str,
@@ -324,76 +211,71 @@ class Minio:
 
         return code, message
 
+    def _build_headers(
+            self,
+            host: str,
+            headers: Optional[DictType] = None,
+            body: Optional[bytes] = None,
+            creds: Optional[Credentials] = None,
+    ) -> tuple[DictType, datetime]:
+        """Build headers with given parameters."""
+        headers = headers or {}
+        md5sum_added = headers.get("Content-MD5")
+        headers["Host"] = host
+        headers["User-Agent"] = self._user_agent
+        sha256 = None
+        md5sum = None
+
+        if body:
+            headers["Content-Length"] = str(len(body))
+        if creds:
+            if self._base_url.is_https:
+                sha256 = "UNSIGNED-PAYLOAD"
+                md5sum = None if md5sum_added else md5sum_hash(body)
+            else:
+                sha256 = sha256_hash(body)
+        else:
+            md5sum = None if md5sum_added else md5sum_hash(body)
+        if md5sum:
+            headers["Content-MD5"] = md5sum
+        if sha256:
+            headers["x-amz-content-sha256"] = sha256
+        if creds and creds.session_token:
+            headers["X-Amz-Security-Token"] = creds.session_token
+        date = time.utcnow()
+        headers["x-amz-date"] = time.to_amz_date(date)
+        return headers, date
+
     def _url_open(
             self,
-            *,
             method: str,
             region: str,
             bucket_name: Optional[str] = None,
             object_name: Optional[str] = None,
             body: Optional[bytes] = None,
-            headers: Optional[HTTPHeaderDict] = None,
-            query_params: Optional[HTTPQueryDict] = None,
+            headers: Optional[DictType] = None,
+            query_params: Optional[DictType] = None,
             preload_content: bool = True,
             no_body_trace: bool = False,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> BaseHTTPResponse:
         """Execute HTTP request."""
+        creds = self._provider.retrieve() if self._provider else None
         url = self._base_url.build(
             method=method,
             region=region,
             bucket_name=bucket_name,
             object_name=object_name,
             query_params=query_params,
-            extra_query_params=extra_query_params,
         )
-
-        headers = headers.copy() if headers else HTTPHeaderDict()
-        if extra_headers:
-            headers.extend(extra_headers)
-
-        headers["Host"] = url.netloc
-        headers["User-Agent"] = self._user_agent
-        content_sha256 = headers.get("x-amz-content-sha256")
-        content_md5 = headers.get("Content-MD5")
-        if method in ["PUT", "POST"]:
-            headers["Content-Length"] = str(len(body or b""))
-            if not headers.get("Content-Type"):
-                headers["Content-Type"] = "application/octet-stream"
-        if body is None:
-            content_sha256 = content_sha256 or ZERO_SHA256_HASH
-            content_md5 = content_md5 or ZERO_MD5_HASH
-        else:
-            if not content_sha256:
-                if self._base_url.is_https:
-                    content_sha256 = UNSIGNED_PAYLOAD
-                else:
-                    sha256_checksum = headers.get("x-amz-checksum-sha256")
-                    content_sha256 = hex_string(
-                        base64_string_to_sum(sha256_checksum) if sha256_checksum
-                        else SHA256.hash(body),
-                    )
-            if not content_md5 and content_sha256 == UNSIGNED_PAYLOAD:
-                content_md5 = base64_string(MD5.hash(body))
-        if not headers.get("x-amz-content-sha256"):
-            headers["x-amz-content-sha256"] = cast(str, content_sha256)
-        if not headers.get("Content-MD5") and content_md5:
-            headers["Content-MD5"] = content_md5
-        date = time.utcnow()
-        headers["x-amz-date"] = time.to_amz_date(date)
-
-        if self._provider is not None:
-            creds = self._provider.retrieve()
-            if creds.session_token:
-                headers["X-Amz-Security-Token"] = creds.session_token
+        headers, date = self._build_headers(url.netloc, headers, body, creds)
+        if creds:
             headers = sign_v4_s3(
                 method=method,
                 url=url,
                 region=region,
                 headers=headers,
                 credentials=creds,
-                content_sha256=cast(str, content_sha256),
+                content_sha256=cast(str, headers.get("x-amz-content-sha256")),
                 date=date,
             )
 
@@ -413,11 +295,19 @@ class Minio:
                 self._trace_stream.write("\n")
             self._trace_stream.write("\n")
 
+        http_headers = HTTPHeaderDict()
+        for key, value in (headers or {}).items():
+            if isinstance(value, (list, tuple)):
+                for val in value:
+                    http_headers.add(key, val)
+            else:
+                http_headers.add(key, value)
+
         response = self._http.urlopen(
             method,
             urlunsplit(url),
             body=body,
-            headers=headers,
+            headers=http_headers,
             preload_content=preload_content,
         )
 
@@ -532,35 +422,28 @@ class Minio:
 
         if response_error.code in ["NoSuchBucket", "RetryHead"]:
             if bucket_name is not None:
-                self._region_map.remove(bucket_name)
+                self._region_map.pop(bucket_name, None)
 
         raise response_error
 
     def _execute(
             self,
-            *,
             method: str,
             bucket_name: Optional[str] = None,
             object_name: Optional[str] = None,
             body: Optional[bytes] = None,
-            headers: Optional[HTTPHeaderDict] = None,
-            query_params: Optional[HTTPQueryDict] = None,
+            headers: Optional[DictType] = None,
+            query_params: Optional[DictType] = None,
             preload_content: bool = True,
             no_body_trace: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> BaseHTTPResponse:
         """Execute HTTP request."""
-        region = self._get_region(
-            bucket_name=bucket_name,
-            region=region,
-        )
+        region = self._get_region(bucket_name)
 
         try:
             return self._url_open(
-                method=method,
-                region=region,
+                method,
+                region,
                 bucket_name=bucket_name,
                 object_name=object_name,
                 body=body,
@@ -568,8 +451,6 @@ class Minio:
                 query_params=query_params,
                 preload_content=preload_content,
                 no_body_trace=no_body_trace,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
         except S3Error as exc:
             if exc.code != "RetryHead":
@@ -578,8 +459,8 @@ class Minio:
         # Retry only once on RetryHead error.
         try:
             return self._url_open(
-                method=method,
-                region=region,
+                method,
+                region,
                 bucket_name=bucket_name,
                 object_name=object_name,
                 body=body,
@@ -587,8 +468,6 @@ class Minio:
                 query_params=query_params,
                 preload_content=preload_content,
                 no_body_trace=no_body_trace,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
         except S3Error as exc:
             if exc.code != "RetryHead":
@@ -599,31 +478,13 @@ class Minio:
             )
             raise exc.copy(cast(str, code), cast(str, message))
 
-    def _get_region(
-            self,
-            *,
-            bucket_name: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> str:
+    def _get_region(self, bucket_name: Optional[str] = None) -> str:
         """
         Return region of given bucket either from region cache or set in
         constructor.
         """
 
-        if (
-                region is not None and self._base_url.region is not None and
-                region != self._base_url.region
-        ):
-            raise ValueError(
-                f"region must be {self._base_url.region}, but passed {region}",
-            )
-
-        if region is not None:
-            return region
-
-        if self._base_url.region is not None:
+        if self._base_url.region:
             return self._base_url.region
 
         if not bucket_name or not self._provider:
@@ -635,12 +496,10 @@ class Minio:
 
         # Execute GetBucketLocation REST API to get region of the bucket.
         response = self._url_open(
-            method="GET",
-            region="us-east-1",
+            "GET",
+            "us-east-1",
             bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"location": ""}),
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params={"location": ""},
         )
 
         element = ET.fromstring(response.data.decode())
@@ -651,22 +510,18 @@ class Minio:
         else:
             region = element.text
 
-        self._region_map.set(bucket_name, region)
+        self._region_map[bucket_name] = region
         return region
 
     def set_app_info(self, app_name: str, app_version: str):
         """
         Set your application name and version to user agent header.
 
-        Args:
-            app_name (str):
-                Application name.
+        :param app_name: Application name.
+        :param app_version: Application version.
 
-            app_version (str):
-                Application version.
-
-        Example:
-            >>> client.set_app_info("my_app", "1.0.2")
+        Example::
+            client.set_app_info('my_app', '1.0.2')
         """
         if not (app_name and app_version):
             raise ValueError("Application name/version cannot be empty.")
@@ -676,12 +531,7 @@ class Minio:
         """
         Enable http trace.
 
-        Args:
-            stream (TextIO):
-                Stream for writing HTTP call tracing.
-
-        Example:
-            >>> client.trace_on(sys.stdout)
+        :param stream: Stream for writing HTTP call tracing.
         """
         if not stream:
             raise ValueError('Input stream for trace output is invalid.')
@@ -689,7 +539,9 @@ class Minio:
         self._trace_stream = stream
 
     def trace_off(self):
-        """Disable HTTP trace."""
+        """
+        Disable HTTP trace.
+        """
         self._trace_stream = None
 
     def enable_accelerate_endpoint(self):
@@ -718,122 +570,71 @@ class Minio:
 
     def select_object_content(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             request: SelectRequest,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> SelectObjectReader:
         """
         Select content of an object by SQL expression.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param request: :class:`SelectRequest <SelectRequest>` object.
+        :return: A reader contains requested records and progress information.
 
-            object_name (str):
-                Object name in the bucket.
-
-            request (SelectRequest):
-                Select request.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            SelectObjectReader:
-                A reader object representing the results of the select
-                operation.
-
-        Example:
-            >>> with client.select_object_content(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object.csv",
-            ...     request=SelectRequest(
-            ...         expression="select * from S3Object",
-            ...         input_serialization=CSVInputSerialization(),
-            ...         output_serialization=CSVOutputSerialization(),
-            ...         request_progress=True,
-            ...     ),
-            ... ) as result:
-            ...     for data in result.stream():
-            ...         print(data.decode())
-            ...     print(result.stats())
+        Example::
+            with client.select_object_content(
+                    "my-bucket",
+                    "my-object.csv",
+                    SelectRequest(
+                        "select * from S3Object",
+                        CSVInputSerialization(),
+                        CSVOutputSerialization(),
+                        request_progress=True,
+                    ),
+            ) as result:
+                for data in result.stream():
+                    print(data.decode())
+                print(result.stats())
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         if not isinstance(request, SelectRequest):
             raise ValueError("request must be SelectRequest type")
         body = marshal(request)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         response = self._execute(
-            method="POST",
+            "POST",
             bucket_name=bucket_name,
             object_name=object_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"select": "", "select-type": "2"}),
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"select": "", "select-type": "2"},
             preload_content=False,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
         return SelectObjectReader(response)
 
     def make_bucket(
             self,
-            *,
             bucket_name: str,
             location: Optional[str] = None,
             object_lock: bool = False,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Create a bucket with region and optional object lock.
+        Create a bucket with region and object lock.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param location: Region in which the bucket will be created.
+        :param object_lock: Flag to set object-lock feature.
 
-            location (Optional[str], default=None):
-                Region in which the bucket is to be created.
+        Examples::
+            # Create bucket.
+            client.make_bucket("my-bucket")
 
-            object_lock (bool, default=False):
-                Flag to enable the object-lock feature.
+            # Create bucket on specific region.
+            client.make_bucket("my-bucket", "us-west-1")
 
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> # Create bucket
-            >>> client.make_bucket(bucket_name="my-bucket")
-            >>>
-            >>> # Create bucket in a specific region
-            >>> client.make_bucket(
-            ...     bucket_name="my-bucket",
-            ...     location="eu-west-1",
-            ... )
-            >>>
-            >>> # Create bucket with object-lock in a region
-            >>> client.make_bucket(
-            ...     bucket_name="my-bucket",
-            ...     location="eu-west-2",
-            ...     object_lock=True,
-            ... )
+            # Create bucket with object-lock feature on specific region.
+            client.make_bucket("my-bucket", "eu-west-2", object_lock=True)
         """
         check_bucket_name(bucket_name, True,
                           s3_check=self._base_url.is_aws_host)
@@ -846,624 +647,228 @@ class Minio:
                     f"but passed {location}"
                 )
         location = self._base_url.region or location or "us-east-1"
-        headers = HTTPHeaderDict()
-        if object_lock:
-            headers["x-amz-bucket-object-lock-enabled"] = "true"
+        headers: Optional[DictType] = (
+            {"x-amz-bucket-object-lock-enabled": "true"}
+            if object_lock else None
+        )
+
         body = None
         if location != "us-east-1":
             element = Element("CreateBucketConfiguration")
             SubElement(element, "LocationConstraint", location)
             body = getbytes(element)
         self._url_open(
-            method="PUT",
-            region=location,
+            "PUT",
+            location,
             bucket_name=bucket_name,
             body=body,
             headers=headers,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
-        self._region_map.set(bucket_name, location)
+        self._region_map[bucket_name] = location
 
-    def _list_buckets(
-            self,
-            *,
-            bucket_region: Optional[str] = None,
-            max_buckets: int = 10000,
-            prefix: Optional[str] = None,
-            continuation_token: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> ListAllMyBucketsResult:
-        """Do ListBuckets S3 API."""
-        query_params = HTTPQueryDict()
-        query_params["max-buckets"] = str(
-            max_buckets if max_buckets > 0 else 10000,
-        )
-        if bucket_region is not None:
-            query_params["bucket-region"] = bucket_region
-        if prefix:
-            query_params["prefix"] = prefix
-        if continuation_token:
-            query_params["continuation-token"] = continuation_token
-
-        response = self._execute(
-            method="GET",
-            query_params=query_params,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
-        return unmarshal(ListAllMyBucketsResult, response.data.decode())
-
-    def list_buckets(
-            self,
-            *,
-            bucket_region: Optional[str] = None,
-            max_buckets: int = 10000,
-            prefix: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> Iterator[Bucket]:
+    def list_buckets(self) -> list[Bucket]:
         """
         List information of all accessible buckets.
 
-        Args:
-            bucket_region (Optional[str], default=None):
-                Fetch buckets from the specified region.
+        :return: List of :class:`Bucket <Bucket>` object.
 
-            max_buckets (int, default=10000):
-                Maximum number of buckets to fetch.
-
-            prefix (Optional[str], default=None):
-                Return only buckets whose names start with this prefix.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Iterator[Bucket]:
-                An iterator of :class:`minio.datatypes.Bucket` objects.
-
-        Example:
-            >>> buckets = client.list_buckets()
-            >>> for bucket in buckets:
-            ...     print(bucket.name, bucket.creation_date)
+        Example::
+            buckets = client.list_buckets()
+            for bucket in buckets:
+                print(bucket.name, bucket.creation_date)
         """
-        continuation_token: Optional[str] = ""
-        while continuation_token is not None:
-            result = self._list_buckets(
-                bucket_region=bucket_region,
-                max_buckets=max_buckets,
-                prefix=prefix,
-                continuation_token=continuation_token,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
-            )
-            continuation_token = result.continuation_token
-            yield from result.buckets
 
-    def bucket_exists(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> bool:
+        response = self._execute("GET")
+        result = unmarshal(ListAllMyBucketsResult, response.data.decode())
+        return result.buckets
+
+    def bucket_exists(self, bucket_name: str) -> bool:
         """
         Check if a bucket exists.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: True if the bucket exists.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            bool:
-                True if the bucket exists, False otherwise.
-
-        Example:
-            >>> if client.bucket_exists(bucket_name="my-bucket"):
-            ...     print("my-bucket exists")
-            ... else:
-            ...     print("my-bucket does not exist")
+        Example::
+            if client.bucket_exists("my-bucket"):
+                print("my-bucket exists")
+            else:
+                print("my-bucket does not exist")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
-            self._execute(
-                method="HEAD",
-                bucket_name=bucket_name,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
-            )
+            self._execute("HEAD", bucket_name)
             return True
         except S3Error as exc:
             if exc.code != "NoSuchBucket":
                 raise
         return False
 
-    def remove_bucket(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def remove_bucket(self, bucket_name: str):
         """
         Remove an empty bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.remove_bucket(bucket_name="my-bucket")
+        Example::
+            client.remove_bucket("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
-        self._execute(
-            method="DELETE",
-            bucket_name=bucket_name,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
-        self._region_map.remove(bucket_name)
+        self._execute("DELETE", bucket_name)
+        self._region_map.pop(bucket_name, None)
 
-    def get_bucket_policy(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> str:
+    def get_bucket_policy(self, bucket_name: str) -> str:
         """
-        Get the bucket policy configuration of a bucket.
+        Get bucket policy configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: Bucket policy configuration as JSON string.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            str:
-                Bucket policy configuration as a JSON string.
-
-        Example:
-            >>> policy = client.get_bucket_policy(bucket_name="my-bucket")
+        Example::
+            policy = client.get_bucket_policy("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"policy": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "GET", bucket_name, query_params={"policy": ""},
         )
         return response.data.decode()
 
-    def _execute_delete_bucket(
-            self,
-            *,
-            bucket_name: str,
-            query_params: HTTPQueryDict,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
-        """ Delete any bucket API. """
+    def delete_bucket_policy(self, bucket_name: str):
+        """
+        Delete bucket policy configuration of a bucket.
+
+        :param bucket_name: Name of the bucket.
+
+        Example::
+            client.delete_bucket_policy("my-bucket")
+        """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
-        self._execute(
-            method="DELETE",
-            bucket_name=bucket_name,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
+        self._execute("DELETE", bucket_name, query_params={"policy": ""})
 
-    def delete_bucket_policy(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def set_bucket_policy(self, bucket_name: str, policy: str | bytes):
         """
-        Delete the bucket policy configuration of a bucket.
+        Set bucket policy configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param policy: Bucket policy configuration as JSON string.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_policy(bucket_name="my-bucket")
-        """
-        self._execute_delete_bucket(
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"policy": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
-
-    def set_bucket_policy(
-            self,
-            *,
-            bucket_name: str,
-            policy: str | bytes,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
-        """
-        Set the bucket policy configuration for a bucket.
-
-        Args:
-            bucket_name (str):
-                Name of the bucket.
-
-            policy (str | bytes):
-                Bucket policy configuration as a JSON string.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> # Example anonymous read-only bucket policy
-            >>> policy = {
-            ...     "Version": "2012-10-17",
-            ...     "Statement": [
-            ...         {
-            ...             "Effect": "Allow",
-            ...             "Principal": {"AWS": "*"},
-            ...             "Action": ["s3:GetBucketLocation", "s3:ListBucket"],
-            ...             "Resource": "arn:aws:s3:::my-bucket",
-            ...         },
-            ...         {
-            ...             "Effect": "Allow",
-            ...             "Principal": {"AWS": "*"},
-            ...             "Action": "s3:GetObject",
-            ...             "Resource": "arn:aws:s3:::my-bucket/*",
-            ...         },
-            ...     ],
-            ... }
-            >>> client.set_bucket_policy(
-            ...     bucket_name="my-bucket",
-            ...     policy=json.dumps(policy),
-            ... )
-            >>> # Example anonymous read-write bucket policy
-            >>> policy = {
-            ...     "Version": "2012-10-17",
-            ...     "Statement": [
-            ...         {
-            ...             "Effect": "Allow",
-            ...             "Principal": {"AWS": "*"},
-            ...             "Action": [
-            ...                 "s3:GetBucketLocation",
-            ...                 "s3:ListBucket",
-            ...                 "s3:ListBucketMultipartUploads",
-            ...             ],
-            ...             "Resource": "arn:aws:s3:::my-bucket",
-            ...         },
-            ...         {
-            ...             "Effect": "Allow",
-            ...             "Principal": {"AWS": "*"},
-            ...             "Action": [
-            ...                 "s3:GetObject",
-            ...                 "s3:PutObject",
-            ...                 "s3:DeleteObject",
-            ...                 "s3:ListMultipartUploadParts",
-            ...                 "s3:AbortMultipartUpload",
-            ...             ],
-            ...             "Resource": "arn:aws:s3:::my-bucket/images/*",
-            ...         },
-            ...     ],
-            ... }
-            >>> client.set_bucket_policy(
-            ...     bucket_name="my-bucket",
-            ...     policy=json.dumps(policy),
-            ... )
+        Example::
+            client.set_bucket_policy("my-bucket", policy)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         is_valid_policy_type(policy)
-        body = policy if isinstance(policy, bytes) else policy.encode()
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
-            body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"policy": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "PUT",
+            bucket_name,
+            body=policy if isinstance(policy, bytes) else policy.encode(),
+            headers={"Content-MD5": cast(str, md5sum_hash(policy))},
+            query_params={"policy": ""},
         )
 
-    def get_bucket_notification(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> NotificationConfig:
+    def get_bucket_notification(self, bucket_name: str) -> NotificationConfig:
         """
-        Get the notification configuration of a bucket.
+        Get notification configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`NotificationConfig <NotificationConfig>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            NotificationConfig:
-                The notification configuration of the bucket.
-
-        Example:
-            >>> config = client.get_bucket_notification(bucket_name="my-bucket")
-    """
+        Example::
+            config = client.get_bucket_notification("my-bucket")
+        """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"notification": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "GET", bucket_name, query_params={"notification": ""},
         )
         return unmarshal(NotificationConfig, response.data.decode())
 
     def set_bucket_notification(
             self,
-            *,
             bucket_name: str,
             config: NotificationConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the notification configuration of a bucket.
+        Set notification configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: class:`NotificationConfig <NotificationConfig>` object.
 
-            config (NotificationConfig):
-                Notification configuration.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> config = NotificationConfig(
-            ...     queue_config_list=[
-            ...         QueueConfig(
-            ...             queue="QUEUE-ARN-OF-THIS-BUCKET",
-            ...             events=["s3:ObjectCreated:*"],
-            ...             config_id="1",
-            ...             prefix_filter_rule=PrefixFilterRule("abc"),
-            ...         ),
-            ...     ],
-            ... )
-            >>> client.set_bucket_notification(
-            ...     bucket_name="my-bucket",
-            ...     config=config,
-            ... )
+        Example::
+            config = NotificationConfig(
+                queue_config_list=[
+                    QueueConfig(
+                        "QUEUE-ARN-OF-THIS-BUCKET",
+                        ["s3:ObjectCreated:*"],
+                        config_id="1",
+                        prefix_filter_rule=PrefixFilterRule("abc"),
+                    ),
+                ],
+            )
+            client.set_bucket_notification("my-bucket", config)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, NotificationConfig):
             raise ValueError("config must be NotificationConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"notification": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"notification": ""},
         )
 
-    def delete_bucket_notification(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_bucket_notification(self, bucket_name: str):
         """
-        Delete the notification configuration of a bucket.
+        Delete notification configuration of a bucket. On success, S3 service
+        stops notification of events previously set of the bucket.
 
-        On success, the S3 service stops sending event notifications
-        that were previously configured for the bucket.
+        :param bucket_name: Name of the bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_notification(bucket_name="my-bucket")
+        Example::
+            client.delete_bucket_notification("my-bucket")
         """
-        self.set_bucket_notification(
-            bucket_name=bucket_name,
-            config=NotificationConfig(),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
+        self.set_bucket_notification(bucket_name, NotificationConfig())
 
-    def set_bucket_encryption(
-            self,
-            *,
-            bucket_name: str,
-            config: SSEConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def set_bucket_encryption(self, bucket_name: str, config: SSEConfig):
         """
-        Set the encryption configuration of a bucket.
+        Set encryption configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: :class:`SSEConfig <SSEConfig>` object.
 
-            config (SSEConfig):
-                Server-side encryption configuration.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.set_bucket_encryption(
-            ...     bucket_name="my-bucket",
-            ...     config=SSEConfig(Rule.new_sse_s3_rule()),
-            ... )
+        Example::
+            client.set_bucket_encryption(
+                "my-bucket", SSEConfig(Rule.new_sse_s3_rule()),
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, SSEConfig):
             raise ValueError("config must be SSEConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"encryption": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"encryption": ""},
         )
 
-    def get_bucket_encryption(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> Optional[SSEConfig]:
+    def get_bucket_encryption(self, bucket_name: str) -> Optional[SSEConfig]:
         """
-        Get the encryption configuration of a bucket.
+        Get encryption configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`SSEConfig <SSEConfig>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[SSEConfig]:
-                The server-side encryption configuration of the bucket, or
-                None if no encryption configuration is set.
-
-        Example:
-            >>> config = client.get_bucket_encryption(bucket_name="my-bucket")
+        Example::
+            config = client.get_bucket_encryption("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=HTTPQueryDict({"encryption": ""}),
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                "GET",
+                bucket_name,
+                query_params={"encryption": ""},
             )
             return unmarshal(SSEConfig, response.data.decode())
         except S3Error as exc:
@@ -1471,40 +876,21 @@ class Minio:
                 raise
         return None
 
-    def delete_bucket_encryption(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_bucket_encryption(self, bucket_name: str):
         """
-        Delete the encryption configuration of a bucket.
+        Delete encryption configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_encryption(bucket_name="my-bucket")
+        Example::
+            client.delete_bucket_encryption("my-bucket")
         """
+        check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
-            self._execute_delete_bucket(
-                bucket_name=bucket_name,
-                query_params=HTTPQueryDict({"encryption": ""}),
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+            self._execute(
+                "DELETE",
+                bucket_name,
+                query_params={"encryption": ""},
             )
         except S3Error as exc:
             if exc.code != "ServerSideEncryptionConfigurationNotFoundError":
@@ -1512,61 +898,31 @@ class Minio:
 
     def listen_bucket_notification(
             self,
-            *,
             bucket_name: str,
             prefix: str = "",
             suffix: str = "",
-            events: tuple[str, ...] = (
-                's3:ObjectCreated:*',
-                's3:ObjectRemoved:*',
-                's3:ObjectAccessed:*',
-            ),
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            events: tuple[str, ...] = ('s3:ObjectCreated:*',
+                                       's3:ObjectRemoved:*',
+                                       's3:ObjectAccessed:*'),
     ) -> EventIterable:
         """
-        Listen for events on objects in a bucket matching prefix and/or suffix.
+        Listen events of object prefix and suffix of a bucket. Caller should
+        iterate returned iterator to read new events.
 
-        The caller should iterate over the returned iterator to read new events
-        as they occur.
+        :param bucket_name: Name of the bucket.
+        :param prefix: Listen events of object starts with prefix.
+        :param suffix: Listen events of object ends with suffix.
+        :param events: Events to listen.
+        :return: Iterator of event records as :dict:.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
-
-            prefix (str, default=""):
-                Listen for events on objects whose names start with this prefix.
-
-            suffix (str, default=""):
-                Listen for events on objects whose names end with this suffix.
-
-            events (tuple[str, ...], default=("s3:ObjectCreated:*",
-            "s3:ObjectRemoved:*", "s3:ObjectAccessed:*")):
-                Events to listen for.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            EventIterable:
-                An iterator of :class:`minio.datatypes.EventIterable` containing
-                event records.
-
-        Example:
-            >>> with client.listen_bucket_notification(
-            ...     bucket_name="my-bucket",
-            ...     prefix="my-prefix/",
-            ...     events=["s3:ObjectCreated:*", "s3:ObjectRemoved:*"],
-            ... ) as events:
-            ...     for event in events:
-            ...         print(event)
+        Example::
+            with client.listen_bucket_notification(
+                "my-bucket",
+                prefix="my-prefix/",
+                events=["s3:ObjectCreated:*", "s3:ObjectRemoved:*"],
+            ) as events:
+                for event in events:
+                    print(event)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if self._base_url.is_aws_host:
@@ -1574,398 +930,185 @@ class Minio:
                 "ListenBucketNotification API is not supported in Amazon S3",
             )
 
-        query_params = HTTPQueryDict({
-            "prefix": prefix or "",
-            "suffix": suffix or "",
-            "events": events,
-        })
         return EventIterable(
             lambda: self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=query_params,
+                "GET",
+                bucket_name,
+                query_params={
+                    "prefix": prefix or "",
+                    "suffix": suffix or "",
+                    "events": cast(Tuple[str], events),
+                },
                 preload_content=False,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             ),
         )
 
     def set_bucket_versioning(
             self,
-            *,
             bucket_name: str,
             config: VersioningConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the versioning configuration for a bucket.
+        Set versioning configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: :class:`VersioningConfig <VersioningConfig>`.
 
-            config (VersioningConfig):
-                Versioning configuration.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.set_bucket_versioning(
-            ...     bucket_name="my-bucket",
-            ...     config=VersioningConfig(ENABLED),
-            ... )
+        Example::
+            client.set_bucket_versioning(
+                "my-bucket", VersioningConfig(ENABLED),
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, VersioningConfig):
             raise ValueError("config must be VersioningConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"versioning": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"versioning": ""},
         )
 
-    def get_bucket_versioning(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> VersioningConfig:
+    def get_bucket_versioning(self, bucket_name: str) -> VersioningConfig:
         """
-        Get the versioning configuration of a bucket.
+        Get versioning configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`VersioningConfig <VersioningConfig>`.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            VersioningConfig:
-                The versioning configuration of the bucket.
-
-        Example:
-            >>> config = client.get_bucket_versioning(bucket_name="my-bucket")
-            >>> print(config.status)
+        Example::
+            config = client.get_bucket_versioning("my-bucket")
+            print(config.status)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"versioning": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "GET",
+            bucket_name,
+            query_params={"versioning": ""},
         )
         return unmarshal(VersioningConfig, response.data.decode())
 
     def fput_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             file_path: str,
             content_type: str = "application/octet-stream",
-            headers: Optional[HTTPHeaderDict] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
+            metadata: Optional[DictType] = None,
             sse: Optional[Sse] = None,
             progress: Optional[ProgressType] = None,
             part_size: int = 0,
-            checksum: Optional[Algorithm] = None,
             num_parallel_uploads: int = 3,
             tags: Optional[Tags] = None,
             retention: Optional[Retention] = None,
             legal_hold: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> ObjectWriteResult:
         """
-        Upload data from a file to an object in a bucket.
+        Uploads data from a file to an object in a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param file_path: Name of file to upload.
+        :param content_type: Content type of the object.
+        :param metadata: Any additional metadata to be uploaded along
+            with your PUT request.
+        :param sse: Server-side encryption.
+        :param progress: A progress object
+        :param part_size: Multipart part size
+        :param num_parallel_uploads: Number of parallel uploads.
+        :param tags: :class:`Tags` for the object.
+        :param retention: :class:`Retention` configuration object.
+        :param legal_hold: Flag to set legal hold for the object.
+        :return: :class:`ObjectWriteResult` object.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            # Upload data.
+            result = client.fput_object(
+                "my-bucket", "my-object", "my-filename",
+            )
 
-            file_path (str):
-                Path to the file to upload.
+            # Upload data with metadata.
+            result = client.fput_object(
+                "my-bucket", "my-object", "my-filename",
+                metadata={"My-Project": "one"},
+            )
 
-            content_type (str, default="application/octet-stream"):
-                Content type of the object.
-
-            headers (Optional[HTTPHeaderDict], default=None):
-                Additional headers.
-
-            user_metadata (Optional[HTTPHeaderDict], default=None):
-                User metadata of the object.
-
-            sse (Optional[Sse], default=None):
-                Server-side encryption configuration.
-
-            progress (Optional[ProgressType], default=None):
-                Progress object to track upload progress.
-
-            part_size (int, default=0):
-                Multipart upload part size in bytes.
-
-            checksum (Optional[Algorithm], default=None):
-                Algorithm for checksum computation.
-
-            num_parallel_uploads (int, default=3):
-                Number of parallel uploads.
-
-            tags (Optional[Tags], default=None):
-                Tags for the object.
-
-            retention (Optional[Retention], default=None):
-                Retention configuration.
-
-            legal_hold (bool, default=False):
-                Flag to set legal hold for the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                The result of the object upload operation.
-
-        Example:
-            >>> # Upload data
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ... )
-            >>> print(
-            ...     f"created {result.object_name} object; "
-            ...     f"etag: {result.etag}, version-id: {result.version_id}",
-            ... )
-
-            >>> # Upload with part size
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     part_size=10*1024*1024,
-            ... )
-
-            >>> # Upload with content type
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     content_type="application/csv",
-            ... )
-
-            >>> # Upload with metadata
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     metadata={"My-Project": "one"},
-            ... )
-
-            >>> # Upload with customer key encryption
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     sse=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
-            ... )
-
-            >>> # Upload with KMS encryption
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     sse=SseKMS(
-            ...         "KMS-KEY-ID",
-            ...         {"Key1": "Value1", "Key2": "Value2"},
-            ...     ),
-            ... )
-
-            >>> # Upload with S3-managed encryption
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     sse=SseS3(),
-            ... )
-
-            >>> # Upload with tags, retention and legal hold
-            >>> date = datetime.utcnow().replace(
-            ...     hour=0, minute=0, second=0, microsecond=0,
-            ... ) + timedelta(days=30)
-            >>> tags = Tags(for_object=True)
-            >>> tags["User"] = "jsmith"
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     tags=tags,
-            ...     retention=Retention(GOVERNANCE, date),
-            ...     legal_hold=True,
-            ... )
-
-            >>> # Upload with progress bar
-            >>> result = client.fput_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     progress=Progress(),
-            ... )
+            # Upload data with tags, retention and legal-hold.
+            date = datetime.utcnow().replace(
+                hour=0, minute=0, second=0, microsecond=0,
+            ) + timedelta(days=30)
+            tags = Tags(for_object=True)
+            tags["User"] = "jsmith"
+            result = client.fput_object(
+                "my-bucket", "my-object", "my-filename",
+                tags=tags,
+                retention=Retention(GOVERNANCE, date),
+                legal_hold=True,
+            )
         """
+
         file_size = os.stat(file_path).st_size
         with open(file_path, "rb") as file_data:
             return self.put_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                data=file_data,
-                length=file_size,
+                bucket_name,
+                object_name,
+                file_data,
+                file_size,
                 content_type=content_type,
-                headers=headers,
-                user_metadata=user_metadata,
+                metadata=cast(Union[DictType, None], metadata),
                 sse=sse,
-                checksum=checksum,
                 progress=progress,
                 part_size=part_size,
                 num_parallel_uploads=num_parallel_uploads,
                 tags=tags,
                 retention=retention,
                 legal_hold=legal_hold,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
 
     def fget_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             file_path: str,
-            match_etag: Optional[str] = None,
-            not_match_etag: Optional[str] = None,
-            modified_since: Optional[datetime] = None,
-            unmodified_since: Optional[datetime] = None,
-            fetch_checksum: bool = False,
+            request_headers: Optional[DictType] = None,
             ssec: Optional[SseCustomerKey] = None,
             version_id: Optional[str] = None,
+            extra_query_params: Optional[DictType] = None,
             tmp_file_path: Optional[str] = None,
             progress: Optional[ProgressType] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Download an object to a file.
+        Downloads data of an object to file.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param file_path: Name of file to download.
+        :param request_headers: Any additional headers to be added with GET
+                                request.
+        :param ssec: Server-side encryption customer key.
+        :param version_id: Version-ID of the object.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :param tmp_file_path: Path to a temporary file.
+        :param progress: A progress object
+        :return: Object information.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            # Download data of an object.
+            client.fget_object("my-bucket", "my-object", "my-filename")
 
-            file_path (str):
-                Path to the file where data will be downloaded.
+            # Download data of an object of version-ID.
+            client.fget_object(
+                "my-bucket", "my-object", "my-filename",
+                version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
+            )
 
-            match_etag (Optional[str], default=None):
-                Match ETag of the object.
-
-            not_match_etag (Optional[str], default=None):
-                None-match ETag of the object.
-
-            modified_since (Optional[datetime], default=None):
-                Condition to fetch object modified since the given date.
-
-            unmodified_since (Optional[datetime], default=None):
-                Condition to fetch object unmodified since the given date.
-
-            fetch_checksum (bool, default=False):
-                Flag to fetch object checksum.
-
-            ssec (Optional[SseCustomerKey], default=None):
-                Server-side encryption customer key.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            tmp_file_path (Optional[str], default=None):
-                Path to a temporary file used during download.
-
-            progress (Optional[ProgressType], default=None):
-                Progress object to track download progress.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> # Download object
-            >>> client.fget_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ... )
-            >>>
-            >>> # Download specific version of object
-            >>> client.fget_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
-            ... )
-            >>>
-            >>> # Download SSE-C encrypted object
-            >>> client.fget_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     file_path="my-filename",
-            ...     ssec=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
-            ... )
+            # Download data of an SSE-C encrypted object.
+            client.fget_object(
+                "my-bucket", "my-object", "my-filename",
+                ssec=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
@@ -1977,14 +1120,15 @@ class Minio:
         makedirs(os.path.dirname(file_path))
 
         stat = self.stat_object(
-            bucket_name=bucket_name,
-            object_name=object_name,
-            ssec=ssec,
+            bucket_name,
+            object_name,
+            ssec,
             version_id=version_id,
+            extra_headers=request_headers,
         )
 
         etag = queryencode(cast(str, stat.etag))
-        # Write to a temporary file "file_path.ETAG.part.minio" before saving.
+        # Write to a temporary file "file_path.part.minio" before saving.
         tmp_file_path = (
             tmp_file_path or f"{file_path}.{etag}.part.minio"
         )
@@ -1992,17 +1136,11 @@ class Minio:
         response = None
         try:
             response = self.get_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                match_etag=match_etag,
-                not_match_etag=not_match_etag,
-                modified_since=modified_since,
-                unmodified_since=unmodified_since,
-                fetch_checksum=fetch_checksum,
+                bucket_name,
+                object_name,
+                request_headers=request_headers,
                 ssec=ssec,
                 version_id=version_id,
-                region=region,
-                extra_headers=extra_headers,
                 extra_query_params=extra_query_params,
             )
 
@@ -2027,361 +1165,231 @@ class Minio:
 
     def get_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
-            version_id: Optional[str] = None,
-            ssec: Optional[SseCustomerKey] = None,
             offset: int = 0,
-            length: Optional[int] = None,
-            match_etag: Optional[str] = None,
-            not_match_etag: Optional[str] = None,
-            modified_since: Optional[datetime] = None,
-            unmodified_since: Optional[datetime] = None,
-            fetch_checksum: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            length: int = 0,
+            request_headers: Optional[DictType] = None,
+            ssec: Optional[SseCustomerKey] = None,
+            version_id: Optional[str] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> BaseHTTPResponse:
         """
-        Get object data from a bucket.
+        Get data of an object. Returned response should be closed after use to
+        release network resources. To reuse the connection, it's required to
+        call `response.release_conn()` explicitly.
 
-        Data is read starting at the specified offset up to the given length.
-        The returned response must be closed after use to release network
-        resources. To reuse the connection, explicitly call
-        ``response.release_conn()``.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param offset: Start byte position of object data.
+        :param length: Number of bytes of object data from offset.
+        :param request_headers: Any additional headers to be added with GET
+                                request.
+        :param ssec: Server-side encryption customer key.
+        :param version_id: Version-ID of the object.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :return: :class:`urllib3.response.BaseHTTPResponse` object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        Example::
+            # Get data of an object.
+            response = None
+            try:
+                response = client.get_object("my-bucket", "my-object")
+                # Read data from response.
+            finally:
+                if response:
+                    response.close()
+                    response.release_conn()
 
-            object_name (str):
-                Object name in the bucket.
+            # Get data of an object of version-ID.
+            response = None
+            try:
+                response = client.get_object(
+                    "my-bucket", "my-object",
+                    version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
+                )
+                # Read data from response.
+            finally:
+                if response:
+                    response.close()
+                    response.release_conn()
 
-            version_id (Optional[str], default=None):
-                Version ID of the object.
+            # Get data of an object from offset and length.
+            response = None
+            try:
+                response = client.get_object(
+                    "my-bucket", "my-object", offset=512, length=1024,
+                )
+                # Read data from response.
+            finally:
+                if response:
+                    response.close()
+                    response.release_conn()
 
-            ssec (Optional[SseCustomerKey], default=None):
-                Server-side encryption customer key.
-
-            offset (int, default=0):
-                Start byte position of object data.
-
-            length (Optional[int], default=None):
-                Number of bytes of object data to read from offset.
-
-            match_etag (Optional[str], default=None):
-                Match ETag of the object.
-
-            not_match_etag (Optional[str], default=None):
-                None-match ETag of the object.
-
-            modified_since (Optional[datetime], default=None):
-                Condition to fetch object modified since the given date.
-
-            unmodified_since (Optional[datetime], default=None):
-                Condition to fetch object unmodified since the given date.
-
-            fetch_checksum (bool, default=False):
-                Flag to fetch object checksum.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            BaseHTTPResponse:
-                An :class:`urllib3.response.BaseHTTPResponse` or
-                :class:`urllib3.response.HTTPResponse` object containing
-                the object data.
-
-        Example:
-            >>> # Get data of an object
-            >>> try:
-            ...     response = client.get_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...     )
-            ...     # Read data from response
-            ... finally:
-            ...     response.close()
-            ...     response.release_conn()
-            >>>
-            >>> # Get specific version of an object
-            >>> try:
-            ...     response = client.get_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
-            ...     )
-            ... finally:
-            ...     response.close()
-            ...     response.release_conn()
-            >>>
-            >>> # Get object data from offset and length
-            >>> try:
-            ...     response = client.get_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         offset=512,
-            ...         length=1024,
-            ...     )
-            ... finally:
-            ...     response.close()
-            ...     response.release_conn()
-            >>>
-            >>> # Get SSE-C encrypted object
-            >>> try:
-            ...     response = client.get_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         ssec=SseCustomerKey(
-            ...             b"32byteslongsecretkeymustprovided"
-            ...         ),
-            ...     )
-            ... finally:
-            ...     response.close()
-            ...     response.release_conn()
+            # Get data of an SSE-C encrypted object.
+            response = None
+            try:
+                response = client.get_object(
+                    "my-bucket", "my-object",
+                    ssec=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
+                )
+                # Read data from response.
+            finally:
+                if response:
+                    response.close()
+                    response.release_conn()
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         check_ssec(ssec)
 
-        headers = self._gen_read_headers(
-            ssec=ssec,
-            offset=offset,
-            length=length,
-            match_etag=match_etag,
-            not_match_etag=not_match_etag,
-            modified_since=modified_since,
-            unmodified_since=unmodified_since,
-            fetch_checksum=fetch_checksum,
-        )
-        query_params = HTTPQueryDict()
+        headers = cast(DictType, ssec.headers() if ssec else {})
+        headers.update(request_headers or {})
+
+        if offset or length:
+            end = (offset + length - 1) if length else ""
+            headers['Range'] = f"bytes={offset}-{end}"
+
         if version_id:
-            query_params["versionId"] = version_id
+            extra_query_params = extra_query_params or {}
+            extra_query_params["versionId"] = version_id
 
         return self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            headers=headers,
-            query_params=query_params,
+            "GET",
+            bucket_name,
+            object_name,
+            headers=cast(DictType, headers),
+            query_params=extra_query_params,
             preload_content=False,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
 
     def prompt_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             prompt: str,
             lambda_arn: Optional[str] = None,
+            request_headers: Optional[DictType] = None,
             ssec: Optional[SseCustomerKey] = None,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
             **kwargs: Optional[Any],
     ) -> BaseHTTPResponse:
         """
         Prompt an object using natural language.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param prompt: Prompt the Object to interact with the AI model.
+                                request.
+        :param lambda_arn: Lambda ARN to use for prompt.
+        :param request_headers: Any additional headers to be added with POST
+        :param ssec: Server-side encryption customer key.
+        :param version_id: Version-ID of the object.
+        :param kwargs: Extra parameters for advanced usage.
+        :return: :class:`urllib3.response.BaseHTTPResponse` object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            prompt (str):
-                Natural language prompt to interact with the object using
-                the AI model.
-
-            lambda_arn (Optional[str], default=None):
-                AWS Lambda ARN to use for processing the prompt.
-
-            ssec (Optional[SseCustomerKey], default=None):
-                Server-side encryption customer key.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-            **kwargs (Optional[Any]):
-                Additional parameters for advanced usage.
-
-        Returns:
-            BaseHTTPResponse:
-                An :class:`urllib3.response.BaseHTTPResponse` object.
-
-        Example:
-            >>> response = None
-            >>> try:
-            ...     response = client.prompt_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         prompt="Describe the object for me",
-            ...     )
-            ...     # Read data from response
-            ... finally:
-            ...     if response:
-            ...         response.close()
-            ...         response.release_conn()
+        Example::
+            # prompt an object.
+            response = None
+            try:
+                response = client.get_object(
+                "my-bucket", "my-object",
+                "Describe the object for me")
+                # Read data from response.
+            finally:
+                if response:
+                    response.close()
+                    response.release_conn()
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         check_ssec(ssec)
 
-        query_params = HTTPQueryDict()
+        headers = cast(DictType, ssec.headers() if ssec else {})
+        headers.update(request_headers or {})
+
+        extra_query_params = {"lambdaArn": lambda_arn or ""}
+
         if version_id:
-            query_params["versionId"] = version_id
-        query_params["lambdaArn"] = lambda_arn or ""
+            extra_query_params["versionId"] = version_id
 
         prompt_body = kwargs
         prompt_body["prompt"] = prompt
 
         body = json.dumps(prompt_body)
         return self._execute(
-            method="POST",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            headers=HTTPHeaderDict(ssec.headers()) if ssec else None,
-            query_params=query_params,
+            "POST",
+            bucket_name,
+            object_name,
+            headers=cast(DictType, headers),
+            query_params=cast(DictType, extra_query_params),
             body=body.encode(),
             preload_content=False,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
 
     def copy_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             source: CopySource,
             sse: Optional[Sse] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
+            metadata: Optional[DictType] = None,
             tags: Optional[Tags] = None,
             retention: Optional[Retention] = None,
             legal_hold: bool = False,
             metadata_directive: Optional[str] = None,
             tagging_directive: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> ObjectWriteResult:
         """
         Create an object by server-side copying data from another object.
+        In this API maximum supported source object size is 5GiB.
 
-        The maximum supported source object size for this API is 5 GiB.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param source: :class:`CopySource` object.
+        :param sse: Server-side encryption of destination object.
+        :param metadata: Any user-defined metadata to be copied along with
+                         destination object.
+        :param tags: Tags for destination object.
+        :param retention: :class:`Retention` configuration object.
+        :param legal_hold: Flag to set legal hold for destination object.
+        :param metadata_directive: Directive used to handle user metadata for
+                                   destination object.
+        :param tagging_directive: Directive used to handle tags for destination
+                                   object.
+        :return: :class:`ObjectWriteResult <ObjectWriteResult>` object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        Example::
+            # copy an object from a bucket to another.
+            result = client.copy_object(
+                "my-bucket",
+                "my-object",
+                CopySource("my-sourcebucket", "my-sourceobject"),
+            )
+            print(result.object_name, result.version_id)
 
-            object_name (str):
-                Object name in the bucket.
+            # copy an object with condition.
+            result = client.copy_object(
+                "my-bucket",
+                "my-object",
+                CopySource(
+                    "my-sourcebucket",
+                    "my-sourceobject",
+                    modified_since=datetime(2014, 4, 1, tzinfo=timezone.utc),
+                ),
+            )
+            print(result.object_name, result.version_id)
 
-            source (CopySource):
-                Source object information.
-
-            sse (Optional[Sse], default=None):
-                Server-side encryption configuration for the destination
-                object.
-
-            user_metadata (Optional[HTTPHeaderDict], default=None):
-                User-defined metadata to be applied to the destination
-                object.
-
-            tags (Optional[Tags], default=None):
-                Tags for the destination object.
-
-            retention (Optional[Retention], default=None):
-                Retention configuration for the destination object.
-
-            legal_hold (bool, default=False):
-                Flag to enable legal hold on the destination object.
-
-            metadata_directive (Optional[str], default=None):
-                Directive for handling user metadata on the destination
-                object.
-
-            tagging_directive (Optional[str], default=None):
-                Directive for handling tags on the destination object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                The result of the copy operation.
-
-        Example:
-            >>> from datetime import datetime, timezone
-            >>> from minio.commonconfig import REPLACE, CopySource
-            >>>
-            >>> # Copy an object from a bucket to another
-            >>> result = client.copy_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     source=CopySource(
-            ...         bucket_name="my-sourcebucket",
-            ...         object_name="my-sourceobject",
-            ...     ),
-            ... )
-            >>> print(result.object_name, result.version_id)
-            >>>
-            >>> # Copy an object with condition
-            >>> result = client.copy_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     source=CopySource(
-            ...         bucket_name="my-sourcebucket",
-            ...         object_name="my-sourceobject",
-            ...         modified_since=datetime(
-            ...             2014, 4, 1, tzinfo=timezone.utc,
-            ...         ),
-            ...     ),
-            ... )
-            >>> print(result.object_name, result.version_id)
-            >>>
-            >>> # Copy an object with replacing metadata
-            >>> user_metadata = {"test_meta_key": "test_meta_value"}
-            >>> result = client.copy_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     source=CopySource(
-            ...         bucket_name="my-sourcebucket",
-            ...         object_name="my-sourceobject",
-            ...     ),
-            ...     user_metadata=user_metadata,
-            ...     metadata_directive=REPLACE,
-            ... )
-            >>> print(result.object_name, result.version_id)
+            # copy an object from a bucket with replacing metadata.
+            metadata = {"test_meta_key": "test_meta_value"}
+            result = client.copy_object(
+                "my-bucket",
+                "my-object",
+                CopySource("my-sourcebucket", "my-sourceobject"),
+                metadata=metadata,
+                metadata_directive=REPLACE,
+            )
+            print(result.object_name, result.version_id)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
@@ -2406,8 +1414,8 @@ class Minio:
         size = -1
         if source.offset is None and source.length is None:
             stat = self.stat_object(
-                bucket_name=source.bucket_name,
-                object_name=source.object_name,
+                source.bucket_name,
+                source.object_name,
                 version_id=source.version_id,
                 ssec=source.ssec,
             )
@@ -2429,43 +1437,36 @@ class Minio:
                     "object size greater than 5 GiB"
                 )
             return self.compose_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                sources=[ComposeSource.of(source)],
-                sse=sse,
-                user_metadata=user_metadata,
-                tags=tags,
-                retention=retention,
+                bucket_name, object_name, [ComposeSource.of(source)],
+                sse=sse, metadata=metadata, tags=tags, retention=retention,
                 legal_hold=legal_hold,
             )
 
-        headers = self._gen_write_headers(
-            user_metadata=user_metadata,
-            sse=sse,
-            tags=tags,
-            retention=retention,
-            legal_hold=legal_hold,
+        headers = genheaders(
+            metadata,
+            sse,
+            tags,
+            retention,
+            legal_hold,
         )
         if metadata_directive:
             headers["x-amz-metadata-directive"] = metadata_directive
         if tagging_directive:
             headers["x-amz-tagging-directive"] = tagging_directive
-        headers.extend(source.gen_copy_headers())
+        headers.update(source.gen_copy_headers())
         response = self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             object_name=object_name,
             headers=headers,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
         etag, last_modified = parse_copy_object(response)
-        return ObjectWriteResult.new(
-            headers=response.headers,
-            bucket_name=bucket_name,
-            object_name=object_name,
-            etag=etag,
+        return ObjectWriteResult(
+            bucket_name,
+            object_name,
+            response.headers.get("x-amz-version-id"),
+            etag,
+            response.headers,
             last_modified=last_modified,
         )
 
@@ -2477,8 +1478,8 @@ class Minio:
         for src in sources:
             i += 1
             stat = self.stat_object(
-                bucket_name=src.bucket_name,
-                object_name=src.object_name,
+                src.bucket_name,
+                src.object_name,
                 version_id=src.version_id,
                 ssec=src.ssec,
             )
@@ -2536,138 +1537,79 @@ class Minio:
 
     def _upload_part_copy(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             upload_id: str,
             part_number: int,
-            headers: HTTPHeaderDict,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            headers: DictType,
     ) -> tuple[str, Optional[datetime]]:
         """Execute UploadPartCopy S3 API."""
-        query_params = HTTPQueryDict(
-            {
+        response = self._execute(
+            "PUT",
+            bucket_name,
+            object_name,
+            headers=headers,
+            query_params={
                 "partNumber": str(part_number),
                 "uploadId": upload_id,
             },
-        )
-        response = self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
         return parse_copy_object(response)
 
     def compose_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             sources: list[ComposeSource],
             sse: Optional[Sse] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
+            metadata: Optional[DictType] = None,
             tags: Optional[Tags] = None,
             retention: Optional[Retention] = None,
             legal_hold: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> ObjectWriteResult:
         """
-        Create an object by combining data from multiple source objects using
+        Create an object by combining data from different source objects using
         server-side copy.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param sources: List of :class:`ComposeSource` object.
+        :param sse: Server-side encryption of destination object.
+        :param metadata: Any user-defined metadata to be copied along with
+                         destination object.
+        :param tags: Tags for destination object.
+        :param retention: :class:`Retention` configuration object.
+        :param legal_hold: Flag to set legal hold for destination object.
+        :return: :class:`ObjectWriteResult <ObjectWriteResult>` object.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            sources = [
+                ComposeSource("my-job-bucket", "my-object-part-one"),
+                ComposeSource("my-job-bucket", "my-object-part-two"),
+                ComposeSource("my-job-bucket", "my-object-part-three"),
+            ]
 
-            sources (list[ComposeSource]):
-                List of source objects to be combined.
+            # Create my-bucket/my-object by combining source object
+            # list.
+            result = client.compose_object("my-bucket", "my-object", sources)
+            print(result.object_name, result.version_id)
 
-            sse (Optional[Sse], default=None):
-                Server-side encryption configuration for the destination
-                object.
+            # Create my-bucket/my-object with user metadata by combining
+            # source object list.
+            result = client.compose_object(
+                "my-bucket",
+                "my-object",
+                sources,
+                metadata={"test_meta_key": "test_meta_value"},
+            )
+            print(result.object_name, result.version_id)
 
-            user_metadata (Optional[HTTPHeaderDict], default=None):
-                User-defined metadata to be applied to the destination
-                object.
-
-            tags (Optional[Tags], default=None):
-                Tags for the destination object.
-
-            retention (Optional[Retention], default=None):
-                Retention configuration for the destination object.
-
-            legal_hold (bool, default=False):
-                Flag to enable legal hold on the destination object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                The result of the compose operation.
-
-        Example:
-            >>> from minio.commonconfig import ComposeSource
-            >>> from minio.sse import SseS3
-            >>>
-            >>> sources = [
-            ...     ComposeSource(
-            ...         bucket_name="my-job-bucket",
-            ...         object_name="my-object-part-one",
-            ...     ),
-            ...     ComposeSource(
-            ...         bucket_name="my-job-bucket",
-            ...         object_name="my-object-part-two",
-            ...     ),
-            ...     ComposeSource(
-            ...         bucket_name="my-job-bucket",
-            ...         object_name="my-object-part-three",
-            ...     ),
-            ... ]
-            >>>
-            >>> # Create object by combining sources
-            >>> result = client.compose_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     sources=sources,
-            ... )
-            >>> print(result.object_name, result.version_id)
-            >>>
-            >>> # With user metadata
-            >>> result = client.compose_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     sources=sources,
-            ...     user_metadata={"test_meta_key": "test_meta_value"},
-            ... )
-            >>> print(result.object_name, result.version_id)
-            >>>
-            >>> # With user metadata and SSE
-            >>> result = client.compose_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     sources=sources,
-            ...     sse=SseS3(),
-            ... )
-            >>> print(result.object_name, result.version_id)
+            # Create my-bucket/my-object with user metadata and
+            # server-side encryption by combining source object list.
+            client.compose_object(
+                "my-bucket", "my-object", sources, sse=SseS3(),
+            )
+            print(result.object_name, result.version_id)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
@@ -2691,37 +1633,18 @@ class Minio:
                 sources[0].length is None
         ):
             return self.copy_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                source=CopySource.of(sources[0]),
-                sse=sse,
-                user_metadata=user_metadata,
-                tags=tags,
-                retention=retention,
+                bucket_name, object_name, CopySource.of(sources[0]),
+                sse=sse, metadata=metadata, tags=tags, retention=retention,
                 legal_hold=legal_hold,
-                metadata_directive=REPLACE if user_metadata else None,
+                metadata_directive=REPLACE if metadata else None,
                 tagging_directive=REPLACE if tags else None,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
 
-        headers = self._gen_write_headers(
-            user_metadata=user_metadata,
-            sse=sse,
-            tags=tags,
-            retention=retention,
-            legal_hold=legal_hold,
-        )
+        headers = genheaders(metadata, sse, tags, retention, legal_hold)
         upload_id = self._create_multipart_upload(
-            bucket_name=bucket_name,
-            object_name=object_name,
-            headers=headers,
+            bucket_name, object_name, headers,
         )
-        ssec_headers = (
-            sse.headers() if isinstance(sse, SseCustomerKey)
-            else HTTPHeaderDict()
-        )
+        ssec_headers = sse.headers() if isinstance(sse, SseCustomerKey) else {}
         try:
             part_number = 0
             total_parts = []
@@ -2732,8 +1655,8 @@ class Minio:
                 elif src.offset is not None:
                     size -= src.offset
                 offset = src.offset or 0
-                headers = cast(HTTPHeaderDict, src.headers)
-                headers.extend(ssec_headers)
+                headers = cast(DictType, src.headers)
+                headers.update(ssec_headers)
                 if size <= MAX_PART_SIZE:
                     part_number += 1
                     if src.length is not None:
@@ -2745,11 +1668,11 @@ class Minio:
                             f"bytes={offset}-{offset + size - 1}"
                         )
                     etag, _ = self._upload_part_copy(
-                        bucket_name=bucket_name,
-                        object_name=object_name,
-                        upload_id=upload_id,
-                        part_number=part_number,
-                        headers=headers,
+                        bucket_name,
+                        object_name,
+                        upload_id,
+                        part_number,
+                        headers,
                     )
                     total_parts.append(Part(part_number, etag))
                     continue
@@ -2762,69 +1685,55 @@ class Minio:
                         f"bytes={offset}-{end_bytes}"
                     )
                     etag, _ = self._upload_part_copy(
-                        bucket_name=bucket_name,
-                        object_name=object_name,
-                        upload_id=upload_id,
-                        part_number=part_number,
-                        headers=headers_copy,
+                        bucket_name,
+                        object_name,
+                        upload_id,
+                        part_number,
+                        headers_copy,
                     )
                     total_parts.append(Part(part_number, etag))
                     offset += length
                     size -= length
             result = self._complete_multipart_upload(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                upload_id=upload_id,
-                parts=total_parts,
+                bucket_name, object_name, upload_id, total_parts,
+                sse if isinstance(sse, SseCustomerKey) else None,
             )
-            return ObjectWriteResult.new(
-                headers=result.headers,
-                bucket_name=cast(str, result.bucket_name),
-                object_name=cast(str, result.object_name),
-                version_id=result.version_id,
-                etag=result.etag,
+            return ObjectWriteResult(
+                cast(str, result.bucket_name),
+                cast(str, result.object_name),
+                result.version_id,
+                result.etag,
+                result.http_headers,
                 location=result.location,
             )
         except Exception as exc:
             if upload_id:
                 self._abort_multipart_upload(
-                    bucket_name=bucket_name,
-                    object_name=object_name,
-                    upload_id=upload_id,
+                    bucket_name, object_name, upload_id,
                 )
             raise exc
 
     def _abort_multipart_upload(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             upload_id: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """Execute AbortMultipartUpload S3 API."""
         self._execute(
-            method="DELETE",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            query_params=HTTPQueryDict({'uploadId': upload_id}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "DELETE",
+            bucket_name,
+            object_name,
+            query_params={'uploadId': upload_id},
         )
 
     def _complete_multipart_upload(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             upload_id: str,
             parts: list[Part],
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            ssec: Optional[SseCustomerKey] = None,
     ) -> CompleteMultipartUploadResult:
         """Execute CompleteMultipartUpload S3 API."""
         element = Element("CompleteMultipartUpload")
@@ -2832,307 +1741,155 @@ class Minio:
             tag = SubElement(element, "Part")
             SubElement(tag, "PartNumber", str(part.part_number))
             SubElement(tag, "ETag", '"' + part.etag + '"')
-            if part.checksum_crc32:
-                SubElement(tag, "ChecksumCRC32", part.checksum_crc32)
-            elif part.checksum_crc32c:
-                SubElement(tag, "ChecksumCRC32C", part.checksum_crc32c)
-            elif part.checksum_sha1:
-                SubElement(tag, "ChecksumSHA1", part.checksum_sha1)
-            elif part.checksum_sha256:
-                SubElement(tag, "ChecksumSHA256", part.checksum_sha256)
         body = getbytes(element)
-        headers = HTTPHeaderDict(
-            {
-                "Content-Type": 'application/xml',
-                "Content-MD5": base64_string(MD5.hash(body)),
-            },
-        )
+        headers: DictType = {
+            "Content-Type": 'application/xml',
+            "Content-MD5": cast(str, md5sum_hash(body)),
+        }
+        if ssec:
+            headers.update(ssec.headers())
         response = self._execute(
-            method="POST",
-            bucket_name=bucket_name,
-            object_name=object_name,
+            "POST",
+            bucket_name,
+            object_name,
             body=body,
             headers=headers,
-            query_params=HTTPQueryDict({'uploadId': upload_id}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params={'uploadId': upload_id},
         )
         return CompleteMultipartUploadResult(response)
 
     def _create_multipart_upload(
             self,
-            *,
             bucket_name: str,
             object_name: str,
-            headers: HTTPHeaderDict,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            headers: DictType,
     ) -> str:
         """Execute CreateMultipartUpload S3 API."""
         if not headers.get("Content-Type"):
             headers["Content-Type"] = "application/octet-stream"
         response = self._execute(
-            method="POST",
-            bucket_name=bucket_name,
-            object_name=object_name,
+            "POST",
+            bucket_name,
+            object_name,
             headers=headers,
-            query_params=HTTPQueryDict({"uploads": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params={"uploads": ""},
         )
         element = ET.fromstring(response.data.decode())
         return cast(str, findtext(element, "UploadId", True))
 
     def _put_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             data: bytes,
-            headers: Optional[HTTPHeaderDict] = None,
-            query_params: Optional[HTTPQueryDict] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            headers: Optional[DictType] = None,
+            query_params: Optional[DictType] = None,
     ) -> ObjectWriteResult:
         """Execute PutObject S3 API."""
         response = self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
-            object_name=object_name,
+            "PUT",
+            bucket_name,
+            object_name,
             body=data,
             headers=headers,
             query_params=query_params,
             no_body_trace=True,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
-        return ObjectWriteResult.new(
-            headers=response.headers,
-            bucket_name=bucket_name,
-            object_name=object_name,
+        return ObjectWriteResult(
+            bucket_name,
+            object_name,
+            response.headers.get("x-amz-version-id"),
+            response.headers.get("etag", "").replace('"', ""),
+            response.headers,
         )
 
     def _upload_part(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             data: bytes,
-            headers: Optional[HTTPHeaderDict],
+            headers: Optional[DictType],
             upload_id: str,
             part_number: int,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> ObjectWriteResult:
+    ) -> str:
         """Execute UploadPart S3 API."""
-        query_params = HTTPQueryDict({
-            "partNumber": str(part_number),
-            "uploadId": upload_id,
-        })
         result = self._put_object(
-            bucket_name=bucket_name,
-            object_name=object_name,
-            data=data,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            bucket_name,
+            object_name,
+            data,
+            headers,
+            query_params={
+                "partNumber": str(part_number),
+                "uploadId": upload_id,
+            },
         )
-        return result
+        return cast(str, result.etag)
 
-    def _upload_part_task(self, kwargs):
+    def _upload_part_task(self, args):
         """Upload_part task for ThreadPool."""
-        return kwargs["part_number"], self._upload_part(**kwargs)
+        return args[5], self._upload_part(*args)
 
     def put_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             data: BinaryIO,
             length: int,
             content_type: str = "application/octet-stream",
-            headers: Optional[HTTPHeaderDict] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
+            metadata: Optional[DictType] = None,
             sse: Optional[Sse] = None,
             progress: Optional[ProgressType] = None,
             part_size: int = 0,
-            checksum: Optional[Algorithm] = None,
             num_parallel_uploads: int = 3,
             tags: Optional[Tags] = None,
             retention: Optional[Retention] = None,
             legal_hold: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            write_offset: Optional[int] = None,
     ) -> ObjectWriteResult:
         """
-        Upload data from a stream to an object in a bucket.
+        Uploads data from a stream to an object in a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param data: An object having callable read() returning bytes object.
+        :param length: Data size; -1 for unknown size and set valid part_size.
+        :param content_type: Content type of the object.
+        :param metadata: Any additional metadata to be uploaded along
+            with your PUT request.
+        :param sse: Server-side encryption.
+        :param progress: A progress object;
+        :param part_size: Multipart part size.
+        :param num_parallel_uploads: Number of parallel uploads.
+        :param tags: :class:`Tags` for the object.
+        :param retention: :class:`Retention` configuration object.
+        :param legal_hold: Flag to set legal hold for the object.
+        :param write_offset: Offset byte for appending data to existing object.
+        :return: :class:`ObjectWriteResult` object.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            # Upload data.
+            result = client.put_object(
+                "my-bucket", "my-object", io.BytesIO(b"hello"), 5,
+            )
 
-            data (BinaryIO):
-                An object with a callable ``read()`` method that returns a
-                bytes object.
+            # Upload data with metadata.
+            result = client.put_object(
+                "my-bucket", "my-object", io.BytesIO(b"hello"), 5,
+                metadata={"My-Project": "one"},
+            )
 
-            length (int):
-                Size of the data in bytes. Use -1 for unknown size and set a
-                valid ``part_size``.
-
-            content_type (str, default="application/octet-stream"):
-                Content type of the object.
-
-            headers (Optional[HTTPHeaderDict], default=None):
-                Additional headers.
-
-            user_metadata (Optional[HTTPHeaderDict], default=None):
-                User metadata for the object.
-
-            sse (Optional[Sse], default=None):
-                Server-side encryption configuration.
-
-            progress (Optional[ProgressType], default=None):
-                Progress object to track upload progress.
-
-            part_size (int, default=0):
-                Multipart upload part size in bytes.
-
-            checksum (Optional[Algorithm], default=None):
-                Algorithm for checksum computation.
-
-            num_parallel_uploads (int, default=3):
-                Number of parallel uploads.
-
-            tags (Optional[Tags], default=None):
-                Tags for the object.
-
-            retention (Optional[Retention], default=None):
-                Retention configuration.
-
-            legal_hold (bool, default=False):
-                Flag to enable legal hold on the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                The result of the object upload operation.
-
-        Example:
-            >>> # Upload simple data
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ... )
-            >>> print(
-            ...     f"created {result.object_name} object; "
-            ...     f"etag: {result.etag}, version-id: {result.version_id}",
-            ... )
-            >>>
-            >>> # Upload unknown-sized data with multipart
-            >>> with urlopen("https://cdn.kernel.org/pub/linux/kernel/v5.x/"
-            ...              "linux-5.4.81.tar.xz") as data:
-            ...     result = client.put_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         data=data,
-            ...         length=-1,
-            ...         part_size=10*1024*1024,
-            ...     )
-            >>>
-            >>> # Upload with content type
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     content_type="application/csv",
-            ... )
-            >>>
-            >>> # Upload with metadata
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     metadata={"My-Project": "one"},
-            ... )
-            >>>
-            >>> # Upload with customer key SSE
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     sse=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
-            ... )
-            >>>
-            >>> # Upload with KMS SSE
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     sse=SseKMS(
-            ...         "KMS-KEY-ID",
-            ...         {"Key1": "Value1", "Key2": "Value2"},
-            ...     ),
-            ... )
-            >>>
-            >>> # Upload with S3-managed SSE
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     sse=SseS3(),
-            ... )
-            >>>
-            >>> # Upload with tags, retention, and legal hold
-            >>> date = datetime.utcnow().replace(
-            ...     hour=0, minute=0, second=0, microsecond=0,
-            ... ) + timedelta(days=30)
-            >>> tags = Tags(for_object=True)
-            >>> tags["User"] = "jsmith"
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     tags=tags,
-            ...     retention=Retention(GOVERNANCE, date),
-            ...     legal_hold=True,
-            ... )
-            >>>
-            >>> # Upload with progress bar
-            >>> result = client.put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"hello"),
-            ...     length=5,
-            ...     progress=Progress(),
-            ... )
+            # Upload data with tags, retention and legal-hold.
+            date = datetime.utcnow().replace(
+                hour=0, minute=0, second=0, microsecond=0,
+            ) + timedelta(days=30)
+            tags = Tags(for_object=True)
+            tags["User"] = "jsmith"
+            result = client.put_object(
+                "my-bucket", "my-object", io.BytesIO(b"hello"), 5,
+                tags=tags,
+                retention=Retention(GOVERNANCE, date),
+                legal_hold=True,
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
@@ -3143,27 +1900,21 @@ class Minio:
             raise ValueError("retention must be Retention type")
         if not callable(getattr(data, "read")):
             raise ValueError("input data must have callable read()")
+        if write_offset is not None:
+            if write_offset < 0:
+                raise ValueError("write offset should not be negative")
+            if length < 0:
+                raise ValueError("length must be provided for write offset")
+            part_size = length if length > MIN_PART_SIZE else MIN_PART_SIZE
         part_size, part_count = get_part_info(length, part_size)
         if progress:
             # Set progress bar length and object name before upload
             progress.set_meta(object_name=object_name, total_length=length)
 
-        add_content_sha256 = self._base_url.is_https
-        algorithms = [checksum or Algorithm.CRC32C]
-        add_sha256_checksum = algorithms[0] == Algorithm.SHA256
-        if add_content_sha256 and not add_sha256_checksum:
-            algorithms.append(Algorithm.SHA256)
-        hashers = new_hashers(algorithms)
-
-        headers = self._gen_write_headers(
-            headers=headers,
-            user_metadata=user_metadata,
-            sse=sse,
-            tags=tags,
-            retention=retention,
-            legal_hold=legal_hold,
-        )
+        headers = genheaders(metadata, sse, tags, retention, legal_hold)
         headers["Content-Type"] = content_type or "application/octet-stream"
+        if write_offset:
+            headers["x-amz-write-offset-bytes"] = str(write_offset)
 
         object_size = length
         uploaded_size = 0
@@ -3182,10 +1933,7 @@ class Minio:
                         part_size = object_size - uploaded_size
                         stop = True
                     part_data = read_part_data(
-                        stream=data,
-                        size=part_size,
-                        progress=progress,
-                        hashers=hashers,
+                        data, part_size, progress=progress,
                     )
                     if len(part_data) != part_size:
                         raise IOError(
@@ -3195,11 +1943,7 @@ class Minio:
                         )
                 else:
                     part_data = read_part_data(
-                        stream=data,
-                        size=part_size + 1,
-                        part_data=one_byte,
-                        progress=progress,
-                        hashers=hashers,
+                        data, part_size + 1, one_byte, progress=progress,
                     )
                     # If part_data_size is less or equal to part_size,
                     # then we have reached last part.
@@ -3212,130 +1956,127 @@ class Minio:
 
                 uploaded_size += len(part_data)
 
-                checksum_headers = make_headers(
-                    hashers, add_content_sha256, add_sha256_checksum,
-                )
-
                 if part_count == 1:
-                    headers.extend(checksum_headers)
                     return self._put_object(
-                        bucket_name=bucket_name,
-                        object_name=object_name,
-                        data=part_data,
-                        headers=headers,
-                        region=region,
-                        extra_headers=extra_headers,
-                        extra_query_params=extra_query_params,
+                        bucket_name, object_name, part_data, headers,
                     )
 
                 if not upload_id:
-                    headers.extend(make_headers(
-                        hashers, add_content_sha256, add_sha256_checksum,
-                        algorithm_only=True,
-                    ))
                     upload_id = self._create_multipart_upload(
-                        bucket_name=bucket_name,
-                        object_name=object_name,
-                        headers=headers,
-                        region=region,
-                        extra_headers=extra_headers,
-                        extra_query_params=extra_query_params,
+                        bucket_name, object_name, headers,
                     )
                     if num_parallel_uploads and num_parallel_uploads > 1:
                         pool = ThreadPool(num_parallel_uploads)
                         pool.start_parallel()
 
-                headers = HTTPHeaderDict(
-                    sse.headers() if isinstance(sse, SseCustomerKey) else None,
+                args = (
+                    bucket_name,
+                    object_name,
+                    part_data,
+                    (
+                        cast(DictType, sse.headers())
+                        if isinstance(sse, SseCustomerKey) else None
+                    ),
+                    upload_id,
+                    part_number,
                 )
-                headers.extend(checksum_headers)
                 if num_parallel_uploads > 1:
-                    kwargs = {
-                        "bucket_name": bucket_name,
-                        "object_name": object_name,
-                        "data": part_data,
-                        "headers": headers,
-                        "upload_id": upload_id,
-                        "part_number": part_number,
-                    }
                     cast(ThreadPool, pool).add_task(
-                        self._upload_part_task, kwargs,
+                        self._upload_part_task, args,
                     )
                 else:
-                    result = self._upload_part(
-                        bucket_name=bucket_name,
-                        object_name=object_name,
-                        data=part_data,
-                        headers=headers,
-                        upload_id=upload_id,
-                        part_number=part_number,
-                    )
-                    parts.append(Part(
-                        part_number=part_number,
-                        etag=result.etag,
-                        checksum_crc32=result.checksum_crc32,
-                        checksum_crc32c=result.checksum_crc32c,
-                        checksum_sha1=result.checksum_sha1,
-                        checksum_sha256=result.checksum_sha256,
-                    ))
+                    etag = self._upload_part(*args)
+                    parts.append(Part(part_number, etag))
 
             if pool:
-                result_queue = pool.result()
+                result = pool.result()
                 parts = [Part(0, "")] * part_count
-                while not result_queue.empty():
-                    part_number, upload_result = result_queue.get()
-                    parts[part_number - 1] = Part(
-                        part_number=part_number,
-                        etag=upload_result.etag,
-                        checksum_crc32=upload_result.checksum_crc32,
-                        checksum_crc32c=upload_result.checksum_crc32c,
-                        checksum_sha1=upload_result.checksum_sha1,
-                        checksum_sha256=upload_result.checksum_sha256,
-                    )
+                while not result.empty():
+                    part_number, etag = result.get()
+                    parts[part_number - 1] = Part(part_number, etag)
 
             upload_result = self._complete_multipart_upload(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                upload_id=cast(str, upload_id),
-                parts=parts,
-                extra_headers=HTTPHeaderDict(
-                    sse.headers() if isinstance(sse, SseCustomerKey) else None
-                ),
+                bucket_name, object_name, cast(str, upload_id), parts,
+                sse if isinstance(sse, SseCustomerKey) else None,
             )
-            return ObjectWriteResult.new(
-                headers=upload_result.headers,
-                bucket_name=cast(str, upload_result.bucket_name),
-                object_name=cast(str, upload_result.object_name),
-                version_id=upload_result.version_id,
-                etag=upload_result.etag,
+            return ObjectWriteResult(
+                cast(str, upload_result.bucket_name),
+                cast(str, upload_result.object_name),
+                upload_result.version_id,
+                upload_result.etag,
+                upload_result.http_headers,
                 location=upload_result.location,
             )
         except Exception as exc:
             if upload_id:
                 self._abort_multipart_upload(
-                    bucket_name=bucket_name,
-                    object_name=object_name,
-                    upload_id=upload_id,
+                    bucket_name, object_name, upload_id,
                 )
             raise exc
 
-    def _append_object(
+    def append_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
-            stream: BinaryIO,
-            length: Optional[int] = None,
-            chunk_size: int,
+            data: BinaryIO,
+            length: int,
+            chunk_size: Optional[int] = None,
             progress: Optional[ProgressType] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_headers: Optional[DictType] = None,
     ) -> ObjectWriteResult:
-        """Do append object."""
+        """
+        Appends from a stream to existing object in a bucket.
+
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param data: An object having callable read() returning bytes object.
+        :param length: Data size; -1 for unknown size.
+        :param chunk_size: Chunk size to optimize uploads.
+        :return: :class:`ObjectWriteResult` object.
+
+        Example::
+            # Append data.
+            result = client.append_object(
+                "my-bucket", "my-object", io.BytesIO(b"world"), 5,
+            )
+            print(f"appended {result.object_name} object; etag: {result.etag}")
+
+            # Append data in chunks.
+            data = urlopen(
+                "https://www.kernel.org/pub/linux/kernel/v6.x/"
+                "linux-6.13.12.tar.xz",
+            )
+            result = client.append_object(
+                "my-bucket", "my-object", data, 148611164, 5*1024*1024,
+            )
+            print(f"appended {result.object_name} object; etag: {result.etag}")
+
+            # Append unknown sized data.
+            data = urlopen(
+                "https://www.kernel.org/pub/linux/kernel/v6.x/"
+                "linux-6.14.3.tar.xz",
+            )
+            result = client.append_object(
+                "my-bucket", "my-object", data, 149426584, 5*1024*1024,
+            )
+            print(f"appended {result.object_name} object; etag: {result.etag}")
+        """
+        if length == 0:
+            raise ValueError("length should not be zero")
+        if chunk_size is not None:
+            if chunk_size < MIN_PART_SIZE:
+                raise ValueError("chunk size must be minimum of 5 MiB")
+            if chunk_size > MAX_PART_SIZE:
+                raise ValueError("chunk size must be less than 5 GiB")
+        else:
+            chunk_size = length if length > MIN_PART_SIZE else MIN_PART_SIZE
+
         chunk_count = -1
-        if length is not None:
-            chunk_count = max(int((length + chunk_size - 1) / chunk_size), 1)
+        if length > 0:
+            chunk_count = int(length / chunk_size)
+            if (chunk_count * chunk_size) < length:
+                chunk_count += 1
+            chunk_count = chunk_count or 1
 
         object_size = length
         uploaded_size = 0
@@ -3343,20 +2084,17 @@ class Minio:
         one_byte = b""
         stop = False
 
-        stat = self.stat_object(
-            bucket_name=bucket_name,
-            object_name=object_name,
-        )
+        stat = self.stat_object(bucket_name, object_name)
         write_offset = cast(int, stat.size)
 
         while not stop:
             chunk_number += 1
             if chunk_count > 0:
-                if chunk_number == chunk_count and object_size is not None:
+                if chunk_number == chunk_count:
                     chunk_size = object_size - uploaded_size
                     stop = True
                 chunk_data = read_part_data(
-                    stream=stream, size=chunk_size, progress=progress,
+                    data, chunk_size, progress=progress,
                 )
                 if len(chunk_data) != chunk_size:
                     raise IOError(
@@ -3366,10 +2104,7 @@ class Minio:
                     )
             else:
                 chunk_data = read_part_data(
-                    stream=stream,
-                    size=chunk_size + 1,
-                    part_data=one_byte,
-                    progress=progress,
+                    data, chunk_size + 1, one_byte, progress=progress,
                 )
                 # If chunk_data_size is less or equal to chunk_size,
                 # then we have reached last chunk.
@@ -3382,161 +2117,23 @@ class Minio:
 
             uploaded_size += len(chunk_data)
 
-            headers = HTTPHeaderDict(
-                {"x-amz-write-offset-bytes": str(write_offset)},
-            )
+            headers = extra_headers or {}
+            headers["x-amz-write-offset-bytes"] = str(write_offset)
             upload_result = self._put_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                data=chunk_data,
-                headers=headers,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                bucket_name, object_name, chunk_data, headers=headers,
             )
             write_offset += len(chunk_data)
-        return upload_result
-
-    def append_object(
-            self,
-            *,
-            bucket_name: str,
-            object_name: str,
-            filename: Optional[str | os.PathLike] = None,
-            stream: Optional[BinaryIO] = None,
-            data: Optional[bytes] = None,
-            length: Optional[int] = None,
-            chunk_size: Optional[int] = None,
-            progress: Optional[ProgressType] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> ObjectWriteResult:
-        """
-        Append data to an existing object in a bucket.
-
-        Only one of ``filename``, ``stream`` or ``data`` must be provided.
-        If ``data`` is supplied, ``length`` must also be provided.
-
-        Args:
-            bucket_name (str):
-                Name of the bucket.
-
-            object_name (str):
-                Object name in the bucket.
-
-            filename (Optional[str | os.PathLike], default=None):
-                Path to a file whose contents will be appended.
-
-            stream (Optional[BinaryIO], default=None):
-                An object with a callable ``read()`` method returning a
-                bytes object.
-
-            data (Optional[bytes], default=None):
-                Raw data in a bytes object.
-
-            length (Optional[int], default=None):
-                Data length of ``data`` or ``stream``.
-
-            chunk_size (Optional[int], default=None):
-                Chunk size to split the data for appending.
-
-            progress (Optional[ProgressType], default=None):
-                Progress object to track upload progress.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                The result of the append operation.
-
-        Example:
-            >>> # Append simple data
-            >>> result = client.append_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     data=io.BytesIO(b"world"),
-            ...     length=5,
-            ... )
-            >>> print(f"appended {result.object_name} object; "
-            ...      f"etag: {result.etag}")
-            >>>
-            >>> # Append data in chunks
-            >>> with urlopen("https://www.kernel.org/pub/linux/kernel/v6.x/"
-            ...              "linux-6.13.12.tar.xz") as stream:
-            ...     result = client.append_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         stream=stream,
-            ...         length=148611164,
-            ...         chunk_size=5*1024*1024,
-            ...     )
-            >>> print(f"appended {result.object_name} object; "
-            ...      f"etag: {result.etag}")
-            >>>
-            >>> # Append unknown-sized data
-            >>> with urlopen("https://www.kernel.org/pub/linux/kernel/v6.x/"
-            ...              "linux-6.14.3.tar.xz") as stream:
-            ...     result = client.append_object(
-            ...         bucket_name="my-bucket",
-            ...         object_name="my-object",
-            ...         stream=stream,
-            ...         chunk_size=5*1024*1024,
-            ...     )
-            >>> print(f"appended {result.object_name} object; "
-            ...      f"etag: {result.etag}")
-        """
-        if sum(x is not None for x in (filename, stream, data)) != 1:
-            raise ValueError(
-                "either filename, stream or data must be provided")
-        if (length is not None and length <= 0):
-            raise ValueError("valid length must be provided")
-        if data is not None and length is None:
-            raise ValueError("valid length must be provided for data")
-        if chunk_size is not None:
-            if chunk_size < MIN_PART_SIZE:
-                raise ValueError("chunk size must be minimum of 5 MiB")
-            if chunk_size > MAX_PART_SIZE:
-                raise ValueError("chunk size must be less than 5 GiB")
-        else:
-            chunk_size = max(MIN_PART_SIZE, length or 0)
-
-        if filename:
-            file_size = os.stat(filename).st_size
-            with open(filename, "rb") as file:
-                return self._append_object(
-                    bucket_name=bucket_name,
-                    object_name=object_name,
-                    stream=file,
-                    length=file_size,
-                    chunk_size=cast(int, chunk_size),
-                    progress=progress,
-                    region=region,
-                    extra_headers=extra_headers,
-                    extra_query_params=extra_query_params,
-                )
-        return self._append_object(
-            bucket_name=bucket_name,
-            object_name=object_name,
-            stream=stream if stream else io.BytesIO(cast(bytes, data)),
-            length=length,
-            chunk_size=cast(int, chunk_size),
-            progress=progress,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+        return ObjectWriteResult(
+            cast(str, upload_result.bucket_name),
+            cast(str, upload_result.object_name),
+            upload_result.version_id,
+            upload_result.etag,
+            upload_result.http_headers,
+            location=upload_result.location,
         )
 
     def list_objects(
             self,
-            *,
             bucket_name: str,
             prefix: Optional[str] = None,
             recursive: bool = False,
@@ -3546,95 +2143,61 @@ class Minio:
             use_api_v1: bool = False,
             use_url_encoding_type: bool = True,
             fetch_owner: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> Iterator[Object]:
+            extra_headers: Optional[DictType] = None,
+            extra_query_params: Optional[DictType] = None,
+    ):
         """
-        List object information of a bucket.
+        Lists object information of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param prefix: Object name starts with prefix.
+        :param recursive: List recursively than directory structure emulation.
+        :param start_after: List objects after this key name.
+        :param include_user_meta: MinIO specific flag to control to include
+                                 user metadata.
+        :param include_version: Flag to control whether include object
+                                versions.
+        :param use_api_v1: Flag to control to use ListObjectV1 S3 API or not.
+        :param use_url_encoding_type: Flag to control whether URL encoding type
+                                      to be used or not.
+        :param extra_headers: Extra HTTP headers for advanced usage.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :return: Iterator of :class:`Object <Object>`.
 
-            prefix (Optional[str], default=None):
-                Return objects whose names start with this prefix.
+        Example::
+            # List objects information.
+            objects = client.list_objects("my-bucket")
+            for obj in objects:
+                print(obj)
 
-            recursive (bool, default=False):
-                List objects recursively instead of emulating directory
-                structure.
+            # List objects information whose names starts with "my/prefix/".
+            objects = client.list_objects("my-bucket", prefix="my/prefix/")
+            for obj in objects:
+                print(obj)
 
-            start_after (Optional[str], default=None):
-                List objects after this key name.
+            # List objects information recursively.
+            objects = client.list_objects("my-bucket", recursive=True)
+            for obj in objects:
+                print(obj)
 
-            include_user_meta (bool, default=False):
-                MinIO-specific flag to include user metadata.
+            # List objects information recursively whose names starts with
+            # "my/prefix/".
+            objects = client.list_objects(
+                "my-bucket", prefix="my/prefix/", recursive=True,
+            )
+            for obj in objects:
+                print(obj)
 
-            include_version (bool, default=False):
-                Flag to include object versions in the listing.
-
-            use_api_v1 (bool, default=False):
-                Flag to use ListObjectsV1 S3 API instead of V2.
-
-            use_url_encoding_type (bool, default=True):
-                Flag to enable URL encoding for object names.
-
-            fetch_owner (bool, default=False):
-                Flag to fetch owner information of objects.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Iterator[Object]:
-                An iterator of :class:`minio.datatypes.Object`.
-
-        Example:
-            >>> # List all objects in a bucket
-            >>> objects = client.list_objects(bucket_name="my-bucket")
-            >>> for obj in objects:
-            ...     print(obj)
-            >>>
-            >>> # List objects with a prefix
-            >>> objects = client.list_objects(
-            ...     bucket_name="my-bucket", prefix="my/prefix/",
-            ... )
-            >>> for obj in objects:
-            ...     print(obj)
-            >>>
-            >>> # List objects recursively
-            >>> objects = client.list_objects(
-            ...     bucket_name="my-bucket", recursive=True,
-            ... )
-            >>> for obj in objects:
-            ...     print(obj)
-            >>>
-            >>> # Recursively list objects with a prefix
-            >>> objects = client.list_objects(
-            ...     bucket_name="my-bucket",
-            ...     prefix="my/prefix/",
-            ...     recursive=True,
-            ... )
-            >>> for obj in objects:
-            ...     print(obj)
-            >>>
-            >>> # Recursively list objects after a specific key
-            >>> objects = client.list_objects(
-            ...     bucket_name="my-bucket",
-            ...     recursive=True,
-            ...     start_after="my/prefix/world/1",
-            ... )
-            >>> for obj in objects:
-            ...     print(obj)
+            # List objects information recursively after object name
+            # "my/prefix/world/1".
+            objects = client.list_objects(
+                "my-bucket", recursive=True, start_after="my/prefix/world/1",
+            )
+            for obj in objects:
+                print(obj)
         """
         return self._list_objects(
-            bucket_name=bucket_name,
+            bucket_name,
             delimiter=None if recursive else "/",
             include_user_meta=include_user_meta,
             prefix=prefix,
@@ -3643,135 +2206,63 @@ class Minio:
             include_version=include_version,
             encoding_type="url" if use_url_encoding_type else None,
             fetch_owner=fetch_owner,
-            region=region,
             extra_headers=extra_headers,
             extra_query_params=extra_query_params,
         )
 
     def stat_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
-            version_id: Optional[str] = None,
             ssec: Optional[SseCustomerKey] = None,
-            offset: int = 0,
-            length: Optional[int] = None,
-            match_etag: Optional[str] = None,
-            not_match_etag: Optional[str] = None,
-            modified_since: Optional[datetime] = None,
-            unmodified_since: Optional[datetime] = None,
-            fetch_checksum: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            version_id: Optional[str] = None,
+            extra_headers: Optional[DictType] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> Object:
         """
         Get object information and metadata of an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param ssec: Server-side encryption customer key.
+        :param version_id: Version ID of the object.
+        :param extra_headers: Extra HTTP headers for advanced usage.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :return: :class:`Object <Object>`.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            # Get object information.
+            result = client.stat_object("my-bucket", "my-object")
 
-            version_id (Optional[str], default=None):
-                Version ID of the object.
+            # Get object information of version-ID.
+            result = client.stat_object(
+                "my-bucket", "my-object",
+                version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
+            )
 
-            ssec (Optional[SseCustomerKey], default=None):
-                Server-side encryption customer key.
-
-            offset (int, default=0):
-                Start byte position of object data.
-
-            length (Optional[int], default=None):
-                Number of bytes of object data from offset.
-
-            match_etag (Optional[str], default=None):
-                Fetch only if the ETag of the object matches.
-
-            not_match_etag (Optional[str], default=None):
-                Fetch only if the ETag of the object does not match.
-
-            modified_since (Optional[datetime], default=None):
-                Fetch only if the object was modified since this date.
-
-            unmodified_since (Optional[datetime], default=None):
-                Fetch only if the object was unmodified since this date.
-
-            fetch_checksum (bool, default=False):
-                Flag to fetch the checksum of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Object:
-                A :class:`minio.datatypes.Object` object containing metadata
-                and information about the object.
-
-        Example:
-            >>> # Get object information
-            >>> result = client.stat_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
-            >>> print(f"last-modified: {result.last_modified}, "
-            ...       f"size: {result.size}")
-            >>>
-            >>> # Get specific version of an object
-            >>> result = client.stat_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
-            ... )
-            >>> print(f"last-modified: {result.last_modified}, "
-            ...       f"size: {result.size}")
-            >>>
-            >>> # Get SSE-C encrypted object information
-            >>> result = client.stat_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     ssec=SseCustomerKey(
-            ...         b"32byteslongsecretkeymustprovided"
-            ...     ),
-            ... )
-            >>> print(f"last-modified: {result.last_modified}, "
-            ...       f"size: {result.size}")
+            # Get SSE-C encrypted object information.
+            result = client.stat_object(
+                "my-bucket", "my-object",
+                ssec=SseCustomerKey(b"32byteslongsecretkeymustprovided"),
+            )
         """
+
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         check_ssec(ssec)
 
-        headers = self._gen_read_headers(
-            ssec=ssec,
-            offset=offset,
-            length=length,
-            match_etag=match_etag,
-            not_match_etag=not_match_etag,
-            modified_since=modified_since,
-            unmodified_since=unmodified_since,
-            fetch_checksum=fetch_checksum,
-        )
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        headers = cast(DictType, ssec.headers() if ssec else {})
+        if extra_headers:
+            headers.update(extra_headers)
+
+        query_params = extra_query_params or {}
+        query_params.update({"versionId": version_id} if version_id else {})
         response = self._execute(
-            method="HEAD",
-            bucket_name=bucket_name,
-            object_name=object_name,
+            "HEAD",
+            bucket_name,
+            object_name,
             headers=headers,
             query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
 
         value = response.headers.get("last-modified")
@@ -3793,75 +2284,42 @@ class Minio:
 
     def remove_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
-            version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            version_id: Optional[str] = None
     ):
         """
-        Remove an object from a bucket.
+        Remove an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
 
-            object_name (str):
-                Object name in the bucket.
+        Example::
+            # Remove object.
+            client.remove_object("my-bucket", "my-object")
 
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> # Remove object
-            >>> client.remove_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
-            >>>
-            >>> # Remove a specific version of an object
-            >>> client.remove_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
-            ... )
+            # Remove version of an object.
+            client.remove_object(
+                "my-bucket", "my-object",
+                version_id="dfbd25b3-abec-4184-a4e8-5a35a5c1174d",
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
         self._execute(
-            method="DELETE",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "DELETE",
+            bucket_name,
+            object_name,
+            query_params={"versionId": version_id} if version_id else None,
         )
 
     def _delete_objects(
             self,
-            *,
             bucket_name: str,
             delete_object_list: list[DeleteObject],
             quiet: bool = False,
             bypass_governance_mode: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> DeleteResult:
         """
         Delete multiple objects.
@@ -3874,20 +2332,17 @@ class Minio:
         :return: :class:`DeleteResult <DeleteResult>` object.
         """
         body = marshal(DeleteRequest(delete_object_list, quiet=quiet))
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
+        headers: DictType = {
+            "Content-MD5": cast(str, md5sum_hash(body)),
+        }
         if bypass_governance_mode:
             headers["x-amz-bypass-governance-retention"] = "true"
         response = self._execute(
-            method="POST",
-            bucket_name=bucket_name,
+            "POST",
+            bucket_name,
             body=body,
             headers=headers,
-            query_params=HTTPQueryDict({"delete": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params={"delete": ""},
         )
 
         element = ET.fromstring(response.data.decode())
@@ -3899,73 +2354,49 @@ class Minio:
 
     def remove_objects(
             self,
-            *,
             bucket_name: str,
             delete_object_list: Iterable[DeleteObject],
             bypass_governance_mode: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> Iterator[DeleteError]:
         """
-        Remove multiple objects from a bucket.
+        Remove multiple objects.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param delete_object_list: An iterable containing
+            :class:`DeleteObject <DeleteObject>` object.
+        :param bypass_governance_mode: Bypass Governance retention mode.
+        :return: An iterator containing :class:`DeleteError <DeleteError>`
+            object.
 
-            delete_object_list (Iterable[DeleteObject]):
-                Iterable of :class:`minio.deleteobjects.DeleteObject`
-                instances to be deleted.
+        Example::
+            # Remove list of objects.
+            errors = client.remove_objects(
+                "my-bucket",
+                [
+                    DeleteObject("my-object1"),
+                    DeleteObject("my-object2"),
+                    DeleteObject(
+                        "my-object3", "13f88b18-8dcd-4c83-88f2-8631fdb6250c",
+                    ),
+                ],
+            )
+            for error in errors:
+                print("error occurred when deleting object", error)
 
-            bypass_governance_mode (bool, default=False):
-                Flag to bypass Governance retention mode.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Iterator[DeleteError]:
-                An iterator of :class:`minio.deleteobjects.DeleteError`
-                objects for any failures.
-
-        Example:
-            >>> # Remove a list of objects
-            >>> errors = client.remove_objects(
-            ...     bucket_name="my-bucket",
-            ...     delete_object_list=[
-            ...         DeleteObject(name="my-object1"),
-            ...         DeleteObject(name="my-object2"),
-            ...         DeleteObject(
-            ...             name="my-object3",
-            ...             version_id="13f88b18-8dcd-4c83-88f2-8631fdb6250c",
-            ...         ),
-            ...     ],
-            ... )
-            >>> for error in errors:
-            ...     print("error occurred when deleting object", error)
-            >>>
-            >>> # Remove objects under a prefix recursively
-            >>> delete_object_list = map(
-            ...     lambda x: DeleteObject(x.object_name),
-            ...     client.list_objects(
-            ...         bucket_name="my-bucket",
-            ...         prefix="my/prefix/",
-            ...         recursive=True,
-            ...     ),
-            ... )
-            >>> errors = client.remove_objects(
-            ...     bucket_name="my-bucket",
-            ...     delete_object_list=delete_object_list,
-            ... )
-            >>> for error in errors:
-            ...     print("error occurred when deleting object", error)
+            # Remove a prefix recursively.
+            delete_object_list = list(
+                map(
+                    lambda x: DeleteObject(x.object_name),
+                    client.list_objects(
+                        "my-bucket",
+                        "my/prefix/",
+                        recursive=True,
+                    ),
+                )
+            )
+            errors = client.remove_objects("my-bucket", delete_object_list)
+            for error in errors:
+                print("error occurred when deleting object", error)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
 
@@ -3984,13 +2415,10 @@ class Minio:
                 break
 
             result = self._delete_objects(
-                bucket_name=bucket_name,
-                delete_object_list=objects,
+                bucket_name,
+                objects,
                 quiet=True,
                 bypass_governance_mode=bypass_governance_mode,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
 
             for error in result.error_list:
@@ -4002,93 +2430,53 @@ class Minio:
 
     def get_presigned_url(
             self,
-            *,
             method: str,
             bucket_name: str,
             object_name: str,
             expires: timedelta = timedelta(days=7),
+            response_headers: Optional[DictType] = None,
             request_date: Optional[datetime] = None,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> str:
         """
-        Get a presigned URL for an object.
+        Get presigned URL of an object for HTTP method, expiry time and custom
+        request parameters.
 
-        The presigned URL can be used to perform the specified HTTP method
-        on an object, with a custom expiry time and optional query
-        parameters.
+        :param method: HTTP method.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param expires: Expiry in seconds; defaults to 7 days.
+        :param response_headers: Optional response_headers argument to
+                                 specify response fields like date, size,
+                                 type of file, data about server, etc.
+        :param request_date: Optional request_date argument to
+                             specify a different request date. Default is
+                             current date.
+        :param version_id: Version ID of the object.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :return: URL string.
 
-        Args:
-            method (str):
-                HTTP method to allow (e.g., "GET", "PUT", "DELETE").
-
-            bucket_name (str):
-                Name of the bucket.
-
-            object_name (str):
-                Object name in the bucket.
-
-            expires (timedelta, default=timedelta(days=7)):
-                Expiry duration for the presigned URL.
-
-            request_date (Optional[datetime], default=None):
-                Request time to base the URL on, instead of the current
-                time.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            str:
-                A presigned URL string.
-
-        Example:
-            >>> # Generate presigned URL to delete object
-            >>> url = client.get_presigned_url(
-            ...     method="DELETE",
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     expires=timedelta(days=1),
-            ... )
-            >>> print(url)
-            >>>
-            >>> # Generate presigned URL to upload object with response type
-            >>> url = client.get_presigned_url(
-            ...     method="PUT",
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     expires=timedelta(days=1),
-            ...     extra_query_params=HTTPQueryDict(
-            ...         {"response-content-type": "application/json"}
-            ...     ),
-            ... )
-            >>> print(url)
-            >>>
-            >>> # Generate presigned URL to download object
-            >>> url = client.get_presigned_url(
-            ...     method="GET",
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     expires=timedelta(hours=2),
-            ... )
-            >>> print(url)
+        Example::
+            # Get presigned URL string to delete 'my-object' in
+            # 'my-bucket' with one day expiry.
+            url = client.get_presigned_url(
+                "DELETE",
+                "my-bucket",
+                "my-object",
+                expires=timedelta(days=1),
+            )
+            print(url)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         if expires.total_seconds() < 1 or expires.total_seconds() > 604800:
             raise ValueError("expires must be between 1 second to 7 days")
 
-        region = self._get_region(bucket_name=bucket_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        region = self._get_region(bucket_name)
+        query_params = extra_query_params or {}
+        query_params.update({"versionId": version_id} if version_id else {})
+        query_params.update(response_headers or {})
         creds = self._provider.retrieve() if self._provider else None
         if creds and creds.session_token:
             query_params["X-Amz-Security-Token"] = creds.session_token
@@ -4098,7 +2486,6 @@ class Minio:
             bucket_name=bucket_name,
             object_name=object_name,
             query_params=query_params,
-            extra_query_params=extra_query_params,
         )
 
         if creds:
@@ -4114,157 +2501,104 @@ class Minio:
 
     def presigned_get_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             expires: timedelta = timedelta(days=7),
+            response_headers: Optional[DictType] = None,
             request_date: Optional[datetime] = None,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> str:
         """
-        Get a presigned URL to download an object.
+        Get presigned URL of an object to download its data with expiry time
+        and custom request parameters.
 
-        The presigned URL allows downloading an object's data with a custom
-        expiry time and optional query parameters.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param expires: Expiry in seconds; defaults to 7 days.
+        :param response_headers: Optional response_headers argument to
+                                  specify response fields like date, size,
+                                  type of file, data about server, etc.
+        :param request_date: Optional request_date argument to
+                              specify a different request date. Default is
+                              current date.
+        :param version_id: Version ID of the object.
+        :param extra_query_params: Extra query parameters for advanced usage.
+        :return: URL string.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        Example::
+            # Get presigned URL string to download 'my-object' in
+            # 'my-bucket' with default expiry (i.e. 7 days).
+            url = client.presigned_get_object("my-bucket", "my-object")
+            print(url)
 
-            object_name (str):
-                Object name in the bucket.
-
-            expires (timedelta, default=timedelta(days=7)):
-                Expiry duration for the presigned URL.
-
-            request_date (Optional[datetime], default=None):
-                Request time to base the URL on, instead of the current
-                time.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            str:
-                A presigned URL string.
-
-        Example:
-            >>> # Get presigned URL to download with default expiry (7 days)
-            >>> url = client.presigned_get_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
-            >>> print(url)
-            >>>
-            >>> # Get presigned URL to download with 2-hour expiry
-            >>> url = client.presigned_get_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     expires=timedelta(hours=2),
-            ... )
-            >>> print(url)
+            # Get presigned URL string to download 'my-object' in
+            # 'my-bucket' with two hours expiry.
+            url = client.presigned_get_object(
+                "my-bucket", "my-object", expires=timedelta(hours=2),
+            )
+            print(url)
         """
         return self.get_presigned_url(
-            method="GET",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            expires=expires,
+            "GET",
+            bucket_name,
+            object_name,
+            expires,
+            response_headers=response_headers,
             request_date=request_date,
             version_id=version_id,
-            region=region,
             extra_query_params=extra_query_params,
         )
 
     def presigned_put_object(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             expires: timedelta = timedelta(days=7),
-            region: Optional[str] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> str:
         """
-        Get a presigned URL to upload an object.
+        Get presigned URL of an object to upload data with expiry time and
+        custom request parameters.
 
-        The presigned URL allows uploading data to an object with a custom
-        expiry time and optional query parameters.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param expires: Expiry in seconds; defaults to 7 days.
+        :return: URL string.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        Example::
+            # Get presigned URL string to upload data to 'my-object' in
+            # 'my-bucket' with default expiry (i.e. 7 days).
+            url = client.presigned_put_object("my-bucket", "my-object")
+            print(url)
 
-            object_name (str):
-                Object name in the bucket.
-
-            expires (timedelta, default=timedelta(days=7)):
-                Expiry duration for the presigned URL.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            str:
-                A presigned URL string.
-
-        Example:
-            >>> # Get presigned URL to upload with default expiry (7 days)
-            >>> url = client.presigned_put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
-            >>> print(url)
-            >>>
-            >>> # Get presigned URL to upload with 2-hour expiry
-            >>> url = client.presigned_put_object(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     expires=timedelta(hours=2),
-            ... )
-            >>> print(url)
+            # Get presigned URL string to upload data to 'my-object' in
+            # 'my-bucket' with two hours expiry.
+            url = client.presigned_put_object(
+                "my-bucket", "my-object", expires=timedelta(hours=2),
+            )
+            print(url)
         """
         return self.get_presigned_url(
-            method="PUT",
-            bucket_name=bucket_name,
-            object_name=object_name,
-            expires=expires,
-            region=region,
-            extra_query_params=extra_query_params,
+            "PUT", bucket_name, object_name, expires,
         )
 
     def presigned_post_policy(self, policy: PostPolicy) -> dict[str, str]:
         """
-        Get form-data for a PostPolicy to upload an object using POST.
+        Get form-data of PostPolicy of an object to upload its data using POST
+        method.
 
-        Args:
-            policy (PostPolicy):
-                Post policy that defines conditions for the upload.
+        :param policy: :class:`PostPolicy <PostPolicy>`.
+        :return: :dict: contains form-data.
 
-        Returns:
-            dict[str, str]:
-                A dictionary containing the form-data required for the POST
-                request.
-
-        Example:
-            >>> policy = PostPolicy(
-            ...     "my-bucket", datetime.utcnow() + timedelta(days=10),
-            ... )
-            >>> policy.add_starts_with_condition("key", "my/object/prefix/")
-            >>> policy.add_content_length_range_condition(
-            ...     1*1024*1024, 10*1024*1024,
-            ... )
-            >>> form_data = client.presigned_post_policy(policy)
+        Example::
+            policy = PostPolicy(
+                "my-bucket", datetime.utcnow() + timedelta(days=10),
+            )
+            policy.add_starts_with_condition("key", "my/object/prefix/")
+            policy.add_content_length_range_condition(
+                1*1024*1024, 10*1024*1024,
+            )
+            form_data = client.presigned_post_policy(policy)
         """
         if not isinstance(policy, PostPolicy):
             raise ValueError("policy must be PostPolicy type")
@@ -4276,85 +2610,38 @@ class Minio:
             policy.bucket_name, s3_check=self._base_url.is_aws_host)
         return policy.form_data(
             self._provider.retrieve(),
-            self._get_region(bucket_name=policy.bucket_name),
+            self._get_region(policy.bucket_name),
         )
 
-    def delete_bucket_replication(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_bucket_replication(self, bucket_name: str):
         """
-        Delete the replication configuration of a bucket.
+        Delete replication configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_replication(bucket_name="my-bucket")
+        Example::
+            client.delete_bucket_replication("my-bucket")
         """
-        self._execute_delete_bucket(
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"replication": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
+        check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
+        self._execute("DELETE", bucket_name, query_params={"replication": ""})
 
     def get_bucket_replication(
             self,
-            *,
             bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> Optional[ReplicationConfig]:
         """
-        Get the replication configuration of a bucket.
+        Get bucket replication configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`ReplicationConfig <ReplicationConfig>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[ReplicationConfig]:
-                A :class:`minio.replicationconfig.ReplicationConfig` object
-                if replication is configured, otherwise ``None``.
-
-        Example:
-            >>> config = client.get_bucket_replication(bucket_name="my-bucket")
+        Example::
+            config = client.get_bucket_replication("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=HTTPQueryDict({"replication": ""}),
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                "GET", bucket_name, query_params={"replication": ""},
             )
             return unmarshal(ReplicationConfig, response.data.decode())
         except S3Error as exc:
@@ -4364,154 +2651,81 @@ class Minio:
 
     def set_bucket_replication(
             self,
-            *,
             bucket_name: str,
             config: ReplicationConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the replication configuration of a bucket.
+        Set bucket replication configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: :class:`ReplicationConfig <ReplicationConfig>` object.
 
-            config (ReplicationConfig):
-                Replication configuration to apply to the bucket.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> config = ReplicationConfig(
-            ...     role="REPLACE-WITH-ACTUAL-ROLE",
-            ...     rules=[
-            ...         Rule(
-            ...             destination=Destination(
-            ...                 "REPLACE-WITH-ACTUAL-DESTINATION-BUCKET-ARN",
-            ...             ),
-            ...             status=ENABLED,
-            ...             delete_marker_replication=DeleteMarkerReplication(
-            ...                 DISABLED,
-            ...             ),
-            ...             rule_filter=Filter(
-            ...                 AndOperator(
-            ...                     "TaxDocs",
-            ...                     {"key1": "value1", "key2": "value2"},
-            ...                 ),
-            ...             ),
-            ...             rule_id="rule1",
-            ...             priority=1,
-            ...         ),
-            ...     ],
-            ... )
-            >>> client.set_bucket_replication(
-            ...     bucket_name="my-bucket",
-            ...     config=config,
-            ... )
+        Example::
+            config = ReplicationConfig(
+                "REPLACE-WITH-ACTUAL-ROLE",
+                [
+                    Rule(
+                        Destination(
+                            "REPLACE-WITH-ACTUAL-DESTINATION-BUCKET-ARN",
+                        ),
+                        ENABLED,
+                        delete_marker_replication=DeleteMarkerReplication(
+                            DISABLED,
+                        ),
+                        rule_filter=Filter(
+                            AndOperator(
+                                "TaxDocs",
+                                {"key1": "value1", "key2": "value2"},
+                            ),
+                        ),
+                        rule_id="rule1",
+                        priority=1,
+                    ),
+                ],
+            )
+            client.set_bucket_replication("my-bucket", config)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, ReplicationConfig):
             raise ValueError("config must be ReplicationConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"replication": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"replication": ""},
         )
 
-    def delete_bucket_lifecycle(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_bucket_lifecycle(self, bucket_name: str):
         """
-        Delete the lifecycle configuration of a bucket.
+        Delete notification configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_lifecycle(bucket_name="my-bucket")
+        Example::
+            client.delete_bucket_lifecycle("my-bucket")
         """
-        self._execute_delete_bucket(
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"lifecycle": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
+        check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
+        self._execute("DELETE", bucket_name, query_params={"lifecycle": ""})
 
     def get_bucket_lifecycle(
             self,
-            *,
             bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> Optional[LifecycleConfig]:
         """
-        Get the lifecycle configuration of a bucket.
+        Get bucket lifecycle configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`LifecycleConfig <LifecycleConfig>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[LifecycleConfig]:
-                A :class:`minio.lifecycleconfig.LifecycleConfig` object if
-                configured, otherwise ``None``.
-
-        Example:
-            >>> config = client.get_bucket_lifecycle(bucket_name="my-bucket")
+        Example::
+            config = client.get_bucket_lifecycle("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=HTTPQueryDict({"lifecycle": ""}),
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                "GET", bucket_name, query_params={"lifecycle": ""},
             )
             return unmarshal(LifecycleConfig, response.data.decode())
         except S3Error as exc:
@@ -4521,151 +2735,74 @@ class Minio:
 
     def set_bucket_lifecycle(
             self,
-            *,
             bucket_name: str,
             config: LifecycleConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the lifecycle configuration of a bucket.
+        Set bucket lifecycle configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: :class:`LifecycleConfig <LifecycleConfig>` object.
 
-            config (LifecycleConfig):
-                Lifecycle configuration to apply.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> config = LifecycleConfig(
-            ...     [
-            ...         Rule(
-            ...             status=ENABLED,
-            ...             rule_filter=Filter(prefix="documents/"),
-            ...             rule_id="rule1",
-            ...             transition=Transition(
-            ...                 days=30,
-            ...                 storage_class="GLACIER",
-            ...             ),
-            ...         ),
-            ...         Rule(
-            ...             status=ENABLED,
-            ...             rule_filter=Filter(prefix="logs/"),
-            ...             rule_id="rule2",
-            ...             expiration=Expiration(days=365),
-            ...         ),
-            ...     ],
-            ... )
-            >>> client.set_bucket_lifecycle(
-            ...     bucket_name="my-bucket",
-            ...     config=config,
-            ... )
+        Example::
+            config = LifecycleConfig(
+                [
+                    Rule(
+                        ENABLED,
+                        rule_filter=Filter(prefix="documents/"),
+                        rule_id="rule1",
+                        transition=Transition(
+                            days=30, storage_class="GLACIER",
+                        ),
+                    ),
+                    Rule(
+                        ENABLED,
+                        rule_filter=Filter(prefix="logs/"),
+                        rule_id="rule2",
+                        expiration=Expiration(days=365),
+                    ),
+                ],
+            )
+            client.set_bucket_lifecycle("my-bucket", config)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, LifecycleConfig):
             raise ValueError("config must be LifecycleConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"lifecycle": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"lifecycle": ""},
         )
 
-    def delete_bucket_tags(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_bucket_tags(self, bucket_name: str):
         """
-        Delete the tags configuration of a bucket.
+        Delete tags configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_bucket_tags(bucket_name="my-bucket")
+        Example::
+            client.delete_bucket_tags("my-bucket")
         """
-        self._execute_delete_bucket(
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"tagging": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
-        )
+        check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
+        self._execute("DELETE", bucket_name, query_params={"tagging": ""})
 
-    def get_bucket_tags(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> Optional[Tags]:
+    def get_bucket_tags(self, bucket_name: str) -> Optional[Tags]:
         """
-        Get the tags configuration of a bucket.
+        Get tags configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`Tags <Tags>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[Tags]:
-                A :class:`minio.commonconfig.Tags` object if tags are
-                configured, otherwise ``None``.
-
-        Example:
-            >>> tags = client.get_bucket_tags(bucket_name="my-bucket")
+        Example::
+            tags = client.get_bucket_tags("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=HTTPQueryDict({"tagging": ""}),
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                "GET", bucket_name, query_params={"tagging": ""},
             )
             tagging = unmarshal(Tagging, response.data.decode())
             return tagging.tags
@@ -4674,171 +2811,85 @@ class Minio:
                 raise
         return None
 
-    def set_bucket_tags(
-            self,
-            *,
-            bucket_name: str,
-            tags: Tags,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def set_bucket_tags(self, bucket_name: str, tags: Tags):
         """
-        Set the tags configuration for a bucket.
+        Set tags configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param tags: :class:`Tags <Tags>` object.
 
-            tags (Tags):
-                Tags configuration as a
-                :class:`minio.commonconfig.Tags` object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> tags = Tags.new_bucket_tags()
-            >>> tags["Project"] = "Project One"
-            >>> tags["User"] = "jsmith"
-            >>> client.set_bucket_tags(bucket_name="my-bucket", tags=tags)
+        Example::
+            tags = Tags.new_bucket_tags()
+            tags["Project"] = "Project One"
+            tags["User"] = "jsmith"
+            client.set_bucket_tags("my-bucket", tags)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(tags, Tags):
             raise ValueError("tags must be Tags type")
         body = marshal(Tagging(tags))
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"tagging": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"tagging": ""},
         )
 
     def delete_object_tags(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Delete the tags configuration of an object.
+        Delete tags configuration of an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the Object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_object_tags(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
+        Example::
+            client.delete_object_tags("my-bucket", "my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["tagging"] = ""
         self._execute(
-            method="DELETE",
-            bucket_name=bucket_name,
+            "DELETE",
+            bucket_name,
             object_name=object_name,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params=cast(DictType, query_params),
         )
 
     def get_object_tags(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> Optional[Tags]:
         """
-        Get the tags configuration of an object.
+        Get tags configuration of a object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the Object.
+        :return: :class:`Tags <Tags>` object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[Tags]:
-                A :class:`minio.commonconfig.Tags` object if tags are
-                configured, otherwise ``None``.
-
-        Example:
-            >>> tags = client.get_object_tags(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
+        Example::
+            tags = client.get_object_tags("my-bucket", "my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["tagging"] = ""
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
+                "GET",
+                bucket_name,
                 object_name=object_name,
-                query_params=query_params,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                query_params=cast(DictType, query_params),
             )
             tagging = unmarshal(Tagging, response.data.decode())
             return tagging.tags
@@ -4849,255 +2900,130 @@ class Minio:
 
     def set_object_tags(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             tags: Tags,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the tags configuration for an object.
+        Set tags configuration to an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the Object.
+        :param tags: :class:`Tags <Tags>` object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            tags (Tags):
-                Tags configuration as a
-                :class:`minio.commonconfig.Tags` object.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> tags = Tags.new_object_tags()
-            >>> tags["Project"] = "Project One"
-            >>> tags["User"] = "jsmith"
-            >>> client.set_object_tags(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     tags=tags,
-            ... )
+        Example::
+            tags = Tags.new_object_tags()
+            tags["Project"] = "Project One"
+            tags["User"] = "jsmith"
+            client.set_object_tags("my-bucket", "my-object", tags)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         if not isinstance(tags, Tags):
             raise ValueError("tags must be Tags type")
         body = marshal(Tagging(tags))
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["tagging"] = ""
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             object_name=object_name,
             body=body,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params=cast(DictType, query_params),
         )
 
     def enable_object_legal_hold(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
         Enable legal hold on an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.enable_object_legal_hold(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
+        Example::
+            client.enable_object_legal_hold("my-bucket", "my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         body = marshal(LegalHold(True))
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["legal-hold"] = ""
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             object_name=object_name,
             body=body,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params=cast(DictType, query_params),
         )
 
     def disable_object_legal_hold(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
         Disable legal hold on an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.disable_object_legal_hold(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
+        Example::
+            client.disable_object_legal_hold("my-bucket", "my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         body = marshal(LegalHold(False))
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["legal-hold"] = ""
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             object_name=object_name,
             body=body,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params=cast(DictType, query_params),
         )
 
     def is_object_legal_hold_enabled(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> bool:
         """
-        Check if legal hold is enabled on an object.
+        Returns true if legal hold is enabled on an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            bool:
-                True if legal hold is enabled, False otherwise.
-
-        Example:
-            >>> if client.is_object_legal_hold_enabled(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... ):
-            ...     print("legal hold is enabled on my-object")
-            ... else:
-            ...     print("legal hold is not enabled on my-object")
+        Example::
+            if client.is_object_legal_hold_enabled("my-bucket", "my-object"):
+                print("legal hold is enabled on my-object")
+            else:
+                print("legal hold is not enabled on my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["legal-hold"] = ""
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
+                "GET",
+                bucket_name,
                 object_name=object_name,
-                query_params=query_params,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                query_params=cast(DictType, query_params),
             )
             legal_hold = unmarshal(LegalHold, response.data.decode())
             return legal_hold.status
@@ -5106,198 +3032,89 @@ class Minio:
                 raise
         return False
 
-    def delete_object_lock_config(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ):
+    def delete_object_lock_config(self, bucket_name: str):
         """
-        Delete the object-lock configuration of a bucket.
+        Delete object-lock configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> client.delete_object_lock_config(bucket_name="my-bucket")
+        Example::
+            client.delete_object_lock_config("my-bucket")
         """
         self.set_object_lock_config(
-            bucket_name=bucket_name,
-            config=ObjectLockConfig(None, None, None),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            bucket_name, ObjectLockConfig(None, None, None)
         )
 
-    def get_object_lock_config(
-            self,
-            *,
-            bucket_name: str,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
-    ) -> ObjectLockConfig:
+    def get_object_lock_config(self, bucket_name: str) -> ObjectLockConfig:
         """
-        Get the object-lock configuration of a bucket.
+        Get object-lock configuration of a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :return: :class:`ObjectLockConfig <ObjectLockConfig>` object.
 
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectLockConfig:
-                A :class:`minio.objectlockconfig.ObjectLockConfig`
-                object representing the bucket's object-lock
-                configuration.
-
-        Example:
-            >>> config = client.get_object_lock_config(
-            ...     bucket_name="my-bucket",
-            ... )
+        Example::
+            config = client.get_object_lock_config("my-bucket")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            query_params=HTTPQueryDict({"object-lock": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "GET", bucket_name, query_params={"object-lock": ""},
         )
         return unmarshal(ObjectLockConfig, response.data.decode())
 
     def set_object_lock_config(
             self,
-            *,
             bucket_name: str,
             config: ObjectLockConfig,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the object-lock configuration for a bucket.
+        Set object-lock configuration to a bucket.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param config: :class:`ObjectLockConfig <ObjectLockConfig>` object.
 
-            config (ObjectLockConfig):
-                The object-lock configuration to apply.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> config = ObjectLockConfig(GOVERNANCE, 15, DAYS)
-            >>> client.set_object_lock_config(
-            ...     bucket_name="my-bucket",
-            ...     config=config,
-            ... )
+        Example::
+            config = ObjectLockConfig(GOVERNANCE, 15, DAYS)
+            client.set_object_lock_config("my-bucket", config)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         if not isinstance(config, ObjectLockConfig):
             raise ValueError("config must be ObjectLockConfig type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             body=body,
-            headers=headers,
-            query_params=HTTPQueryDict({"object-lock": ""}),
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params={"object-lock": ""},
         )
 
     def get_object_retention(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> Optional[Retention]:
         """
-        Get the retention information of an object.
+        Get retention configuration of an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
+        :return: :class:`Retention <Retention>` object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            Optional[Retention]:
-                A :class:`minio.retention.Retention` object if retention
-                is set, otherwise ``None``.
-
-        Example:
-            >>> config = client.get_object_retention(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ... )
+        Example::
+            config = client.get_object_retention("my-bucket", "my-object")
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["retention"] = ""
         try:
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
+                "GET",
+                bucket_name,
                 object_name=object_name,
-                query_params=query_params,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                query_params=cast(DictType, query_params),
             )
             return unmarshal(Retention, response.data.decode())
         except S3Error as exc:
@@ -5307,180 +3124,104 @@ class Minio:
 
     def set_object_retention(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             config: Retention,
             version_id: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ):
         """
-        Set the retention information for an object.
+        Set retention configuration on an object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
+        :param bucket_name: Name of the bucket.
+        :param object_name: Object name in the bucket.
+        :param version_id: Version ID of the object.
+        :param config: :class:`Retention <Retention>` object.
 
-            object_name (str):
-                Object name in the bucket.
-
-            config (Retention):
-                Retention configuration.
-
-            version_id (Optional[str], default=None):
-                Version ID of the object.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Example:
-            >>> config = Retention(
-            ...     GOVERNANCE,
-            ...     datetime.utcnow() + timedelta(days=10),
-            ... )
-            >>> client.set_object_retention(
-            ...     bucket_name="my-bucket",
-            ...     object_name="my-object",
-            ...     config=config,
-            ... )
+        Example::
+            config = Retention(
+                GOVERNANCE, datetime.utcnow() + timedelta(days=10),
+            )
+            client.set_object_retention("my-bucket", "my-object", config)
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
         check_object_name(object_name)
         if not isinstance(config, Retention):
             raise ValueError("config must be Retention type")
         body = marshal(config)
-        headers = HTTPHeaderDict(
-            {"Content-MD5": base64_string(MD5.hash(body))},
-        )
-        query_params = HTTPQueryDict()
-        if version_id:
-            query_params["versionId"] = version_id
+        query_params = {"versionId": version_id} if version_id else {}
         query_params["retention"] = ""
         self._execute(
-            method="PUT",
-            bucket_name=bucket_name,
+            "PUT",
+            bucket_name,
             object_name=object_name,
             body=body,
-            headers=headers,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            headers={"Content-MD5": cast(str, md5sum_hash(body))},
+            query_params=cast(DictType, query_params),
         )
 
     def upload_snowball_objects(
             self,
-            *,
             bucket_name: str,
-            objects: Iterable[SnowballObject],
-            headers: Optional[HTTPHeaderDict] = None,
-            user_metadata: Optional[HTTPHeaderDict] = None,
+            object_list: Iterable[SnowballObject],
+            metadata: Optional[DictType] = None,
             sse: Optional[Sse] = None,
             tags: Optional[Tags] = None,
             retention: Optional[Retention] = None,
             legal_hold: bool = False,
             staging_filename: Optional[str] = None,
             compression: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
     ) -> ObjectWriteResult:
         """
-        Upload multiple objects in a single PUT call.
+        Uploads multiple objects in a single put call. It is done by creating
+        intermediate TAR file optionally compressed which is uploaded to S3
+        service.
 
-        This method creates an intermediate TAR file, optionally compressed,
-        that is uploaded to the S3 service.
+        :param bucket_name: Name of the bucket.
+        :param object_list: An iterable containing
+            :class:`SnowballObject <SnowballObject>` object.
+        :param metadata: Any additional metadata to be uploaded along
+            with your PUT request.
+        :param sse: Server-side encryption.
+        :param tags: :class:`Tags` for the object.
+        :param retention: :class:`Retention` configuration object.
+        :param legal_hold: Flag to set legal hold for the object.
+        :param staging_filename: A staging filename to create intermediate
+            tarball.
+        :param compression: Flag to compress TAR ball.
+        :return: :class:`ObjectWriteResult` object.
 
-        Args:
-            bucket_name (str):
-                Name of the bucket.
-
-            objects (Iterable[SnowballObject]):
-                An iterable containing Snowball objects.
-
-            headers (Optional[HTTPHeaderDict], default=None):
-                Additional headers.
-
-            user_metadata (Optional[HTTPHeaderDict], default=None):
-                User metadata.
-
-            sse (Optional[Sse], default=None):
-                Server-side encryption.
-
-            tags (Optional[Tags], default=None):
-                Tags for the object.
-
-            retention (Optional[Retention], default=None):
-                Retention configuration.
-
-            legal_hold (bool, default=False):
-                Flag to set legal hold for the object.
-
-            staging_filename (Optional[str], default=None):
-                A staging filename to create the intermediate tarball.
-
-            compression (bool, default=False):
-                Flag to compress the tarball.
-
-            region (Optional[str], default=None):
-                Region of the bucket to skip auto probing.
-
-            extra_headers (Optional[HTTPHeaderDict], default=None):
-                Extra headers for advanced usage.
-
-            extra_query_params (Optional[HTTPQueryDict], default=None):
-                Extra query parameters for advanced usage.
-
-        Returns:
-            ObjectWriteResult:
-                A :class:`minio.helpers.ObjectWriteResult` object.
-
-        Example:
-            >>> client.upload_snowball_objects(
-            ...     bucket_name="my-bucket",
-            ...     objects=[
-            ...         SnowballObject(
-            ...             object_name="my-object1",
-            ...             filename="/etc/hostname",
-            ...         ),
-            ...         SnowballObject(
-            ...             object_name="my-object2",
-            ...             data=io.BytesIO(b"hello"),
-            ...             length=5,
-            ...         ),
-            ...         SnowballObject(
-            ...             object_name="my-object3",
-            ...             data=io.BytesIO(b"world"),
-            ...             length=5,
-            ...             mod_time=datetime.now(),
-            ...         ),
-            ...     ],
-            ... )
+        Example::
+            # Upload snowball object.
+            result = client.upload_snowball_objects(
+                "my-bucket",
+                [
+                    SnowballObject("my-object1", filename="/etc/hostname"),
+                    SnowballObject(
+                        "my-object2", data=io.BytesIO("hello"), length=5,
+                    ),
+                    SnowballObject(
+                        "my-object3", data=io.BytesIO("world"), length=5,
+                        mod_time=datetime.now(),
+                    ),
+                ],
+            )
         """
         check_bucket_name(bucket_name, s3_check=self._base_url.is_aws_host)
 
         object_name = f"snowball.{random()}.tar"
 
         # turn list like objects into an iterator.
-        objects = itertools.chain(objects)
+        object_list = itertools.chain(object_list)
 
-        headers = HTTPHeaderDict() if headers is None else headers.copy()
-        headers["X-Amz-Meta-Snowball-Auto-Extract"] = "true"
+        metadata = metadata or {}
+        metadata["X-Amz-Meta-Snowball-Auto-Extract"] = "true"
 
         name = staging_filename
         fileobj = None if name else BytesIO()
         with tarfile.open(
                 name=name, mode="w:gz" if compression else "w", fileobj=fileobj,
         ) as tar:
-            for obj in objects:
+            for obj in object_list:
                 if obj.filename:
                     tar.add(obj.filename, obj.object_name)
                 else:
@@ -5501,40 +3242,31 @@ class Minio:
 
         if name:
             return self.fput_object(
-                bucket_name=bucket_name,
-                object_name=object_name,
-                file_path=cast(str, staging_filename),
-                headers=headers,
-                user_metadata=user_metadata,
+                bucket_name,
+                object_name,
+                cast(str, staging_filename),
+                metadata=metadata,
                 sse=sse,
                 tags=tags,
                 retention=retention,
                 legal_hold=legal_hold,
                 part_size=part_size,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
             )
         return self.put_object(
-            bucket_name=bucket_name,
-            object_name=object_name,
-            data=cast(BinaryIO, fileobj),
-            length=length,
-            headers=headers,
-            user_metadata=user_metadata,
+            bucket_name,
+            object_name,
+            cast(BinaryIO, fileobj),
+            length,
+            metadata=cast(Union[DictType, None], metadata),
             sse=sse,
             tags=tags,
             retention=retention,
             legal_hold=legal_hold,
             part_size=part_size,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
         )
 
     def _list_objects(
             self,
-            *,
             bucket_name: str,
             continuation_token: Optional[str] = None,  # listV2 only
             delimiter: Optional[str] = None,  # all
@@ -5548,9 +3280,8 @@ class Minio:
             version_id_marker: Optional[str] = None,  # versioned
             use_api_v1: bool = False,
             include_version: bool = False,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_headers: Optional[DictType] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> Iterator[Object]:
         """
         List objects optionally including versions.
@@ -5567,40 +3298,39 @@ class Minio:
 
         is_truncated = True
         while is_truncated:
-            query_params = HTTPQueryDict()
+            query = extra_query_params or {}
             if include_version:
-                query_params["versions"] = ""
+                query["versions"] = ""
             elif not use_api_v1:
-                query_params["list-type"] = "2"
+                query["list-type"] = "2"
+
             if not include_version and not use_api_v1:
                 if continuation_token:
-                    query_params["continuation-token"] = continuation_token
+                    query["continuation-token"] = continuation_token
                 if fetch_owner:
-                    query_params["fetch-owner"] = "true"
+                    query["fetch-owner"] = "true"
                 if include_user_meta:
-                    query_params["metadata"] = "true"
-            query_params["delimiter"] = delimiter or ""
+                    query["metadata"] = "true"
+            query["delimiter"] = delimiter or ""
             if encoding_type:
-                query_params["encoding-type"] = encoding_type
-            query_params["max-keys"] = str(max_keys or 1000)
-            query_params["prefix"] = prefix or ""
+                query["encoding-type"] = encoding_type
+            query["max-keys"] = str(max_keys or 1000)
+            query["prefix"] = prefix or ""
             if start_after:
                 if include_version:
-                    query_params["key-marker"] = start_after
+                    query["key-marker"] = start_after
                 elif use_api_v1:
-                    query_params["marker"] = start_after
+                    query["marker"] = start_after
                 else:
-                    query_params["start-after"] = start_after
+                    query["start-after"] = start_after
             if version_id_marker:
-                query_params["version-id-marker"] = version_id_marker
+                query["version-id-marker"] = version_id_marker
 
             response = self._execute(
-                method="GET",
-                bucket_name=bucket_name,
-                query_params=query_params,
-                region=region,
-                extra_headers=extra_headers,
-                extra_query_params=extra_query_params,
+                "GET",
+                bucket_name,
+                query_params=cast(DictType, query),
+                headers=extra_headers,
             )
 
             objects, is_truncated, start_after, version_id_marker = (
@@ -5616,7 +3346,6 @@ class Minio:
 
     def _list_multipart_uploads(
             self,
-            *,
             bucket_name: str,
             delimiter: Optional[str] = None,
             encoding_type: Optional[str] = None,
@@ -5624,9 +3353,8 @@ class Minio:
             max_uploads: Optional[int] = None,
             prefix: Optional[str] = None,
             upload_id_marker: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_headers: Optional[DictType] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> ListMultipartUploadsResult:
         """
         Execute ListMultipartUploads S3 API.
@@ -5646,7 +3374,8 @@ class Minio:
                 object
         """
 
-        query_params = HTTPQueryDict(
+        query_params = extra_query_params or {}
+        query_params.update(
             {
                 "uploads": "",
                 "delimiter": delimiter or "",
@@ -5663,26 +3392,22 @@ class Minio:
             query_params["upload-id-marker"] = upload_id_marker
 
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            "GET",
+            bucket_name,
+            query_params=cast(DictType, query_params),
+            headers=cast(Union[DictType, None], extra_headers),
         )
         return ListMultipartUploadsResult(response)
 
     def _list_parts(
             self,
-            *,
             bucket_name: str,
             object_name: str,
             upload_id: str,
             max_parts: Optional[int] = None,
             part_number_marker: Optional[str] = None,
-            region: Optional[str] = None,
-            extra_headers: Optional[HTTPHeaderDict] = None,
-            extra_query_params: Optional[HTTPQueryDict] = None,
+            extra_headers: Optional[DictType] = None,
+            extra_query_params: Optional[DictType] = None,
     ) -> ListPartsResult:
         """
         Execute ListParts S3 API.
@@ -5698,7 +3423,8 @@ class Minio:
         :return: :class:`ListPartsResult <ListPartsResult>` object
         """
 
-        query_params = HTTPQueryDict(
+        query_params = extra_query_params or {}
+        query_params.update(
             {
                 "uploadId": upload_id,
                 "max-parts": str(max_parts or 1000),
@@ -5708,12 +3434,10 @@ class Minio:
             query_params["part-number-marker"] = part_number_marker
 
         response = self._execute(
-            method="GET",
-            bucket_name=bucket_name,
+            "GET",
+            bucket_name,
             object_name=object_name,
-            query_params=query_params,
-            region=region,
-            extra_headers=extra_headers,
-            extra_query_params=extra_query_params,
+            query_params=cast(DictType, query_params),
+            headers=cast(Union[DictType, None], extra_headers),
         )
         return ListPartsResult(response)

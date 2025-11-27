@@ -1803,7 +1803,7 @@ class CfnDomain(
         :param access_policies: An AWS Identity and Access Management ( IAM ) policy document that specifies who can access the OpenSearch Service domain and their permissions. For more information, see `Configuring access policies <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#ac-creating>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param advanced_options: Additional options to specify for the OpenSearch Service domain. For more information, see `AdvancedOptions <https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_CreateDomain.html#API_CreateDomain_RequestBody>`_ in the OpenSearch Service API reference.
         :param advanced_security_options: Specifies options for fine-grained access control and SAML authentication. If you specify advanced security options, you must also enable node-to-node encryption ( `NodeToNodeEncryptionOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-nodetonodeencryptionoptions.html>`_ ) and encryption at rest ( `EncryptionAtRestOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-encryptionatrestoptions.html>`_ ). You must also enable ``EnforceHTTPS`` within `DomainEndpointOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-domainendpointoptions.html>`_ , which requires HTTPS for all traffic to the domain.
-        :param aiml_options: 
+        :param aiml_options: Container for parameters required to enable all machine learning features.
         :param cluster_config: Container for the cluster configuration of a domain.
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
@@ -2163,6 +2163,7 @@ class CfnDomain(
     def aiml_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.AIMLOptionsProperty"]]:
+        '''Container for parameters required to enable all machine learning features.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDomain.AIMLOptionsProperty"]], jsii.get(self, "aimlOptions"))
 
     @aiml_options.setter
@@ -4511,8 +4512,9 @@ class CfnDomain(
             *,
             enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
         ) -> None:
-            '''
-            :param enabled: Whether to enable S3 vectors engine.
+            '''Options for enabling S3 vectors engine features on the specified domain.
+
+            :param enabled: Enables S3 vectors engine features.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-s3vectorsengine.html
             :exampleMetadata: fixture=_generated
@@ -4536,7 +4538,7 @@ class CfnDomain(
 
         @builtins.property
         def enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
-            '''Whether to enable S3 vectors engine.
+            '''Enables S3 vectors engine features.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-s3vectorsengine.html#cfn-opensearchservice-domain-s3vectorsengine-enabled
             '''
@@ -5297,7 +5299,7 @@ class CfnDomainProps:
         :param access_policies: An AWS Identity and Access Management ( IAM ) policy document that specifies who can access the OpenSearch Service domain and their permissions. For more information, see `Configuring access policies <https://docs.aws.amazon.com/opensearch-service/latest/developerguide/ac.html#ac-creating>`_ in the *Amazon OpenSearch Service Developer Guide* .
         :param advanced_options: Additional options to specify for the OpenSearch Service domain. For more information, see `AdvancedOptions <https://docs.aws.amazon.com/opensearch-service/latest/APIReference/API_CreateDomain.html#API_CreateDomain_RequestBody>`_ in the OpenSearch Service API reference.
         :param advanced_security_options: Specifies options for fine-grained access control and SAML authentication. If you specify advanced security options, you must also enable node-to-node encryption ( `NodeToNodeEncryptionOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-nodetonodeencryptionoptions.html>`_ ) and encryption at rest ( `EncryptionAtRestOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-encryptionatrestoptions.html>`_ ). You must also enable ``EnforceHTTPS`` within `DomainEndpointOptions <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-opensearchservice-domain-domainendpointoptions.html>`_ , which requires HTTPS for all traffic to the domain.
-        :param aiml_options: 
+        :param aiml_options: Container for parameters required to enable all machine learning features.
         :param cluster_config: Container for the cluster configuration of a domain.
         :param cognito_options: Configures OpenSearch Service to use Amazon Cognito authentication for OpenSearch Dashboards.
         :param domain_arn: 
@@ -5580,7 +5582,8 @@ class CfnDomainProps:
     def aiml_options(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDomain.AIMLOptionsProperty]]:
-        '''
+        '''Container for parameters required to enable all machine learning features.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-opensearchservice-domain.html#cfn-opensearchservice-domain-aimloptions
         '''
         result = self._values.get("aiml_options")

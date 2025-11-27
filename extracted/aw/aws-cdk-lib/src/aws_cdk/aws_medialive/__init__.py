@@ -3600,6 +3600,8 @@ class CfnChannel(
             "qvbr_quality_level": "qvbrQualityLevel",
             "rate_control_mode": "rateControlMode",
             "scene_change_detect": "sceneChangeDetect",
+            "spatial_aq": "spatialAq",
+            "temporal_aq": "temporalAq",
             "timecode_burnin_settings": "timecodeBurninSettings",
         },
     )
@@ -3626,6 +3628,8 @@ class CfnChannel(
             qvbr_quality_level: typing.Optional[jsii.Number] = None,
             rate_control_mode: typing.Optional[builtins.str] = None,
             scene_change_detect: typing.Optional[builtins.str] = None,
+            spatial_aq: typing.Optional[builtins.str] = None,
+            temporal_aq: typing.Optional[builtins.str] = None,
             timecode_burnin_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.TimecodeBurninSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''
@@ -3648,6 +3652,8 @@ class CfnChannel(
             :param qvbr_quality_level: 
             :param rate_control_mode: 
             :param scene_change_detect: 
+            :param spatial_aq: 
+            :param temporal_aq: 
             :param timecode_burnin_settings: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html
@@ -3691,6 +3697,8 @@ class CfnChannel(
                     qvbr_quality_level=123,
                     rate_control_mode="rateControlMode",
                     scene_change_detect="sceneChangeDetect",
+                    spatial_aq="spatialAq",
+                    temporal_aq="temporalAq",
                     timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                         font_size="fontSize",
                         position="position",
@@ -3719,6 +3727,8 @@ class CfnChannel(
                 check_type(argname="argument qvbr_quality_level", value=qvbr_quality_level, expected_type=type_hints["qvbr_quality_level"])
                 check_type(argname="argument rate_control_mode", value=rate_control_mode, expected_type=type_hints["rate_control_mode"])
                 check_type(argname="argument scene_change_detect", value=scene_change_detect, expected_type=type_hints["scene_change_detect"])
+                check_type(argname="argument spatial_aq", value=spatial_aq, expected_type=type_hints["spatial_aq"])
+                check_type(argname="argument temporal_aq", value=temporal_aq, expected_type=type_hints["temporal_aq"])
                 check_type(argname="argument timecode_burnin_settings", value=timecode_burnin_settings, expected_type=type_hints["timecode_burnin_settings"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if afd_signaling is not None:
@@ -3759,6 +3769,10 @@ class CfnChannel(
                 self._values["rate_control_mode"] = rate_control_mode
             if scene_change_detect is not None:
                 self._values["scene_change_detect"] = scene_change_detect
+            if spatial_aq is not None:
+                self._values["spatial_aq"] = spatial_aq
+            if temporal_aq is not None:
+                self._values["temporal_aq"] = temporal_aq
             if timecode_burnin_settings is not None:
                 self._values["timecode_burnin_settings"] = timecode_burnin_settings
 
@@ -3914,6 +3928,22 @@ class CfnChannel(
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-scenechangedetect
             '''
             result = self._values.get("scene_change_detect")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def spatial_aq(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-spatialaq
+            '''
+            result = self._values.get("spatial_aq")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def temporal_aq(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-av1settings.html#cfn-medialive-channel-av1settings-temporalaq
+            '''
+            result = self._values.get("temporal_aq")
             return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
@@ -10717,6 +10747,7 @@ class CfnChannel(
             "color_space_passthrough_settings": "colorSpacePassthroughSettings",
             "dolby_vision81_settings": "dolbyVision81Settings",
             "hdr10_settings": "hdr10Settings",
+            "hlg2020_settings": "hlg2020Settings",
             "rec601_settings": "rec601Settings",
             "rec709_settings": "rec709Settings",
         },
@@ -10728,6 +10759,7 @@ class CfnChannel(
             color_space_passthrough_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.ColorSpacePassthroughSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             dolby_vision81_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.DolbyVision81SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             hdr10_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.Hdr10SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            hlg2020_settings: typing.Any = None,
             rec601_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.Rec601SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             rec709_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnChannel.Rec709SettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -10738,6 +10770,7 @@ class CfnChannel(
             :param color_space_passthrough_settings: Passthrough applies no color space conversion to the output.
             :param dolby_vision81_settings: 
             :param hdr10_settings: Settings to configure the handling of HDR10 color space.
+            :param hlg2020_settings: 
             :param rec601_settings: Settings to configure the handling of Rec601 color space.
             :param rec709_settings: Settings to configure the handling of Rec709 color space.
 
@@ -10750,6 +10783,8 @@ class CfnChannel(
                 # The values are placeholders you should change.
                 from aws_cdk import aws_medialive as medialive
                 
+                # hlg2020_settings: Any
+                
                 h265_color_space_settings_property = medialive.CfnChannel.H265ColorSpaceSettingsProperty(
                     color_space_passthrough_settings=medialive.CfnChannel.ColorSpacePassthroughSettingsProperty(),
                     dolby_vision81_settings=medialive.CfnChannel.DolbyVision81SettingsProperty(),
@@ -10757,6 +10792,7 @@ class CfnChannel(
                         max_cll=123,
                         max_fall=123
                     ),
+                    hlg2020_settings=hlg2020_settings,
                     rec601_settings=medialive.CfnChannel.Rec601SettingsProperty(),
                     rec709_settings=medialive.CfnChannel.Rec709SettingsProperty()
                 )
@@ -10766,6 +10802,7 @@ class CfnChannel(
                 check_type(argname="argument color_space_passthrough_settings", value=color_space_passthrough_settings, expected_type=type_hints["color_space_passthrough_settings"])
                 check_type(argname="argument dolby_vision81_settings", value=dolby_vision81_settings, expected_type=type_hints["dolby_vision81_settings"])
                 check_type(argname="argument hdr10_settings", value=hdr10_settings, expected_type=type_hints["hdr10_settings"])
+                check_type(argname="argument hlg2020_settings", value=hlg2020_settings, expected_type=type_hints["hlg2020_settings"])
                 check_type(argname="argument rec601_settings", value=rec601_settings, expected_type=type_hints["rec601_settings"])
                 check_type(argname="argument rec709_settings", value=rec709_settings, expected_type=type_hints["rec709_settings"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -10775,6 +10812,8 @@ class CfnChannel(
                 self._values["dolby_vision81_settings"] = dolby_vision81_settings
             if hdr10_settings is not None:
                 self._values["hdr10_settings"] = hdr10_settings
+            if hlg2020_settings is not None:
+                self._values["hlg2020_settings"] = hlg2020_settings
             if rec601_settings is not None:
                 self._values["rec601_settings"] = rec601_settings
             if rec709_settings is not None:
@@ -10811,6 +10850,14 @@ class CfnChannel(
             '''
             result = self._values.get("hdr10_settings")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnChannel.Hdr10SettingsProperty"]], result)
+
+        @builtins.property
+        def hlg2020_settings(self) -> typing.Any:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-channel-h265colorspacesettings.html#cfn-medialive-channel-h265colorspacesettings-hlg2020settings
+            '''
+            result = self._values.get("hlg2020_settings")
+            return typing.cast(typing.Any, result)
 
         @builtins.property
         def rec601_settings(
@@ -11080,6 +11127,8 @@ class CfnChannel(
                 # The values are placeholders you should change.
                 from aws_cdk import aws_medialive as medialive
                 
+                # hlg2020_settings: Any
+                
                 h265_settings_property = medialive.CfnChannel.H265SettingsProperty(
                     adaptive_quantization="adaptiveQuantization",
                     afd_signaling="afdSignaling",
@@ -11094,6 +11143,7 @@ class CfnChannel(
                             max_cll=123,
                             max_fall=123
                         ),
+                        hlg2020_settings=hlg2020_settings,
                         rec601_settings=medialive.CfnChannel.Rec601SettingsProperty(),
                         rec709_settings=medialive.CfnChannel.Rec709SettingsProperty()
                     ),
@@ -23352,6 +23402,7 @@ class CfnChannel(
                 from aws_cdk import aws_medialive as medialive
                 
                 # color_space_passthrough_settings: Any
+                # hlg2020_settings: Any
                 # rec601_settings: Any
                 # rec709_settings: Any
                 
@@ -23384,6 +23435,8 @@ class CfnChannel(
                         qvbr_quality_level=123,
                         rate_control_mode="rateControlMode",
                         scene_change_detect="sceneChangeDetect",
+                        spatial_aq="spatialAq",
+                        temporal_aq="temporalAq",
                         timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                             font_size="fontSize",
                             position="position",
@@ -23476,6 +23529,7 @@ class CfnChannel(
                                 max_cll=123,
                                 max_fall=123
                             ),
+                            hlg2020_settings=hlg2020_settings,
                             rec601_settings=medialive.CfnChannel.Rec601SettingsProperty(),
                             rec709_settings=medialive.CfnChannel.Rec709SettingsProperty()
                         ),
@@ -23689,6 +23743,7 @@ class CfnChannel(
                 from aws_cdk import aws_medialive as medialive
                 
                 # color_space_passthrough_settings: Any
+                # hlg2020_settings: Any
                 # rec601_settings: Any
                 # rec709_settings: Any
                 
@@ -23722,6 +23777,8 @@ class CfnChannel(
                             qvbr_quality_level=123,
                             rate_control_mode="rateControlMode",
                             scene_change_detect="sceneChangeDetect",
+                            spatial_aq="spatialAq",
+                            temporal_aq="temporalAq",
                             timecode_burnin_settings=medialive.CfnChannel.TimecodeBurninSettingsProperty(
                                 font_size="fontSize",
                                 position="position",
@@ -23814,6 +23871,7 @@ class CfnChannel(
                                     max_cll=123,
                                     max_fall=123
                                 ),
+                                hlg2020_settings=hlg2020_settings,
                                 rec601_settings=medialive.CfnChannel.Rec601SettingsProperty(),
                                 rec709_settings=medialive.CfnChannel.Rec709SettingsProperty()
                             ),
@@ -27609,6 +27667,13 @@ class CfnInput(
             ),
             name="name",
             role_arn="roleArn",
+            router_settings=medialive.CfnInput.RouterSettingsProperty(
+                destinations=[medialive.CfnInput.RouterDestinationSettingsProperty(
+                    availability_zone_name="availabilityZoneName"
+                )],
+                encryption_type="encryptionType",
+                secret_arn="secretArn"
+            ),
             sdi_sources=["sdiSources"],
             smpte2110_receiver_group_settings=medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty(
                 smpte2110_receiver_groups=[medialive.CfnInput.Smpte2110ReceiverGroupProperty(
@@ -27667,6 +27732,7 @@ class CfnInput(
         multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.MulticastSettingsCreateRequestProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
+        router_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.RouterSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
         smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.Smpte2110ReceiverGroupSettingsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.InputSourceRequestProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -27687,6 +27753,7 @@ class CfnInput(
         :param multicast_settings: 
         :param name: A name for the input.
         :param role_arn: The IAM role for MediaLive to assume when creating a MediaConnect input or Amazon VPC input. This doesn't apply to other types of inputs. The role is identified by its ARN.
+        :param router_settings: 
         :param sdi_sources: 
         :param smpte2110_receiver_group_settings: 
         :param sources: Settings that apply only if the input is a pull type of input.
@@ -27708,6 +27775,7 @@ class CfnInput(
             multicast_settings=multicast_settings,
             name=name,
             role_arn=role_arn,
+            router_settings=router_settings,
             sdi_sources=sdi_sources,
             smpte2110_receiver_group_settings=smpte2110_receiver_group_settings,
             sources=sources,
@@ -27985,6 +28053,23 @@ class CfnInput(
             type_hints = typing.get_type_hints(_typecheckingstub__f27fc34cd2daae9bc688d197b2f17a9be9a91d5deaae844af5f1dc9c7ebc31ca)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "roleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="routerSettings")
+    def router_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.RouterSettingsProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.RouterSettingsProperty"]], jsii.get(self, "routerSettings"))
+
+    @router_settings.setter
+    def router_settings(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnInput.RouterSettingsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bb0f3ea0253dcf1dc1606278ef96621bf685640d0f796e05f4ea4df5f93c2417)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "routerSettings", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="sdiSources")
@@ -28792,6 +28877,148 @@ class CfnInput(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.RouterDestinationSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"availability_zone_name": "availabilityZoneName"},
+    )
+    class RouterDestinationSettingsProperty:
+        def __init__(
+            self,
+            *,
+            availability_zone_name: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param availability_zone_name: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routerdestinationsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                router_destination_settings_property = medialive.CfnInput.RouterDestinationSettingsProperty(
+                    availability_zone_name="availabilityZoneName"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__fd76591a032a5ef5639e46859de432497cc94985ec82d35bb41068cba6878f6b)
+                check_type(argname="argument availability_zone_name", value=availability_zone_name, expected_type=type_hints["availability_zone_name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if availability_zone_name is not None:
+                self._values["availability_zone_name"] = availability_zone_name
+
+        @builtins.property
+        def availability_zone_name(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routerdestinationsettings.html#cfn-medialive-input-routerdestinationsettings-availabilityzonename
+            '''
+            result = self._values.get("availability_zone_name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterDestinationSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_medialive.CfnInput.RouterSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "destinations": "destinations",
+            "encryption_type": "encryptionType",
+            "secret_arn": "secretArn",
+        },
+    )
+    class RouterSettingsProperty:
+        def __init__(
+            self,
+            *,
+            destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnInput.RouterDestinationSettingsProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            encryption_type: typing.Optional[builtins.str] = None,
+            secret_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param destinations: 
+            :param encryption_type: 
+            :param secret_arn: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routersettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_medialive as medialive
+                
+                router_settings_property = medialive.CfnInput.RouterSettingsProperty(
+                    destinations=[medialive.CfnInput.RouterDestinationSettingsProperty(
+                        availability_zone_name="availabilityZoneName"
+                    )],
+                    encryption_type="encryptionType",
+                    secret_arn="secretArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ce323ecc944c2b41163d06784a86234b6d87b6462d60a348fafd7abe90916f63)
+                check_type(argname="argument destinations", value=destinations, expected_type=type_hints["destinations"])
+                check_type(argname="argument encryption_type", value=encryption_type, expected_type=type_hints["encryption_type"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if destinations is not None:
+                self._values["destinations"] = destinations
+            if encryption_type is not None:
+                self._values["encryption_type"] = encryption_type
+            if secret_arn is not None:
+                self._values["secret_arn"] = secret_arn
+
+        @builtins.property
+        def destinations(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.RouterDestinationSettingsProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routersettings.html#cfn-medialive-input-routersettings-destinations
+            '''
+            result = self._values.get("destinations")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnInput.RouterDestinationSettingsProperty"]]]], result)
+
+        @builtins.property
+        def encryption_type(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routersettings.html#cfn-medialive-input-routersettings-encryptiontype
+            '''
+            result = self._values.get("encryption_type")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def secret_arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-medialive-input-routersettings.html#cfn-medialive-input-routersettings-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "RouterSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_medialive.CfnInput.Smpte2110ReceiverGroupProperty",
         jsii_struct_bases=[],
         name_mapping={"sdp_settings": "sdpSettings"},
@@ -29296,6 +29523,7 @@ class CfnInput(
         "multicast_settings": "multicastSettings",
         "name": "name",
         "role_arn": "roleArn",
+        "router_settings": "routerSettings",
         "sdi_sources": "sdiSources",
         "smpte2110_receiver_group_settings": "smpte2110ReceiverGroupSettings",
         "sources": "sources",
@@ -29317,6 +29545,7 @@ class CfnInputProps:
         multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         name: typing.Optional[builtins.str] = None,
         role_arn: typing.Optional[builtins.str] = None,
+        router_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.RouterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
         smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -29335,6 +29564,7 @@ class CfnInputProps:
         :param multicast_settings: 
         :param name: A name for the input.
         :param role_arn: The IAM role for MediaLive to assume when creating a MediaConnect input or Amazon VPC input. This doesn't apply to other types of inputs. The role is identified by its ARN.
+        :param router_settings: 
         :param sdi_sources: 
         :param smpte2110_receiver_group_settings: 
         :param sources: Settings that apply only if the input is a pull type of input.
@@ -29380,6 +29610,13 @@ class CfnInputProps:
                 ),
                 name="name",
                 role_arn="roleArn",
+                router_settings=medialive.CfnInput.RouterSettingsProperty(
+                    destinations=[medialive.CfnInput.RouterDestinationSettingsProperty(
+                        availability_zone_name="availabilityZoneName"
+                    )],
+                    encryption_type="encryptionType",
+                    secret_arn="secretArn"
+                ),
                 sdi_sources=["sdiSources"],
                 smpte2110_receiver_group_settings=medialive.CfnInput.Smpte2110ReceiverGroupSettingsProperty(
                     smpte2110_receiver_groups=[medialive.CfnInput.Smpte2110ReceiverGroupProperty(
@@ -29434,6 +29671,7 @@ class CfnInputProps:
             check_type(argname="argument multicast_settings", value=multicast_settings, expected_type=type_hints["multicast_settings"])
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
             check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+            check_type(argname="argument router_settings", value=router_settings, expected_type=type_hints["router_settings"])
             check_type(argname="argument sdi_sources", value=sdi_sources, expected_type=type_hints["sdi_sources"])
             check_type(argname="argument smpte2110_receiver_group_settings", value=smpte2110_receiver_group_settings, expected_type=type_hints["smpte2110_receiver_group_settings"])
             check_type(argname="argument sources", value=sources, expected_type=type_hints["sources"])
@@ -29458,6 +29696,8 @@ class CfnInputProps:
             self._values["name"] = name
         if role_arn is not None:
             self._values["role_arn"] = role_arn
+        if router_settings is not None:
+            self._values["router_settings"] = router_settings
         if sdi_sources is not None:
             self._values["sdi_sources"] = sdi_sources
         if smpte2110_receiver_group_settings is not None:
@@ -29552,6 +29792,16 @@ class CfnInputProps:
         '''
         result = self._values.get("role_arn")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def router_settings(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.RouterSettingsProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-medialive-input.html#cfn-medialive-input-routersettings
+        '''
+        result = self._values.get("router_settings")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.RouterSettingsProperty]], result)
 
     @builtins.property
     def sdi_sources(self) -> typing.Optional[typing.List[builtins.str]]:
@@ -33943,6 +34193,8 @@ def _typecheckingstub__1911156090a37730cd16cc0d13076f448f8b192dca9427883cf77e884
     qvbr_quality_level: typing.Optional[jsii.Number] = None,
     rate_control_mode: typing.Optional[builtins.str] = None,
     scene_change_detect: typing.Optional[builtins.str] = None,
+    spatial_aq: typing.Optional[builtins.str] = None,
+    temporal_aq: typing.Optional[builtins.str] = None,
     timecode_burnin_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.TimecodeBurninSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -34482,6 +34734,7 @@ def _typecheckingstub__32abe461f10992cf69e1043984b274ff5499daba5fe0817221cfab579
     color_space_passthrough_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.ColorSpacePassthroughSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     dolby_vision81_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.DolbyVision81SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     hdr10_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.Hdr10SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    hlg2020_settings: typing.Any = None,
     rec601_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.Rec601SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     rec709_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnChannel.Rec709SettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -36005,6 +36258,7 @@ def _typecheckingstub__c37c21db5712f0e670f3144efc99d8c9ed0a67af3bc5d9018df305c7e
     multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
+    router_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.RouterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
     smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -36094,6 +36348,12 @@ def _typecheckingstub__e6c903e6cb9991ee5f749c3f36cb893dcfc9c3500eafd66dea88a7359
 
 def _typecheckingstub__f27fc34cd2daae9bc688d197b2f17a9be9a91d5deaae844af5f1dc9c7ebc31ca(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bb0f3ea0253dcf1dc1606278ef96621bf685640d0f796e05f4ea4df5f93c2417(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnInput.RouterSettingsProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -36219,6 +36479,22 @@ def _typecheckingstub__2e6df72893ce7d89a6f92d69d9db55440192c737e450948d86a7e6e63
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fd76591a032a5ef5639e46859de432497cc94985ec82d35bb41068cba6878f6b(
+    *,
+    availability_zone_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce323ecc944c2b41163d06784a86234b6d87b6462d60a348fafd7abe90916f63(
+    *,
+    destinations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.RouterDestinationSettingsProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    encryption_type: typing.Optional[builtins.str] = None,
+    secret_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e439b3fe47808a945aa11d675bf7807e78bb6123c2ccf728b7f31a2f77ad12e3(
     *,
     sdp_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSdpSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -36278,6 +36554,7 @@ def _typecheckingstub__f5e4e9b50624e42353cf086c51b3b7174a3d994bf1dc422fe68231305
     multicast_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.MulticastSettingsCreateRequestProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     name: typing.Optional[builtins.str] = None,
     role_arn: typing.Optional[builtins.str] = None,
+    router_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.RouterSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sdi_sources: typing.Optional[typing.Sequence[builtins.str]] = None,
     smpte2110_receiver_group_settings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.Smpte2110ReceiverGroupSettingsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInput.InputSourceRequestProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,

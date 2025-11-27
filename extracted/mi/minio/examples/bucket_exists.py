@@ -17,12 +17,12 @@
 from minio import Minio
 
 client = Minio(
-    endpoint="play.min.io",
+    "play.min.io",
     access_key="Q3AM3UQ867SPQQA43P2F",
     secret_key="zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG",
 )
 
-if client.bucket_exists(bucket_name="my-bucket"):
+if client.bucket_exists("my-bucket"):
     print("my-bucket exists")
 else:
     print("my-bucket does not exist")

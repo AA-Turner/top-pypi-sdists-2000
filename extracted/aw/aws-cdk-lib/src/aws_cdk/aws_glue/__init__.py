@@ -7590,7 +7590,9 @@ class CfnIntegration(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_glue.CfnIntegration",
 ):
-    '''Resource Type definition for AWS::Glue::Integration.
+    '''The ``AWS::Glue::Integration`` resource specifies an AWS Glue zero-ETL integration from a data source to a target.
+
+    For more information, see `zero-ETL integration supported by AWS Glue <https://docs.aws.amazon.com/glue/latest/dg/zero-etl-using.html>`_ and `integration structure <https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-integrations.html>`_ in the AWS Glue developer guide.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html
     :cloudformationResource: AWS::Glue::Integration
@@ -7647,15 +7649,15 @@ class CfnIntegration(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param integration_name: The name of the integration.
-        :param source_arn: The Amazon Resource Name (ARN) of the database to use as the source for replication.
-        :param target_arn: The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
-        :param additional_encryption_context: An optional set of non-secret key value pairs that contains additional contextual information about the data.
-        :param data_filter: 
-        :param description: 
-        :param integration_config: The configuration settings for the integration.
-        :param kms_key_id: An KMS key identifier for the key to use to encrypt the integration. If you don't specify an encryption key, the default AWS owned KMS key is used.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param integration_name: A unique name for the integration.
+        :param source_arn: The ARN for the source of the integration.
+        :param target_arn: The ARN for the target of the integration.
+        :param additional_encryption_context: An optional set of non-secret key–value pairs that contains additional contextual information for encryption. This can only be provided if ``KMSKeyId`` is provided.
+        :param data_filter: Selects source tables for the integration using Maxwell filter syntax.
+        :param description: A description for the integration.
+        :param integration_config: The structure used to define properties associated with the zero-ETL integration. For more information, see `IntegrationConfig structure. <https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-integrations.html#aws-glue-api-integrations-IntegrationConfig>`_
+        :param kms_key_id: The ARN of a KMS key used for encrypting the channel.
+        :param tags: Metadata assigned to the resource consisting of a list of key-value pairs.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ffac55aa81a7816fe9e423f20ae65fe96d6eaefe8319323ace391abf446c0dcf)
@@ -7719,7 +7721,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="attrCreateTime")
     def attr_create_time(self) -> builtins.str:
-        '''The time (UTC) when the integration was created.
+        '''The time when the integration was created, in UTC.
 
         :cloudformationAttribute: CreateTime
         '''
@@ -7728,7 +7730,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="attrIntegrationArn")
     def attr_integration_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the integration.
+        '''The Amazon Resource Name (ARN) for the created integration.
 
         :cloudformationAttribute: IntegrationArn
         '''
@@ -7737,7 +7739,17 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''The status of the integration.
+        '''The status of the integration being created.
+
+        The possible statuses are:
+
+        - CREATING: The integration is being created.
+        - ACTIVE: The integration creation succeeds.
+        - MODIFYING: The integration is being modified.
+        - FAILED: The integration creation fails.
+        - DELETING: The integration is deleted.
+        - SYNCING: The integration is synchronizing.
+        - NEEDS_ATTENTION: The integration needs attention, such as synchronization.
 
         :cloudformationAttribute: Status
         '''
@@ -7763,7 +7775,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="integrationName")
     def integration_name(self) -> builtins.str:
-        '''The name of the integration.'''
+        '''A unique name for the integration.'''
         return typing.cast(builtins.str, jsii.get(self, "integrationName"))
 
     @integration_name.setter
@@ -7776,7 +7788,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="sourceArn")
     def source_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the database to use as the source for replication.'''
+        '''The ARN for the source of the integration.'''
         return typing.cast(builtins.str, jsii.get(self, "sourceArn"))
 
     @source_arn.setter
@@ -7789,7 +7801,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="targetArn")
     def target_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.'''
+        '''The ARN for the target of the integration.'''
         return typing.cast(builtins.str, jsii.get(self, "targetArn"))
 
     @target_arn.setter
@@ -7804,7 +7816,7 @@ class CfnIntegration(
     def additional_encryption_context(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''An optional set of non-secret key value pairs that contains additional contextual information about the data.'''
+        '''An optional set of non-secret key–value pairs that contains additional contextual information for encryption.'''
         return typing.cast(typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]], jsii.get(self, "additionalEncryptionContext"))
 
     @additional_encryption_context.setter
@@ -7820,6 +7832,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="dataFilter")
     def data_filter(self) -> typing.Optional[builtins.str]:
+        '''Selects source tables for the integration using Maxwell filter syntax.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "dataFilter"))
 
     @data_filter.setter
@@ -7832,6 +7845,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
+        '''A description for the integration.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
 
     @description.setter
@@ -7846,7 +7860,7 @@ class CfnIntegration(
     def integration_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.IntegrationConfigProperty"]]:
-        '''The configuration settings for the integration.'''
+        '''The structure used to define properties associated with the zero-ETL integration.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegration.IntegrationConfigProperty"]], jsii.get(self, "integrationConfig"))
 
     @integration_config.setter
@@ -7862,7 +7876,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="kmsKeyId")
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An KMS key identifier for the key to use to encrypt the integration.'''
+        '''The ARN of a KMS key used for encrypting the channel.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyId"))
 
     @kms_key_id.setter
@@ -7875,7 +7889,7 @@ class CfnIntegration(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.'''
+        '''Metadata assigned to the resource consisting of a list of key-value pairs.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -7902,11 +7916,11 @@ class CfnIntegration(
             refresh_interval: typing.Optional[builtins.str] = None,
             source_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''The configuration settings for the integration.
+            '''Properties associated with the integration.
 
-            :param continuous_sync: Enables continuous synchronization for on-demand data extractions.
-            :param refresh_interval: Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur.
-            :param source_properties: A collection of key-value pairs that specify additional properties for the integration source.
+            :param continuous_sync: Enables continuous synchronization for on-demand data extractions from SaaS applications to AWS data services like Amazon Redshift and Amazon S3.
+            :param refresh_interval: Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur. This parameter provides flexibility to align the refresh rate with your specific data update patterns, system load considerations, and performance optimization goals. Time increment can be set from 15 minutes to 8640 minutes (six days).
+            :param source_properties: A collection of key-value pairs that specify additional properties for the integration source. These properties provide configuration options that can be used to customize the behavior of the ODB source during data integration operations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html
             :exampleMetadata: fixture=_generated
@@ -7942,7 +7956,7 @@ class CfnIntegration(
         def continuous_sync(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''Enables continuous synchronization for on-demand data extractions.
+            '''Enables continuous synchronization for on-demand data extractions from SaaS applications to AWS data services like Amazon Redshift and Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-continuoussync
             '''
@@ -7952,6 +7966,8 @@ class CfnIntegration(
         @builtins.property
         def refresh_interval(self) -> typing.Optional[builtins.str]:
             '''Specifies the frequency at which CDC (Change Data Capture) pulls or incremental loads should occur.
+
+            This parameter provides flexibility to align the refresh rate with your specific data update patterns, system load considerations, and performance optimization goals. Time increment can be set from 15 minutes to 8640 minutes (six days).
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-refreshinterval
             '''
@@ -7963,6 +7979,8 @@ class CfnIntegration(
             self,
         ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
             '''A collection of key-value pairs that specify additional properties for the integration source.
+
+            These properties provide configuration options that can be used to customize the behavior of the ODB source during data integration operations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integration-integrationconfig.html#cfn-glue-integration-integrationconfig-sourceproperties
             '''
@@ -8012,15 +8030,15 @@ class CfnIntegrationProps:
     ) -> None:
         '''Properties for defining a ``CfnIntegration``.
 
-        :param integration_name: The name of the integration.
-        :param source_arn: The Amazon Resource Name (ARN) of the database to use as the source for replication.
-        :param target_arn: The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
-        :param additional_encryption_context: An optional set of non-secret key value pairs that contains additional contextual information about the data.
-        :param data_filter: 
-        :param description: 
-        :param integration_config: The configuration settings for the integration.
-        :param kms_key_id: An KMS key identifier for the key to use to encrypt the integration. If you don't specify an encryption key, the default AWS owned KMS key is used.
-        :param tags: An array of key-value pairs to apply to this resource.
+        :param integration_name: A unique name for the integration.
+        :param source_arn: The ARN for the source of the integration.
+        :param target_arn: The ARN for the target of the integration.
+        :param additional_encryption_context: An optional set of non-secret key–value pairs that contains additional contextual information for encryption. This can only be provided if ``KMSKeyId`` is provided.
+        :param data_filter: Selects source tables for the integration using Maxwell filter syntax.
+        :param description: A description for the integration.
+        :param integration_config: The structure used to define properties associated with the zero-ETL integration. For more information, see `IntegrationConfig structure. <https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-integrations.html#aws-glue-api-integrations-IntegrationConfig>`_
+        :param kms_key_id: The ARN of a KMS key used for encrypting the channel.
+        :param tags: Metadata assigned to the resource consisting of a list of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html
         :exampleMetadata: fixture=_generated
@@ -8087,7 +8105,7 @@ class CfnIntegrationProps:
 
     @builtins.property
     def integration_name(self) -> builtins.str:
-        '''The name of the integration.
+        '''A unique name for the integration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-integrationname
         '''
@@ -8097,7 +8115,7 @@ class CfnIntegrationProps:
 
     @builtins.property
     def source_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the database to use as the source for replication.
+        '''The ARN for the source of the integration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-sourcearn
         '''
@@ -8107,7 +8125,7 @@ class CfnIntegrationProps:
 
     @builtins.property
     def target_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the Glue data warehouse to use as the target for replication.
+        '''The ARN for the target of the integration.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-targetarn
         '''
@@ -8119,7 +8137,9 @@ class CfnIntegrationProps:
     def additional_encryption_context(
         self,
     ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-        '''An optional set of non-secret key value pairs that contains additional contextual information about the data.
+        '''An optional set of non-secret key–value pairs that contains additional contextual information for encryption.
+
+        This can only be provided if ``KMSKeyId`` is provided.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-additionalencryptioncontext
         '''
@@ -8128,7 +8148,8 @@ class CfnIntegrationProps:
 
     @builtins.property
     def data_filter(self) -> typing.Optional[builtins.str]:
-        '''
+        '''Selects source tables for the integration using Maxwell filter syntax.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-datafilter
         '''
         result = self._values.get("data_filter")
@@ -8136,7 +8157,8 @@ class CfnIntegrationProps:
 
     @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
-        '''
+        '''A description for the integration.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-description
         '''
         result = self._values.get("description")
@@ -8146,7 +8168,9 @@ class CfnIntegrationProps:
     def integration_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIntegration.IntegrationConfigProperty]]:
-        '''The configuration settings for the integration.
+        '''The structure used to define properties associated with the zero-ETL integration.
+
+        For more information, see `IntegrationConfig structure. <https://docs.aws.amazon.com/glue/latest/dg/aws-glue-api-integrations.html#aws-glue-api-integrations-IntegrationConfig>`_
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-integrationconfig
         '''
@@ -8155,9 +8179,7 @@ class CfnIntegrationProps:
 
     @builtins.property
     def kms_key_id(self) -> typing.Optional[builtins.str]:
-        '''An KMS key identifier for the key to use to encrypt the integration.
-
-        If you don't specify an encryption key, the default AWS owned KMS key is used.
+        '''The ARN of a KMS key used for encrypting the channel.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-kmskeyid
         '''
@@ -8166,7 +8188,7 @@ class CfnIntegrationProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''An array of key-value pairs to apply to this resource.
+        '''Metadata assigned to the resource consisting of a list of key-value pairs.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integration.html#cfn-glue-integration-tags
         '''
@@ -8191,7 +8213,9 @@ class CfnIntegrationResourceProperty(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_glue.CfnIntegrationResourceProperty",
 ):
-    '''Resource Type definition for AWS::Glue::IntegrationResourceProperty.
+    '''The ``AWS::Glue::IntegrationResourceProperty`` resource type can be used to setup ``ResourceProperty`` of the AWS Glue connection (for the SaaS source), DynamoDB Database (for DynamoDB source), or AWS Glue database ARN (for the target).
+
+    ResourceProperty is used to define the properties requires to setup the integration, including the role to access the connection or database, KMS keys, event bus for event notifications and VPC connection. To set both source and target properties the same API needs to be invoked twice, once with the AWS Glue connection ARN as ResourceArn with SourceProcessingProperties and next, with the AWS Glue database ARN as ResourceArn with TargetProcessingProperties respectively.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integrationresourceproperty.html
     :cloudformationResource: AWS::Glue::IntegrationResourceProperty
@@ -8242,7 +8266,7 @@ class CfnIntegrationResourceProperty(
         :param resource_arn: The connection ARN of the source, or the database ARN of the target.
         :param source_processing_properties: The resource properties associated with the integration source.
         :param tags: An array of key-value pairs to apply to this resource.
-        :param target_processing_properties: The resource properties associated with the integration target.
+        :param target_processing_properties: The structure used to define the resource properties associated with the integration target.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ae17c734cde2f5daac3730b0666a9bbab9b5da447b629240e30963ab9c7f08f1)
@@ -8364,7 +8388,7 @@ class CfnIntegrationResourceProperty(
     def target_processing_properties(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegrationResourceProperty.TargetProcessingPropertiesProperty"]]:
-        '''The resource properties associated with the integration target.'''
+        '''The structure used to define the resource properties associated with the integration target.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnIntegrationResourceProperty.TargetProcessingPropertiesProperty"]], jsii.get(self, "targetProcessingProperties"))
 
     @target_processing_properties.setter
@@ -8384,9 +8408,9 @@ class CfnIntegrationResourceProperty(
     )
     class SourceProcessingPropertiesProperty:
         def __init__(self, *, role_arn: builtins.str) -> None:
-            '''The resource properties associated with the integration source.
+            '''The structure used to define the resource properties associated with the integration source.
 
-            :param role_arn: The IAM role to access the Glue connection.
+            :param role_arn: The IAM role to access the AWS Glue connection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integrationresourceproperty-sourceprocessingproperties.html
             :exampleMetadata: fixture=_generated
@@ -8410,7 +8434,7 @@ class CfnIntegrationResourceProperty(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The IAM role to access the Glue connection.
+            '''The IAM role to access the AWS Glue connection.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integrationresourceproperty-sourceprocessingproperties.html#cfn-glue-integrationresourceproperty-sourceprocessingproperties-rolearn
             '''
@@ -8448,10 +8472,10 @@ class CfnIntegrationResourceProperty(
             event_bus_arn: typing.Optional[builtins.str] = None,
             kms_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The resource properties associated with the integration target.
+            '''The structure used to define the resource properties associated with the integration target.
 
-            :param role_arn: The IAM role to access the Glue database.
-            :param connection_name: The Glue network connection to configure the Glue job running in the customer VPC.
+            :param role_arn: The IAM role to access the AWS Glue database.
+            :param connection_name: The AWS Glue network connection to configure the AWS Glue job running in the customer VPC.
             :param event_bus_arn: The ARN of an Eventbridge event bus to receive the integration status notification.
             :param kms_arn: The ARN of the KMS key used for encryption.
 
@@ -8491,7 +8515,7 @@ class CfnIntegrationResourceProperty(
 
         @builtins.property
         def role_arn(self) -> builtins.str:
-            '''The IAM role to access the Glue database.
+            '''The IAM role to access the AWS Glue database.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integrationresourceproperty-targetprocessingproperties.html#cfn-glue-integrationresourceproperty-targetprocessingproperties-rolearn
             '''
@@ -8501,7 +8525,7 @@ class CfnIntegrationResourceProperty(
 
         @builtins.property
         def connection_name(self) -> typing.Optional[builtins.str]:
-            '''The Glue network connection to configure the Glue job running in the customer VPC.
+            '''The AWS Glue network connection to configure the AWS Glue job running in the customer VPC.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-glue-integrationresourceproperty-targetprocessingproperties.html#cfn-glue-integrationresourceproperty-targetprocessingproperties-connectionname
             '''
@@ -8562,7 +8586,7 @@ class CfnIntegrationResourcePropertyProps:
         :param resource_arn: The connection ARN of the source, or the database ARN of the target.
         :param source_processing_properties: The resource properties associated with the integration source.
         :param tags: An array of key-value pairs to apply to this resource.
-        :param target_processing_properties: The resource properties associated with the integration target.
+        :param target_processing_properties: The structure used to define the resource properties associated with the integration target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integrationresourceproperty.html
         :exampleMetadata: fixture=_generated
@@ -8644,7 +8668,7 @@ class CfnIntegrationResourcePropertyProps:
     def target_processing_properties(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnIntegrationResourceProperty.TargetProcessingPropertiesProperty]]:
-        '''The resource properties associated with the integration target.
+        '''The structure used to define the resource properties associated with the integration target.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-glue-integrationresourceproperty.html#cfn-glue-integrationresourceproperty-targetprocessingproperties
         '''

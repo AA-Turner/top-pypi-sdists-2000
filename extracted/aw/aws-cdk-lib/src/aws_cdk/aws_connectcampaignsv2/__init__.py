@@ -148,7 +148,8 @@ class CfnCampaign(
                             # the properties below are optional
                             await_answer_machine_prompt=False
                         ),
-                        connect_source_phone_number="connectSourcePhoneNumber"
+                        connect_source_phone_number="connectSourcePhoneNumber",
+                        ring_timeout=123
                     ),
                     outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
                         agentless_config=agentless_config,
@@ -688,7 +689,8 @@ class CfnCampaign(
                                 # the properties below are optional
                                 await_answer_machine_prompt=False
                             ),
-                            connect_source_phone_number="connectSourcePhoneNumber"
+                            connect_source_phone_number="connectSourcePhoneNumber",
+                            ring_timeout=123
                         ),
                         outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
                             agentless_config=agentless_config,
@@ -2509,7 +2511,8 @@ class CfnCampaign(
                             # the properties below are optional
                             await_answer_machine_prompt=False
                         ),
-                        connect_source_phone_number="connectSourcePhoneNumber"
+                        connect_source_phone_number="connectSourcePhoneNumber",
+                        ring_timeout=123
                     ),
                     outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
                         agentless_config=agentless_config,
@@ -2610,6 +2613,7 @@ class CfnCampaign(
             "connect_contact_flow_id": "connectContactFlowId",
             "answer_machine_detection_config": "answerMachineDetectionConfig",
             "connect_source_phone_number": "connectSourcePhoneNumber",
+            "ring_timeout": "ringTimeout",
         },
     )
     class TelephonyOutboundConfigProperty:
@@ -2619,12 +2623,14 @@ class CfnCampaign(
             connect_contact_flow_id: builtins.str,
             answer_machine_detection_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCampaign.AnswerMachineDetectionConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             connect_source_phone_number: typing.Optional[builtins.str] = None,
+            ring_timeout: typing.Optional[jsii.Number] = None,
         ) -> None:
             '''The outbound configuration for telephony.
 
             :param connect_contact_flow_id: The identifier of the published Amazon Connect contact flow.
             :param answer_machine_detection_config: The answering machine detection configuration.
             :param connect_source_phone_number: The Amazon Connect source phone number.
+            :param ring_timeout: Maximum ring time for outbound calls in seconds.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundconfig.html
             :exampleMetadata: fixture=_generated
@@ -2645,7 +2651,8 @@ class CfnCampaign(
                         # the properties below are optional
                         await_answer_machine_prompt=False
                     ),
-                    connect_source_phone_number="connectSourcePhoneNumber"
+                    connect_source_phone_number="connectSourcePhoneNumber",
+                    ring_timeout=123
                 )
             '''
             if __debug__:
@@ -2653,6 +2660,7 @@ class CfnCampaign(
                 check_type(argname="argument connect_contact_flow_id", value=connect_contact_flow_id, expected_type=type_hints["connect_contact_flow_id"])
                 check_type(argname="argument answer_machine_detection_config", value=answer_machine_detection_config, expected_type=type_hints["answer_machine_detection_config"])
                 check_type(argname="argument connect_source_phone_number", value=connect_source_phone_number, expected_type=type_hints["connect_source_phone_number"])
+                check_type(argname="argument ring_timeout", value=ring_timeout, expected_type=type_hints["ring_timeout"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "connect_contact_flow_id": connect_contact_flow_id,
             }
@@ -2660,6 +2668,8 @@ class CfnCampaign(
                 self._values["answer_machine_detection_config"] = answer_machine_detection_config
             if connect_source_phone_number is not None:
                 self._values["connect_source_phone_number"] = connect_source_phone_number
+            if ring_timeout is not None:
+                self._values["ring_timeout"] = ring_timeout
 
         @builtins.property
         def connect_contact_flow_id(self) -> builtins.str:
@@ -2690,6 +2700,15 @@ class CfnCampaign(
             '''
             result = self._values.get("connect_source_phone_number")
             return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def ring_timeout(self) -> typing.Optional[jsii.Number]:
+            '''Maximum ring time for outbound calls in seconds.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connectcampaignsv2-campaign-telephonyoutboundconfig.html#cfn-connectcampaignsv2-campaign-telephonyoutboundconfig-ringtimeout
+            '''
+            result = self._values.get("ring_timeout")
+            return typing.cast(typing.Optional[jsii.Number], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -3137,7 +3156,8 @@ class CfnCampaignProps:
                                 # the properties below are optional
                                 await_answer_machine_prompt=False
                             ),
-                            connect_source_phone_number="connectSourcePhoneNumber"
+                            connect_source_phone_number="connectSourcePhoneNumber",
+                            ring_timeout=123
                         ),
                         outbound_mode=connectcampaignsv2.CfnCampaign.TelephonyOutboundModeProperty(
                             agentless_config=agentless_config,
@@ -3707,6 +3727,7 @@ def _typecheckingstub__2751a1c01ea2bfaf5fe6806fe1a585daea66baf82d5fe0a4cec77a9b5
     connect_contact_flow_id: builtins.str,
     answer_machine_detection_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCampaign.AnswerMachineDetectionConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     connect_source_phone_number: typing.Optional[builtins.str] = None,
+    ring_timeout: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1815,7 +1815,8 @@ class CfnBackupPlan(
                     },
                     schedule_expression="scheduleExpression",
                     schedule_expression_timezone="scheduleExpressionTimezone",
-                    start_window_minutes=123
+                    start_window_minutes=123,
+                    target_logically_air_gapped_backup_vault_arn="targetLogicallyAirGappedBackupVaultArn"
                 )],
         
                 # the properties below are optional
@@ -2182,7 +2183,8 @@ class CfnBackupPlan(
                         },
                         schedule_expression="scheduleExpression",
                         schedule_expression_timezone="scheduleExpressionTimezone",
-                        start_window_minutes=123
+                        start_window_minutes=123,
+                        target_logically_air_gapped_backup_vault_arn="targetLogicallyAirGappedBackupVaultArn"
                     )],
                 
                     # the properties below are optional
@@ -2263,6 +2265,7 @@ class CfnBackupPlan(
             "schedule_expression": "scheduleExpression",
             "schedule_expression_timezone": "scheduleExpressionTimezone",
             "start_window_minutes": "startWindowMinutes",
+            "target_logically_air_gapped_backup_vault_arn": "targetLogicallyAirGappedBackupVaultArn",
         },
     )
     class BackupRuleResourceTypeProperty:
@@ -2280,6 +2283,7 @@ class CfnBackupPlan(
             schedule_expression: typing.Optional[builtins.str] = None,
             schedule_expression_timezone: typing.Optional[builtins.str] = None,
             start_window_minutes: typing.Optional[jsii.Number] = None,
+            target_logically_air_gapped_backup_vault_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''Specifies an object containing properties used to schedule a task to back up a selection of resources.
 
@@ -2294,6 +2298,7 @@ class CfnBackupPlan(
             :param schedule_expression: A CRON expression specifying when AWS Backup initiates a backup job.
             :param schedule_expression_timezone: This is the timezone in which the schedule expression is set. By default, ScheduleExpressions are in UTC. You can modify this to a specified timezone.
             :param start_window_minutes: An optional value that specifies a period of time in minutes after a backup is scheduled before a job is canceled if it doesn't start successfully. If this value is included, it must be at least 60 minutes to avoid errors.
+            :param target_logically_air_gapped_backup_vault_arn: 
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-backupruleresourcetype.html
             :exampleMetadata: fixture=_generated
@@ -2334,7 +2339,8 @@ class CfnBackupPlan(
                     },
                     schedule_expression="scheduleExpression",
                     schedule_expression_timezone="scheduleExpressionTimezone",
-                    start_window_minutes=123
+                    start_window_minutes=123,
+                    target_logically_air_gapped_backup_vault_arn="targetLogicallyAirGappedBackupVaultArn"
                 )
             '''
             if __debug__:
@@ -2350,6 +2356,7 @@ class CfnBackupPlan(
                 check_type(argname="argument schedule_expression", value=schedule_expression, expected_type=type_hints["schedule_expression"])
                 check_type(argname="argument schedule_expression_timezone", value=schedule_expression_timezone, expected_type=type_hints["schedule_expression_timezone"])
                 check_type(argname="argument start_window_minutes", value=start_window_minutes, expected_type=type_hints["start_window_minutes"])
+                check_type(argname="argument target_logically_air_gapped_backup_vault_arn", value=target_logically_air_gapped_backup_vault_arn, expected_type=type_hints["target_logically_air_gapped_backup_vault_arn"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "rule_name": rule_name,
                 "target_backup_vault": target_backup_vault,
@@ -2372,6 +2379,8 @@ class CfnBackupPlan(
                 self._values["schedule_expression_timezone"] = schedule_expression_timezone
             if start_window_minutes is not None:
                 self._values["start_window_minutes"] = start_window_minutes
+            if target_logically_air_gapped_backup_vault_arn is not None:
+                self._values["target_logically_air_gapped_backup_vault_arn"] = target_logically_air_gapped_backup_vault_arn
 
         @builtins.property
         def rule_name(self) -> builtins.str:
@@ -2496,6 +2505,16 @@ class CfnBackupPlan(
             '''
             result = self._values.get("start_window_minutes")
             return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def target_logically_air_gapped_backup_vault_arn(
+            self,
+        ) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-backupplan-backupruleresourcetype.html#cfn-backup-backupplan-backupruleresourcetype-targetlogicallyairgappedbackupvaultarn
+            '''
+            result = self._values.get("target_logically_air_gapped_backup_vault_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -2811,7 +2830,8 @@ class CfnBackupPlanProps:
                         },
                         schedule_expression="scheduleExpression",
                         schedule_expression_timezone="scheduleExpressionTimezone",
-                        start_window_minutes=123
+                        start_window_minutes=123,
+                        target_logically_air_gapped_backup_vault_arn="targetLogicallyAirGappedBackupVaultArn"
                     )],
             
                     # the properties below are optional
@@ -5835,7 +5855,7 @@ class CfnReportPlan(
         ) -> None:
             '''Contains detailed information about a report setting.
 
-            :param report_template: Identifies the report template for the report. Reports are built using a report template. The report templates are:. ``RESOURCE_COMPLIANCE_REPORT | CONTROL_COMPLIANCE_REPORT | BACKUP_JOB_REPORT | COPY_JOB_REPORT | RESTORE_JOB_REPORT``
+            :param report_template: Identifies the report template for the report. Reports are built using a report template. The report templates are:. ``RESOURCE_COMPLIANCE_REPORT | CONTROL_COMPLIANCE_REPORT | BACKUP_JOB_REPORT | COPY_JOB_REPORT | RESTORE_JOB_REPORT | SCAN_JOB_REPORT``
             :param accounts: These are the accounts to be included in the report. Use string value of ``ROOT`` to include all organizational units.
             :param framework_arns: The Amazon Resource Names (ARNs) of the frameworks a report covers.
             :param organization_units: These are the Organizational Units to be included in the report.
@@ -5883,7 +5903,7 @@ class CfnReportPlan(
         def report_template(self) -> builtins.str:
             '''Identifies the report template for the report. Reports are built using a report template. The report templates are:.
 
-            ``RESOURCE_COMPLIANCE_REPORT | CONTROL_COMPLIANCE_REPORT | BACKUP_JOB_REPORT | COPY_JOB_REPORT | RESTORE_JOB_REPORT``
+            ``RESOURCE_COMPLIANCE_REPORT | CONTROL_COMPLIANCE_REPORT | BACKUP_JOB_REPORT | COPY_JOB_REPORT | RESTORE_JOB_REPORT | SCAN_JOB_REPORT``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-backup-reportplan-reportsetting.html#cfn-backup-reportplan-reportsetting-reporttemplate
             '''
@@ -8258,6 +8278,7 @@ def _typecheckingstub__a15d5028e47f5757a8c2319a31ccf993bd398f0a4476991c75f1e1c3b
     schedule_expression: typing.Optional[builtins.str] = None,
     schedule_expression_timezone: typing.Optional[builtins.str] = None,
     start_window_minutes: typing.Optional[jsii.Number] = None,
+    target_logically_air_gapped_backup_vault_arn: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

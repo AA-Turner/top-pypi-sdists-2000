@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.35.0
+Version: 0.36.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -23,7 +23,7 @@ Requires-Dist: argcomplete<4,>=2.10.1
 Requires-Dist: black>=19.10b0
 Requires-Dist: genson<2,>=1.2.1
 Requires-Dist: inflect<8,>=4.1
-Requires-Dist: isort<7,>=4.3.21
+Requires-Dist: isort<8,>=4.3.21
 Requires-Dist: jinja2<4,>=2.10.1
 Requires-Dist: packaging
 Requires-Dist: pydantic>=1.5
@@ -32,7 +32,7 @@ Requires-Dist: tomli<3,>=2.2.1; python_version <= '3.11'
 Provides-Extra: all
 Requires-Dist: graphql-core>=3.2.3; extra == 'all'
 Requires-Dist: httpx>=0.24.1; extra == 'all'
-Requires-Dist: openapi-spec-validator<0.7,>=0.2.8; extra == 'all'
+Requires-Dist: openapi-spec-validator<0.8,>=0.2.8; extra == 'all'
 Requires-Dist: prance>=0.18.2; extra == 'all'
 Requires-Dist: pysnooper<2,>=0.4.1; extra == 'all'
 Requires-Dist: ruff>=0.9.10; extra == 'all'
@@ -45,7 +45,7 @@ Requires-Dist: httpx>=0.24.1; extra == 'http'
 Provides-Extra: ruff
 Requires-Dist: ruff>=0.9.10; extra == 'ruff'
 Provides-Extra: validation
-Requires-Dist: openapi-spec-validator<0.7,>=0.2.8; extra == 'validation'
+Requires-Dist: openapi-spec-validator<0.8,>=0.2.8; extra == 'validation'
 Requires-Dist: prance>=0.18.2; extra == 'validation'
 Description-Content-Type: text/markdown
 
@@ -442,10 +442,14 @@ Typing customization:
                         corresponding con* constrained types.
   --use-one-literal-as-default
                         Use one literal as default value for one literal field
+  --use-specialized-enum, --no-use-specialized-enum
+                        Don''t use specialized Enum class (StrEnum, IntEnum) even if the
+                        target Python version supports it
   --use-standard-collections
                         Use standard collections for type hinting (list, dict)
-  --use-subclass-enum   Define Enum class as subclass with field type when enum has type
-                        (int, float, bytes, str)
+  --use-subclass-enum   Define generic Enum class as subclass with field type when enum has
+                        type (int, float, bytes, str)
+  --use-type-alias      Use TypeAlias instead of root models (experimental)
   --use-union-operator  Use | operator for Union type (PEP 604).
   --use-unique-items-as-set
                         define field type as `set` when the field attribute has
@@ -484,6 +488,9 @@ Field customization:
                         default values.
   --use-field-description
                         Use schema description to populate field docstring
+  --use-inline-field-description
+                        Use schema description to populate field docstring as inline
+                        docstring
 
 Model customization:
   --allow-extra-fields  Deprecated: Allow passing extra fields. This flag is deprecated. Use

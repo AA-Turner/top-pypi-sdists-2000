@@ -19,12 +19,22 @@ from datamodel_code_generator import (
     load_yaml_from_path,
     snooper_to_methods,
 )
-from datamodel_code_generator.format import DEFAULT_FORMATTERS, Formatter, PythonVersion, PythonVersionMin
+from datamodel_code_generator.format import (
+    DEFAULT_FORMATTERS,
+    DatetimeClassType,
+    Formatter,
+    PythonVersion,
+    PythonVersionMin,
+)
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
 from datamodel_code_generator.model import pydantic as pydantic_model
 from datamodel_code_generator.model.base import UNDEFINED, get_module_name
 from datamodel_code_generator.model.dataclass import DataClass
-from datamodel_code_generator.model.enum import Enum
+from datamodel_code_generator.model.enum import (
+    SPECIALIZED_ENUM_TYPE_MATCH,
+    Enum,
+    StrEnum,
+)
 from datamodel_code_generator.parser import DefaultPutDict, LiteralType
 from datamodel_code_generator.parser.base import (
     SPECIAL_PATH_FORMAT,
@@ -52,8 +62,6 @@ from datamodel_code_generator.util import (
 
 if PYDANTIC_V2:
     from pydantic import ConfigDict
-
-from datamodel_code_generator.format import DatetimeClassType
 
 if TYPE_CHECKING:
     from collections.abc import Generator, Iterable, Iterator, Mapping, Sequence
@@ -87,6 +95,8 @@ def get_model_by_path(schema: dict[str, Any] | list[Any], keys: list[str] | list
     )
 
 
+# TODO: This dictionary contains formats valid only for OpenAPI and not for
+#       jsonschema and vice versa. They should be separated.
 json_schema_data_formats: dict[str, dict[str, Types]] = {
     "integer": {
         "int32": Types.int32,
@@ -236,6 +246,19 @@ class JsonSchemaObject(BaseModel):
 
             value = required_fields
 
+        return value
+
+    @field_validator("type", mode="before")
+    def validate_null_type(cls, value: Any) -> Any:  # noqa: N805
+        """
+        Validate and convert unquoted null type to string "null"
+        """
+        # TODO[openapi]: This should be supported only for OpenAPI 3.1+
+        # See: https://github.com/koxudaxi/datamodel-code-generator/issues/2477#issuecomment-3192480591
+        if value is None:
+            value = "null"
+        if isinstance(value, list) and None in value:
+            value = [v if v is not None else "null" for v in value]
         return value
 
     items: Optional[Union[list[JsonSchemaObject], JsonSchemaObject, bool]] = None  # noqa: UP007, UP045
@@ -415,6 +438,7 @@ class JsonSchemaParser(Parser):
         base_path: Path | None = None,
         use_schema_description: bool = False,
         use_field_description: bool = False,
+        use_inline_field_description: bool = False,
         use_default_kwarg: bool = False,
         reuse_model: bool = False,
         encoding: str = "utf-8",
@@ -422,6 +446,7 @@ class JsonSchemaParser(Parser):
         use_one_literal_as_default: bool = False,
         set_default_enum_member: bool = False,
         use_subclass_enum: bool = False,
+        use_specialized_enum: bool = True,
         strict_nullable: bool = False,
         use_generic_container_types: bool = False,
         enable_faux_immutability: bool = False,
@@ -446,6 +471,7 @@ class JsonSchemaParser(Parser):
         use_union_operator: bool = False,
         allow_responses_without_content: bool = False,
         collapse_root_models: bool = False,
+        use_type_alias: bool = False,
         special_field_name_prefix: str | None = None,
         remove_special_field_name_prefix: bool = False,
         capitalise_enum_members: bool = False,
@@ -493,6 +519,7 @@ class JsonSchemaParser(Parser):
             base_path=base_path,
             use_schema_description=use_schema_description,
             use_field_description=use_field_description,
+            use_inline_field_description=use_inline_field_description,
             use_default_kwarg=use_default_kwarg,
             reuse_model=reuse_model,
             encoding=encoding,
@@ -500,6 +527,7 @@ class JsonSchemaParser(Parser):
             use_one_literal_as_default=use_one_literal_as_default,
             set_default_enum_member=set_default_enum_member,
             use_subclass_enum=use_subclass_enum,
+            use_specialized_enum=use_specialized_enum,
             strict_nullable=strict_nullable,
             use_generic_container_types=use_generic_container_types,
             enable_faux_immutability=enable_faux_immutability,
@@ -524,6 +552,7 @@ class JsonSchemaParser(Parser):
             use_union_operator=use_union_operator,
             allow_responses_without_content=allow_responses_without_content,
             collapse_root_models=collapse_root_models,
+            use_type_alias=use_type_alias,
             special_field_name_prefix=special_field_name_prefix,
             remove_special_field_name_prefix=remove_special_field_name_prefix,
             capitalise_enum_members=capitalise_enum_members,
@@ -623,6 +652,7 @@ class JsonSchemaParser(Parser):
             extras=self.get_field_extras(field),
             use_annotated=self.use_annotated,
             use_field_description=self.use_field_description,
+            use_inline_field_description=self.use_inline_field_description,
             use_default_kwarg=self.use_default_kwarg,
             original_name=original_field_name,
             has_default=field.has_default,
@@ -943,6 +973,7 @@ class JsonSchemaParser(Parser):
                         strip_default_none=self.strip_default_none,
                         use_annotated=self.use_annotated,
                         use_field_description=self.use_field_description,
+                        use_inline_field_description=self.use_inline_field_description,
                         original_name=original_field_name,
                     )
                 )
@@ -1203,6 +1234,7 @@ class JsonSchemaParser(Parser):
             extras=self.get_field_extras(obj),
             use_annotated=self.use_annotated,
             use_field_description=self.use_field_description,
+            use_inline_field_description=self.use_inline_field_description,
             original_name=None,
             has_default=obj.has_default,
         )
@@ -1236,6 +1268,7 @@ class JsonSchemaParser(Parser):
                 extras=field.extras,
                 use_annotated=self.use_annotated,
                 use_field_description=self.use_field_description,
+                use_inline_field_description=self.use_inline_field_description,
                 original_name=None,
                 has_default=field.has_default,
             )
@@ -1320,6 +1353,7 @@ class JsonSchemaParser(Parser):
                     extras=self.get_field_extras(obj),
                     use_annotated=self.use_annotated,
                     use_field_description=self.use_field_description,
+                    use_inline_field_description=self.use_inline_field_description,
                     original_name=None,
                     has_default=obj.has_default,
                 )
@@ -1391,18 +1425,34 @@ class JsonSchemaParser(Parser):
                     strip_default_none=self.strip_default_none,
                     has_default=obj.has_default,
                     use_field_description=self.use_field_description,
+                    use_inline_field_description=self.use_inline_field_description,
                     original_name=None,
                 )
             )
 
         def create_enum(reference_: Reference) -> DataType:
-            enum = Enum(
+            type_: Types | None = _get_type(obj.type, obj.format) if isinstance(obj.type, str) else None
+
+            enum_cls: type[Enum] = Enum
+            if (
+                self.use_specialized_enum
+                and type_
+                and (specialized_type := SPECIALIZED_ENUM_TYPE_MATCH.get(type_))
+                # StrEnum is available only in Python 3.11+
+                and (specialized_type != StrEnum or self.target_python_version.has_strenum)
+            ):
+                # If specialized enum is available in the target Python version,
+                # use it and ignore `self.use_subclass_enum` setting.
+                type_ = None
+                enum_cls = specialized_type
+
+            enum = enum_cls(
                 reference=reference_,
                 fields=enum_fields,
                 path=self.current_source_path,
                 description=obj.description if self.use_schema_description else None,
                 custom_template_dir=self.custom_template_dir,
-                type_=_get_type(obj.type, obj.format) if self.use_subclass_enum and isinstance(obj.type, str) else None,
+                type_=type_ if self.use_subclass_enum else None,
                 default=obj.default if obj.has_default else UNDEFINED,
                 treat_dot_as_module=self.treat_dot_as_module,
             )
@@ -1445,6 +1495,7 @@ class JsonSchemaParser(Parser):
                     use_annotated=self.use_annotated,
                     has_default=obj.has_default,
                     use_field_description=self.use_field_description,
+                    use_inline_field_description=self.use_inline_field_description,
                     original_name=None,
                 )
             ],
@@ -1581,7 +1632,10 @@ class JsonSchemaParser(Parser):
         raw: dict[str, Any],
         path: list[str],
     ) -> None:
-        self.parse_obj(name, self.SCHEMA_OBJECT_TYPE.model_validate(raw), path)
+        obj: JsonSchemaObject = (
+            self.SCHEMA_OBJECT_TYPE.model_validate(raw) if PYDANTIC_V2 else self.SCHEMA_OBJECT_TYPE.parse_obj(raw)
+        )
+        self.parse_obj(name, obj, path)
 
     def parse_obj(
         self,

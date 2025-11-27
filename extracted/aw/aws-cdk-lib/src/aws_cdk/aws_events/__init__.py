@@ -5474,146 +5474,37 @@ class CfnRule(
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-rule.html
     :cloudformationResource: AWS::Events::Rule
-    :exampleMetadata: fixture=_generated
+    :exampleMetadata: infused
 
     Example::
 
-        # The code below shows an example of how to instantiate this type.
-        # The values are placeholders you should change.
-        from aws_cdk import aws_events as events
+        from aws_cdk.mixins_preview.aws_s3.events import BucketEvents
+        import aws_cdk.aws_events as events
+        import aws_cdk.aws_events_targets as targets
+        # fn: lambda.Function
         
-        # event_pattern: Any
         
-        cfn_rule = events.CfnRule(self, "MyCfnRule",
-            description="description",
-            event_bus_name="eventBusName",
-            event_pattern=event_pattern,
-            name="name",
-            role_arn="roleArn",
-            schedule_expression="scheduleExpression",
-            state="state",
-            tags=[CfnTag(
-                key="key",
-                value="value"
-            )],
-            targets=[events.CfnRule.TargetProperty(
-                arn="arn",
-                id="id",
+        # Works with L2 constructs
+        bucket = s3.Bucket(scope, "Bucket")
+        bucket_events = BucketEvents.from_bucket(bucket)
         
-                # the properties below are optional
-                app_sync_parameters=events.CfnRule.AppSyncParametersProperty(
-                    graph_ql_operation="graphQlOperation"
-                ),
-                batch_parameters=events.CfnRule.BatchParametersProperty(
-                    job_definition="jobDefinition",
-                    job_name="jobName",
+        events.Rule(scope, "Rule",
+            event_pattern=bucket_events.object_created_pattern(
+                object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+            ),
+            targets=[targets.LambdaFunction(fn)]
+        )
         
-                    # the properties below are optional
-                    array_properties=events.CfnRule.BatchArrayPropertiesProperty(
-                        size=123
-                    ),
-                    retry_strategy=events.CfnRule.BatchRetryStrategyProperty(
-                        attempts=123
-                    )
-                ),
-                dead_letter_config=events.CfnRule.DeadLetterConfigProperty(
-                    arn="arn"
-                ),
-                ecs_parameters=events.CfnRule.EcsParametersProperty(
-                    task_definition_arn="taskDefinitionArn",
+        # Also works with L1 constructs
+        cfn_bucket = s3.CfnBucket(scope, "CfnBucket")
+        cfn_bucket_events = BucketEvents.from_bucket(cfn_bucket)
         
-                    # the properties below are optional
-                    capacity_provider_strategy=[events.CfnRule.CapacityProviderStrategyItemProperty(
-                        capacity_provider="capacityProvider",
-        
-                        # the properties below are optional
-                        base=123,
-                        weight=123
-                    )],
-                    enable_ecs_managed_tags=False,
-                    enable_execute_command=False,
-                    group="group",
-                    launch_type="launchType",
-                    network_configuration=events.CfnRule.NetworkConfigurationProperty(
-                        aws_vpc_configuration=events.CfnRule.AwsVpcConfigurationProperty(
-                            subnets=["subnets"],
-        
-                            # the properties below are optional
-                            assign_public_ip="assignPublicIp",
-                            security_groups=["securityGroups"]
-                        )
-                    ),
-                    placement_constraints=[events.CfnRule.PlacementConstraintProperty(
-                        expression="expression",
-                        type="type"
-                    )],
-                    placement_strategies=[events.CfnRule.PlacementStrategyProperty(
-                        field="field",
-                        type="type"
-                    )],
-                    platform_version="platformVersion",
-                    propagate_tags="propagateTags",
-                    reference_id="referenceId",
-                    tag_list=[CfnTag(
-                        key="key",
-                        value="value"
-                    )],
-                    task_count=123
-                ),
-                http_parameters=events.CfnRule.HttpParametersProperty(
-                    header_parameters={
-                        "header_parameters_key": "headerParameters"
-                    },
-                    path_parameter_values=["pathParameterValues"],
-                    query_string_parameters={
-                        "query_string_parameters_key": "queryStringParameters"
-                    }
-                ),
-                input="input",
-                input_path="inputPath",
-                input_transformer=events.CfnRule.InputTransformerProperty(
-                    input_template="inputTemplate",
-        
-                    # the properties below are optional
-                    input_paths_map={
-                        "input_paths_map_key": "inputPathsMap"
-                    }
-                ),
-                kinesis_parameters=events.CfnRule.KinesisParametersProperty(
-                    partition_key_path="partitionKeyPath"
-                ),
-                redshift_data_parameters=events.CfnRule.RedshiftDataParametersProperty(
-                    database="database",
-        
-                    # the properties below are optional
-                    db_user="dbUser",
-                    secret_manager_arn="secretManagerArn",
-                    sql="sql",
-                    sqls=["sqls"],
-                    statement_name="statementName",
-                    with_event=False
-                ),
-                retry_policy=events.CfnRule.RetryPolicyProperty(
-                    maximum_event_age_in_seconds=123,
-                    maximum_retry_attempts=123
-                ),
-                role_arn="roleArn",
-                run_command_parameters=events.CfnRule.RunCommandParametersProperty(
-                    run_command_targets=[events.CfnRule.RunCommandTargetProperty(
-                        key="key",
-                        values=["values"]
-                    )]
-                ),
-                sage_maker_pipeline_parameters=events.CfnRule.SageMakerPipelineParametersProperty(
-                    pipeline_parameter_list=[events.CfnRule.SageMakerPipelineParameterProperty(
-                        name="name",
-                        value="value"
-                    )]
-                ),
-                sqs_parameters=events.CfnRule.SqsParametersProperty(
-                    message_group_id="messageGroupId"
-                )
-            )]
+        events.CfnRule(scope, "CfnRule",
+            state="ENABLED",
+            event_pattern=cfn_bucket_events.object_created_pattern(
+                object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+            ),
+            targets=[events.CfnRule.TargetProperty(arn=fn.function_arn, id="L1")]
         )
     '''
 
@@ -8365,146 +8256,37 @@ class CfnRuleProps:
         :param targets: Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule. Targets are the resources that are invoked when a rule is triggered. The maximum number of entries per request is 10. .. epigraph:: Each rule can have up to five (5) targets associated with it at one time. For a list of services you can configure as targets for events, see `EventBridge targets <https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-targets.html>`_ in the **Amazon EventBridge User Guide** . Creating rules with built-in targets is supported only in the the console . The built-in targets are: - ``Amazon EBS CreateSnapshot API call`` - ``Amazon EC2 RebootInstances API call`` - ``Amazon EC2 StopInstances API call`` - ``Amazon EC2 TerminateInstances API call`` For some target types, ``PutTargets`` provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the ``KinesisParameters`` argument. To invoke a command on multiple EC2 instances with one rule, you can use the ``RunCommandParameters`` field. To be able to make API calls against the resources that you own, Amazon EventBridge needs the appropriate permissions: - For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. - For EC2 instances, Kinesis Data Streams, AWS Step Functions state machines and API Gateway APIs, EventBridge relies on IAM roles that you specify in the ``RoleARN`` argument in ``PutTargets`` . For more information, see `Authentication and Access Control <https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html>`_ in the **Amazon EventBridge User Guide** . If another AWS account is in the same region and has granted you permission (using ``PutPermission`` ), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the ``Arn`` value when you run ``PutTargets`` . If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see `Amazon EventBridge Pricing <https://docs.aws.amazon.com/eventbridge/pricing/>`_ . .. epigraph:: ``Input`` , ``InputPath`` , and ``InputTransformer`` are not available with ``PutTarget`` if the target is an event bus of a different AWS account. If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a ``RoleArn`` with proper permissions in the ``Target`` structure. For more information, see `Sending and Receiving Events Between AWS Accounts <https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html>`_ in the *Amazon EventBridge User Guide* . .. epigraph:: If you have an IAM role on a cross-account event bus target, a ``PutTargets`` call without a role on the same target (same ``Id`` and ``Arn`` ) will not remove the role. For more information about enabling cross-account events, see `PutPermission <https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutPermission.html>`_ . *Input* , *InputPath* , and *InputTransformer* are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event: - If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target). - If *Input* is specified in the form of valid JSON, then the matched event is overridden with this constant. - If *InputPath* is specified in the form of JSONPath (for example, ``$.detail`` ), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed). - If *InputTransformer* is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target. When you specify ``InputPath`` or ``InputTransformer`` , you must use JSON dot notation, not bracket notation. When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect. This action can partially fail if too many requests are made at the same time. If that happens, ``FailedEntryCount`` is non-zero in the response and each entry in ``FailedEntries`` provides the ID of the failed target and the error code.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-events-rule.html
-        :exampleMetadata: fixture=_generated
+        :exampleMetadata: infused
 
         Example::
 
-            # The code below shows an example of how to instantiate this type.
-            # The values are placeholders you should change.
-            from aws_cdk import aws_events as events
+            from aws_cdk.mixins_preview.aws_s3.events import BucketEvents
+            import aws_cdk.aws_events as events
+            import aws_cdk.aws_events_targets as targets
+            # fn: lambda.Function
             
-            # event_pattern: Any
             
-            cfn_rule_props = events.CfnRuleProps(
-                description="description",
-                event_bus_name="eventBusName",
-                event_pattern=event_pattern,
-                name="name",
-                role_arn="roleArn",
-                schedule_expression="scheduleExpression",
-                state="state",
-                tags=[CfnTag(
-                    key="key",
-                    value="value"
-                )],
-                targets=[events.CfnRule.TargetProperty(
-                    arn="arn",
-                    id="id",
+            # Works with L2 constructs
+            bucket = s3.Bucket(scope, "Bucket")
+            bucket_events = BucketEvents.from_bucket(bucket)
             
-                    # the properties below are optional
-                    app_sync_parameters=events.CfnRule.AppSyncParametersProperty(
-                        graph_ql_operation="graphQlOperation"
-                    ),
-                    batch_parameters=events.CfnRule.BatchParametersProperty(
-                        job_definition="jobDefinition",
-                        job_name="jobName",
+            events.Rule(scope, "Rule",
+                event_pattern=bucket_events.object_created_pattern(
+                    object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                ),
+                targets=[targets.LambdaFunction(fn)]
+            )
             
-                        # the properties below are optional
-                        array_properties=events.CfnRule.BatchArrayPropertiesProperty(
-                            size=123
-                        ),
-                        retry_strategy=events.CfnRule.BatchRetryStrategyProperty(
-                            attempts=123
-                        )
-                    ),
-                    dead_letter_config=events.CfnRule.DeadLetterConfigProperty(
-                        arn="arn"
-                    ),
-                    ecs_parameters=events.CfnRule.EcsParametersProperty(
-                        task_definition_arn="taskDefinitionArn",
+            # Also works with L1 constructs
+            cfn_bucket = s3.CfnBucket(scope, "CfnBucket")
+            cfn_bucket_events = BucketEvents.from_bucket(cfn_bucket)
             
-                        # the properties below are optional
-                        capacity_provider_strategy=[events.CfnRule.CapacityProviderStrategyItemProperty(
-                            capacity_provider="capacityProvider",
-            
-                            # the properties below are optional
-                            base=123,
-                            weight=123
-                        )],
-                        enable_ecs_managed_tags=False,
-                        enable_execute_command=False,
-                        group="group",
-                        launch_type="launchType",
-                        network_configuration=events.CfnRule.NetworkConfigurationProperty(
-                            aws_vpc_configuration=events.CfnRule.AwsVpcConfigurationProperty(
-                                subnets=["subnets"],
-            
-                                # the properties below are optional
-                                assign_public_ip="assignPublicIp",
-                                security_groups=["securityGroups"]
-                            )
-                        ),
-                        placement_constraints=[events.CfnRule.PlacementConstraintProperty(
-                            expression="expression",
-                            type="type"
-                        )],
-                        placement_strategies=[events.CfnRule.PlacementStrategyProperty(
-                            field="field",
-                            type="type"
-                        )],
-                        platform_version="platformVersion",
-                        propagate_tags="propagateTags",
-                        reference_id="referenceId",
-                        tag_list=[CfnTag(
-                            key="key",
-                            value="value"
-                        )],
-                        task_count=123
-                    ),
-                    http_parameters=events.CfnRule.HttpParametersProperty(
-                        header_parameters={
-                            "header_parameters_key": "headerParameters"
-                        },
-                        path_parameter_values=["pathParameterValues"],
-                        query_string_parameters={
-                            "query_string_parameters_key": "queryStringParameters"
-                        }
-                    ),
-                    input="input",
-                    input_path="inputPath",
-                    input_transformer=events.CfnRule.InputTransformerProperty(
-                        input_template="inputTemplate",
-            
-                        # the properties below are optional
-                        input_paths_map={
-                            "input_paths_map_key": "inputPathsMap"
-                        }
-                    ),
-                    kinesis_parameters=events.CfnRule.KinesisParametersProperty(
-                        partition_key_path="partitionKeyPath"
-                    ),
-                    redshift_data_parameters=events.CfnRule.RedshiftDataParametersProperty(
-                        database="database",
-            
-                        # the properties below are optional
-                        db_user="dbUser",
-                        secret_manager_arn="secretManagerArn",
-                        sql="sql",
-                        sqls=["sqls"],
-                        statement_name="statementName",
-                        with_event=False
-                    ),
-                    retry_policy=events.CfnRule.RetryPolicyProperty(
-                        maximum_event_age_in_seconds=123,
-                        maximum_retry_attempts=123
-                    ),
-                    role_arn="roleArn",
-                    run_command_parameters=events.CfnRule.RunCommandParametersProperty(
-                        run_command_targets=[events.CfnRule.RunCommandTargetProperty(
-                            key="key",
-                            values=["values"]
-                        )]
-                    ),
-                    sage_maker_pipeline_parameters=events.CfnRule.SageMakerPipelineParametersProperty(
-                        pipeline_parameter_list=[events.CfnRule.SageMakerPipelineParameterProperty(
-                            name="name",
-                            value="value"
-                        )]
-                    ),
-                    sqs_parameters=events.CfnRule.SqsParametersProperty(
-                        message_group_id="messageGroupId"
-                    )
-                )]
+            events.CfnRule(scope, "CfnRule",
+                state="ENABLED",
+                event_pattern=cfn_bucket_events.object_created_pattern(
+                    object=BucketEvents.ObjectCreated.ObjectType(key=["uploads/*"])
+                ),
+                targets=[events.CfnRule.TargetProperty(arn=fn.function_arn, id="L1")]
             )
         '''
         if __debug__:
@@ -9818,11 +9600,6 @@ class EventPattern:
         version: typing.Optional[typing.Sequence[builtins.str]] = None,
     ) -> None:
         '''Events in Amazon CloudWatch Events are represented as JSON objects. For more information about JSON objects, see RFC 7159.
-
-        **Important**: this class can only be used with a ``Rule`` class. In particular,
-        do not use it with ``CfnRule`` class: your pattern will not be rendered
-        correctly. In a ``CfnRule`` class, write the pattern as you normally would when
-        directly writing CloudFormation.
 
         Rules use event patterns to select events and route them to targets. A
         pattern either matches an event or it doesn't. Event patterns are represented
