@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: litellm
-Version: 1.80.5
+Version: 1.80.7
 Summary: Library to easily interface with LLM API providers
 License: MIT
 Author: BerriAI
@@ -34,13 +34,14 @@ Requires-Dist: fastapi-sso (>=0.16.0,<0.17.0) ; extra == "proxy"
 Requires-Dist: fastuuid (>=0.13.0)
 Requires-Dist: google-cloud-iam (>=2.19.1,<3.0.0) ; extra == "extra-proxy"
 Requires-Dist: google-cloud-kms (>=2.21.3,<3.0.0) ; extra == "extra-proxy"
+Requires-Dist: grpcio (>=1.62.3,<1.68.0)
 Requires-Dist: gunicorn (>=23.0.0,<24.0.0) ; extra == "proxy"
 Requires-Dist: httpx (>=0.23.0)
 Requires-Dist: importlib-metadata (>=6.8.0)
 Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
 Requires-Dist: jsonschema (>=4.22.0,<5.0.0)
 Requires-Dist: litellm-enterprise (==0.1.22) ; extra == "proxy"
-Requires-Dist: litellm-proxy-extras (==0.4.6) ; extra == "proxy"
+Requires-Dist: litellm-proxy-extras (==0.4.9) ; extra == "proxy"
 Requires-Dist: mcp (>=1.21.2,<2.0.0) ; (python_version >= "3.10") and (extra == "proxy")
 Requires-Dist: mlflow (>3.1.4) ; (python_version >= "3.10") and (extra == "mlflow")
 Requires-Dist: numpydoc ; extra == "utils"
@@ -63,7 +64,7 @@ Requires-Dist: tiktoken (>=0.7.0)
 Requires-Dist: tokenizers
 Requires-Dist: uvicorn (>=0.31.1,<0.32.0) ; extra == "proxy"
 Requires-Dist: uvloop (>=0.21.0,<0.22.0) ; (sys_platform != "win32") and (extra == "proxy")
-Requires-Dist: websockets (>=13.1.0,<14.0.0) ; extra == "proxy"
+Requires-Dist: websockets (>=15.0.1,<16.0.0) ; extra == "proxy"
 Project-URL: Documentation, https://docs.litellm.ai
 Project-URL: Homepage, https://litellm.ai
 Project-URL: Repository, https://github.com/BerriAI/litellm
@@ -85,7 +86,7 @@ Description-Content-Type: text/markdown
         <p align="center">Call all LLM APIs using the OpenAI format [Bedrock, Huggingface, VertexAI, TogetherAI, Azure, OpenAI, Groq etc.]
         <br>
     </p>
-<h4 align="center"><a href="https://docs.litellm.ai/docs/simple_proxy" target="_blank">LiteLLM Proxy Server (LLM Gateway)</a> | <a href="https://docs.litellm.ai/docs/hosted" target="_blank"> Hosted Proxy (Preview)</a> | <a href="https://docs.litellm.ai/docs/enterprise"target="_blank">Enterprise Tier</a></h4>
+<h4 align="center"><a href="https://docs.litellm.ai/docs/simple_proxy" target="_blank">LiteLLM Proxy Server (LLM Gateway)</a> | <a href="https://docs.litellm.ai/docs/enterprise#hosted-litellm-proxy" target="_blank"> Hosted Proxy</a> | <a href="https://docs.litellm.ai/docs/enterprise"target="_blank">Enterprise Tier</a></h4>
 <h4 align="center">
     <a href="https://pypi.org/project/litellm/" target="_blank">
         <img src="https://img.shields.io/pypi/v/litellm.svg" alt="PyPI Version">
@@ -114,17 +115,13 @@ LiteLLM manages:
 LiteLLM Performance: **8ms P95 latency** at 1k RPS (See benchmarks [here](https://docs.litellm.ai/docs/benchmarks))
 
 [**Jump to LiteLLM Proxy (LLM Gateway) Docs**](https://github.com/BerriAI/litellm?tab=readme-ov-file#litellm-proxy-server-llm-gateway---docs) <br>
-[**Jump to Supported LLM Providers**](https://github.com/BerriAI/litellm?tab=readme-ov-file#supported-providers-docs)
+[**Jump to Supported LLM Providers**](https://docs.litellm.ai/docs/providers)
 
 🚨 **Stable Release:** Use docker images with the `-stable` tag. These have undergone 12 hour load tests, before being published. [More information about the release cycle here](https://docs.litellm.ai/docs/proxy/release_cycle)
 
 Support for more providers. Missing a provider or LLM Platform, raise a [feature request](https://github.com/BerriAI/litellm/issues/new?assignees=&labels=enhancement&projects=&template=feature_request.yml&title=%5BFeature%5D%3A+).
 
 # Usage ([**Docs**](https://docs.litellm.ai/docs/))
-
-> [!IMPORTANT]
-> LiteLLM v1.0.0 now requires `openai>=1.0.0`. Migration guide [here](https://docs.litellm.ai/docs/migration)
-> LiteLLM v1.40.14+ now requires `pydantic>=2.0.0`. No changes required.
 
 <a target="_blank" href="https://colab.research.google.com/github/BerriAI/litellm/blob/main/cookbook/liteLLM_Getting_Started.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
@@ -187,6 +184,8 @@ print(response)
     }
 }
 ```
+
+> **Note:** LiteLLM also supports the [Responses API](https://docs.litellm.ai/docs/response_api) (`litellm.responses()`)
 
 Call any model supported by a provider, with `model=<provider_name>/<model_name>`. There might be provider-specific details here, so refer to [provider docs for more information](https://docs.litellm.ai/docs/providers)
 
@@ -284,7 +283,7 @@ response = completion(model="openai/gpt-4o", messages=[{"role": "user", "content
 
 Track spend + Load Balance across multiple projects
 
-[Hosted Proxy (Preview)](https://docs.litellm.ai/docs/hosted)
+[Hosted Proxy](https://docs.litellm.ai/docs/enterprise#hosted-litellm-proxy)
 
 The proxy provides:
 

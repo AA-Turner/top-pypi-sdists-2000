@@ -20,7 +20,6 @@ import time
 from typing import Any
 
 import jax
-import numpy as np
 import orbax.checkpoint as ocp
 from orbax.checkpoint._src.checkpoint_managers import preservation_policy as preservation_policy_lib
 from orbax.checkpoint._src.checkpoint_managers import save_decision_policy as save_decision_policy_lib
@@ -95,12 +94,6 @@ class CheckpointManagerPerfBenchmark(benchmarks_core.BenchmarksGenerator):
 
     mngr = ocp.CheckpointManager(
         save_path,
-        item_handlers={
-            'pytree_item': ocp.PyTreeCheckpointHandler(
-                use_ocdbt=options.use_ocdbt,
-                use_zarr3=options.use_zarr3,
-            )
-        },
         options=ocp.CheckpointManagerOptions(
             save_decision_policy=save_decision_policy_lib.ContinuousCheckpointingPolicy(),
             preservation_policy=preservation_policy_lib.LatestN(n=1),
@@ -110,7 +103,7 @@ class CheckpointManagerPerfBenchmark(benchmarks_core.BenchmarksGenerator):
     save_times = []
     total_save_times = []
     for i in range(options.train_steps):
-      with metrics.time(f'save_{i}'):
+      with metrics.measure(f'save_{i}'):
         save_start = time.time()
         mngr.save(
             i,
@@ -121,26 +114,8 @@ class CheckpointManagerPerfBenchmark(benchmarks_core.BenchmarksGenerator):
         save_times.append(time.time() - save_start)
         mngr.wait_until_finished()
         total_save_times.append(time.time() - save_start)
-      with metrics.time(f'train_step_{i}'):
+      with metrics.measure(f'train_step_{i}'):
         pytree = self._train_step(pytree)
-
-    save_times = np.array(save_times)
-    total_save_times = np.array(total_save_times)
-
-    # Exclude step 0 from assertions; setup may take extra time.
-    asserting_save_times = save_times[1:]
-    asserting_total_save_times = total_save_times[1:]
-
-    mean_save_time = np.mean(asserting_save_times)
-    mean_total_save_time = np.mean(asserting_total_save_times)
-
-    assert np.all(asserting_save_times <= 2 * mean_save_time), (
-        f'Save times={asserting_save_times}, mean save time={mean_save_time}'
-    )
-    assert np.all(asserting_total_save_times <= 2 * mean_total_save_time), (
-        f'Total save times={asserting_total_save_times}, mean total save'
-        f' time={mean_total_save_time}'
-    )
 
     abstract_pytree = jax.tree.map(
         lambda x: ocp.utils.to_shape_dtype_struct(x)
@@ -150,7 +125,7 @@ class CheckpointManagerPerfBenchmark(benchmarks_core.BenchmarksGenerator):
     )
     context.pytree = self._clear_pytree(context.pytree)
 
-    with metrics.time('restore'):
+    with metrics.measure('restore'):
       mngr.restore(
           mngr.latest_step(),
           args=ocp.args.Composite(
@@ -159,6 +134,8 @@ class CheckpointManagerPerfBenchmark(benchmarks_core.BenchmarksGenerator):
               ),
           ),
       )
+
+    # TODO(nikhilbansall) : Add assertions for this test.
 
     mngr.close()
     return benchmarks_core.TestResult(metrics=metrics)

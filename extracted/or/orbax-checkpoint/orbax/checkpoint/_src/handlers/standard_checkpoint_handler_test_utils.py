@@ -26,11 +26,11 @@ from flax import nnx
 import flax.training.train_state
 import jax
 from jax import numpy as jnp
-from jax.experimental import layout
 import numpy as np
 import optax
 from orbax.checkpoint import test_utils
 from orbax.checkpoint import utils
+from orbax.checkpoint._src.arrays import sharding as arrays_sharding_lib
 from orbax.checkpoint._src.handlers import pytree_checkpoint_handler
 from orbax.checkpoint._src.handlers import standard_checkpoint_handler
 from orbax.checkpoint._src.metadata import sharding as sharding_metadata
@@ -39,14 +39,8 @@ from orbax.checkpoint._src.metadata import value as value_metadata
 from orbax.checkpoint._src.multihost import multihost
 from orbax.checkpoint._src.serialization import type_handlers
 
-if jax.__version_info__ >= (0, 6, 3):
-  DLL = layout.Layout
-else:
-  DLL = layout.DeviceLocalLayout  # type: ignore
-if jax.__version_info__ >= (0, 6, 2):
-  Format = layout.Format
-else:
-  Format = layout.Layout
+DLL = arrays_sharding_lib.DLL
+Format = arrays_sharding_lib.Format
 PyTree = Any
 SaveArgs = type_handlers.SaveArgs
 StandardRestoreArgs = standard_checkpoint_handler.StandardRestoreArgs
@@ -174,11 +168,7 @@ class StandardCheckpointHandlerTestBase:
       test_utils.assert_tree_equal(self, pytree, restored_regular)
 
       # create a custom layout
-      arr_layout = (
-          arr.format.layout  # type: ignore
-          if jax.__version_info__ >= (0, 6, 3)
-          else arr.format.device_local_layout  # type: ignore
-      )
+      arr_layout = arrays_sharding_lib.get_device_local_layout(arr)
       custom_layout = Format(  # pytype: disable=wrong-keyword-args
           DLL(
               major_to_minor=arr_layout.major_to_minor[::-1],  # pytype: disable=attribute-error
@@ -515,8 +505,13 @@ class StandardCheckpointHandlerTestBase:
       return StandardCheckpointHandler()
 
     def test_with_random_keys(self):
+      # TODO(b/393160483) investigate Pathways remote Python support for
+      # random.keys.
       if utils.is_pathways_backend():
-        self.skipTest('Pathways does not support random keys checkpoint.')
+        self.skipTest(
+            'Disabled on Pathways because random keys are not supported by'
+            ' remote Python.'
+        )
 
       def create_random_keys(seed):
         duplicated_sharding = jax.sharding.NamedSharding(
@@ -569,3 +564,38 @@ class StandardCheckpointHandlerTestBase:
             args=self.restore_args_cls(abstract_tree),
         )
         test_utils.assert_tree_equal(self, self.pytree, restored)
+
+    def test_save_restore_random_keys_with_jax_eval_shape(self):
+      # TODO(b/393160483) investigate Pathways remote Python support for
+      # random.keys.
+      if utils.is_pathways_backend():
+        self.skipTest(
+            'Disabled on Pathways because random keys are not supported by'
+            ' remote Python.'
+        )
+
+      mesh = jax.sharding.Mesh(jax.devices(), ('x',))
+      sharding = jax.sharding.NamedSharding(mesh, jax.sharding.PartitionSpec())
+
+      @functools.partial(
+          jax.jit,
+          in_shardings=sharding,
+          out_shardings=sharding,
+      )
+      def sharded_create_state_fn(root_key):
+        return dict(
+            matrix=jnp.array([[1, 2], [3, 4], [5, 6], [7, 8]]),
+            rngkey=jax.random.fold_in(root_key, 42),
+        )
+
+      pytree = sharded_create_state_fn(jax.random.key(0))
+      abstract_pytree = jax.eval_shape(
+          sharded_create_state_fn, jax.random.key(0)
+      )
+
+      self.handler.save(self.directory, args=self.save_args_cls(pytree))
+
+      restored = self.handler.restore(
+          self.directory, args=self.restore_args_cls(abstract_pytree)
+      )
+      test_utils.assert_tree_equal(self, pytree, restored)

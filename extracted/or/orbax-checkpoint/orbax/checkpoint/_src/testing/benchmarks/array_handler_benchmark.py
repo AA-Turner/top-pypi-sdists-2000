@@ -151,7 +151,6 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
     )
     sharded_array = test_context.pytree['array']
     array_name = 'array'
-    array_path = test_context.path / array_name
 
     ts_context = ts_utils.get_ts_context(use_ocdbt=options.use_ocdbt)
     value_typestr = type_handler_registry.get_param_typestr(
@@ -162,7 +161,6 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
 
     param_info = type_handlers.ParamInfo(
         name=array_name,
-        path=array_path,
         parent_dir=test_context.path,
         use_zarr3=options.use_zarr3,
         is_ocdbt_checkpoint=options.use_ocdbt,
@@ -174,7 +172,7 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
     save_args = type_handlers.SaveArgs()
 
     # --- Serialization ---
-    with metrics.time('serialize'):
+    with metrics.measure('serialize'):
 
       async def serialize_and_wait():
         serialize_futures = await handler.serialize(
@@ -191,7 +189,7 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
     logging.info('Serialization complete for %s', param_info.name)
 
     if options.use_ocdbt:
-      with metrics.time('merge_ocdbt'):
+      with metrics.measure('merge_ocdbt'):
         asyncio.run(
             ocdbt_utils.merge_ocdbt_per_process_files(
                 test_context.path,
@@ -203,7 +201,7 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
         logging.info('OCDBT merge complete for %s', test_context.path)
 
     # --- Metadata Validation ---
-    with metrics.time('metadata_validation'):
+    with metrics.measure('metadata_validation'):
       metadata = asyncio.run(handler.metadata([param_info]))[0]
       self._validate_metadata(metadata, sharded_array, param_info.name)
       multihost.sync_global_processes('metadata validation complete')
@@ -215,7 +213,7 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
         global_shape=sharded_array.shape,
         dtype=sharded_array.dtype,
     )
-    with metrics.time('deserialize'):
+    with metrics.measure('deserialize'):
       restored_array = asyncio.run(
           handler.deserialize([param_info], args=[restore_args])
       )[0]
@@ -224,7 +222,7 @@ class ArrayHandlerBenchmark(core.BenchmarksGenerator):
     logging.info('Deserialization complete for %s', param_info.name)
 
     # --- Restored Array Validation ---
-    with metrics.time('correctness_check'):
+    with metrics.measure('correctness_check'):
       pytree_utils.assert_pytree_equal(sharded_array, restored_array)
     logging.info('Correctness check passed for %s', param_info.name)
 

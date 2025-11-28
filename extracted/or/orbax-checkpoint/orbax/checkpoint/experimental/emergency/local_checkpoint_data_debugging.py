@@ -96,13 +96,13 @@ async def open_tensorstore(
   """Opens TensorStore for the given parameter for reading."""
   info = serialization_types.ParamInfo(
       name=param_name,
-      path=directory / param_name,
       parent_dir=directory,
       is_ocdbt_checkpoint=use_ocdbt,
       use_zarr3=use_zarr3,
       ts_context=ts_utils.get_ts_context(use_ocdbt=use_ocdbt),
   )
-  tspec = ts_utils.get_json_tspec_read(info, use_ocdbt=use_ocdbt)
+  array_read_spec = ts_utils.build_array_read_spec(info, use_ocdbt=use_ocdbt)
+  tspec = array_read_spec.json
   return await ts.open(
       ts.Spec(tspec),
       read=True,

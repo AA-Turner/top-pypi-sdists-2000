@@ -134,21 +134,26 @@ class Benchmark(abc.ABC):
     test_context_str += f"PyTree Summary:\n{pytree_summary}\n"
     return test_context_str
 
-  def run(self) -> TestResult:
+  def run(self, repeat_index: int | None = None) -> TestResult:
     """Executes the benchmark test case."""
+    name = self.name
+    if repeat_index is not None:
+      name += f"_repeat_{repeat_index}"
     logging.info(
         "[process_id=%s] Setting up test: %s",
         multihost.process_index(),
-        self.name,
+        name,
     )
 
-    benchmark_metrics = metric_lib.Metrics(name=f"{self.name} Internal")
-    with benchmark_metrics.time("sync_global_processes:benchmark:run"):
+    benchmark_metrics = metric_lib.Metrics(name=f"{name} Internal")
+    with benchmark_metrics.measure("sync_global_processes:benchmark:run"):
       multihost.sync_global_processes("benchmark:run")
 
-    path = directory_setup.setup_test_directory(self.name, self.output_dir)
+    path = directory_setup.setup_test_directory(
+        self.name, self.output_dir, repeat_index
+    )
 
-    with benchmark_metrics.time(
+    with benchmark_metrics.measure(
         "sync_global_processes:benchmark:setup_test_directory"
     ):
       multihost.sync_global_processes("benchmark:setup_test_directory")
@@ -160,7 +165,9 @@ class Benchmark(abc.ABC):
     else:
       data = checkpoint_generation.load_checkpoint(self.checkpoint_config.path)
 
-    with benchmark_metrics.time("sync_global_processes:benchmark:setup_pytree"):
+    with benchmark_metrics.measure(
+        "sync_global_processes:benchmark:setup_pytree"
+    ):
       multihost.sync_global_processes("benchmark:setup_pytree")
 
     context = TestContext(
@@ -173,7 +180,7 @@ class Benchmark(abc.ABC):
     logging.info(
         "[process_id=%s] Executing test function: %s",
         multihost.process_index(),
-        self.name,
+        name,
     )
     try:
       result = self.test_fn(context)
@@ -182,19 +189,20 @@ class Benchmark(abc.ABC):
       # execution is recorded in the TestResult.
       if sys.version_info >= (3, 11):
         e.add_note(
-            f"[process_id={multihost.process_index()}], {test_context_summary}"
+            f"[process_id={multihost.process_index()}],"
+            f" {test_context_summary[:100]}"
         )
       logging.error(
           "[process_id=%s] Test function '%s' context: %s, raised an"
           " exception: %s",
           multihost.process_index(),
-          self.name,
-          test_context_summary,
+          name,
+          test_context_summary[:100],
           e,
           exc_info=True,
       )
       result = TestResult(metrics=metric_lib.Metrics(), error=e)
-    result.metrics.name = self.name
+    result.metrics.name = name
 
     result.metrics.report()
     benchmark_metrics.report()
@@ -202,7 +210,7 @@ class Benchmark(abc.ABC):
     logging.info(
         "[process_id=%s] Test finished: %s",
         multihost.process_index(),
-        self.name,
+        name,
     )
 
     return result
@@ -366,41 +374,18 @@ class TestSuite:
       self,
       name: str,
       benchmarks_generators: Sequence[BenchmarksGenerator],
+      output_dir: str | None = None,
       skip_incompatible_mesh_configs: bool = True,
+      num_repeats: int = 1,
   ):
     self._name = name
     self._benchmarks_generators = benchmarks_generators
     self._skip_incompatible_mesh_configs = skip_incompatible_mesh_configs
-
-  def _generate_report(self, results: Sequence[TestResult]) -> str:
-    """Generates a report from the test results."""
-    passed_count = 0
-    failed_tests = []
-    for result in results:
-      if result.is_successful():
-        passed_count += 1
-      else:
-        failed_tests.append(result)
-
-    failed_count = len(failed_tests)
-    report_lines = []
-    title = f" Test Suite Report: {self._name} "
-    report_lines.append(f"\n{title:=^80}")
-    report_lines.append(f"Total tests run: {len(results)}")
-    report_lines.append(f"Passed: {passed_count}")
-    report_lines.append(f"Failed: {failed_count}")
-
-    if failed_count > 0:
-      report_lines.append("-" * 80)
-      report_lines.append("--- Failed Tests ---")
-      for result in failed_tests:
-        error_repr = repr(result.error)
-        # Limit error length to avoid flooding logs.
-        if len(error_repr) > 1000:
-          error_repr = error_repr[:1000] + "..."
-        report_lines.append(f"Test: {result.metrics.name}, Error: {error_repr}")
-    report_lines.append("=" * 80)
-    return "\n".join(report_lines)
+    self._num_repeats = num_repeats
+    self._output_dir = output_dir
+    self._suite_metrics = metric_lib.MetricsManager(
+        name=name, num_repeats=num_repeats
+    )
 
   def run(self) -> Sequence[TestResult]:
     """Runs all benchmarks in the suite sequentially."""
@@ -408,7 +393,7 @@ class TestSuite:
         "\n%s Running Test Suite: %s %s", "=" * 25, self._name, "=" * 25
     )
 
-    results = []
+    all_results = []
     for i, generator in enumerate(self._benchmarks_generators):
       logging.info(
           "\n%s Running Generator %d: %s %s",
@@ -422,17 +407,34 @@ class TestSuite:
       )
       if not generated_benchmarks:
         logging.warning(
-            "Generator %s produced no benchmarks.", generator.__class__.__name__
+            "Generator %s produced no benchmarks.",
+            generator.__class__.__name__,
         )
         continue
 
       for benchmark in generated_benchmarks:
-        logging.info("\n--- Running test: %s ---", benchmark.name)
-        results.append(benchmark.run())
+        for i in range(self._num_repeats):
+          repeat_index = i if self._num_repeats > 1 else None
+          logging.info(
+              "\n--- Running test: %s (Repeat %d/%d) ---",
+              benchmark.name,
+              i + 1,
+              self._num_repeats,
+          )
+          result = benchmark.run(repeat_index=repeat_index)
+          all_results.append(result)
+          self._suite_metrics.add_result(
+              benchmark.name, benchmark.options, result.metrics, result.error
+          )
 
-    if not results:
+    if not all_results:
       logging.warning("No benchmarks were run for this suite.")
 
-    logging.info(self._generate_report(results))
+    if self._output_dir is not None:
+      self._suite_metrics.export_to_tensorboard(
+          epath.Path(self._output_dir) / "tensorboard"
+      )
+
+    logging.info(self._suite_metrics.generate_report())
     multihost.sync_global_processes("test_suite:run_end")
-    return results
+    return all_results

@@ -22,7 +22,6 @@ import sys
 from typing import Any, Dict, Optional, Sequence, Tuple, TypeAlias, Union
 
 from absl import logging
-from etils import epath
 import jax
 import numpy as np
 from orbax.checkpoint._src.futures import future
@@ -78,39 +77,6 @@ class NumpyHandler(types.TypeHandler):
     self._metadata_key = metadata_key
     self._override_ocdbt_process_id = ocdbt_process_id
 
-  def _get_array_write_spec(
-      self,
-      info: types.ParamInfo,
-      value: np.ndarray,
-      use_ocdbt: bool,
-      process_index: Optional[Union[int, str]] = None,
-      arg: Optional[types.SaveArgs] = None,
-  ) -> ts_utils.ArrayWriteSpec:
-    """Gets ArrayWriteSpec for writing."""
-    return ts_utils.build_array_write_spec(
-        info=info,
-        arg=arg,
-        global_shape=value.shape,
-        local_shape=value.shape,
-        dtype=value.dtype,
-        use_ocdbt=use_ocdbt,
-        process_index=process_index,
-        metadata_key=self._metadata_key,
-    )
-
-  def _get_json_tspec_read(
-      self,
-      info: types.ParamInfo,
-      use_ocdbt: bool,
-  ) -> Dict[str, Any]:
-    """Gets Tensorstore spec for reading."""
-    return ts_utils.get_json_tspec_read(
-        info,
-        use_ocdbt=use_ocdbt,
-        metadata_key=self._metadata_key,
-        raise_array_data_missing_error=info.raise_array_data_missing_error,
-    )
-
   def typestr(self) -> str:
     return 'np.ndarray'
 
@@ -121,7 +87,13 @@ class NumpyHandler(types.TypeHandler):
     for info in infos:
       # Use OCDBT flag from the existing checkpoint.
       use_ocdbt = info.is_ocdbt_checkpoint
-      tspec = self._get_json_tspec_read(info, use_ocdbt=use_ocdbt)
+      array_read_spec = ts_utils.build_array_read_spec(
+          info,
+          use_ocdbt=use_ocdbt,
+          metadata_key=self._metadata_key,
+          raise_array_data_missing_error=info.raise_array_data_missing_error,
+      )
+      tspec = array_read_spec.json
       open_ops.append(
           ts.open(ts.Spec(tspec), open=True, context=info.ts_context)
       )
@@ -150,15 +122,18 @@ class NumpyHandler(types.TypeHandler):
     """Serializes numpy arrays in a background thread."""
     write_coros = []
     for value, info, arg in zip(values, infos, args):
-      array_write_spec = self._get_array_write_spec(
-          info,
-          value,
+      array_write_spec = ts_utils.build_array_write_spec(
+          info=info,
+          arg=arg,
+          global_shape=value.shape,
+          local_shape=value.shape,
+          dtype=value.dtype,
           use_ocdbt=info.is_ocdbt_checkpoint,
           process_index=ocdbt_utils.get_process_index_for_subdir(
               use_ocdbt=info.is_ocdbt_checkpoint,
               override_ocdbt_process_id=self._override_ocdbt_process_id,
           ),
-          arg=arg,
+          metadata_key=self._metadata_key,
       )
       tspec = array_write_spec.json
       if logging.vlog_is_on(1):
@@ -202,11 +177,17 @@ class NumpyHandler(types.TypeHandler):
     for info, arg in zip(infos, args):
       if not info.is_ocdbt_checkpoint:
         await ts_utils.assert_parameter_files_exist(
-            info.path, self._metadata_key, info.use_zarr3
+            info.parent_dir / info.name, self._metadata_key, info.use_zarr3
         )
       # Use OCDBT flag from the existing checkpoint.
       use_ocdbt = info.is_ocdbt_checkpoint
-      tspec = self._get_json_tspec_read(info, use_ocdbt=use_ocdbt)
+      array_read_spec = ts_utils.build_array_read_spec(
+          info,
+          use_ocdbt=use_ocdbt,
+          metadata_key=self._metadata_key,
+          raise_array_data_missing_error=info.raise_array_data_missing_error,
+      )
+      tspec = array_read_spec.json
       tspec = ts_utils.get_cast_tspec_deserialize(tspec, arg)
 
       if logging.vlog_is_on(1):
@@ -310,8 +291,8 @@ class StringHandler(types.TypeHandler):
       info: types.ParamInfo,
   ) -> Dict[str, Any]:
     """Gets Tensorstore spec in JSON format."""
-    if info.path is None:
-      raise ValueError('Must construct serialization path.')
+    if info.parent_dir is None:
+      raise ValueError('Must provide info.parent_dir.')
     directory = (info.parent_dir / self._filename).as_posix()
     kvstore_tspec = ts_utils.build_kvstore_tspec(directory, use_ocdbt=False)
     tspec = {
@@ -384,11 +365,9 @@ class StringHandler(types.TypeHandler):
     """See superclass documentation."""
     del args
     types.check_input_arguments(infos)
-    directory = epath.Path(infos[0].path).parent
     open_futures = []
 
     for info in infos:
-      info.path = epath.Path(directory / self._filename)
       tspec = self._get_json_tspec(info)
       open_future = ts.open(
           tspec, open=True, read=True, context=self._ts_context

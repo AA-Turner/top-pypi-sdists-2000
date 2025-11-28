@@ -38,6 +38,8 @@ from orbax.checkpoint._src.multihost import multihost
 from orbax.checkpoint._src.path import gcs_utils
 from orbax.checkpoint._src.path import temporary_paths
 
+# Allowed checkpoint step naming using any non empty `step_prefix`.
+ALLOWED_STEP_NAME_PATTERN = r'(.+)_(\d+)'
 
 TMP_DIR_SUFFIX = temporary_paths.TMP_DIR_SUFFIX
 # prefix_1000.orbax-checkpoint-tmp-1010101
@@ -319,13 +321,11 @@ class _StandardNameFormat(NameFormat[Metadata]):
     single_host_load_and_broadcast: If True, the jax process=0 will list all
       steps and broadcast them to all other processes. NOTE: Ignored if jax
       backend is not multi controller.
-    enable_hns: Enables HNS-specific path logic.
   """
 
   step_prefix: Optional[str] = None
   step_format_fixed_length: Optional[int] = None
   single_host_load_and_broadcast: bool = False
-  enable_hns: bool = False
 
   def __str__(self):
     return f'StandardNameFormat("{self.build_name(1234)}")'
@@ -373,9 +373,7 @@ class _StandardNameFormat(NameFormat[Metadata]):
     """Returns step paths under `base_path`."""
     base_path = epath.Path(base_path)
     # <step_prefix>_?<0 padding>?*
-    if self.enable_hns and gcs_utils.is_hierarchical_namespace_enabled(
-        base_path
-    ):
+    if gcs_utils.is_hierarchical_namespace_enabled(base_path):
       logging.vlog(
           1,
           'HNS enabled. Using GCS API to list step paths at %s',
@@ -558,7 +556,6 @@ def standard_name_format(
     step_prefix: Optional[str] = None,
     step_format_fixed_length: Optional[int] = None,
     single_host_load_and_broadcast: bool = False,
-    enable_hns: bool = False,
 ) -> NameFormat[Metadata]:
   """Returns NameFormat for 'standard' steps for common Orbax use cases.
 
@@ -578,13 +575,11 @@ def standard_name_format(
     single_host_load_and_broadcast: If True, the jax process=0 will list all
       steps and broadcast them to all other processes. NOTE: Ignored if jax
       backend is not multi controller.
-    enable_hns: Enables HNS-specific path logic.
   """
   return _StandardNameFormat(
       step_prefix=step_prefix,
       step_format_fixed_length=step_format_fixed_length,
       single_host_load_and_broadcast=single_host_load_and_broadcast,
-      enable_hns=enable_hns,
   )
 
 
@@ -739,10 +734,8 @@ def step_from_checkpoint_name(name: str) -> int:
   """Returns the step from a checkpoint name. Also works for tmp checkpoints."""
   if name.isdigit():
     return int(name)
-  elif name.split('_')[-1].isdigit():
-    split = name.split('_')
-    if len(split) == 2 and split[0]:
-      return int(split[-1])
+  elif m := re.fullmatch(ALLOWED_STEP_NAME_PATTERN, name):
+    return int(m.group(2))
   elif tmp_match := re.match(TMP_DIR_STEP_PATTERN, name):
     return int(tmp_match.group(1))
   raise ValueError(f'Unrecognized name format: {name}.')

@@ -164,23 +164,14 @@ class SomeGeneric(typing.Generic[test.type_stub_helpers.e2e_example_impl.T2]):
         """Initialize self.  See help(type(self)) for accurate signature."""
         ...
 
-    class __custom_constructor_int_spec(typing_extensions.Protocol):
-        def __call__(self, /) -> SomeGeneric[int]:
-            ...
-
-        async def aio(self, /) -> SomeGeneric[int]:
-            ...
-
-    custom_constructor_int: typing.ClassVar[__custom_constructor_int_spec]
-
-    class __custom_constructor_str_spec(typing_extensions.Protocol):
+    class __custom_constructor_spec(typing_extensions.Protocol):
         def __call__(self, /) -> SomeGeneric[str]:
             ...
 
         async def aio(self, /) -> SomeGeneric[str]:
             ...
 
-    custom_constructor_str: typing.ClassVar[__custom_constructor_str_spec]
+    custom_constructor: typing.ClassVar[__custom_constructor_spec]
 
 
 some_instance: typing.Optional[BlockingFoo]

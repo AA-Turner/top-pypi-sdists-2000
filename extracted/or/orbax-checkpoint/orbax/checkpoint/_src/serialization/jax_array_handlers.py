@@ -63,13 +63,23 @@ _SHARDING_FILE_NAME = '_sharding'
 def check_array_values(
     values: Sequence[Union[jax.Array, np.ndarray]],
     infos: Sequence[types.ParamInfo],
+    raise_error: bool = True,
 ):
+  """Checks array values for zero size."""
   for v, info in zip(values, infos):
     if v.size == 0:
-      raise ValueError(
-          f'Cannot save arrays with zero size: ParamInfo: [name={info.name},'
-          f'value_typestr={info.value_typestr}]'
-      )
+      if raise_error:
+        raise ValueError(
+            f'Cannot save arrays with zero size: ParamInfo: [name={info.name},'
+            f'value_typestr={info.value_typestr}]'
+        )
+      else:
+        logging.warning(
+            'Saving array with zero size: ParamInfo: [name=%s,'
+            ' value_typestr=%s]',
+            info.name,
+            info.value_typestr,
+        )
 
 
 JAX_ARRAY_TYPE_STR = 'jax.Array'
@@ -671,7 +681,7 @@ async def _validate_non_ocdbt_files(
 ):
   await asyncio.gather(*[
       ts_utils.assert_parameter_files_exist(  # pylint: disable=protected-access
-          info.path, metadata_key, info.use_zarr3
+          info.parent_dir / info.name, metadata_key, info.use_zarr3
       )
       for info in infos
   ])
@@ -753,12 +763,13 @@ async def _deserialize_arrays(
       await _validate_non_ocdbt_files(infos, metadata_key)
     deserialize_ops = []
     for info, arg, sharding in zip(infos, args, shardings):
-      tspec = ts_utils.get_json_tspec_read(
+      array_read_spec = ts_utils.build_array_read_spec(
           info,
           use_ocdbt=use_ocdbt,
           metadata_key=metadata_key,
           raise_array_data_missing_error=info.raise_array_data_missing_error,
       )
+      tspec = array_read_spec.json
       tspec = ts_utils.get_cast_tspec_deserialize(tspec, arg)
 
       # set dtype=None to deserialize for random keys
@@ -843,6 +854,8 @@ def _get_abstract_arrays(
     assert isinstance(arg, ArrayRestoreArgs)
     assert arg.global_shape is not None
     assert arg.dtype is not None
+    if sharding is None:
+      raise ValueError('Sharding of jax.Array cannot be None.')
     abstract_arrays.append(
         jax.ShapeDtypeStruct(
             shape=arg.global_shape, dtype=arg.dtype, sharding=sharding
@@ -924,18 +937,8 @@ class ArrayHandler(types.TypeHandler):
           'Setting `primary_host` to None requires JAX version > 0.4.25.'
       )
 
-  def _get_json_tspec_read(
-      self,
-      info: types.ParamInfo,
-      use_ocdbt: bool,
-  ) -> Dict[str, Any]:
-    """Gets Tensorstore spec for reading."""
-    return ts_utils.get_json_tspec_read(
-        info,
-        use_ocdbt=use_ocdbt,
-        metadata_key=self._metadata_key,
-        raise_array_data_missing_error=info.raise_array_data_missing_error,
-    )
+  def has_dispatcher(self) -> bool:
+    return self._dispatcher is not None
 
   def typestr(self) -> str:
     return JAX_ARRAY_TYPE_STR
@@ -953,7 +956,13 @@ class ArrayHandler(types.TypeHandler):
     for info in infos:
       # Use OCDBT flag from the existing checkpoint.
       use_ocdbt = info.is_ocdbt_checkpoint
-      tspec = self._get_json_tspec_read(info, use_ocdbt=use_ocdbt)
+      array_read_spec = ts_utils.build_array_read_spec(
+          info,
+          use_ocdbt=use_ocdbt,
+          metadata_key=self._metadata_key,
+          raise_array_data_missing_error=info.raise_array_data_missing_error,
+      )
+      tspec = array_read_spec.json
       open_ops.append(
           ts.open(ts.Spec(tspec), open=True, context=info.ts_context)
       )
@@ -1006,7 +1015,9 @@ class ArrayHandler(types.TypeHandler):
     """See superclass documentation."""
     args = args or [types.SaveArgs()] * len(values)
     types.check_input_arguments(values, infos, args)
-    check_array_values(values, infos)
+    # TODO(b/461467565): Raise error when saving zero sized arrays on pathways
+    # as well.
+    check_array_values(values, infos, raise_error=not self.has_dispatcher())
 
     self._ext_metadata = dict()
     arrays = []
@@ -1078,6 +1089,38 @@ class ArrayHandler(types.TypeHandler):
 
     return future_list
 
+  async def _maybe_read_metadata_and_update_restore_args(
+      self,
+      infos: Sequence[types.ParamInfo],
+      args: Sequence[types.RestoreArgs],
+  ) -> Sequence[ArrayRestoreArgs]:
+    """Reads metadata and updates restore args."""
+    if any(
+        not isinstance(arg, ArrayRestoreArgs)
+        or arg.global_shape is None
+        or arg.dtype is None
+        for arg in args
+    ):
+      result: list[ArrayRestoreArgs] = []
+      logging.warning(
+          '`global_shape` and `dtype` are required for efficient restoration on'
+          ' Pathways. Automatically restoring metadata from disk to obtain'
+          ' these properties, which involves lightweight reading of metadata'
+          ' files, but please provide these properties for optimal restoration.'
+      )
+      metadatas = await self.metadata(infos)
+      for arg, meta in zip(args, metadatas):
+        if not isinstance(arg, ArrayRestoreArgs):
+          arg = ArrayRestoreArgs()
+        if arg.global_shape is None:
+          arg = dataclasses.replace(arg, global_shape=meta.shape)
+        if arg.dtype is None:
+          arg = dataclasses.replace(arg, dtype=meta.dtype)
+        result.append(arg)
+      return result
+    else:
+      return [cast(ArrayRestoreArgs, arg) for arg in args]
+
   async def deserialize(
       self,
       infos: Sequence[types.ParamInfo],
@@ -1111,6 +1154,9 @@ class ArrayHandler(types.TypeHandler):
           infos, args, shardings, self._metadata_key, self._array_metadata_store
       )
     else:
+      args = await self._maybe_read_metadata_and_update_restore_args(
+          infos, args
+      )
       ret = self._dispatcher.dispatch(
           _sync_deserialize_arrays,
           result_specs=_get_abstract_arrays(args, shardings),
