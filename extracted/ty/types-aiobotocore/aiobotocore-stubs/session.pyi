@@ -112,6 +112,7 @@ from types_aiobotocore_cognito_sync.client import CognitoSyncClient
 from types_aiobotocore_comprehend.client import ComprehendClient
 from types_aiobotocore_comprehendmedical.client import ComprehendMedicalClient
 from types_aiobotocore_compute_optimizer.client import ComputeOptimizerClient
+from types_aiobotocore_compute_optimizer_automation.client import ComputeOptimizerAutomationClient
 from types_aiobotocore_config.client import ConfigServiceClient
 from types_aiobotocore_connect.client import ConnectClient
 from types_aiobotocore_connect_contact_lens.client import ConnectContactLensClient
@@ -288,6 +289,7 @@ from types_aiobotocore_mpa.client import MultipartyApprovalClient
 from types_aiobotocore_mq.client import MQClient
 from types_aiobotocore_mturk.client import MTurkClient
 from types_aiobotocore_mwaa.client import MWAAClient
+from types_aiobotocore_mwaa_serverless.client import MWAAServerlessClient
 from types_aiobotocore_neptune.client import NeptuneClient
 from types_aiobotocore_neptune_graph.client import NeptuneGraphClient
 from types_aiobotocore_neptunedata.client import NeptuneDataClient
@@ -307,6 +309,7 @@ from types_aiobotocore_organizations.client import OrganizationsClient
 from types_aiobotocore_osis.client import OpenSearchIngestionClient
 from types_aiobotocore_outposts.client import OutpostsClient
 from types_aiobotocore_panorama.client import PanoramaClient
+from types_aiobotocore_partnercentral_channel.client import PartnerCentralChannelAPIClient
 from types_aiobotocore_partnercentral_selling.client import PartnerCentralSellingAPIClient
 from types_aiobotocore_payment_cryptography.client import PaymentCryptographyControlPlaneClient
 from types_aiobotocore_payment_cryptography_data.client import PaymentCryptographyDataPlaneClient
@@ -385,6 +388,7 @@ from types_aiobotocore_ses.client import SESClient
 from types_aiobotocore_sesv2.client import SESV2Client
 from types_aiobotocore_shield.client import ShieldClient
 from types_aiobotocore_signer.client import SignerClient
+from types_aiobotocore_signin.client import SignInServiceClient
 from types_aiobotocore_simspaceweaver.client import SimSpaceWeaverClient
 from types_aiobotocore_snow_device_management.client import SnowDeviceManagementClient
 from types_aiobotocore_snowball.client import SnowballClient
@@ -2267,6 +2271,25 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[ComputeOptimizerClient]:
         """
         Create client for ComputeOptimizer service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
+        service_name: Literal["compute-optimizer-automation"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[ComputeOptimizerAutomationClient]:
+        """
+        Create client for ComputeOptimizerAutomation service.
         """
 
     @overload  # type: ignore[override]
@@ -5502,6 +5525,25 @@ class AioSession(BotocoreSession):
     @overload  # type: ignore[override]
     def create_client(  # type: ignore[override]
         self,
+        service_name: Literal["mwaa-serverless"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[MWAAServerlessClient]:
+        """
+        Create client for MWAAServerless service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
         service_name: Literal["neptune"],
         region_name: str | None = ...,
         api_version: str | None = ...,
@@ -5858,6 +5900,25 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[PanoramaClient]:
         """
         Create client for Panorama service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
+        service_name: Literal["partnercentral-channel"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[PartnerCentralChannelAPIClient]:
+        """
+        Create client for PartnerCentralChannelAPI service.
         """
 
     @overload  # type: ignore[override]
@@ -7264,6 +7325,25 @@ class AioSession(BotocoreSession):
     ) -> ClientCreatorContext[SignerClient]:
         """
         Create client for Signer service.
+        """
+
+    @overload  # type: ignore[override]
+    def create_client(  # type: ignore[override]
+        self,
+        service_name: Literal["signin"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: AioConfig | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> ClientCreatorContext[SignInServiceClient]:
+        """
+        Create client for SignInService service.
         """
 
     @overload  # type: ignore[override]

@@ -112,7 +112,7 @@ extras_require = {
     # of the Unicode Character Database instead of the built-in unicodedata
     # which varies between python versions and may be outdated.
     "unicode": [
-        ("unicodedata2 >= 15.1.0; python_version <= '3.12'"),
+        "unicodedata2 >= 17.0.0; python_version <= '3.14'",
     ],
     # for graphite type tables in ttLib/tables (Silf, Glat, Gloc)
     "graphite": ["lz4 >= 1.7.4.2"],
@@ -146,7 +146,7 @@ extras_require = {
     ],
     # for packing GSUB/GPOS tables with Harfbuzz repacker
     "repacker": [
-        "uharfbuzz >= 0.23.0",
+        "uharfbuzz >= 0.45.0",
     ],
 }
 # use a special 'all' key as shorthand to includes all the extra dependencies
@@ -164,7 +164,6 @@ classifiers = {
         "Natural Language :: English",
         "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -496,7 +495,7 @@ if ext_modules:
 
 setup_params = dict(
     name="fonttools",
-    version="4.60.1",
+    version="4.61.0",
     description="Tools to manipulate font files",
     author="Just van Rossum",
     author_email="just@letterror.com",
@@ -506,7 +505,7 @@ setup_params = dict(
     license="MIT",
     license_files=["LICENSE", "LICENSE.external"],
     platforms=["Any"],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
     long_description=long_description,
     long_description_content_type="text/x-rst",
     package_dir={"": "Lib"},

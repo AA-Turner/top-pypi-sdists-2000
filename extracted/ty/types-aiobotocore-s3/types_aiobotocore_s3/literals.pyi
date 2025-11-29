@@ -24,6 +24,7 @@ else:
 __all__ = (
     "AnalyticsS3ExportFileFormatType",
     "ArchiveStatusType",
+    "BucketAbacStatusType",
     "BucketAccelerateStatusType",
     "BucketCannedACLType",
     "BucketExistsWaiterName",
@@ -39,6 +40,7 @@ __all__ = (
     "DataRedundancyType",
     "DeleteMarkerReplicationStatusType",
     "EncodingTypeType",
+    "EncryptionTypeType",
     "EventType",
     "ExistingObjectReplicationStatusType",
     "ExpirationStateType",
@@ -113,6 +115,7 @@ __all__ = (
 
 AnalyticsS3ExportFileFormatType = Literal["CSV"]
 ArchiveStatusType = Literal["ARCHIVE_ACCESS", "DEEP_ARCHIVE_ACCESS"]
+BucketAbacStatusType = Literal["Disabled", "Enabled"]
 BucketAccelerateStatusType = Literal["Enabled", "Suspended"]
 BucketCannedACLType = Literal["authenticated-read", "private", "public-read", "public-read-write"]
 BucketExistsWaiterName = Literal["bucket_exists"]
@@ -162,6 +165,7 @@ CompressionTypeType = Literal["BZIP2", "GZIP", "NONE"]
 DataRedundancyType = Literal["SingleAvailabilityZone", "SingleLocalZone"]
 DeleteMarkerReplicationStatusType = Literal["Disabled", "Enabled"]
 EncodingTypeType = Literal["url"]
+EncryptionTypeType = Literal["NONE", "SSE-C"]
 EventType = Literal[
     "s3:IntelligentTiering",
     "s3:LifecycleExpiration:*",
@@ -404,6 +408,7 @@ ServiceName = Literal[
     "comprehend",
     "comprehendmedical",
     "compute-optimizer",
+    "compute-optimizer-automation",
     "config",
     "connect",
     "connect-contact-lens",
@@ -574,6 +579,7 @@ ServiceName = Literal[
     "mq",
     "mturk",
     "mwaa",
+    "mwaa-serverless",
     "neptune",
     "neptune-graph",
     "neptunedata",
@@ -593,6 +599,7 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
     "payment-cryptography-data",
@@ -667,6 +674,7 @@ ServiceName = Literal[
     "sesv2",
     "shield",
     "signer",
+    "signin",
     "simspaceweaver",
     "snow-device-management",
     "snowball",

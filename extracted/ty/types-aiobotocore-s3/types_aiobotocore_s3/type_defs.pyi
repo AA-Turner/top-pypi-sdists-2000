@@ -8,9 +8,9 @@ Copyright 2025 Vlad Emelianov
 Usage::
 
     ```python
-    from types_aiobotocore_s3.type_defs import AbortIncompleteMultipartUploadTypeDef
+    from types_aiobotocore_s3.type_defs import AbacStatusTypeDef
 
-    data: AbortIncompleteMultipartUploadTypeDef = ...
+    data: AbacStatusTypeDef = ...
     ```
 """
 
@@ -27,6 +27,7 @@ from aiobotocore.response import StreamingBody
 
 from .literals import (
     ArchiveStatusType,
+    BucketAbacStatusType,
     BucketAccelerateStatusType,
     BucketCannedACLType,
     BucketLocationConstraintType,
@@ -37,6 +38,7 @@ from .literals import (
     CompressionTypeType,
     DataRedundancyType,
     DeleteMarkerReplicationStatusType,
+    EncryptionTypeType,
     EventType,
     ExistingObjectReplicationStatusType,
     ExpirationStateType,
@@ -95,6 +97,7 @@ else:
     from typing_extensions import Literal, NotRequired, TypedDict
 
 __all__ = (
+    "AbacStatusTypeDef",
     "AbortIncompleteMultipartUploadTypeDef",
     "AbortMultipartUploadOutputTypeDef",
     "AbortMultipartUploadRequestMultipartUploadAbortTypeDef",
@@ -112,6 +115,8 @@ __all__ = (
     "AnalyticsFilterTypeDef",
     "AnalyticsS3BucketDestinationTypeDef",
     "BlobTypeDef",
+    "BlockedEncryptionTypesOutputTypeDef",
+    "BlockedEncryptionTypesTypeDef",
     "BucketCopyRequestTypeDef",
     "BucketDownloadFileRequestTypeDef",
     "BucketDownloadFileobjRequestTypeDef",
@@ -214,6 +219,8 @@ __all__ = (
     "ExistingObjectReplicationTypeDef",
     "FileobjTypeDef",
     "FilterRuleTypeDef",
+    "GetBucketAbacOutputTypeDef",
+    "GetBucketAbacRequestTypeDef",
     "GetBucketAccelerateConfigurationOutputTypeDef",
     "GetBucketAccelerateConfigurationRequestTypeDef",
     "GetBucketAclOutputTypeDef",
@@ -427,6 +434,7 @@ __all__ = (
     "ProgressEventTypeDef",
     "ProgressTypeDef",
     "PublicAccessBlockConfigurationTypeDef",
+    "PutBucketAbacRequestTypeDef",
     "PutBucketAccelerateConfigurationRequestTypeDef",
     "PutBucketAclRequestBucketAclPutTypeDef",
     "PutBucketAclRequestTypeDef",
@@ -530,6 +538,7 @@ __all__ = (
     "ServerSideEncryptionConfigurationOutputTypeDef",
     "ServerSideEncryptionConfigurationTypeDef",
     "ServerSideEncryptionConfigurationUnionTypeDef",
+    "ServerSideEncryptionRuleOutputTypeDef",
     "ServerSideEncryptionRuleTypeDef",
     "SessionCredentialsTypeDef",
     "SourceSelectionCriteriaTypeDef",
@@ -569,6 +578,9 @@ __all__ = (
     "WriteGetObjectResponseRequestTypeDef",
 )
 
+class AbacStatusTypeDef(TypedDict):
+    Status: NotRequired[BucketAbacStatusType]
+
 class AbortIncompleteMultipartUploadTypeDef(TypedDict):
     DaysAfterInitiation: NotRequired[int]
 
@@ -602,6 +614,12 @@ class AnalyticsS3BucketDestinationTypeDef(TypedDict):
     Prefix: NotRequired[str]
 
 BlobTypeDef = Union[str, bytes, IO[Any], StreamingBody]
+
+class BlockedEncryptionTypesOutputTypeDef(TypedDict):
+    EncryptionType: NotRequired[list[EncryptionTypeType]]
+
+class BlockedEncryptionTypesTypeDef(TypedDict):
+    EncryptionType: NotRequired[Sequence[EncryptionTypeType]]
 
 class CopySourceTypeDef(TypedDict):
     Bucket: str
@@ -912,6 +930,10 @@ class ExistingObjectReplicationTypeDef(TypedDict):
 class FilterRuleTypeDef(TypedDict):
     Name: NotRequired[FilterRuleNameType]
     Value: NotRequired[str]
+
+class GetBucketAbacRequestTypeDef(TypedDict):
+    Bucket: str
+    ExpectedBucketOwner: NotRequired[str]
 
 class GetBucketAccelerateConfigurationRequestTypeDef(TypedDict):
     Bucket: str
@@ -1418,6 +1440,13 @@ class TopicConfigurationDeprecatedTypeDef(TypedDict):
     Event: NotRequired[EventType]
     Topic: NotRequired[str]
 
+class PutBucketAbacRequestTypeDef(TypedDict):
+    Bucket: str
+    AbacStatus: AbacStatusTypeDef
+    ContentMD5: NotRequired[str]
+    ChecksumAlgorithm: NotRequired[ChecksumAlgorithmType]
+    ExpectedBucketOwner: NotRequired[str]
+
 class AbortMultipartUploadOutputTypeDef(TypedDict):
     RequestCharged: Literal["requester"]
     ResponseMetadata: ResponseMetadataTypeDef
@@ -1474,6 +1503,10 @@ class DeleteObjectTaggingOutputTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 class EmptyResponseMetadataTypeDef(TypedDict):
+    ResponseMetadata: ResponseMetadataTypeDef
+
+class GetBucketAbacOutputTypeDef(TypedDict):
+    AbacStatus: AbacStatusTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 class GetBucketAccelerateConfigurationOutputTypeDef(TypedDict):
@@ -2762,9 +2795,15 @@ class RoutingRuleTypeDef(TypedDict):
     Redirect: RedirectTypeDef
     Condition: NotRequired[ConditionTypeDef]
 
+class ServerSideEncryptionRuleOutputTypeDef(TypedDict):
+    ApplyServerSideEncryptionByDefault: NotRequired[ServerSideEncryptionByDefaultTypeDef]
+    BucketKeyEnabled: NotRequired[bool]
+    BlockedEncryptionTypes: NotRequired[BlockedEncryptionTypesOutputTypeDef]
+
 class ServerSideEncryptionRuleTypeDef(TypedDict):
     ApplyServerSideEncryptionByDefault: NotRequired[ServerSideEncryptionByDefaultTypeDef]
     BucketKeyEnabled: NotRequired[bool]
+    BlockedEncryptionTypes: NotRequired[BlockedEncryptionTypesTypeDef]
 
 class SourceSelectionCriteriaTypeDef(TypedDict):
     SseKmsEncryptedObjects: NotRequired[SseKmsEncryptedObjectsTypeDef]
@@ -3319,7 +3358,7 @@ class WebsiteConfigurationTypeDef(TypedDict):
     RoutingRules: NotRequired[Sequence[RoutingRuleTypeDef]]
 
 class ServerSideEncryptionConfigurationOutputTypeDef(TypedDict):
-    Rules: list[ServerSideEncryptionRuleTypeDef]
+    Rules: list[ServerSideEncryptionRuleOutputTypeDef]
 
 class ServerSideEncryptionConfigurationTypeDef(TypedDict):
     Rules: Sequence[ServerSideEncryptionRuleTypeDef]
