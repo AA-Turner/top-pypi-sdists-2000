@@ -110,9 +110,6 @@ pygments_style = 'sphinx'
 # a list of builtin themes.
 html_theme = 'furo'
 
-# https://github.com/pradyunsg/furo/issues/889#issuecomment-3291032986
-pygments_dark_style = 'native'
-
 ## html_favicon = '_static/lock-light.svg'
 ## html_theme_options = {
 ##     'light_logo': 'logo-light.png',

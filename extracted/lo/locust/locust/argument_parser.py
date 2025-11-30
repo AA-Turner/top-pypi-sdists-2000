@@ -151,6 +151,14 @@ class LocustTomlConfigParser(configargparse.TomlConfigParser):
         return result
 
 
+class LocustConfigParser(configargparse.ConfigFileParser):
+    def parse(self, stream):
+        if stream.name.endswith(".toml"):
+            return LocustTomlConfigParser(["tool.locust"]).parse(stream)
+
+        return configargparse.DefaultConfigFileParser().parse(stream)
+
+
 def parse_locustfile_paths(paths: list[str]) -> list[str]:
     """
     Returns a list of relative file paths.
@@ -218,12 +226,7 @@ def download_locustfile_from_url(url: str) -> str:
 def get_empty_argument_parser(add_help=True, default_config_files=DEFAULT_CONFIG_FILES) -> LocustArgumentParser:
     parser = LocustArgumentParser(
         default_config_files=default_config_files,
-        config_file_parser_class=configargparse.CompositeConfigParser(
-            [
-                LocustTomlConfigParser(["tool.locust"]),
-                configargparse.DefaultConfigFileParser,
-            ]
-        ),
+        config_file_parser_class=LocustConfigParser,
         add_env_var_help=False,
         add_config_file_help=False,
         add_help=add_help,
@@ -250,7 +253,7 @@ See documentation for more details, including how to set options using a file or
         "--locustfile",
         metavar="<filename>",
         default="locustfile.py",
-        help="The Python file or module that contains your test, e.g. 'my_test.py'. Accepts multiple comma-separated .py files, a package name/directory or a url to a remote locustfile. Defaults to 'locustfile'.",
+        help="The Python file or module that contains your test, e.g. 'my_test.py'. Accepts multiple comma-separated .py files, a package name/directory or a url to a remote locustfile. Defaults to 'locustfile.py'.",
         env_var="LOCUST_LOCUSTFILE",
     )
 

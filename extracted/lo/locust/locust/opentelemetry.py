@@ -7,22 +7,20 @@ from ._version import __version__
 logger = logging.getLogger(__name__)
 
 
-def setup_opentelemetry():
+def setup_opentelemetry() -> bool:
     try:
         from opentelemetry import metrics, trace
         from opentelemetry.sdk.resources import Resource
     except ImportError:
-        logger.error("OpenTelemetry SDK is not installed, opentelemetry not enabled. Run 'pip install locust[otel]")
-        return
+        logger.error("OpenTelemetry SDK is not installed, opentelemetry not enabled. Run 'pip install locust[otel]'")
+        return False
 
-    traces_exporters = set(e.strip().lower() for e in os.getenv("OTEL_TRACES_EXPORTER", "otlp").split(",") if e.strip())
-    metrics_exporters = set(
-        e.strip().lower() for e in os.getenv("OTEL_METRICS_EXPORTER", "otlp").split(",") if e.strip()
-    )
+    traces_exporters = {e.strip().lower() for e in os.getenv("OTEL_TRACES_EXPORTER", "otlp").split(",") if e.strip()}
+    metrics_exporters = {e.strip().lower() for e in os.getenv("OTEL_METRICS_EXPORTER", "otlp").split(",") if e.strip()}
 
     if traces_exporters == {"none"} and metrics_exporters == {"none"}:
-        logger.debug("No OpenTelemetry exporters configured, opentelemetry not enabled")
-        return
+        logger.info("No OpenTelemetry exporters configured, opentelemetry not enabled")
+        return False
 
     resource = Resource.create(
         {
@@ -42,6 +40,7 @@ def setup_opentelemetry():
     _setup_auto_instrumentation()
 
     logger.debug("OpenTelemetry configured!")
+    return True
 
 
 def _setup_tracer_provider(resource, traces_exporters):
@@ -52,14 +51,20 @@ def _setup_tracer_provider(resource, traces_exporters):
 
     for exporter in traces_exporters:
         if exporter == "otlp":
-            protocol = os.getenv("OTEL_EXPORTER_OTLP_TRACES_PROTOCOL", "grpc").lower().strip()
+            protocol = (
+                os.getenv("OTEL_EXPORTER_OTLP_TRACES_PROTOCOL", os.getenv("OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"))
+                .lower()
+                .strip()
+            )
             try:
                 if protocol == "grpc":
                     from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
-                elif protocol == "http":
+                elif protocol == "http/protobuf" or protocol == "http":
                     from opentelemetry.exporter.otlp.proto.http.trace_exporter import OTLPSpanExporter
                 else:
-                    logger.warning(f"Unknown OpenTelemetry otlp exporter protocol '{protocol}'. Use 'grpc' or 'http'")
+                    logger.warning(
+                        f"Unknown OpenTelemetry otlp exporter protocol '{protocol}'. Use 'grpc' or 'http/protobuf'"
+                    )
                     continue
             except ImportError:
                 logger.warning(
@@ -91,14 +96,20 @@ def _setup_meter_provider(resource, metrics_exporters):
 
     for exporter in metrics_exporters:
         if exporter == "otlp":
-            protocol = os.getenv("OTEL_EXPORTER_OTLP_METRICS_PROTOCOL", "grpc").lower().strip()
+            protocol = (
+                os.getenv("OTEL_EXPORTER_OTLP_METRICS_PROTOCOL", os.getenv("OTEL_EXPORTER_OTLP_PROTOCOL", "grpc"))
+                .lower()
+                .strip()
+            )
             try:
                 if protocol == "grpc":
                     from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
-                elif protocol == "http":
+                elif protocol == "http/protobuf" or protocol == "http":
                     from opentelemetry.exporter.otlp.proto.http.metric_exporter import OTLPMetricExporter
                 else:
-                    logger.warning(f"Unknown OpenTelemetry otlp exporter protocol '{protocol}'. Use 'grpc' or 'http'")
+                    logger.warning(
+                        f"Unknown OpenTelemetry otlp exporter protocol '{protocol}'. Use 'grpc' or 'http/protobuf'"
+                    )
                     continue
             except ImportError:
                 logger.warning(

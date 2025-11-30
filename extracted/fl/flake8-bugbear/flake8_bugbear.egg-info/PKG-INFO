@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: flake8-bugbear
-Version: 25.10.21
+Version: 25.11.29
 Summary: A plugin for flake8 finding likely bugs and design problems in your program. Contains warnings that don't belong in pyflakes and pycodestyle.
 Author-email: Łukasz Langa <lukasz@langa.pl>
 License: MIT
@@ -325,9 +325,24 @@ second usage. Save the result to a list if the result is needed multiple times.
 
 **B040**: Caught exception with call to ``add_note`` not used. Did you forget to ``raise`` it?
 
+.. _B041:
+
 **B041**: Repeated key-value pair in dictionary literal. Only emits errors when the key's value is *also* the same, being the opposite of the pyflakes like check.
 
-**B042**: Remember to call super().__init__() in custom exceptions initalizer.
+.. _B042:
+
+**B042**: Exception classes with a custom `__init__` should pass all args to `super().__init__()` to work correctly with `copy.copy` and `pickle`. 
+Both `BaseException.__reduce__` and `BaseException.__str__` rely on the `args` attribute being set correctly, which is set in `BaseException.__new__` and `BaseException.__init__`. 
+If you define `__init__` yourself without passing all arguments to `super().__init__` it is very easy to break pickling, especially if they pass keyword arguments which both 
+`BaseException.__new__` and `BaseException.__init__` ignore. It's also important that `__init__` not accept any keyword-only parameters. 
+Alternately you can define both `__str__` and `__reduce__` to bypass the need for correct handling of `args`. 
+If you define `__str__/__reduce__` in super classes this check is unable to detect it, and we advise disabling it.
+
+.. _B043:
+
+**B043**: Do not call ``delattr(x, 'attr')``, instead use ``del x.attr``. 
+There is no additional safety in using ``delattr`` if you know the attribute name ahead of time.
+
 
 Opinionated warnings
 ~~~~~~~~~~~~~~~~~~~~
@@ -518,8 +533,14 @@ MIT
 Change Log
 ----------
 
+25.11.29
+~~~~~~~~
+
+* B043: Add new check to state don't call delattr with constant (#514)
+* B042: ignore overloaded init, ignore if str+pickle dunder, improve README
+
 25.10.21
-~~~~~~~~~~
+~~~~~~~~
 
 * B042: New check for reminding to call super().__init__ in custom exceptions
 * B028: Skip if skip_file_prefixes is used (#503)

@@ -17,7 +17,7 @@ from typing import Dict, Iterable, Iterator, List, Protocol, Sequence, Set, Unio
 import attr
 import pycodestyle  # type: ignore[import-untyped]
 
-__version__ = "25.10.21"
+__version__ = "25.11.29"
 
 LOG = logging.getLogger("flake8.bugbear")
 CONTEXTFUL_NODES = (
@@ -523,6 +523,13 @@ class BugBearVisitor(ast.NodeVisitor):
                     and not iskeyword(node.args[1].value)
                 ):
                     self.add_error("B010", node)
+                elif (
+                    node.func.id == "delattr"
+                    and len(node.args) == 2
+                    and _is_identifier(node.args[1])
+                    and not iskeyword(node.args[1].value)
+                ):
+                    self.add_error("B043", node)
 
         self.check_for_b026(node)
         self.check_for_b028(node)
@@ -1749,9 +1756,38 @@ class BugBearVisitor(ast.NodeVisitor):
             else:
                 return
 
+        # if the user defines __str__ + a pickle dunder they're probably in the clear.
+        has_pickle_dunder = False
+        has_str = False
+        for fun in node.body:
+            if isinstance(fun, ast.FunctionDef) and fun.name in (
+                "__getnewargs_ex__",
+                "__getnewargs__",
+                "__getstate__",
+                "__setstate__",
+                "__reduce__",
+                "__reduce_ex__",
+            ):
+                if has_str:
+                    return
+                has_pickle_dunder = True
+            elif isinstance(fun, ast.FunctionDef) and fun.name == "__str__":
+                if has_pickle_dunder:
+                    return
+                has_str = True
+
         # iterate body nodes looking for __init__
         for fun in node.body:
             if not (isinstance(fun, ast.FunctionDef) and fun.name == "__init__"):
+                continue
+            if any(
+                (isinstance(decorator, ast.Name) and decorator.id == "overload")
+                or (
+                    isinstance(decorator, ast.Attribute)
+                    and decorator.attr == "overload"
+                )
+                for decorator in fun.decorator_list
+            ):
                 continue
             if fun.args.kwonlyargs or fun.args.kwarg:
                 # kwargs cannot be passed to super().__init__()
@@ -2411,8 +2447,14 @@ error_codes = {
     "B042": Error(
         message=(
             "B042 Exception class with `__init__` should pass all args to "
-            "`super().__init__()` in order to work with `copy.copy()`. "
+            "`super().__init__()` to work in edge cases of `pickle` and `copy.copy()`. "
             "It should also not take any kwargs."
+        )
+    ),
+    "B043": Error(
+        message=(
+            "B043 Do not call delattr with a constant attribute value, "
+            "it is not any safer than normal property access."
         )
     ),
     # Warnings disabled by default.

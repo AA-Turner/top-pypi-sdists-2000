@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: beartype
-Version: 0.22.6
+Version: 0.22.7
 Summary: Unbearably fast near-real-time pure-Python runtime-static type-checker.
 Project-URL: Docs, https://beartype.readthedocs.io
 Project-URL: GitHub, https://github.com/beartype/beartype

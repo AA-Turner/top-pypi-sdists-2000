@@ -5,7 +5,7 @@ authors = [
 ]
 description = "Keep all y'all's __all__'s in sync"
 readme = 'README.rst'
-requires-python = '>=3.9'
+requires-python = '>=3.10'
 license = {text = 'Apache-2.0'}
 keywords = [
     '__all__',
@@ -29,6 +29,14 @@ classifiers = [
 dependencies = []
 dynamic = ['version']
 
+[dependency-groups]
+docs = [
+    'furo',
+    'sphinx',
+    'sphinx-autobuild',
+    'sphinx-copybutton',
+]
+
 [project.urls]
 'Home Page' = 'https://public.readthedocs.io'
 'Documentation' = 'https://public.readthedocs.io'
@@ -51,7 +59,7 @@ include = [
     'conftest.py',
 ]
 excludes = [
-    '*/.mypy_cache/',
+    '**/.mypy_cache',
 ]
 
 [tool.hatch.envs.default]
@@ -59,7 +67,7 @@ installer = 'uv'
 
 [tool.hatch.envs.default.scripts]
 all = [
-    'hatch test --all --cover',
+    'hatch test --all',
     'hatch run qa:qa',
     'hatch run docs:docs',
 ]
@@ -73,17 +81,19 @@ extra-dependencies = [
 ]
 
 [tool.hatch.envs.hatch-test.scripts]
-run = 'pytest{env:HATCH_TEST_ARGS:} {args}'
-run-cov = 'coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}'
-cov-combine = 'coverage combine'
-cov-report = [
-  'coverage report',
-  'coverage xml',
-  '- diff-cover coverage.xml',
+run = [
+    'coverage run -m pytest{env:HATCH_TEST_ARGS:} {args}',
+    'coverage combine',
+    'coverage report',
+    'coverage xml',
+    '- diff-cover coverage.xml',
 ]
+run-cov = 'hatch test'
+cov-combine = ''
+cov-report = ''
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
+python = ['3.10', '3.11', '3.12', '3.13', '3.14']
 
 [tool.hatch.envs.qa]
 dependencies = [
@@ -107,12 +117,12 @@ preview = [
     'hatch fmt --diff src',
 ]
 
+[tool.hatch.envs.hatch-static-analysis]
+config-path = 'none'
+
 [tool.hatch.envs.docs]
-dependencies = [
-    'furo',
-    'sphinx',
-    'sphinx-autobuild',
-    'sphinx-copybutton',
+dependency-groups = [
+    'docs',
 ]
 
 [tool.hatch.envs.docs.scripts]
