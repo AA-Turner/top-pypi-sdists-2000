@@ -18,7 +18,7 @@ from sphinx.util.console import colorize
 from sphinx.util.logging import is_suppressed_warning, prefixed_warnings
 from sphinx.util.parallel import ParallelTasks
 
-from tests.utils import TESTS_ROOT
+from tests.utils import TEST_ROOTS_DIR
 
 if TYPE_CHECKING:
     from sphinx.testing.util import SphinxTestApp
@@ -26,8 +26,7 @@ if TYPE_CHECKING:
 
 @pytest.mark.sphinx('html', testroot='root')
 def test_info_and_warning(app: SphinxTestApp) -> None:
-    app.verbosity = 2
-    logging.setup(app, app.status, app.warning)
+    logging.setup(app, app.status, app.warning, verbosity=2)
     logger = logging.getLogger(__name__)
 
     logger.debug('message1')
@@ -61,8 +60,7 @@ def test_Exception(app: SphinxTestApp) -> None:
 @pytest.mark.sphinx('html', testroot='root')
 def test_verbosity_filter(app: SphinxTestApp) -> None:
     # verbosity = 0: INFO
-    app.verbosity = 0
-    logging.setup(app, app.status, app.warning)
+    logging.setup(app, app.status, app.warning, verbosity=0)
     logger = logging.getLogger(__name__)
 
     logger.info('message1')
@@ -75,8 +73,7 @@ def test_verbosity_filter(app: SphinxTestApp) -> None:
     assert 'message4' not in app.status.getvalue()
 
     # verbosity = 1: VERBOSE
-    app.verbosity = 1
-    logging.setup(app, app.status, app.warning)
+    logging.setup(app, app.status, app.warning, verbosity=1)
     logger = logging.getLogger(__name__)
 
     logger.info('message1')
@@ -89,8 +86,7 @@ def test_verbosity_filter(app: SphinxTestApp) -> None:
     assert 'message4' not in app.status.getvalue()
 
     # verbosity = 2: DEBUG
-    app.verbosity = 2
-    logging.setup(app, app.status, app.warning)
+    logging.setup(app, app.status, app.warning, verbosity=2)
     logger = logging.getLogger(__name__)
 
     logger.info('message1')
@@ -301,7 +297,7 @@ def force_colors():
 def test_log_no_ansi_colors(tmp_path):
     with force_colors():
         wfile = tmp_path / 'warnings.txt'
-        srcdir = TESTS_ROOT / 'roots' / 'test-nitpicky-warnings'
+        srcdir = TEST_ROOTS_DIR / 'test-nitpicky-warnings'
         argv = list(map(str, ['-b', 'html', srcdir, tmp_path, '-n', '-w', wfile]))
         retcode = build_main(argv)
         assert retcode == 0
@@ -312,8 +308,7 @@ def test_log_no_ansi_colors(tmp_path):
 
 @pytest.mark.sphinx('html', testroot='root')
 def test_colored_logs(app: SphinxTestApp) -> None:
-    app.verbosity = 2
-    logging.setup(app, app.status, app.warning)
+    logging.setup(app, app.status, app.warning, verbosity=2)
     logger = logging.getLogger(__name__)
 
     # default colors
@@ -363,7 +358,7 @@ def test_output_with_unencodable_char(app):
         def write(self, object):
             self.stream.write(object.encode('cp1252').decode('cp1252'))
 
-    logging.setup(app, StreamWriter(app.status), app.warning)
+    logging.setup(app, StreamWriter(app.status), app.warning, verbosity=0)
     logger = logging.getLogger(__name__)
 
     # info with UnicodeEncodeError

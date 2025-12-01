@@ -75,7 +75,7 @@ from typing import (
 )
 from weakref import WeakSet
 
-from sphinx.ext.autodoc.mock import mock
+from sphinx.ext.autodoc._dynamic._mock import mock
 from sphinx.util.typing import _INVALID_BUILTIN_CLASSES, restify, stringify_annotation
 
 
@@ -205,7 +205,7 @@ def test_is_invalid_builtin_class() -> None:
             zipfile.Path,
             zipfile.CompleteDirs,
         )
-    if sys.version_info[:2] >= (3, 13):
+    if sys.version_info[:2] == (3, 13):
         invalid_types += (
             # pathlib
             Path,
@@ -217,7 +217,7 @@ def test_is_invalid_builtin_class() -> None:
         )
 
     invalid_names = {(cls.__module__, cls.__qualname__) for cls in invalid_types}
-    if sys.version_info[:2] < (3, 13):
+    if sys.version_info[:2] != (3, 13):
         invalid_names |= {
             ('pathlib._local', 'Path'),
             ('pathlib._local', 'PosixPath'),
@@ -231,7 +231,7 @@ def test_is_invalid_builtin_class() -> None:
             ('zipfile._path', 'Path'),
             ('zipfile._path', 'CompleteDirs'),
         }
-    assert _INVALID_BUILTIN_CLASSES.keys() == invalid_names
+    assert set(_INVALID_BUILTIN_CLASSES) == invalid_names
 
 
 def test_restify_type_hints_containers():

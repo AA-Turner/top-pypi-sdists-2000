@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: sql_metadata
-Version: 2.18.0
+Version: 2.19.0
 Summary: Uses tokenized query returned by python-sqlparse and generates query metadata
 License: MIT
 License-File: LICENSE
