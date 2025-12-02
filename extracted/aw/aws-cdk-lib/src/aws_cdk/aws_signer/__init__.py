@@ -157,6 +157,18 @@ class CfnProfilePermission(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnProfilePermission")
+    @builtins.classmethod
+    def is_cfn_profile_permission(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProfilePermission.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fa9b2b5c20a313a6a8736730c6a3112613d411a11743beb2f9de986fce357c4a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfilePermission", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -472,6 +484,18 @@ class CfnSigningProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__f88b9c5ab8f3709756f086e40d555988785e2364dbe7e70f2cd9c77e7cc59634)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSigningProfile", [resource]))
+
+    @jsii.member(jsii_name="isCfnSigningProfile")
+    @builtins.classmethod
+    def is_cfn_signing_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSigningProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c3e32d4beb10fbb8b17ae147070d2bc9be76eea0d4a93458b396357b7b5d3473)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSigningProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1281,6 +1305,12 @@ def _typecheckingstub__7b7dd51e7eac664b5afe9a1b7d1972f7da8883244b3f554de5c8d1e0c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fa9b2b5c20a313a6a8736730c6a3112613d411a11743beb2f9de986fce357c4a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c27c534af2f676e9fe9c9b1c8462b7339b8b65f0c4b9b08f485033feefe4741(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1348,6 +1378,12 @@ def _typecheckingstub__d84fe196f81722ce814c09f8bd21719acd97c32e92c1de922d0f04c31
 
 def _typecheckingstub__f88b9c5ab8f3709756f086e40d555988785e2364dbe7e70f2cd9c77e7cc59634(
     resource: _ISigningProfileRef_80e46916,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c3e32d4beb10fbb8b17ae147070d2bc9be76eea0d4a93458b396357b7b5d3473(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

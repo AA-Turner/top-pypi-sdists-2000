@@ -68,6 +68,7 @@ from anthropic.types.beta import (
     BetaMCPToolResultBlock,
     BetaMCPToolUseBlock,
     BetaMCPToolUseBlockParam,
+    BetaMemoryTool20250818Param,
     BetaRequestMCPServerToolConfigurationParam,
     BetaRequestMCPServerURLDefinitionParam,
     BetaRequestMCPToolResultBlockParam,
@@ -94,6 +95,7 @@ from inspect_ai._util.content import (
     ContentToolUse,
 )
 from inspect_ai._util.error import exception_message
+from inspect_ai._util.hash import mm3_hash
 from inspect_ai._util.http import is_retryable_http_status
 from inspect_ai._util.images import file_as_data, file_as_data_uri
 from inspect_ai._util.json import to_json_str_safe
@@ -304,6 +306,8 @@ class AnthropicAPI(ModelAPI):
                 betas.append("computer-use-2025-01-24")
             if any("20241022" in str(tool.get("type", "")) for tool in tools_param):
                 betas.append("computer-use-2024-10-22")
+            if any(tool.get("type", None) == "memory_20250818" for tool in tools_param):
+                betas.append("context-management-2025-06-27")
             if len(betas) > 0:
                 betas = list(dict.fromkeys(betas))  # remove duplicates
                 extra_headers["anthropic-beta"] = ",".join(betas)
@@ -779,6 +783,7 @@ class AnthropicAPI(ModelAPI):
                 self.computer_use_tool_param(tool)
                 or self.text_editor_tool_param(tool)
                 or self.web_search_tool_param(tool)
+                or self.memory_tool_param(tool)
             )
             if config.internal_tools is not False
             else None
@@ -888,6 +893,36 @@ class AnthropicAPI(ModelAPI):
         else:
             return None
 
+    def memory_tool_param(self, tool: ToolInfo) -> BetaMemoryTool20250818Param | None:
+        # check for compatible 'memory' tool
+        if tool.name == "memory" and (
+            sorted(tool.parameters.properties.keys())
+            == sorted(
+                [
+                    "command",
+                    "file_text",
+                    "insert_line",
+                    "insert_text",
+                    "new_path",
+                    "new_str",
+                    "old_path",
+                    "old_str",
+                    "path",
+                    "view_range",
+                ]
+            )
+        ):
+            # memory tool supported on Claude 4+ models
+            if _supports_memory(self.model_name):
+                return BetaMemoryTool20250818Param(
+                    type="memory_20250818",
+                    name="memory",
+                )
+            else:
+                return None
+        else:
+            return None
+
 
 def _supports_web_search(model_name: str) -> bool:
     """Check if the model supports Anthropic's native web search tool."""
@@ -897,6 +932,12 @@ def _supports_web_search(model_name: str) -> bool:
     return model_name.startswith(
         ("claude-opus-4", "claude-sonnet-4", "claude-3-7-sonnet")
     ) or model_name in ("claude-3-5-sonnet-latest", "claude-3-5-haiku-latest")
+
+
+def _supports_memory(model_name: str) -> bool:
+    """Check if the model supports Anthropic's native memory tool."""
+    # https://docs.claude.com/en/docs/agents-and-tools/tool-use/memory-tool
+    return model_name.startswith(("claude-sonnet-4", "claude-opus-4", "claude-haiku-4"))
 
 
 def _web_search_tool_param(
@@ -938,6 +979,7 @@ ToolParamDef = (
     | BetaToolTextEditor20250429Param
     | BetaToolTextEditor20250728Param
     | WebSearchTool20250305Param
+    | BetaMemoryTool20250818Param
 )
 
 
@@ -970,6 +1012,10 @@ def is_web_search_tool(param: ToolParamDef) -> TypeGuard[WebSearchTool20250305Pa
     return param.get("name") == "web_search" and not is_tool_param(param)
 
 
+def is_memory_tool(param: ToolParamDef) -> TypeGuard[BetaMemoryTool20250818Param]:
+    return param.get("name") == "memory" and not is_tool_param(param)
+
+
 def add_cache_control(
     param: TextBlockParam
     | ToolParam
@@ -979,6 +1025,7 @@ def add_cache_control(
     | BetaToolTextEditor20250429Param
     | BetaToolTextEditor20250728Param
     | WebSearchTool20250305Param
+    | BetaMemoryTool20250818Param
     | dict[str, Any],
 ) -> None:
     cast(dict[str, Any], param)["cache_control"] = {"type": "ephemeral"}
@@ -1225,6 +1272,7 @@ async def assistant_message_block_params(
 
 @dataclass
 class _AssistantInternal:
+    thinking_signatures: dict[str, str] = field(default_factory=dict)
     tool_call_internal_names: dict[str, str | None] = field(default_factory=dict)
     server_mcp_tool_uses: dict[
         str, tuple[BetaMCPToolUseBlockParam, BetaRequestMCPToolResultBlockParam]
@@ -1448,6 +1496,14 @@ def content_and_tool_calls_from_assistant_content_blocks(
                 ContentReasoning(reasoning=content_block.data, redacted=True)
             )
         elif isinstance(content_block, ThinkingBlock):
+            # also record the thinking signature for this thinking in the side list
+            # this is b/c if we are operating within a bridge then scaffolds (e.g.
+            # responses with store=False) will not send back the id/signature.
+            assistant_internal().thinking_signatures[
+                mm3_hash(content_block.thinking)
+            ] = content_block.signature
+
+            # append the content
             content.append(
                 ContentReasoning(
                     reasoning=content_block.thinking, signature=content_block.signature
@@ -1563,13 +1619,19 @@ async def message_block_params(
                 )
             ]
         else:
-            if content.signature is None:
-                raise ValueError("Thinking content without signature.")
+            signature = content.signature
+            if signature is None:
+                # see if we can get it from assistant_internal()
+                signature = assistant_internal().thinking_signatures.get(
+                    mm3_hash(content.reasoning), None
+                )
+                if signature is None:
+                    raise ValueError("Thinking content without signature.")
             return [
                 ThinkingBlockParam(
                     type="thinking",
                     thinking=content.reasoning,
-                    signature=content.signature,
+                    signature=signature,
                 )
             ]
 

@@ -1,8 +1,9 @@
-Metadata-Version: 2.3
+Metadata-Version: 2.4
 Name: pandas-stubs
-Version: 2.3.2.250926
+Version: 2.3.3.251201
 Summary: Type annotations for pandas
 License: BSD-3-Clause
+License-File: LICENSE
 Author: The Pandas Development Team
 Author-email: pandas-dev@python.org
 Requires-Python: >=3.10
@@ -17,6 +18,7 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Topic :: Scientific/Engineering
 Classifier: Typing :: Stubs Only

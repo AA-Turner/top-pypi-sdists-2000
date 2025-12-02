@@ -154,6 +154,18 @@ class CfnRepositoryAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnRepositoryAssociation")
+    @builtins.classmethod
+    def is_cfn_repository_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRepositoryAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__596423eb40153189756cccb07f3f1e302056c5f3d1a5c402b65ee9b2bd632429)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepositoryAssociation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -473,6 +485,12 @@ def _typecheckingstub__a9945ca32970980617005509f9022b62752f888a7e9cebee066071030
     connection_arn: typing.Optional[builtins.str] = None,
     owner: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__596423eb40153189756cccb07f3f1e302056c5f3d1a5c402b65ee9b2bd632429(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

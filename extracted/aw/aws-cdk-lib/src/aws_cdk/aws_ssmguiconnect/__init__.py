@@ -134,6 +134,18 @@ class CfnPreferences(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPreferences")
+    @builtins.classmethod
+    def is_cfn_preferences(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPreferences.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6562f2bf90b68b48dc09b0a75ee01b5351c8960048d32d4959c0c685cf566e01)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPreferences", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -502,6 +514,12 @@ def _typecheckingstub__045e31f70bcabcaa4437ed6c7e11fb8462233ba15c60675b143088abf
     id: builtins.str,
     *,
     connection_recording_preferences: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPreferences.ConnectionRecordingPreferencesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6562f2bf90b68b48dc09b0a75ee01b5351c8960048d32d4959c0c685cf566e01(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

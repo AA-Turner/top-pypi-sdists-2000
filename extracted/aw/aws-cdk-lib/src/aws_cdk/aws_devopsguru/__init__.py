@@ -109,6 +109,18 @@ class CfnLogAnomalyDetectionIntegration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnLogAnomalyDetectionIntegration")
+    @builtins.classmethod
+    def is_cfn_log_anomaly_detection_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLogAnomalyDetectionIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bd9bb427696d5c02c85fa4a6bed8681733de36f3b08a4d15c1d74bb4c02bacec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogAnomalyDetectionIntegration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -253,6 +265,18 @@ class CfnNotificationChannel(
         props = CfnNotificationChannelProps(config=config)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnNotificationChannel")
+    @builtins.classmethod
+    def is_cfn_notification_channel(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnNotificationChannel.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e7cf698482e965143262477b2e6fc73156f4d9d188eacd138c835ddb9b799ee5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationChannel", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -664,6 +688,18 @@ class CfnResourceCollection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnResourceCollection")
+    @builtins.classmethod
+    def is_cfn_resource_collection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResourceCollection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__90723f6e9696166d896b76b49283c60fb3299ad87778b997c50054613c3bee54)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceCollection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1059,6 +1095,12 @@ def _typecheckingstub__7dc62acf712b07249b67b80a94f4e15a261a6b082a35061105bf54719
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bd9bb427696d5c02c85fa4a6bed8681733de36f3b08a4d15c1d74bb4c02bacec(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c7d4c4b155787a36eae130b71f2a0e6f6ea7ceac0a4e10dacf22e236d23abb5c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1076,6 +1118,12 @@ def _typecheckingstub__fd2b521cca5ab7bb045c8de504725accf6a36d02b2e14e71a7be76772
     id: builtins.str,
     *,
     config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnNotificationChannel.NotificationChannelConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e7cf698482e965143262477b2e6fc73156f4d9d188eacd138c835ddb9b799ee5(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1133,6 +1181,12 @@ def _typecheckingstub__c3c60a96b04c3d10c4530a8ce94f0b7ce1f25e7d301936f232eea2b55
     id: builtins.str,
     *,
     resource_collection_filter: typing.Union[_IResolvable_da3f097b, typing.Union[CfnResourceCollection.ResourceCollectionFilterProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__90723f6e9696166d896b76b49283c60fb3299ad87778b997c50054613c3bee54(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

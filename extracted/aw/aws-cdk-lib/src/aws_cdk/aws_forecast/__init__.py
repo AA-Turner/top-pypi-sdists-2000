@@ -183,6 +183,18 @@ class CfnDataset(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataset", [resource]))
 
+    @jsii.member(jsii_name="isCfnDataset")
+    @builtins.classmethod
+    def is_cfn_dataset(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataset.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cd8e1aea50f441ccc197802977524067f5e89254f3c87ae04e46afb2d6fdc7b3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataset", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -696,6 +708,18 @@ class CfnDatasetGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDatasetGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnDatasetGroup")
+    @builtins.classmethod
+    def is_cfn_dataset_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDatasetGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3326d247c6ac96f9ca3814dff0ae4efbd7e49a9ee66ebb11d044210450b45f7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatasetGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1131,6 +1155,12 @@ def _typecheckingstub__e7321d2a22c43244bdb8c0f7c1054f5978ceb1e5113b993c92c6751db
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cd8e1aea50f441ccc197802977524067f5e89254f3c87ae04e46afb2d6fdc7b3(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c3188a463f212919233b295ee25b6e0aaffc31e7e8210e2646c840e3c1e66be(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1230,6 +1260,12 @@ def _typecheckingstub__5388ec02293ab366c5482f6fdf1bcfeef6fb2f3ebfa93879ddc0f4ab1
 
 def _typecheckingstub__fa0a6d9f67d9280e67a066e006de2d1335a7652278affaf48c4585d95de30f33(
     resource: _IDatasetGroupRef_6d6b1f2e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a3326d247c6ac96f9ca3814dff0ae4efbd7e49a9ee66ebb11d044210450b45f7(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

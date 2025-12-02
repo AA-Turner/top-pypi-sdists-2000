@@ -1044,6 +1044,18 @@ class CfnApplication(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11435f3b38389f59b991e7c280594e96568ced4d6768eb98216699745e2535ae)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1906,6 +1918,18 @@ class CfnDomain(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
         return typing.cast(_IDomainRef_76d6bc00, jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+
+    @jsii.member(jsii_name="isCfnDomain")
+    @builtins.classmethod
+    def is_cfn_domain(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDomain.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b28bf62abef9cfdda720a4031afdec5a223e3dbc0de6e0d6d81f98ca4d487a3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7165,6 +7189,12 @@ class EngineVersion(
         '''AWS OpenSearch 3.1.'''
         return typing.cast("EngineVersion", jsii.sget(cls, "OPENSEARCH_3_1"))
 
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="OPENSEARCH_3_3")
+    def OPENSEARCH_3_3(cls) -> "EngineVersion":
+        '''AWS OpenSearch 3.3.'''
+        return typing.cast("EngineVersion", jsii.sget(cls, "OPENSEARCH_3_3"))
+
     @builtins.property
     @jsii.member(jsii_name="version")
     def version(self) -> builtins.str:
@@ -10935,6 +10965,12 @@ def _typecheckingstub__322cb6fb73e5eb5873a4fb2838c44691f6a54118d1b70841067679f20
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__11435f3b38389f59b991e7c280594e96568ced4d6768eb98216699745e2535ae(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__010596563813f2e4ea0ec0e832557f7f62393de348b04daaa36cd0c1173c0fab(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11068,6 +11104,12 @@ def _typecheckingstub__8aef0b900a2703d083f24bd9797f860fe581d2375f4aa106d0ea25803
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     domain_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b28bf62abef9cfdda720a4031afdec5a223e3dbc0de6e0d6d81f98ca4d487a3(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

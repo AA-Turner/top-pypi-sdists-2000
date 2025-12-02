@@ -3283,6 +3283,32 @@ class CfnAnycastIpList(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAnycastIpList")
+    @builtins.classmethod
+    def arn_for_anycast_ip_list(
+        cls,
+        resource: _IAnycastIpListRef_e7af96ce,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8f993f78734797706709e4a9abab3c0dbfbec2c60db8d49ccebc9d3291f08017)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnycastIpList", [resource]))
+
+    @jsii.member(jsii_name="isCfnAnycastIpList")
+    @builtins.classmethod
+    def is_cfn_anycast_ip_list(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAnycastIpList.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ed7fb447989269283004c6b11699223de9556655d6f224ace04c8d6a6ef63fb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnycastIpList", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3846,6 +3872,29 @@ class CfnCachePolicy(
         props = CfnCachePolicyProps(cache_policy_config=cache_policy_config)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCachePolicy")
+    @builtins.classmethod
+    def arn_for_cache_policy(cls, resource: _ICachePolicyRef_4d6ba2ea) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db3274d5e2cde1a1d92a0c49a90a0d4a9161fd7b6b6d1df36593b6bad1439dc8)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCachePolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnCachePolicy")
+    @builtins.classmethod
+    def is_cfn_cache_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCachePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ab8fb8161d9f71381f7d5224b5945074fe8f0a57c7d40aac9822c95d61cfcfe)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCachePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4676,6 +4725,32 @@ class CfnCloudFrontOriginAccessIdentity(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForCloudFrontOriginAccessIdentity")
+    @builtins.classmethod
+    def arn_for_cloud_front_origin_access_identity(
+        cls,
+        resource: _ICloudFrontOriginAccessIdentityRef_a078bb8b,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ed0f687f020e9f1414cab1079069818bf637205eaadf43e0d79351b1e402b2a7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudFrontOriginAccessIdentity", [resource]))
+
+    @jsii.member(jsii_name="isCfnCloudFrontOriginAccessIdentity")
+    @builtins.classmethod
+    def is_cfn_cloud_front_origin_access_identity(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCloudFrontOriginAccessIdentity.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__777dc156cea7751c3d6585c4f7bbb27e023379a13f039433bf361b6c8490746d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudFrontOriginAccessIdentity", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4883,7 +4958,7 @@ class CfnConnectionFunction(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_cloudfront.CfnConnectionFunction",
 ):
-    '''Resource Type definition for AWS::CloudFront::ConnectionFunction.
+    '''A connection function.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html
     :cloudformationResource: AWS::CloudFront::ConnectionFunction
@@ -4932,11 +5007,11 @@ class CfnConnectionFunction(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param connection_function_code: 
-        :param connection_function_config: 
-        :param name: 
-        :param auto_publish: Default: - false
-        :param tags: 
+        :param connection_function_code: The code for the connection function.
+        :param connection_function_config: Contains configuration information about a CloudFront function.
+        :param name: The connection function name.
+        :param auto_publish: A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created. To automatically publish to the ``LIVE`` stage, set this property to ``true`` . Default: - false
+        :param tags: A complex type that contains zero or more ``Tag`` elements.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__272d16d9062ee05daad782d97792ee561efd7d4997d1c0a4cc8567323f5c1bb3)
@@ -4965,6 +5040,18 @@ class CfnConnectionFunction(
             type_hints = typing.get_type_hints(_typecheckingstub__b1a9ba7d825837cf7e2167bea8deb2bef087e87146bd02a4470b889a7ecbb298)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnectionFunction", [resource]))
+
+    @jsii.member(jsii_name="isCfnConnectionFunction")
+    @builtins.classmethod
+    def is_cfn_connection_function(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnectionFunction.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5eb7f6013722c03aa1c49ad09b52c05af95ec4e4118dc275d66a2d3c5d52e997)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectionFunction", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4999,7 +5086,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrConnectionFunctionArn")
     def attr_connection_function_arn(self) -> builtins.str:
-        '''
+        '''The connection function Amazon Resource Name (ARN).
+
         :cloudformationAttribute: ConnectionFunctionArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrConnectionFunctionArn"))
@@ -5007,7 +5095,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedTime")
     def attr_created_time(self) -> builtins.str:
-        '''
+        '''The connection function created time.
+
         :cloudformationAttribute: CreatedTime
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedTime"))
@@ -5015,7 +5104,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrETag")
     def attr_e_tag(self) -> builtins.str:
-        '''
+        '''A complex type that contains ``Tag`` key and ``Tag`` value.
+
         :cloudformationAttribute: ETag
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrETag"))
@@ -5023,7 +5113,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''
+        '''The connection function ID.
+
         :cloudformationAttribute: Id
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrId"))
@@ -5031,7 +5122,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedTime")
     def attr_last_modified_time(self) -> builtins.str:
-        '''
+        '''The connection function last modified time.
+
         :cloudformationAttribute: LastModifiedTime
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrLastModifiedTime"))
@@ -5039,7 +5131,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrStage")
     def attr_stage(self) -> builtins.str:
-        '''
+        '''The connection function stage.
+
         :cloudformationAttribute: Stage
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStage"))
@@ -5047,7 +5140,8 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''
+        '''The connection function status.
+
         :cloudformationAttribute: Status
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
@@ -5072,6 +5166,7 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="connectionFunctionCode")
     def connection_function_code(self) -> builtins.str:
+        '''The code for the connection function.'''
         return typing.cast(builtins.str, jsii.get(self, "connectionFunctionCode"))
 
     @connection_function_code.setter
@@ -5086,6 +5181,7 @@ class CfnConnectionFunction(
     def connection_function_config(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.ConnectionFunctionConfigProperty"]:
+        '''Contains configuration information about a CloudFront function.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.ConnectionFunctionConfigProperty"], jsii.get(self, "connectionFunctionConfig"))
 
     @connection_function_config.setter
@@ -5101,6 +5197,7 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
+        '''The connection function name.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -5115,6 +5212,7 @@ class CfnConnectionFunction(
     def auto_publish(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "autoPublish"))
 
     @auto_publish.setter
@@ -5130,6 +5228,7 @@ class CfnConnectionFunction(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A complex type that contains zero or more ``Tag`` elements.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -5156,10 +5255,11 @@ class CfnConnectionFunction(
             runtime: builtins.str,
             key_value_store_associations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectionFunction.KeyValueStoreAssociationProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
-            '''
-            :param comment: 
-            :param runtime: 
-            :param key_value_store_associations: 
+            '''Contains configuration information about a CloudFront function.
+
+            :param comment: A comment to describe the function.
+            :param runtime: The function's runtime environment version.
+            :param key_value_store_associations: The configuration for the key value store associations.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-connectionfunctionconfig.html
             :exampleMetadata: fixture=_generated
@@ -5194,7 +5294,8 @@ class CfnConnectionFunction(
 
         @builtins.property
         def comment(self) -> builtins.str:
-            '''
+            '''A comment to describe the function.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-connectionfunctionconfig.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig-comment
             '''
             result = self._values.get("comment")
@@ -5203,7 +5304,8 @@ class CfnConnectionFunction(
 
         @builtins.property
         def runtime(self) -> builtins.str:
-            '''
+            '''The function's runtime environment version.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-connectionfunctionconfig.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig-runtime
             '''
             result = self._values.get("runtime")
@@ -5214,7 +5316,8 @@ class CfnConnectionFunction(
         def key_value_store_associations(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnConnectionFunction.KeyValueStoreAssociationProperty"]]]]:
-            '''
+            '''The configuration for the key value store associations.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-connectionfunctionconfig.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig-keyvaluestoreassociations
             '''
             result = self._values.get("key_value_store_associations")
@@ -5238,8 +5341,9 @@ class CfnConnectionFunction(
     )
     class KeyValueStoreAssociationProperty:
         def __init__(self, *, key_value_store_arn: builtins.str) -> None:
-            '''
-            :param key_value_store_arn: 
+            '''The key value store association.
+
+            :param key_value_store_arn: The Amazon Resource Name (ARN) of the key value store association.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-keyvaluestoreassociation.html
             :exampleMetadata: fixture=_generated
@@ -5263,7 +5367,8 @@ class CfnConnectionFunction(
 
         @builtins.property
         def key_value_store_arn(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the key value store association.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-connectionfunction-keyvaluestoreassociation.html#cfn-cloudfront-connectionfunction-keyvaluestoreassociation-keyvaluestorearn
             '''
             result = self._values.get("key_value_store_arn")
@@ -5305,11 +5410,11 @@ class CfnConnectionFunctionProps:
     ) -> None:
         '''Properties for defining a ``CfnConnectionFunction``.
 
-        :param connection_function_code: 
-        :param connection_function_config: 
-        :param name: 
-        :param auto_publish: Default: - false
-        :param tags: 
+        :param connection_function_code: The code for the connection function.
+        :param connection_function_config: Contains configuration information about a CloudFront function.
+        :param name: The connection function name.
+        :param auto_publish: A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created. To automatically publish to the ``LIVE`` stage, set this property to ``true`` . Default: - false
+        :param tags: A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html
         :exampleMetadata: fixture=_generated
@@ -5360,7 +5465,8 @@ class CfnConnectionFunctionProps:
 
     @builtins.property
     def connection_function_code(self) -> builtins.str:
-        '''
+        '''The code for the connection function.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-connectionfunctioncode
         '''
         result = self._values.get("connection_function_code")
@@ -5371,7 +5477,8 @@ class CfnConnectionFunctionProps:
     def connection_function_config(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, CfnConnectionFunction.ConnectionFunctionConfigProperty]:
-        '''
+        '''Contains configuration information about a CloudFront function.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-connectionfunctionconfig
         '''
         result = self._values.get("connection_function_config")
@@ -5380,7 +5487,8 @@ class CfnConnectionFunctionProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''
+        '''The connection function name.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-name
         '''
         result = self._values.get("name")
@@ -5391,7 +5499,10 @@ class CfnConnectionFunctionProps:
     def auto_publish(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''
+        '''A flag that determines whether to automatically publish the function to the ``LIVE`` stage when it’s created.
+
+        To automatically publish to the ``LIVE`` stage, set this property to ``true`` .
+
         :default: - false
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-autopublish
@@ -5401,7 +5512,8 @@ class CfnConnectionFunctionProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''A complex type that contains zero or more ``Tag`` elements.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-connectionfunction.html#cfn-cloudfront-connectionfunction-tags
         '''
         result = self._values.get("tags")
@@ -5576,6 +5688,18 @@ class CfnConnectionGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__7abafae3595549aeea49449356d1630080ed0595c8e1a55dfbca9c8cbf16ba25)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnectionGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnConnectionGroup")
+    @builtins.classmethod
+    def is_cfn_connection_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnectionGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b4ea108ac64404c6d7e33a1ecc08b6d7ee5da1aeb947679ad259dda8b73368a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectionGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6065,6 +6189,32 @@ class CfnContinuousDeploymentPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForContinuousDeploymentPolicy")
+    @builtins.classmethod
+    def arn_for_continuous_deployment_policy(
+        cls,
+        resource: _IContinuousDeploymentPolicyRef_6e9263e9,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__269d57c92c538b87c4d2a8574eff826cc0177add8b7d424895261448b7ee4b76)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContinuousDeploymentPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnContinuousDeploymentPolicy")
+    @builtins.classmethod
+    def is_cfn_continuous_deployment_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContinuousDeploymentPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c64bc0a065a8a2b25f85166fa49a7e79cc3cf4a9a551389306e5fe00609f254d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContinuousDeploymentPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7054,6 +7204,18 @@ class CfnDistribution(
             check_type(argname="argument distribution_id", value=distribution_id, expected_type=type_hints["distribution_id"])
         return typing.cast(_IDistributionRef_36fd2094, jsii.sinvoke(cls, "fromDistributionId", [scope, id, distribution_id]))
 
+    @jsii.member(jsii_name="isCfnDistribution")
+    @builtins.classmethod
+    def is_cfn_distribution(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDistribution.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__beee85ba27debf1af919f7068a1ce4b0f66698ef77bcf9da506c4aae09380789)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDistribution", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7699,8 +7861,9 @@ class CfnDistribution(
     )
     class ConnectionFunctionAssociationProperty:
         def __init__(self, *, id: builtins.str) -> None:
-            '''
-            :param id: 
+            '''A connection function association.
+
+            :param id: The association's ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-connectionfunctionassociation.html
             :exampleMetadata: fixture=_generated
@@ -7724,7 +7887,8 @@ class CfnDistribution(
 
         @builtins.property
         def id(self) -> builtins.str:
-            '''
+            '''The association's ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-connectionfunctionassociation.html#cfn-cloudfront-distribution-connectionfunctionassociation-id
             '''
             result = self._values.get("id")
@@ -8847,7 +9011,7 @@ class CfnDistribution(
             :param cache_behaviors: A complex type that contains zero or more ``CacheBehavior`` elements.
             :param cnam_es: An alias for the CloudFront distribution's domain name. .. epigraph:: This property is legacy. We recommend that you use `Aliases <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-aliases>`_ instead.
             :param comment: A comment to describe the distribution. The comment cannot be longer than 128 characters. Default: - ""
-            :param connection_function_association: 
+            :param connection_function_association: The distribution's connection function association.
             :param connection_mode: This field specifies whether the connection mode is through a standard distribution (direct) or a multi-tenant distribution with distribution tenants (tenant-only).
             :param continuous_deployment_policy_id: .. epigraph:: This field only supports standard distributions. You can't specify this field for multi-tenant distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . The identifier of a continuous deployment policy. For more information, see ``CreateContinuousDeploymentPolicy`` .
             :param custom_error_responses: A complex type that controls the following:. - Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. - How long CloudFront caches HTTP status codes in the 4xx and 5xx range. For more information about custom error pages, see `Customizing Error Responses <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html>`_ in the *Amazon CloudFront Developer Guide* .
@@ -8864,7 +9028,7 @@ class CfnDistribution(
             :param staging: .. epigraph:: This field only supports standard distributions. You can't specify this field for multi-tenant distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . A Boolean that indicates whether this is a staging distribution. When this value is ``true`` , this is a staging distribution. When this value is ``false`` , this is not a staging distribution.
             :param tenant_config: .. epigraph:: This field only supports multi-tenant distributions. You can't specify this field for standard distributions. For more information, see `Unsupported features for SaaS Manager for Amazon CloudFront <https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-config-options.html#unsupported-saas>`_ in the *Amazon CloudFront Developer Guide* . A distribution tenant configuration.
             :param viewer_certificate: A complex type that determines the distribution's SSL/TLS configuration for communicating with viewers.
-            :param viewer_mtls_config: 
+            :param viewer_mtls_config: The distribution's viewer mTLS configuration.
             :param web_acl_id: .. epigraph:: Multi-tenant distributions only support AWS WAF V2 web ACLs. A unique identifier that specifies the AWS WAF web ACL, if any, to associate with this distribution. To specify a web ACL created using the latest version of AWS WAF , use the ACL ARN, for example ``arn:aws:wafv2:us-east-1:123456789012:global/webacl/ExampleWebACL/a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`` . To specify a web ACL created using AWS WAF Classic, use the ACL ID, for example ``a1b2c3d4-5678-90ab-cdef-EXAMPLE11111`` . AWS WAF is a web application firewall that lets you monitor the HTTP and HTTPS requests that are forwarded to CloudFront, and lets you control access to your content. Based on conditions that you specify, such as the IP addresses that requests originate from or the values of query strings, CloudFront responds to requests either with the requested content or with an HTTP 403 status code (Forbidden). You can also configure CloudFront to return a custom error page when a request is blocked. For more information about AWS WAF , see the `AWS WAF Developer Guide <https://docs.aws.amazon.com/waf/latest/developerguide/what-is-aws-waf.html>`_ . Default: - ""
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html
@@ -9130,7 +9294,8 @@ class CfnDistribution(
         def connection_function_association(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ConnectionFunctionAssociationProperty"]]:
-            '''
+            '''The distribution's connection function association.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-connectionfunctionassociation
             '''
             result = self._values.get("connection_function_association")
@@ -9394,7 +9559,8 @@ class CfnDistribution(
         def viewer_mtls_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.ViewerMtlsConfigProperty"]]:
-            '''
+            '''The distribution's viewer mTLS configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-distributionconfig.html#cfn-cloudfront-distribution-distributionconfig-viewermtlsconfig
             '''
             result = self._values.get("viewer_mtls_config")
@@ -11629,10 +11795,11 @@ class CfnDistribution(
             advertise_trust_store_ca_names: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             ignore_certificate_expiry: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''
-            :param trust_store_id: 
-            :param advertise_trust_store_ca_names: 
-            :param ignore_certificate_expiry: 
+            '''A trust store configuration.
+
+            :param trust_store_id: The trust store ID.
+            :param advertise_trust_store_ca_names: The configuration to use to advertise trust store CA names.
+            :param ignore_certificate_expiry: The configuration to use to ignore certificate expiration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html
             :exampleMetadata: fixture=_generated
@@ -11666,7 +11833,8 @@ class CfnDistribution(
 
         @builtins.property
         def trust_store_id(self) -> builtins.str:
-            '''
+            '''The trust store ID.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-truststoreid
             '''
             result = self._values.get("trust_store_id")
@@ -11677,7 +11845,8 @@ class CfnDistribution(
         def advertise_trust_store_ca_names(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''The configuration to use to advertise trust store CA names.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-advertisetruststorecanames
             '''
             result = self._values.get("advertise_trust_store_ca_names")
@@ -11687,7 +11856,8 @@ class CfnDistribution(
         def ignore_certificate_expiry(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''
+            '''The configuration to use to ignore certificate expiration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-truststoreconfig.html#cfn-cloudfront-distribution-truststoreconfig-ignorecertificateexpiry
             '''
             result = self._values.get("ignore_certificate_expiry")
@@ -11899,9 +12069,10 @@ class CfnDistribution(
             mode: typing.Optional[builtins.str] = None,
             trust_store_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDistribution.TrustStoreConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''
-            :param mode: 
-            :param trust_store_config: 
+            '''A viewer mTLS configuration.
+
+            :param mode: The viewer mTLS mode.
+            :param trust_store_config: The trust store configuration associated with the viewer mTLS configuration.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html
             :exampleMetadata: fixture=_generated
@@ -11935,7 +12106,8 @@ class CfnDistribution(
 
         @builtins.property
         def mode(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The viewer mTLS mode.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html#cfn-cloudfront-distribution-viewermtlsconfig-mode
             '''
             result = self._values.get("mode")
@@ -11945,7 +12117,8 @@ class CfnDistribution(
         def trust_store_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDistribution.TrustStoreConfigProperty"]]:
-            '''
+            '''The trust store configuration associated with the viewer mTLS configuration.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-distribution-viewermtlsconfig.html#cfn-cloudfront-distribution-viewermtlsconfig-truststoreconfig
             '''
             result = self._values.get("trust_store_config")
@@ -12561,6 +12734,18 @@ class CfnDistributionTenant(
             type_hints = typing.get_type_hints(_typecheckingstub__beab03238943a511823b52120be43c1c8b9dffd7a92aa529b7703614ebef6c00)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDistributionTenant", [resource]))
+
+    @jsii.member(jsii_name="isCfnDistributionTenant")
+    @builtins.classmethod
+    def is_cfn_distribution_tenant(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDistributionTenant.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8554e3468b21bcadec914c8058c06fdc92cd518da0f2e3d23eb3f54e91ef8ed1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDistributionTenant", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13700,6 +13885,29 @@ class CfnFunction(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForFunction")
+    @builtins.classmethod
+    def arn_for_function(cls, resource: _IFunctionRef_2f1d7e70) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__21cfeefd070caa3909e18bfdcc667e8d634642ce554e858d4b3eb956163987d7)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFunction", [resource]))
+
+    @jsii.member(jsii_name="isCfnFunction")
+    @builtins.classmethod
+    def is_cfn_function(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFunction.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc2fbf3bad20891be7f001f22d91aa0d73ca6f5ba9e3108d1a4f6a1d3c54b790)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunction", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -14258,6 +14466,18 @@ class CfnKeyGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnKeyGroup")
+    @builtins.classmethod
+    def is_cfn_key_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnKeyGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__675a78d25eb058f51498644e8829d54b49b3f08ab64e4d2547a625898ca4f0a1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeyGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -14565,6 +14785,18 @@ class CfnKeyValueStore(
             type_hints = typing.get_type_hints(_typecheckingstub__4f4c6e21b975eb5ec1a32765eb6bf251c135448741ff4e7ba0f16fcdd59ece6d)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForKeyValueStore", [resource]))
+
+    @jsii.member(jsii_name="isCfnKeyValueStore")
+    @builtins.classmethod
+    def is_cfn_key_value_store(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnKeyValueStore.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e4ab4877297a874a7d7a28e21c38d9d4423eddaf073abf478f36c800a4d52bb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKeyValueStore", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14906,6 +15138,18 @@ class CfnMonitoringSubscription(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnMonitoringSubscription")
+    @builtins.classmethod
+    def is_cfn_monitoring_subscription(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMonitoringSubscription.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9801897eeaf736df7937e94f255ac669ffa554826d9aa133f60ca7d2e564fec7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitoringSubscription", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -15240,6 +15484,32 @@ class CfnOriginAccessControl(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOriginAccessControl")
+    @builtins.classmethod
+    def arn_for_origin_access_control(
+        cls,
+        resource: _IOriginAccessControlRef_c4ffc680,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4aaf114d74144a2b246f33793cc76fd6718f2af5f3c12e12fc9c00bc15460a88)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOriginAccessControl", [resource]))
+
+    @jsii.member(jsii_name="isCfnOriginAccessControl")
+    @builtins.classmethod
+    def is_cfn_origin_access_control(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOriginAccessControl.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b418f047220e27edf0fe029815bc2e07997e4ccc911d2e7c8fb21920d88db186)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginAccessControl", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15595,6 +15865,32 @@ class CfnOriginRequestPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOriginRequestPolicy")
+    @builtins.classmethod
+    def arn_for_origin_request_policy(
+        cls,
+        resource: _IOriginRequestPolicyRef_affb6d7f,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2106e8417d54f40a1e50c87b2405ca3cae6170732341170e51c096da65f2d46)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOriginRequestPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnOriginRequestPolicy")
+    @builtins.classmethod
+    def is_cfn_origin_request_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOriginRequestPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__20d3774739c2b1cdbb4846d51f59db9a72404a55f8a9da1244ad1a66b68d98e1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginRequestPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16208,6 +16504,18 @@ class CfnPublicKey(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPublicKey")
+    @builtins.classmethod
+    def is_cfn_public_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPublicKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__73710adb25b083f16c4076a57b15102b99a707e2a7b09169a17515fac0fe53cc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicKey", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -16541,6 +16849,18 @@ class CfnRealtimeLogConfig(
             type_hints = typing.get_type_hints(_typecheckingstub__9f2dc02dceb814b7d5502a4089a3d6ba79d4e87294619e80ac0bcba937f4ba75)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRealtimeLogConfig", [resource]))
+
+    @jsii.member(jsii_name="isCfnRealtimeLogConfig")
+    @builtins.classmethod
+    def is_cfn_realtime_log_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRealtimeLogConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aa955a80b84a77adcb59b79dcb19580d30f73d5fc9a8af232f7ee65989d7d3ad)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRealtimeLogConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -17048,6 +17368,32 @@ class CfnResponseHeadersPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForResponseHeadersPolicy")
+    @builtins.classmethod
+    def arn_for_response_headers_policy(
+        cls,
+        resource: _IResponseHeadersPolicyRef_25ee5061,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aa8c39acc4fb2438f8b5e27c9e0bc18414534d7364a7b19ff9cb460606ed4025)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResponseHeadersPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnResponseHeadersPolicy")
+    @builtins.classmethod
+    def is_cfn_response_headers_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResponseHeadersPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c38dc5ed485aac584f21252d9c9df4092fe81f2c727c268e25270cdc1d25a689)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResponseHeadersPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -19057,6 +19403,18 @@ class CfnStreamingDistribution(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnStreamingDistribution")
+    @builtins.classmethod
+    def is_cfn_streaming_distribution(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStreamingDistribution.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__756b0a3cc0c26f2a7e8aa5fcc0020e51288829bc0eb0ab3d4262f4bd74abc1eb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamingDistribution", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -19693,9 +20051,7 @@ class CfnTrustStore(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_cloudfront.CfnTrustStore",
 ):
-    '''Resource Type definition for AWS::CloudFront::TrustStore.
-
-    TrustStores contain CA certificates for mTLS authentication and can be associated with CloudFront distributions.
+    '''A trust store.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html
     :cloudformationResource: AWS::CloudFront::TrustStore
@@ -19741,9 +20097,9 @@ class CfnTrustStore(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param name: A unique name to identify the trust store.
-        :param ca_certificates_bundle_source: 
-        :param tags: Key-value pairs for resource tagging.
+        :param name: The trust store's name.
+        :param ca_certificates_bundle_source: A CA certificates bundle source.
+        :param tags: A complex type that contains zero or more ``Tag`` elements.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__824ae12ab63f13e1c8bb7e88dd932be69b78f01ef525902840d651274bbde9e3)
@@ -19767,6 +20123,18 @@ class CfnTrustStore(
             type_hints = typing.get_type_hints(_typecheckingstub__b9e57bf3350f28fbc10218a8171ecfd89e650b38bf751d3a97d2eaef4923d761)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustStore", [resource]))
+
+    @jsii.member(jsii_name="isCfnTrustStore")
+    @builtins.classmethod
+    def is_cfn_trust_store(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrustStore.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b65584f5b66ef1cf17bd8c213a2166a05d33f70dd06ba5fd0dcde95833c26815)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustStore", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -19801,7 +20169,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the trust store.
+        '''The trust store's Amazon Resource Name (ARN).
 
         :cloudformationAttribute: Arn
         '''
@@ -19810,7 +20178,8 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrETag")
     def attr_e_tag(self) -> builtins.str:
-        '''
+        '''The version identifier for the current version of the trust store.
+
         :cloudformationAttribute: ETag
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrETag"))
@@ -19818,7 +20187,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrId")
     def attr_id(self) -> builtins.str:
-        '''The unique identifier for the trust store.
+        '''The trust store's ID.
 
         :cloudformationAttribute: Id
         '''
@@ -19827,7 +20196,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrLastModifiedTime")
     def attr_last_modified_time(self) -> builtins.str:
-        '''The last modification timestamp of the trust store PEM file.
+        '''The trust store's last modified time.
 
         :cloudformationAttribute: LastModifiedTime
         '''
@@ -19836,7 +20205,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrNumberOfCaCertificates")
     def attr_number_of_ca_certificates(self) -> jsii.Number:
-        '''The number of CA certificates in the trust store PEM file.
+        '''The trust store's number of CA certificates.
 
         :cloudformationAttribute: NumberOfCaCertificates
         '''
@@ -19845,7 +20214,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="attrStatus")
     def attr_status(self) -> builtins.str:
-        '''Current status of the trust store.
+        '''The trust store's status.
 
         :cloudformationAttribute: Status
         '''
@@ -19871,7 +20240,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> builtins.str:
-        '''A unique name to identify the trust store.'''
+        '''The trust store's name.'''
         return typing.cast(builtins.str, jsii.get(self, "name"))
 
     @name.setter
@@ -19886,6 +20255,7 @@ class CfnTrustStore(
     def ca_certificates_bundle_source(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]]:
+        '''A CA certificates bundle source.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleSourceProperty"]], jsii.get(self, "caCertificatesBundleSource"))
 
     @ca_certificates_bundle_source.setter
@@ -19901,7 +20271,7 @@ class CfnTrustStore(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Key-value pairs for resource tagging.'''
+        '''A complex type that contains zero or more ``Tag`` elements.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -19930,11 +20300,12 @@ class CfnTrustStore(
             region: builtins.str,
             version: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param bucket: The S3 bucket containing the CA certificates bundle PEM file.
-            :param key: The S3 object key of the CA certificates bundle PEM file.
-            :param region: The S3 bucket region.
-            :param version: The S3 object version of the CA certificates bundle PEM file.
+            '''The CA certificates bundle location in Amazon S3.
+
+            :param bucket: The S3 bucket.
+            :param key: The location's key.
+            :param region: The location's Region.
+            :param version: The location's version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html
             :exampleMetadata: fixture=_generated
@@ -19970,7 +20341,7 @@ class CfnTrustStore(
 
         @builtins.property
         def bucket(self) -> builtins.str:
-            '''The S3 bucket containing the CA certificates bundle PEM file.
+            '''The S3 bucket.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-bucket
             '''
@@ -19980,7 +20351,7 @@ class CfnTrustStore(
 
         @builtins.property
         def key(self) -> builtins.str:
-            '''The S3 object key of the CA certificates bundle PEM file.
+            '''The location's key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-key
             '''
@@ -19990,7 +20361,7 @@ class CfnTrustStore(
 
         @builtins.property
         def region(self) -> builtins.str:
-            '''The S3 bucket region.
+            '''The location's Region.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-region
             '''
@@ -20000,7 +20371,7 @@ class CfnTrustStore(
 
         @builtins.property
         def version(self) -> typing.Optional[builtins.str]:
-            '''The S3 object version of the CA certificates bundle PEM file.
+            '''The location's version.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundles3location.html#cfn-cloudfront-truststore-cacertificatesbundles3location-version
             '''
@@ -20031,8 +20402,9 @@ class CfnTrustStore(
             *,
             ca_certificates_bundle_s3_location: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTrustStore.CaCertificatesBundleS3LocationProperty", typing.Dict[builtins.str, typing.Any]]],
         ) -> None:
-            '''
-            :param ca_certificates_bundle_s3_location: 
+            '''A CA certificates bundle source.
+
+            :param ca_certificates_bundle_s3_location: The CA certificates bundle location in Amazon S3.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundlesource.html
             :exampleMetadata: fixture=_generated
@@ -20065,7 +20437,8 @@ class CfnTrustStore(
         def ca_certificates_bundle_s3_location(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnTrustStore.CaCertificatesBundleS3LocationProperty"]:
-            '''
+            '''The CA certificates bundle location in Amazon S3.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-cloudfront-truststore-cacertificatesbundlesource.html#cfn-cloudfront-truststore-cacertificatesbundlesource-cacertificatesbundles3location
             '''
             result = self._values.get("ca_certificates_bundle_s3_location")
@@ -20103,9 +20476,9 @@ class CfnTrustStoreProps:
     ) -> None:
         '''Properties for defining a ``CfnTrustStore``.
 
-        :param name: A unique name to identify the trust store.
-        :param ca_certificates_bundle_source: 
-        :param tags: Key-value pairs for resource tagging.
+        :param name: The trust store's name.
+        :param ca_certificates_bundle_source: A CA certificates bundle source.
+        :param tags: A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html
         :exampleMetadata: fixture=_generated
@@ -20151,7 +20524,7 @@ class CfnTrustStoreProps:
 
     @builtins.property
     def name(self) -> builtins.str:
-        '''A unique name to identify the trust store.
+        '''The trust store's name.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-name
         '''
@@ -20163,7 +20536,8 @@ class CfnTrustStoreProps:
     def ca_certificates_bundle_source(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTrustStore.CaCertificatesBundleSourceProperty]]:
-        '''
+        '''A CA certificates bundle source.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-cacertificatesbundlesource
         '''
         result = self._values.get("ca_certificates_bundle_source")
@@ -20171,7 +20545,7 @@ class CfnTrustStoreProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''Key-value pairs for resource tagging.
+        '''A complex type that contains zero or more ``Tag`` elements.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-truststore.html#cfn-cloudfront-truststore-tags
         '''
@@ -20263,6 +20637,18 @@ class CfnVpcOrigin(
             type_hints = typing.get_type_hints(_typecheckingstub__c17183b68583813539a00897d3038f8a182da83287d46d4f4e340ac6d536f7f2)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVpcOrigin", [resource]))
+
+    @jsii.member(jsii_name="isCfnVpcOrigin")
+    @builtins.classmethod
+    def is_cfn_vpc_origin(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVpcOrigin.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f66cb41bfd09cebe1c70b0ce2c7066c712dbd1fb4067e5b265465e95b8ee6bf1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVpcOrigin", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -32034,6 +32420,18 @@ def _typecheckingstub__2b13827b228b7c298a17121364286edab0de8f14fd459f83803e07a1c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8f993f78734797706709e4a9abab3c0dbfbec2c60db8d49ccebc9d3291f08017(
+    resource: _IAnycastIpListRef_e7af96ce,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ed7fb447989269283004c6b11699223de9556655d6f224ace04c8d6a6ef63fb(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__aa4751ceff9fa4c468103f7488b7f0652f09aa7eba8687281685471bc5d09584(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -32106,6 +32504,18 @@ def _typecheckingstub__1ecaedd7f16610a74896b909af6b8327237ba10f429c68ee400588f2d
     id: builtins.str,
     *,
     cache_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCachePolicy.CachePolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__db3274d5e2cde1a1d92a0c49a90a0d4a9161fd7b6b6d1df36593b6bad1439dc8(
+    resource: _ICachePolicyRef_4d6ba2ea,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ab8fb8161d9f71381f7d5224b5945074fe8f0a57c7d40aac9822c95d61cfcfe(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32191,6 +32601,18 @@ def _typecheckingstub__f7e5746b5e9605c9b6058b245e37628d4de4a28a6ec81a063f83dcea2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ed0f687f020e9f1414cab1079069818bf637205eaadf43e0d79351b1e402b2a7(
+    resource: _ICloudFrontOriginAccessIdentityRef_a078bb8b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__777dc156cea7751c3d6585c4f7bbb27e023379a13f039433bf361b6c8490746d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__683eb561c6eda03fa343baf1dac94004449a9f5f958222dbcf3157aad3d2353a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -32238,6 +32660,12 @@ def _typecheckingstub__272d16d9062ee05daad782d97792ee561efd7d4997d1c0a4cc8567323
 
 def _typecheckingstub__b1a9ba7d825837cf7e2167bea8deb2bef087e87146bd02a4470b889a7ecbb298(
     resource: _IConnectionFunctionRef_e329c080,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5eb7f6013722c03aa1c49ad09b52c05af95ec4e4118dc275d66a2d3c5d52e997(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32330,6 +32758,12 @@ def _typecheckingstub__7abafae3595549aeea49449356d1630080ed0595c8e1a55dfbca9c8cb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0b4ea108ac64404c6d7e33a1ecc08b6d7ee5da1aeb947679ad259dda8b73368a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__dad045911121964ba7e6a7c8d166ac2aaace23640d9bee11f9fbbbb1b78e3236(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -32388,6 +32822,18 @@ def _typecheckingstub__b57269fe6faf53d2e30ff31a58c5711db8b8cc3b38dc9ac79efdb585d
     id: builtins.str,
     *,
     continuous_deployment_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnContinuousDeploymentPolicy.ContinuousDeploymentPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__269d57c92c538b87c4d2a8574eff826cc0177add8b7d424895261448b7ee4b76(
+    resource: _IContinuousDeploymentPolicyRef_6e9263e9,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c64bc0a065a8a2b25f85166fa49a7e79cc3cf4a9a551389306e5fe00609f254d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32498,6 +32944,12 @@ def _typecheckingstub__515b2d0306d8b0ddb1748f6ce685671bb2aafd2cd036b754a5a5628d1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     distribution_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__beee85ba27debf1af919f7068a1ce4b0f66698ef77bcf9da506c4aae09380789(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32916,6 +33368,12 @@ def _typecheckingstub__beab03238943a511823b52120be43c1c8b9dffd7a92aa529b7703614e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8554e3468b21bcadec914c8058c06fdc92cd518da0f2e3d23eb3f54e91ef8ed1(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__57520040a3293830d92c5db58279dc6ba57c2835396f254ab1cf1fc8a732ea40(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33067,6 +33525,18 @@ def _typecheckingstub__7fd6686720dc42916d1486e9d86a083535cb418c14fb4746839d47b9f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__21cfeefd070caa3909e18bfdcc667e8d634642ce554e858d4b3eb956163987d7(
+    resource: _IFunctionRef_2f1d7e70,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cc2fbf3bad20891be7f001f22d91aa0d73ca6f5ba9e3108d1a4f6a1d3c54b790(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__676078cdc388a90c2898708674577c94e68ab34efc8ba4848182b1bbcc55aa64(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33152,6 +33622,12 @@ def _typecheckingstub__f76122d8eb5a2e346f84a770990097cb3637adebdf9c4e339ad0d33ee
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__675a78d25eb058f51498644e8829d54b49b3f08ab64e4d2547a625898ca4f0a1(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4109b7a561956bf3aa5d6e3fcb68e6a1ee60d3d5519af53727e7a34f1cfebb26(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33199,6 +33675,12 @@ def _typecheckingstub__39a9c43a6e994ac270417da8b032b21384dbcc2f5eb680a69e9a420bb
 
 def _typecheckingstub__4f4c6e21b975eb5ec1a32765eb6bf251c135448741ff4e7ba0f16fcdd59ece6d(
     resource: _IKeyValueStoreRef_332470ca,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e4ab4877297a874a7d7a28e21c38d9d4423eddaf073abf478f36c800a4d52bb(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33260,6 +33742,12 @@ def _typecheckingstub__ced3ed079ed433587ef1975eb7679215d61c861fee5ee32066a1c0a33
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9801897eeaf736df7937e94f255ac669ffa554826d9aa133f60ca7d2e564fec7(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f97fee287b7cc733d9e3d225cb221d2e6e85c8827eebd3a31754f7c8730e3f76(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33315,6 +33803,18 @@ def _typecheckingstub__cede2a2577225484fb142173757735a061c8f8a7b77f7775c71aeb255
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4aaf114d74144a2b246f33793cc76fd6718f2af5f3c12e12fc9c00bc15460a88(
+    resource: _IOriginAccessControlRef_c4ffc680,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b418f047220e27edf0fe029815bc2e07997e4ccc911d2e7c8fb21920d88db186(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__543dd4c22fad038021b080a1cf4dfdf0974d39f6434fef84a84800ed4ab06110(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33356,6 +33856,18 @@ def _typecheckingstub__871d96ff224e7800447b82036cafd3ac5d0f4648e4030dbdae394618d
     id: builtins.str,
     *,
     origin_request_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginRequestPolicy.OriginRequestPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2106e8417d54f40a1e50c87b2405ca3cae6170732341170e51c096da65f2d46(
+    resource: _IOriginRequestPolicyRef_affb6d7f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__20d3774739c2b1cdbb4846d51f59db9a72404a55f8a9da1244ad1a66b68d98e1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33429,6 +33941,12 @@ def _typecheckingstub__b1958332a898112d6a8103bbe8e7c119db53593ff5ad9f5859b51e1f1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__73710adb25b083f16c4076a57b15102b99a707e2a7b09169a17515fac0fe53cc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3ab6df19428bbab908ddb2fa2f24965c865f8fbae43d39872e7bcaf980a5b5bb(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33478,6 +33996,12 @@ def _typecheckingstub__8600367ceeead504a7a5648f122da082bbe25466b2e32f26804dfa35f
 
 def _typecheckingstub__9f2dc02dceb814b7d5502a4089a3d6ba79d4e87294619e80ac0bcba937f4ba75(
     resource: _IRealtimeLogConfigRef_83cc214a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aa955a80b84a77adcb59b79dcb19580d30f73d5fc9a8af232f7ee65989d7d3ad(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33549,6 +34073,18 @@ def _typecheckingstub__2887da28e2f7d008cf9b91797497a167a286e4f5b55f3a746aa7c2c40
     id: builtins.str,
     *,
     response_headers_policy_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnResponseHeadersPolicy.ResponseHeadersPolicyConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aa8c39acc4fb2438f8b5e27c9e0bc18414534d7364a7b19ff9cb460606ed4025(
+    resource: _IResponseHeadersPolicyRef_25ee5061,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c38dc5ed485aac584f21252d9c9df4092fe81f2c727c268e25270cdc1d25a689(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33743,6 +34279,12 @@ def _typecheckingstub__17ca08764f2b6977e10df04a284bfbc1dbaa0d6bbc803a829470cc3b9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__756b0a3cc0c26f2a7e8aa5fcc0020e51288829bc0eb0ab3d4262f4bd74abc1eb(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3ac1854f5f193377cda6bb81ca0d6ba242bd208bc7a9cf98c91ebe2ce4c52ed6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33830,6 +34372,12 @@ def _typecheckingstub__b9e57bf3350f28fbc10218a8171ecfd89e650b38bf751d3a97d2eaef4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b65584f5b66ef1cf17bd8c213a2166a05d33f70dd06ba5fd0dcde95833c26815(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70b8c48a9efbe8008e3b44e85650405247e70cd53d8d4210419274c1b5f64c5e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33898,6 +34446,12 @@ def _typecheckingstub__f7062f7bb7781a86be4f5d08bb3bb95af09a186c881a9c115d240e934
 
 def _typecheckingstub__c17183b68583813539a00897d3038f8a182da83287d46d4f4e340ac6d536f7f2(
     resource: _IVpcOriginRef_4a31f77c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f66cb41bfd09cebe1c70b0ce2c7066c712dbd1fb4067e5b265465e95b8ee6bf1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

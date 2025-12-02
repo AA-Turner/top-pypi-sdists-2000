@@ -1,3 +1,5 @@
+"""Tests for base parser classes and utilities."""
+
 from __future__ import annotations
 
 from collections import OrderedDict
@@ -7,8 +9,10 @@ import pytest
 
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
 from datamodel_code_generator.model.pydantic import BaseModel, DataModelField
+from datamodel_code_generator.model.type_alias import TypeAlias, TypeAliasBackport, TypeAliasTypeBackport, TypeStatement
 from datamodel_code_generator.parser.base import (
     Parser,
+    add_model_path_to_list,
     escape_characters,
     exact_import,
     relative,
@@ -19,22 +23,26 @@ from datamodel_code_generator.types import DataType
 
 
 class A(DataModel):
-    pass
+    """Test data model class A."""
 
 
 class B(DataModel):
-    pass
+    """Test data model class B."""
 
 
 class C(Parser):
+    """Test parser class C."""
+
     def parse_raw(self, name: str, raw: dict[str, Any]) -> None:
-        pass
+        """Parse raw data into models."""
 
     def parse(self) -> str:  # noqa: PLR6301
+        """Parse and return results."""
         return "parsed"
 
 
 def test_parser() -> None:
+    """Test parser initialization."""
     c = C(
         data_model_type=D,
         data_model_root_type=B,
@@ -48,7 +56,47 @@ def test_parser() -> None:
     assert c.base_class == "Base"
 
 
+def test_add_model_path_to_list() -> None:
+    """Test method which adds model paths to "update" list."""
+    reference_1 = Reference(path="Base1", original_name="A", name="A")
+    reference_2 = Reference(path="Alias2", original_name="B", name="B")
+    reference_3 = Reference(path="Alias3", original_name="B", name="B")
+    reference_4 = Reference(path="Alias4", original_name="B", name="B")
+    reference_5 = Reference(path="Alias5", original_name="B", name="B")
+    model1 = BaseModel(fields=[], reference=reference_1)
+    model2 = TypeAlias(fields=[], reference=reference_2)
+    model3 = TypeAliasBackport(fields=[], reference=reference_3)
+    model4 = TypeAliasTypeBackport(fields=[], reference=reference_4)
+    model5 = TypeStatement(fields=[], reference=reference_5)
+
+    paths = add_model_path_to_list(None, model1)
+    assert "Base1" in paths
+    assert len(paths) == 1
+
+    paths = list[str]()
+    add_model_path_to_list(paths, model1)
+    assert "Base1" in paths
+    assert len(paths) == 1
+
+    add_model_path_to_list(paths, model1)
+    assert len(paths) != 2
+    assert len(paths) == 1
+
+    add_model_path_to_list(paths, model2)
+    assert "Alias2" not in paths
+
+    add_model_path_to_list(paths, model3)
+    assert "Alias3" not in paths
+
+    add_model_path_to_list(paths, model4)
+    assert "Alias4" not in paths
+
+    add_model_path_to_list(paths, model5)
+    assert "Alias5" not in paths
+
+
 def test_sort_data_models() -> None:
+    """Test sorting data models by dependencies."""
     reference_a = Reference(path="A", original_name="A", name="A")
     reference_b = Reference(path="B", original_name="B", name="B")
     reference_c = Reference(path="C", original_name="C", name="C")
@@ -85,6 +133,7 @@ def test_sort_data_models() -> None:
 
 
 def test_sort_data_models_unresolved() -> None:
+    """Test sorting data models with unresolved references."""
     reference_a = Reference(path="A", original_name="A", name="A")
     reference_b = Reference(path="B", original_name="B", name="B")
     reference_c = Reference(path="C", original_name="C", name="C")
@@ -131,6 +180,7 @@ def test_sort_data_models_unresolved() -> None:
 
 
 def test_sort_data_models_unresolved_raise_recursion_error() -> None:
+    """Test sorting data models raises error on recursion limit."""
     reference_a = Reference(path="A", original_name="A", name="A")
     reference_b = Reference(path="B", original_name="B", name="B")
     reference_c = Reference(path="C", original_name="C", name="C")
@@ -188,6 +238,7 @@ def test_sort_data_models_unresolved_raise_recursion_error() -> None:
     ],
 )
 def test_relative(current_module: str, reference: str, val: tuple[str, str]) -> None:
+    """Test relative import calculation."""
     assert relative(current_module, reference) == val
 
 
@@ -202,6 +253,7 @@ def test_relative(current_module: str, reference: str, val: tuple[str, str]) -> 
     ],
 )
 def test_exact_import(from_: str, import_: str, name: str, val: tuple[str, str]) -> None:
+    """Test exact import formatting."""
     assert exact_import(from_, import_, name) == val
 
 
@@ -230,11 +282,15 @@ def test_snake_to_upper_camel(word: str, expected: str) -> None:
 
 
 class D(DataModel):
+    """Test data model class D with custom render."""
+
     def __init__(self, filename: str, data: str, fields: list[DataModelFieldBase]) -> None:  # noqa: ARG002
+        """Initialize data model with custom data."""
         super().__init__(fields=fields, reference=Reference(""))
         self._data = data
 
     def render(self) -> str:
+        """Render the data model."""
         return self._data
 
 
@@ -285,12 +341,13 @@ def test_no_additional_imports() -> None:
     ],
 )
 def test_postprocess_result_modules(input_data: Any, expected: Any) -> None:
+    """Test postprocessing of result modules."""
     result = Parser._Parser__postprocess_result_modules(input_data)
     assert result == expected
 
 
 def test_find_member_with_integer_enum() -> None:
-    """Test find_member method with integer enum values"""
+    """Test find_member method with integer enum values."""
     from datamodel_code_generator.model.enum import Enum  # noqa: PLC0415
     from datamodel_code_generator.model.pydantic.base_model import DataModelField  # noqa: PLC0415
     from datamodel_code_generator.reference import Reference  # noqa: PLC0415
@@ -337,6 +394,7 @@ def test_find_member_with_integer_enum() -> None:
 
 
 def test_find_member_with_string_enum() -> None:
+    """Test find_member method with string enum values."""
     from datamodel_code_generator.model.enum import Enum  # noqa: PLC0415
     from datamodel_code_generator.model.pydantic.base_model import DataModelField  # noqa: PLC0415
     from datamodel_code_generator.reference import Reference  # noqa: PLC0415
@@ -374,6 +432,7 @@ def test_find_member_with_string_enum() -> None:
 
 
 def test_find_member_with_mixed_enum() -> None:
+    """Test find_member method with mixed type enum values."""
     from datamodel_code_generator.model.enum import Enum  # noqa: PLC0415
     from datamodel_code_generator.model.pydantic.base_model import DataModelField  # noqa: PLC0415
     from datamodel_code_generator.reference import Reference  # noqa: PLC0415
@@ -416,6 +475,7 @@ def test_find_member_with_mixed_enum() -> None:
 
 @pytest.fixture
 def escape_map() -> dict[str, str]:
+    """Provide escape character mapping for tests."""
     return {
         "\u0000": r"\x00",  # Null byte
         "'": r"\'",
@@ -442,11 +502,13 @@ def escape_map() -> dict[str, str]:
     ],
 )
 def test_character_escaping(input_str: str, expected: str) -> None:
+    """Test character escaping in strings."""
     assert input_str.translate(escape_characters) == expected
 
 
 @pytest.mark.parametrize("flag", [True, False])
 def test_use_non_positive_negative_number_constrained_types(flag: bool) -> None:
+    """Test configuration of non-positive negative number constrained types."""
     instance = C(source="", use_non_positive_negative_number_constrained_types=flag)
 
     assert instance.data_type_manager.use_non_positive_negative_number_constrained_types == flag

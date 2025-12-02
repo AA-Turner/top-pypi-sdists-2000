@@ -163,6 +163,18 @@ class CfnAlert(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlert", [resource]))
 
+    @jsii.member(jsii_name="isCfnAlert")
+    @builtins.classmethod
+    def is_cfn_alert(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAlert.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__587577ce5286e6a91911048c661558f2621eaff3ea7315d2121edd1807d309b3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlert", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -799,6 +811,18 @@ class CfnAnomalyDetector(
             type_hints = typing.get_type_hints(_typecheckingstub__c8cf636c8f7cf7279c49b9fa3feb0fda966a92c233e7106c81669b28ba865267)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAnomalyDetector", [resource]))
+
+    @jsii.member(jsii_name="isCfnAnomalyDetector")
+    @builtins.classmethod
+    def is_cfn_anomaly_detector(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAnomalyDetector.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1817b34f4153bd72d9998a7b44bd566cf11f3f3cb8c79a3c658fd3069f066ae9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalyDetector", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2785,6 +2809,12 @@ def _typecheckingstub__067a4d083eaa74e381d588052acf304dc111409daa9c5a0d6ced2f733
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__587577ce5286e6a91911048c661558f2621eaff3ea7315d2121edd1807d309b3(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__af2583fccb79de99e1ffd4367cdbaef6fc5d3286d05c49c0757a5d05f7d45ebb(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2877,6 +2907,12 @@ def _typecheckingstub__31ab81393e1b85b97eacf8fc50ccdd65726ebe4cd344f89434267d135
 
 def _typecheckingstub__c8cf636c8f7cf7279c49b9fa3feb0fda966a92c233e7106c81669b28ba865267(
     resource: _IAnomalyDetectorRef_2d878a8f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1817b34f4153bd72d9998a7b44bd566cf11f3f3cb8c79a3c658fd3069f066ae9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

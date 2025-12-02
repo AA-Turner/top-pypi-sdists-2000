@@ -185,6 +185,18 @@ class CfnLaunchProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnLaunchProfile")
+    @builtins.classmethod
+    def is_cfn_launch_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLaunchProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50d000c59aa75025adc08529352ffc4597e16c995119c8e8b48770c364dd6ebf)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLaunchProfile", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1115,6 +1127,18 @@ class CfnStreamingImage(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnStreamingImage")
+    @builtins.classmethod
+    def is_cfn_streaming_image(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStreamingImage.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__da4535586d11a1f06715ca72fe402927b9b97b2ca21e221a91d9cbe9924ee734)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamingImage", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1581,6 +1605,18 @@ class CfnStudio(
             check_type(argname="argument studio_id", value=studio_id, expected_type=type_hints["studio_id"])
         return typing.cast(_IStudioRef_cc59155f, jsii.sinvoke(cls, "fromStudioId", [scope, id, studio_id]))
 
+    @jsii.member(jsii_name="isCfnStudio")
+    @builtins.classmethod
+    def is_cfn_studio(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStudio.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__637ff1db00e07f6af9eb8ded99a23aed9282b5757637ef0d62ba7d70803a93b7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStudio", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1927,6 +1963,18 @@ class CfnStudioComponent(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnStudioComponent")
+    @builtins.classmethod
+    def is_cfn_studio_component(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStudioComponent.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e4e770aaf698d10cf688b255900a253df80561ff98f6aa9ec91d969871b5fdf)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStudioComponent", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3218,6 +3266,12 @@ def _typecheckingstub__73431936cbffacfb1263654979458319433048ccdba564211a0c846e4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__50d000c59aa75025adc08529352ffc4597e16c995119c8e8b48770c364dd6ebf(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__520cd2385901941c1e07bafe0b30dccdcf30981fdd1174c5151396c07cc1b66a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3354,6 +3408,12 @@ def _typecheckingstub__71d825f7da9831b1c19a5c5c864573313899a2423aac6b5af05a411a5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__da4535586d11a1f06715ca72fe402927b9b97b2ca21e221a91d9cbe9924ee734(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__401199e97fd635eab46a6fe194df913d1300b94756f7fbccce0959a5e942144d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3443,6 +3503,12 @@ def _typecheckingstub__bd2bf748ce8156650a8f97cdc57655ec8a309bab4bf87feae2916f958
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__637ff1db00e07f6af9eb8ded99a23aed9282b5757637ef0d62ba7d70803a93b7(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a95feb38c2ffd266287aa8d0e3539b938c3d8fffe708542e910fcb088e43f36e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3513,6 +3579,12 @@ def _typecheckingstub__c22fe0082d9b44d07e4ef368d5f042dd2864628399c458b780e181e7b
     script_parameters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStudioComponent.ScriptParameterKeyValueProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     subtype: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3e4e770aaf698d10cf688b255900a253df80561ff98f6aa9ec91d969871b5fdf(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

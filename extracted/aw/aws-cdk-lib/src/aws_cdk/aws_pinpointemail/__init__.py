@@ -160,6 +160,18 @@ class CfnConfigurationSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnConfigurationSet")
+    @builtins.classmethod
+    def is_cfn_configuration_set(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConfigurationSet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86a914db378e429e8395c2f6f313348f609c35b9d2be474b500026180fb21fc1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationSet", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -627,6 +639,18 @@ class CfnConfigurationSetEventDestination(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnConfigurationSetEventDestination")
+    @builtins.classmethod
+    def is_cfn_configuration_set_event_destination(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConfigurationSetEventDestination.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea484227f4f02d80e815624ba151ae7e95465ba9fe3882ecb5c2bb25d0895cfc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationSetEventDestination", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1586,6 +1610,18 @@ class CfnDedicatedIpPool(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnDedicatedIpPool")
+    @builtins.classmethod
+    def is_cfn_dedicated_ip_pool(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDedicatedIpPool.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__943788eb8dd0214374526fbc4e2300d806bfcef2f2dd2653580b973d76b1707d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDedicatedIpPool", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1820,6 +1856,18 @@ class CfnIdentity(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnIdentity")
+    @builtins.classmethod
+    def is_cfn_identity(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentity.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__029320315f6608106b0e39d7b105f7fe424c619e7c36a9b42ca1736adde0fb0b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentity", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2262,6 +2310,12 @@ def _typecheckingstub__b0c95495940bb828b5dc5b2e121395259e9f69d29759aa8ece46c8d24
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__86a914db378e429e8395c2f6f313348f609c35b9d2be474b500026180fb21fc1(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e6dd1ef01c80034f28eb402d34ecce4ecdd4b4ee13faa3eadfb7b0805bfbbbe2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2345,6 +2399,12 @@ def _typecheckingstub__4c3015fa55474d84ea557c71099210d5a0a477cd6ac12fea1054d78cb
     configuration_set_name: builtins.str,
     event_destination_name: builtins.str,
     event_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationSetEventDestination.EventDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ea484227f4f02d80e815624ba151ae7e95465ba9fe3882ecb5c2bb25d0895cfc(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2460,6 +2520,12 @@ def _typecheckingstub__899a68183365f6ff6816e9b10a8ecb9638a47c22455c5e67ef8907a0b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__943788eb8dd0214374526fbc4e2300d806bfcef2f2dd2653580b973d76b1707d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d1cf085443e5626a1250bb7258f52d1348a70395f9010d1a929116713b6e1478(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2501,6 +2567,12 @@ def _typecheckingstub__f326a74ba0fea8fd81e31aaa8d715b3c05b23e23144183b83fb47b604
     feedback_forwarding_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     mail_from_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentity.MailFromAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__029320315f6608106b0e39d7b105f7fe424c619e7c36a9b42ca1736adde0fb0b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

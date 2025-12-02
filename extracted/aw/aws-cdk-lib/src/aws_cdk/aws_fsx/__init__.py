@@ -432,6 +432,18 @@ class CfnDataRepositoryAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnDataRepositoryAssociation")
+    @builtins.classmethod
+    def is_cfn_data_repository_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataRepositoryAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ec2964d32a48fe526042aee95a1a423f4a496e235f2ce481f01a4c8bc6ee3f16)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataRepositoryAssociation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1231,6 +1243,18 @@ class CfnFileSystem(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnFileSystem")
+    @builtins.classmethod
+    def is_cfn_file_system(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFileSystem.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9a96b8e60d5803996a8d064489e9cac37bd2c6ccc9675e614051c3b31228f0a9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFileSystem", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3328,7 +3352,7 @@ class CfnFileSystem(
             For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-managed-AD.html>`_ or `Managing FSx for ONTAP SVMs <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/managing-svms.html>`_ .
 
             :param dns_ips: A list of up to three IP addresses of DNS servers or domain controllers in the self-managed AD directory.
-            :param domain_join_service_account_secret: 
+            :param domain_join_service_account_secret: The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the self-managed Active Directory domain join service account credentials. When provided, Amazon FSx uses the credentials stored in this secret to join the file system to your self-managed Active Directory domain. The secret must contain two key-value pairs: - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_USERNAME`` - The username for the service account - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_PASSWORD`` - The password for the service account For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-manage-prereqs.html>`_ or `Using Amazon FSx for ONTAP with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/self-manage-prereqs.html>`_ .
             :param domain_name: The fully qualified domain name of the self-managed AD directory, such as ``corp.example.com`` .
             :param file_system_administrators_group: (Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.
             :param organizational_unit_distinguished_name: (Optional) The fully qualified distinguished name of the organizational unit within your self-managed AD directory. Amazon FSx only accepts OU as the direct parent of the file system. An example is ``OU=FSx,DC=yourdomain,DC=corp,DC=com`` . To learn more, see `RFC 2253 <https://docs.aws.amazon.com/https://tools.ietf.org/html/rfc2253>`_ . If none is provided, the FSx file system is created in the default location of your self-managed AD directory. .. epigraph:: Only Organizational Unit (OU) objects can be the direct parent of the file system that you're creating.
@@ -3390,7 +3414,17 @@ class CfnFileSystem(
 
         @builtins.property
         def domain_join_service_account_secret(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the self-managed Active Directory domain join service account credentials.
+
+            When provided, Amazon FSx uses the credentials stored in this secret to join the file system to your self-managed Active Directory domain.
+
+            The secret must contain two key-value pairs:
+
+            - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_USERNAME`` - The username for the service account
+            - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_PASSWORD`` - The password for the service account
+
+            For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-manage-prereqs.html>`_ or `Using Amazon FSx for ONTAP with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/self-manage-prereqs.html>`_ .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-filesystem-selfmanagedactivedirectoryconfiguration.html#cfn-fsx-filesystem-selfmanagedactivedirectoryconfiguration-domainjoinserviceaccountsecret
             '''
             result = self._values.get("domain_join_service_account_secret")
@@ -4407,6 +4441,18 @@ class CfnS3AccessPointAttachment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnS3AccessPointAttachment")
+    @builtins.classmethod
+    def is_cfn_s3_access_point_attachment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnS3AccessPointAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d540dafa7fae09ad03b252b57b50ded7c907de9e2c8c4d193e684b1a26eefee9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnS3AccessPointAttachment", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5199,6 +5245,18 @@ class CfnSnapshot(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSnapshot")
+    @builtins.classmethod
+    def is_cfn_snapshot(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSnapshot.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7540d3c0a594f1d80faa8559da6b9ca57fbb2d98ebb188f822c5a63246359396)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSnapshot", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5479,6 +5537,18 @@ class CfnStorageVirtualMachine(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnStorageVirtualMachine")
+    @builtins.classmethod
+    def is_cfn_storage_virtual_machine(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStorageVirtualMachine.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__12c4a933de1c37ba35741fa2dafde79b84698f85b280474873d8e023c7b06cd1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageVirtualMachine", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5758,7 +5828,7 @@ class CfnStorageVirtualMachine(
             '''The configuration that Amazon FSx uses to join the ONTAP storage virtual machine (SVM) to your self-managed (including on-premises) Microsoft Active Directory directory.
 
             :param dns_ips: A list of up to three IP addresses of DNS servers or domain controllers in the self-managed AD directory.
-            :param domain_join_service_account_secret: 
+            :param domain_join_service_account_secret: The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the self-managed Active Directory domain join service account credentials. When provided, Amazon FSx uses the credentials stored in this secret to join the file system to your self-managed Active Directory domain. The secret must contain two key-value pairs: - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_USERNAME`` - The username for the service account - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_PASSWORD`` - The password for the service account For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-manage-prereqs.html>`_ or `Using Amazon FSx for ONTAP with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/self-manage-prereqs.html>`_ .
             :param domain_name: The fully qualified domain name of the self-managed AD directory, such as ``corp.example.com`` .
             :param file_system_administrators_group: (Optional) The name of the domain group whose members are granted administrative privileges for the file system. Administrative privileges include taking ownership of files and folders, setting audit controls (audit ACLs) on files and folders, and administering the file system remotely by using the FSx Remote PowerShell. The group that you specify must already exist in your domain. If you don't provide one, your AD domain's Domain Admins group is used.
             :param organizational_unit_distinguished_name: (Optional) The fully qualified distinguished name of the organizational unit within your self-managed AD directory. Amazon FSx only accepts OU as the direct parent of the file system. An example is ``OU=FSx,DC=yourdomain,DC=corp,DC=com`` . To learn more, see `RFC 2253 <https://docs.aws.amazon.com/https://tools.ietf.org/html/rfc2253>`_ . If none is provided, the FSx file system is created in the default location of your self-managed AD directory. .. epigraph:: Only Organizational Unit (OU) objects can be the direct parent of the file system that you're creating.
@@ -5820,7 +5890,17 @@ class CfnStorageVirtualMachine(
 
         @builtins.property
         def domain_join_service_account_secret(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the self-managed Active Directory domain join service account credentials.
+
+            When provided, Amazon FSx uses the credentials stored in this secret to join the file system to your self-managed Active Directory domain.
+
+            The secret must contain two key-value pairs:
+
+            - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_USERNAME`` - The username for the service account
+            - ``CUSTOMER_MANAGED_ACTIVE_DIRECTORY_PASSWORD`` - The password for the service account
+
+            For more information, see `Using Amazon FSx for Windows with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-manage-prereqs.html>`_ or `Using Amazon FSx for ONTAP with your self-managed Microsoft Active Directory <https://docs.aws.amazon.com/fsx/latest/ONTAPGuide/self-manage-prereqs.html>`_ .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-storagevirtualmachine-selfmanagedactivedirectoryconfiguration.html#cfn-fsx-storagevirtualmachine-selfmanagedactivedirectoryconfiguration-domainjoinserviceaccountsecret
             '''
             result = self._values.get("domain_join_service_account_secret")
@@ -6208,6 +6288,18 @@ class CfnVolume(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnVolume")
+    @builtins.classmethod
+    def is_cfn_volume(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVolume.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4f54676aad4c6fc45165240c1ef076784b084beae9efcc0c2fd08219a2c44d72)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVolume", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9686,6 +9778,12 @@ def _typecheckingstub__dbe6e92927c4082cced17704c323c0e8dfbb17ada263b6e29e1a80b69
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ec2964d32a48fe526042aee95a1a423f4a496e235f2ce481f01a4c8bc6ee3f16(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__91cc4e67660a8ade53fdb55d0b22b24057bd4d13556bece96527303175e40fb2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9793,6 +9891,12 @@ def _typecheckingstub__2d13764c3dcb8d96799af4fa191d042ff4511c33cfd1aecbf235dded3
     storage_type: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     windows_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFileSystem.WindowsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9a96b8e60d5803996a8d064489e9cac37bd2c6ccc9675e614051c3b31228f0a9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10095,6 +10199,12 @@ def _typecheckingstub__f51e0b107c6c6ca8bc284dbcf4013f6c7bcdd088cb084476fdf615b4d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d540dafa7fae09ad03b252b57b50ded7c907de9e2c8c4d193e684b1a26eefee9(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6e021f2b2cc052b241526f0c8b04451cdbb773840ed5e597d710011b7885f25f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10201,6 +10311,12 @@ def _typecheckingstub__9d5d4adee5d5cd344131498bc7092a1109dbe23b110d78c712b65bf14
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7540d3c0a594f1d80faa8559da6b9ca57fbb2d98ebb188f822c5a63246359396(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e16496e8dfd463b470127a5c588838d852660a318c398df552c6e9b695f66236(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10250,6 +10366,12 @@ def _typecheckingstub__3859c7ed2c6acfabdeba44c5147f6c5a5bf3d7d6a4e09a2dac79cbdc9
     root_volume_security_style: typing.Optional[builtins.str] = None,
     svm_admin_password: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__12c4a933de1c37ba35741fa2dafde79b84698f85b280474873d8e023c7b06cd1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10345,6 +10467,12 @@ def _typecheckingstub__8032dc0135fe914a968f543d77b52c3a075a98fbe43ae2b6c95c8ef1f
     open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVolume.OpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     volume_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4f54676aad4c6fc45165240c1ef076784b084beae9efcc0c2fd08219a2c44d72(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

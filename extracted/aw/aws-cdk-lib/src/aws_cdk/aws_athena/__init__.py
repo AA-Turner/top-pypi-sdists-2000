@@ -163,6 +163,18 @@ class CfnCapacityReservation(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapacityReservation", [resource]))
 
+    @jsii.member(jsii_name="isCfnCapacityReservation")
+    @builtins.classmethod
+    def is_cfn_capacity_reservation(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCapacityReservation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cd03eeb972c18518cd5fb4248827e6d6379dc839e0859929f49295fd1f68d401)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapacityReservation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -664,6 +676,18 @@ class CfnDataCatalog(
             check_type(argname="argument data_catalog_name", value=data_catalog_name, expected_type=type_hints["data_catalog_name"])
         return typing.cast(_IDataCatalogRef_a1e1d9b1, jsii.sinvoke(cls, "fromDataCatalogName", [scope, id, data_catalog_name]))
 
+    @jsii.member(jsii_name="isCfnDataCatalog")
+    @builtins.classmethod
+    def is_cfn_data_catalog(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataCatalog.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8da2b482d34acbde85caaeea639faa4b784c7e3c2ee75e559e3cd37b500da2ae)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataCatalog", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1116,6 +1140,18 @@ class CfnNamedQuery(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnNamedQuery")
+    @builtins.classmethod
+    def is_cfn_named_query(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnNamedQuery.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2112e8d72fa96f91df43a9ae2df353758e22f7e76106ac1a5018855814bf31de)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNamedQuery", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1418,6 +1454,18 @@ class CfnPreparedStatement(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPreparedStatement")
+    @builtins.classmethod
+    def is_cfn_prepared_statement(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPreparedStatement.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0bbcc6cf69fea8a479691c07e7148f5866c3799ccf4b88e0220df92bf7ae9c19)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPreparedStatement", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1874,6 +1922,18 @@ class CfnWorkGroup(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument work_group_name", value=work_group_name, expected_type=type_hints["work_group_name"])
         return typing.cast(_IWorkGroupRef_ee1f32da, jsii.sinvoke(cls, "fromWorkGroupName", [scope, id, work_group_name]))
+
+    @jsii.member(jsii_name="isCfnWorkGroup")
+    @builtins.classmethod
+    def is_cfn_work_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e90657fb4ab268d2857588a85009d72ec58af75fdb581be0af1e2b660508664a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2463,9 +2523,13 @@ class CfnWorkGroup(
             max_concurrent_dpus: typing.Optional[jsii.Number] = None,
             spark_properties: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''The engine configuration for running queries.
+            '''The engine configuration for the workgroup, which includes the minimum/maximum number of Data Processing Units (DPU) that queries should use when running in provisioned capacity.
 
-            :param additional_configs: Contains additional notebook engine MAP<string, string> parameter mappings in the form of key-value pairs. To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the StartSessionRequest$NotebookVersion field, and then add a key named NotebookId to AdditionalConfigs that has the value of the Athena notebook ID.
+            If not specified, Athena uses default values (Default value for min is 4 and for max is Minimum of 124 and allocated DPUs).
+
+            To specify DPU values for PC queries the WG containing EngineConfiguration should have the following values: The name of the Classifications should be ``athena-query-engine-properties`` , with the only allowed properties as ``max-dpu-count`` and ``min-dpu-count`` .
+
+            :param additional_configs: Contains additional notebook engine ``MAP<string, string>`` parameter mappings in the form of key-value pairs. To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the ``StartSessionRequest$NotebookVersion`` field, and then add a key named ``NotebookId`` to ``AdditionalConfigs`` that has the value of the Athena notebook ID.
             :param classifications: The configuration classifications that can be specified for the engine.
             :param coordinator_dpu_size: The number of DPUs to use for the coordinator. A coordinator is a special executor that orchestrates processing work and manages other executors in a notebook session. The default is 1.
             :param default_executor_dpu_size: The default number of DPUs to use for executors. An executor is the smallest unit of compute that a notebook session can request from Athena. The default is 1.
@@ -2525,9 +2589,9 @@ class CfnWorkGroup(
         def additional_configs(
             self,
         ) -> typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]]:
-            '''Contains additional notebook engine MAP<string, string> parameter mappings in the form of key-value pairs.
+            '''Contains additional notebook engine ``MAP<string, string>`` parameter mappings in the form of key-value pairs.
 
-            To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the StartSessionRequest$NotebookVersion field, and then add a key named NotebookId to AdditionalConfigs that has the value of the Athena notebook ID.
+            To specify an Athena notebook that the Jupyter server will download and serve, specify a value for the ``StartSessionRequest$NotebookVersion`` field, and then add a key named ``NotebookId`` to ``AdditionalConfigs`` that has the value of the Athena notebook ID.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-engineconfiguration.html#cfn-athena-workgroup-engineconfiguration-additionalconfigs
             '''
@@ -2687,9 +2751,9 @@ class CfnWorkGroup(
             enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
             kms_key: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Configuration settings for managed log persistence.
+            '''Configuration settings for delivering logs to Amazon S3 buckets.
 
-            :param enabled: Enables managed log persistence.
+            :param enabled: Enables mamanged log persistence.
             :param kms_key: The KMS key ARN to encrypt the logs stored in managed log persistence.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html
@@ -2720,7 +2784,7 @@ class CfnWorkGroup(
         def enabled(
             self,
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-            '''Enables managed log persistence.
+            '''Enables mamanged log persistence.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-athena-workgroup-managedloggingconfiguration.html#cfn-athena-workgroup-managedloggingconfiguration-enabled
             '''
@@ -4442,6 +4506,12 @@ def _typecheckingstub__65e5c5fb20b5937a61b9375b77df684f21fbdcdff52211d39c9e364b9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cd03eeb972c18518cd5fb4248827e6d6379dc839e0859929f49295fd1f68d401(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0bcae353c3f5a5e1be964ca831d796ba8924d38d98e4da35f1f4249f28af0833(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4528,6 +4598,12 @@ def _typecheckingstub__d5d2a0246fafbbc6a693f337ada29b85155f59962e79d7c642084d446
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     data_catalog_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8da2b482d34acbde85caaeea639faa4b784c7e3c2ee75e559e3cd37b500da2ae(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4619,6 +4695,12 @@ def _typecheckingstub__70a6acd727802c2fa7a22438ae44b6660590077a4f16a3e6add10721d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2112e8d72fa96f91df43a9ae2df353758e22f7e76106ac1a5018855814bf31de(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ddec5e38097efea59697e1d796fb6a6d88b7ddece86ca310e4558dddfdb308b6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4680,6 +4762,12 @@ def _typecheckingstub__2c4c8a39ce9fb61cd606b4abe521c05c0c7c27caa382a68b361cf3be6
     statement_name: builtins.str,
     work_group: typing.Union[builtins.str, _IWorkGroupRef_ee1f32da],
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0bbcc6cf69fea8a479691c07e7148f5866c3799ccf4b88e0220df92bf7ae9c19(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4755,6 +4843,12 @@ def _typecheckingstub__be43a8d87adff5435c9f23ab60a2b7d950366fdde534d2500f7e413d6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     work_group_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e90657fb4ab268d2857588a85009d72ec58af75fdb581be0af1e2b660508664a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

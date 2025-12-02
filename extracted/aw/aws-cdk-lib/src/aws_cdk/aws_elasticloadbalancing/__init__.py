@@ -285,6 +285,18 @@ class CfnLoadBalancer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnLoadBalancer")
+    @builtins.classmethod
+    def is_cfn_load_balancer(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLoadBalancer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8992f89439e67ec9ffadbd70334665686a9a72dca924c6c068a9f48e67f272f6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoadBalancer", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2752,6 +2764,12 @@ def _typecheckingstub__ad4de01fae3e412612aab1283fdbc2d6f0e2fef6e20c971f887b72cbc
     security_groups: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISecurityGroupRef_efa4ff18]]] = None,
     subnets: typing.Optional[typing.Sequence[typing.Union[builtins.str, _ISubnetRef_ac31e361]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8992f89439e67ec9ffadbd70334665686a9a72dca924c6c068a9f48e67f272f6(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -177,6 +177,18 @@ class CfnCRL(
             check_type(argname="argument crl_id", value=crl_id, expected_type=type_hints["crl_id"])
         return typing.cast(_ICRLRef_21f48bbb, jsii.sinvoke(cls, "fromCrlId", [scope, id, crl_id]))
 
+    @jsii.member(jsii_name="isCfnCRL")
+    @builtins.classmethod
+    def is_cfn_crl(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCRL.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__afaaf5d7ef4415ef621bd5f4e1d78e95a3214653211998418fa3be14b4fe4ffe)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCRL", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -578,6 +590,18 @@ class CfnProfile(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument profile_id", value=profile_id, expected_type=type_hints["profile_id"])
         return typing.cast(_IProfileRef_cfaa2db9, jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
+
+    @jsii.member(jsii_name="isCfnProfile")
+    @builtins.classmethod
+    def is_cfn_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5fed9f25419acddbb74cddfd2e69ca8bd0edd423718cf2845b5253d849db587d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1284,6 +1308,18 @@ class CfnTrustAnchor(
             check_type(argname="argument trust_anchor_id", value=trust_anchor_id, expected_type=type_hints["trust_anchor_id"])
         return typing.cast(_ITrustAnchorRef_2e6950c3, jsii.sinvoke(cls, "fromTrustAnchorId", [scope, id, trust_anchor_id]))
 
+    @jsii.member(jsii_name="isCfnTrustAnchor")
+    @builtins.classmethod
+    def is_cfn_trust_anchor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrustAnchor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b0217f2d64b32fe21ef720b8932c170d9bb94a33f154555765922b3bfcabab4d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustAnchor", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1888,6 +1924,12 @@ def _typecheckingstub__8204e9b235056c4607bf2a8db01ddb35e4b3074bbf873b9d68e9be5ab
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__afaaf5d7ef4415ef621bd5f4e1d78e95a3214653211998418fa3be14b4fe4ffe(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8dd9193cb33ddf82dba5396e1ae096cc9b451b4296ca2900997bdae6a30a6f44(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1977,6 +2019,12 @@ def _typecheckingstub__1f9aa44b88d6ed3fd5d41a336777d0efa3496e91f55dcf344b750b37d
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     profile_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5fed9f25419acddbb74cddfd2e69ca8bd0edd423718cf2845b5253d849db587d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2115,6 +2163,12 @@ def _typecheckingstub__9c74d8e90ef0bef49a45147e252ba08bc97f3f0738fa055f1700d853f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     trust_anchor_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b0217f2d64b32fe21ef720b8932c170d9bb94a33f154555765922b3bfcabab4d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

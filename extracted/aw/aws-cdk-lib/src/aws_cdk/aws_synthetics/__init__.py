@@ -1782,6 +1782,18 @@ class CfnCanary(
             check_type(argname="argument canary_name", value=canary_name, expected_type=type_hints["canary_name"])
         return typing.cast(_ICanaryRef_cf407e49, jsii.sinvoke(cls, "fromCanaryName", [scope, id, canary_name]))
 
+    @jsii.member(jsii_name="isCfnCanary")
+    @builtins.classmethod
+    def is_cfn_canary(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCanary.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6a3fbf9db1e0a642690468c48e630211c97b836ae6d07dfc5645551505768178)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCanary", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3833,6 +3845,18 @@ class CfnGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnGroup")
+    @builtins.classmethod
+    def is_cfn_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4617b52968dab7116670f82ed8a0e28c73b86148aa7dc92f940f22398ef479e9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5590,6 +5614,12 @@ def _typecheckingstub__a9ea9a4c62ed507734c1656b5b5b9ece24a5a15e32aa598350d8dcba8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6a3fbf9db1e0a642690468c48e630211c97b836ae6d07dfc5645551505768178(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bc166bab0fcf177897c1dbb233203e39458428064bc6ff7215b01b2b3ec6f3a2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5853,6 +5883,12 @@ def _typecheckingstub__973b5b11ee0c26a7aa94d55785d1a025e0c569700b7877564d84ae144
     name: builtins.str,
     resource_arns: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4617b52968dab7116670f82ed8a0e28c73b86148aa7dc92f940f22398ef479e9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

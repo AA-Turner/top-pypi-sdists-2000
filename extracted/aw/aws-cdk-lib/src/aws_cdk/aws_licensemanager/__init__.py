@@ -151,6 +151,18 @@ class CfnGrant(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGrant", [resource]))
 
+    @jsii.member(jsii_name="isCfnGrant")
+    @builtins.classmethod
+    def is_cfn_grant(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGrant.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77395be3520b17c3fdb320cd771bc776e8d38fcf1699b4649b0b02baeb512632)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGrant", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -566,6 +578,18 @@ class CfnLicense(
             type_hints = typing.get_type_hints(_typecheckingstub__edbf08bc914e74c1bdf307cc4a134bf853aec8fa0fa88bdae05d34aad073560d)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLicense", [resource]))
+
+    @jsii.member(jsii_name="isCfnLicense")
+    @builtins.classmethod
+    def is_cfn_license(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLicense.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__44c0864b8227060c52869733f29658cb579ea455300bf39ad4a797305bc4a646)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLicense", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1665,6 +1689,12 @@ def _typecheckingstub__d75a1343afb37f47732759e1bffa4521f7146f8652ca23eb417d8545d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__77395be3520b17c3fdb320cd771bc776e8d38fcf1699b4649b0b02baeb512632(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__06f3d843a99f00dd40b93f69a334bda31af66745c91ef0da13aef948b5e7cd3b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1746,6 +1776,12 @@ def _typecheckingstub__4fa5716b8b0216bdd1da1f12239ad6038aa037294da7f4a1f0215f1b1
 
 def _typecheckingstub__edbf08bc914e74c1bdf307cc4a134bf853aec8fa0fa88bdae05d34aad073560d(
     resource: _ILicenseRef_ae3cfc85,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__44c0864b8227060c52869733f29658cb579ea455300bf39ad4a797305bc4a646(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

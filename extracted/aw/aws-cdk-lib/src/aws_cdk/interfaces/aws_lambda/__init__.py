@@ -84,6 +84,74 @@ class AliasReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_lambda.CapacityProviderReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "capacity_provider_arn": "capacityProviderArn",
+        "capacity_provider_name": "capacityProviderName",
+    },
+)
+class CapacityProviderReference:
+    def __init__(
+        self,
+        *,
+        capacity_provider_arn: builtins.str,
+        capacity_provider_name: builtins.str,
+    ) -> None:
+        '''A reference to a CapacityProvider resource.
+
+        :param capacity_provider_arn: The ARN of the CapacityProvider resource.
+        :param capacity_provider_name: The CapacityProviderName of the CapacityProvider resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            
+            capacity_provider_reference = interfaces_aws_lambda.CapacityProviderReference(
+                capacity_provider_arn="capacityProviderArn",
+                capacity_provider_name="capacityProviderName"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__00dca94efa22346b052a6470fe46fd4bd396570533c2cf79a9e8680d82ea3171)
+            check_type(argname="argument capacity_provider_arn", value=capacity_provider_arn, expected_type=type_hints["capacity_provider_arn"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "capacity_provider_arn": capacity_provider_arn,
+            "capacity_provider_name": capacity_provider_name,
+        }
+
+    @builtins.property
+    def capacity_provider_arn(self) -> builtins.str:
+        '''The ARN of the CapacityProvider resource.'''
+        result = self._values.get("capacity_provider_arn")
+        assert result is not None, "Required property 'capacity_provider_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def capacity_provider_name(self) -> builtins.str:
+        '''The CapacityProviderName of the CapacityProvider resource.'''
+        result = self._values.get("capacity_provider_name")
+        assert result is not None, "Required property 'capacity_provider_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CapacityProviderReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_lambda.CodeSigningConfigReference",
     jsii_struct_bases=[],
     name_mapping={"code_signing_config_arn": "codeSigningConfigArn"},
@@ -368,6 +436,51 @@ class _IAliasRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAliasRef).__jsii_proxy_class__ = lambda : _IAliasRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_lambda.ICapacityProviderRef")
+class ICapacityProviderRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a CapacityProvider.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderRef")
+    def capacity_provider_ref(self) -> CapacityProviderReference:
+        '''(experimental) A reference to a CapacityProvider resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ICapacityProviderRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a CapacityProvider.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_lambda.ICapacityProviderRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderRef")
+    def capacity_provider_ref(self) -> CapacityProviderReference:
+        '''(experimental) A reference to a CapacityProvider resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(CapacityProviderReference, jsii.get(self, "capacityProviderRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ICapacityProviderRef).__jsii_proxy_class__ = lambda : _ICapacityProviderRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_lambda.ICodeSigningConfigRef")
@@ -1040,11 +1153,13 @@ class VersionReference:
 
 __all__ = [
     "AliasReference",
+    "CapacityProviderReference",
     "CodeSigningConfigReference",
     "EventInvokeConfigReference",
     "EventSourceMappingReference",
     "FunctionReference",
     "IAliasRef",
+    "ICapacityProviderRef",
     "ICodeSigningConfigRef",
     "IEventInvokeConfigRef",
     "IEventSourceMappingRef",
@@ -1066,6 +1181,14 @@ publication.publish()
 def _typecheckingstub__0b5bdc37a9ac06d42b682902b37a528e61143ca57e7d401996ee0bf55267110d(
     *,
     alias_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__00dca94efa22346b052a6470fe46fd4bd396570533c2cf79a9e8680d82ea3171(
+    *,
+    capacity_provider_arn: builtins.str,
+    capacity_provider_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1137,5 +1260,5 @@ def _typecheckingstub__4eef012bdf282178fc15f29261bb73aca6423bb74d9618d940489c8c8
     """Type checking stubs"""
     pass
 
-for cls in [IAliasRef, ICodeSigningConfigRef, IEventInvokeConfigRef, IEventSourceMappingRef, IFunctionRef, ILayerVersionPermissionRef, ILayerVersionRef, IPermissionRef, IUrlRef, IVersionRef]:
+for cls in [IAliasRef, ICapacityProviderRef, ICodeSigningConfigRef, IEventInvokeConfigRef, IEventSourceMappingRef, IFunctionRef, ILayerVersionPermissionRef, ILayerVersionRef, IPermissionRef, IUrlRef, IVersionRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

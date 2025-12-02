@@ -138,6 +138,18 @@ class CfnDiscovery(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnDiscovery")
+    @builtins.classmethod
+    def is_cfn_discovery(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDiscovery.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e398642b74895631a145c04842032f1c33e946c3fe37654680dadde0099457e8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDiscovery", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -274,6 +286,18 @@ class CfnGroupingConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnGroupingConfiguration")
+    @builtins.classmethod
+    def is_cfn_grouping_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroupingConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c8a6205301473dd0abbf7d9e514ff1e3dd484388b3279d11866578aee510c5ea)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroupingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -811,6 +835,18 @@ class CfnServiceLevelObjective(
             type_hints = typing.get_type_hints(_typecheckingstub__50a8d652cbf22349e5d84f80af59842df8ded75cea6b970f58214a8f492fd4f8)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceLevelObjective", [resource]))
+
+    @jsii.member(jsii_name="isCfnServiceLevelObjective")
+    @builtins.classmethod
+    def is_cfn_service_level_objective(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServiceLevelObjective.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__94e44eb419dbbf730aa60c7d8e2d423279ca1b683a468ce398085d7e403dd625)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceLevelObjective", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3478,6 +3514,12 @@ def _typecheckingstub__431b690cfc38177c6d13e2a64c92a9b242c6a79b7a4c3d863419e7fee
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e398642b74895631a145c04842032f1c33e946c3fe37654680dadde0099457e8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__169149a48e72c8ecdaddbc89a3281a63982fa5a6a224a652a20963505c16cf6d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3495,6 +3537,12 @@ def _typecheckingstub__55532ed92820a19cd89fdea2459ad5e1c62c57066396013b794bd07c6
     id: builtins.str,
     *,
     grouping_attribute_definitions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupingConfiguration.GroupingAttributeDefinitionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c8a6205301473dd0abbf7d9e514ff1e3dd484388b3279d11866578aee510c5ea(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3551,6 +3599,12 @@ def _typecheckingstub__8476d024be5b448cfb8f9ae2f80fa7f2083296f712cdb7cd12e69365d
 
 def _typecheckingstub__50a8d652cbf22349e5d84f80af59842df8ded75cea6b970f58214a8f492fd4f8(
     resource: _IServiceLevelObjectiveRef_54989f43,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94e44eb419dbbf730aa60c7d8e2d423279ca1b683a468ce398085d7e403dd625(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

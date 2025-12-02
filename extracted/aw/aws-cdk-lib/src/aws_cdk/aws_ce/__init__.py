@@ -145,6 +145,18 @@ class CfnAnomalyMonitor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAnomalyMonitor")
+    @builtins.classmethod
+    def is_cfn_anomaly_monitor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAnomalyMonitor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6b3a6d7c4ec886a5deb8cd8a9c3e3749ec924487a30eaa40934422f251b90b4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalyMonitor", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -604,6 +616,18 @@ class CfnAnomalySubscription(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnAnomalySubscription")
+    @builtins.classmethod
+    def is_cfn_anomaly_subscription(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAnomalySubscription.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__da1efa7f83d16370aa73dd1c0f5d7ca9eb02a5affdf2910e6cee1a4126f63b63)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAnomalySubscription", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1201,6 +1225,18 @@ class CfnCostCategory(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCostCategory", [resource]))
 
+    @jsii.member(jsii_name="isCfnCostCategory")
+    @builtins.classmethod
+    def is_cfn_cost_category(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCostCategory.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c2bf94b64cd5a16c51706c3b46966d9ad60f6870c1ac4992c8b378e64ee10928)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCostCategory", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1592,6 +1628,12 @@ def _typecheckingstub__1da201141928cd17a5dfa2d08e87045b296530c05640d211ef71adaee
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b6b3a6d7c4ec886a5deb8cd8a9c3e3749ec924487a30eaa40934422f251b90b4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6921f8abc6dadac739e2b96af2776140990a7019006bfdd7eb73d790e771a751(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1664,6 +1706,12 @@ def _typecheckingstub__0a7fbd046e3b9f6f7efea32f7eb528d813f3ccf81de7e59ec417de1ea
     resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnAnomalySubscription.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     threshold: typing.Optional[jsii.Number] = None,
     threshold_expression: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__da1efa7f83d16370aa73dd1c0f5d7ca9eb02a5affdf2910e6cee1a4126f63b63(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1768,6 +1816,12 @@ def _typecheckingstub__0d86a2b59e53c629c2de8bd291387500a9799712ca28f9459ef98f5dd
 
 def _typecheckingstub__30de2325a48578df08a56854195b68d4e79d2e1eb2d3d4efa49d73fb657ebd12(
     resource: _ICostCategoryRef_65c8e6b4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c2bf94b64cd5a16c51706c3b46966d9ad60f6870c1ac4992c8b378e64ee10928(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

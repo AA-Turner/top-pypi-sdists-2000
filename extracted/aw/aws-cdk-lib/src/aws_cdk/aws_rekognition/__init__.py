@@ -185,6 +185,18 @@ class CfnCollection(
             check_type(argname="argument collection_id", value=collection_id, expected_type=type_hints["collection_id"])
         return typing.cast(_ICollectionRef_cd86fe44, jsii.sinvoke(cls, "fromCollectionId", [scope, id, collection_id]))
 
+    @jsii.member(jsii_name="isCfnCollection")
+    @builtins.classmethod
+    def is_cfn_collection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCollection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5343300072174c7cce5b98df5df7902fe59129db8a7ab4749c39a12ed4352653)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCollection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -409,6 +421,18 @@ class CfnProject(
             type_hints = typing.get_type_hints(_typecheckingstub__78f0c2fed8fa2fb065ea66167ae02e2e889e7e38dc774eee4070b2802108e437)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForProject", [resource]))
+
+    @jsii.member(jsii_name="isCfnProject")
+    @builtins.classmethod
+    def is_cfn_project(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProject.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b92ac91d358ed6a50cf39cb1da7b237191f43a495229949bcb407670ff9e7eaf)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -722,6 +746,18 @@ class CfnStreamProcessor(
             type_hints = typing.get_type_hints(_typecheckingstub__bcb846764f929d72bf382a16d586668b1e6adb862070304acddb92d74a8d23e4)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStreamProcessor", [resource]))
+
+    @jsii.member(jsii_name="isCfnStreamProcessor")
+    @builtins.classmethod
+    def is_cfn_stream_processor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStreamProcessor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7efcae89d5ec0b054ffd8cc61a3e43439c7273b87a1ab4887582634cdfe1042f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamProcessor", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2016,6 +2052,12 @@ def _typecheckingstub__89f83cbadab9414e3b2967333d4e4e07e55a46297b44ac738dc482fd7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5343300072174c7cce5b98df5df7902fe59129db8a7ab4749c39a12ed4352653(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6b782257f4d64c4abcb4d4415ba27cde118213945920a4b2608a0dc326e124dc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2060,6 +2102,12 @@ def _typecheckingstub__14434bd621070d38889fc701fc289b3379981bee9c73fd7502773f1ee
 
 def _typecheckingstub__78f0c2fed8fa2fb065ea66167ae02e2e889e7e38dc774eee4070b2802108e437(
     resource: _IProjectRef_fbe2a8df,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b92ac91d358ed6a50cf39cb1da7b237191f43a495229949bcb407670ff9e7eaf(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2119,6 +2167,12 @@ def _typecheckingstub__db29995773d1d6016b19ea60d9d43e43a080dc683708f8f6806c20b41
 
 def _typecheckingstub__bcb846764f929d72bf382a16d586668b1e6adb862070304acddb92d74a8d23e4(
     resource: _IStreamProcessorRef_a51f63be,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7efcae89d5ec0b054ffd8cc61a3e43439c7273b87a1ab4887582634cdfe1042f(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

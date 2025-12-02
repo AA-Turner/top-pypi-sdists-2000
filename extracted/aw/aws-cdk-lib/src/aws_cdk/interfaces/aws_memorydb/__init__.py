@@ -97,12 +97,18 @@ class ACLReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_memorydb.ClusterReference",
     jsii_struct_bases=[],
-    name_mapping={"cluster_name": "clusterName"},
+    name_mapping={"cluster_arn": "clusterArn", "cluster_name": "clusterName"},
 )
 class ClusterReference:
-    def __init__(self, *, cluster_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        cluster_arn: builtins.str,
+        cluster_name: builtins.str,
+    ) -> None:
         '''A reference to a Cluster resource.
 
+        :param cluster_arn: The ARN of the Cluster resource.
         :param cluster_name: The ClusterName of the Cluster resource.
 
         :exampleMetadata: fixture=_generated
@@ -114,15 +120,25 @@ class ClusterReference:
             from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
             
             cluster_reference = interfaces_aws_memorydb.ClusterReference(
+                cluster_arn="clusterArn",
                 cluster_name="clusterName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3deef1425782efff9b4d98e66cec56c0c0150df563370d932f95306adc751eb9)
+            check_type(argname="argument cluster_arn", value=cluster_arn, expected_type=type_hints["cluster_arn"])
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "cluster_arn": cluster_arn,
             "cluster_name": cluster_name,
         }
+
+    @builtins.property
+    def cluster_arn(self) -> builtins.str:
+        '''The ARN of the Cluster resource.'''
+        result = self._values.get("cluster_arn")
+        assert result is not None, "Required property 'cluster_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def cluster_name(self) -> builtins.str:
@@ -416,12 +432,21 @@ typing.cast(typing.Any, IUserRef).__jsii_proxy_class__ = lambda : _IUserRefProxy
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_memorydb.MultiRegionClusterReference",
     jsii_struct_bases=[],
-    name_mapping={"multi_region_cluster_name": "multiRegionClusterName"},
+    name_mapping={
+        "multi_region_cluster_arn": "multiRegionClusterArn",
+        "multi_region_cluster_name": "multiRegionClusterName",
+    },
 )
 class MultiRegionClusterReference:
-    def __init__(self, *, multi_region_cluster_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        multi_region_cluster_arn: builtins.str,
+        multi_region_cluster_name: builtins.str,
+    ) -> None:
         '''A reference to a MultiRegionCluster resource.
 
+        :param multi_region_cluster_arn: The ARN of the MultiRegionCluster resource.
         :param multi_region_cluster_name: The MultiRegionClusterName of the MultiRegionCluster resource.
 
         :exampleMetadata: fixture=_generated
@@ -433,15 +458,25 @@ class MultiRegionClusterReference:
             from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
             
             multi_region_cluster_reference = interfaces_aws_memorydb.MultiRegionClusterReference(
+                multi_region_cluster_arn="multiRegionClusterArn",
                 multi_region_cluster_name="multiRegionClusterName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__75089b41f224535ca8b53af8adb788da8ab8d10bb872bc9a10a092a1a9c3b547)
+            check_type(argname="argument multi_region_cluster_arn", value=multi_region_cluster_arn, expected_type=type_hints["multi_region_cluster_arn"])
             check_type(argname="argument multi_region_cluster_name", value=multi_region_cluster_name, expected_type=type_hints["multi_region_cluster_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "multi_region_cluster_arn": multi_region_cluster_arn,
             "multi_region_cluster_name": multi_region_cluster_name,
         }
+
+    @builtins.property
+    def multi_region_cluster_arn(self) -> builtins.str:
+        '''The ARN of the MultiRegionCluster resource.'''
+        result = self._values.get("multi_region_cluster_arn")
+        assert result is not None, "Required property 'multi_region_cluster_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def multi_region_cluster_name(self) -> builtins.str:
@@ -465,12 +500,21 @@ class MultiRegionClusterReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_memorydb.ParameterGroupReference",
     jsii_struct_bases=[],
-    name_mapping={"parameter_group_name": "parameterGroupName"},
+    name_mapping={
+        "parameter_group_arn": "parameterGroupArn",
+        "parameter_group_name": "parameterGroupName",
+    },
 )
 class ParameterGroupReference:
-    def __init__(self, *, parameter_group_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        parameter_group_arn: builtins.str,
+        parameter_group_name: builtins.str,
+    ) -> None:
         '''A reference to a ParameterGroup resource.
 
+        :param parameter_group_arn: The ARN of the ParameterGroup resource.
         :param parameter_group_name: The ParameterGroupName of the ParameterGroup resource.
 
         :exampleMetadata: fixture=_generated
@@ -482,15 +526,25 @@ class ParameterGroupReference:
             from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
             
             parameter_group_reference = interfaces_aws_memorydb.ParameterGroupReference(
+                parameter_group_arn="parameterGroupArn",
                 parameter_group_name="parameterGroupName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f4ce9a12bead66527ba95eaf76ca4ea36b47fd939e732e4960545097be001fdb)
+            check_type(argname="argument parameter_group_arn", value=parameter_group_arn, expected_type=type_hints["parameter_group_arn"])
             check_type(argname="argument parameter_group_name", value=parameter_group_name, expected_type=type_hints["parameter_group_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "parameter_group_arn": parameter_group_arn,
             "parameter_group_name": parameter_group_name,
         }
+
+    @builtins.property
+    def parameter_group_arn(self) -> builtins.str:
+        '''The ARN of the ParameterGroup resource.'''
+        result = self._values.get("parameter_group_arn")
+        assert result is not None, "Required property 'parameter_group_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def parameter_group_name(self) -> builtins.str:
@@ -514,12 +568,21 @@ class ParameterGroupReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_memorydb.SubnetGroupReference",
     jsii_struct_bases=[],
-    name_mapping={"subnet_group_name": "subnetGroupName"},
+    name_mapping={
+        "subnet_group_arn": "subnetGroupArn",
+        "subnet_group_name": "subnetGroupName",
+    },
 )
 class SubnetGroupReference:
-    def __init__(self, *, subnet_group_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        subnet_group_arn: builtins.str,
+        subnet_group_name: builtins.str,
+    ) -> None:
         '''A reference to a SubnetGroup resource.
 
+        :param subnet_group_arn: The ARN of the SubnetGroup resource.
         :param subnet_group_name: The SubnetGroupName of the SubnetGroup resource.
 
         :exampleMetadata: fixture=_generated
@@ -531,15 +594,25 @@ class SubnetGroupReference:
             from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
             
             subnet_group_reference = interfaces_aws_memorydb.SubnetGroupReference(
+                subnet_group_arn="subnetGroupArn",
                 subnet_group_name="subnetGroupName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__883529d4f6ed163d080574cce70282fa264bc95b899e5b38e34449540c227601)
+            check_type(argname="argument subnet_group_arn", value=subnet_group_arn, expected_type=type_hints["subnet_group_arn"])
             check_type(argname="argument subnet_group_name", value=subnet_group_name, expected_type=type_hints["subnet_group_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "subnet_group_arn": subnet_group_arn,
             "subnet_group_name": subnet_group_name,
         }
+
+    @builtins.property
+    def subnet_group_arn(self) -> builtins.str:
+        '''The ARN of the SubnetGroup resource.'''
+        result = self._values.get("subnet_group_arn")
+        assert result is not None, "Required property 'subnet_group_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def subnet_group_name(self) -> builtins.str:
@@ -647,6 +720,7 @@ def _typecheckingstub__982f28c3a9b42816be0816db50a9f6523de8c69c56f49ca86ab1dee0a
 
 def _typecheckingstub__3deef1425782efff9b4d98e66cec56c0c0150df563370d932f95306adc751eb9(
     *,
+    cluster_arn: builtins.str,
     cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -654,6 +728,7 @@ def _typecheckingstub__3deef1425782efff9b4d98e66cec56c0c0150df563370d932f95306ad
 
 def _typecheckingstub__75089b41f224535ca8b53af8adb788da8ab8d10bb872bc9a10a092a1a9c3b547(
     *,
+    multi_region_cluster_arn: builtins.str,
     multi_region_cluster_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -661,6 +736,7 @@ def _typecheckingstub__75089b41f224535ca8b53af8adb788da8ab8d10bb872bc9a10a092a1a
 
 def _typecheckingstub__f4ce9a12bead66527ba95eaf76ca4ea36b47fd939e732e4960545097be001fdb(
     *,
+    parameter_group_arn: builtins.str,
     parameter_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -668,6 +744,7 @@ def _typecheckingstub__f4ce9a12bead66527ba95eaf76ca4ea36b47fd939e732e4960545097b
 
 def _typecheckingstub__883529d4f6ed163d080574cce70282fa264bc95b899e5b38e34449540c227601(
     *,
+    subnet_group_arn: builtins.str,
     subnet_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""

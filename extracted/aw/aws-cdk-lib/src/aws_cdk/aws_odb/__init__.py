@@ -223,6 +223,18 @@ class CfnCloudAutonomousVmCluster(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudAutonomousVmCluster", [resource]))
 
+    @jsii.member(jsii_name="isCfnCloudAutonomousVmCluster")
+    @builtins.classmethod
+    def is_cfn_cloud_autonomous_vm_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCloudAutonomousVmCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ce337b4462c2a2db2945b875b9f04881a80baf036e635c50ef2333cb3a45472)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudAutonomousVmCluster", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1348,6 +1360,18 @@ class CfnCloudExadataInfrastructure(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudExadataInfrastructure", [resource]))
 
+    @jsii.member(jsii_name="isCfnCloudExadataInfrastructure")
+    @builtins.classmethod
+    def is_cfn_cloud_exadata_infrastructure(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCloudExadataInfrastructure.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__203e17020262a387118e5a38d00675252617b126cf10586488f0a6cd1f562aea)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudExadataInfrastructure", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2411,6 +2435,18 @@ class CfnCloudVmCluster(
             type_hints = typing.get_type_hints(_typecheckingstub__5ec1bb67eb1f8034aed766424720d834a10f73711ca4897fbf09bccd8e66a312)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCloudVmCluster", [resource]))
+
+    @jsii.member(jsii_name="isCfnCloudVmCluster")
+    @builtins.classmethod
+    def is_cfn_cloud_vm_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCloudVmCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3fae1183beddeb63437cb2f64384bdf7e2e417a3ba8f001ad23f5baaf9702c6d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCloudVmCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3836,6 +3872,18 @@ class CfnOdbNetwork(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOdbNetwork", [resource]))
 
+    @jsii.member(jsii_name="isCfnOdbNetwork")
+    @builtins.classmethod
+    def is_cfn_odb_network(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOdbNetwork.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2c685aeaf1eb416dd2800fc48a3c1d1c7dd98708de1ce8239d0baced61c8ce83)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOdbNetwork", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4866,6 +4914,7 @@ class CfnOdbPeeringConnection(
         from aws_cdk import aws_odb as odb
         
         cfn_odb_peering_connection = odb.CfnOdbPeeringConnection(self, "MyCfnOdbPeeringConnection",
+            additional_peer_network_cidrs=["additionalPeerNetworkCidrs"],
             display_name="displayName",
             odb_network_id="odbNetworkId",
             peer_network_id="peerNetworkId",
@@ -4881,6 +4930,7 @@ class CfnOdbPeeringConnection(
         scope: _constructs_77d1e7e8.Construct,
         id: builtins.str,
         *,
+        additional_peer_network_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         peer_network_id: typing.Optional[builtins.str] = None,
@@ -4890,6 +4940,7 @@ class CfnOdbPeeringConnection(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
+        :param additional_peer_network_cidrs: The additional CIDR blocks for the ODB peering connection.
         :param display_name: The display name of the ODB peering connection.
         :param odb_network_id: The unique identifier of the ODB network.
         :param peer_network_id: The unique identifier of the peer network.
@@ -4900,6 +4951,7 @@ class CfnOdbPeeringConnection(
             check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnOdbPeeringConnectionProps(
+            additional_peer_network_cidrs=additional_peer_network_cidrs,
             display_name=display_name,
             odb_network_id=odb_network_id,
             peer_network_id=peer_network_id,
@@ -4921,6 +4973,18 @@ class CfnOdbPeeringConnection(
             type_hints = typing.get_type_hints(_typecheckingstub__71634217fabaa9fdeeb3b6936b0b0dbfb0fa7bf82bc155a002f7a1a5d503784d)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOdbPeeringConnection", [resource]))
+
+    @jsii.member(jsii_name="isCfnOdbPeeringConnection")
+    @builtins.classmethod
+    def is_cfn_odb_peering_connection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOdbPeeringConnection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c1141e5f59d4c3840f2aa56b777a97bf3e009ee928e5ca90e05fcc3d376d87f5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOdbPeeringConnection", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4991,6 +5055,15 @@ class CfnOdbPeeringConnection(
         return typing.cast(builtins.str, jsii.get(self, "attrPeerNetworkArn"))
 
     @builtins.property
+    @jsii.member(jsii_name="attrPeerNetworkCidrs")
+    def attr_peer_network_cidrs(self) -> typing.List[builtins.str]:
+        '''The CIDR blocks for the ODB peering connection.
+
+        :cloudformationAttribute: PeerNetworkCidrs
+        '''
+        return typing.cast(typing.List[builtins.str], jsii.get(self, "attrPeerNetworkCidrs"))
+
+    @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
     def cdk_tag_manager(self) -> _TagManager_0a598cb3:
         '''Tag Manager which manages the tags for this resource.'''
@@ -5006,6 +5079,24 @@ class CfnOdbPeeringConnection(
     def odb_peering_connection_ref(self) -> _OdbPeeringConnectionReference_273daf27:
         '''A reference to a OdbPeeringConnection resource.'''
         return typing.cast(_OdbPeeringConnectionReference_273daf27, jsii.get(self, "odbPeeringConnectionRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="additionalPeerNetworkCidrs")
+    def additional_peer_network_cidrs(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''The additional CIDR blocks for the ODB peering connection.'''
+        return typing.cast(typing.Optional[typing.List[builtins.str]], jsii.get(self, "additionalPeerNetworkCidrs"))
+
+    @additional_peer_network_cidrs.setter
+    def additional_peer_network_cidrs(
+        self,
+        value: typing.Optional[typing.List[builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be8b3690a5b92ba19ccadca1d0fbda9304d4e8efd29fee0b9118c09a792a08da)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "additionalPeerNetworkCidrs", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="displayName")
@@ -5064,6 +5155,7 @@ class CfnOdbPeeringConnection(
     jsii_type="aws-cdk-lib.aws_odb.CfnOdbPeeringConnectionProps",
     jsii_struct_bases=[],
     name_mapping={
+        "additional_peer_network_cidrs": "additionalPeerNetworkCidrs",
         "display_name": "displayName",
         "odb_network_id": "odbNetworkId",
         "peer_network_id": "peerNetworkId",
@@ -5074,6 +5166,7 @@ class CfnOdbPeeringConnectionProps:
     def __init__(
         self,
         *,
+        additional_peer_network_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
         display_name: typing.Optional[builtins.str] = None,
         odb_network_id: typing.Optional[builtins.str] = None,
         peer_network_id: typing.Optional[builtins.str] = None,
@@ -5081,6 +5174,7 @@ class CfnOdbPeeringConnectionProps:
     ) -> None:
         '''Properties for defining a ``CfnOdbPeeringConnection``.
 
+        :param additional_peer_network_cidrs: The additional CIDR blocks for the ODB peering connection.
         :param display_name: The display name of the ODB peering connection.
         :param odb_network_id: The unique identifier of the ODB network.
         :param peer_network_id: The unique identifier of the peer network.
@@ -5096,6 +5190,7 @@ class CfnOdbPeeringConnectionProps:
             from aws_cdk import aws_odb as odb
             
             cfn_odb_peering_connection_props = odb.CfnOdbPeeringConnectionProps(
+                additional_peer_network_cidrs=["additionalPeerNetworkCidrs"],
                 display_name="displayName",
                 odb_network_id="odbNetworkId",
                 peer_network_id="peerNetworkId",
@@ -5107,11 +5202,14 @@ class CfnOdbPeeringConnectionProps:
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__cb14f6a041f61647a57988c9818fe08cae77494cecfe8f526e6f77c42849303b)
+            check_type(argname="argument additional_peer_network_cidrs", value=additional_peer_network_cidrs, expected_type=type_hints["additional_peer_network_cidrs"])
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
             check_type(argname="argument odb_network_id", value=odb_network_id, expected_type=type_hints["odb_network_id"])
             check_type(argname="argument peer_network_id", value=peer_network_id, expected_type=type_hints["peer_network_id"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if additional_peer_network_cidrs is not None:
+            self._values["additional_peer_network_cidrs"] = additional_peer_network_cidrs
         if display_name is not None:
             self._values["display_name"] = display_name
         if odb_network_id is not None:
@@ -5120,6 +5218,17 @@ class CfnOdbPeeringConnectionProps:
             self._values["peer_network_id"] = peer_network_id
         if tags is not None:
             self._values["tags"] = tags
+
+    @builtins.property
+    def additional_peer_network_cidrs(
+        self,
+    ) -> typing.Optional[typing.List[builtins.str]]:
+        '''The additional CIDR blocks for the ODB peering connection.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-odb-odbpeeringconnection.html#cfn-odb-odbpeeringconnection-additionalpeernetworkcidrs
+        '''
+        result = self._values.get("additional_peer_network_cidrs")
+        return typing.cast(typing.Optional[typing.List[builtins.str]], result)
 
     @builtins.property
     def display_name(self) -> typing.Optional[builtins.str]:
@@ -5210,6 +5319,12 @@ def _typecheckingstub__d5f3b11bad526801ca3c7c4e0e6c7dadf7c59ded4c26290e2160449d6
 
 def _typecheckingstub__86063b64a76451e09f7cc3c098d3a20d6095c5fd75becc743f4fb325ff458295(
     resource: _ICloudAutonomousVmClusterRef_ec2012b7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ce337b4462c2a2db2945b875b9f04881a80baf036e635c50ef2333cb3a45472(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5381,6 +5496,12 @@ def _typecheckingstub__a9e784e2b60bf0ded6072c21a14696c9c37eb9b5ed869eb536dd419a5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__203e17020262a387118e5a38d00675252617b126cf10586488f0a6cd1f562aea(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4f2b53aab94ecf4f8defcc0e14b676f19557d80b7dd0f9ff46a17b7649889a87(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5529,6 +5650,12 @@ def _typecheckingstub__54a24296108cf4d367a887b0b65dc2c9163c185183c8fde1522a8cb32
 
 def _typecheckingstub__5ec1bb67eb1f8034aed766424720d834a10f73711ca4897fbf09bccd8e66a312(
     resource: _ICloudVmClusterRef_d11cd0d7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3fae1183beddeb63437cb2f64384bdf7e2e417a3ba8f001ad23f5baaf9702c6d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5755,6 +5882,12 @@ def _typecheckingstub__ef0a50d37ee472fef04a96ce46352bd7892bc747ded64016afb5aa480
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2c685aeaf1eb416dd2800fc48a3c1d1c7dd98708de1ce8239d0baced61c8ce83(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e2bd65fc6165cb531de2b171a21a41aaf44e19b81b1e54c00c7b0bb7dbc5feab(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5908,6 +6041,7 @@ def _typecheckingstub__cf0303fdbabd342a7442eedc20c217c961164af3d96d803130ec699ce
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     *,
+    additional_peer_network_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
     display_name: typing.Optional[builtins.str] = None,
     odb_network_id: typing.Optional[builtins.str] = None,
     peer_network_id: typing.Optional[builtins.str] = None,
@@ -5922,6 +6056,12 @@ def _typecheckingstub__71634217fabaa9fdeeb3b6936b0b0dbfb0fa7bf82bc155a002f7a1a5d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c1141e5f59d4c3840f2aa56b777a97bf3e009ee928e5ca90e05fcc3d376d87f5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3c607296b85b8e34cc1971180744ea86ab063bf6e70311b45f2a5e22464c0506(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5930,6 +6070,12 @@ def _typecheckingstub__3c607296b85b8e34cc1971180744ea86ab063bf6e70311b45f2a5e224
 
 def _typecheckingstub__fdee86eadecbb57db0a54818b6bf117c40239d065452a626ca98bb6f57e734f3(
     props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be8b3690a5b92ba19ccadca1d0fbda9304d4e8efd29fee0b9118c09a792a08da(
+    value: typing.Optional[typing.List[builtins.str]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5960,6 +6106,7 @@ def _typecheckingstub__e52d668f36d0789e49c0196d151e22c497a4f1c0a77cff71369f51481
 
 def _typecheckingstub__cb14f6a041f61647a57988c9818fe08cae77494cecfe8f526e6f77c42849303b(
     *,
+    additional_peer_network_cidrs: typing.Optional[typing.Sequence[builtins.str]] = None,
     display_name: typing.Optional[builtins.str] = None,
     odb_network_id: typing.Optional[builtins.str] = None,
     peer_network_id: typing.Optional[builtins.str] = None,

@@ -1155,12 +1155,21 @@ typing.cast(typing.Any, IVdmAttributesRef).__jsii_proxy_class__ = lambda : _IVdm
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerAddonInstanceReference",
     jsii_struct_bases=[],
-    name_mapping={"addon_instance_id": "addonInstanceId"},
+    name_mapping={
+        "addon_instance_arn": "addonInstanceArn",
+        "addon_instance_id": "addonInstanceId",
+    },
 )
 class MailManagerAddonInstanceReference:
-    def __init__(self, *, addon_instance_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        addon_instance_arn: builtins.str,
+        addon_instance_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerAddonInstance resource.
 
+        :param addon_instance_arn: The ARN of the MailManagerAddonInstance resource.
         :param addon_instance_id: The AddonInstanceId of the MailManagerAddonInstance resource.
 
         :exampleMetadata: fixture=_generated
@@ -1172,15 +1181,25 @@ class MailManagerAddonInstanceReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_addon_instance_reference = interfaces_aws_ses.MailManagerAddonInstanceReference(
+                addon_instance_arn="addonInstanceArn",
                 addon_instance_id="addonInstanceId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a8992f803f7505e5c4e7f7ccc64a127ca7b7063494b30e9339e4be159c0cfad2)
+            check_type(argname="argument addon_instance_arn", value=addon_instance_arn, expected_type=type_hints["addon_instance_arn"])
             check_type(argname="argument addon_instance_id", value=addon_instance_id, expected_type=type_hints["addon_instance_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "addon_instance_arn": addon_instance_arn,
             "addon_instance_id": addon_instance_id,
         }
+
+    @builtins.property
+    def addon_instance_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerAddonInstance resource.'''
+        result = self._values.get("addon_instance_arn")
+        assert result is not None, "Required property 'addon_instance_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def addon_instance_id(self) -> builtins.str:
@@ -1204,12 +1223,21 @@ class MailManagerAddonInstanceReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerAddonSubscriptionReference",
     jsii_struct_bases=[],
-    name_mapping={"addon_subscription_id": "addonSubscriptionId"},
+    name_mapping={
+        "addon_subscription_arn": "addonSubscriptionArn",
+        "addon_subscription_id": "addonSubscriptionId",
+    },
 )
 class MailManagerAddonSubscriptionReference:
-    def __init__(self, *, addon_subscription_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        addon_subscription_arn: builtins.str,
+        addon_subscription_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerAddonSubscription resource.
 
+        :param addon_subscription_arn: The ARN of the MailManagerAddonSubscription resource.
         :param addon_subscription_id: The AddonSubscriptionId of the MailManagerAddonSubscription resource.
 
         :exampleMetadata: fixture=_generated
@@ -1221,15 +1249,25 @@ class MailManagerAddonSubscriptionReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_addon_subscription_reference = interfaces_aws_ses.MailManagerAddonSubscriptionReference(
+                addon_subscription_arn="addonSubscriptionArn",
                 addon_subscription_id="addonSubscriptionId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__06c8f0b71be4b35dd631e5b326b64de20a8a9419c00ee747d47feb81e8e24d10)
+            check_type(argname="argument addon_subscription_arn", value=addon_subscription_arn, expected_type=type_hints["addon_subscription_arn"])
             check_type(argname="argument addon_subscription_id", value=addon_subscription_id, expected_type=type_hints["addon_subscription_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "addon_subscription_arn": addon_subscription_arn,
             "addon_subscription_id": addon_subscription_id,
         }
+
+    @builtins.property
+    def addon_subscription_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerAddonSubscription resource.'''
+        result = self._values.get("addon_subscription_arn")
+        assert result is not None, "Required property 'addon_subscription_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def addon_subscription_id(self) -> builtins.str:
@@ -1253,12 +1291,21 @@ class MailManagerAddonSubscriptionReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerAddressListReference",
     jsii_struct_bases=[],
-    name_mapping={"address_list_id": "addressListId"},
+    name_mapping={
+        "address_list_arn": "addressListArn",
+        "address_list_id": "addressListId",
+    },
 )
 class MailManagerAddressListReference:
-    def __init__(self, *, address_list_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        address_list_arn: builtins.str,
+        address_list_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerAddressList resource.
 
+        :param address_list_arn: The ARN of the MailManagerAddressList resource.
         :param address_list_id: The AddressListId of the MailManagerAddressList resource.
 
         :exampleMetadata: fixture=_generated
@@ -1270,15 +1317,25 @@ class MailManagerAddressListReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_address_list_reference = interfaces_aws_ses.MailManagerAddressListReference(
+                address_list_arn="addressListArn",
                 address_list_id="addressListId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__7c2b0da17cb6c3256946c402db92a74c797c3f05e0d39993ce9b3fa320c136fe)
+            check_type(argname="argument address_list_arn", value=address_list_arn, expected_type=type_hints["address_list_arn"])
             check_type(argname="argument address_list_id", value=address_list_id, expected_type=type_hints["address_list_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "address_list_arn": address_list_arn,
             "address_list_id": address_list_id,
         }
+
+    @builtins.property
+    def address_list_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerAddressList resource.'''
+        result = self._values.get("address_list_arn")
+        assert result is not None, "Required property 'address_list_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def address_list_id(self) -> builtins.str:
@@ -1302,12 +1359,13 @@ class MailManagerAddressListReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerArchiveReference",
     jsii_struct_bases=[],
-    name_mapping={"archive_id": "archiveId"},
+    name_mapping={"archive_arn": "archiveArn", "archive_id": "archiveId"},
 )
 class MailManagerArchiveReference:
-    def __init__(self, *, archive_id: builtins.str) -> None:
+    def __init__(self, *, archive_arn: builtins.str, archive_id: builtins.str) -> None:
         '''A reference to a MailManagerArchive resource.
 
+        :param archive_arn: The ARN of the MailManagerArchive resource.
         :param archive_id: The ArchiveId of the MailManagerArchive resource.
 
         :exampleMetadata: fixture=_generated
@@ -1319,15 +1377,25 @@ class MailManagerArchiveReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_archive_reference = interfaces_aws_ses.MailManagerArchiveReference(
+                archive_arn="archiveArn",
                 archive_id="archiveId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d873d90f01d0f3d0d63356e5f39ba9bc18cfdf68b988be224e350d3631357471)
+            check_type(argname="argument archive_arn", value=archive_arn, expected_type=type_hints["archive_arn"])
             check_type(argname="argument archive_id", value=archive_id, expected_type=type_hints["archive_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "archive_arn": archive_arn,
             "archive_id": archive_id,
         }
+
+    @builtins.property
+    def archive_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerArchive resource.'''
+        result = self._values.get("archive_arn")
+        assert result is not None, "Required property 'archive_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def archive_id(self) -> builtins.str:
@@ -1351,12 +1419,21 @@ class MailManagerArchiveReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerIngressPointReference",
     jsii_struct_bases=[],
-    name_mapping={"ingress_point_id": "ingressPointId"},
+    name_mapping={
+        "ingress_point_arn": "ingressPointArn",
+        "ingress_point_id": "ingressPointId",
+    },
 )
 class MailManagerIngressPointReference:
-    def __init__(self, *, ingress_point_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        ingress_point_arn: builtins.str,
+        ingress_point_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerIngressPoint resource.
 
+        :param ingress_point_arn: The ARN of the MailManagerIngressPoint resource.
         :param ingress_point_id: The IngressPointId of the MailManagerIngressPoint resource.
 
         :exampleMetadata: fixture=_generated
@@ -1368,15 +1445,25 @@ class MailManagerIngressPointReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_ingress_point_reference = interfaces_aws_ses.MailManagerIngressPointReference(
+                ingress_point_arn="ingressPointArn",
                 ingress_point_id="ingressPointId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8145e93ee23430220a5eda157c3db564cad6b152e32d494bde06e8d772a86c20)
+            check_type(argname="argument ingress_point_arn", value=ingress_point_arn, expected_type=type_hints["ingress_point_arn"])
             check_type(argname="argument ingress_point_id", value=ingress_point_id, expected_type=type_hints["ingress_point_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "ingress_point_arn": ingress_point_arn,
             "ingress_point_id": ingress_point_id,
         }
+
+    @builtins.property
+    def ingress_point_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerIngressPoint resource.'''
+        result = self._values.get("ingress_point_arn")
+        assert result is not None, "Required property 'ingress_point_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def ingress_point_id(self) -> builtins.str:
@@ -1400,12 +1487,13 @@ class MailManagerIngressPointReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerRelayReference",
     jsii_struct_bases=[],
-    name_mapping={"relay_id": "relayId"},
+    name_mapping={"relay_arn": "relayArn", "relay_id": "relayId"},
 )
 class MailManagerRelayReference:
-    def __init__(self, *, relay_id: builtins.str) -> None:
+    def __init__(self, *, relay_arn: builtins.str, relay_id: builtins.str) -> None:
         '''A reference to a MailManagerRelay resource.
 
+        :param relay_arn: The ARN of the MailManagerRelay resource.
         :param relay_id: The RelayId of the MailManagerRelay resource.
 
         :exampleMetadata: fixture=_generated
@@ -1417,15 +1505,25 @@ class MailManagerRelayReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_relay_reference = interfaces_aws_ses.MailManagerRelayReference(
+                relay_arn="relayArn",
                 relay_id="relayId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0562a03f6b72be06c19d5688e1c48764e8ded3478b41a82adc774cf5a0fbed07)
+            check_type(argname="argument relay_arn", value=relay_arn, expected_type=type_hints["relay_arn"])
             check_type(argname="argument relay_id", value=relay_id, expected_type=type_hints["relay_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "relay_arn": relay_arn,
             "relay_id": relay_id,
         }
+
+    @builtins.property
+    def relay_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerRelay resource.'''
+        result = self._values.get("relay_arn")
+        assert result is not None, "Required property 'relay_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def relay_id(self) -> builtins.str:
@@ -1449,12 +1547,18 @@ class MailManagerRelayReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerRuleSetReference",
     jsii_struct_bases=[],
-    name_mapping={"rule_set_id": "ruleSetId"},
+    name_mapping={"rule_set_arn": "ruleSetArn", "rule_set_id": "ruleSetId"},
 )
 class MailManagerRuleSetReference:
-    def __init__(self, *, rule_set_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        rule_set_arn: builtins.str,
+        rule_set_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerRuleSet resource.
 
+        :param rule_set_arn: The ARN of the MailManagerRuleSet resource.
         :param rule_set_id: The RuleSetId of the MailManagerRuleSet resource.
 
         :exampleMetadata: fixture=_generated
@@ -1466,15 +1570,25 @@ class MailManagerRuleSetReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_rule_set_reference = interfaces_aws_ses.MailManagerRuleSetReference(
+                rule_set_arn="ruleSetArn",
                 rule_set_id="ruleSetId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__0fd5bafd074000bd08230593448d667674cbf8e9ec48c59888040334cc4a4b23)
+            check_type(argname="argument rule_set_arn", value=rule_set_arn, expected_type=type_hints["rule_set_arn"])
             check_type(argname="argument rule_set_id", value=rule_set_id, expected_type=type_hints["rule_set_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "rule_set_arn": rule_set_arn,
             "rule_set_id": rule_set_id,
         }
+
+    @builtins.property
+    def rule_set_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerRuleSet resource.'''
+        result = self._values.get("rule_set_arn")
+        assert result is not None, "Required property 'rule_set_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def rule_set_id(self) -> builtins.str:
@@ -1498,12 +1612,21 @@ class MailManagerRuleSetReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ses.MailManagerTrafficPolicyReference",
     jsii_struct_bases=[],
-    name_mapping={"traffic_policy_id": "trafficPolicyId"},
+    name_mapping={
+        "traffic_policy_arn": "trafficPolicyArn",
+        "traffic_policy_id": "trafficPolicyId",
+    },
 )
 class MailManagerTrafficPolicyReference:
-    def __init__(self, *, traffic_policy_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        traffic_policy_arn: builtins.str,
+        traffic_policy_id: builtins.str,
+    ) -> None:
         '''A reference to a MailManagerTrafficPolicy resource.
 
+        :param traffic_policy_arn: The ARN of the MailManagerTrafficPolicy resource.
         :param traffic_policy_id: The TrafficPolicyId of the MailManagerTrafficPolicy resource.
 
         :exampleMetadata: fixture=_generated
@@ -1515,15 +1638,25 @@ class MailManagerTrafficPolicyReference:
             from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
             
             mail_manager_traffic_policy_reference = interfaces_aws_ses.MailManagerTrafficPolicyReference(
+                traffic_policy_arn="trafficPolicyArn",
                 traffic_policy_id="trafficPolicyId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__205ca1074da01182de1ffa47ee6863235fb4c5979f395f404b9a0d9eb9befc57)
+            check_type(argname="argument traffic_policy_arn", value=traffic_policy_arn, expected_type=type_hints["traffic_policy_arn"])
             check_type(argname="argument traffic_policy_id", value=traffic_policy_id, expected_type=type_hints["traffic_policy_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "traffic_policy_arn": traffic_policy_arn,
             "traffic_policy_id": traffic_policy_id,
         }
+
+    @builtins.property
+    def traffic_policy_arn(self) -> builtins.str:
+        '''The ARN of the MailManagerTrafficPolicy resource.'''
+        result = self._values.get("traffic_policy_arn")
+        assert result is not None, "Required property 'traffic_policy_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def traffic_policy_id(self) -> builtins.str:
@@ -1918,6 +2051,7 @@ def _typecheckingstub__78d4b405750ad37e2ceb18cc71d146af078abd3d3df476b2b7acf90c5
 
 def _typecheckingstub__a8992f803f7505e5c4e7f7ccc64a127ca7b7063494b30e9339e4be159c0cfad2(
     *,
+    addon_instance_arn: builtins.str,
     addon_instance_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1925,6 +2059,7 @@ def _typecheckingstub__a8992f803f7505e5c4e7f7ccc64a127ca7b7063494b30e9339e4be159
 
 def _typecheckingstub__06c8f0b71be4b35dd631e5b326b64de20a8a9419c00ee747d47feb81e8e24d10(
     *,
+    addon_subscription_arn: builtins.str,
     addon_subscription_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1932,6 +2067,7 @@ def _typecheckingstub__06c8f0b71be4b35dd631e5b326b64de20a8a9419c00ee747d47feb81e
 
 def _typecheckingstub__7c2b0da17cb6c3256946c402db92a74c797c3f05e0d39993ce9b3fa320c136fe(
     *,
+    address_list_arn: builtins.str,
     address_list_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1939,6 +2075,7 @@ def _typecheckingstub__7c2b0da17cb6c3256946c402db92a74c797c3f05e0d39993ce9b3fa32
 
 def _typecheckingstub__d873d90f01d0f3d0d63356e5f39ba9bc18cfdf68b988be224e350d3631357471(
     *,
+    archive_arn: builtins.str,
     archive_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1946,6 +2083,7 @@ def _typecheckingstub__d873d90f01d0f3d0d63356e5f39ba9bc18cfdf68b988be224e350d363
 
 def _typecheckingstub__8145e93ee23430220a5eda157c3db564cad6b152e32d494bde06e8d772a86c20(
     *,
+    ingress_point_arn: builtins.str,
     ingress_point_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1953,6 +2091,7 @@ def _typecheckingstub__8145e93ee23430220a5eda157c3db564cad6b152e32d494bde06e8d77
 
 def _typecheckingstub__0562a03f6b72be06c19d5688e1c48764e8ded3478b41a82adc774cf5a0fbed07(
     *,
+    relay_arn: builtins.str,
     relay_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1960,6 +2099,7 @@ def _typecheckingstub__0562a03f6b72be06c19d5688e1c48764e8ded3478b41a82adc774cf5a
 
 def _typecheckingstub__0fd5bafd074000bd08230593448d667674cbf8e9ec48c59888040334cc4a4b23(
     *,
+    rule_set_arn: builtins.str,
     rule_set_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -1967,6 +2107,7 @@ def _typecheckingstub__0fd5bafd074000bd08230593448d667674cbf8e9ec48c59888040334c
 
 def _typecheckingstub__205ca1074da01182de1ffa47ee6863235fb4c5979f395f404b9a0d9eb9befc57(
     *,
+    traffic_policy_arn: builtins.str,
     traffic_policy_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

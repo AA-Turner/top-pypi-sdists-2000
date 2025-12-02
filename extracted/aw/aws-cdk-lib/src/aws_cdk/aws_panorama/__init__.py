@@ -225,6 +225,18 @@ class CfnApplicationInstance(
             check_type(argname="argument application_instance_id", value=application_instance_id, expected_type=type_hints["application_instance_id"])
         return typing.cast(_IApplicationInstanceRef_530e8c33, jsii.sinvoke(cls, "fromApplicationInstanceId", [scope, id, application_instance_id]))
 
+    @jsii.member(jsii_name="isCfnApplicationInstance")
+    @builtins.classmethod
+    def is_cfn_application_instance(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplicationInstance.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb3ed9d2426f451e3bd6baba6a2f534f717b5076782b9e522b13823c420b592e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationInstance", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -885,6 +897,18 @@ class CfnPackage(
             check_type(argname="argument package_id", value=package_id, expected_type=type_hints["package_id"])
         return typing.cast(_IPackageRef_675e27b7, jsii.sinvoke(cls, "fromPackageId", [scope, id, package_id]))
 
+    @jsii.member(jsii_name="isCfnPackage")
+    @builtins.classmethod
+    def is_cfn_package(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPackage.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__26450166c38099b9461762c4c5b68170797ccd2ee0abd48a6a5b776efc7eb89e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPackage", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1351,6 +1375,18 @@ class CfnPackageVersion(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPackageVersion")
+    @builtins.classmethod
+    def is_cfn_package_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPackageVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fe822a39893f6b8aa5031935e7bc2ee9e7cb5428991e4f1a93335fe85bf76ca9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPackageVersion", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1725,6 +1761,12 @@ def _typecheckingstub__cf3c71beda280e35f7832b3400f0af821e251042c4f89db4b42f5975d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__eb3ed9d2426f451e3bd6baba6a2f534f717b5076782b9e522b13823c420b592e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f02c8fd6f1a71465462afea3d559ebb5b8ea0af1bc67afc99474bf782789ec30(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1846,6 +1888,12 @@ def _typecheckingstub__036c08570129c334f6bca1d78d3bbd858ea49a86a6495c2d28a66c5f7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__26450166c38099b9461762c4c5b68170797ccd2ee0abd48a6a5b776efc7eb89e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d571cb582323b52428cb462f12dd0ba0765010a338ed79ea157b3fc920aa535a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1906,6 +1954,12 @@ def _typecheckingstub__13ea96f0334a230d99017463d74c935661d9ebbe5ba26311c01f75163
     mark_latest: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     owner_account: typing.Optional[builtins.str] = None,
     updated_latest_patch_version: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fe822a39893f6b8aa5031935e7bc2ee9e7cb5428991e4f1a93335fe85bf76ca9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

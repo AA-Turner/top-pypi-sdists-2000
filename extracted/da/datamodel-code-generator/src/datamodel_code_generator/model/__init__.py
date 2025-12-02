@@ -1,3 +1,9 @@
+"""Model generation module.
+
+Provides factory functions and classes for generating different output formats
+(Pydantic, dataclasses, TypedDict, msgspec) based on configuration.
+"""
+
 from __future__ import annotations
 
 import sys
@@ -17,6 +23,8 @@ DEFAULT_TARGET_PYTHON_VERSION = PythonVersion(f"{sys.version_info.major}.{sys.ve
 
 
 class DataModelSet(NamedTuple):
+    """Collection of model types needed for a specific output format."""
+
     data_model: type[DataModel]
     root_model: type[DataModel]
     field_model: type[DataModelFieldBase]
@@ -32,6 +40,7 @@ def get_data_model_types(
     target_python_version: PythonVersion = DEFAULT_TARGET_PYTHON_VERSION,
     use_type_alias: bool = False,  # noqa: FBT001, FBT002
 ) -> DataModelSet:
+    """Get the appropriate model types for the given output format and Python version."""
     from datamodel_code_generator import DataModelType  # noqa: PLC0415
 
     from . import (  # noqa: PLC0415
@@ -46,28 +55,28 @@ def get_data_model_types(
     )
     from .types import DataTypeManager  # noqa: PLC0415
 
-    # Pydantic v1 does not support TypeAliasType type, fallback to TypeAlias
-    if data_model_type == DataModelType.PydanticBaseModel:
-        if target_python_version.has_type_alias:
-            # Python 3.10+: typing.TypeAlias
-            type_alias_class = type_alias.TypeAlias
-            scalar_class = scalar.DataTypeScalar
-            union_class = union.DataTypeUnion
+    # Pydantic v2 requires TypeAliasType; other output types use TypeAlias for better compatibility
+    if data_model_type == DataModelType.PydanticV2BaseModel:
+        if target_python_version.has_type_statement:
+            type_alias_class = type_alias.TypeStatement
+            scalar_class = scalar.DataTypeScalarTypeStatement
+            union_class = union.DataTypeUnionTypeStatement
         else:
-            # Python 3.9: typing_extensions.TypeAlias
-            type_alias_class = type_alias.TypeAliasBackport
-            scalar_class = scalar.DataTypeScalarBackport
-            union_class = union.DataTypeUnionBackport
+            type_alias_class = type_alias.TypeAliasTypeBackport
+            scalar_class = scalar.DataTypeScalarTypeBackport
+            union_class = union.DataTypeUnionTypeBackport
     elif target_python_version.has_type_statement:
-        # Python 3.12+ with Pydantic v2 or other formats: Use type statement
         type_alias_class = type_alias.TypeStatement
         scalar_class = scalar.DataTypeScalarTypeStatement
         union_class = union.DataTypeUnionTypeStatement
+    elif target_python_version.has_type_alias:
+        type_alias_class = type_alias.TypeAlias
+        scalar_class = scalar.DataTypeScalar
+        union_class = union.DataTypeUnion
     else:
-        # Python 3.9-3.11 with Pydantic v2 or other formats: Use TypeAliasType
-        type_alias_class = type_alias.TypeAliasTypeBackport
-        scalar_class = scalar.DataTypeScalarTypeBackport
-        union_class = union.DataTypeUnionTypeBackport
+        type_alias_class = type_alias.TypeAliasBackport
+        scalar_class = scalar.DataTypeScalarBackport
+        union_class = union.DataTypeUnionBackport
 
     if data_model_type == DataModelType.PydanticBaseModel:
         return DataModelSet(
@@ -124,7 +133,7 @@ def get_data_model_types(
             scalar_model=scalar_class,
             union_model=union_class,
         )
-    msg = f"{data_model_type} is unsupported data model type"
+    msg = f"{data_model_type} is unsupported data model type"  # pragma: no cover
     raise ValueError(msg)  # pragma: no cover
 
 

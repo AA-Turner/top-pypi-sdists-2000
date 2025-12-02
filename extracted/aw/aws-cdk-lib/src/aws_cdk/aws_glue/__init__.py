@@ -215,6 +215,18 @@ class CfnClassifier(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnClassifier")
+    @builtins.classmethod
+    def is_cfn_classifier(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnClassifier.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9bd2750643971dbd7fe2ea02c4f93b5dbfadb654ca0c8f75a1bb9f86d2f0b85d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClassifier", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1070,6 +1082,18 @@ class CfnConnection(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnConnection")
+    @builtins.classmethod
+    def is_cfn_connection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3cb53e6213f4001e09098ddea6056180dccc6200753c09890c58c04ebeaa5060)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1504,7 +1528,7 @@ class CfnConnection(
         ) -> None:
             '''A structure that is used to specify a connection to create or update.
 
-            :param connection_type: The type of the connection. Currently, these types are supported:. - ``JDBC`` - Designates a connection to a database through Java Database Connectivity (JDBC). ``JDBC`` Connections use the following ConnectionParameters. - Required: All of ( ``HOST`` , ``PORT`` , ``JDBC_ENGINE`` ) or ``JDBC_CONNECTION_URL`` . - Required: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - Optional: ``JDBC_ENFORCE_SSL`` , ``CUSTOM_JDBC_CERT`` , ``CUSTOM_JDBC_CERT_STRING`` , ``SKIP_CUSTOM_JDBC_CERT_VALIDATION`` . These parameters are used to configure SSL with JDBC. - ``KAFKA`` - Designates a connection to an Apache Kafka streaming platform. ``KAFKA`` Connections use the following ConnectionParameters. - Required: ``KAFKA_BOOTSTRAP_SERVERS`` . - Optional: ``KAFKA_SSL_ENABLED`` , ``KAFKA_CUSTOM_CERT`` , ``KAFKA_SKIP_CUSTOM_CERT_VALIDATION`` . These parameters are used to configure SSL with ``KAFKA`` . - Optional: ``KAFKA_CLIENT_KEYSTORE`` , ``KAFKA_CLIENT_KEYSTORE_PASSWORD`` , ``KAFKA_CLIENT_KEY_PASSWORD`` , ``ENCRYPTED_KAFKA_CLIENT_KEYSTORE_PASSWORD`` , ``ENCRYPTED_KAFKA_CLIENT_KEY_PASSWORD`` . These parameters are used to configure TLS client configuration with SSL in ``KAFKA`` . - Optional: ``KAFKA_SASL_MECHANISM`` . Can be specified as ``SCRAM-SHA-512`` , ``GSSAPI`` , or ``AWS_MSK_IAM`` . - Optional: ``KAFKA_SASL_SCRAM_USERNAME`` , ``KAFKA_SASL_SCRAM_PASSWORD`` , ``ENCRYPTED_KAFKA_SASL_SCRAM_PASSWORD`` . These parameters are used to configure SASL/SCRAM-SHA-512 authentication with ``KAFKA`` . - Optional: ``KAFKA_SASL_GSSAPI_KEYTAB`` , ``KAFKA_SASL_GSSAPI_KRB5_CONF`` , ``KAFKA_SASL_GSSAPI_SERVICE`` , ``KAFKA_SASL_GSSAPI_PRINCIPAL`` . These parameters are used to configure SASL/GSSAPI authentication with ``KAFKA`` . - ``MONGODB`` - Designates a connection to a MongoDB document database. ``MONGODB`` Connections use the following ConnectionParameters. - Required: ``CONNECTION_URL`` . - Required: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - ``VIEW_VALIDATION_REDSHIFT`` - Designates a connection used for view validation by Amazon Redshift. - ``VIEW_VALIDATION_ATHENA`` - Designates a connection used for view validation by Amazon Athena. - ``NETWORK`` - Designates a network connection to a data source within an Amazon Virtual Private Cloud environment (Amazon VPC). ``NETWORK`` Connections do not require ConnectionParameters. Instead, provide a PhysicalConnectionRequirements. - ``MARKETPLACE`` - Uses configuration settings contained in a connector purchased from AWS Marketplace to read from and write to data stores that are not natively supported by AWS Glue . ``MARKETPLACE`` Connections use the following ConnectionParameters. - Required: ``CONNECTOR_TYPE`` , ``CONNECTOR_URL`` , ``CONNECTOR_CLASS_NAME`` , ``CONNECTION_URL`` . - Required for ``JDBC`` ``CONNECTOR_TYPE`` connections: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - ``CUSTOM`` - Uses configuration settings contained in a custom connector to read from and write to data stores that are not natively supported by AWS Glue . Additionally, a ``ConnectionType`` for the following SaaS connectors is supported: - ``FACEBOOKADS`` - Designates a connection to Facebook Ads. - ``GOOGLEADS`` - Designates a connection to Google Ads. - ``GOOGLESHEETS`` - Designates a connection to Google Sheets. - ``GOOGLEANALYTICS4`` - Designates a connection to Google Analytics 4. - ``HUBSPOT`` - Designates a connection to HubSpot. - ``INSTAGRAMADS`` - Designates a connection to Instagram Ads. - ``INTERCOM`` - Designates a connection to Intercom. - ``JIRACLOUD`` - Designates a connection to Jira Cloud. - ``MARKETO`` - Designates a connection to Adobe Marketo Engage. - ``NETSUITEERP`` - Designates a connection to Oracle NetSuite. - ``SALESFORCE`` - Designates a connection to Salesforce using OAuth authentication. - ``SALESFORCEMARKETINGCLOUD`` - Designates a connection to Salesforce Marketing Cloud. - ``SALESFORCEPARDOT`` - Designates a connection to Salesforce Marketing Cloud Account Engagement (MCAE). - ``SAPODATA`` - Designates a connection to SAP OData. - ``SERVICENOW`` - Designates a connection to ServiceNow. - ``SLACK`` - Designates a connection to Slack. - ``SNOWFLAKE`` - Designates a connection to Snowflake. - ``SNAPCHATADS`` - Designates a connection to Snapchat Ads. - ``STRIPE`` - Designates a connection to Stripe. - ``ZENDESK`` - Designates a connection to Zendesk. - ``ZOHOCRM`` - Designates a connection to Zoho CRM. - ``ADOBEANALYTICS`` - Designates a connection to Adobe Analytics. - ``LINKEDIN`` - Designates a connection to LinkedIn. - ``MIXPANEL`` - Designates a connection to Mixpanel. - ``ASANA`` - Designates a connection to Asana. - ``SMARTSHEET`` - Designates a connection to Smartsheet. - ``DATADOG`` - Designates a connection to Datadog. - ``WOOCOMMERCE`` - Designates a connection to WooCommerce. - ``PAYPAL`` - Designates a connection to PayPal. - ``QUICKBOOKS`` - Designates a connection to QuickBooks. - ``FACEBOOKPAGEINSIGHTS`` - Designates a connection to Facebook Page Insights. - ``FRESHDESK`` - Designates a connection to Freshdesk. - ``TWILIO`` - Designates a connection to Twilio. - ``DOCUSIGNMONITOR`` - Designates a connection to DocuSign Monitor. - ``FRESHSALES`` - Designates a connection to Freshsales. - ``ZOOM`` - Designates a connection to Zoom. - ``GOOGLESEARCHCONSOLE`` - Designates a connection to Google Search Console. - ``SALESFORCECOMMERCECLOUD`` - Designates a connection to Salesforce Commerce Cloud. - ``SAPCONCUR`` - Designates a connection to SAP Concur. - ``DYNATRACE`` - Designates a connection to Dynatrace. - ``MICROSOFTDYNAMIC365FINANCEANDOPS`` - Designates a connection to Microsoft Dynamics 365 Finance and Operations. - ``MICROSOFTTEAMS`` - Designates a connection to Microsoft Teams. - ``BLACKBAUDRAISEREDGENXT`` - Designates a connection to Blackbaud Raiser's Edge NXT. - ``MAILCHIMP`` - Designates a connection to Mailchimp. - ``GITLAB`` - Designates a connection to GitLab. - ``PENDO`` - Designates a connection to Pendo. - ``PRODUCTBOARD`` - Designates a connection to Productboard. - ``CIRCLECI`` - Designates a connection to CircleCI. - ``PIPEDIVE`` - Designates a connection to Pipedrive. - ``SENDGRID`` - Designates a connection to SendGrid. For more information on the connection parameters needed for a particular connector, see the documentation for the connector in `Adding an AWS Glue connection <https://docs.aws.amazon.com/glue/latest/dg/console-connections.html>`_ in the AWS Glue User Guide. ``SFTP`` is not supported. For more information about how optional ConnectionProperties are used to configure features in AWS Glue , consult `AWS Glue connection properties <https://docs.aws.amazon.com/glue/latest/dg/connection-defining.html>`_ . For more information about how optional ConnectionProperties are used to configure features in AWS Glue Studio, consult `Using connectors and connections <https://docs.aws.amazon.com/glue/latest/ug/connectors-chapter.html>`_ .
+            :param connection_type: The type of the connection. Currently, these types are supported:. - ``JDBC`` - Designates a connection to a database through Java Database Connectivity (JDBC). ``JDBC`` Connections use the following ConnectionParameters. - Required: All of ( ``HOST`` , ``PORT`` , ``JDBC_ENGINE`` ) or ``JDBC_CONNECTION_URL`` . - Required: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - Optional: ``JDBC_ENFORCE_SSL`` , ``CUSTOM_JDBC_CERT`` , ``CUSTOM_JDBC_CERT_STRING`` , ``SKIP_CUSTOM_JDBC_CERT_VALIDATION`` . These parameters are used to configure SSL with JDBC. - ``KAFKA`` - Designates a connection to an Apache Kafka streaming platform. ``KAFKA`` Connections use the following ConnectionParameters. - Required: ``KAFKA_BOOTSTRAP_SERVERS`` . - Optional: ``KAFKA_SSL_ENABLED`` , ``KAFKA_CUSTOM_CERT`` , ``KAFKA_SKIP_CUSTOM_CERT_VALIDATION`` . These parameters are used to configure SSL with ``KAFKA`` . - Optional: ``KAFKA_CLIENT_KEYSTORE`` , ``KAFKA_CLIENT_KEYSTORE_PASSWORD`` , ``KAFKA_CLIENT_KEY_PASSWORD`` , ``ENCRYPTED_KAFKA_CLIENT_KEYSTORE_PASSWORD`` , ``ENCRYPTED_KAFKA_CLIENT_KEY_PASSWORD`` . These parameters are used to configure TLS client configuration with SSL in ``KAFKA`` . - Optional: ``KAFKA_SASL_MECHANISM`` . Can be specified as ``SCRAM-SHA-512`` , ``GSSAPI`` , or ``AWS_MSK_IAM`` . - Optional: ``KAFKA_SASL_SCRAM_USERNAME`` , ``KAFKA_SASL_SCRAM_PASSWORD`` , ``ENCRYPTED_KAFKA_SASL_SCRAM_PASSWORD`` . These parameters are used to configure SASL/SCRAM-SHA-512 authentication with ``KAFKA`` . - Optional: ``KAFKA_SASL_GSSAPI_KEYTAB`` , ``KAFKA_SASL_GSSAPI_KRB5_CONF`` , ``KAFKA_SASL_GSSAPI_SERVICE`` , ``KAFKA_SASL_GSSAPI_PRINCIPAL`` . These parameters are used to configure SASL/GSSAPI authentication with ``KAFKA`` . - ``MONGODB`` - Designates a connection to a MongoDB document database. ``MONGODB`` Connections use the following ConnectionParameters. - Required: ``CONNECTION_URL`` . - Required: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - ``VIEW_VALIDATION_REDSHIFT`` - Designates a connection used for view validation by Amazon Redshift. - ``VIEW_VALIDATION_ATHENA`` - Designates a connection used for view validation by Amazon Athena. - ``NETWORK`` - Designates a network connection to a data source within an Amazon Virtual Private Cloud environment (Amazon VPC). ``NETWORK`` Connections do not require ConnectionParameters. Instead, provide a PhysicalConnectionRequirements. - ``MARKETPLACE`` - Uses configuration settings contained in a connector purchased from AWS Marketplace to read from and write to data stores that are not natively supported by AWS Glue . ``MARKETPLACE`` Connections use the following ConnectionParameters. - Required: ``CONNECTOR_TYPE`` , ``CONNECTOR_URL`` , ``CONNECTOR_CLASS_NAME`` , ``CONNECTION_URL`` . - Required for ``JDBC`` ``CONNECTOR_TYPE`` connections: All of ( ``USERNAME`` , ``PASSWORD`` ) or ``SECRET_ID`` . - ``CUSTOM`` - Uses configuration settings contained in a custom connector to read from and write to data stores that are not natively supported by AWS Glue . Additionally, a ``ConnectionType`` for the following SaaS connectors is supported: - ``FACEBOOKADS`` - Designates a connection to Facebook Ads. - ``GOOGLEADS`` - Designates a connection to Google Ads. - ``GOOGLESHEETS`` - Designates a connection to Google Sheets. - ``GOOGLEANALYTICS4`` - Designates a connection to Google Analytics 4. - ``HUBSPOT`` - Designates a connection to HubSpot. - ``INSTAGRAMADS`` - Designates a connection to Instagram Ads. - ``INTERCOM`` - Designates a connection to Intercom. - ``JIRACLOUD`` - Designates a connection to Jira Cloud. - ``MARKETO`` - Designates a connection to Adobe Marketo Engage. - ``NETSUITEERP`` - Designates a connection to Oracle NetSuite. - ``SALESFORCE`` - Designates a connection to Salesforce using OAuth authentication. - ``SALESFORCEMARKETINGCLOUD`` - Designates a connection to Salesforce Marketing Cloud. - ``SALESFORCEPARDOT`` - Designates a connection to Salesforce Marketing Cloud Account Engagement (MCAE). - ``SAPODATA`` - Designates a connection to SAP OData. - ``SERVICENOW`` - Designates a connection to ServiceNow. - ``SLACK`` - Designates a connection to Slack. - ``SNAPCHATADS`` - Designates a connection to Snapchat Ads. - ``STRIPE`` - Designates a connection to Stripe. - ``ZENDESK`` - Designates a connection to Zendesk. - ``ZOHOCRM`` - Designates a connection to Zoho CRM. For more information on the connection parameters needed for a particular connector, see the documentation for the connector in `Adding an AWS Glue connection <https://docs.aws.amazon.com/glue/latest/dg/console-connections.html>`_ in the AWS Glue User Guide. ``SFTP`` is not supported. For more information about how optional ConnectionProperties are used to configure features in AWS Glue , consult `AWS Glue connection properties <https://docs.aws.amazon.com/glue/latest/dg/connection-defining.html>`_ . For more information about how optional ConnectionProperties are used to configure features in AWS Glue Studio, consult `Using connectors and connections <https://docs.aws.amazon.com/glue/latest/ug/connectors-chapter.html>`_ .
             :param athena_properties: Connection properties specific to the Athena compute environment.
             :param authentication_configuration: The authentication properties of the connection.
             :param connection_properties: These key-value pairs define parameters for the connection.
@@ -1683,40 +1707,10 @@ class CfnConnection(
             - ``SAPODATA`` - Designates a connection to SAP OData.
             - ``SERVICENOW`` - Designates a connection to ServiceNow.
             - ``SLACK`` - Designates a connection to Slack.
-            - ``SNOWFLAKE`` - Designates a connection to Snowflake.
             - ``SNAPCHATADS`` - Designates a connection to Snapchat Ads.
             - ``STRIPE`` - Designates a connection to Stripe.
             - ``ZENDESK`` - Designates a connection to Zendesk.
             - ``ZOHOCRM`` - Designates a connection to Zoho CRM.
-            - ``ADOBEANALYTICS`` - Designates a connection to Adobe Analytics.
-            - ``LINKEDIN`` - Designates a connection to LinkedIn.
-            - ``MIXPANEL`` - Designates a connection to Mixpanel.
-            - ``ASANA`` - Designates a connection to Asana.
-            - ``SMARTSHEET`` - Designates a connection to Smartsheet.
-            - ``DATADOG`` - Designates a connection to Datadog.
-            - ``WOOCOMMERCE`` - Designates a connection to WooCommerce.
-            - ``PAYPAL`` - Designates a connection to PayPal.
-            - ``QUICKBOOKS`` - Designates a connection to QuickBooks.
-            - ``FACEBOOKPAGEINSIGHTS`` - Designates a connection to Facebook Page Insights.
-            - ``FRESHDESK`` - Designates a connection to Freshdesk.
-            - ``TWILIO`` - Designates a connection to Twilio.
-            - ``DOCUSIGNMONITOR`` - Designates a connection to DocuSign Monitor.
-            - ``FRESHSALES`` - Designates a connection to Freshsales.
-            - ``ZOOM`` - Designates a connection to Zoom.
-            - ``GOOGLESEARCHCONSOLE`` - Designates a connection to Google Search Console.
-            - ``SALESFORCECOMMERCECLOUD`` - Designates a connection to Salesforce Commerce Cloud.
-            - ``SAPCONCUR`` - Designates a connection to SAP Concur.
-            - ``DYNATRACE`` - Designates a connection to Dynatrace.
-            - ``MICROSOFTDYNAMIC365FINANCEANDOPS`` - Designates a connection to Microsoft Dynamics 365 Finance and Operations.
-            - ``MICROSOFTTEAMS`` - Designates a connection to Microsoft Teams.
-            - ``BLACKBAUDRAISEREDGENXT`` - Designates a connection to Blackbaud Raiser's Edge NXT.
-            - ``MAILCHIMP`` - Designates a connection to Mailchimp.
-            - ``GITLAB`` - Designates a connection to GitLab.
-            - ``PENDO`` - Designates a connection to Pendo.
-            - ``PRODUCTBOARD`` - Designates a connection to Productboard.
-            - ``CIRCLECI`` - Designates a connection to CircleCI.
-            - ``PIPEDIVE`` - Designates a connection to Pipedrive.
-            - ``SENDGRID`` - Designates a connection to SendGrid.
 
             For more information on the connection parameters needed for a particular connector, see the documentation for the connector in `Adding an AWS Glue connection <https://docs.aws.amazon.com/glue/latest/dg/console-connections.html>`_ in the AWS Glue User Guide.
 
@@ -2615,6 +2609,18 @@ class CfnCrawler(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument crawler_name", value=crawler_name, expected_type=type_hints["crawler_name"])
         return typing.cast(_ICrawlerRef_51dfa641, jsii.sinvoke(cls, "fromCrawlerName", [scope, id, crawler_name]))
+
+    @jsii.member(jsii_name="isCfnCrawler")
+    @builtins.classmethod
+    def is_cfn_crawler(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCrawler.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e90bca6c00df4dd09e1c57b19fb6155dd6b89174440e24c659ae6b26030ecc03)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCrawler", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4707,6 +4713,18 @@ class CfnCustomEntityType(
             check_type(argname="argument custom_entity_type_id", value=custom_entity_type_id, expected_type=type_hints["custom_entity_type_id"])
         return typing.cast(_ICustomEntityTypeRef_223f7f71, jsii.sinvoke(cls, "fromCustomEntityTypeId", [scope, id, custom_entity_type_id]))
 
+    @jsii.member(jsii_name="isCfnCustomEntityType")
+    @builtins.classmethod
+    def is_cfn_custom_entity_type(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCustomEntityType.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__905bc74171502b910d0b55a0ae0c25eddfb1098cd478b18bf600e25057f28aaa)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomEntityType", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4990,6 +5008,18 @@ class CfnDataCatalogEncryptionSettings(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnDataCatalogEncryptionSettings")
+    @builtins.classmethod
+    def is_cfn_data_catalog_encryption_settings(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataCatalogEncryptionSettings.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__97f2c3604de40e45029d75d7c250337142d2709a09784e91b6092b7e204e4469)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataCatalogEncryptionSettings", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5494,6 +5524,18 @@ class CfnDataQualityRuleset(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnDataQualityRuleset")
+    @builtins.classmethod
+    def is_cfn_data_quality_ruleset(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataQualityRuleset.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__28cf061019f661099f0c3be6b819fadc6161349a42b7ff5deb88416c5f5ce2ea)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataQualityRuleset", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5961,6 +6003,18 @@ class CfnDatabase(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument database_name", value=database_name, expected_type=type_hints["database_name"])
         return typing.cast(_IDatabaseRef_df838168, jsii.sinvoke(cls, "fromDatabaseName", [scope, id, database_name]))
+
+    @jsii.member(jsii_name="isCfnDatabase")
+    @builtins.classmethod
+    def is_cfn_database(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDatabase.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32b3805ad532444a8c31bd611ce88f78248b944c43b246a19267474f10ad9c18)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatabase", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6743,6 +6797,18 @@ class CfnDevEndpoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnDevEndpoint")
+    @builtins.classmethod
+    def is_cfn_dev_endpoint(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDevEndpoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__86e2941d214c415d02d8af9219234bc01f8033733b5e50d76da91281130056fd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDevEndpoint", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7383,6 +7449,18 @@ class CfnIdentityCenterConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnIdentityCenterConfiguration")
+    @builtins.classmethod
+    def is_cfn_identity_center_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentityCenterConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a5e1288a6924f6e5913efdf8759e2a6527f3a4cc1d3a65d938315615520e0b30)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityCenterConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7687,6 +7765,18 @@ class CfnIntegration(
             type_hints = typing.get_type_hints(_typecheckingstub__05ee051a200babfe5d577ec1bf7748b915f9cfa0c6738ebcc762a74938b16d43)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIntegration", [resource]))
+
+    @jsii.member(jsii_name="isCfnIntegration")
+    @builtins.classmethod
+    def is_cfn_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e0199b47fe3999acb83a659ef3526635b02d5e80c1a17d85ad24bbc3862d7560)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8281,6 +8371,18 @@ class CfnIntegrationResourceProperty(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnIntegrationResourceProperty")
+    @builtins.classmethod
+    def is_cfn_integration_resource_property(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIntegrationResourceProperty.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3ad62bb88d1fd7df29e1b7a304e4e01b361eacdddfda9f5053316ef54d3a41fb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegrationResourceProperty", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8871,6 +8973,18 @@ class CfnJob(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument job_name", value=job_name, expected_type=type_hints["job_name"])
         return typing.cast(_IJobRef_b119043c, jsii.sinvoke(cls, "fromJobName", [scope, id, job_name]))
+
+    @jsii.member(jsii_name="isCfnJob")
+    @builtins.classmethod
+    def is_cfn_job(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnJob.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__84b39d7f2b5dd498188d198d5331f6c12f27246de4a00ff56d641bb095d11eb6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnJob", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10156,6 +10270,18 @@ class CfnMLTransform(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnMLTransform")
+    @builtins.classmethod
+    def is_cfn_ml_transform(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMLTransform.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22711b4a970f242bab198ce84d9a51df2ea73737059c4b35e844be0bfe9119c4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMLTransform", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11395,6 +11521,18 @@ class CfnPartition(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPartition")
+    @builtins.classmethod
+    def is_cfn_partition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPartition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__28e0783759483c03d07c012f25636825ce974eebe7f92bf40085bf5c9a7a82d2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPartition", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12732,6 +12870,18 @@ class CfnRegistry(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRegistry", [resource]))
 
+    @jsii.member(jsii_name="isCfnRegistry")
+    @builtins.classmethod
+    def is_cfn_registry(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRegistry.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ec3af8392fed5fa754db21c91bbaa835a6d31f4b144c58971ed1a71805f295f8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistry", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13032,6 +13182,18 @@ class CfnSchema(
             type_hints = typing.get_type_hints(_typecheckingstub__1b17688ef1cd21a5514bb4f028167cbcad4edaf17c4781f868d5484a9a339230)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSchema", [resource]))
+
+    @jsii.member(jsii_name="isCfnSchema")
+    @builtins.classmethod
+    def is_cfn_schema(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSchema.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b344a6a2b716182aa507942254aea19464efb5148cdf1f1063935759e006486c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchema", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13600,6 +13762,18 @@ class CfnSchemaVersion(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSchemaVersion")
+    @builtins.classmethod
+    def is_cfn_schema_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSchemaVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__25027d0127213a942fd178819fa8f0db2accbea494844123afb037fd8c955ad6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchemaVersion", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13830,6 +14004,18 @@ class CfnSchemaVersionMetadata(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnSchemaVersionMetadata")
+    @builtins.classmethod
+    def is_cfn_schema_version_metadata(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSchemaVersionMetadata.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__45cdb966a1a0159f49b92c39a4ae84b06180b38b305f24ea3fc2de90b0cc1280)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSchemaVersionMetadata", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14146,6 +14332,18 @@ class CfnSecurityConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnSecurityConfiguration")
+    @builtins.classmethod
+    def is_cfn_security_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSecurityConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c46dfb82b829d32ef2f538355fd4c5845956502ff87901addfdb80f261c626b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14700,6 +14898,18 @@ class CfnTable(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnTable")
+    @builtins.classmethod
+    def is_cfn_table(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTable.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__660ecc5559592bf5d4a11c422dee3df5d254d3277774dfa273e8fd56e200295c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTable", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16260,6 +16470,18 @@ class CfnTableOptimizer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnTableOptimizer")
+    @builtins.classmethod
+    def is_cfn_table_optimizer(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTableOptimizer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c9a78ac6a2af304827b58c3b0f32b4f249320f43df4d1138bc8ec9d4843b1b84)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTableOptimizer", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17357,6 +17579,18 @@ class CfnTrigger(
             check_type(argname="argument trigger_name", value=trigger_name, expected_type=type_hints["trigger_name"])
         return typing.cast(_ITriggerRef_d85f5014, jsii.sinvoke(cls, "fromTriggerName", [scope, id, trigger_name]))
 
+    @jsii.member(jsii_name="isCfnTrigger")
+    @builtins.classmethod
+    def is_cfn_trigger(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrigger.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__73125f7568baefba7b660e446c6b98f5efce43fa2d990c598cae0f8702fea77b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrigger", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -18361,6 +18595,18 @@ class CfnUsageProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUsageProfile")
+    @builtins.classmethod
+    def is_cfn_usage_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUsageProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__39f3634f34f6dc47fd124bd9c3cbd510a52d9aa523a5765d23966fce74647fc3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUsageProfile", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -18867,6 +19113,18 @@ class CfnWorkflow(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnWorkflow")
+    @builtins.classmethod
+    def is_cfn_workflow(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkflow.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4a0eec7c2842db7276304011bca5c29ff5432bf077f4dfd1c9983ebe7de3ec03)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkflow", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -19180,6 +19438,12 @@ def _typecheckingstub__c31bd9435d221f14c31ca91edbb76c0650b44f88a5a16431a384ce585
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9bd2750643971dbd7fe2ea02c4f93b5dbfadb654ca0c8f75a1bb9f86d2f0b85d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e64f8d2a274e89a852157febbc2182dcdb6d685a9d95146fd826be8c2e235c78(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -19274,6 +19538,12 @@ def _typecheckingstub__ed744b41db4675b65946b69de8e2f2df8beabc93f21d52abb4a5ce5d2
     *,
     catalog_id: builtins.str,
     connection_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnection.ConnectionInputProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3cb53e6213f4001e09098ddea6056180dccc6200753c09890c58c04ebeaa5060(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19427,6 +19697,12 @@ def _typecheckingstub__9ad087260b86f149a125685668b821ca3edecc96c6b66bdc38f719435
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     crawler_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e90bca6c00df4dd09e1c57b19fb6155dd6b89174440e24c659ae6b26030ecc03(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19697,6 +19973,12 @@ def _typecheckingstub__d9fcfdaedb8245c0773846f383316c653711b4bf502cef627cc38c7a8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__905bc74171502b910d0b55a0ae0c25eddfb1098cd478b18bf600e25057f28aaa(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f1161ed4cb74764a76ad0a2a8d9218348384b8c59f0f79872699c83d6a9671c3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -19749,6 +20031,12 @@ def _typecheckingstub__282fa6292001a27626ebcdd16c3756f6c1f39e2fce0bffe2aa07015e6
     *,
     catalog_id: builtins.str,
     data_catalog_encryption_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataCatalogEncryptionSettings.DataCatalogEncryptionSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__97f2c3604de40e45029d75d7c250337142d2709a09784e91b6092b7e204e4469(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19820,6 +20108,12 @@ def _typecheckingstub__2cd6788453c5f421cc94877f7bd1430bf0188a7b66044acb47e85a138
     ruleset: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
     target_table: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataQualityRuleset.DataQualityTargetTableProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__28cf061019f661099f0c3be6b819fadc6161349a42b7ff5deb88416c5f5ce2ea(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19913,6 +20207,12 @@ def _typecheckingstub__46d072003af0a253294aa99188670d3a5326fb17900c9f4bc5ca0850d
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     database_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__32b3805ad532444a8c31bd611ce88f78248b944c43b246a19267474f10ad9c18(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20020,6 +20320,12 @@ def _typecheckingstub__f207845d994208ff1660ad2df9e045c11ca6d377ac8544937edbec1dd
     subnet_id: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
     worker_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__86e2941d214c415d02d8af9219234bc01f8033733b5e50d76da91281130056fd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20158,6 +20464,12 @@ def _typecheckingstub__e02020a96b7f983d041d512872a4682bdba5253496a16de355e50da3b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a5e1288a6924f6e5913efdf8759e2a6527f3a4cc1d3a65d938315615520e0b30(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__24e51b2eeff00706fbd4d0555ff0585adc48cee98f45781ea9eca8e9c47f40e1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20216,6 +20528,12 @@ def _typecheckingstub__ffac55aa81a7816fe9e423f20ae65fe96d6eaefe8319323ace391abf4
 
 def _typecheckingstub__05ee051a200babfe5d577ec1bf7748b915f9cfa0c6738ebcc762a74938b16d43(
     resource: _IIntegrationRef_48550f23,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0199b47fe3999acb83a659ef3526635b02d5e80c1a17d85ad24bbc3862d7560(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20318,6 +20636,12 @@ def _typecheckingstub__ae17c734cde2f5daac3730b0666a9bbab9b5da447b629240e30963ab9
     source_processing_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegrationResourceProperty.SourceProcessingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_processing_properties: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegrationResourceProperty.TargetProcessingPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3ad62bb88d1fd7df29e1b7a304e4e01b361eacdddfda9f5053316ef54d3a41fb(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20426,6 +20750,12 @@ def _typecheckingstub__800b295a4e0e23b0b95e4eb1a477f6d73e527378c000c53073ea7b72f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     job_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__84b39d7f2b5dd498188d198d5331f6c12f27246de4a00ff56d641bb095d11eb6(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20661,6 +20991,12 @@ def _typecheckingstub__53d1d58fe97e9c17e46132b4f82f741ba019c774fe0bb3bdba1d51dbe
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__22711b4a970f242bab198ce84d9a51df2ea73737059c4b35e844be0bfe9119c4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__17b628057d4918b2654a169e223fdc7952223107b4c9c602966d2f6978fffbac(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20833,6 +21169,12 @@ def _typecheckingstub__8a7cb666e01a9021862d0b0ab8ac8df4a82cacbe6e60f96bbb3750ad2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__28e0783759483c03d07c012f25636825ce974eebe7f92bf40085bf5c9a7a82d2(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__78b5b937bbcdbead6e9c098e9cd77435e7317295bfb6d1904684e13a384ac6d6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20977,6 +21319,12 @@ def _typecheckingstub__0af7bd3f3a558a8449061cab98ea1758e8ecdd7b6ecc0799e16d4103d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ec3af8392fed5fa754db21c91bbaa835a6d31f4b144c58971ed1a71805f295f8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bc8a013f30adcd1edf09a70d6cb3498fabc5c2275ef048bccad07b556f68c139(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21034,6 +21382,12 @@ def _typecheckingstub__6c24fd21e2dfff4073f4fd8235eb4e6907b6a19fef52a7e12e6cc3279
 
 def _typecheckingstub__1b17688ef1cd21a5514bb4f028167cbcad4edaf17c4781f868d5484a9a339230(
     resource: _ISchemaRef_48c52337,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b344a6a2b716182aa507942254aea19464efb5148cdf1f1063935759e006486c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21138,6 +21492,12 @@ def _typecheckingstub__da5c949b18973d69cdae418c5f7d35241c93c30bd7bc7107898aaaace
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__25027d0127213a942fd178819fa8f0db2accbea494844123afb037fd8c955ad6(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7d9452a9d70f3e83a829bffc8890b5cfcb4a0c94403e5c71cf3e3ebe8bbd2492(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21178,6 +21538,12 @@ def _typecheckingstub__0a9a3e2496aeeeaf0a9f2c36f1a1d9a7ad7e6c6e6875c4024e3b0fdc4
     key: builtins.str,
     schema_version_id: typing.Union[builtins.str, _ISchemaVersionRef_fe82c194],
     value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__45cdb966a1a0159f49b92c39a4ae84b06180b38b305f24ea3fc2de90b0cc1280(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21235,6 +21601,12 @@ def _typecheckingstub__c75e7a9665c1990bc4f5c74c4d708791cc9808fb5f2dd7221d5808a57
     *,
     encryption_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSecurityConfiguration.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c46dfb82b829d32ef2f538355fd4c5845956502ff87901addfdb80f261c626b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21312,6 +21684,12 @@ def _typecheckingstub__63721068e81107cadbf3e418ec393de98f88a141604f2bb1044b5ae30
     database_name: builtins.str,
     table_input: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.TableInputProperty, typing.Dict[builtins.str, typing.Any]]],
     open_table_format_input: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.OpenTableFormatInputProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__660ecc5559592bf5d4a11c422dee3df5d254d3277774dfa273e8fd56e200295c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21479,6 +21857,12 @@ def _typecheckingstub__b4e894dd19e24d3b1945f7e3626cca9af994eb9445db78ad546596509
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c9a78ac6a2af304827b58c3b0f32b4f249320f43df4d1138bc8ec9d4843b1b84(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d700611fa218622715d366ef2028e76f353a44f5389864842f0903ab64e6f8c3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21619,6 +22003,12 @@ def _typecheckingstub__986602eae0e3d2f16446e9c0e6491a51063164c5666c61327ac4cd04c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     trigger_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__73125f7568baefba7b660e446c6b98f5efce43fa2d990c598cae0f8702fea77b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21769,6 +22159,12 @@ def _typecheckingstub__e7218caa3227d549ee6ae3f63083c402f9b57ee1e7764a3646a34f5e1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__39f3634f34f6dc47fd124bd9c3cbd510a52d9aa523a5765d23966fce74647fc3(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__38ce869b1bd68828450bb4539cadcbf1bb558fbab9e1f008be2b39687f6175e3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21842,6 +22238,12 @@ def _typecheckingstub__d6c744c641379ecc5fd54ce4fcbe0501c332b7726b6037690528980d8
     max_concurrent_runs: typing.Optional[jsii.Number] = None,
     name: typing.Optional[builtins.str] = None,
     tags: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4a0eec7c2842db7276304011bca5c29ff5432bf077f4dfd1c9983ebe7de3ec03(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

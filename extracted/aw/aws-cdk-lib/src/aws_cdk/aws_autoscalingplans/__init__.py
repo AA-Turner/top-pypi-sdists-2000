@@ -197,6 +197,18 @@ class CfnScalingPlan(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnScalingPlan")
+    @builtins.classmethod
+    def is_cfn_scaling_plan(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnScalingPlan.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__df123c3e31a1992cf2ca10a9f9f7ffc4388bce21736632fa95eda1e54d8b33e6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScalingPlan", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1729,6 +1741,12 @@ def _typecheckingstub__8845a217500d0a413cb4f3d41fb46473a55d2418ee7613a0fc607b2a0
     *,
     application_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPlan.ApplicationSourceProperty, typing.Dict[builtins.str, typing.Any]]],
     scaling_instructions: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnScalingPlan.ScalingInstructionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__df123c3e31a1992cf2ca10a9f9f7ffc4388bce21736632fa95eda1e54d8b33e6(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

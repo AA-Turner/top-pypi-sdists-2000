@@ -224,6 +224,18 @@ class CfnNotificationRule(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNotificationRule", [resource]))
 
+    @jsii.member(jsii_name="isCfnNotificationRule")
+    @builtins.classmethod
+    def is_cfn_notification_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnNotificationRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__30aaea3fdc79a268b1a12d5425c0141bf2c12fc2f8c5922ee8871c55ace9b01b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1480,6 +1492,12 @@ def _typecheckingstub__724996b7b605c1ccec7fc232a8e933db042d262c4932936112f67cf6c
 
 def _typecheckingstub__e81708227acb98da73d79e733ff85bbe1c6146c47676c1ea6b92d00ee0dac1f5(
     resource: _INotificationRuleRef_72554e3b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__30aaea3fdc79a268b1a12d5425c0141bf2c12fc2f8c5922ee8871c55ace9b01b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

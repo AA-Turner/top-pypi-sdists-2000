@@ -126,6 +126,21 @@ class CfnAutoshiftObserverNotificationStatus(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAutoshiftObserverNotificationStatus")
+    @builtins.classmethod
+    def is_cfn_autoshift_observer_notification_status(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''Checks whether the given object is a CfnAutoshiftObserverNotificationStatus.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__35a130ce569d5e9229a16be838630fa70ca411e2c19ffacfb80ab99a66557347)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAutoshiftObserverNotificationStatus", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -324,6 +339,18 @@ class CfnZonalAutoshiftConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnZonalAutoshiftConfiguration")
+    @builtins.classmethod
+    def is_cfn_zonal_autoshift_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnZonalAutoshiftConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__532529b765c4aea983c9eac0bed4cf71fd15d11cb156c4e06f3316c506c45ffd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnZonalAutoshiftConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -767,6 +794,12 @@ def _typecheckingstub__a641c95b7291cd74504f21deec131b94f9a4820ca9da19c12dcb74b34
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__35a130ce569d5e9229a16be838630fa70ca411e2c19ffacfb80ab99a66557347(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__367a58f6c0a1e21e312519427c6e0c9dec1c77bae6f15f5e3bb87efaf051de75(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -799,6 +832,12 @@ def _typecheckingstub__8c7357d3884cea81f1166de2f6ac59cb16a8663a471270d73a743eb77
     resource_identifier: builtins.str,
     practice_run_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnZonalAutoshiftConfiguration.PracticeRunConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     zonal_autoshift_status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__532529b765c4aea983c9eac0bed4cf71fd15d11cb156c4e06f3316c506c45ffd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

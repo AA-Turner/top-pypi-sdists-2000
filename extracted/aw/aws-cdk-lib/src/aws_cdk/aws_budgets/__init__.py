@@ -213,6 +213,18 @@ class CfnBudget(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnBudget")
+    @builtins.classmethod
+    def is_cfn_budget(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnBudget.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__740f9b17e21a494f6d3946d033f8571fe21a5d43393b6dafeaf07c0827989cff)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBudget", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2301,6 +2313,18 @@ class CfnBudgetsAction(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnBudgetsAction")
+    @builtins.classmethod
+    def is_cfn_budgets_action(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnBudgetsAction.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a761373430bae071b3f84cf82c0119fad84ab751de684547f15a34cfd3caf710)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBudgetsAction", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3338,6 +3362,12 @@ def _typecheckingstub__fcf9a7d2538a7b213b0959a8dca9ebac8bd9adbb67b3989e4ad2e983d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__740f9b17e21a494f6d3946d033f8571fe21a5d43393b6dafeaf07c0827989cff(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e48291da0e0d52b22d4094e08b1071a9eb7e9781ef841ed60fbf1c118c7db23c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3529,6 +3559,12 @@ def _typecheckingstub__5feaf1ccce7286d2cae539317638953135d21b7e897f0ded2f3a275d0
     subscribers: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnBudgetsAction.SubscriberProperty, typing.Dict[builtins.str, typing.Any]]]]],
     approval_model: typing.Optional[builtins.str] = None,
     resource_tags: typing.Optional[typing.Sequence[typing.Union[CfnBudgetsAction.ResourceTagProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a761373430bae071b3f84cf82c0119fad84ab751de684547f15a34cfd3caf710(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

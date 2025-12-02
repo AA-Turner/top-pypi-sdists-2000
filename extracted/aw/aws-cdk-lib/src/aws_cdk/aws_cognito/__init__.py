@@ -2381,6 +2381,18 @@ class CfnIdentityPool(
             check_type(argname="argument identity_pool_id", value=identity_pool_id, expected_type=type_hints["identity_pool_id"])
         return typing.cast(_IIdentityPoolRef_5cf45895, jsii.sinvoke(cls, "fromIdentityPoolId", [scope, id, identity_pool_id]))
 
+    @jsii.member(jsii_name="isCfnIdentityPool")
+    @builtins.classmethod
+    def is_cfn_identity_pool(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentityPool.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__68da4104ea1f9e9a96f5dcd02ee6186d7a10a8592672d26f6469f863b8ba3c2b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityPool", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2965,6 +2977,18 @@ class CfnIdentityPoolPrincipalTag(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnIdentityPoolPrincipalTag")
+    @builtins.classmethod
+    def is_cfn_identity_pool_principal_tag(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentityPoolPrincipalTag.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67b708619f8f6ec0745020da0546b3736efc89425bacb15a6f6618febf25d80b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityPoolPrincipalTag", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3504,6 +3528,18 @@ class CfnIdentityPoolRoleAttachment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnIdentityPoolRoleAttachment")
+    @builtins.classmethod
+    def is_cfn_identity_pool_role_attachment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentityPoolRoleAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9e655015c3929a5adf06cfc02236b3d0ea55668ba307b402d58ae344e257abb1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityPoolRoleAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4094,6 +4130,18 @@ class CfnLogDeliveryConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnLogDeliveryConfiguration")
+    @builtins.classmethod
+    def is_cfn_log_delivery_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLogDeliveryConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__203ff2a38d6a161e1172d7f8852a5ad8398f3ba214f39ff1f73b5b9e562c7ba5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLogDeliveryConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4655,6 +4703,18 @@ class CfnManagedLoginBranding(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnManagedLoginBranding")
+    @builtins.classmethod
+    def is_cfn_managed_login_branding(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnManagedLoginBranding.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ce9a19ca9ae4e25b8f6aa753ce5ce24a0209cbc2731ca9a27a4ce514408279b1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnManagedLoginBranding", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5107,7 +5167,22 @@ class CfnTerms(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_cognito.CfnTerms",
 ):
-    '''Resource Type definition for AWS::Cognito::Terms.
+    '''Creates terms documents for the requested app client.
+
+    When Terms and conditions and Privacy policy documents are configured, the app client displays links to them in the sign-up page of managed login for the app client.
+
+    You can provide URLs for terms documents in the languages that are supported by `managed login localization <https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-managed-login.html#managed-login-localization>`_ . Amazon Cognito directs users to the terms documents for their current language, with fallback to ``default`` if no document exists for the language.
+
+    Each request accepts one type of terms document and a map of language-to-link for that document type. You must provide both types of terms documents in at least one language before Amazon Cognito displays your terms documents. Supply each type in separate requests.
+
+    For more information, see `Terms documents <https://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-managed-login.html#managed-login-terms-documents>`_ .
+    .. epigraph::
+
+       Amazon Cognito evaluates AWS Identity and Access Management (IAM) policies in requests for this API operation. For this operation, you must use IAM credentials to authorize requests, and you must grant yourself the corresponding IAM permission in a policy.
+
+       **Learn more** - `Signing AWS API Requests <https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-signing.html>`_
+
+       - `Using the Amazon Cognito user pools API and user pool endpoints <https://docs.aws.amazon.com/cognito/latest/developerguide/user-pools-API-operations.html>`_
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html
     :cloudformationResource: AWS::Cognito::Terms
@@ -5149,12 +5224,12 @@ class CfnTerms(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param enforcement: 
-        :param links: 
-        :param terms_name: 
-        :param terms_source: 
-        :param user_pool_id: 
-        :param client_id: 
+        :param enforcement: This parameter is reserved for future use and currently accepts one value.
+        :param links: A map of URLs to languages. For each localized language that will view the requested ``TermsName`` , assign a URL. A selection of ``cognito:default`` displays for all languages that don't have a language-specific URL. For example, ``"cognito:default": "https://terms.example.com", "cognito:spanish": "https://terms.example.com/es"`` .
+        :param terms_name: The type and friendly name of the terms documents.
+        :param terms_source: This parameter is reserved for future use and currently accepts one value.
+        :param user_pool_id: The ID of the user pool that contains the terms documents.
+        :param client_id: The ID of the app client that the terms documents are assigned to.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__60ed6baa47f9012cc57d9cef7e22f15d5f04fd45aa55fc0e8672f7e89ef3f146)
@@ -5170,6 +5245,18 @@ class CfnTerms(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnTerms")
+    @builtins.classmethod
+    def is_cfn_terms(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTerms.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__32770d5656ddcce643117a225779988aebdbcb97affb68fb24f76a84651cb365)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTerms", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5204,7 +5291,8 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="attrTermsId")
     def attr_terms_id(self) -> builtins.str:
-        '''
+        '''The ID of the terms documents.
+
         :cloudformationAttribute: TermsId
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrTermsId"))
@@ -5223,6 +5311,7 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="enforcement")
     def enforcement(self) -> builtins.str:
+        '''This parameter is reserved for future use and currently accepts one value.'''
         return typing.cast(builtins.str, jsii.get(self, "enforcement"))
 
     @enforcement.setter
@@ -5237,6 +5326,7 @@ class CfnTerms(
     def links(
         self,
     ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
+        '''A map of URLs to languages.'''
         return typing.cast(typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b], jsii.get(self, "links"))
 
     @links.setter
@@ -5252,6 +5342,7 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="termsName")
     def terms_name(self) -> builtins.str:
+        '''The type and friendly name of the terms documents.'''
         return typing.cast(builtins.str, jsii.get(self, "termsName"))
 
     @terms_name.setter
@@ -5264,6 +5355,7 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="termsSource")
     def terms_source(self) -> builtins.str:
+        '''This parameter is reserved for future use and currently accepts one value.'''
         return typing.cast(builtins.str, jsii.get(self, "termsSource"))
 
     @terms_source.setter
@@ -5276,6 +5368,7 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="userPoolId")
     def user_pool_id(self) -> builtins.str:
+        '''The ID of the user pool that contains the terms documents.'''
         return typing.cast(builtins.str, jsii.get(self, "userPoolId"))
 
     @user_pool_id.setter
@@ -5288,6 +5381,7 @@ class CfnTerms(
     @builtins.property
     @jsii.member(jsii_name="clientId")
     def client_id(self) -> typing.Optional[builtins.str]:
+        '''The ID of the app client that the terms documents are assigned to.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "clientId"))
 
     @client_id.setter
@@ -5323,12 +5417,12 @@ class CfnTermsProps:
     ) -> None:
         '''Properties for defining a ``CfnTerms``.
 
-        :param enforcement: 
-        :param links: 
-        :param terms_name: 
-        :param terms_source: 
-        :param user_pool_id: 
-        :param client_id: 
+        :param enforcement: This parameter is reserved for future use and currently accepts one value.
+        :param links: A map of URLs to languages. For each localized language that will view the requested ``TermsName`` , assign a URL. A selection of ``cognito:default`` displays for all languages that don't have a language-specific URL. For example, ``"cognito:default": "https://terms.example.com", "cognito:spanish": "https://terms.example.com/es"`` .
+        :param terms_name: The type and friendly name of the terms documents.
+        :param terms_source: This parameter is reserved for future use and currently accepts one value.
+        :param user_pool_id: The ID of the user pool that contains the terms documents.
+        :param client_id: The ID of the app client that the terms documents are assigned to.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html
         :exampleMetadata: fixture=_generated
@@ -5372,7 +5466,8 @@ class CfnTermsProps:
 
     @builtins.property
     def enforcement(self) -> builtins.str:
-        '''
+        '''This parameter is reserved for future use and currently accepts one value.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-enforcement
         '''
         result = self._values.get("enforcement")
@@ -5383,7 +5478,12 @@ class CfnTermsProps:
     def links(
         self,
     ) -> typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]:
-        '''
+        '''A map of URLs to languages.
+
+        For each localized language that will view the requested ``TermsName`` , assign a URL. A selection of ``cognito:default`` displays for all languages that don't have a language-specific URL.
+
+        For example, ``"cognito:default": "https://terms.example.com", "cognito:spanish": "https://terms.example.com/es"`` .
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-links
         '''
         result = self._values.get("links")
@@ -5392,7 +5492,8 @@ class CfnTermsProps:
 
     @builtins.property
     def terms_name(self) -> builtins.str:
-        '''
+        '''The type and friendly name of the terms documents.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-termsname
         '''
         result = self._values.get("terms_name")
@@ -5401,7 +5502,8 @@ class CfnTermsProps:
 
     @builtins.property
     def terms_source(self) -> builtins.str:
-        '''
+        '''This parameter is reserved for future use and currently accepts one value.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-termssource
         '''
         result = self._values.get("terms_source")
@@ -5410,7 +5512,8 @@ class CfnTermsProps:
 
     @builtins.property
     def user_pool_id(self) -> builtins.str:
-        '''
+        '''The ID of the user pool that contains the terms documents.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-userpoolid
         '''
         result = self._values.get("user_pool_id")
@@ -5419,7 +5522,8 @@ class CfnTermsProps:
 
     @builtins.property
     def client_id(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The ID of the app client that the terms documents are assigned to.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cognito-terms.html#cfn-cognito-terms-clientid
         '''
         result = self._values.get("client_id")
@@ -5747,6 +5851,18 @@ class CfnUserPool(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument user_pool_id", value=user_pool_id, expected_type=type_hints["user_pool_id"])
         return typing.cast(_IUserPoolRef_0b7d02b5, jsii.sinvoke(cls, "fromUserPoolId", [scope, id, user_pool_id]))
+
+    @jsii.member(jsii_name="isCfnUserPool")
+    @builtins.classmethod
+    def is_cfn_user_pool(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPool.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b7e2525fd1931da972c8e688a610002de203cd2cefb75bbb754cf77a89582cac)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPool", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8717,6 +8833,18 @@ class CfnUserPoolClient(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUserPoolClient")
+    @builtins.classmethod
+    def is_cfn_user_pool_client(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolClient.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__56deb60f193f9f102ed18b276bc08a270cce1dd3fc0c01350c1a24b17bb4c18e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolClient", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10068,6 +10196,18 @@ class CfnUserPoolDomain(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUserPoolDomain")
+    @builtins.classmethod
+    def is_cfn_user_pool_domain(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolDomain.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bf23e7886d72f797b39a140b202eda044a3ec13bb2f07ca150f0410509971ff5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolDomain", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10420,6 +10560,18 @@ class CfnUserPoolGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUserPoolGroup")
+    @builtins.classmethod
+    def is_cfn_user_pool_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cda87d34ce41936d3debc164b98829d465aff48a90c90b60638c6c52a9824d67)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10734,6 +10886,18 @@ class CfnUserPoolIdentityProvider(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserPoolIdentityProvider")
+    @builtins.classmethod
+    def is_cfn_user_pool_identity_provider(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolIdentityProvider.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__95a3af295bcb2f57e749ef37382981dea291f439869b4628b28918f31acbdad8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolIdentityProvider", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11804,6 +11968,18 @@ class CfnUserPoolResourceServer(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUserPoolResourceServer")
+    @builtins.classmethod
+    def is_cfn_user_pool_resource_server(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolResourceServer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f1b951e53dbb02cef3646308929658478365ec97ba606ec2c03f6a24d7a48348)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolResourceServer", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12223,6 +12399,21 @@ class CfnUserPoolRiskConfigurationAttachment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserPoolRiskConfigurationAttachment")
+    @builtins.classmethod
+    def is_cfn_user_pool_risk_configuration_attachment(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolRiskConfigurationAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d04e43a127e8086b4ffee2617ba42eda163be8f5b5b3231a8a1b850a3ef1d6ba)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolRiskConfigurationAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13370,6 +13561,21 @@ class CfnUserPoolUICustomizationAttachment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUserPoolUICustomizationAttachment")
+    @builtins.classmethod
+    def is_cfn_user_pool_ui_customization_attachment(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolUICustomizationAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e055cffa102f9950c3fe54680b77426adc87553a5321e47db1f656ca4964ddfd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolUICustomizationAttachment", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13629,6 +13835,18 @@ class CfnUserPoolUser(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserPoolUser")
+    @builtins.classmethod
+    def is_cfn_user_pool_user(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolUser.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5b341febf1737e60d203510e1387628f331c5f9f9bc1b8d7ef81b64621d4fea1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolUser", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14166,6 +14384,18 @@ class CfnUserPoolUserToGroupAttachment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserPoolUserToGroupAttachment")
+    @builtins.classmethod
+    def is_cfn_user_pool_user_to_group_attachment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPoolUserToGroupAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f31d5a90cf5a3519ffc7ff93530071681166eb0e5a27e47db9853d060edf229d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPoolUserToGroupAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -24698,6 +24928,12 @@ def _typecheckingstub__23c766eb59af70f92541dfd9c9cae67b99255f21efd59868b8feff443
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__68da4104ea1f9e9a96f5dcd02ee6186d7a10a8592672d26f6469f863b8ba3c2b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d0046422699f4c95c1d9df0a173b8caf8590dc3fcb3ada38e03f96cba1a359bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24820,6 +25056,12 @@ def _typecheckingstub__036c02730249ce227e84b1b6d6f563004dc63ae9f5f1d1b135ebaf712
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__67b708619f8f6ec0745020da0546b3736efc89425bacb15a6f6618febf25d80b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f3f48484f4649e6d58d093801018075e48fd42dcf857d13ad24a164c0f41e989(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24891,6 +25133,12 @@ def _typecheckingstub__e0686a984bb6b75dbf3aca8c723d268e911604e9a4aafa6bc4c2a74b9
     identity_pool_id: typing.Union[builtins.str, _IIdentityPoolRef_5cf45895],
     role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Union[_IResolvable_da3f097b, typing.Union[CfnIdentityPoolRoleAttachment.RoleMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     roles: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9e655015c3929a5adf06cfc02236b3d0ea55668ba307b402d58ae344e257abb1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24971,6 +25219,12 @@ def _typecheckingstub__e29530a80c41b2b01a02705536af0f4120664e64afaf6cf445105a2dd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__203ff2a38d6a161e1172d7f8852a5ad8398f3ba214f39ff1f73b5b9e562c7ba5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9c754043d52de2809138bd323abb0b034a1950dd042f21ac2f36d2f80c2f6ab5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -25045,6 +25299,12 @@ def _typecheckingstub__478f8899894ffccc3f20b06ae18c36beb41bf5c5c9aa65a99dbdbf95c
     return_merged_resources: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     settings: typing.Any = None,
     use_cognito_provided_values: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ce9a19ca9ae4e25b8f6aa753ce5ce24a0209cbc2731ca9a27a4ce514408279b1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25130,6 +25390,12 @@ def _typecheckingstub__60ed6baa47f9012cc57d9cef7e22f15d5f04fd45aa55fc0e8672f7e89
     terms_source: builtins.str,
     user_pool_id: builtins.str,
     client_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__32770d5656ddcce643117a225779988aebdbcb97affb68fb24f76a84651cb365(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25249,6 +25515,12 @@ def _typecheckingstub__77bca4d59ea1b80508c0fd60c8f34e3c4dff94c3e5dada90fee904207
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     user_pool_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b7e2525fd1931da972c8e688a610002de203cd2cefb75bbb754cf77a89582cac(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -25673,6 +25945,12 @@ def _typecheckingstub__87712ca9ae8faf9f73a6c5d11987fcf280543ea093bcc4253c800c015
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__56deb60f193f9f102ed18b276bc08a270cce1dd3fc0c01350c1a24b17bb4c18e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8a9fb7182377f570d9a0052b4ec94ac913c9394d689704450911f34bf1b5d913(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -25892,6 +26170,12 @@ def _typecheckingstub__6e0b36c4d155cfdfa9801e3f221c4fe6c5403bf24a64d17bd90fb5386
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bf23e7886d72f797b39a140b202eda044a3ec13bb2f07ca150f0410509971ff5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__847babb3c81b57d55437dd6a17098995090128630b1accb7f8cd0e345f7e39f6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -25954,6 +26238,12 @@ def _typecheckingstub__64c0c3e44e677deced2e13e5ab4d3c7550518140bbe9dfaf681651d95
     group_name: typing.Optional[builtins.str] = None,
     precedence: typing.Optional[jsii.Number] = None,
     role_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cda87d34ce41936d3debc164b98829d465aff48a90c90b60638c6c52a9824d67(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26021,6 +26311,12 @@ def _typecheckingstub__759e90505ceb64aa7002be11d4da4a87090102263927799f662a83f60
     user_pool_id: builtins.str,
     attribute_mapping: typing.Any = None,
     idp_identifiers: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__95a3af295bcb2f57e749ef37382981dea291f439869b4628b28918f31acbdad8(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26132,6 +26428,12 @@ def _typecheckingstub__5ff380728a32f62434c91f2ef979d9f2a64ce347253fb0640fb5f618b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f1b951e53dbb02cef3646308929658478365ec97ba606ec2c03f6a24d7a48348(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e2a96db567ceac3c2f12fc90cf5f16fbfc45a32b92f0b1c83858321911b0ed93(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -26195,6 +26497,12 @@ def _typecheckingstub__e3245a667ca916eabc555ef843b4a36bfcb47060fa353bd730066a76d
     account_takeover_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.AccountTakeoverRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     compromised_credentials_risk_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.CompromisedCredentialsRiskConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     risk_exception_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolRiskConfigurationAttachment.RiskExceptionConfigurationTypeProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d04e43a127e8086b4ffee2617ba42eda163be8f5b5b3231a8a1b850a3ef1d6ba(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26332,6 +26640,12 @@ def _typecheckingstub__bf3306ea8a9b6f4ebe73eb42059e52138281652a9e2e36e507fd8658e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e055cffa102f9950c3fe54680b77426adc87553a5321e47db1f656ca4964ddfd(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__80b3aec0691b38b614ccbfd3a409e8f6e5a07ef4b029f9f7451ae00fe408ecee(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -26383,6 +26697,12 @@ def _typecheckingstub__392de74de1133635a0d4d21dbd0cb3290007171e021625ff9a1259834
     user_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolUser.AttributeTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     username: typing.Optional[builtins.str] = None,
     validation_data: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnUserPoolUser.AttributeTypeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5b341febf1737e60d203510e1387628f331c5f9f9bc1b8d7ef81b64621d4fea1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -26476,6 +26796,12 @@ def _typecheckingstub__a7364d75afc292798863e1183adee778bee531b8ea162e2882fe2861f
     group_name: typing.Union[builtins.str, _IUserPoolGroupRef_89b16d48],
     username: typing.Union[builtins.str, _IUserPoolUserRef_cbf1b211],
     user_pool_id: typing.Union[builtins.str, _IUserPoolRef_0b7d02b5],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f31d5a90cf5a3519ffc7ff93530071681166eb0e5a27e47db9853d060edf229d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

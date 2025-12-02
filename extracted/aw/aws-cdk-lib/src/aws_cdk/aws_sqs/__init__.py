@@ -322,6 +322,18 @@ class CfnQueue(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
+    @jsii.member(jsii_name="isCfnQueue")
+    @builtins.classmethod
+    def is_cfn_queue(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueue.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7060868a08b81bbb2617d578c1ba0a42166eea4bc6de349534e007a6ef2dab9c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -679,6 +691,18 @@ class CfnQueueInlinePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnQueueInlinePolicy")
+    @builtins.classmethod
+    def is_cfn_queue_inline_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueueInlinePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e41b828a0c06179aa89228128eee8515c5c8d09477d1bbddbd89adfd24d7154)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueInlinePolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -870,6 +894,18 @@ class CfnQueuePolicy(
         props = CfnQueuePolicyProps(policy_document=policy_document, queues=queues)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnQueuePolicy")
+    @builtins.classmethod
+    def is_cfn_queue_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueuePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c72ef4b40a0179ae873c04bb3ffd839742965b348dad00f6d4f0730497f15822)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueuePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4603,6 +4639,12 @@ def _typecheckingstub__722a92eb0cd4ca74862788bfdd1e2c8f0a2a7b6e0dbce380469836d36
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7060868a08b81bbb2617d578c1ba0a42166eea4bc6de349534e007a6ef2dab9c(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e2edac588147bdde110e32931a1f527ce029c9c91623ac9467d77dfcabed1ecf(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4721,6 +4763,12 @@ def _typecheckingstub__5a4a58f0061e5bc1b45f4a41f066d63064e48860dda7c96bf6a78c07d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6e41b828a0c06179aa89228128eee8515c5c8d09477d1bbddbd89adfd24d7154(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c076ea64b445e3d9bfc6e9a477574b1c255cf5b418bca5369a75bae6dd0d4c0f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4759,6 +4807,12 @@ def _typecheckingstub__cf0938ca02c83217053a748eaced04a040ecea55f727e4a44ff3eff90
     *,
     policy_document: typing.Any,
     queues: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c72ef4b40a0179ae873c04bb3ffd839742965b348dad00f6d4f0730497f15822(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

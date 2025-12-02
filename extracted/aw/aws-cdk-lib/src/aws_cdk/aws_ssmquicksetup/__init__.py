@@ -159,6 +159,18 @@ class CfnConfigurationManager(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnConfigurationManager")
+    @builtins.classmethod
+    def is_cfn_configuration_manager(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConfigurationManager.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e16c534a0bc09400f2d36556fe44dea3fc540fa3fc16e2df20b3683ba1a3e2e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConfigurationManager", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -982,6 +994,18 @@ class CfnLifecycleAutomation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnLifecycleAutomation")
+    @builtins.classmethod
+    def is_cfn_lifecycle_automation(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLifecycleAutomation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__523ed66bffc5765c790c0d8e90a565d5c679651369ff3a75447e973fa1cdb3dd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLifecycleAutomation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1241,6 +1265,12 @@ def _typecheckingstub__12a9f65dcaf9bde5bcf296a113eb81107c3f8fa3375cf583d296e98f6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6e16c534a0bc09400f2d36556fe44dea3fc540fa3fc16e2df20b3683ba1a3e2e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1e179f5a174a371bbe7011b09d95b0c0f8863380aab0eca42d0e1c516056fd7f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1318,6 +1348,12 @@ def _typecheckingstub__c274d30b541ddefe9caa5141a1a8e43de7216c46c089f1fdae60d5449
     automation_parameters: typing.Union[_IResolvable_da3f097b, typing.Mapping[builtins.str, typing.Sequence[builtins.str]]],
     resource_key: builtins.str,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__523ed66bffc5765c790c0d8e90a565d5c679651369ff3a75447e973fa1cdb3dd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

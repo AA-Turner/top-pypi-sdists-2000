@@ -246,6 +246,18 @@ class CfnMonitor(
             check_type(argname="argument monitor_name", value=monitor_name, expected_type=type_hints["monitor_name"])
         return typing.cast(_IMonitorRef_a18ca427, jsii.sinvoke(cls, "fromMonitorName", [scope, id, monitor_name]))
 
+    @jsii.member(jsii_name="isCfnMonitor")
+    @builtins.classmethod
+    def is_cfn_monitor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMonitor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4a31740c20f17e2c5b5c617e8d8c72b1d0d428abec0fd0a38d59e782baf37e19)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitor", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1255,6 +1267,12 @@ def _typecheckingstub__b08db58b07bcc2642602e00bb759e374c262439bdb8f7478e94d862c6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     monitor_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4a31740c20f17e2c5b5c617e8d8c72b1d0d428abec0fd0a38d59e782baf37e19(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

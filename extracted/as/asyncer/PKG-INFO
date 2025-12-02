@@ -1,8 +1,10 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: asyncer
-Version: 0.0.10
+Version: 0.0.11
 Summary: Asyncer, async and await, focused on developer experience.
 Author-Email: =?utf-8?q?Sebasti=C3=A1n_Ram=C3=ADrez?= <tiangolo@gmail.com>
+License-Expression: MIT
+License-File: LICENSE
 Classifier: Development Status :: 4 - Beta
 Classifier: Framework :: AsyncIO
 Classifier: Framework :: Trio
@@ -11,7 +13,6 @@ Classifier: Intended Audience :: Education
 Classifier: Intended Audience :: Information Technology
 Classifier: Intended Audience :: Science/Research
 Classifier: Intended Audience :: System Administrators
-Classifier: License :: OSI Approved :: MIT License
 Classifier: Programming Language :: Python :: 3 :: Only
 Classifier: Programming Language :: Python :: 3.8
 Classifier: Programming Language :: Python :: 3.9
@@ -29,6 +30,7 @@ Project-URL: Issues, https://github.com/fastapi/asyncer/issues
 Project-URL: Changelog, https://asyncer.tiangolo.com/release-notes/
 Requires-Python: >=3.8
 Requires-Dist: anyio<5.0,>=3.4.0
+Requires-Dist: sniffio>=1.1
 Requires-Dist: typing_extensions>=4.8.0; python_version < "3.10"
 Description-Content-Type: text/markdown
 

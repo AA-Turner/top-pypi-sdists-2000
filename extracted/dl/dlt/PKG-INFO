@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: dlt
-Version: 1.18.2
+Version: 1.19.0
 Summary: dlt is an open-source python-first scalable data loading library that does not require any backend to run.
 Project-URL: Homepage, https://github.com/dlt-hub
 Project-URL: Repository, https://github.com/dlt-hub/dlt
@@ -30,7 +30,7 @@ Requires-Dist: giturlparse>=0.10.0
 Requires-Dist: humanize>=4.4.0
 Requires-Dist: jsonpath-ng>=1.5.3
 Requires-Dist: orjson!=3.10.1,!=3.9.11,!=3.9.12,!=3.9.13,!=3.9.14,<4,>=3.6.7; platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'
-Requires-Dist: orjson>=3.10.1; sys_platform != 'emscripten'
+Requires-Dist: orjson>=3.10.1; platform_python_implementation != 'PyPy' and sys_platform != 'emscripten'
 Requires-Dist: orjson>=3.11.0; python_version > '3.13'
 Requires-Dist: packaging>=21.1
 Requires-Dist: pathvalidate>=2.5.2
@@ -78,7 +78,7 @@ Requires-Dist: pyarrow>=16.0.0; extra == 'clickhouse'
 Requires-Dist: s3fs>=2022.4.0; extra == 'clickhouse'
 Provides-Extra: databricks
 Requires-Dist: databricks-sdk>=0.38.0; extra == 'databricks'
-Requires-Dist: databricks-sql-connector<4,>=2.9.3; (python_version <= '3.12') and extra == 'databricks'
+Requires-Dist: databricks-sql-connector>=2.9.3; (python_version <= '3.12') and extra == 'databricks'
 Requires-Dist: databricks-sql-connector>=3.6.0; (python_version >= '3.13') and extra == 'databricks'
 Provides-Extra: dbml
 Requires-Dist: pydbml; extra == 'dbml'
@@ -144,7 +144,7 @@ Requires-Dist: adlfs>=2024.7.0; extra == 'synapse'
 Requires-Dist: pyarrow>=16.0.0; extra == 'synapse'
 Requires-Dist: pyodbc>=4.0.39; extra == 'synapse'
 Provides-Extra: weaviate
-Requires-Dist: weaviate-client>=3.22; extra == 'weaviate'
+Requires-Dist: weaviate-client<4.0.0,>=3.26.7; extra == 'weaviate'
 Provides-Extra: workspace
 Requires-Dist: duckdb>=0.9; extra == 'workspace'
 Requires-Dist: ibis-framework>=10.5.0; (python_version >= '3.10') and extra == 'workspace'
@@ -225,7 +225,7 @@ Try it out in our **[Colab Demo](https://colab.research.google.com/drive/1NfSB1D
 
 ## Features
 
-dlt is an open-source Python library that loads data from various, often messy data sources into well-structured datasets. It provides lightweight Python interfaces to extract, load, inspect, and transform data. dlt and dlt docs are built from the ground up to be used with LLMs: the [LLM-native workflow](https://dlthub.com/docs/dlt-ecosystem/llm-tooling/llm-native-workflow.md) will take your pipeline code to data in a notebook for over [5000 sources](https://dlthub.com/workspace).
+dlt is an open-source Python library that loads data from various, often messy data sources into well-structured datasets. It provides lightweight Python interfaces to extract, load, inspect, and transform data. dlt and dlt docs are built from the ground up to be used with LLMs: the [LLM-native workflow](https://dlthub.com/docs/dlt-ecosystem/llm-tooling/llm-native-workflow) will take your pipeline code to data in a notebook for over [5000 sources](https://dlthub.com/workspace).
 
 dlt is designed to be easy to use, flexible, and scalable:
 

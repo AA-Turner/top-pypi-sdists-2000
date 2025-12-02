@@ -322,6 +322,18 @@ class CfnLifecyclePolicy(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLifecyclePolicy", [resource]))
 
+    @jsii.member(jsii_name="isCfnLifecyclePolicy")
+    @builtins.classmethod
+    def is_cfn_lifecycle_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLifecyclePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f489f95e84ed80f33f31ab9bfdc3dc85952419b4c35952887e27f834c1538f2a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLifecyclePolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3800,6 +3812,12 @@ def _typecheckingstub__2602533fbe79433bf8a3cb4984e0ec983ab5d121243f4d319dfc6038c
 
 def _typecheckingstub__830703e41406e6c71f5b9c1c3b14fc45cadeaae13ef088ba35c359cad091de68(
     resource: _ILifecyclePolicyRef_4d3577bf,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f489f95e84ed80f33f31ab9bfdc3dc85952419b4c35952887e27f834c1538f2a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

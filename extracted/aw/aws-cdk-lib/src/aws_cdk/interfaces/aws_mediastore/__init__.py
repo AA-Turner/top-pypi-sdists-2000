@@ -37,13 +37,19 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_mediastore.ContainerReference",
     jsii_struct_bases=[],
-    name_mapping={"container_id": "containerId"},
+    name_mapping={"container_id": "containerId", "container_name": "containerName"},
 )
 class ContainerReference:
-    def __init__(self, *, container_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        container_id: builtins.str,
+        container_name: builtins.str,
+    ) -> None:
         '''A reference to a Container resource.
 
         :param container_id: The Id of the Container resource.
+        :param container_name: The ContainerName of the Container resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -54,14 +60,17 @@ class ContainerReference:
             from aws_cdk.interfaces import aws_mediastore as interfaces_aws_mediastore
             
             container_reference = interfaces_aws_mediastore.ContainerReference(
-                container_id="containerId"
+                container_id="containerId",
+                container_name="containerName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__5fc1e7d63ffcff822c29c0c5b4e61add8e8b4ea0adcb2738490b14e8602e367c)
             check_type(argname="argument container_id", value=container_id, expected_type=type_hints["container_id"])
+            check_type(argname="argument container_name", value=container_name, expected_type=type_hints["container_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "container_id": container_id,
+            "container_name": container_name,
         }
 
     @builtins.property
@@ -69,6 +78,13 @@ class ContainerReference:
         '''The Id of the Container resource.'''
         result = self._values.get("container_id")
         assert result is not None, "Required property 'container_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def container_name(self) -> builtins.str:
+        '''The ContainerName of the Container resource.'''
+        result = self._values.get("container_name")
+        assert result is not None, "Required property 'container_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -138,6 +154,7 @@ publication.publish()
 def _typecheckingstub__5fc1e7d63ffcff822c29c0c5b4e61add8e8b4ea0adcb2738490b14e8602e367c(
     *,
     container_id: builtins.str,
+    container_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

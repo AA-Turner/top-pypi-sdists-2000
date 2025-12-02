@@ -1378,6 +1378,18 @@ class CfnApplication(
             check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
         return typing.cast(_IApplicationRef_1ffc51d6, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
 
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f05223981a99573905734a5d52b4c3728fc3e8d5a46b4000e84b710903ac435e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1652,6 +1664,18 @@ class CfnDeploymentConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnDeploymentConfig")
+    @builtins.classmethod
+    def is_cfn_deployment_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDeploymentConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__daa2d6c6f9d646eac53e561c1d67ebde325b634758e0986f0a295b805ce694d0)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeploymentConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2682,6 +2706,18 @@ class CfnDeploymentGroup(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnDeploymentGroup")
+    @builtins.classmethod
+    def is_cfn_deployment_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDeploymentGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e02347a41f861ae2ca4988a56366a8f04999deef510bddf41e34add35e785ce2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeploymentGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10595,6 +10631,12 @@ def _typecheckingstub__994304faea12eda1f4933ffaf6eb6e8dd9709b690e69aaa2758aac884
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f05223981a99573905734a5d52b4c3728fc3e8d5a46b4000e84b710903ac435e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__472dad38d3229c543cd45d013c4792382a9a9ff72b6a1c296cd46ddee9866459(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -10643,6 +10685,12 @@ def _typecheckingstub__1601263a429a6a400738eca0c5abc3bd436649919830aa684054ba853
     minimum_healthy_hosts: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.MinimumHealthyHostsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     traffic_routing_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.TrafficRoutingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     zonal_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentConfig.ZonalConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__daa2d6c6f9d646eac53e561c1d67ebde325b634758e0986f0a295b805ce694d0(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10774,6 +10822,12 @@ def _typecheckingstub__afc1bc74c13d6392d70ae9e55ed64b8ec6f2cfed100b230e370997efe
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     termination_hook_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     trigger_configurations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDeploymentGroup.TriggerConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e02347a41f861ae2ca4988a56366a8f04999deef510bddf41e34add35e785ce2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

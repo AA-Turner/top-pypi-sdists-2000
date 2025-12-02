@@ -331,7 +331,7 @@ class FindingAggregatorReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_securityhub.HubReference",
     jsii_struct_bases=[],
-    name_mapping={"hub_arn": "hubARN"},
+    name_mapping={"hub_arn": "hubArn"},
 )
 class HubReference:
     def __init__(self, *, hub_arn: builtins.str) -> None:
@@ -348,7 +348,7 @@ class HubReference:
             from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
             
             hub_reference = interfaces_aws_securityhub.HubReference(
-                hub_aRN="hubARN"
+                hub_arn="hubArn"
             )
         '''
         if __debug__:

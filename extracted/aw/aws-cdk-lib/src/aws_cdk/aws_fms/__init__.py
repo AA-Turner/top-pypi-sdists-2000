@@ -129,6 +129,18 @@ class CfnNotificationChannel(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnNotificationChannel")
+    @builtins.classmethod
+    def is_cfn_notification_channel(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnNotificationChannel.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__88e027fce8ba1ad79844659e6c4a03f44e606d509ac5636b75638a160d57cadc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNotificationChannel", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -470,6 +482,18 @@ class CfnPolicy(
             type_hints = typing.get_type_hints(_typecheckingstub__04831c3d313ebba8bad32171f846010edb93cd059740f75d9307402682cb79a8)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnPolicy")
+    @builtins.classmethod
+    def is_cfn_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ee4a629bf9bbaff1976aede304cd788a8b6185359d321e0edab127b30ba07c2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2674,6 +2698,29 @@ class CfnResourceSet(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForResourceSet")
+    @builtins.classmethod
+    def arn_for_resource_set(cls, resource: _IResourceSetRef_2023206e) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f7c13edcd660a79aed5d424e18f65e0034552c34f24c89b5d8ad16d5ba15b9db)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourceSet", [resource]))
+
+    @jsii.member(jsii_name="isCfnResourceSet")
+    @builtins.classmethod
+    def is_cfn_resource_set(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResourceSet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__90bf2432509391d27a0c5037579a707c521761974a58d84b611c47db8f472cba)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourceSet", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2947,6 +2994,12 @@ def _typecheckingstub__7a03e25c676e3f843e7365938075353612a65a3a2bd2538074f016448
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__88e027fce8ba1ad79844659e6c4a03f44e606d509ac5636b75638a160d57cadc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__eae25dcbfb8d4710a66ea0f6804d609f2c8fbb762e291caa42156e2d5e0a5ccd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3004,6 +3057,12 @@ def _typecheckingstub__a29b3b13041b0ccbd18a0c29ff5cff0adbc0e2aedc87591f1c54ec7a1
 
 def _typecheckingstub__04831c3d313ebba8bad32171f846010edb93cd059740f75d9307402682cb79a8(
     resource: _IPolicyRef_61b69924,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ee4a629bf9bbaff1976aede304cd788a8b6185359d321e0edab127b30ba07c2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3242,6 +3301,18 @@ def _typecheckingstub__4a4dcb98b2ac8a85db4734c3fc81a2a27145d1602529cf3cac45f8658
     description: typing.Optional[builtins.str] = None,
     resources: typing.Optional[typing.Sequence[builtins.str]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f7c13edcd660a79aed5d424e18f65e0034552c34f24c89b5d8ad16d5ba15b9db(
+    resource: _IResourceSetRef_2023206e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__90bf2432509391d27a0c5037579a707c521761974a58d84b611c47db8f472cba(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

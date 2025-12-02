@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fastmcp
-Version: 2.13.1
+Version: 2.13.2
 Summary: The fast, Pythonic way to build MCP servers and clients.
 Project-URL: Homepage, https://gofastmcp.com
 Project-URL: Repository, https://github.com/jlowin/fastmcp
@@ -26,7 +26,7 @@ Requires-Dist: jsonschema-path>=0.3.4
 Requires-Dist: mcp!=1.21.1,<2.0.0,>=1.19.0
 Requires-Dist: openapi-pydantic>=0.5.1
 Requires-Dist: platformdirs>=4.0.0
-Requires-Dist: py-key-value-aio[disk,keyring,memory]<0.3.0,>=0.2.8
+Requires-Dist: py-key-value-aio[disk,memory]<0.4.0,>=0.2.8
 Requires-Dist: pydantic[email]>=2.11.7
 Requires-Dist: pyperclip>=1.9.0
 Requires-Dist: python-dotenv>=1.1.0
@@ -355,6 +355,7 @@ FastMCP provides comprehensive authentication support that sets it apart from ba
 - **Auth0**
 - **WorkOS**
 - **Descope**
+- **Discord**
 - **JWT/Custom**
 - **API Keys**
 

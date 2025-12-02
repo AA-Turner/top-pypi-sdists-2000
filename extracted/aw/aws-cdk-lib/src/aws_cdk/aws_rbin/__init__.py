@@ -152,7 +152,7 @@ class CfnRule(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param resource_type: The resource type to be retained by the retention rule. Currently, only Amazon EBS snapshots and EBS-backed AMIs are supported. To retain snapshots, specify ``EBS_SNAPSHOT`` . To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
+        :param resource_type: The resource type to be retained by the retention rule. Currently, only EBS volumes, EBS snapshots, and EBS-backed AMIs are supported. - To retain EBS volumes, specify ``EBS_VOLUME`` . - To retain EBS snapshots, specify ``EBS_SNAPSHOT`` - To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
         :param retention_period: Information about the retention period for which the retention rule is to retain resources.
         :param description: The retention rule description.
         :param exclude_resource_tags: [Region-level retention rules only] Specifies the exclusion tags to use to identify resources that are to be excluded, or ignored, by a Region-level retention rule. Resources that have any of these tags are not retained by the retention rule upon deletion. You can't specify exclusion tags for tag-level retention rules.
@@ -188,6 +188,18 @@ class CfnRule(
             type_hints = typing.get_type_hints(_typecheckingstub__7da27deaca2198440ed34a5309980243bc9e8578e620ae1d2780c39a98dee670)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
+
+    @jsii.member(jsii_name="isCfnRule")
+    @builtins.classmethod
+    def is_cfn_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7930d1844a2fb30bdc1c6f84cf00255e7313e63639ab82659d1bb857ec18294d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRule", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -484,7 +496,7 @@ class CfnRule(
             '''Information about the retention period for which the retention rule is to retain resources.
 
             :param retention_period_unit: The unit of time in which the retention period is measured. Currently, only ``DAYS`` is supported.
-            :param retention_period_value: The period value for which the retention rule is to retain resources. The period is measured using the unit specified for *RetentionPeriodUnit* .
+            :param retention_period_value: The period value for which the retention rule is to retain resources, measured in days. The supported retention periods are: - EBS volumes: 1 - 7 days - EBS snapshots and EBS-backed AMIs: 1 - 365 days
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rbin-rule-retentionperiod.html
             :exampleMetadata: fixture=_generated
@@ -523,9 +535,12 @@ class CfnRule(
 
         @builtins.property
         def retention_period_value(self) -> jsii.Number:
-            '''The period value for which the retention rule is to retain resources.
+            '''The period value for which the retention rule is to retain resources, measured in days.
 
-            The period is measured using the unit specified for *RetentionPeriodUnit* .
+            The supported retention periods are:
+
+            - EBS volumes: 1 - 7 days
+            - EBS snapshots and EBS-backed AMIs: 1 - 365 days
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rbin-rule-retentionperiod.html#cfn-rbin-rule-retentionperiod-retentionperiodvalue
             '''
@@ -563,7 +578,7 @@ class CfnRule(
 
             The unlock delay is the period after which a retention rule can be modified or edited after it has been unlocked by a user with the required permissions. The retention rule can't be modified or deleted during the unlock delay.
 
-            :param unlock_delay_unit: The unit of time in which to measure the unlock delay. Currently, the unlock delay can be measure only in days.
+            :param unlock_delay_unit: The unit of time in which to measure the unlock delay. Currently, the unlock delay can be measured only in days.
             :param unlock_delay_value: The unlock delay period, measured in the unit specified for *UnlockDelayUnit* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rbin-rule-unlockdelay.html
@@ -594,7 +609,7 @@ class CfnRule(
         def unlock_delay_unit(self) -> typing.Optional[builtins.str]:
             '''The unit of time in which to measure the unlock delay.
 
-            Currently, the unlock delay can be measure only in days.
+            Currently, the unlock delay can be measured only in days.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rbin-rule-unlockdelay.html#cfn-rbin-rule-unlockdelay-unlockdelayunit
             '''
@@ -651,7 +666,7 @@ class CfnRuleProps:
     ) -> None:
         '''Properties for defining a ``CfnRule``.
 
-        :param resource_type: The resource type to be retained by the retention rule. Currently, only Amazon EBS snapshots and EBS-backed AMIs are supported. To retain snapshots, specify ``EBS_SNAPSHOT`` . To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
+        :param resource_type: The resource type to be retained by the retention rule. Currently, only EBS volumes, EBS snapshots, and EBS-backed AMIs are supported. - To retain EBS volumes, specify ``EBS_VOLUME`` . - To retain EBS snapshots, specify ``EBS_SNAPSHOT`` - To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
         :param retention_period: Information about the retention period for which the retention rule is to retain resources.
         :param description: The retention rule description.
         :param exclude_resource_tags: [Region-level retention rules only] Specifies the exclusion tags to use to identify resources that are to be excluded, or ignored, by a Region-level retention rule. Resources that have any of these tags are not retained by the retention rule upon deletion. You can't specify exclusion tags for tag-level retention rules.
@@ -728,7 +743,11 @@ class CfnRuleProps:
     def resource_type(self) -> builtins.str:
         '''The resource type to be retained by the retention rule.
 
-        Currently, only Amazon EBS snapshots and EBS-backed AMIs are supported. To retain snapshots, specify ``EBS_SNAPSHOT`` . To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
+        Currently, only EBS volumes, EBS snapshots, and EBS-backed AMIs are supported.
+
+        - To retain EBS volumes, specify ``EBS_VOLUME`` .
+        - To retain EBS snapshots, specify ``EBS_SNAPSHOT``
+        - To retain EBS-backed AMIs, specify ``EC2_IMAGE`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rbin-rule.html#cfn-rbin-rule-resourcetype
         '''
@@ -857,6 +876,12 @@ def _typecheckingstub__38111a34066818ca2f172524180ec7dec02ce564c681ac0c87097b023
 
 def _typecheckingstub__7da27deaca2198440ed34a5309980243bc9e8578e620ae1d2780c39a98dee670(
     resource: _IRuleRef_4e521f27,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7930d1844a2fb30bdc1c6f84cf00255e7313e63639ab82659d1bb857ec18294d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

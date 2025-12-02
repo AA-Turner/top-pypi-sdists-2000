@@ -149,6 +149,18 @@ class CfnAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAlias")
+    @builtins.classmethod
+    def is_cfn_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8bffdec8882dcbb9589356b4df70a53525e7236376153e231147455d4094233e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -403,6 +415,18 @@ class CfnKey(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnKey")
+    @builtins.classmethod
+    def is_cfn_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c53b0abed938b2f60e07fd365caaa972774564f2d923cf9f42805b0705bf2e0c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKey", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1103,6 +1127,12 @@ def _typecheckingstub__03e3543c569149d753dcca4f9aa62f90766372bafcd1f94b89e73d5b4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8bffdec8882dcbb9589356b4df70a53525e7236376153e231147455d4094233e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4ff200923cccd5fdae928ff708195bbced1ef4f7d50f668b5c73f249ed90f28f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1145,6 +1175,12 @@ def _typecheckingstub__eae3f8af01ec3a496044e22e7d1ce2b96cf8f20736ded57ce899a918f
     enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     key_check_value_algorithm: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c53b0abed938b2f60e07fd365caaa972774564f2d923cf9f42805b0705bf2e0c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

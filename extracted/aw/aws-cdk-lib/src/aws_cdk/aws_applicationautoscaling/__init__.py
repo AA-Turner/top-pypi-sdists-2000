@@ -1260,6 +1260,32 @@ class CfnScalableTarget(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForScalableTarget")
+    @builtins.classmethod
+    def arn_for_scalable_target(
+        cls,
+        resource: _IScalableTargetRef_c773595e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db0255693dd929aabeec9ee9d2c152e7917befc129a2c25f56c8c4d2ee8a60b1)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScalableTarget", [resource]))
+
+    @jsii.member(jsii_name="isCfnScalableTarget")
+    @builtins.classmethod
+    def is_cfn_scalable_target(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnScalableTarget.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e571015664cc42cc3829a9f4dcf9489d133c95870228e47fb3a932a2745dc582)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScalableTarget", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2265,6 +2291,18 @@ class CfnScalingPolicy(
             type_hints = typing.get_type_hints(_typecheckingstub__e94aa5b5a8792b0bbd1f7970d19d372f417f892e5b20cfe2e2a93425c72d02bb)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForScalingPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnScalingPolicy")
+    @builtins.classmethod
+    def is_cfn_scaling_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnScalingPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5746b5fb3c76ac04903098ef160cfa565bca560438425fd3cac2470a12c39891)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScalingPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7869,6 +7907,18 @@ def _typecheckingstub__7b7828d7eb81c45c73ed70f9ac7ffe26699d8745e54d9a892440a20af
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__db0255693dd929aabeec9ee9d2c152e7917befc129a2c25f56c8c4d2ee8a60b1(
+    resource: _IScalableTargetRef_c773595e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e571015664cc42cc3829a9f4dcf9489d133c95870228e47fb3a932a2745dc582(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7eab92548702648ed3d9193a8bedd481f01db8b59f68de00b0454143553b1539(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7991,6 +8041,12 @@ def _typecheckingstub__1fdbd49d0d5c8d10cb6dba70c50d20e471988b2d94237a064669be24b
 
 def _typecheckingstub__e94aa5b5a8792b0bbd1f7970d19d372f417f892e5b20cfe2e2a93425c72d02bb(
     resource: _IScalingPolicyRef_50de02c0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5746b5fb3c76ac04903098ef160cfa565bca560438425fd3cac2470a12c39891(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

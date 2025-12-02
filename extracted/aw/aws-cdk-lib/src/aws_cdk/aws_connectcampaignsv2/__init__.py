@@ -342,6 +342,18 @@ class CfnCampaign(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCampaign", [resource]))
 
+    @jsii.member(jsii_name="isCfnCampaign")
+    @builtins.classmethod
+    def is_cfn_campaign(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCampaign.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f5e7fbab4dbaaa56b414f9d8ef055f52f7b21d16d5e38d7ccd0e211a452accc1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCampaign", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3456,6 +3468,12 @@ def _typecheckingstub__228f2b3a0b621ad8a32effe36abeb2d513f50077bd0ad5de7f33f1ea8
 
 def _typecheckingstub__9fc69a65d7e6e3f42c04772f0ea86d7fe04188e3e9db32e64d4478bc1964e332(
     resource: _ICampaignRef_408c1832,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f5e7fbab4dbaaa56b414f9d8ef055f52f7b21d16d5e38d7ccd0e211a452accc1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

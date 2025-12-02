@@ -2207,10 +2207,12 @@ from ..interfaces.aws_ec2 import ISubnetRef as _ISubnetRef_ac31e361
 from ..interfaces.aws_eks import (
     AccessEntryReference as _AccessEntryReference_447195cd,
     AddonReference as _AddonReference_afb1bd13,
+    CapabilityReference as _CapabilityReference_ae98e6d7,
     ClusterReference as _ClusterReference_d6e6b9ff,
     FargateProfileReference as _FargateProfileReference_5fd534f8,
     IAccessEntryRef as _IAccessEntryRef_14bb9c0a,
     IAddonRef as _IAddonRef_fb5de88c,
+    ICapabilityRef as _ICapabilityRef_3aad918f,
     IClusterRef as _IClusterRef_5527f448,
     IFargateProfileRef as _IFargateProfileRef_ebba9623,
     IIdentityProviderConfigRef as _IIdentityProviderConfigRef_0106e882,
@@ -5080,6 +5082,18 @@ class CfnAccessEntry(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessEntry", [resource]))
 
+    @jsii.member(jsii_name="isCfnAccessEntry")
+    @builtins.classmethod
+    def is_cfn_access_entry(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessEntry.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2201236df56666f37cccad3b8909c61b143048a6e317eaa829b19a9287e15257)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessEntry", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5688,6 +5702,18 @@ class CfnAddon(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAddon", [resource]))
 
+    @jsii.member(jsii_name="isCfnAddon")
+    @builtins.classmethod
+    def is_cfn_addon(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAddon.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__299947a1c393a4144b2d1fdb8399e56792820013583df0c9e76d8d6aa861fff5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAddon", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6259,6 +6285,1081 @@ class CfnAddonProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _ICapabilityRef_3aad918f, _ITaggableV2_4e6798f8)
+class CfnCapability(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_eks.CfnCapability",
+):
+    '''Resource Type definition for EKS Capability.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html
+    :cloudformationResource: AWS::EKS::Capability
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_eks as eks
+        
+        cfn_capability = eks.CfnCapability(self, "MyCfnCapability",
+            capability_name="capabilityName",
+            cluster_name="clusterName",
+            delete_propagation_policy="deletePropagationPolicy",
+            role_arn="roleArn",
+            type="type",
+        
+            # the properties below are optional
+            configuration=eks.CfnCapability.CapabilityConfigurationProperty(
+                argo_cd=eks.CfnCapability.ArgoCdProperty(
+                    aws_idc=eks.CfnCapability.AwsIdcProperty(
+                        idc_instance_arn="idcInstanceArn",
+        
+                        # the properties below are optional
+                        idc_managed_application_arn="idcManagedApplicationArn",
+                        idc_region="idcRegion"
+                    ),
+        
+                    # the properties below are optional
+                    namespace="namespace",
+                    network_access=eks.CfnCapability.NetworkAccessProperty(
+                        vpce_ids=["vpceIds"]
+                    ),
+                    rbac_role_mappings=[eks.CfnCapability.ArgoCdRoleMappingProperty(
+                        identities=[eks.CfnCapability.SsoIdentityProperty(
+                            id="id",
+                            type="type"
+                        )],
+                        role="role"
+                    )],
+                    server_url="serverUrl"
+                )
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        capability_name: builtins.str,
+        cluster_name: builtins.str,
+        delete_propagation_policy: builtins.str,
+        role_arn: builtins.str,
+        type: builtins.str,
+        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.CapabilityConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::EKS::Capability``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param capability_name: A unique name for the capability. The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
+        :param cluster_name: The name of the EKS cluster where you want to create the capability.
+        :param delete_propagation_policy: Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted. Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services. This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
+        :param type: The type of capability to create. Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
+        :param configuration: Configuration settings for a capability. The structure of this object varies depending on the capability type.
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f94b9433f5976d86701a1661bac684fa50aa8c936a197ecda38b131deb72e2c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnCapabilityProps(
+            capability_name=capability_name,
+            cluster_name=cluster_name,
+            delete_propagation_policy=delete_propagation_policy,
+            role_arn=role_arn,
+            type=type,
+            configuration=configuration,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCapability")
+    @builtins.classmethod
+    def arn_for_capability(cls, resource: _ICapabilityRef_3aad918f) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__aba1bbc04508c74d9f8497c23c3d42eced87971133e733cfd6b31e2fc595db01)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapability", [resource]))
+
+    @jsii.member(jsii_name="isCfnCapability")
+    @builtins.classmethod
+    def is_cfn_capability(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCapability.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc7f348430bfc0c3f4efa23cc946a4aa40625de9dd7bd02fa905148aa9091c22)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapability", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__30796b603d235aec87f2847222cca2ea8ec0a5feb55fe74d7572f02d6484f846)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc4e0445478c910b2ff65d611af8181abbf0fb5bf11c352fe799fe2788bf0cc5)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the capability.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrConfigurationArgoCdAwsIdcIdcManagedApplicationArn")
+    def attr_configuration_argo_cd_aws_idc_idc_managed_application_arn(
+        self,
+    ) -> builtins.str:
+        '''The ARN of the managed application created in IAM Identity Center for this Argo CD capability.
+
+        This application is automatically created and managed by EKS.
+
+        :cloudformationAttribute: Configuration.ArgoCd.AwsIdc.IdcManagedApplicationArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrConfigurationArgoCdAwsIdcIdcManagedApplicationArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrConfigurationArgoCdServerUrl")
+    def attr_configuration_argo_cd_server_url(self) -> builtins.str:
+        '''The URL of the Argo CD server.
+
+        Use this URL to access the Argo CD web interface and API.
+
+        :cloudformationAttribute: Configuration.ArgoCd.ServerUrl
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrConfigurationArgoCdServerUrl"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The Unix epoch timestamp in seconds for when the capability was created.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrModifiedAt")
+    def attr_modified_at(self) -> builtins.str:
+        '''The Unix epoch timestamp in seconds for when the capability was last modified.
+
+        :cloudformationAttribute: ModifiedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrModifiedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''The current status of the capability.
+
+        Valid values include: CREATING (the capability is being created), ACTIVE (the capability is running and available), UPDATING (the capability is being updated), DELETING (the capability is being deleted), CREATE_FAILED (the capability creation failed), UPDATE_FAILED (the capability update failed), or DELETE_FAILED (the capability deletion failed).
+
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrVersion")
+    def attr_version(self) -> builtins.str:
+        '''The version of the capability software that is currently running.
+
+        :cloudformationAttribute: Version
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capabilityRef")
+    def capability_ref(self) -> _CapabilityReference_ae98e6d7:
+        '''A reference to a Capability resource.'''
+        return typing.cast(_CapabilityReference_ae98e6d7, jsii.get(self, "capabilityRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capabilityName")
+    def capability_name(self) -> builtins.str:
+        '''A unique name for the capability.'''
+        return typing.cast(builtins.str, jsii.get(self, "capabilityName"))
+
+    @capability_name.setter
+    def capability_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c046434d1f0003cf6c193f33ec344a15fd8a93ed983e22e037417c0d3f3d0b53)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "capabilityName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="clusterName")
+    def cluster_name(self) -> builtins.str:
+        '''The name of the EKS cluster where you want to create the capability.'''
+        return typing.cast(builtins.str, jsii.get(self, "clusterName"))
+
+    @cluster_name.setter
+    def cluster_name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8944e2621bc212176b7a03974f2d283e76e6f44654d3ede504af18dafbdbd326)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "clusterName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="deletePropagationPolicy")
+    def delete_propagation_policy(self) -> builtins.str:
+        '''Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted.'''
+        return typing.cast(builtins.str, jsii.get(self, "deletePropagationPolicy"))
+
+    @delete_propagation_policy.setter
+    def delete_propagation_policy(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e41af4f092d594380ebcadf382eed9967d6d10801fdd36af1a96d2c638ca425b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "deletePropagationPolicy", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="roleArn")
+    def role_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services.'''
+        return typing.cast(builtins.str, jsii.get(self, "roleArn"))
+
+    @role_arn.setter
+    def role_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__112e9832a83c03604514a35b9f36a7e1f319893f8e9a5bb9638ec97757d22f97)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "roleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="type")
+    def type(self) -> builtins.str:
+        '''The type of capability to create.'''
+        return typing.cast(builtins.str, jsii.get(self, "type"))
+
+    @type.setter
+    def type(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a300d45d5039bfdf19a45d25811fbb6ad49d39c4bca2ceae8adb816ac7c3f471)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "type", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]]:
+        '''Configuration settings for a capability.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.CapabilityConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__292eb262615ca3e11e4723da01bedda397199714a5de67b4c36de40819e1b905)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb37ce6f0e5ae3f7fc9be815c224238918f0f32968ca83cdb3707245d23f81d8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.ArgoCdProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "aws_idc": "awsIdc",
+            "namespace": "namespace",
+            "network_access": "networkAccess",
+            "rbac_role_mappings": "rbacRoleMappings",
+            "server_url": "serverUrl",
+        },
+    )
+    class ArgoCdProperty:
+        def __init__(
+            self,
+            *,
+            aws_idc: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.AwsIdcProperty", typing.Dict[builtins.str, typing.Any]]],
+            namespace: typing.Optional[builtins.str] = None,
+            network_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.NetworkAccessProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            rbac_role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.ArgoCdRoleMappingProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+            server_url: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration settings for an Argo CD capability.
+
+            This includes the Kubernetes namespace, IAM Identity Center integration, RBAC role mappings, and network access configuration.
+
+            :param aws_idc: Configuration for integrating Argo CD with IAM Identity Center. This allows you to use your organization's identity provider for authentication to Argo CD.
+            :param namespace: The Kubernetes namespace where Argo CD resources will be created. If not specified, the default namespace is used.
+            :param network_access: Configuration for network access to the Argo CD capability's managed API server endpoint. By default, the Argo CD server is accessible via a public endpoint. You can optionally specify one or more VPC endpoint IDs to enable private connectivity from your VPCs.
+            :param rbac_role_mappings: A list of role mappings that define which IAM Identity Center users or groups have which Argo CD roles. Each mapping associates an Argo CD role (ADMIN, EDITOR, or VIEWER) with one or more IAM Identity Center identities.
+            :param server_url: The URL of the Argo CD server. Use this URL to access the Argo CD web interface and API.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                argo_cd_property = eks.CfnCapability.ArgoCdProperty(
+                    aws_idc=eks.CfnCapability.AwsIdcProperty(
+                        idc_instance_arn="idcInstanceArn",
+                
+                        # the properties below are optional
+                        idc_managed_application_arn="idcManagedApplicationArn",
+                        idc_region="idcRegion"
+                    ),
+                
+                    # the properties below are optional
+                    namespace="namespace",
+                    network_access=eks.CfnCapability.NetworkAccessProperty(
+                        vpce_ids=["vpceIds"]
+                    ),
+                    rbac_role_mappings=[eks.CfnCapability.ArgoCdRoleMappingProperty(
+                        identities=[eks.CfnCapability.SsoIdentityProperty(
+                            id="id",
+                            type="type"
+                        )],
+                        role="role"
+                    )],
+                    server_url="serverUrl"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4dd514956ba9407bf8fbdec188d0163809209d4f0283595fe34f7c33f29754a8)
+                check_type(argname="argument aws_idc", value=aws_idc, expected_type=type_hints["aws_idc"])
+                check_type(argname="argument namespace", value=namespace, expected_type=type_hints["namespace"])
+                check_type(argname="argument network_access", value=network_access, expected_type=type_hints["network_access"])
+                check_type(argname="argument rbac_role_mappings", value=rbac_role_mappings, expected_type=type_hints["rbac_role_mappings"])
+                check_type(argname="argument server_url", value=server_url, expected_type=type_hints["server_url"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "aws_idc": aws_idc,
+            }
+            if namespace is not None:
+                self._values["namespace"] = namespace
+            if network_access is not None:
+                self._values["network_access"] = network_access
+            if rbac_role_mappings is not None:
+                self._values["rbac_role_mappings"] = rbac_role_mappings
+            if server_url is not None:
+                self._values["server_url"] = server_url
+
+        @builtins.property
+        def aws_idc(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnCapability.AwsIdcProperty"]:
+            '''Configuration for integrating Argo CD with IAM Identity Center.
+
+            This allows you to use your organization's identity provider for authentication to Argo CD.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-awsidc
+            '''
+            result = self._values.get("aws_idc")
+            assert result is not None, "Required property 'aws_idc' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapability.AwsIdcProperty"], result)
+
+        @builtins.property
+        def namespace(self) -> typing.Optional[builtins.str]:
+            '''The Kubernetes namespace where Argo CD resources will be created.
+
+            If not specified, the default namespace is used.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-namespace
+            '''
+            result = self._values.get("namespace")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def network_access(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.NetworkAccessProperty"]]:
+            '''Configuration for network access to the Argo CD capability's managed API server endpoint.
+
+            By default, the Argo CD server is accessible via a public endpoint. You can optionally specify one or more VPC endpoint IDs to enable private connectivity from your VPCs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-networkaccess
+            '''
+            result = self._values.get("network_access")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.NetworkAccessProperty"]], result)
+
+        @builtins.property
+        def rbac_role_mappings(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdRoleMappingProperty"]]]]:
+            '''A list of role mappings that define which IAM Identity Center users or groups have which Argo CD roles.
+
+            Each mapping associates an Argo CD role (ADMIN, EDITOR, or VIEWER) with one or more IAM Identity Center identities.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-rbacrolemappings
+            '''
+            result = self._values.get("rbac_role_mappings")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdRoleMappingProperty"]]]], result)
+
+        @builtins.property
+        def server_url(self) -> typing.Optional[builtins.str]:
+            '''The URL of the Argo CD server.
+
+            Use this URL to access the Argo CD web interface and API.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocd.html#cfn-eks-capability-argocd-serverurl
+            '''
+            result = self._values.get("server_url")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ArgoCdProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.ArgoCdRoleMappingProperty",
+        jsii_struct_bases=[],
+        name_mapping={"identities": "identities", "role": "role"},
+    )
+    class ArgoCdRoleMappingProperty:
+        def __init__(
+            self,
+            *,
+            identities: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.SsoIdentityProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            role: builtins.str,
+        ) -> None:
+            '''A mapping between an Argo CD role and IAM Identity Center identities.
+
+            This defines which users or groups have specific permissions in Argo CD.
+
+            :param identities: A list of IAM Identity Center identities (users or groups) that should be assigned this Argo CD role.
+            :param role: The Argo CD role to assign. Valid values are: ADMIN (full administrative access to Argo CD), EDITOR (edit access to Argo CD resources), or VIEWER (read-only access to Argo CD resources).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                argo_cd_role_mapping_property = eks.CfnCapability.ArgoCdRoleMappingProperty(
+                    identities=[eks.CfnCapability.SsoIdentityProperty(
+                        id="id",
+                        type="type"
+                    )],
+                    role="role"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__239e5f8be08485383c07d07cb8cedf8fa6154164eab4962dd489aadba9d403c8)
+                check_type(argname="argument identities", value=identities, expected_type=type_hints["identities"])
+                check_type(argname="argument role", value=role, expected_type=type_hints["role"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "identities": identities,
+                "role": role,
+            }
+
+        @builtins.property
+        def identities(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.SsoIdentityProperty"]]]:
+            '''A list of IAM Identity Center identities (users or groups) that should be assigned this Argo CD role.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html#cfn-eks-capability-argocdrolemapping-identities
+            '''
+            result = self._values.get("identities")
+            assert result is not None, "Required property 'identities' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapability.SsoIdentityProperty"]]], result)
+
+        @builtins.property
+        def role(self) -> builtins.str:
+            '''The Argo CD role to assign.
+
+            Valid values are: ADMIN (full administrative access to Argo CD), EDITOR (edit access to Argo CD resources), or VIEWER (read-only access to Argo CD resources).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-argocdrolemapping.html#cfn-eks-capability-argocdrolemapping-role
+            '''
+            result = self._values.get("role")
+            assert result is not None, "Required property 'role' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ArgoCdRoleMappingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.AwsIdcProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "idc_instance_arn": "idcInstanceArn",
+            "idc_managed_application_arn": "idcManagedApplicationArn",
+            "idc_region": "idcRegion",
+        },
+    )
+    class AwsIdcProperty:
+        def __init__(
+            self,
+            *,
+            idc_instance_arn: builtins.str,
+            idc_managed_application_arn: typing.Optional[builtins.str] = None,
+            idc_region: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Configuration for integrating Argo CD with IAM Identity Center.
+
+            This allows you to use your organization's identity provider for authentication to Argo CD.
+
+            :param idc_instance_arn: The ARN of the IAM Identity Center instance to use for authentication.
+            :param idc_managed_application_arn: The ARN of the managed application created in IAM Identity Center for this Argo CD capability. This application is automatically created and managed by EKS.
+            :param idc_region: The Region where your IAM Identity Center instance is located.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-awsidc.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                aws_idc_property = eks.CfnCapability.AwsIdcProperty(
+                    idc_instance_arn="idcInstanceArn",
+                
+                    # the properties below are optional
+                    idc_managed_application_arn="idcManagedApplicationArn",
+                    idc_region="idcRegion"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__026a54a07cf582ba5a94a8e2596033884e1eef3478ff12b2e65ffd1c33c46148)
+                check_type(argname="argument idc_instance_arn", value=idc_instance_arn, expected_type=type_hints["idc_instance_arn"])
+                check_type(argname="argument idc_managed_application_arn", value=idc_managed_application_arn, expected_type=type_hints["idc_managed_application_arn"])
+                check_type(argname="argument idc_region", value=idc_region, expected_type=type_hints["idc_region"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "idc_instance_arn": idc_instance_arn,
+            }
+            if idc_managed_application_arn is not None:
+                self._values["idc_managed_application_arn"] = idc_managed_application_arn
+            if idc_region is not None:
+                self._values["idc_region"] = idc_region
+
+        @builtins.property
+        def idc_instance_arn(self) -> builtins.str:
+            '''The ARN of the IAM Identity Center instance to use for authentication.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-awsidc.html#cfn-eks-capability-awsidc-idcinstancearn
+            '''
+            result = self._values.get("idc_instance_arn")
+            assert result is not None, "Required property 'idc_instance_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def idc_managed_application_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the managed application created in IAM Identity Center for this Argo CD capability.
+
+            This application is automatically created and managed by EKS.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-awsidc.html#cfn-eks-capability-awsidc-idcmanagedapplicationarn
+            '''
+            result = self._values.get("idc_managed_application_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def idc_region(self) -> typing.Optional[builtins.str]:
+            '''The Region where your IAM Identity Center instance is located.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-awsidc.html#cfn-eks-capability-awsidc-idcregion
+            '''
+            result = self._values.get("idc_region")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AwsIdcProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.CapabilityConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"argo_cd": "argoCd"},
+    )
+    class CapabilityConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            argo_cd: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapability.ArgoCdProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Configuration settings for a capability.
+
+            The structure of this object varies depending on the capability type.
+
+            :param argo_cd: Configuration settings for an Argo CD capability. This includes the Kubernetes namespace, IAM Identity Center integration, RBAC role mappings, and network access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-capabilityconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                capability_configuration_property = eks.CfnCapability.CapabilityConfigurationProperty(
+                    argo_cd=eks.CfnCapability.ArgoCdProperty(
+                        aws_idc=eks.CfnCapability.AwsIdcProperty(
+                            idc_instance_arn="idcInstanceArn",
+                
+                            # the properties below are optional
+                            idc_managed_application_arn="idcManagedApplicationArn",
+                            idc_region="idcRegion"
+                        ),
+                
+                        # the properties below are optional
+                        namespace="namespace",
+                        network_access=eks.CfnCapability.NetworkAccessProperty(
+                            vpce_ids=["vpceIds"]
+                        ),
+                        rbac_role_mappings=[eks.CfnCapability.ArgoCdRoleMappingProperty(
+                            identities=[eks.CfnCapability.SsoIdentityProperty(
+                                id="id",
+                                type="type"
+                            )],
+                            role="role"
+                        )],
+                        server_url="serverUrl"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8d38a3a7c2404193e0d7b39f9c2fc80a04e6cf17decf02ceb0696aa9ebf53d95)
+                check_type(argname="argument argo_cd", value=argo_cd, expected_type=type_hints["argo_cd"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if argo_cd is not None:
+                self._values["argo_cd"] = argo_cd
+
+        @builtins.property
+        def argo_cd(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdProperty"]]:
+            '''Configuration settings for an Argo CD capability.
+
+            This includes the Kubernetes namespace, IAM Identity Center integration, RBAC role mappings, and network access configuration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-capabilityconfiguration.html#cfn-eks-capability-capabilityconfiguration-argocd
+            '''
+            result = self._values.get("argo_cd")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapability.ArgoCdProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapabilityConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.NetworkAccessProperty",
+        jsii_struct_bases=[],
+        name_mapping={"vpce_ids": "vpceIds"},
+    )
+    class NetworkAccessProperty:
+        def __init__(
+            self,
+            *,
+            vpce_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''Configuration for network access to the Argo CD capability's managed API server endpoint.
+
+            By default, the Argo CD server is accessible via a public endpoint. You can optionally specify one or more VPC endpoint IDs to enable private connectivity from your VPCs.
+
+            :param vpce_ids: A list of VPC endpoint IDs to associate with the managed Argo CD API server endpoint. Each VPC endpoint provides private connectivity from a specific VPC to the Argo CD server. You can specify multiple VPC endpoint IDs to enable access from multiple VPCs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-networkaccess.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                network_access_property = eks.CfnCapability.NetworkAccessProperty(
+                    vpce_ids=["vpceIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__783131ab42be20f92bd1a98ffbc74d7fbc0dd88019a47c2c068323d05530d13a)
+                check_type(argname="argument vpce_ids", value=vpce_ids, expected_type=type_hints["vpce_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if vpce_ids is not None:
+                self._values["vpce_ids"] = vpce_ids
+
+        @builtins.property
+        def vpce_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of VPC endpoint IDs to associate with the managed Argo CD API server endpoint.
+
+            Each VPC endpoint provides private connectivity from a specific VPC to the Argo CD server. You can specify multiple VPC endpoint IDs to enable access from multiple VPCs.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-networkaccess.html#cfn-eks-capability-networkaccess-vpceids
+            '''
+            result = self._values.get("vpce_ids")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "NetworkAccessProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_eks.CfnCapability.SsoIdentityProperty",
+        jsii_struct_bases=[],
+        name_mapping={"id": "id", "type": "type"},
+    )
+    class SsoIdentityProperty:
+        def __init__(self, *, id: builtins.str, type: builtins.str) -> None:
+            '''An IAM Identity Center identity (user or group) that can be assigned permissions in a capability.
+
+            :param id: The unique identifier of the IAM Identity Center user or group.
+            :param type: The type of identity. Valid values are SSO_USER or SSO_GROUP.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_eks as eks
+                
+                sso_identity_property = eks.CfnCapability.SsoIdentityProperty(
+                    id="id",
+                    type="type"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b45dcd434a756ea5d133bd9a7a87466bb2642a36b51ba8ddc2d6bd8a4ba73fbc)
+                check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "id": id,
+                "type": type,
+            }
+
+        @builtins.property
+        def id(self) -> builtins.str:
+            '''The unique identifier of the IAM Identity Center user or group.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html#cfn-eks-capability-ssoidentity-id
+            '''
+            result = self._values.get("id")
+            assert result is not None, "Required property 'id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The type of identity.
+
+            Valid values are SSO_USER or SSO_GROUP.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-capability-ssoidentity.html#cfn-eks-capability-ssoidentity-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "SsoIdentityProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_eks.CfnCapabilityProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "capability_name": "capabilityName",
+        "cluster_name": "clusterName",
+        "delete_propagation_policy": "deletePropagationPolicy",
+        "role_arn": "roleArn",
+        "type": "type",
+        "configuration": "configuration",
+        "tags": "tags",
+    },
+)
+class CfnCapabilityProps:
+    def __init__(
+        self,
+        *,
+        capability_name: builtins.str,
+        cluster_name: builtins.str,
+        delete_propagation_policy: builtins.str,
+        role_arn: builtins.str,
+        type: builtins.str,
+        configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.CapabilityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnCapability``.
+
+        :param capability_name: A unique name for the capability. The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
+        :param cluster_name: The name of the EKS cluster where you want to create the capability.
+        :param delete_propagation_policy: Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted. Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
+        :param role_arn: The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services. This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
+        :param type: The type of capability to create. Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
+        :param configuration: Configuration settings for a capability. The structure of this object varies depending on the capability type.
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_eks as eks
+            
+            cfn_capability_props = eks.CfnCapabilityProps(
+                capability_name="capabilityName",
+                cluster_name="clusterName",
+                delete_propagation_policy="deletePropagationPolicy",
+                role_arn="roleArn",
+                type="type",
+            
+                # the properties below are optional
+                configuration=eks.CfnCapability.CapabilityConfigurationProperty(
+                    argo_cd=eks.CfnCapability.ArgoCdProperty(
+                        aws_idc=eks.CfnCapability.AwsIdcProperty(
+                            idc_instance_arn="idcInstanceArn",
+            
+                            # the properties below are optional
+                            idc_managed_application_arn="idcManagedApplicationArn",
+                            idc_region="idcRegion"
+                        ),
+            
+                        # the properties below are optional
+                        namespace="namespace",
+                        network_access=eks.CfnCapability.NetworkAccessProperty(
+                            vpce_ids=["vpceIds"]
+                        ),
+                        rbac_role_mappings=[eks.CfnCapability.ArgoCdRoleMappingProperty(
+                            identities=[eks.CfnCapability.SsoIdentityProperty(
+                                id="id",
+                                type="type"
+                            )],
+                            role="role"
+                        )],
+                        server_url="serverUrl"
+                    )
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1692badb0a867b36af4f94f4857570684acb492cb6cb4bafa2279c6453c9ee1d)
+            check_type(argname="argument capability_name", value=capability_name, expected_type=type_hints["capability_name"])
+            check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
+            check_type(argname="argument delete_propagation_policy", value=delete_propagation_policy, expected_type=type_hints["delete_propagation_policy"])
+            check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+            check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "capability_name": capability_name,
+            "cluster_name": cluster_name,
+            "delete_propagation_policy": delete_propagation_policy,
+            "role_arn": role_arn,
+            "type": type,
+        }
+        if configuration is not None:
+            self._values["configuration"] = configuration
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def capability_name(self) -> builtins.str:
+        '''A unique name for the capability.
+
+        The name must be unique within your cluster and can contain alphanumeric characters, hyphens, and underscores.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-capabilityname
+        '''
+        result = self._values.get("capability_name")
+        assert result is not None, "Required property 'capability_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def cluster_name(self) -> builtins.str:
+        '''The name of the EKS cluster where you want to create the capability.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-clustername
+        '''
+        result = self._values.get("cluster_name")
+        assert result is not None, "Required property 'cluster_name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def delete_propagation_policy(self) -> builtins.str:
+        '''Specifies how Kubernetes resources managed by the capability should be handled when the capability is deleted.
+
+        Currently, the only supported value is RETAIN which retains all Kubernetes resources managed by the capability when the capability is deleted.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-deletepropagationpolicy
+        '''
+        result = self._values.get("delete_propagation_policy")
+        assert result is not None, "Required property 'delete_propagation_policy' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def role_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the IAM role that the capability uses to interact with AWS services.
+
+        This role must have a trust policy that allows the EKS service principal to assume it, and it must have the necessary permissions for the capability type you're creating.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-rolearn
+        '''
+        result = self._values.get("role_arn")
+        assert result is not None, "Required property 'role_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def type(self) -> builtins.str:
+        '''The type of capability to create.
+
+        Valid values are: ACK (AWS Controllers for Kubernetes, which lets you manage AWS resources directly from Kubernetes), ARGOCD (Argo CD for GitOps-based continuous delivery), or KRO (Kube Resource Orchestrator for composing and managing custom Kubernetes resources).
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-type
+        '''
+        result = self._values.get("type")
+        assert result is not None, "Required property 'type' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapability.CapabilityConfigurationProperty]]:
+        '''Configuration settings for a capability.
+
+        The structure of this object varies depending on the capability type.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-configuration
+        '''
+        result = self._values.get("configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapability.CapabilityConfigurationProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-capability.html#cfn-eks-capability-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnCapabilityProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IClusterRef_5527f448, _ITaggable_36806126)
 class CfnCluster(
     _CfnResource_9df397a6,
@@ -6414,7 +7515,7 @@ class CfnCluster(
         :param access_config: The access configuration for the cluster.
         :param bootstrap_self_managed_addons: If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed. The default networking add-ons include ``vpc-cni`` , ``coredns`` , and ``kube-proxy`` . Use this option when you plan to install third-party alternative add-ons or self-manage the default networking add-ons.
         :param compute_config: Indicates the current configuration of the compute capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account. For more information, see EKS Auto Mode compute capability in the *Amazon EKS User Guide* .
-        :param control_plane_scaling_config: Configuration for provisioned control plane scaling.
+        :param control_plane_scaling_config: The control plane scaling tier configuration. For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
         :param deletion_protection: The current deletion protection setting for the cluster. When ``true`` , deletion protection is enabled and the cluster cannot be deleted until protection is disabled. When ``false`` , the cluster can be deleted normally. This setting only applies to clusters in an active state.
         :param encryption_config: The encryption configuration for the cluster.
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
@@ -6509,6 +7610,18 @@ class CfnCluster(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
         return typing.cast(_IClusterRef_5527f448, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
+
+    @jsii.member(jsii_name="isCfnCluster")
+    @builtins.classmethod
+    def is_cfn_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d4b6bf17e0698431e6e661c951da5321c0084fa51b07e75b4f521c5762cab23b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6727,7 +7840,7 @@ class CfnCluster(
     def control_plane_scaling_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]]:
-        '''Configuration for provisioned control plane scaling.'''
+        '''The control plane scaling tier configuration.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.ControlPlaneScalingConfigProperty"]], jsii.get(self, "controlPlaneScalingConfig"))
 
     @control_plane_scaling_config.setter
@@ -6976,7 +8089,7 @@ class CfnCluster(
         ) -> None:
             '''The access configuration for the cluster.
 
-            :param authentication_mode: The desired authentication mode for the cluster. If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the the console , the default value is ``API_AND_CONFIG_MAP`` .
+            :param authentication_mode: The desired authentication mode for the cluster. If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the AWS Management Console , the default value is ``API_AND_CONFIG_MAP`` .
             :param bootstrap_cluster_creator_admin_permissions: Specifies whether or not the cluster creator IAM principal was set as a cluster admin access entry during cluster creation time. The default value is ``true`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-accessconfig.html
@@ -7007,7 +8120,7 @@ class CfnCluster(
         def authentication_mode(self) -> typing.Optional[builtins.str]:
             '''The desired authentication mode for the cluster.
 
-            If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the the console , the default value is ``API_AND_CONFIG_MAP`` .
+            If you create a cluster by using the EKS API, AWS SDKs, or AWS CloudFormation , the default is ``CONFIG_MAP`` . If you create the cluster by using the AWS Management Console , the default value is ``API_AND_CONFIG_MAP`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-accessconfig.html#cfn-eks-cluster-accessconfig-authenticationmode
             '''
@@ -7327,9 +8440,11 @@ class CfnCluster(
     )
     class ControlPlaneScalingConfigProperty:
         def __init__(self, *, tier: typing.Optional[builtins.str] = None) -> None:
-            '''Configuration for provisioned control plane scaling.
+            '''The control plane scaling tier configuration.
 
-            :param tier: The scaling tier for the provisioned control plane.
+            For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
+
+            :param tier: The control plane scaling tier configuration. Available options are ``standard`` , ``tier-xl`` , ``tier-2xl`` , or ``tier-4xl`` . For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-controlplanescalingconfig.html
             :exampleMetadata: fixture=_generated
@@ -7353,7 +8468,9 @@ class CfnCluster(
 
         @builtins.property
         def tier(self) -> typing.Optional[builtins.str]:
-            '''The scaling tier for the provisioned control plane.
+            '''The control plane scaling tier configuration.
+
+            Available options are ``standard`` , ``tier-xl`` , ``tier-2xl`` , or ``tier-4xl`` . For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-eks-cluster-controlplanescalingconfig.html#cfn-eks-cluster-controlplanescalingconfig-tier
             '''
@@ -8553,7 +9670,7 @@ class CfnClusterProps:
         :param access_config: The access configuration for the cluster.
         :param bootstrap_self_managed_addons: If you set this value to ``False`` when creating a cluster, the default networking add-ons will not be installed. The default networking add-ons include ``vpc-cni`` , ``coredns`` , and ``kube-proxy`` . Use this option when you plan to install third-party alternative add-ons or self-manage the default networking add-ons.
         :param compute_config: Indicates the current configuration of the compute capability on your EKS Auto Mode cluster. For example, if the capability is enabled or disabled. If the compute capability is enabled, EKS Auto Mode will create and delete EC2 Managed Instances in your AWS account. For more information, see EKS Auto Mode compute capability in the *Amazon EKS User Guide* .
-        :param control_plane_scaling_config: Configuration for provisioned control plane scaling.
+        :param control_plane_scaling_config: The control plane scaling tier configuration. For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
         :param deletion_protection: The current deletion protection setting for the cluster. When ``true`` , deletion protection is enabled and the cluster cannot be deleted until protection is disabled. When ``false`` , the cluster can be deleted normally. This setting only applies to clusters in an active state.
         :param encryption_config: The encryption configuration for the cluster.
         :param force: Set this value to ``true`` to override upgrade-blocking readiness checks when updating a cluster. Default: - false
@@ -8793,7 +9910,9 @@ class CfnClusterProps:
     def control_plane_scaling_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCluster.ControlPlaneScalingConfigProperty]]:
-        '''Configuration for provisioned control plane scaling.
+        '''The control plane scaling tier configuration.
+
+        For more information, see EKS Provisioned Control Plane in the Amazon EKS User Guide.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-eks-cluster.html#cfn-eks-cluster-controlplanescalingconfig
         '''
@@ -9077,6 +10196,18 @@ class CfnFargateProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__c62d4336aef51ec7813a4b4af67342c66c46cfd302381a17f490f8f40b58381d)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFargateProfile", [resource]))
+
+    @jsii.member(jsii_name="isCfnFargateProfile")
+    @builtins.classmethod
+    def is_cfn_fargate_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFargateProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__49aabfe417d8714ce9bce65103d511007ad5988cbbfbf46c3300453e749221b8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFargateProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9621,6 +10752,18 @@ class CfnIdentityProviderConfig(
             type_hints = typing.get_type_hints(_typecheckingstub__34801166e9e75cba4add5f2a32bddc7f06c49030536f66b194b2011569cce956)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIdentityProviderConfig", [resource]))
+
+    @jsii.member(jsii_name="isCfnIdentityProviderConfig")
+    @builtins.classmethod
+    def is_cfn_identity_provider_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIdentityProviderConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__63688c5bc69f59a9b9895c44973d0f56a661ee32b127b4cd646df28d1d1e93ec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIdentityProviderConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10312,6 +11455,18 @@ class CfnNodegroup(
             type_hints = typing.get_type_hints(_typecheckingstub__19982cfc58b84a650ce9bb68eeaf60912fd6067c7ebca829e4893f1fce3c2d8f)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForNodegroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnNodegroup")
+    @builtins.classmethod
+    def is_cfn_nodegroup(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnNodegroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6dbc6c294d6b655557cc920b959180ab8a60e0aaa527dac44ade5dafb058e81e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnNodegroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11928,6 +13083,18 @@ class CfnPodIdentityAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPodIdentityAssociation")
+    @builtins.classmethod
+    def is_cfn_pod_identity_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPodIdentityAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c9bf1ced5b57cfc982adc7d8da812c43876aaa66079cbd6632adc50e7e001b47)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPodIdentityAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -22618,6 +23785,8 @@ __all__ = [
     "CfnAccessEntryProps",
     "CfnAddon",
     "CfnAddonProps",
+    "CfnCapability",
+    "CfnCapabilityProps",
     "CfnCluster",
     "CfnClusterProps",
     "CfnFargateProfile",
@@ -22967,6 +24136,12 @@ def _typecheckingstub__8fc076ea75df70bc18e6646b0b0dfc56f172dae5807fc58bd261a16c6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2201236df56666f37cccad3b8909c61b143048a6e317eaa829b19a9287e15257(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0d2a19d3fcdc61c683ec8a1d3fbbec66a1f1ec722b4eb7cc1ecb1b5779af27e5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23074,6 +24249,12 @@ def _typecheckingstub__51a5406bc62f26fc219359867db20bf590d4793887770ba7e4d71bd64
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__299947a1c393a4144b2d1fdb8399e56792820013583df0c9e76d8d6aa861fff5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fb634c71637a3029d784eb1cc23e12801a6d069d381448751935635b986d50bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23177,6 +24358,150 @@ def _typecheckingstub__484b2779e40e4780cb0940ac7bc9daaf91fa04347613d732138d3be3d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1f94b9433f5976d86701a1661bac684fa50aa8c936a197ecda38b131deb72e2c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    capability_name: builtins.str,
+    cluster_name: builtins.str,
+    delete_propagation_policy: builtins.str,
+    role_arn: builtins.str,
+    type: builtins.str,
+    configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.CapabilityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aba1bbc04508c74d9f8497c23c3d42eced87971133e733cfd6b31e2fc595db01(
+    resource: _ICapabilityRef_3aad918f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cc7f348430bfc0c3f4efa23cc946a4aa40625de9dd7bd02fa905148aa9091c22(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__30796b603d235aec87f2847222cca2ea8ec0a5feb55fe74d7572f02d6484f846(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc4e0445478c910b2ff65d611af8181abbf0fb5bf11c352fe799fe2788bf0cc5(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c046434d1f0003cf6c193f33ec344a15fd8a93ed983e22e037417c0d3f3d0b53(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8944e2621bc212176b7a03974f2d283e76e6f44654d3ede504af18dafbdbd326(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e41af4f092d594380ebcadf382eed9967d6d10801fdd36af1a96d2c638ca425b(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__112e9832a83c03604514a35b9f36a7e1f319893f8e9a5bb9638ec97757d22f97(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a300d45d5039bfdf19a45d25811fbb6ad49d39c4bca2ceae8adb816ac7c3f471(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__292eb262615ca3e11e4723da01bedda397199714a5de67b4c36de40819e1b905(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapability.CapabilityConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb37ce6f0e5ae3f7fc9be815c224238918f0f32968ca83cdb3707245d23f81d8(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4dd514956ba9407bf8fbdec188d0163809209d4f0283595fe34f7c33f29754a8(
+    *,
+    aws_idc: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.AwsIdcProperty, typing.Dict[builtins.str, typing.Any]]],
+    namespace: typing.Optional[builtins.str] = None,
+    network_access: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.NetworkAccessProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    rbac_role_mappings: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.ArgoCdRoleMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    server_url: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__239e5f8be08485383c07d07cb8cedf8fa6154164eab4962dd489aadba9d403c8(
+    *,
+    identities: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.SsoIdentityProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    role: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__026a54a07cf582ba5a94a8e2596033884e1eef3478ff12b2e65ffd1c33c46148(
+    *,
+    idc_instance_arn: builtins.str,
+    idc_managed_application_arn: typing.Optional[builtins.str] = None,
+    idc_region: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8d38a3a7c2404193e0d7b39f9c2fc80a04e6cf17decf02ceb0696aa9ebf53d95(
+    *,
+    argo_cd: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.ArgoCdProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__783131ab42be20f92bd1a98ffbc74d7fbc0dd88019a47c2c068323d05530d13a(
+    *,
+    vpce_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b45dcd434a756ea5d133bd9a7a87466bb2642a36b51ba8ddc2d6bd8a4ba73fbc(
+    *,
+    id: builtins.str,
+    type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1692badb0a867b36af4f94f4857570684acb492cb6cb4bafa2279c6453c9ee1d(
+    *,
+    capability_name: builtins.str,
+    cluster_name: builtins.str,
+    delete_propagation_policy: builtins.str,
+    role_arn: builtins.str,
+    type: builtins.str,
+    configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapability.CapabilityConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d3e62a858014f3867f3039d1328d57223fb0d16e3fb6d1e2d79279938756eb35(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -23222,6 +24547,12 @@ def _typecheckingstub__06b7df746bf67240facb00749c1c399634c9167d5acb1747f034220ef
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     cluster_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d4b6bf17e0698431e6e661c951da5321c0084fa51b07e75b4f521c5762cab23b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23551,6 +24882,12 @@ def _typecheckingstub__c62d4336aef51ec7813a4b4af67342c66c46cfd302381a17f490f8f40
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__49aabfe417d8714ce9bce65103d511007ad5988cbbfbf46c3300453e749221b8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__43ebc50d6c5b13856e87922886b34c19885bddbafafc65bf42a5e790bc129b85(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23642,6 +24979,12 @@ def _typecheckingstub__5aefb3bc5a12905f1fee3f10f2a7ba558d09704a51fff92ba5d790fc1
 
 def _typecheckingstub__34801166e9e75cba4add5f2a32bddc7f06c49030536f66b194b2011569cce956(
     resource: _IIdentityProviderConfigRef_0106e882,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__63688c5bc69f59a9b9895c44973d0f56a661ee32b127b4cd646df28d1d1e93ec(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23749,6 +25092,12 @@ def _typecheckingstub__27ebd660a66f96284eec036f7614b1586f77d9990c9dd345fe73522c7
 
 def _typecheckingstub__19982cfc58b84a650ce9bb68eeaf60912fd6067c7ebca829e4893f1fce3c2d8f(
     resource: _INodegroupRef_cac0d8aa,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6dbc6c294d6b655557cc920b959180ab8a60e0aaa527dac44ade5dafb058e81e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23981,6 +25330,12 @@ def _typecheckingstub__be8311b6089cea26f85c63a586f0c5b063230a1b4a96ffcd4c6c983a3
     disable_session_tags: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     target_role_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c9bf1ced5b57cfc982adc7d8da812c43876aaa66079cbd6632adc50e7e001b47(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

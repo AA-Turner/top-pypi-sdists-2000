@@ -190,6 +190,18 @@ class CfnApplication(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
 
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b4e08f6d9252ec685994e80dfaccf256affaf78836001fbb59695c3e4fec6c4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1100,6 +1112,18 @@ class CfnDataIntegration(
             check_type(argname="argument data_integration_id", value=data_integration_id, expected_type=type_hints["data_integration_id"])
         return typing.cast(_IDataIntegrationRef_c5e65586, jsii.sinvoke(cls, "fromDataIntegrationId", [scope, id, data_integration_id]))
 
+    @jsii.member(jsii_name="isCfnDataIntegration")
+    @builtins.classmethod
+    def is_cfn_data_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4b3be01c82f3ba80a719edb986c644415a8703b0921b82351ff4f69610ad6826)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataIntegration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1770,6 +1794,18 @@ class CfnEventIntegration(
             check_type(argname="argument event_integration_name", value=event_integration_name, expected_type=type_hints["event_integration_name"])
         return typing.cast(_IEventIntegrationRef_d2c58e8f, jsii.sinvoke(cls, "fromEventIntegrationName", [scope, id, event_integration_name]))
 
+    @jsii.member(jsii_name="isCfnEventIntegration")
+    @builtins.classmethod
+    def is_cfn_event_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEventIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8157effeb247ca9e399730fb309192297da614d0a45b1ebc8ca9a78c58b7f93)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventIntegration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2118,6 +2154,12 @@ def _typecheckingstub__7b42f16ecbbfeacf4cebf72ced2a17f07f5a84908315be11f343c633d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0b4e08f6d9252ec685994e80dfaccf256affaf78836001fbb59695c3e4fec6c4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2397143274609e6f7787d10c8effb0139785b91de02a335ac411b9f6e4478fb6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2281,6 +2323,12 @@ def _typecheckingstub__20305a315b3389b912aa7c2944c682e8c102efa0a52d1ebccfdcf5ad5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4b3be01c82f3ba80a719edb986c644415a8703b0921b82351ff4f69610ad6826(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1b6af7441719b460ee4641270770c612fb58e431a8fbcc3d0f99ddae2d585fb7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2403,6 +2451,12 @@ def _typecheckingstub__0fc7a2e0941d7492b5dc210f140a9f33a60d60a6ccc985e636799c9a5
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     event_integration_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8157effeb247ca9e399730fb309192297da614d0a45b1ebc8ca9a78c58b7f93(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

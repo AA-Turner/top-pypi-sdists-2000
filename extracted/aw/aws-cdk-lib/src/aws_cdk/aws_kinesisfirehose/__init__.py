@@ -1093,6 +1093,18 @@ class CfnDeliveryStream(
             check_type(argname="argument delivery_stream_name", value=delivery_stream_name, expected_type=type_hints["delivery_stream_name"])
         return typing.cast(_IDeliveryStreamRef_678f5e53, jsii.sinvoke(cls, "fromDeliveryStreamName", [scope, id, delivery_stream_name]))
 
+    @jsii.member(jsii_name="isCfnDeliveryStream")
+    @builtins.classmethod
+    def is_cfn_delivery_stream(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDeliveryStream.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a2c77ae20b52e1374216d80edbcd2176fd2fa1f7855bf638310a3e5c5084f72)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDeliveryStream", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -15388,6 +15400,12 @@ def _typecheckingstub__537ae2739e300bc97b7a362a703d67a61ec717ff18fbb371a4140cee8
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     delivery_stream_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1a2c77ae20b52e1374216d80edbcd2176fd2fa1f7855bf638310a3e5c5084f72(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

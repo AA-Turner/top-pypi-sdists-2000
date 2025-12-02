@@ -247,6 +247,18 @@ class CfnCustomAction(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomAction", [resource]))
 
+    @jsii.member(jsii_name="isCfnCustomAction")
+    @builtins.classmethod
+    def is_cfn_custom_action(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCustomAction.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ccb1b3050ff0a7228a18cf6cff1ab38c8edf1865d586be9deb662144098ed6ed)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomAction", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -918,6 +930,21 @@ class CfnMicrosoftTeamsChannelConfiguration(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMicrosoftTeamsChannelConfiguration", [resource]))
 
+    @jsii.member(jsii_name="isCfnMicrosoftTeamsChannelConfiguration")
+    @builtins.classmethod
+    def is_cfn_microsoft_teams_channel_configuration(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''Checks whether the given object is a CfnMicrosoftTeamsChannelConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01a58831e76fae2e840d84a7656465ba76e3d5c87f3fa3293c1339ac014c1e91)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMicrosoftTeamsChannelConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1511,6 +1538,18 @@ class CfnSlackChannelConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__1459eeddaa97796b97caf2489c64064df6b970f4951ff8d9f8e516792a85e067)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSlackChannelConfiguration", [resource]))
+
+    @jsii.member(jsii_name="isCfnSlackChannelConfiguration")
+    @builtins.classmethod
+    def is_cfn_slack_channel_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSlackChannelConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__94fa8f24c4540d62b0dd376261aff517fd5c901c6027465dd7851224a961ef21)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSlackChannelConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2683,6 +2722,12 @@ def _typecheckingstub__2f0dabfb69083d44ca1d20244065511de9c1d1848beb7133eb0588ccb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ccb1b3050ff0a7228a18cf6cff1ab38c8edf1865d586be9deb662144098ed6ed(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__44267bc9ce7cc2f3773138acc4718fe9e74ff7aacb67eedf1ef50ff399714ce2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2784,6 +2829,12 @@ def _typecheckingstub__62f6b943071fca79376376fd20660d7b707a1026a9039a0c12c88895d
 
 def _typecheckingstub__95da38507fe31225a8cb3b3d31adcc7ef3333f69ff76138aec769d52a6bc80dd(
     resource: _IMicrosoftTeamsChannelConfigurationRef_a41e777d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01a58831e76fae2e840d84a7656465ba76e3d5c87f3fa3293c1339ac014c1e91(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2910,6 +2961,12 @@ def _typecheckingstub__1cb3844509a8f0685c3dc0d26d5014fa028976d66c5d0a8984e8284bb
 
 def _typecheckingstub__1459eeddaa97796b97caf2489c64064df6b970f4951ff8d9f8e516792a85e067(
     resource: _ISlackChannelConfigurationRef_0aa1013d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94fa8f24c4540d62b0dd376261aff517fd5c901c6027465dd7851224a961ef21(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

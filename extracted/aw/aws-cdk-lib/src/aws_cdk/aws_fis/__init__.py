@@ -232,6 +232,32 @@ class CfnExperimentTemplate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForExperimentTemplate")
+    @builtins.classmethod
+    def arn_for_experiment_template(
+        cls,
+        resource: _IExperimentTemplateRef_6e2c390d,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__955e8d9b6ffc29ef02c64df0332b4fb3d903820db81869dab7d4b0fcae3954a5)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExperimentTemplate", [resource]))
+
+    @jsii.member(jsii_name="isCfnExperimentTemplate")
+    @builtins.classmethod
+    def is_cfn_experiment_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnExperimentTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8c02b69513eaa6d584d67dbfa20700ccda1e88ac036d15ca9a5fd7b2705f9703)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExperimentTemplate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1877,6 +1903,18 @@ class CfnTargetAccountConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnTargetAccountConfiguration")
+    @builtins.classmethod
+    def is_cfn_target_account_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTargetAccountConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b012b8e226586b9d0a7357b80090042f760366171594642546de4bb97e95ed7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTargetAccountConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2108,6 +2146,18 @@ def _typecheckingstub__18c9c3e4d1ff3bcad4812197927f55bc4b8c438403e1429c7b277b86b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__955e8d9b6ffc29ef02c64df0332b4fb3d903820db81869dab7d4b0fcae3954a5(
+    resource: _IExperimentTemplateRef_6e2c390d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8c02b69513eaa6d584d67dbfa20700ccda1e88ac036d15ca9a5fd7b2705f9703(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f585bbf456dc6cc0738abf8f561ed71c4f0c179266caff94e199c238d49fb738(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2307,6 +2357,12 @@ def _typecheckingstub__1d0fb924a03756f6ae5153adb03414ea3ed5c7be2c4632f5a2e6ea82b
     experiment_template_id: builtins.str,
     role_arn: builtins.str,
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b012b8e226586b9d0a7357b80090042f760366171594642546de4bb97e95ed7(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

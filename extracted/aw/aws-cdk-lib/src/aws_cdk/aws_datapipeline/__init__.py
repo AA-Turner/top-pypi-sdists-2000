@@ -215,6 +215,18 @@ class CfnPipeline(
             check_type(argname="argument pipeline_id", value=pipeline_id, expected_type=type_hints["pipeline_id"])
         return typing.cast(_IPipelineRef_5a3c7db8, jsii.sinvoke(cls, "fromPipelineID", [scope, id, pipeline_id]))
 
+    @jsii.member(jsii_name="isCfnPipeline")
+    @builtins.classmethod
+    def is_cfn_pipeline(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPipeline.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24d9cd69c25229bb14cdf157b4d855f43a6e088e473ef1ef7eb028223f0d66d2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPipeline", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1104,6 +1116,12 @@ def _typecheckingstub__2da468833cc5611eaf4299e9e2a7e5f72bf97b5c7d0bb050a1b910af6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     pipeline_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__24d9cd69c25229bb14cdf157b4d855f43a6e088e473ef1ef7eb028223f0d66d2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

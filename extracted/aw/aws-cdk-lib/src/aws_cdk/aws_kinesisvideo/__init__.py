@@ -149,6 +149,18 @@ class CfnSignalingChannel(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSignalingChannel", [resource]))
 
+    @jsii.member(jsii_name="isCfnSignalingChannel")
+    @builtins.classmethod
+    def is_cfn_signaling_channel(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSignalingChannel.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__619de6b6f20e948ac88e1396eaed694621afc258b72203a155b49e47da202c92)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSignalingChannel", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -439,7 +451,7 @@ class CfnStream(
         :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
-        :param stream_storage_configuration: Configuration for the storage tier of the Kinesis Video Stream.
+        :param stream_storage_configuration: The configuration for stream storage, including the default storage tier for stream data. This configuration determines how stream data is stored and accessed, with different tiers offering varying levels of performance and cost optimization.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
         '''
         if __debug__:
@@ -468,6 +480,18 @@ class CfnStream(
             type_hints = typing.get_type_hints(_typecheckingstub__d38301bab4e9a780a923b10ea8c1ff4821d9241fed12ad8d638b9bf035dbb82e)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStream", [resource]))
+
+    @jsii.member(jsii_name="isCfnStream")
+    @builtins.classmethod
+    def is_cfn_stream(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStream.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9f778dacdea02c1501883a5f1b0b7fc6733f60cad294d68e73bbfee8c08bf72)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStream", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -595,7 +619,7 @@ class CfnStream(
     def stream_storage_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamStorageConfigurationProperty"]]:
-        '''Configuration for the storage tier of the Kinesis Video Stream.'''
+        '''The configuration for stream storage, including the default storage tier for stream data.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStream.StreamStorageConfigurationProperty"]], jsii.get(self, "streamStorageConfiguration"))
 
     @stream_storage_configuration.setter
@@ -632,9 +656,11 @@ class CfnStream(
             *,
             default_storage_tier: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''Configuration for the storage tier of the Kinesis Video Stream.
+            '''The configuration for stream storage, including the default storage tier for stream data.
 
-            :param default_storage_tier: The storage tier for the Kinesis Video Stream. Determines the storage class used for stream data. Default: - "HOT"
+            This configuration determines how stream data is stored and accessed, with different tiers offering varying levels of performance and cost optimization.
+
+            :param default_storage_tier: The default storage tier for the stream data. This setting determines the storage class used for stream data, affecting both performance characteristics and storage costs. Available storage tiers: - ``HOT`` - Optimized for frequent access with the lowest latency and highest performance. Ideal for real-time applications and frequently accessed data. - ``WARM`` - Balanced performance and cost for moderately accessed data. Suitable for data that is accessed regularly but not continuously. Default: - "HOT"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-kinesisvideo-stream-streamstorageconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -658,9 +684,14 @@ class CfnStream(
 
         @builtins.property
         def default_storage_tier(self) -> typing.Optional[builtins.str]:
-            '''The storage tier for the Kinesis Video Stream.
+            '''The default storage tier for the stream data.
 
-            Determines the storage class used for stream data.
+            This setting determines the storage class used for stream data, affecting both performance characteristics and storage costs.
+
+            Available storage tiers:
+
+            - ``HOT`` - Optimized for frequent access with the lowest latency and highest performance. Ideal for real-time applications and frequently accessed data.
+            - ``WARM`` - Balanced performance and cost for moderately accessed data. Suitable for data that is accessed regularly but not continuously.
 
             :default: - "HOT"
 
@@ -713,7 +744,7 @@ class CfnStreamProps:
         :param kms_key_id: The ID of the AWS Key Management Service ( AWS ) key that Kinesis Video Streams uses to encrypt data on the stream.
         :param media_type: The ``MediaType`` of the stream.
         :param name: The name of the stream.
-        :param stream_storage_configuration: Configuration for the storage tier of the Kinesis Video Stream.
+        :param stream_storage_configuration: The configuration for stream storage, including the default storage tier for stream data. This configuration determines how stream data is stored and accessed, with different tiers offering varying levels of performance and cost optimization.
         :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-resource-tags.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisvideo-stream.html
@@ -814,7 +845,9 @@ class CfnStreamProps:
     def stream_storage_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnStream.StreamStorageConfigurationProperty]]:
-        '''Configuration for the storage tier of the Kinesis Video Stream.
+        '''The configuration for stream storage, including the default storage tier for stream data.
+
+        This configuration determines how stream data is stored and accessed, with different tiers offering varying levels of performance and cost optimization.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-kinesisvideo-stream.html#cfn-kinesisvideo-stream-streamstorageconfiguration
         '''
@@ -867,6 +900,12 @@ def _typecheckingstub__58eea5563d65f986204277ab06c42f79f4e2ffc4cdc5b476a7662b924
 
 def _typecheckingstub__f943a12cf61d205b3e198fcb6b11456495270986d52e4c7b0e3cc5ff66520815(
     resource: _ISignalingChannelRef_cbe8a964,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__619de6b6f20e948ac88e1396eaed694621afc258b72203a155b49e47da202c92(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -934,6 +973,12 @@ def _typecheckingstub__9ec46ef966c55301f1d7f90935a5a7340c3d7ee98963234b59d16d191
 
 def _typecheckingstub__d38301bab4e9a780a923b10ea8c1ff4821d9241fed12ad8d638b9bf035dbb82e(
     resource: _IStreamRef_ff0d232b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9f778dacdea02c1501883a5f1b0b7fc6733f60cad294d68e73bbfee8c08bf72(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

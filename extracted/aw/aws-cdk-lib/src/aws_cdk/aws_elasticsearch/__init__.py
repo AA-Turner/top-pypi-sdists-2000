@@ -962,6 +962,18 @@ class CfnDomain(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDomain", [resource]))
 
+    @jsii.member(jsii_name="isCfnDomain")
+    @builtins.classmethod
+    def is_cfn_domain(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDomain.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2ae07e2d3387a4d143a394bac670552a2a065e51a7f3a7be79abd3b31ab0af8a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8034,6 +8046,12 @@ def _typecheckingstub__63b7f3680a648547d6da1f542a01684f9c4d84033f4c9aee8eaecae81
 
 def _typecheckingstub__f92c16f52961caa436aedaacb16657f8201f8e49e96b5f617f6b4adcf1098c98(
     resource: _IDomainRef_67910ee2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2ae07e2d3387a4d143a394bac670552a2a065e51a7f3a7be79abd3b31ab0af8a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

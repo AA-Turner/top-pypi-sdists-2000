@@ -188,6 +188,18 @@ class CfnApplication(
             check_type(argname="argument application_id", value=application_id, expected_type=type_hints["application_id"])
         return typing.cast(_IApplicationRef_acbdc0fc, jsii.sinvoke(cls, "fromApplicationId", [scope, id, application_id]))
 
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b0cf5b706d06c0dd6b1e93b0309f4e55fd74c03a64b97a9ac60c848b9632643d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -517,6 +529,12 @@ def _typecheckingstub__1067620c303cd543bab59a50b3262f84fd21bb6c0cc28e8c18b489da1
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     application_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b0cf5b706d06c0dd6b1e93b0309f4e55fd74c03a64b97a9ac60c848b9632643d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -235,6 +235,18 @@ class CfnAPIKey(
             check_type(argname="argument key_name", value=key_name, expected_type=type_hints["key_name"])
         return typing.cast(_IAPIKeyRef_02c748d1, jsii.sinvoke(cls, "fromKeyName", [scope, id, key_name]))
 
+    @jsii.member(jsii_name="isCfnAPIKey")
+    @builtins.classmethod
+    def is_cfn_api_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAPIKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dd5f8c7319d59786154399d4d4317acb8af1c8046718646829764bfea8b1db37)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAPIKey", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1099,6 +1111,18 @@ class CfnGeofenceCollection(
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
         return typing.cast(_IGeofenceCollectionRef_40bd2c98, jsii.sinvoke(cls, "fromGeofenceCollectionArn", [scope, id, arn]))
 
+    @jsii.member(jsii_name="isCfnGeofenceCollection")
+    @builtins.classmethod
+    def is_cfn_geofence_collection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGeofenceCollection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5461e88afdf404170bd031fdc6be5f4cfecf4007389d8acd1bb068a75dbeb745)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGeofenceCollection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1577,6 +1601,18 @@ class CfnMap(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument map_name", value=map_name, expected_type=type_hints["map_name"])
         return typing.cast(_IMapRef_a23859d8, jsii.sinvoke(cls, "fromMapName", [scope, id, map_name]))
+
+    @jsii.member(jsii_name="isCfnMap")
+    @builtins.classmethod
+    def is_cfn_map(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMap.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__14a83572ceb4f16a58d82f813899eff155be24882637bad7545f10597df62d35)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMap", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2182,6 +2218,18 @@ class CfnPlaceIndex(
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
         return typing.cast(_IPlaceIndexRef_a9b4878a, jsii.sinvoke(cls, "fromPlaceIndexArn", [scope, id, arn]))
 
+    @jsii.member(jsii_name="isCfnPlaceIndex")
+    @builtins.classmethod
+    def is_cfn_place_index(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPlaceIndex.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1629d733538c9f0f757280d8dc22e5f522a9a10f7786ada8489085329594aa9d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPlaceIndex", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2720,6 +2768,18 @@ class CfnRouteCalculator(
             check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
         return typing.cast(_IRouteCalculatorRef_f2a132ab, jsii.sinvoke(cls, "fromRouteCalculatorArn", [scope, id, arn]))
 
+    @jsii.member(jsii_name="isCfnRouteCalculator")
+    @builtins.classmethod
+    def is_cfn_route_calculator(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRouteCalculator.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__231d2b58e0973d958f7fb16ba0698cf4e188bd9b23cf1faf7b59f0992df237a8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRouteCalculator", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3167,6 +3227,18 @@ class CfnTracker(
             check_type(argname="argument tracker_name", value=tracker_name, expected_type=type_hints["tracker_name"])
         return typing.cast(_ITrackerRef_e22d1822, jsii.sinvoke(cls, "fromTrackerName", [scope, id, tracker_name]))
 
+    @jsii.member(jsii_name="isCfnTracker")
+    @builtins.classmethod
+    def is_cfn_tracker(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTracker.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a3ab7791c21683bb00ac6f4ff9d557463bf3cbceee241963435d3d4c8fb4f60)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTracker", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3446,6 +3518,18 @@ class CfnTrackerConsumer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnTrackerConsumer")
+    @builtins.classmethod
+    def is_cfn_tracker_consumer(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrackerConsumer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__838c9087b2ed63c199bc748958c21ee405f0361e202cbbff3639edd242584605)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrackerConsumer", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3869,6 +3953,12 @@ def _typecheckingstub__252ed95f79a8e3f1207bcf22e30ccce54352607889625ae0c44f99f5c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__dd5f8c7319d59786154399d4d4317acb8af1c8046718646829764bfea8b1db37(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__90e4d83d582a33efc0dfeef244e5a4b84a90230cc485853b42d16a3e6f6609a7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4005,6 +4095,12 @@ def _typecheckingstub__c08c10d57c8eee3a7ab3b16b2260e0eba901740b7d53feea0bc19561f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5461e88afdf404170bd031fdc6be5f4cfecf4007389d8acd1bb068a75dbeb745(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__66134049825423372dae82a0ee8b8c0bba09bda09682513f80795605e6e0bca6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4096,6 +4192,12 @@ def _typecheckingstub__b60cdf883704a6b802821177f72dd20fb8c7309cece100f783ecb0973
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     map_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__14a83572ceb4f16a58d82f813899eff155be24882637bad7545f10597df62d35(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4194,6 +4296,12 @@ def _typecheckingstub__38a00f836ed297fe9f6601dc3a96365eb13942e1ef45700edd7e4569a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1629d733538c9f0f757280d8dc22e5f522a9a10f7786ada8489085329594aa9d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4300,6 +4408,12 @@ def _typecheckingstub__a2f2772368dd3b1946646c582d13424fefd6b9aa10c741a11047ddb1d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__231d2b58e0973d958f7fb16ba0698cf4e188bd9b23cf1faf7b59f0992df237a8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d0f206fe9bb875d2c7acae9be0a23fa0286ad54fbd1bebff69010a95bea15fec(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4392,6 +4506,12 @@ def _typecheckingstub__401c575e4494825351571dd08bdd2279e6de4c865a407e5d04e089f82
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1a3ab7791c21683bb00ac6f4ff9d557463bf3cbceee241963435d3d4c8fb4f60(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__606edf93b66473926b20e5a3b0af67fe5ed3f2fceae488ca1b2486f74e9beeb4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4464,6 +4584,12 @@ def _typecheckingstub__796f07ade0c1c21cf2be739abf72847e038c9c0f1fe6e69286fa0b51d
     *,
     consumer_arn: builtins.str,
     tracker_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__838c9087b2ed63c199bc748958c21ee405f0361e202cbbff3639edd242584605(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

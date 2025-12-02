@@ -37,12 +37,21 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_autoscaling.AutoScalingGroupReference",
     jsii_struct_bases=[],
-    name_mapping={"auto_scaling_group_name": "autoScalingGroupName"},
+    name_mapping={
+        "auto_scaling_group_arn": "autoScalingGroupArn",
+        "auto_scaling_group_name": "autoScalingGroupName",
+    },
 )
 class AutoScalingGroupReference:
-    def __init__(self, *, auto_scaling_group_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        auto_scaling_group_arn: builtins.str,
+        auto_scaling_group_name: builtins.str,
+    ) -> None:
         '''A reference to a AutoScalingGroup resource.
 
+        :param auto_scaling_group_arn: The ARN of the AutoScalingGroup resource.
         :param auto_scaling_group_name: The AutoScalingGroupName of the AutoScalingGroup resource.
 
         :exampleMetadata: fixture=_generated
@@ -54,15 +63,25 @@ class AutoScalingGroupReference:
             from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
             
             auto_scaling_group_reference = interfaces_aws_autoscaling.AutoScalingGroupReference(
+                auto_scaling_group_arn="autoScalingGroupArn",
                 auto_scaling_group_name="autoScalingGroupName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__ad45614f4e540bae613323f2166957137deb5300bd434a60a612b05401cb8925)
+            check_type(argname="argument auto_scaling_group_arn", value=auto_scaling_group_arn, expected_type=type_hints["auto_scaling_group_arn"])
             check_type(argname="argument auto_scaling_group_name", value=auto_scaling_group_name, expected_type=type_hints["auto_scaling_group_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "auto_scaling_group_arn": auto_scaling_group_arn,
             "auto_scaling_group_name": auto_scaling_group_name,
         }
+
+    @builtins.property
+    def auto_scaling_group_arn(self) -> builtins.str:
+        '''The ARN of the AutoScalingGroup resource.'''
+        result = self._values.get("auto_scaling_group_arn")
+        assert result is not None, "Required property 'auto_scaling_group_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def auto_scaling_group_name(self) -> builtins.str:
@@ -659,6 +678,7 @@ publication.publish()
 
 def _typecheckingstub__ad45614f4e540bae613323f2166957137deb5300bd434a60a612b05401cb8925(
     *,
+    auto_scaling_group_arn: builtins.str,
     auto_scaling_group_name: builtins.str,
 ) -> None:
     """Type checking stubs"""

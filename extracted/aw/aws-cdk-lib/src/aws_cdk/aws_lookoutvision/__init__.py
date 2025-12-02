@@ -168,6 +168,18 @@ class CfnProject(
             check_type(argname="argument project_name", value=project_name, expected_type=type_hints["project_name"])
         return typing.cast(_IProjectRef_ebc63cfa, jsii.sinvoke(cls, "fromProjectName", [scope, id, project_name]))
 
+    @jsii.member(jsii_name="isCfnProject")
+    @builtins.classmethod
+    def is_cfn_project(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProject.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e45bbfda2feb9cb819883025c071612a0b025c74b1cf57bd52a95248afffb6e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProject", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -319,6 +331,12 @@ def _typecheckingstub__10d2b4dda47960ca6ee5e6df8c5e0d918819f580de3bd335e8522dea9
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     project_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3e45bbfda2feb9cb819883025c071612a0b025c74b1cf57bd52a95248afffb6e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

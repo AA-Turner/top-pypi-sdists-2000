@@ -582,6 +582,18 @@ class CfnAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAlias")
+    @builtins.classmethod
+    def is_cfn_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e80558a98b03b885d95d989843060b9b93618c41f5f93432adc0b2fd67e7319)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -931,6 +943,18 @@ class CfnKey(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument key_id", value=key_id, expected_type=type_hints["key_id"])
         return typing.cast(_IKeyRef_d4fc6ef3, jsii.sinvoke(cls, "fromKeyId", [scope, id, key_id]))
+
+    @jsii.member(jsii_name="isCfnKey")
+    @builtins.classmethod
+    def is_cfn_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89642e771ba2a812f40a717a96d411721a80787ba9dc32888fe3f5c03f286fac)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnKey", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1679,6 +1703,18 @@ class CfnReplicaKey(
             type_hints = typing.get_type_hints(_typecheckingstub__90ad819d0c1118f8ff47efe0445b43498a14541be2f7a7478db6658fb8d67ed1)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForReplicaKey", [resource]))
+
+    @jsii.member(jsii_name="isCfnReplicaKey")
+    @builtins.classmethod
+    def is_cfn_replica_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnReplicaKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7044cd43ac1ad4bf8d0bcb243e6e605c2f4dc8f018e9e982b7ddfdf19831cf2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicaKey", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3687,6 +3723,12 @@ def _typecheckingstub__9ed5a3924f89c3ad638de218f71940a644d4f9331e3a66f708de865cc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5e80558a98b03b885d95d989843060b9b93618c41f5f93432adc0b2fd67e7319(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__91d92bc86df739cdbb4a623f1bec0006f2c4e912b1d6817e7e5fc8fc28d6d61d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3757,6 +3799,12 @@ def _typecheckingstub__017d6fb56914db7b54b414d0535f40acc821857d39e3de53a3749ea5b
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     key_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__89642e771ba2a812f40a717a96d411721a80787ba9dc32888fe3f5c03f286fac(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3879,6 +3927,12 @@ def _typecheckingstub__a43b13aecc4a6c9b9c5cce2bd96d2ececdc7c64b21c374cf96c4ab5ea
 
 def _typecheckingstub__90ad819d0c1118f8ff47efe0445b43498a14541be2f7a7478db6658fb8d67ed1(
     resource: _IReplicaKeyRef_61fa3e10,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7044cd43ac1ad4bf8d0bcb243e6e605c2f4dc8f018e9e982b7ddfdf19831cf2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -197,6 +197,55 @@ class AddonReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_eks.CapabilityReference",
+    jsii_struct_bases=[],
+    name_mapping={"capability_arn": "capabilityArn"},
+)
+class CapabilityReference:
+    def __init__(self, *, capability_arn: builtins.str) -> None:
+        '''A reference to a Capability resource.
+
+        :param capability_arn: The Arn of the Capability resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            
+            capability_reference = interfaces_aws_eks.CapabilityReference(
+                capability_arn="capabilityArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc801b63380c6ce04f8c7266654f326fcd069c8bbc7b78140d8b612445f8e92c)
+            check_type(argname="argument capability_arn", value=capability_arn, expected_type=type_hints["capability_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "capability_arn": capability_arn,
+        }
+
+    @builtins.property
+    def capability_arn(self) -> builtins.str:
+        '''The Arn of the Capability resource.'''
+        result = self._values.get("capability_arn")
+        assert result is not None, "Required property 'capability_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CapabilityReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_eks.ClusterReference",
     jsii_struct_bases=[],
     name_mapping={"cluster_arn": "clusterArn", "cluster_name": "clusterName"},
@@ -430,6 +479,51 @@ class _IAddonRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IAddonRef).__jsii_proxy_class__ = lambda : _IAddonRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_eks.ICapabilityRef")
+class ICapabilityRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a Capability.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="capabilityRef")
+    def capability_ref(self) -> CapabilityReference:
+        '''(experimental) A reference to a Capability resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _ICapabilityRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a Capability.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_eks.ICapabilityRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="capabilityRef")
+    def capability_ref(self) -> CapabilityReference:
+        '''(experimental) A reference to a Capability resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(CapabilityReference, jsii.get(self, "capabilityRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ICapabilityRef).__jsii_proxy_class__ = lambda : _ICapabilityRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_eks.IClusterRef")
@@ -868,10 +962,12 @@ class PodIdentityAssociationReference:
 __all__ = [
     "AccessEntryReference",
     "AddonReference",
+    "CapabilityReference",
     "ClusterReference",
     "FargateProfileReference",
     "IAccessEntryRef",
     "IAddonRef",
+    "ICapabilityRef",
     "IClusterRef",
     "IFargateProfileRef",
     "IIdentityProviderConfigRef",
@@ -898,6 +994,13 @@ def _typecheckingstub__8380b0e2d2286804f49005cd1b95a852ea64c317bb9048747945aafc0
     addon_arn: builtins.str,
     addon_name: builtins.str,
     cluster_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc801b63380c6ce04f8c7266654f326fcd069c8bbc7b78140d8b612445f8e92c(
+    *,
+    capability_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -944,5 +1047,5 @@ def _typecheckingstub__d7465fc9c2ed3ddbe51e8bf5142f1243a8335f32f088977ac177d64c2
     """Type checking stubs"""
     pass
 
-for cls in [IAccessEntryRef, IAddonRef, IClusterRef, IFargateProfileRef, IIdentityProviderConfigRef, INodegroupRef, IPodIdentityAssociationRef]:
+for cls in [IAccessEntryRef, IAddonRef, ICapabilityRef, IClusterRef, IFargateProfileRef, IIdentityProviderConfigRef, INodegroupRef, IPodIdentityAssociationRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

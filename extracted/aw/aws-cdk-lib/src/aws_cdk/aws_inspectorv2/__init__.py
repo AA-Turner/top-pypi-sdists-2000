@@ -187,6 +187,18 @@ class CfnCisScanConfiguration(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCisScanConfiguration", [resource]))
 
+    @jsii.member(jsii_name="isCfnCisScanConfiguration")
+    @builtins.classmethod
+    def is_cfn_cis_scan_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCisScanConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0157dbe9d0e6a256bfb1f48831eecbee74bad3bf884fbf7b8719bed932bc494b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCisScanConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1067,6 +1079,18 @@ class CfnCodeSecurityIntegration(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSecurityIntegration", [resource]))
 
+    @jsii.member(jsii_name="isCfnCodeSecurityIntegration")
+    @builtins.classmethod
+    def is_cfn_code_security_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCodeSecurityIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b98f80c5b07b3b4699f81f95546fed657ea28fce1615629bee70f86785ce350f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCodeSecurityIntegration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1814,6 +1838,18 @@ class CfnCodeSecurityScanConfiguration(
             type_hints = typing.get_type_hints(_typecheckingstub__e4e2ba232f61f3996b58dc5cfd25237fcbd03e5685907e35ac8cd5f40d55260b)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSecurityScanConfiguration", [resource]))
+
+    @jsii.member(jsii_name="isCfnCodeSecurityScanConfiguration")
+    @builtins.classmethod
+    def is_cfn_code_security_scan_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCodeSecurityScanConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e1f6d967d4a3eb9c698e7e4d9da2813e02cf4fa4c7e56bc813ceb4ed4d3d1817)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCodeSecurityScanConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2656,6 +2692,18 @@ class CfnFilter(
             type_hints = typing.get_type_hints(_typecheckingstub__704d307380b328e752813838e45cc7632f81ee6e606de43e80cdab6fbc9f46bb)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFilter", [resource]))
+
+    @jsii.member(jsii_name="isCfnFilter")
+    @builtins.classmethod
+    def is_cfn_filter(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFilter.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4e088efafc9f496c3c6fa7871d5344534a4487772b0dada5b37c9bf1911c2234)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFilter", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4675,6 +4723,12 @@ def _typecheckingstub__17bb5d9e0d4a2d165ecc0f9d6c045ff79fb5bd35d06a65c705104aaf2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0157dbe9d0e6a256bfb1f48831eecbee74bad3bf884fbf7b8719bed932bc494b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1c340cf5a8052b5b5d1021305af92e23dcb4f62645a1014b0a49bb031d376ee8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4796,6 +4850,12 @@ def _typecheckingstub__6ca7e2752a7e90b087558c274f5098a9e8bc7c5d74e989dc2358c5a14
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b98f80c5b07b3b4699f81f95546fed657ea28fce1615629bee70f86785ce350f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d2b41111bd2e5e5f072f8545fffa3c791a4d0e501f547576454bf1a1f74205d6(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -4906,6 +4966,12 @@ def _typecheckingstub__e4e2ba232f61f3996b58dc5cfd25237fcbd03e5685907e35ac8cd5f40
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e1f6d967d4a3eb9c698e7e4d9da2813e02cf4fa4c7e56bc813ceb4ed4d3d1817(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ecb6f2f1a541e759bd4ebb9f175ef2898e08b44a5a2f74698a104ebf563f6050(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5005,6 +5071,12 @@ def _typecheckingstub__76aaac8f8d755716225a5dd2d4902f3e7ec007381fa82a2d163553362
 
 def _typecheckingstub__704d307380b328e752813838e45cc7632f81ee6e606de43e80cdab6fbc9f46bb(
     resource: _IFilterRef_37875571,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4e088efafc9f496c3c6fa7871d5344534a4487772b0dada5b37c9bf1911c2234(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

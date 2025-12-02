@@ -149,6 +149,18 @@ class CfnEnabledBaseline(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnEnabledBaseline")
+    @builtins.classmethod
+    def is_cfn_enabled_baseline(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEnabledBaseline.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e09a5dba630535a2f8d2e5d15a3d49c069893b08b0228a19c8000f2a78fe220)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnabledBaseline", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -547,6 +559,18 @@ class CfnEnabledControl(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnEnabledControl")
+    @builtins.classmethod
+    def is_cfn_enabled_control(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEnabledControl.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f9e764ea81c10e2fcb4b5c9268a99900232bdfe55916559ad3f65773288d27ef)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnabledControl", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -927,6 +951,18 @@ class CfnLandingZone(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLandingZone", [resource]))
 
+    @jsii.member(jsii_name="isCfnLandingZone")
+    @builtins.classmethod
+    def is_cfn_landing_zone(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLandingZone.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0fbf2e6c872dcc975b073b7baf401268403ffd771bd9a450b5d5ac60e3101f75)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLandingZone", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1215,6 +1251,12 @@ def _typecheckingstub__1ea8761029fec1b3c1fb5fb985be9ac741a889e29fe3445cfb5a96243
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__5e09a5dba630535a2f8d2e5d15a3d49c069893b08b0228a19c8000f2a78fe220(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5abe9c6604e1de27a08b948cef7b25d1d00ac0fd4f37eae3c69039eafa98f1eb(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1288,6 +1330,12 @@ def _typecheckingstub__1f147c3cf3aed5100105feba92fb41fa040a90e250e566c4f852830a7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f9e764ea81c10e2fcb4b5c9268a99900232bdfe55916559ad3f65773288d27ef(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f48fb910d3eecb04d51dd6fcc7cb9241b6efe5d9c5090dd7e2fd56008e8b927d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1356,6 +1404,12 @@ def _typecheckingstub__af3c2c6625c6aae1afd50bbbd83dafe3289d77c3e128938fa7a5e5c8c
 
 def _typecheckingstub__36638b5e73ae0759a65f449689a9ef46f9b511d7843e7813f777d3775441d74e(
     resource: _ILandingZoneRef_c378ff0b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0fbf2e6c872dcc975b073b7baf401268403ffd771bd9a450b5d5ac60e3101f75(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

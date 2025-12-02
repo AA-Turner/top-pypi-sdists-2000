@@ -223,6 +223,18 @@ class CfnAlias(
             check_type(argname="argument alias_id", value=alias_id, expected_type=type_hints["alias_id"])
         return typing.cast(_IAliasRef_e769a35f, jsii.sinvoke(cls, "fromAliasId", [scope, id, alias_id]))
 
+    @jsii.member(jsii_name="isCfnAlias")
+    @builtins.classmethod
+    def is_cfn_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ad685b203601481886e2e61a50c1f39900a909250b63716c7d0547dcd9dd01fc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -697,6 +709,18 @@ class CfnBuild(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument build_id", value=build_id, expected_type=type_hints["build_id"])
         return typing.cast(_IBuildRef_a9adc427, jsii.sinvoke(cls, "fromBuildId", [scope, id, build_id]))
+
+    @jsii.member(jsii_name="isCfnBuild")
+    @builtins.classmethod
+    def is_cfn_build(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnBuild.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6100fec8b4f28cf578bdb00e4623f9816b4eaeacf32174a5d6bafe2aa8948285)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBuild", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1300,6 +1324,27 @@ class CfnContainerFleet(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContainerFleet", [resource]))
 
+    @jsii.member(jsii_name="fromContainerFleetArn")
+    @builtins.classmethod
+    def from_container_fleet_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> _IContainerFleetRef_f4f92a80:
+        '''Creates a new IContainerFleetRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e5e3ccfc677214283b03d24ad094b839a7b023f7241795766e6161818f7c7d65)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(_IContainerFleetRef_f4f92a80, jsii.sinvoke(cls, "fromContainerFleetArn", [scope, id, arn]))
+
     @jsii.member(jsii_name="fromFleetId")
     @builtins.classmethod
     def from_fleet_id(
@@ -1320,6 +1365,18 @@ class CfnContainerFleet(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
         return typing.cast(_IContainerFleetRef_f4f92a80, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+
+    @jsii.member(jsii_name="isCfnContainerFleet")
+    @builtins.classmethod
+    def is_cfn_container_fleet(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContainerFleet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__90c8d5c928f98368c2557b1519270e4e28140c3d410bccc58f7858457f883739)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainerFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3251,7 +3308,7 @@ class CfnContainerGroupDefinition(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: A descriptive identifier for the container group definition. The name value is unique in an AWS Region.
-        :param operating_system: The platform that all containers in the container group definition run on. .. epigraph:: Amazon Linux 2 (AL2) will reach end of support on 6/30/2025. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
+        :param operating_system: The platform that all containers in the container group definition run on. .. epigraph:: Amazon Linux 2 (AL2) will reach end of support on 6/30/2026. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
         :param total_memory_limit_mebibytes: The amount of memory (in MiB) on a fleet instance to allocate for the container group. All containers in the group share these resources. You can set a limit for each container definition in the group. If individual containers have limits, this total value must be greater than any individual container's memory limit.
         :param total_vcpu_limit: The amount of vCPU units on a fleet instance to allocate for the container group (1 vCPU is equal to 1024 CPU units). All containers in the group share these resources. You can set a limit for each container definition in the group. If individual containers have limits, this total value must be equal to or greater than the sum of the limits for each container in the group.
         :param container_group_type: The type of container group. Container group type determines how Amazon GameLift Servers deploys the container group on each fleet instance.
@@ -3293,6 +3350,18 @@ class CfnContainerGroupDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__579b482b64e29fb725c6556d8b05792316cee10c0ccfc4731e33c616fcd26ddc)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContainerGroupDefinition", [resource]))
+
+    @jsii.member(jsii_name="isCfnContainerGroupDefinition")
+    @builtins.classmethod
+    def is_cfn_container_group_definition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContainerGroupDefinition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ed8ef0ea129119fcd8929b52b751f36681e05a579d92ea375580fb2eadbc58a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContainerGroupDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4623,7 +4692,7 @@ class CfnContainerGroupDefinitionProps:
         '''Properties for defining a ``CfnContainerGroupDefinition``.
 
         :param name: A descriptive identifier for the container group definition. The name value is unique in an AWS Region.
-        :param operating_system: The platform that all containers in the container group definition run on. .. epigraph:: Amazon Linux 2 (AL2) will reach end of support on 6/30/2025. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
+        :param operating_system: The platform that all containers in the container group definition run on. .. epigraph:: Amazon Linux 2 (AL2) will reach end of support on 6/30/2026. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
         :param total_memory_limit_mebibytes: The amount of memory (in MiB) on a fleet instance to allocate for the container group. All containers in the group share these resources. You can set a limit for each container definition in the group. If individual containers have limits, this total value must be greater than any individual container's memory limit.
         :param total_vcpu_limit: The amount of vCPU units on a fleet instance to allocate for the container group (1 vCPU is equal to 1024 CPU units). All containers in the group share these resources. You can set a limit for each container definition in the group. If individual containers have limits, this total value must be equal to or greater than the sum of the limits for each container in the group.
         :param container_group_type: The type of container group. Container group type determines how Amazon GameLift Servers deploys the container group on each fleet instance.
@@ -4778,7 +4847,7 @@ class CfnContainerGroupDefinitionProps:
 
         .. epigraph::
 
-           Amazon Linux 2 (AL2) will reach end of support on 6/30/2025. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
+           Amazon Linux 2 (AL2) will reach end of support on 6/30/2026. See more details in the `Amazon Linux 2 FAQs <https://docs.aws.amazon.com/amazon-linux-2/faqs/>`_ . For game servers that are hosted on AL2 and use server SDK version 4.x for Amazon GameLift Servers, first update the game server build to server SDK 5.x, and then deploy to AL2023 instances. See `Migrate to server SDK version 5. <https://docs.aws.amazon.com/gamelift/latest/developerguide/reference-serversdk5-migration.html>`_
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-containergroupdefinition.html#cfn-gamelift-containergroupdefinition-operatingsystem
         '''
@@ -5046,7 +5115,7 @@ class CfnFleet(
         :param ec2_inbound_permissions: The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet. Set this parameter for managed EC2 fleets. You can leave this parameter empty when creating the fleet, but you must call ` <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetPortSettings>`_ to set it before players can connect to game sessions. As a best practice, we recommend opening ports for remote access only when you need them and closing them when you're finished. For Amazon GameLift Servers Realtime fleets, Amazon GameLift Servers automatically sets TCP and UDP ranges.
         :param ec2_instance_type: The Amazon GameLift Servers-supported Amazon EC2 instance type to use with managed EC2 fleets. Instance type determines the computing resources that will be used to host your game servers, including CPU, memory, storage, and networking capacity. See `Amazon Elastic Compute Cloud Instance Types <https://docs.aws.amazon.com/ec2/instance-types/>`_ for detailed descriptions of Amazon EC2 instance types.
         :param fleet_type: Indicates whether to use On-Demand or Spot instances for this fleet. By default, this property is set to ``ON_DEMAND`` . Learn more about when to use `On-Demand versus Spot Instances <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html#gamelift-ec2-instances-spot>`_ . This fleet property can't be changed after the fleet is created.
-        :param instance_role_arn: A unique identifier for an IAM role that manages access to your AWS services. With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the the console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
+        :param instance_role_arn: A unique identifier for an IAM role that manages access to your AWS services. With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the AWS Management Console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param instance_role_credentials_provider: Indicates that fleet instances maintain a shared credentials file for the IAM role defined in ``InstanceRoleArn`` . Shared credentials allow applications that are deployed with the game server executable to communicate with other AWS resources. This property is used only when the game server is integrated with the server SDK version 5.x. For more information about using shared credentials, see `Communicate with other AWS resources from your fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param locations: A set of remote locations to deploy additional instances to and manage as a multi-location fleet. Use this parameter when creating a fleet in AWS Regions that support multiple locations. You can add any AWS Region or Local Zone that's supported by Amazon GameLift Servers. Provide a list of one or more AWS Region codes, such as ``us-west-2`` , or Local Zone names. When using this parameter, Amazon GameLift Servers requires you to include your home location in the request. For a list of supported Regions and Local Zones, see `Amazon GameLift Servers service locations <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-regions.html>`_ for managed hosting.
         :param log_paths: (deprecated) This parameter is no longer used. When hosting a custom game build, specify where Amazon GameLift should store log files using the Amazon GameLift server API call ProcessReady()
@@ -5054,8 +5123,8 @@ class CfnFleet(
         :param metric_groups: The name of an AWS CloudWatch metric group to add this fleet to. A metric group is used to aggregate the metrics for multiple fleets. You can specify an existing metric group name or set a new name to create a new metric group. A fleet can be included in only one metric group at a time.
         :param min_size: (deprecated) [DEPRECATED] The minimum value allowed for the fleet's instance count. When creating a new fleet, GameLift automatically sets this value to "0". After the fleet is active, you can change this value.
         :param new_game_session_protection_policy: The status of termination protection for active game sessions on the fleet. By default, this property is set to ``NoProtection`` . - *NoProtection* - Game sessions can be terminated during active gameplay as a result of a scale-down event. - *FullProtection* - Game sessions in ``ACTIVE`` status cannot be terminated during a scale-down event.
-        :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the the console under account settings.
-        :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the the console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
+        :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the AWS Management Console under account settings.
+        :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the AWS Management Console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
         :param resource_creation_limit_policy: A policy that limits the number of game sessions that an individual player can create on instances in this fleet within a specified span of time.
         :param runtime_configuration: Instructions for how to launch and maintain server processes on instances in the fleet. The runtime configuration defines one or more server process configurations, each identifying a build executable or Realtime script file and the number of processes of that type to run concurrently. .. epigraph:: The ``RuntimeConfiguration`` parameter is required unless the fleet is being configured using the older parameters ``ServerLaunchPath`` and ``ServerLaunchParameters`` , which are still supported for backward compatibility.
         :param scaling_policies: Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.
@@ -5153,6 +5222,18 @@ class CfnFleet(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
         return typing.cast(_IFleetRef_6df955ee, jsii.sinvoke(cls, "fromFleetId", [scope, id, fleet_id]))
+
+    @jsii.member(jsii_name="isCfnFleet")
+    @builtins.classmethod
+    def is_cfn_fleet(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFleet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01ddf47f275bc83bb3abe257983b8fa3533342ecdb627237d53c90176c62f411)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6786,7 +6867,7 @@ class CfnFleetProps:
         :param ec2_inbound_permissions: The IP address ranges and port settings that allow inbound traffic to access game server processes and other processes on this fleet. Set this parameter for managed EC2 fleets. You can leave this parameter empty when creating the fleet, but you must call ` <https://docs.aws.amazon.com/gamelift/latest/apireference/API_UpdateFleetPortSettings>`_ to set it before players can connect to game sessions. As a best practice, we recommend opening ports for remote access only when you need them and closing them when you're finished. For Amazon GameLift Servers Realtime fleets, Amazon GameLift Servers automatically sets TCP and UDP ranges.
         :param ec2_instance_type: The Amazon GameLift Servers-supported Amazon EC2 instance type to use with managed EC2 fleets. Instance type determines the computing resources that will be used to host your game servers, including CPU, memory, storage, and networking capacity. See `Amazon Elastic Compute Cloud Instance Types <https://docs.aws.amazon.com/ec2/instance-types/>`_ for detailed descriptions of Amazon EC2 instance types.
         :param fleet_type: Indicates whether to use On-Demand or Spot instances for this fleet. By default, this property is set to ``ON_DEMAND`` . Learn more about when to use `On-Demand versus Spot Instances <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html#gamelift-ec2-instances-spot>`_ . This fleet property can't be changed after the fleet is created.
-        :param instance_role_arn: A unique identifier for an IAM role that manages access to your AWS services. With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the the console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
+        :param instance_role_arn: A unique identifier for an IAM role that manages access to your AWS services. With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the AWS Management Console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param instance_role_credentials_provider: Indicates that fleet instances maintain a shared credentials file for the IAM role defined in ``InstanceRoleArn`` . Shared credentials allow applications that are deployed with the game server executable to communicate with other AWS resources. This property is used only when the game server is integrated with the server SDK version 5.x. For more information about using shared credentials, see `Communicate with other AWS resources from your fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
         :param locations: A set of remote locations to deploy additional instances to and manage as a multi-location fleet. Use this parameter when creating a fleet in AWS Regions that support multiple locations. You can add any AWS Region or Local Zone that's supported by Amazon GameLift Servers. Provide a list of one or more AWS Region codes, such as ``us-west-2`` , or Local Zone names. When using this parameter, Amazon GameLift Servers requires you to include your home location in the request. For a list of supported Regions and Local Zones, see `Amazon GameLift Servers service locations <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-regions.html>`_ for managed hosting.
         :param log_paths: (deprecated) This parameter is no longer used. When hosting a custom game build, specify where Amazon GameLift should store log files using the Amazon GameLift server API call ProcessReady()
@@ -6794,8 +6875,8 @@ class CfnFleetProps:
         :param metric_groups: The name of an AWS CloudWatch metric group to add this fleet to. A metric group is used to aggregate the metrics for multiple fleets. You can specify an existing metric group name or set a new name to create a new metric group. A fleet can be included in only one metric group at a time.
         :param min_size: (deprecated) [DEPRECATED] The minimum value allowed for the fleet's instance count. When creating a new fleet, GameLift automatically sets this value to "0". After the fleet is active, you can change this value.
         :param new_game_session_protection_policy: The status of termination protection for active game sessions on the fleet. By default, this property is set to ``NoProtection`` . - *NoProtection* - Game sessions can be terminated during active gameplay as a result of a scale-down event. - *FullProtection* - Game sessions in ``ACTIVE`` status cannot be terminated during a scale-down event.
-        :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the the console under account settings.
-        :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the the console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
+        :param peer_vpc_aws_account_id: Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC. You can find your account ID in the AWS Management Console under account settings.
+        :param peer_vpc_id: A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet. The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the AWS Management Console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
         :param resource_creation_limit_policy: A policy that limits the number of game sessions that an individual player can create on instances in this fleet within a specified span of time.
         :param runtime_configuration: Instructions for how to launch and maintain server processes on instances in the fleet. The runtime configuration defines one or more server process configurations, each identifying a build executable or Realtime script file and the number of processes of that type to run concurrently. .. epigraph:: The ``RuntimeConfiguration`` parameter is required unless the fleet is being configured using the older parameters ``ServerLaunchPath`` and ``ServerLaunchParameters`` , which are still supported for backward compatibility.
         :param scaling_policies: Rule that controls how a fleet is scaled. Scaling policies are uniquely identified by the combination of name and fleet ID.
@@ -7126,7 +7207,7 @@ class CfnFleetProps:
     def instance_role_arn(self) -> typing.Optional[builtins.str]:
         '''A unique identifier for an IAM role that manages access to your AWS services.
 
-        With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the the console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
+        With an instance role ARN set, any application that runs on an instance in this fleet can assume the role, including install scripts, server processes, and daemons (background processes). Create a role or look up a role's ARN by using the `IAM dashboard <https://docs.aws.amazon.com/iam/>`_ in the AWS Management Console . Learn more about using on-box credentials for your game servers at `Access external resources from a game server <https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html>`_ . This attribute is used with fleets where ``ComputeType`` is ``EC2`` .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-instancerolearn
         '''
@@ -7228,7 +7309,7 @@ class CfnFleetProps:
     def peer_vpc_aws_account_id(self) -> typing.Optional[builtins.str]:
         '''Used when peering your Amazon GameLift Servers fleet with a VPC, the unique identifier for the AWS account that owns the VPC.
 
-        You can find your account ID in the the console under account settings.
+        You can find your account ID in the AWS Management Console under account settings.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-peervpcawsaccountid
         '''
@@ -7239,7 +7320,7 @@ class CfnFleetProps:
     def peer_vpc_id(self) -> typing.Optional[builtins.str]:
         '''A unique identifier for a VPC with resources to be accessed by your Amazon GameLift Servers fleet.
 
-        The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the the console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
+        The VPC must be in the same Region as your fleet. To look up a VPC ID, use the `VPC Dashboard <https://docs.aws.amazon.com/vpc/>`_ in the AWS Management Console . Learn more about VPC peering in `VPC Peering with Amazon GameLift Servers Fleets <https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-gamelift-fleet.html#cfn-gamelift-fleet-peervpcid
         '''
@@ -7488,6 +7569,18 @@ class CfnGameServerGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__404e092482dc871458880168ac858b7bf88e63e20673f4e26db50c873f594090)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGameServerGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnGameServerGroup")
+    @builtins.classmethod
+    def is_cfn_game_server_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGameServerGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c4327b050a5a80bc4fd7cf3b9e079fecd8db099853bf44148eca0696668d198e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGameServerGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8486,6 +8579,18 @@ class CfnGameSessionQueue(
             check_type(argname="argument game_session_queue_name", value=game_session_queue_name, expected_type=type_hints["game_session_queue_name"])
         return typing.cast(_IGameSessionQueueRef_8896df67, jsii.sinvoke(cls, "fromGameSessionQueueName", [scope, id, game_session_queue_name]))
 
+    @jsii.member(jsii_name="isCfnGameSessionQueue")
+    @builtins.classmethod
+    def is_cfn_game_session_queue(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGameSessionQueue.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ee1c730cc1eab1258e264b8485d4b82fda30bd2c50490abd5aedaf9e42b4f82)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGameSessionQueue", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9317,6 +9422,18 @@ class CfnLocation(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLocation", [resource]))
 
+    @jsii.member(jsii_name="isCfnLocation")
+    @builtins.classmethod
+    def is_cfn_location(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLocation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51a4af3dacaf82d541bcfbdd44f8fb4e0a14addd51d87a875d3b7727150e194f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLocation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9656,6 +9773,18 @@ class CfnMatchmakingConfiguration(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument matchmaking_configuration_name", value=matchmaking_configuration_name, expected_type=type_hints["matchmaking_configuration_name"])
         return typing.cast(_IMatchmakingConfigurationRef_419e9495, jsii.sinvoke(cls, "fromMatchmakingConfigurationName", [scope, id, matchmaking_configuration_name]))
+
+    @jsii.member(jsii_name="isCfnMatchmakingConfiguration")
+    @builtins.classmethod
+    def is_cfn_matchmaking_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMatchmakingConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a056fe9685d06a401b8711d261bc4873d3cbb09c3d2f36a77ddbc26d821be032)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMatchmakingConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10504,6 +10633,18 @@ class CfnMatchmakingRuleSet(
             check_type(argname="argument matchmaking_rule_set_name", value=matchmaking_rule_set_name, expected_type=type_hints["matchmaking_rule_set_name"])
         return typing.cast(_IMatchmakingRuleSetRef_57b0825c, jsii.sinvoke(cls, "fromMatchmakingRuleSetName", [scope, id, matchmaking_rule_set_name]))
 
+    @jsii.member(jsii_name="isCfnMatchmakingRuleSet")
+    @builtins.classmethod
+    def is_cfn_matchmaking_rule_set(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMatchmakingRuleSet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ede8857083a06bedbfd3f41a0d6102bca8590a2106848c3c0fcfbe5f5a1959bc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMatchmakingRuleSet", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10839,6 +10980,18 @@ class CfnScript(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument script_id", value=script_id, expected_type=type_hints["script_id"])
         return typing.cast(_IScriptRef_c20d81ab, jsii.sinvoke(cls, "fromScriptId", [scope, id, script_id]))
+
+    @jsii.member(jsii_name="isCfnScript")
+    @builtins.classmethod
+    def is_cfn_script(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnScript.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2e57fbca1856a665289a2d99850660b4b31ac5fb183f6b6b7ce9455fcfe41605)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnScript", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11289,6 +11442,12 @@ def _typecheckingstub__a59b299e6043860af26f7752ca92bfb2a6ddcc5cc02cdd40fd28dd726
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ad685b203601481886e2e61a50c1f39900a909250b63716c7d0547dcd9dd01fc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e6c7223e714d0339897da2cbb4b67d9e03a5022aa12f568680b86e828460d501(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11376,6 +11535,12 @@ def _typecheckingstub__fce919b179ae0f0256b86c63c73e64f52cf5bc6cc8b69274e60f6c90c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     build_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6100fec8b4f28cf578bdb00e4623f9816b4eaeacf32174a5d6bafe2aa8948285(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11481,10 +11646,24 @@ def _typecheckingstub__ab6c6ca30728cb7c3256e0f7c29051a6aedaba2da17c4636d893c52b3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e5e3ccfc677214283b03d24ad094b839a7b023f7241795766e6161818f7c7d65(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4bea05f08256bdbf55f0f4481b2104de57302a58c74c37db452b862c9cc716f4(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     fleet_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__90c8d5c928f98368c2557b1519270e4e28140c3d410bccc58f7858457f883739(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11741,6 +11920,12 @@ def _typecheckingstub__579b482b64e29fb725c6556d8b05792316cee10c0ccfc4731e33c616f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4ed8ef0ea129119fcd8929b52b751f36681e05a579d92ea375580fb2eadbc58a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b07a706beb428681d6a41fe2a705cfe7e9f6f65c0df4708d633a856c73d6fa7b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11966,6 +12151,12 @@ def _typecheckingstub__8559f65005087aabe3f94a9857ca3ab135fe3fddc5daa3feb2e8cdfac
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     fleet_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01ddf47f275bc83bb3abe257983b8fa3533342ecdb627237d53c90176c62f411(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12302,6 +12493,12 @@ def _typecheckingstub__404e092482dc871458880168ac858b7bf88e63e20673f4e26db50c873
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c4327b050a5a80bc4fd7cf3b9e079fecd8db099853bf44148eca0696668d198e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__32ac0616025cd3de739c7101cea4baa4d9d85d9755bd18a18599fd247f47e000(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12475,6 +12672,12 @@ def _typecheckingstub__604e1fe11dcc006d09239a8bce6316a343133e18607927cf4992e8abe
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7ee1c730cc1eab1258e264b8485d4b82fda30bd2c50490abd5aedaf9e42b4f82(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2cc05027a8472775374b6846f6c9ab499cc41f64fa8ed31ccbfd79e142b8b76d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12609,6 +12812,12 @@ def _typecheckingstub__2894a9471cf32535cc0aefdaa361f84636dfaf4516bf68ec7cbb5fee7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__51a4af3dacaf82d541bcfbdd44f8fb4e0a14addd51d87a875d3b7727150e194f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d95943640733fe4e543a0c2a9e0a647a118d84274c6945f59f0598a9585e4a4b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12684,6 +12893,12 @@ def _typecheckingstub__44f1d437cf25656e15ed4fd08232b72aae3264ab16d7f3b56203fc14f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     matchmaking_configuration_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a056fe9685d06a401b8711d261bc4873d3cbb09c3d2f36a77ddbc26d821be032(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12866,6 +13081,12 @@ def _typecheckingstub__8e5b9fd099aa59434fcb8a6563f3d9bfcf91d508b750f45d7b65f6d3f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ede8857083a06bedbfd3f41a0d6102bca8590a2106848c3c0fcfbe5f5a1959bc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d61a78aff0b1528ed82cb81e325639d2c75504b437ae15a2e7aac55347f0a30(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12935,6 +13156,12 @@ def _typecheckingstub__1f59c8d56686af6162141e6c0156e96fdd82f37720262dc218ca572b2
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     script_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2e57fbca1856a665289a2d99850660b4b31ac5fb183f6b6b7ce9455fcfe41605(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

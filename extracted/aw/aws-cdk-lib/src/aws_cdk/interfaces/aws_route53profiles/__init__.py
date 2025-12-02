@@ -176,13 +176,22 @@ typing.cast(typing.Any, IProfileResourceAssociationRef).__jsii_proxy_class__ = l
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_route53profiles.ProfileAssociationReference",
     jsii_struct_bases=[],
-    name_mapping={"profile_association_id": "profileAssociationId"},
+    name_mapping={
+        "profile_association_id": "profileAssociationId",
+        "resource_id": "resourceId",
+    },
 )
 class ProfileAssociationReference:
-    def __init__(self, *, profile_association_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        profile_association_id: builtins.str,
+        resource_id: builtins.str,
+    ) -> None:
         '''A reference to a ProfileAssociation resource.
 
         :param profile_association_id: The Id of the ProfileAssociation resource.
+        :param resource_id: The ResourceId of the ProfileAssociation resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -193,14 +202,17 @@ class ProfileAssociationReference:
             from aws_cdk.interfaces import aws_route53profiles as interfaces_aws_route53profiles
             
             profile_association_reference = interfaces_aws_route53profiles.ProfileAssociationReference(
-                profile_association_id="profileAssociationId"
+                profile_association_id="profileAssociationId",
+                resource_id="resourceId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c14bfb3f68cb45840b17a7bd76e4e892aad98ea5651c00283cc519cc2283f930)
             check_type(argname="argument profile_association_id", value=profile_association_id, expected_type=type_hints["profile_association_id"])
+            check_type(argname="argument resource_id", value=resource_id, expected_type=type_hints["resource_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "profile_association_id": profile_association_id,
+            "resource_id": resource_id,
         }
 
     @builtins.property
@@ -208,6 +220,13 @@ class ProfileAssociationReference:
         '''The Id of the ProfileAssociation resource.'''
         result = self._values.get("profile_association_id")
         assert result is not None, "Required property 'profile_association_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def resource_id(self) -> builtins.str:
+        '''The ResourceId of the ProfileAssociation resource.'''
+        result = self._values.get("resource_id")
+        assert result is not None, "Required property 'resource_id' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -345,6 +364,7 @@ publication.publish()
 def _typecheckingstub__c14bfb3f68cb45840b17a7bd76e4e892aad98ea5651c00283cc519cc2283f930(
     *,
     profile_association_id: builtins.str,
+    resource_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

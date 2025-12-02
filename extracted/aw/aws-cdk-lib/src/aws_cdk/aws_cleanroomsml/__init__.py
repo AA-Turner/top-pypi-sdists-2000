@@ -183,6 +183,18 @@ class CfnTrainingDataset(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrainingDataset", [resource]))
 
+    @jsii.member(jsii_name="isCfnTrainingDataset")
+    @builtins.classmethod
+    def is_cfn_training_dataset(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrainingDataset.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__78cf47e6a5adfa0a4a705f563e7416bb97dce81c2248e22f49d4a1a299157dfd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrainingDataset", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -908,6 +920,12 @@ def _typecheckingstub__038c489df01bd94323363a194424fbe900aac226689cefa852a1f05e7
 
 def _typecheckingstub__9550e7cc74f3a3279d5dadd02f957b89e1799245db85d81f550168acf07d3e4e(
     resource: _ITrainingDatasetRef_e0f12c42,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__78cf47e6a5adfa0a4a705f563e7416bb97dce81c2248e22f49d4a1a299157dfd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -132,6 +132,18 @@ class CfnConnectionAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnConnectionAlias")
+    @builtins.classmethod
+    def is_cfn_connection_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnectionAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__76f39ec24ce0950d3ba9ddf713f5b5c8349a489a83df314a68c350efb2fde838)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectionAlias", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -539,6 +551,18 @@ class CfnWorkspace(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument workspace_id", value=workspace_id, expected_type=type_hints["workspace_id"])
         return typing.cast(_IWorkspaceRef_2a5ebc43, jsii.sinvoke(cls, "fromWorkspaceId", [scope, id, workspace_id]))
+
+    @jsii.member(jsii_name="isCfnWorkspace")
+    @builtins.classmethod
+    def is_cfn_workspace(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkspace.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0189c0ab3f83c44331c574b9d6fa036f364fb409d35f51f73b8fba8ae858db28)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkspace", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1169,6 +1193,39 @@ class CfnWorkspacesPool(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pool_id", value=pool_id, expected_type=type_hints["pool_id"])
         return typing.cast(_IWorkspacesPoolRef_7d9266b1, jsii.sinvoke(cls, "fromPoolId", [scope, id, pool_id]))
+
+    @jsii.member(jsii_name="fromWorkspacesPoolArn")
+    @builtins.classmethod
+    def from_workspaces_pool_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> _IWorkspacesPoolRef_7d9266b1:
+        '''Creates a new IWorkspacesPoolRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__465631994003e79f30cef2521513b6f1d5f50c2aa738f7e794eda5bec14dc824)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(_IWorkspacesPoolRef_7d9266b1, jsii.sinvoke(cls, "fromWorkspacesPoolArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="isCfnWorkspacesPool")
+    @builtins.classmethod
+    def is_cfn_workspaces_pool(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkspacesPool.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d95fd45f53c6dbbf035cfa65feb9e596460f33a7c75ea9712267b2a083e3d9e0)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkspacesPool", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1833,6 +1890,12 @@ def _typecheckingstub__3fd73d00432c1164a74beb35acf6162e3d82fa91d51a0edf8c896028b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__76f39ec24ce0950d3ba9ddf713f5b5c8349a489a83df314a68c350efb2fde838(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__70d07e3ef46b7d1868d493367bae11c00c38fa0bb35cfa4e162e97b1482bf156(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1901,6 +1964,12 @@ def _typecheckingstub__4d89928bc3143b40dfcbe60436eb821c87d4ca5d7e96d4ce7e5b5f261
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     workspace_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0189c0ab3f83c44331c574b9d6fa036f364fb409d35f51f73b8fba8ae858db28(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2017,6 +2086,20 @@ def _typecheckingstub__aca13282ecc7b7c8ac155574994d5d8d845bec6aa4ca0daf161949c98
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     pool_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__465631994003e79f30cef2521513b6f1d5f50c2aa738f7e794eda5bec14dc824(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d95fd45f53c6dbbf035cfa65feb9e596460f33a7c75ea9712267b2a083e3d9e0(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

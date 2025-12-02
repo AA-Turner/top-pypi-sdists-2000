@@ -1,6 +1,4 @@
-"""
-Main function.
-"""
+"""Main module for datamodel-code-generator CLI."""
 
 from __future__ import annotations
 
@@ -17,15 +15,18 @@ from typing import TYPE_CHECKING, Any, ClassVar, Optional, Union, cast
 from urllib.parse import ParseResult, urlparse
 
 import argcomplete
-import black
 from pydantic import BaseModel
+from typing_extensions import TypeAlias
 
 from datamodel_code_generator import (
+    DEFAULT_SHARED_MODULE_NAME,
+    DataclassArguments,
     DataModelType,
     Error,
     InputFileType,
     InvalidClassNameError,
     OpenAPIScope,
+    ReuseScope,
     enable_debug_message,
     generate,
 )
@@ -36,6 +37,7 @@ from datamodel_code_generator.format import (
     Formatter,
     PythonVersion,
     PythonVersionMin,
+    _get_black,
     is_supported_in_black,
 )
 from datamodel_code_generator.model.pydantic_v2 import UnionMode  # noqa: TC001 # needed for pydantic
@@ -55,6 +57,16 @@ if TYPE_CHECKING:
 
     from typing_extensions import Self
 
+# Options that should be excluded from pyproject.toml config generation
+EXCLUDED_CONFIG_OPTIONS: frozenset[str] = frozenset({
+    "generate_pyproject_config",
+    "version",
+    "help",
+    "debug",
+    "no_color",
+    "disable_warnings",
+})
+
 
 class Exit(IntEnum):
     """Exit reasons."""
@@ -65,6 +77,7 @@ class Exit(IntEnum):
 
 
 def sig_int_handler(_: int, __: Any) -> None:  # pragma: no cover
+    """Handle SIGINT signal gracefully."""
     sys.exit(Exit.OK)
 
 
@@ -72,35 +85,45 @@ signal.signal(signal.SIGINT, sig_int_handler)
 
 
 class Config(BaseModel):
+    """Configuration model for code generation."""
+
     if PYDANTIC_V2:
         model_config = ConfigDict(arbitrary_types_allowed=True)  # pyright: ignore[reportAssignmentType]
 
-        def get(self, item: str) -> Any:
+        def get(self, item: str) -> Any:  # pragma: no cover
+            """Get attribute value by name."""
             return getattr(self, item)
 
-        def __getitem__(self, item: str) -> Any:
+        def __getitem__(self, item: str) -> Any:  # pragma: no cover
+            """Get item by key."""
             return self.get(item)
 
         @classmethod
         def parse_obj(cls, obj: Any) -> Self:
+            """Parse object into Config model."""
             return cls.model_validate(obj)
 
         @classmethod
         def get_fields(cls) -> dict[str, Any]:
+            """Get model fields."""
             return cls.model_fields
 
     else:
 
         class Config:
+            """Pydantic v1 configuration."""
+
             # Pydantic 1.5.1 doesn't support validate_assignment correctly
             arbitrary_types_allowed = (TextIOBase,)
 
         @classmethod
         def get_fields(cls) -> dict[str, Any]:
+            """Get model fields."""
             return cls.__fields__
 
     @field_validator("aliases", "extra_template_data", "custom_formatters_kwargs", mode="before")
     def validate_file(cls, value: Any) -> TextIOBase | None:  # noqa: N805
+        """Validate and open file path."""
         if value is None:  # pragma: no cover
             return value
 
@@ -108,7 +131,7 @@ class Config(BaseModel):
         if path.is_file():
             return cast("TextIOBase", path.expanduser().resolve().open("rt"))
 
-        msg = f"A file was expected but {value} is not a file."
+        msg = f"A file was expected but {value} is not a file."  # pragma: no cover
         raise Error(msg)  # pragma: no cover
 
     @field_validator(
@@ -119,23 +142,29 @@ class Config(BaseModel):
         mode="before",
     )
     def validate_path(cls, value: Any) -> Path | None:  # noqa: N805
+        """Validate and resolve path."""
         if value is None or isinstance(value, Path):
             return value  # pragma: no cover
         return Path(value).expanduser().resolve()
 
     @field_validator("url", mode="before")
     def validate_url(cls, value: Any) -> ParseResult | None:  # noqa: N805
+        """Validate and parse URL."""
         if isinstance(value, str) and is_url(value):  # pragma: no cover
             return urlparse(value)
         if value is None:  # pragma: no cover
             return None
-        msg = f"This protocol doesn't support only http/https. --input={value}"
+        msg = f"This protocol doesn't support only http/https. --input={value}"  # pragma: no cover
         raise Error(msg)  # pragma: no cover
 
     # Pydantic 1.5.1 doesn't support each_item=True correctly
     @field_validator("http_headers", mode="before")
     def validate_http_headers(cls, value: Any) -> list[tuple[str, str]] | None:  # noqa: N805
-        def validate_each_item(each_item: Any) -> tuple[str, str]:
+        """Validate HTTP headers."""
+        if value is None:  # pragma: no cover
+            return None
+
+        def validate_each_item(each_item: str | tuple[str, str]) -> tuple[str, str]:
             if isinstance(each_item, str):  # pragma: no cover
                 try:
                     field_name, field_value = each_item.split(":", maxsplit=1)
@@ -147,11 +176,16 @@ class Config(BaseModel):
 
         if isinstance(value, list):
             return [validate_each_item(each_item) for each_item in value]
-        return value  # pragma: no cover
+        msg = f"Invalid http_headers value: {value!r}"  # pragma: no cover
+        raise Error(msg)  # pragma: no cover
 
     @field_validator("http_query_parameters", mode="before")
     def validate_http_query_parameters(cls, value: Any) -> list[tuple[str, str]] | None:  # noqa: N805
-        def validate_each_item(each_item: Any) -> tuple[str, str]:
+        """Validate HTTP query parameters."""
+        if value is None:  # pragma: no cover
+            return None
+
+        def validate_each_item(each_item: str | tuple[str, str]) -> tuple[str, str]:
             if isinstance(each_item, str):  # pragma: no cover
                 try:
                     field_name, field_value = each_item.split("=", maxsplit=1)
@@ -163,10 +197,12 @@ class Config(BaseModel):
 
         if isinstance(value, list):
             return [validate_each_item(each_item) for each_item in value]
-        return value  # pragma: no cover
+        msg = f"Invalid http_query_parameters value: {value!r}"  # pragma: no cover
+        raise Error(msg)  # pragma: no cover
 
     @model_validator(mode="before")
     def validate_additional_imports(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+        """Validate and split additional imports."""
         additional_imports = values.get("additional_imports")
         if additional_imports is not None:
             values["additional_imports"] = additional_imports.split(",")
@@ -174,6 +210,7 @@ class Config(BaseModel):
 
     @model_validator(mode="before")
     def validate_custom_formatters(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+        """Validate and split custom formatters."""
         custom_formatters = values.get("custom_formatters")
         if custom_formatters is not None:
             values["custom_formatters"] = custom_formatters.split(",")
@@ -199,6 +236,7 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_output_datetime_class(self: Self) -> Self:  # pyright: ignore[reportRedeclaration]
+            """Validate output datetime class compatibility."""
             datetime_class_type: DatetimeClassType | None = self.output_datetime_class
             if (
                 datetime_class_type
@@ -210,18 +248,21 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_original_field_name_delimiter(self: Self) -> Self:  # pyright: ignore[reportRedeclaration]
+            """Validate original field name delimiter requires snake case."""
             if self.original_field_name_delimiter is not None and not self.snake_case_field:
                 raise Error(self.__validate_original_field_name_delimiter_err)
             return self
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_custom_file_header(self: Self) -> Self:  # pyright: ignore[reportRedeclaration]
+            """Validate custom file header options are mutually exclusive."""
             if self.custom_file_header and self.custom_file_header_path:
                 raise Error(self.__validate_custom_file_header_err)
             return self
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_keyword_only(self: Self) -> Self:  # pyright: ignore[reportRedeclaration]
+            """Validate keyword-only compatibility with target Python version."""
             output_model_type: DataModelType = self.output_model_type
             python_target: PythonVersion = self.target_python_version
             if (
@@ -234,6 +275,7 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_root(self: Self) -> Self:  # pyright: ignore[reportRedeclaration]
+            """Validate root model configuration."""
             if self.use_annotated:
                 self.field_constraints = True
             return self
@@ -242,6 +284,7 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_output_datetime_class(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+            """Validate output datetime class compatibility."""
             datetime_class_type: DatetimeClassType | None = values.get("output_datetime_class")
             if (
                 datetime_class_type
@@ -253,18 +296,21 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_original_field_name_delimiter(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+            """Validate original field name delimiter requires snake case."""
             if values.get("original_field_name_delimiter") is not None and not values.get("snake_case_field"):
                 raise Error(cls.__validate_original_field_name_delimiter_err)
             return values
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_custom_file_header(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+            """Validate custom file header options are mutually exclusive."""
             if values.get("custom_file_header") and values.get("custom_file_header_path"):
                 raise Error(cls.__validate_custom_file_header_err)
             return values
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_keyword_only(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+            """Validate keyword-only compatibility with target Python version."""
             output_model_type: DataModelType = cast("DataModelType", values.get("output_model_type"))
             python_target: PythonVersion = cast("PythonVersion", values.get("target_python_version"))
             if (
@@ -277,6 +323,7 @@ class Config(BaseModel):
 
         @model_validator()  # pyright: ignore[reportArgumentType]
         def validate_root(cls, values: dict[str, Any]) -> dict[str, Any]:  # noqa: N805
+            """Validate root model configuration."""
             if values.get("use_annotated"):
                 values["field_constraints"] = True
             return values
@@ -308,9 +355,12 @@ class Config(BaseModel):
     use_standard_collections: bool = False
     use_schema_description: bool = False
     use_field_description: bool = False
+    use_attribute_docstrings: bool = False
     use_inline_field_description: bool = False
     use_default_kwarg: bool = False
     reuse_model: bool = False
+    reuse_scope: ReuseScope = ReuseScope.Module
+    shared_module_name: str = DEFAULT_SHARED_MODULE_NAME
     encoding: str = DEFAULT_ENCODING
     enum_field_as_literal: Optional[LiteralType] = None  # noqa: UP045
     use_one_literal_as_default: bool = False
@@ -341,6 +391,7 @@ class Config(BaseModel):
     original_field_name_delimiter: Optional[str] = None  # noqa: UP045
     use_double_quotes: bool = False
     collapse_root_models: bool = False
+    skip_root_model: bool = False
     use_type_alias: bool = False
     special_field_name_prefix: Optional[str] = None  # noqa: UP045
     remove_special_field_name_prefix: bool = False
@@ -358,12 +409,15 @@ class Config(BaseModel):
     output_datetime_class: Optional[DatetimeClassType] = None  # noqa: UP045
     keyword_only: bool = False
     frozen_dataclasses: bool = False
+    dataclass_arguments: Optional[DataclassArguments] = None  # noqa: UP045
     no_alias: bool = False
     formatters: list[Formatter] = DEFAULT_FORMATTERS
     parent_scoped_naming: bool = False
     disable_future_imports: bool = False
+    type_mappings: Optional[list[str]] = None  # noqa: UP045
 
     def merge_args(self, args: Namespace) -> None:
+        """Merge command-line arguments into config."""
         set_args = {f: getattr(args, f) for f in self.get_fields() if getattr(args, f) is not None}
 
         if set_args.get("output_model_type") == DataModelType.MsgspecStruct.value:
@@ -378,10 +432,7 @@ class Config(BaseModel):
 
 
 def _get_pyproject_toml_config(source: Path) -> dict[str, Any]:
-    """Find and return the [tool.datamodel-codgen] section of the closest
-    pyproject.toml if it exists.
-    """
-
+    """Find and return the [tool.datamodel-codgen] section of the closest pyproject.toml if it exists."""
     current_path = source
     while current_path != current_path.parent:
         if (current_path / "pyproject.toml").is_file():
@@ -391,7 +442,9 @@ def _get_pyproject_toml_config(source: Path) -> dict[str, Any]:
                 # Convert options from kebap- to snake-case
                 pyproject_config = {k.replace("-", "_"): v for k, v in pyproject_config.items()}
                 # Replace US-american spelling if present (ignore if british spelling is present)
-                if "capitalize_enum_members" in pyproject_config and "capitalise_enum_members" not in pyproject_config:
+                if (
+                    "capitalize_enum_members" in pyproject_config and "capitalise_enum_members" not in pyproject_config
+                ):  # pragma: no cover
                     pyproject_config["capitalise_enum_members"] = pyproject_config.pop("capitalize_enum_members")
                 return pyproject_config
 
@@ -403,9 +456,39 @@ def _get_pyproject_toml_config(source: Path) -> dict[str, Any]:
     return {}
 
 
-def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, PLR0915
-    """Main function."""
+TomlValue: TypeAlias = Union[str, bool, list["TomlValue"], tuple["TomlValue", ...]]
 
+
+def _format_toml_value(value: TomlValue) -> str:
+    """Format a Python value as a TOML value string."""
+    if isinstance(value, bool):
+        return "true" if value else "false"
+    if isinstance(value, str):
+        return f'"{value}"'
+    formatted_items = [_format_toml_value(item) for item in value]
+    return f"[{', '.join(formatted_items)}]"
+
+
+def generate_pyproject_config(args: Namespace) -> str:
+    """Generate pyproject.toml [tool.datamodel-codegen] section from CLI arguments."""
+    lines: list[str] = ["[tool.datamodel-codegen]"]
+
+    args_dict: dict[str, object] = vars(args)
+    for key, value in sorted(args_dict.items()):
+        if value is None:
+            continue
+        if key in EXCLUDED_CONFIG_OPTIONS:
+            continue
+
+        toml_key = key.replace("_", "-")
+        toml_value = _format_toml_value(cast("TomlValue", value))
+        lines.append(f"{toml_key} = {toml_value}")
+
+    return "\n".join(lines) + "\n"
+
+
+def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, PLR0915
+    """Execute datamodel code generation from command-line arguments."""
     # add cli completion support
     argcomplete.autocomplete(arg_parser)
 
@@ -419,6 +502,11 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
 
         print(get_version())  # noqa: T201
         sys.exit(0)
+
+    if namespace.generate_pyproject_config:
+        config_output = generate_pyproject_config(namespace)
+        print(config_output)  # noqa: T201
+        return Exit.OK
 
     pyproject_config = _get_pyproject_toml_config(Path.cwd())
 
@@ -441,7 +529,7 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
         print(  # noqa: T201
             f"Installed black doesn't support Python version {config.target_python_version.value}.\n"
             f"You have to install a newer black.\n"
-            f"Installed black version: {black.__version__}",
+            f"Installed black version: {_get_black().__version__}",
             file=sys.stderr,
         )
         return Exit.ERROR
@@ -451,6 +539,13 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
 
     if config.disable_warnings:
         warnings.simplefilter("ignore")
+
+    if config.reuse_scope == ReuseScope.Tree and not config.reuse_model:
+        print(  # noqa: T201
+            "Warning: --reuse-scope=tree has no effect without --reuse-model",
+            file=sys.stderr,
+        )
+
     extra_template_data: defaultdict[str, dict[str, Any]] | None
     if config.extra_template_data is None:
         extra_template_data = None
@@ -528,9 +623,12 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
             use_standard_collections=config.use_standard_collections,
             use_schema_description=config.use_schema_description,
             use_field_description=config.use_field_description,
+            use_attribute_docstrings=config.use_attribute_docstrings,
             use_inline_field_description=config.use_inline_field_description,
             use_default_kwarg=config.use_default_kwarg,
             reuse_model=config.reuse_model,
+            reuse_scope=config.reuse_scope,
+            shared_module_name=config.shared_module_name,
             encoding=config.encoding,
             enum_field_as_literal=config.enum_field_as_literal,
             use_one_literal_as_default=config.use_one_literal_as_default,
@@ -559,6 +657,7 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
             original_field_name_delimiter=config.original_field_name_delimiter,
             use_double_quotes=config.use_double_quotes,
             collapse_root_models=config.collapse_root_models,
+            skip_root_model=config.skip_root_model,
             use_type_alias=config.use_type_alias,
             use_union_operator=config.use_union_operator,
             special_field_name_prefix=config.special_field_name_prefix,
@@ -580,7 +679,9 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
             no_alias=config.no_alias,
             formatters=config.formatters,
             parent_scoped_naming=config.parent_scoped_naming,
+            dataclass_arguments=config.dataclass_arguments,
             disable_future_imports=config.disable_future_imports,
+            type_mappings=config.type_mappings,
         )
     except InvalidClassNameError as e:
         print(f"{e} You have to set `--class-name` option", file=sys.stderr)  # noqa: T201

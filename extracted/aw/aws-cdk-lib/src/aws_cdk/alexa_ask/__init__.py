@@ -141,6 +141,18 @@ class CfnSkill(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSkill")
+    @builtins.classmethod
+    def is_cfn_skill(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSkill.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5dd8f7ac20a52edfb83ede893c043b149d3cc67c216744e403e92e5d5c16e537)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSkill", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -662,6 +674,12 @@ def _typecheckingstub__0d78aeecda8ab7b4c5c33f0fcee213f02875f3e3b528db0fdd0278c4f
     authentication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.AuthenticationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     skill_package: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSkill.SkillPackageProperty, typing.Dict[builtins.str, typing.Any]]],
     vendor_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5dd8f7ac20a52edfb83ede893c043b149d3cc67c216744e403e92e5d5c16e537(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

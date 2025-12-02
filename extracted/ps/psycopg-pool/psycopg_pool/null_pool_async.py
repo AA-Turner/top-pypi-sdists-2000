@@ -7,12 +7,13 @@ Psycopg null connection pool module (async version).
 from __future__ import annotations
 
 import logging
-from typing import Any, cast
+from typing import cast
 
 from psycopg import AsyncConnection
 from psycopg.pq import TransactionStatus
 
-from .abc import ACT, AsyncConnectFailedCB, AsyncConnectionCB
+from .abc import ACT, AsyncConnectFailedCB, AsyncConnectionCB, AsyncConninfoParam
+from .abc import AsyncKwargsParam
 from .errors import PoolTimeout, TooManyRequests
 from ._compat import ConnectionTimeout
 from ._acompat import AEvent
@@ -23,12 +24,13 @@ logger = logging.getLogger("psycopg.pool")
 
 
 class AsyncNullConnectionPool(_BaseNullConnectionPool, AsyncConnectionPool[ACT]):
+
     def __init__(
         self,
-        conninfo: str = "",
+        conninfo: AsyncConninfoParam = "",
         *,
-        connection_class: type[ACT] = cast("type[ACT]", AsyncConnection),
-        kwargs: dict[str, Any] | None = None,
+        connection_class: type[ACT] = cast(type[ACT], AsyncConnection),
+        kwargs: AsyncKwargsParam | None = None,
         min_size: int = 0,  # Note: min_size default value changed to 0.
         max_size: int | None = None,
         open: bool | None = None,
@@ -36,6 +38,7 @@ class AsyncNullConnectionPool(_BaseNullConnectionPool, AsyncConnectionPool[ACT])
         check: AsyncConnectionCB[ACT] | None = None,
         reset: AsyncConnectionCB[ACT] | None = None,
         name: str | None = None,
+        close_returns: bool = False,
         timeout: float = 30.0,
         max_waiting: int = 0,
         max_lifetime: float = 60 * 60.0,
@@ -55,6 +58,7 @@ class AsyncNullConnectionPool(_BaseNullConnectionPool, AsyncConnectionPool[ACT])
             min_size=min_size,
             max_size=max_size,
             name=name,
+            close_returns=False,  # close_returns=True makes no sense
             timeout=timeout,
             max_waiting=max_waiting,
             max_lifetime=max_lifetime,

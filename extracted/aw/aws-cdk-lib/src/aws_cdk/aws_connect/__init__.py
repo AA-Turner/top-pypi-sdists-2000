@@ -216,6 +216,18 @@ class CfnAgentStatus(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgentStatus", [resource]))
 
+    @jsii.member(jsii_name="isCfnAgentStatus")
+    @builtins.classmethod
+    def is_cfn_agent_status(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAgentStatus.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b47e9130211cfbd3cdc77fcdd150116569ba0b304296f653155f1dc3e20060bc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAgentStatus", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -627,6 +639,18 @@ class CfnApprovedOrigin(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnApprovedOrigin")
+    @builtins.classmethod
+    def is_cfn_approved_origin(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApprovedOrigin.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f6b49c7450b9e0e8351b3a43ae45df214e3043d1c9abcf8a9183be69db6bba9f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApprovedOrigin", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -858,6 +882,18 @@ class CfnContactFlow(
             type_hints = typing.get_type_hints(_typecheckingstub__e9095c329fca5b45d66dab1fccc242e6ae82dd746edeab2b003d272ea355d443)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactFlow", [resource]))
+
+    @jsii.member(jsii_name="isCfnContactFlow")
+    @builtins.classmethod
+    def is_cfn_contact_flow(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContactFlow.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__64593685953fb1ef6367c9368e726e27ad3c9d1b3883a38f09d5c13be693c07d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContactFlow", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1091,6 +1127,18 @@ class CfnContactFlowModule(
             type_hints = typing.get_type_hints(_typecheckingstub__594ee3994c2d321f1ded11e73b783e5e3491183cfb9dae318d2f0adcfd0ebae3)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactFlowModule", [resource]))
+
+    @jsii.member(jsii_name="isCfnContactFlowModule")
+    @builtins.classmethod
+    def is_cfn_contact_flow_module(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContactFlowModule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1ba47cd6266f1f20b2ce61dc83d4d485c1fcb871651f4b84e5e30e8f4f8e2753)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContactFlowModule", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1599,6 +1647,32 @@ class CfnContactFlowVersion(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForContactFlowVersion")
+    @builtins.classmethod
+    def arn_for_contact_flow_version(
+        cls,
+        resource: _IContactFlowVersionRef_0646c7f7,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4c1e9b8af1e00c6d522097632979343df6266fb9bdd0a68b48aa5a5c3d923cc0)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForContactFlowVersion", [resource]))
+
+    @jsii.member(jsii_name="isCfnContactFlowVersion")
+    @builtins.classmethod
+    def is_cfn_contact_flow_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnContactFlowVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__97e1fe12f2b0dc99efb6c1a6f7a8d9bc669ca719ebfe00a124552283f9245a01)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnContactFlowVersion", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1856,6 +1930,18 @@ class CfnEmailAddress(
             type_hints = typing.get_type_hints(_typecheckingstub__98a0239dae758fd013b020f0b8a394622176551877a96a418a071f3c534e7ac8)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEmailAddress", [resource]))
+
+    @jsii.member(jsii_name="isCfnEmailAddress")
+    @builtins.classmethod
+    def is_cfn_email_address(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEmailAddress.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__04505315070c82ae4667002c35ccb40ad69f4d10e6de112242af314b798a1b85)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEmailAddress", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2264,6 +2350,30 @@ class CfnEvaluationForm(
                             instructions="instructions",
                             not_applicable_enabled=False,
                             question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                                multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                                    options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                        ref_id="refId",
+                                        text="text"
+                                    )],
+        
+                                    # the properties below are optional
+                                    automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                            rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                                category="category",
+                                                condition="condition",
+                                                option_ref_ids=["optionRefIds"]
+                                            )
+                                        )],
+        
+                                        # the properties below are optional
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
+                                        default_option_ref_ids=["defaultOptionRefIds"]
+                                    ),
+                                    display_as="displayAs"
+                                ),
                                 numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                                     max_value=123,
                                     min_value=123,
@@ -2343,6 +2453,9 @@ class CfnEvaluationForm(
                 enabled=False
             ),
             description="description",
+            language_configuration=connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty(
+                form_language="formLanguage"
+            ),
             scoring_strategy=connect.CfnEvaluationForm.ScoringStrategyProperty(
                 mode="mode",
                 status="status"
@@ -2350,7 +2463,10 @@ class CfnEvaluationForm(
             tags=[CfnTag(
                 key="key",
                 value="value"
-            )]
+            )],
+            target_configuration=connect.CfnEvaluationForm.EvaluationFormTargetConfigurationProperty(
+                contact_interaction_type="contactInteractionType"
+            )
         )
     '''
 
@@ -2365,8 +2481,10 @@ class CfnEvaluationForm(
         title: builtins.str,
         auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.AutoEvaluationConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.ScoringStrategyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormTargetConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::Connect::EvaluationForm``.
 
@@ -2378,8 +2496,10 @@ class CfnEvaluationForm(
         :param title: A title of the evaluation form.
         :param auto_evaluation_configuration: The automatic evaluation configuration of an evaluation form.
         :param description: The description of the evaluation form. *Length Constraints* : Minimum length of 0. Maximum length of 1024.
+        :param language_configuration: 
         :param scoring_strategy: A scoring strategy of the evaluation form.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
+        :param target_configuration: 
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__67672e07b9b284918b4f61d0c04df64749fd2f5f1f5a07e093b1e338fae6f20d)
@@ -2392,8 +2512,10 @@ class CfnEvaluationForm(
             title=title,
             auto_evaluation_configuration=auto_evaluation_configuration,
             description=description,
+            language_configuration=language_configuration,
             scoring_strategy=scoring_strategy,
             tags=tags,
+            target_configuration=target_configuration,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
@@ -2411,6 +2533,18 @@ class CfnEvaluationForm(
             type_hints = typing.get_type_hints(_typecheckingstub__17f11f6e71002ab1f9575406dbf201d99508497f1204ddcb88d1eed331722df9)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEvaluationForm", [resource]))
+
+    @jsii.member(jsii_name="isCfnEvaluationForm")
+    @builtins.classmethod
+    def is_cfn_evaluation_form(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEvaluationForm.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f9fabfed2c41e6af2d0f9bc6f0deba937ab8dc805d9b829956e6c1c8ec92657)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEvaluationForm", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2557,6 +2691,23 @@ class CfnEvaluationForm(
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="languageConfiguration")
+    def language_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty"]], jsii.get(self, "languageConfiguration"))
+
+    @language_configuration.setter
+    def language_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__efb516908c15c7df5482baa8a9445f59725720b268873f9eb72e8359ab37fbeb)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "languageConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="scoringStrategy")
     def scoring_strategy(
         self,
@@ -2586,6 +2737,23 @@ class CfnEvaluationForm(
             type_hints = typing.get_type_hints(_typecheckingstub__ec087e4492b70f062d224ca25c2f0d81dc78704ad8d957b26ed60e8e67176df5)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "tagsRaw", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="targetConfiguration")
+    def target_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTargetConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTargetConfigurationProperty"]], jsii.get(self, "targetConfiguration"))
+
+    @target_configuration.setter
+    def target_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormTargetConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9fd1bcf6915520e15d5f7a36f9cc0d9fa88981fc0858ec75150d146490ef08a1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "targetConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.AutoEvaluationConfigurationProperty",
@@ -2769,6 +2937,30 @@ class CfnEvaluationForm(
                                 instructions="instructions",
                                 not_applicable_enabled=False,
                                 question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                                    multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                            ref_id="refId",
+                                            text="text"
+                                        )],
+                
+                                        # the properties below are optional
+                                        automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                            options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                                rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                                    category="category",
+                                                    condition="condition",
+                                                    option_ref_ids=["optionRefIds"]
+                                                )
+                                            )],
+                
+                                            # the properties below are optional
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
+                                            default_option_ref_ids=["defaultOptionRefIds"]
+                                        ),
+                                        display_as="displayAs"
+                                    ),
                                     numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                                         max_value=123,
                                         min_value=123,
@@ -3453,6 +3645,30 @@ class CfnEvaluationForm(
                         instructions="instructions",
                         not_applicable_enabled=False,
                         question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                            multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                                options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                    ref_id="refId",
+                                    text="text"
+                                )],
+                
+                                # the properties below are optional
+                                automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                    options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                        rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                            category="category",
+                                            condition="condition",
+                                            option_ref_ids=["optionRefIds"]
+                                        )
+                                    )],
+                
+                                    # the properties below are optional
+                                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                        source_type="sourceType"
+                                    ),
+                                    default_option_ref_ids=["defaultOptionRefIds"]
+                                ),
+                                display_as="displayAs"
+                            ),
                             numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                                 max_value=123,
                                 min_value=123,
@@ -3570,6 +3786,399 @@ class CfnEvaluationForm(
 
         def __repr__(self) -> str:
             return "EvaluationFormItemProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"form_language": "formLanguage"},
+    )
+    class EvaluationFormLanguageConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            form_language: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param form_language: The language of the form.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformlanguageconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_language_configuration_property = connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty(
+                    form_language="formLanguage"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__dac948724142aed3865fceed86ff96b08e0d4c05069ba899323a887a5adb519f)
+                check_type(argname="argument form_language", value=form_language, expected_type=type_hints["form_language"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if form_language is not None:
+                self._values["form_language"] = form_language
+
+        @builtins.property
+        def form_language(self) -> typing.Optional[builtins.str]:
+            '''The language of the form.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformlanguageconfiguration.html#cfn-connect-evaluationform-evaluationformlanguageconfiguration-formlanguage
+            '''
+            result = self._values.get("form_language")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormLanguageConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"rule_category": "ruleCategory"},
+    )
+    class EvaluationFormMultiSelectQuestionAutomationOptionProperty:
+        def __init__(
+            self,
+            *,
+            rule_category: typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param rule_category: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomationoption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_multi_select_question_automation_option_property = connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                    rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                        category="category",
+                        condition="condition",
+                        option_ref_ids=["optionRefIds"]
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__518dbaa317199e863790cbfe686adc7f0551b2069e11b9e6bb1e59f0a8b8ea50)
+                check_type(argname="argument rule_category", value=rule_category, expected_type=type_hints["rule_category"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "rule_category": rule_category,
+            }
+
+        @builtins.property
+        def rule_category(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomationoption.html#cfn-connect-evaluationform-evaluationformmultiselectquestionautomationoption-rulecategory
+            '''
+            result = self._values.get("rule_category")
+            assert result is not None, "Required property 'rule_category' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormMultiSelectQuestionAutomationOptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "options": "options",
+            "answer_source": "answerSource",
+            "default_option_ref_ids": "defaultOptionRefIds",
+        },
+    )
+    class EvaluationFormMultiSelectQuestionAutomationProperty:
+        def __init__(
+            self,
+            *,
+            options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            default_option_ref_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param options: The answer options for the automation.
+            :param answer_source: A question automation answer.
+            :param default_option_ref_ids: The list of reference id.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_multi_select_question_automation_property = connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                    options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                        rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                            category="category",
+                            condition="condition",
+                            option_ref_ids=["optionRefIds"]
+                        )
+                    )],
+                
+                    # the properties below are optional
+                    answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                        source_type="sourceType"
+                    ),
+                    default_option_ref_ids=["defaultOptionRefIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__597b6f67b4c7001b0aa56e6d7f1b39161a3e4d93e2232ca7c28a31c123d81de0)
+                check_type(argname="argument options", value=options, expected_type=type_hints["options"])
+                check_type(argname="argument answer_source", value=answer_source, expected_type=type_hints["answer_source"])
+                check_type(argname="argument default_option_ref_ids", value=default_option_ref_ids, expected_type=type_hints["default_option_ref_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "options": options,
+            }
+            if answer_source is not None:
+                self._values["answer_source"] = answer_source
+            if default_option_ref_ids is not None:
+                self._values["default_option_ref_ids"] = default_option_ref_ids
+
+        @builtins.property
+        def options(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty"]]]:
+            '''The answer options for the automation.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomation.html#cfn-connect-evaluationform-evaluationformmultiselectquestionautomation-options
+            '''
+            result = self._values.get("options")
+            assert result is not None, "Required property 'options' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty"]]], result)
+
+        @builtins.property
+        def answer_source(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]]:
+            '''A question automation answer.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomation.html#cfn-connect-evaluationform-evaluationformmultiselectquestionautomation-answersource
+            '''
+            result = self._values.get("answer_source")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty"]], result)
+
+        @builtins.property
+        def default_option_ref_ids(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The list of reference id.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionautomation.html#cfn-connect-evaluationform-evaluationformmultiselectquestionautomation-defaultoptionrefids
+            '''
+            result = self._values.get("default_option_ref_ids")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormMultiSelectQuestionAutomationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"ref_id": "refId", "text": "text"},
+    )
+    class EvaluationFormMultiSelectQuestionOptionProperty:
+        def __init__(self, *, ref_id: builtins.str, text: builtins.str) -> None:
+            '''
+            :param ref_id: The identifier to reference the item.
+            :param text: The title of the option.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionoption.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_multi_select_question_option_property = connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                    ref_id="refId",
+                    text="text"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__03cbeb39e68cecf7e07416d44a97c018c9510b85a763281fe84c155b108ed613)
+                check_type(argname="argument ref_id", value=ref_id, expected_type=type_hints["ref_id"])
+                check_type(argname="argument text", value=text, expected_type=type_hints["text"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "ref_id": ref_id,
+                "text": text,
+            }
+
+        @builtins.property
+        def ref_id(self) -> builtins.str:
+            '''The identifier to reference the item.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionoption.html#cfn-connect-evaluationform-evaluationformmultiselectquestionoption-refid
+            '''
+            result = self._values.get("ref_id")
+            assert result is not None, "Required property 'ref_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def text(self) -> builtins.str:
+            '''The title of the option.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionoption.html#cfn-connect-evaluationform-evaluationformmultiselectquestionoption-text
+            '''
+            result = self._values.get("text")
+            assert result is not None, "Required property 'text' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormMultiSelectQuestionOptionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "options": "options",
+            "automation": "automation",
+            "display_as": "displayAs",
+        },
+    )
+    class EvaluationFormMultiSelectQuestionPropertiesProperty:
+        def __init__(
+            self,
+            *,
+            options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty", typing.Dict[builtins.str, typing.Any]]]]],
+            automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            display_as: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param options: The list of options for the question.
+            :param automation: 
+            :param display_as: The display mode of the multi-select question.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionproperties.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_multi_select_question_properties_property = connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                    options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                        ref_id="refId",
+                        text="text"
+                    )],
+                
+                    # the properties below are optional
+                    automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                            rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                category="category",
+                                condition="condition",
+                                option_ref_ids=["optionRefIds"]
+                            )
+                        )],
+                
+                        # the properties below are optional
+                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                            source_type="sourceType"
+                        ),
+                        default_option_ref_ids=["defaultOptionRefIds"]
+                    ),
+                    display_as="displayAs"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__2a35d5c5de9b9ce7bff1070d801fe725d1c399eaf6c79f17891969717c0e500d)
+                check_type(argname="argument options", value=options, expected_type=type_hints["options"])
+                check_type(argname="argument automation", value=automation, expected_type=type_hints["automation"])
+                check_type(argname="argument display_as", value=display_as, expected_type=type_hints["display_as"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "options": options,
+            }
+            if automation is not None:
+                self._values["automation"] = automation
+            if display_as is not None:
+                self._values["display_as"] = display_as
+
+        @builtins.property
+        def options(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty"]]]:
+            '''The list of options for the question.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionproperties.html#cfn-connect-evaluationform-evaluationformmultiselectquestionproperties-options
+            '''
+            result = self._values.get("options")
+            assert result is not None, "Required property 'options' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty"]]], result)
+
+        @builtins.property
+        def automation(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionproperties.html#cfn-connect-evaluationform-evaluationformmultiselectquestionproperties-automation
+            '''
+            result = self._values.get("automation")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty"]], result)
+
+        @builtins.property
+        def display_as(self) -> typing.Optional[builtins.str]:
+            '''The display mode of the multi-select question.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformmultiselectquestionproperties.html#cfn-connect-evaluationform-evaluationformmultiselectquestionproperties-displayas
+            '''
+            result = self._values.get("display_as")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormMultiSelectQuestionPropertiesProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -4053,6 +4662,30 @@ class CfnEvaluationForm(
                     instructions="instructions",
                     not_applicable_enabled=False,
                     question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                        multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                            options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                ref_id="refId",
+                                text="text"
+                            )],
+                
+                            # the properties below are optional
+                            automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                    rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                        category="category",
+                                        condition="condition",
+                                        option_ref_ids=["optionRefIds"]
+                                    )
+                                )],
+                
+                                # the properties below are optional
+                                answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                    source_type="sourceType"
+                                ),
+                                default_option_ref_ids=["defaultOptionRefIds"]
+                            ),
+                            display_as="displayAs"
+                        ),
                         numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                             max_value=123,
                             min_value=123,
@@ -4256,6 +4889,7 @@ class CfnEvaluationForm(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty",
         jsii_struct_bases=[],
         name_mapping={
+            "multi_select": "multiSelect",
             "numeric": "numeric",
             "single_select": "singleSelect",
             "text": "text",
@@ -4265,6 +4899,7 @@ class CfnEvaluationForm(
         def __init__(
             self,
             *,
+            multi_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             numeric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             single_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormSingleSelectQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -4273,6 +4908,7 @@ class CfnEvaluationForm(
 
             The question type properties must be either for a numeric question or a single select question.
 
+            :param multi_select: 
             :param numeric: The properties of the numeric question.
             :param single_select: The properties of the numeric question.
             :param text: The properties of the text question.
@@ -4287,6 +4923,30 @@ class CfnEvaluationForm(
                 from aws_cdk import aws_connect as connect
                 
                 evaluation_form_question_type_properties_property = connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                    multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                            ref_id="refId",
+                            text="text"
+                        )],
+                
+                        # the properties below are optional
+                        automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                            options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                    category="category",
+                                    condition="condition",
+                                    option_ref_ids=["optionRefIds"]
+                                )
+                            )],
+                
+                            # the properties below are optional
+                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                source_type="sourceType"
+                            ),
+                            default_option_ref_ids=["defaultOptionRefIds"]
+                        ),
+                        display_as="displayAs"
+                    ),
                     numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                         max_value=123,
                         min_value=123,
@@ -4354,16 +5014,29 @@ class CfnEvaluationForm(
             '''
             if __debug__:
                 type_hints = typing.get_type_hints(_typecheckingstub__9c2a28674a94b033e97fe7c1b9bbd46fbd0b917a1605152cbffbc509362bd288)
+                check_type(argname="argument multi_select", value=multi_select, expected_type=type_hints["multi_select"])
                 check_type(argname="argument numeric", value=numeric, expected_type=type_hints["numeric"])
                 check_type(argname="argument single_select", value=single_select, expected_type=type_hints["single_select"])
                 check_type(argname="argument text", value=text, expected_type=type_hints["text"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if multi_select is not None:
+                self._values["multi_select"] = multi_select
             if numeric is not None:
                 self._values["numeric"] = numeric
             if single_select is not None:
                 self._values["single_select"] = single_select
             if text is not None:
                 self._values["text"] = text
+
+        @builtins.property
+        def multi_select(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformquestiontypeproperties.html#cfn-connect-evaluationform-evaluationformquestiontypeproperties-multiselect
+            '''
+            result = self._values.get("multi_select")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty"]], result)
 
         @builtins.property
         def numeric(
@@ -4493,6 +5166,30 @@ class CfnEvaluationForm(
                             instructions="instructions",
                             not_applicable_enabled=False,
                             question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                                multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                                    options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                        ref_id="refId",
+                                        text="text"
+                                    )],
+                
+                                    # the properties below are optional
+                                    automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                            rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                                category="category",
+                                                condition="condition",
+                                                option_ref_ids=["optionRefIds"]
+                                            )
+                                        )],
+                
+                                        # the properties below are optional
+                                        answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                            source_type="sourceType"
+                                        ),
+                                        default_option_ref_ids=["defaultOptionRefIds"]
+                                    ),
+                                    display_as="displayAs"
+                                ),
                                 numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                                     max_value=123,
                                     min_value=123,
@@ -5093,6 +5790,57 @@ class CfnEvaluationForm(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormTargetConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"contact_interaction_type": "contactInteractionType"},
+    )
+    class EvaluationFormTargetConfigurationProperty:
+        def __init__(self, *, contact_interaction_type: builtins.str) -> None:
+            '''
+            :param contact_interaction_type: The interaction type of a contact.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtargetconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                evaluation_form_target_configuration_property = connect.CfnEvaluationForm.EvaluationFormTargetConfigurationProperty(
+                    contact_interaction_type="contactInteractionType"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3a4f561e74643508e28b119f0630dcc366182788d3d5c80d3842dd0ffce9c9f5)
+                check_type(argname="argument contact_interaction_type", value=contact_interaction_type, expected_type=type_hints["contact_interaction_type"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "contact_interaction_type": contact_interaction_type,
+            }
+
+        @builtins.property
+        def contact_interaction_type(self) -> builtins.str:
+            '''The interaction type of a contact.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-evaluationformtargetconfiguration.html#cfn-connect-evaluationform-evaluationformtargetconfiguration-contactinteractiontype
+            '''
+            result = self._values.get("contact_interaction_type")
+            assert result is not None, "Required property 'contact_interaction_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EvaluationFormTargetConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty",
         jsii_struct_bases=[],
         name_mapping={"answer_source": "answerSource"},
@@ -5209,6 +5957,95 @@ class CfnEvaluationForm(
 
         def __repr__(self) -> str:
             return "EvaluationFormTextQuestionPropertiesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "category": "category",
+            "condition": "condition",
+            "option_ref_ids": "optionRefIds",
+        },
+    )
+    class MultiSelectQuestionRuleCategoryAutomationProperty:
+        def __init__(
+            self,
+            *,
+            category: builtins.str,
+            condition: builtins.str,
+            option_ref_ids: typing.Sequence[builtins.str],
+        ) -> None:
+            '''
+            :param category: The category name as defined in Rules.
+            :param condition: The automation condition applied on contact categories.
+            :param option_ref_ids: The list of reference id.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-multiselectquestionrulecategoryautomation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                multi_select_question_rule_category_automation_property = connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                    category="category",
+                    condition="condition",
+                    option_ref_ids=["optionRefIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__aef61a3c8079f96ec3846cd669c1fa6b2a1bb2306302ed02acd0a8cb558006dc)
+                check_type(argname="argument category", value=category, expected_type=type_hints["category"])
+                check_type(argname="argument condition", value=condition, expected_type=type_hints["condition"])
+                check_type(argname="argument option_ref_ids", value=option_ref_ids, expected_type=type_hints["option_ref_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "category": category,
+                "condition": condition,
+                "option_ref_ids": option_ref_ids,
+            }
+
+        @builtins.property
+        def category(self) -> builtins.str:
+            '''The category name as defined in Rules.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-multiselectquestionrulecategoryautomation.html#cfn-connect-evaluationform-multiselectquestionrulecategoryautomation-category
+            '''
+            result = self._values.get("category")
+            assert result is not None, "Required property 'category' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def condition(self) -> builtins.str:
+            '''The automation condition applied on contact categories.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-multiselectquestionrulecategoryautomation.html#cfn-connect-evaluationform-multiselectquestionrulecategoryautomation-condition
+            '''
+            result = self._values.get("condition")
+            assert result is not None, "Required property 'condition' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def option_ref_ids(self) -> typing.List[builtins.str]:
+            '''The list of reference id.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-evaluationform-multiselectquestionrulecategoryautomation.html#cfn-connect-evaluationform-multiselectquestionrulecategoryautomation-optionrefids
+            '''
+            result = self._values.get("option_ref_ids")
+            assert result is not None, "Required property 'option_ref_ids' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "MultiSelectQuestionRuleCategoryAutomationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -5449,8 +6286,10 @@ class CfnEvaluationForm(
         "title": "title",
         "auto_evaluation_configuration": "autoEvaluationConfiguration",
         "description": "description",
+        "language_configuration": "languageConfiguration",
         "scoring_strategy": "scoringStrategy",
         "tags": "tags",
+        "target_configuration": "targetConfiguration",
     },
 )
 class CfnEvaluationFormProps:
@@ -5463,8 +6302,10 @@ class CfnEvaluationFormProps:
         title: builtins.str,
         auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutoEvaluationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnEvaluationForm``.
 
@@ -5474,8 +6315,10 @@ class CfnEvaluationFormProps:
         :param title: A title of the evaluation form.
         :param auto_evaluation_configuration: The automatic evaluation configuration of an evaluation form.
         :param description: The description of the evaluation form. *Length Constraints* : Minimum length of 0. Maximum length of 1024.
+        :param language_configuration: 
         :param scoring_strategy: A scoring strategy of the evaluation form.
         :param tags: The tags used to organize, track, or control access for this resource. For example, { "tags": {"key1":"value1", "key2":"value2"} }.
+        :param target_configuration: 
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-evaluationform.html
         :exampleMetadata: fixture=_generated
@@ -5533,6 +6376,30 @@ class CfnEvaluationFormProps:
                                 instructions="instructions",
                                 not_applicable_enabled=False,
                                 question_type_properties=connect.CfnEvaluationForm.EvaluationFormQuestionTypePropertiesProperty(
+                                    multi_select=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty(
+                                        options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty(
+                                            ref_id="refId",
+                                            text="text"
+                                        )],
+            
+                                        # the properties below are optional
+                                        automation=connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty(
+                                            options=[connect.CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty(
+                                                rule_category=connect.CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty(
+                                                    category="category",
+                                                    condition="condition",
+                                                    option_ref_ids=["optionRefIds"]
+                                                )
+                                            )],
+            
+                                            # the properties below are optional
+                                            answer_source=connect.CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty(
+                                                source_type="sourceType"
+                                            ),
+                                            default_option_ref_ids=["defaultOptionRefIds"]
+                                        ),
+                                        display_as="displayAs"
+                                    ),
                                     numeric=connect.CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty(
                                         max_value=123,
                                         min_value=123,
@@ -5612,6 +6479,9 @@ class CfnEvaluationFormProps:
                     enabled=False
                 ),
                 description="description",
+                language_configuration=connect.CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty(
+                    form_language="formLanguage"
+                ),
                 scoring_strategy=connect.CfnEvaluationForm.ScoringStrategyProperty(
                     mode="mode",
                     status="status"
@@ -5619,7 +6489,10 @@ class CfnEvaluationFormProps:
                 tags=[CfnTag(
                     key="key",
                     value="value"
-                )]
+                )],
+                target_configuration=connect.CfnEvaluationForm.EvaluationFormTargetConfigurationProperty(
+                    contact_interaction_type="contactInteractionType"
+                )
             )
         '''
         if __debug__:
@@ -5630,8 +6503,10 @@ class CfnEvaluationFormProps:
             check_type(argname="argument title", value=title, expected_type=type_hints["title"])
             check_type(argname="argument auto_evaluation_configuration", value=auto_evaluation_configuration, expected_type=type_hints["auto_evaluation_configuration"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument language_configuration", value=language_configuration, expected_type=type_hints["language_configuration"])
             check_type(argname="argument scoring_strategy", value=scoring_strategy, expected_type=type_hints["scoring_strategy"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument target_configuration", value=target_configuration, expected_type=type_hints["target_configuration"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "instance_arn": instance_arn,
             "items": items,
@@ -5642,10 +6517,14 @@ class CfnEvaluationFormProps:
             self._values["auto_evaluation_configuration"] = auto_evaluation_configuration
         if description is not None:
             self._values["description"] = description
+        if language_configuration is not None:
+            self._values["language_configuration"] = language_configuration
         if scoring_strategy is not None:
             self._values["scoring_strategy"] = scoring_strategy
         if tags is not None:
             self._values["tags"] = tags
+        if target_configuration is not None:
+            self._values["target_configuration"] = target_configuration
 
     @builtins.property
     def instance_arn(self) -> typing.Union[builtins.str, _IInstanceRef_b6835093]:
@@ -5722,6 +6601,16 @@ class CfnEvaluationFormProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def language_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-evaluationform.html#cfn-connect-evaluationform-languageconfiguration
+        '''
+        result = self._values.get("language_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty]], result)
+
+    @builtins.property
     def scoring_strategy(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.ScoringStrategyProperty]]:
@@ -5742,6 +6631,16 @@ class CfnEvaluationFormProps:
         '''
         result = self._values.get("tags")
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def target_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormTargetConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-evaluationform.html#cfn-connect-evaluationform-targetconfiguration
+        '''
+        result = self._values.get("target_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormTargetConfigurationProperty]], result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
         return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -5872,6 +6771,18 @@ class CfnHoursOfOperation(
             type_hints = typing.get_type_hints(_typecheckingstub__b29283b351b66869118b9820a74132e9dd95c4882c9d0e8e14ea121ae7efaba7)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHoursOfOperation", [resource]))
+
+    @jsii.member(jsii_name="isCfnHoursOfOperation")
+    @builtins.classmethod
+    def is_cfn_hours_of_operation(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnHoursOfOperation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5bda5fbfb2a2d4e935a5311c2fa05ff46d01d60b2fb370114c19a2cb315eb329)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHoursOfOperation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6799,6 +7710,18 @@ class CfnInstance(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstance", [resource]))
 
+    @jsii.member(jsii_name="isCfnInstance")
+    @builtins.classmethod
+    def is_cfn_instance(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInstance.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8cacaa40d365157a9c2ecb5636a5446540ed9d5f5e98ee8cda6516074bc030a4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstance", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7460,6 +8383,18 @@ class CfnInstanceStorageConfig(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnInstanceStorageConfig")
+    @builtins.classmethod
+    def is_cfn_instance_storage_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInstanceStorageConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__19d09d779f78aea1ec9617fd9a7c486e2e56b04f1a3e04bdd0c0522353714c0a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstanceStorageConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8241,6 +9176,18 @@ class CfnIntegrationAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnIntegrationAssociation")
+    @builtins.classmethod
+    def is_cfn_integration_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIntegrationAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d9d59f1585ead00032b10f99b5fe883aa71a6250c9c2c7116d8e48e00ca20ca)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegrationAssociation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -8517,6 +9464,18 @@ class CfnPhoneNumber(
             type_hints = typing.get_type_hints(_typecheckingstub__ace4cf0aec7582be307eb1c4435fe5f7c6a0a3ad0c1a79fd0acb0198e947d673)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPhoneNumber", [resource]))
+
+    @jsii.member(jsii_name="isCfnPhoneNumber")
+    @builtins.classmethod
+    def is_cfn_phone_number(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPhoneNumber.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2462e566c565d069bddd1ccdbf0c230e0f24824281ae7d45a515307d62c35d2b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPhoneNumber", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -8912,6 +9871,18 @@ class CfnPredefinedAttribute(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPredefinedAttribute")
+    @builtins.classmethod
+    def is_cfn_predefined_attribute(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPredefinedAttribute.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__90d211508e0f2ac7bdf21cd816f5bff3505eefb2fb975e5418499d7422cb157f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPredefinedAttribute", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9394,6 +10365,18 @@ class CfnPrompt(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPrompt", [resource]))
 
+    @jsii.member(jsii_name="isCfnPrompt")
+    @builtins.classmethod
+    def is_cfn_prompt(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPrompt.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0d02846280b1da0f555ca03329de0d65503acc78f1029cda6351a37b91c8092a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrompt", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9751,6 +10734,18 @@ class CfnQueue(
             type_hints = typing.get_type_hints(_typecheckingstub__e2260ac73200da744b6c234260ea164580139111bb6707750278d0e109ade3a3)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
+
+    @jsii.member(jsii_name="isCfnQueue")
+    @builtins.classmethod
+    def is_cfn_queue(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueue.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3797f600b83b2b2339bd120c0fc82ac20530fa44301808bf03179af787f4092e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10424,6 +11419,18 @@ class CfnQuickConnect(
             type_hints = typing.get_type_hints(_typecheckingstub__e3e4eb0a23736e29d930c03aefcb682719bc73d58ce7993d4052e46edc2c69bd)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQuickConnect", [resource]))
+
+    @jsii.member(jsii_name="isCfnQuickConnect")
+    @builtins.classmethod
+    def is_cfn_quick_connect(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQuickConnect.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7a4b7ab5e885386965fc10658f93754e8f894c7bab13c73dd3347ecb57bbe679)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQuickConnect", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11154,6 +12161,18 @@ class CfnRoutingProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__101a29fea1d94d7b9ecdd5e4851b18a046a208351c818f073e110d5a87858dee)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoutingProfile", [resource]))
+
+    @jsii.member(jsii_name="isCfnRoutingProfile")
+    @builtins.classmethod
+    def is_cfn_routing_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRoutingProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0251fab76321967f67f1b3f8a63360b3cb059c43aba6052ea4d1ce72ec4b5697)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoutingProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12101,6 +13120,18 @@ class CfnRule(
             type_hints = typing.get_type_hints(_typecheckingstub__21ce47746fd90d93763234aac8a998b283a3b36d6c26d70e2e44daffed315bf2)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRule", [resource]))
+
+    @jsii.member(jsii_name="isCfnRule")
+    @builtins.classmethod
+    def is_cfn_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__611882d9abfd8720fae563e18f7ec57ee7cc24b72bffe900e68638cf220f7caa)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRule", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13707,6 +14738,18 @@ class CfnSecurityKey(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSecurityKey")
+    @builtins.classmethod
+    def is_cfn_security_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSecurityKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6730f5c2ce35fe47e9473dbad9225cdaaa31dd58a37e3f3d820032d00bb376b7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityKey", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -13991,6 +15034,18 @@ class CfnSecurityProfile(
             type_hints = typing.get_type_hints(_typecheckingstub__605777f68f6348b588e4d9c01c50e35ca60eeab982e060cca3cec1c2c85b7777)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSecurityProfile", [resource]))
+
+    @jsii.member(jsii_name="isCfnSecurityProfile")
+    @builtins.classmethod
+    def is_cfn_security_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSecurityProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7a1b19869ffc80b510efc228a20a1b60d75ceed802c46247104daa4d066c4591)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecurityProfile", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14975,6 +16030,18 @@ class CfnTaskTemplate(
             type_hints = typing.get_type_hints(_typecheckingstub__534412111be38c2d2445cd8c536febb1a009f1eef77a386c6dd489a6c701be58)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTaskTemplate", [resource]))
+
+    @jsii.member(jsii_name="isCfnTaskTemplate")
+    @builtins.classmethod
+    def is_cfn_task_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTaskTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c09a4ef205fadb20a8c14a51d04c88da90b389b4fa959c4a744e7ba067dd367f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTaskTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16041,6 +17108,18 @@ class CfnTrafficDistributionGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrafficDistributionGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnTrafficDistributionGroup")
+    @builtins.classmethod
+    def is_cfn_traffic_distribution_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrafficDistributionGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__913f8abff57b1f639c2cf12dc0ac366a8d6cfeda7a5bffded2a876ec7546d831)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrafficDistributionGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -16405,6 +17484,18 @@ class CfnUser(
             type_hints = typing.get_type_hints(_typecheckingstub__18a58c02c716920ea89623af4079c1d73cfc325b3632baf55e840a062cb5c1b9)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
+
+    @jsii.member(jsii_name="isCfnUser")
+    @builtins.classmethod
+    def is_cfn_user(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUser.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc37a103178ea265b4f762291c5e8b15ace14b5b11cf6a0d9d5d02f03b5f5958)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -17068,6 +18159,18 @@ class CfnUserHierarchyGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserHierarchyGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnUserHierarchyGroup")
+    @builtins.classmethod
+    def is_cfn_user_hierarchy_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserHierarchyGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__532065df37a6af15e6ed7ae397a9b6fb60cdc045a581ab61488e88c54d2afd52)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserHierarchyGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -17390,6 +18493,18 @@ class CfnUserHierarchyStructure(
             type_hints = typing.get_type_hints(_typecheckingstub__df89dbffb17433056c8b0b2fda2b30c518a512cbc61b91aaa0241b0fdcf67822)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUserHierarchyStructure", [resource]))
+
+    @jsii.member(jsii_name="isCfnUserHierarchyStructure")
+    @builtins.classmethod
+    def is_cfn_user_hierarchy_structure(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserHierarchyStructure.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bac1a6f5d57dcced5fc69625f57887c18f6b8f08854bd8d8399fae7c6ff77253)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserHierarchyStructure", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18541,6 +19656,18 @@ class CfnView(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForView", [resource]))
 
+    @jsii.member(jsii_name="isCfnView")
+    @builtins.classmethod
+    def is_cfn_view(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnView.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__679b32f5b19d9403a9c22a8fad183a866d962b792ae50b1033df6ee610b362a0)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnView", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -18911,6 +20038,18 @@ class CfnViewVersion(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForViewVersion", [resource]))
 
+    @jsii.member(jsii_name="isCfnViewVersion")
+    @builtins.classmethod
+    def is_cfn_view_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnViewVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b76c32541e955ba926518e22d683750029ba74f8c381a90ceba4151abc281a03)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnViewVersion", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -19188,6 +20327,12 @@ def _typecheckingstub__985efce7d51e6b6d5f263df8fe473f63ae7c3862ee395b66b755bc272
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b47e9130211cfbd3cdc77fcdd150116569ba0b304296f653155f1dc3e20060bc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3d83454aed4d3419db0f2c17c70b50ce23d4acfe85654c14b3955ccec567507d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -19272,6 +20417,12 @@ def _typecheckingstub__44955422cb4c00b338f45e52a0d4136fdcdb94c8e433595b636f468d5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__f6b49c7450b9e0e8351b3a43ae45df214e3043d1c9abcf8a9183be69db6bba9f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__15b611bd9c5a92c253c2e2b0cba97b9f73bad0cfc8494953acb694fda143bba2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -19321,6 +20472,12 @@ def _typecheckingstub__bacec198fd7006a7e922c6b62694383eb7200d23c3f8da491f520191b
 
 def _typecheckingstub__e9095c329fca5b45d66dab1fccc242e6ae82dd746edeab2b003d272ea355d443(
     resource: _IContactFlowRef_747dc709,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__64593685953fb1ef6367c9368e726e27ad3c9d1b3883a38f09d5c13be693c07d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19395,6 +20552,12 @@ def _typecheckingstub__008a6ee0ce6447d7f5f7c62774a959e253bc4a69cef26848e6d3f74cf
 
 def _typecheckingstub__594ee3994c2d321f1ded11e73b783e5e3491183cfb9dae318d2f0adcfd0ebae3(
     resource: _IContactFlowModuleRef_7a0e807b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ba47cd6266f1f20b2ce61dc83d4d485c1fcb871651f4b84e5e30e8f4f8e2753(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19482,6 +20645,18 @@ def _typecheckingstub__a31de8fadfe8b204a6f20d104c9bd7e6d511bb0a98ca39db212f6ea6f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4c1e9b8af1e00c6d522097632979343df6266fb9bdd0a68b48aa5a5c3d923cc0(
+    resource: _IContactFlowVersionRef_0646c7f7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__97e1fe12f2b0dc99efb6c1a6f7a8d9bc669ca719ebfe00a124552283f9245a01(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__13f86454b3bf4a5aaf2f2292d0d2d066b4877ddadcbc6f3f09833d142f628fc0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -19530,6 +20705,12 @@ def _typecheckingstub__82663491f0adb2dbe44ce9a95c4b21bf5d7529ba2b8adcceab5da9bed
 
 def _typecheckingstub__98a0239dae758fd013b020f0b8a394622176551877a96a418a071f3c534e7ac8(
     resource: _IEmailAddressRef_35d49535,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__04505315070c82ae4667002c35ccb40ad69f4d10e6de112242af314b798a1b85(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19611,14 +20792,22 @@ def _typecheckingstub__67672e07b9b284918b4f61d0c04df64749fd2f5f1f5a07e093b1e338f
     title: builtins.str,
     auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutoEvaluationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
 
 def _typecheckingstub__17f11f6e71002ab1f9575406dbf201d99508497f1204ddcb88d1eed331722df9(
     resource: _IEvaluationFormRef_fa83f2b6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7f9fabfed2c41e6af2d0f9bc6f0deba937ab8dc805d9b829956e6c1c8ec92657(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19671,6 +20860,12 @@ def _typecheckingstub__9b9daef123f8c8ba72731239424846e3251f3e39a09700e6514170d31
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__efb516908c15c7df5482baa8a9445f59725720b268873f9eb72e8359ab37fbeb(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b8ab41606e6f4148f72499568c63a3750f38b857a5fc25e01a04fcefb15350c9(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.ScoringStrategyProperty]],
 ) -> None:
@@ -19679,6 +20874,12 @@ def _typecheckingstub__b8ab41606e6f4148f72499568c63a3750f38b857a5fc25e01a04fcefb
 
 def _typecheckingstub__ec087e4492b70f062d224ca25c2f0d81dc78704ad8d957b26ed60e8e67176df5(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9fd1bcf6915520e15d5f7a36f9cc0d9fa88981fc0858ec75150d146490ef08a1(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEvaluationForm.EvaluationFormTargetConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19761,6 +20962,46 @@ def _typecheckingstub__1ed93558b58ad3642a506969313dd38d56ce0f003f808635135ccaf5c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__dac948724142aed3865fceed86ff96b08e0d4c05069ba899323a887a5adb519f(
+    *,
+    form_language: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__518dbaa317199e863790cbfe686adc7f0551b2069e11b9e6bb1e59f0a8b8ea50(
+    *,
+    rule_category: typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.MultiSelectQuestionRuleCategoryAutomationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__597b6f67b4c7001b0aa56e6d7f1b39161a3e4d93e2232ca7c28a31c123d81de0(
+    *,
+    options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationOptionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    default_option_ref_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__03cbeb39e68cecf7e07416d44a97c018c9510b85a763281fe84c155b108ed613(
+    *,
+    ref_id: builtins.str,
+    text: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2a35d5c5de9b9ce7bff1070d801fe725d1c399eaf6c79f17891969717c0e500d(
+    *,
+    options: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormMultiSelectQuestionOptionProperty, typing.Dict[builtins.str, typing.Any]]]]],
+    automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormMultiSelectQuestionAutomationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    display_as: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b81afcd26ca2b7f7f360e53cfff837a4d204082391c2522686bc1415137d9bb0(
     *,
     answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19813,6 +21054,7 @@ def _typecheckingstub__76f87135992dba43e2709251a961f9661f40617cabeb04621ceba33e2
 
 def _typecheckingstub__9c2a28674a94b033e97fe7c1b9bbd46fbd0b917a1605152cbffbc509362bd288(
     *,
+    multi_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormMultiSelectQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     numeric: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormNumericQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     single_select: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormSingleSelectQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     text: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTextQuestionPropertiesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19867,6 +21109,13 @@ def _typecheckingstub__45e8b8c481c725b1ed84e34212cf426ea008289d40995f757fe99cb6f
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3a4f561e74643508e28b119f0630dcc366182788d3d5c80d3842dd0ffce9c9f5(
+    *,
+    contact_interaction_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2ca5130e277ddd74204d9bbd7aeee6155c32ce87f65672233c24b6ac1a433fcd(
     *,
     answer_source: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormQuestionAutomationAnswerSourceProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
@@ -19877,6 +21126,15 @@ def _typecheckingstub__2ca5130e277ddd74204d9bbd7aeee6155c32ce87f65672233c24b6ac1
 def _typecheckingstub__bf7945895c50206de7b3703ba68cf028dc4eaef3ad3a6f2e2ded4961891aa32e(
     *,
     automation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTextQuestionAutomationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__aef61a3c8079f96ec3846cd669c1fa6b2a1bb2306302ed02acd0a8cb558006dc(
+    *,
+    category: builtins.str,
+    condition: builtins.str,
+    option_ref_ids: typing.Sequence[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19913,8 +21171,10 @@ def _typecheckingstub__b678e993288629444b4e1bc33b4631f7578a458c70203ec6ae7263a8a
     title: builtins.str,
     auto_evaluation_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.AutoEvaluationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    language_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormLanguageConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     scoring_strategy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.ScoringStrategyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    target_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEvaluationForm.EvaluationFormTargetConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -19936,6 +21196,12 @@ def _typecheckingstub__da9a7b2f06b8b2d053fcfa26018be9202b48193f9ffb7fc1d9518391c
 
 def _typecheckingstub__b29283b351b66869118b9820a74132e9dd95c4882c9d0e8e14ea121ae7efaba7(
     resource: _IHoursOfOperationRef_5b4f8721,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5bda5fbfb2a2d4e935a5311c2fa05ff46d01d60b2fb370114c19a2cb315eb329(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20072,6 +21338,12 @@ def _typecheckingstub__941d1392a5833365a03c940bc71ac18bb6462d16c9e41d71b35d84fcc
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8cacaa40d365157a9c2ecb5636a5446540ed9d5f5e98ee8cda6516074bc030a4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__6e4dee5bd55d2c2f964814ca3e2747955315fb5bc8f0a80efc7cbad1ed39cbdc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20154,6 +21426,12 @@ def _typecheckingstub__30c8e9e3ad538fac1acafd66e46e4e7a4f3893f93a8c6bb42ba1525f1
     kinesis_stream_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.KinesisStreamConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kinesis_video_stream_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.KinesisVideoStreamConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     s3_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnInstanceStorageConfig.S3ConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__19d09d779f78aea1ec9617fd9a7c486e2e56b04f1a3e04bdd0c0522353714c0a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20276,6 +21554,12 @@ def _typecheckingstub__0623057688349069456f9eae4995faa9cd189f98024c1f76262706d57
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6d9d59f1585ead00032b10f99b5fe883aa71a6250c9c2c7116d8e48e00ca20ca(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9bb2bfc240169367a312e392a1f57215cf8d8c8079407283c69a1ce7b13f7f09(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20332,6 +21616,12 @@ def _typecheckingstub__9ec70d84fd2bda163d290722acbb6feca633b4ee134732d8b720c0b96
 
 def _typecheckingstub__ace4cf0aec7582be307eb1c4435fe5f7c6a0a3ad0c1a79fd0acb0198e947d673(
     resource: _IPhoneNumberRef_62bb2b03,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2462e566c565d069bddd1ccdbf0c230e0f24824281ae7d45a515307d62c35d2b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20412,6 +21702,12 @@ def _typecheckingstub__aae8251f3c38f12791d918a121eabea35a0fd76a17fe96a45e59fab89
     attribute_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPredefinedAttribute.AttributeConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     purposes: typing.Optional[typing.Sequence[builtins.str]] = None,
     values: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnPredefinedAttribute.ValuesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__90d211508e0f2ac7bdf21cd816f5bff3505eefb2fb975e5418499d7422cb157f(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20503,6 +21799,12 @@ def _typecheckingstub__dc46dab0c2d14e8dfdb3e969df4458aabc563abc513ce6843f4ada17b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0d02846280b1da0f555ca03329de0d65503acc78f1029cda6351a37b91c8092a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__082bb671ea7d466d02fa1596c6cdcfaf4437ac98f010da0ad9653442f009294a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20576,6 +21878,12 @@ def _typecheckingstub__305bba43cd31a2f9d719dec6a726b64cb46f6b33b3b631880aa85047c
 
 def _typecheckingstub__e2260ac73200da744b6c234260ea164580139111bb6707750278d0e109ade3a3(
     resource: _IQueueRef_da280a64,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3797f600b83b2b2339bd120c0fc82ac20530fa44301808bf03179af787f4092e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20703,6 +22011,12 @@ def _typecheckingstub__e3e4eb0a23736e29d930c03aefcb682719bc73d58ce7993d4052e46ed
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7a4b7ab5e885386965fc10658f93754e8f894c7bab13c73dd3347ecb57bbe679(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ac17b042f7cf408478c49ac00f219efb0ede78bbe556a5ec55b66c5025bf6198(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -20808,6 +22122,12 @@ def _typecheckingstub__ca1360ef7fc87b491018629ca5fc6a3c13fcbdd97e4a14461038caf03
 
 def _typecheckingstub__101a29fea1d94d7b9ecdd5e4851b18a046a208351c818f073e110d5a87858dee(
     resource: _IRoutingProfileRef_908ef992,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0251fab76321967f67f1b3f8a63360b3cb059c43aba6052ea4d1ce72ec4b5697(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -20950,6 +22270,12 @@ def _typecheckingstub__999d5f7971fc0ea0f693e0f9a61faf62317d493403a6d249ca1db6bc5
 
 def _typecheckingstub__21ce47746fd90d93763234aac8a998b283a3b36d6c26d70e2e44daffed315bf2(
     resource: _IRuleRef_795f35b4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__611882d9abfd8720fae563e18f7ec57ee7cc24b72bffe900e68638cf220f7caa(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21137,6 +22463,12 @@ def _typecheckingstub__eec1c8c6bb56659ae557c882f85d373b6d643a7be8fd81d7dcb8e28a4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6730f5c2ce35fe47e9473dbad9225cdaaa31dd58a37e3f3d820032d00bb376b7(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__23c2e847b86bfc09195d252c47aea6a4403071968a249a46d9beca03100b5358(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21190,6 +22522,12 @@ def _typecheckingstub__3e088a4b4379aab0e18ddc67fbe352d07789383efb957a27db08764dc
 
 def _typecheckingstub__605777f68f6348b588e4d9c01c50e35ca60eeab982e060cca3cec1c2c85b7777(
     resource: _ISecurityProfileRef_b6bb0bdf,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7a1b19869ffc80b510efc228a20a1b60d75ceed802c46247104daa4d066c4591(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21348,6 +22686,12 @@ def _typecheckingstub__e55cf6106eb4919ab3d57f42477e52e40f628476ec3364c5bf5b40089
 
 def _typecheckingstub__534412111be38c2d2445cd8c536febb1a009f1eef77a386c6dd489a6c701be58(
     resource: _ITaskTemplateRef_9cc832c1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c09a4ef205fadb20a8c14a51d04c88da90b389b4fa959c4a744e7ba067dd367f(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21520,6 +22864,12 @@ def _typecheckingstub__2ee904e8a4e6fe4dcc9c15d6c1689a759bfd0088d09d2db288ae01d45
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__913f8abff57b1f639c2cf12dc0ac366a8d6cfeda7a5bffded2a876ec7546d831(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b4f6c13df7129e219cbf36228095876149e60b246cf354ab6fe83b9652428171(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21587,6 +22937,12 @@ def _typecheckingstub__05b3c171d418de057737855a6729454df2138450ce49f656f47804ab2
 
 def _typecheckingstub__18a58c02c716920ea89623af4079c1d73cfc325b3632baf55e840a062cb5c1b9(
     resource: _IUserRef_7465521c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fc37a103178ea265b4f762291c5e8b15ace14b5b11cf6a0d9d5d02f03b5f5958(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21718,6 +23074,12 @@ def _typecheckingstub__02879d9b411f3ce8bd843f8f971e5d4909d0ccd4c4ea85854249fe8d6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__532065df37a6af15e6ed7ae397a9b6fb60cdc045a581ab61488e88c54d2afd52(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__752f8fce7f90c25285d3743bf24f50aec111d37047ee0c4af63a38e966735a03(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21776,6 +23138,12 @@ def _typecheckingstub__0dd86f1d677cc33d8aa1cee7bb5d0ab37a797bd1cb536ed79c4373391
 
 def _typecheckingstub__df89dbffb17433056c8b0b2fda2b30c518a512cbc61b91aaa0241b0fdcf67822(
     resource: _IUserHierarchyStructureRef_34687182,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bac1a6f5d57dcced5fc69625f57887c18f6b8f08854bd8d8399fae7c6ff77253(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -21905,6 +23273,12 @@ def _typecheckingstub__c7618f126a589a27ec8b1bfafbb2a862c9f94db11e1a2bcb9b2dc9cee
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__679b32f5b19d9403a9c22a8fad183a866d962b792ae50b1033df6ee610b362a0(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a4f4d449c39fb674cb2aee4444da15965f7a738d317d39c5795787870d91cb90(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -21978,6 +23352,12 @@ def _typecheckingstub__c352cc20d21de3ffee67568db6d5f70cd6bd44413ffa25ab4bc4e5003
 
 def _typecheckingstub__b18e539209dd27e86b0f94e5ae1b078558505cb618bcf4e09aac05d86d1e7bfd(
     resource: _IViewVersionRef_9f0eb9b0,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b76c32541e955ba926518e22d683750029ba74f8c381a90ceba4151abc281a03(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

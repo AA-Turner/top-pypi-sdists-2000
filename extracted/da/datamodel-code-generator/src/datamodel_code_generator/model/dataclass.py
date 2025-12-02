@@ -1,8 +1,13 @@
+"""Python dataclass model generator.
+
+Generates Python dataclasses using the @dataclass decorator.
+"""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, ClassVar, Optional
 
-from datamodel_code_generator import DatetimeClassType, PythonVersion, PythonVersionMin
+from datamodel_code_generator import DataclassArguments, DatetimeClassType, PythonVersion, PythonVersionMin
 from datamodel_code_generator.imports import (
     IMPORT_DATE,
     IMPORT_DATETIME,
@@ -33,6 +38,8 @@ def _has_field_assignment(field: DataModelFieldBase) -> bool:
 
 
 class DataClass(DataModel):
+    """DataModel implementation for Python dataclasses."""
+
     TEMPLATE_FILE_PATH: ClassVar[str] = "dataclass.jinja2"
     DEFAULT_IMPORTS: ClassVar[tuple[Import, ...]] = (IMPORT_DATACLASS,)
 
@@ -54,7 +61,9 @@ class DataClass(DataModel):
         keyword_only: bool = False,
         frozen: bool = False,
         treat_dot_as_module: bool = False,
+        dataclass_arguments: DataclassArguments | None = None,
     ) -> None:
+        """Initialize dataclass with fields sorted by field assignment requirement."""
         super().__init__(
             reference=reference,
             fields=sorted(fields, key=_has_field_assignment),
@@ -72,9 +81,19 @@ class DataClass(DataModel):
             frozen=frozen,
             treat_dot_as_module=treat_dot_as_module,
         )
+        if dataclass_arguments is not None:
+            self.dataclass_arguments = dataclass_arguments
+        else:
+            self.dataclass_arguments = {}
+            if frozen:
+                self.dataclass_arguments["frozen"] = True
+            if keyword_only:
+                self.dataclass_arguments["kw_only"] = True
 
 
 class DataModelField(DataModelFieldBase):
+    """Field implementation for dataclass models."""
+
     _FIELD_KEYS: ClassVar[set[str]] = {
         "default_factory",
         "init",
@@ -87,6 +106,7 @@ class DataModelField(DataModelFieldBase):
     constraints: Optional[Constraints] = None  # noqa: UP045
 
     def process_const(self) -> None:
+        """Process const field constraint."""
         if "const" not in self.extras:
             return
         self.const = True
@@ -98,25 +118,28 @@ class DataModelField(DataModelFieldBase):
 
     @property
     def imports(self) -> tuple[Import, ...]:
+        """Get imports including field() if needed."""
         field = self.field
         if field and field.startswith("field("):
             return chain_as_tuple(super().imports, (IMPORT_FIELD,))
         return super().imports
 
     def self_reference(self) -> bool:  # pragma: no cover
+        """Check if field references its parent dataclass."""
         return isinstance(self.parent, DataClass) and self.parent.reference.path in {
             d.reference.path for d in self.data_type.all_data_types if d.reference
         }
 
     @property
     def field(self) -> str | None:
-        """for backwards compatibility"""
+        """For backwards compatibility."""
         result = str(self)
         if not result:
             return None
         return result
 
     def __str__(self) -> str:
+        """Generate field() call or default value representation."""
         data: dict[str, Any] = {k: v for k, v in self.extras.items() if k in self._FIELD_KEYS}
 
         if self.default != UNDEFINED and self.default is not None:
@@ -147,6 +170,8 @@ class DataModelField(DataModelFieldBase):
 
 
 class DataTypeManager(_DataTypeManager):
+    """Type manager for dataclass models."""
+
     def __init__(  # noqa: PLR0913, PLR0917
         self,
         python_version: PythonVersion = PythonVersionMin,
@@ -159,6 +184,7 @@ class DataTypeManager(_DataTypeManager):
         target_datetime_class: DatetimeClassType = DatetimeClassType.Datetime,
         treat_dot_as_module: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
+        """Initialize type manager with datetime type mapping."""
         super().__init__(
             python_version,
             use_standard_collections,

@@ -168,6 +168,18 @@ class CfnInvoiceUnit(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInvoiceUnit", [resource]))
 
+    @jsii.member(jsii_name="isCfnInvoiceUnit")
+    @builtins.classmethod
+    def is_cfn_invoice_unit(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInvoiceUnit.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f97e5d0e05825f59a4f670e04661e7a2360b8e39fa20004da63e2812f003323d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInvoiceUnit", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -624,6 +636,12 @@ def _typecheckingstub__ec21d6093b38a709121aa7ff8c0297fdced84c912861970ec02e3bc31
 
 def _typecheckingstub__da43b69b71c31ed78101f0716e31477bd305068db757443e4b0bfe0a5e113036(
     resource: _IInvoiceUnitRef_43bc5894,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f97e5d0e05825f59a4f670e04661e7a2360b8e39fa20004da63e2812f003323d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

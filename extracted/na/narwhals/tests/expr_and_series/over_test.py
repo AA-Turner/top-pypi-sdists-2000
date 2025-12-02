@@ -372,8 +372,13 @@ def test_over_cum_reverse(
 ) -> None:
     if "pyarrow_table" in str(constructor_eager):
         request.applymarker(pytest.mark.xfail)
-    if "pandas_nullable" in str(constructor_eager) and attr in {"cum_max", "cum_min"}:
-        # https://github.com/pandas-dev/pandas/issues/61031
+    if (
+        "pandas_nullable" in str(constructor_eager)
+        and attr in {"cum_max", "cum_min"}
+        and PANDAS_VERSION < (3, 0)
+    ):
+        # TODO(FBruzzesi): convert to pytest.skip() if the fix does not make it into
+        # `pandas=2.3.4`. Otherwise update version boundary
         request.applymarker(pytest.mark.xfail)
     if "cudf" in str(constructor_eager):
         # https://github.com/rapidsai/cudf/issues/18159
@@ -518,6 +523,7 @@ def test_over_ewm_mean(
     [
         (("a",), [1, 1, 4, 5, 5], [3, 3, 4, 6, 6]),
         (("a", "c"), [1, 1, 4, 5, 6], [3, 3, 4, 5, 6]),
+        (("a", "d"), [1, 1, 4, 5, 6], [3, 3, 4, 5, 6]),
     ],
 )
 def test_over_with_nulls_in_partition(
@@ -529,21 +535,20 @@ def test_over_with_nulls_in_partition(
     # https://github.com/narwhals-dev/narwhals/issues/3300
     if "duckdb" in str(constructor) and DUCKDB_VERSION < (1, 3):
         pytest.skip()
-    context = (
-        pytest.raises(NotImplementedError, match="`over` with `partition_by`")
-        if "pyarrow_table" in str(constructor) and len(partition) > 1
-        else does_not_raise()
-    )
-    data = {"a": [1, 1, None, 3, 3], "b": [1, 3, 4, 5, 6], "c": [1, 1, None, 3, 4]}
+    data = {
+        "a": [1, 1, None, 3, 3],
+        "b": [1, 3, 4, 5, 6],
+        "c": [1, 1, None, 3, 4],  # second group with nulls
+        "d": [1, 1, 2, 2, 3],  # second group without nulls
+    }
     df = nw.from_native(constructor(data))
     expected = {"b": [1, 3, 4, 5, 6], "bmin": expected_min, "bmax": expected_max}
-    with context:
-        result = df.select(
-            "b",
-            bmin=nw.col("b").min().over(partition),
-            bmax=nw.col("b").max().over(partition),
-        ).sort("b")
-        assert_equal_data(result, expected)
+    result = df.select(
+        "b",
+        bmin=nw.col("b").min().over(partition),
+        bmax=nw.col("b").max().over(partition),
+    ).sort("b")
+    assert_equal_data(result, expected)
 
 
 @pytest.mark.parametrize(

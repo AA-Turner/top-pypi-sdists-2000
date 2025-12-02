@@ -197,6 +197,18 @@ class CfnCluster(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
+    @jsii.member(jsii_name="isCfnCluster")
+    @builtins.classmethod
+    def is_cfn_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb8855d21ae7bbddafabe35720182f99ebe4422eea7f0d74a996221b01b0b2f7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -948,6 +960,18 @@ class CfnParameterGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnParameterGroup")
+    @builtins.classmethod
+    def is_cfn_parameter_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnParameterGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a8e5f78a06b573c243009368bcc31a6bc412b54b9ef399ccbc21b6fb582663d8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnParameterGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1190,6 +1214,18 @@ class CfnSubnetGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSubnetGroup")
+    @builtins.classmethod
+    def is_cfn_subnet_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSubnetGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__568854a3808c43b3057219155f5478652fc2df4f800baf90d9736b19851e2184)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSubnetGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1412,6 +1448,12 @@ def _typecheckingstub__f9f30ee10a84923167efcee2b8e1e518005532c0ce7a5332fd89071e6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__eb8855d21ae7bbddafabe35720182f99ebe4422eea7f0d74a996221b01b0b2f7(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9d414733c7b35171bc3653d115c315aa4807828bc7abf2009139681ae47eb70e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1553,6 +1595,12 @@ def _typecheckingstub__57163a266c7ddaa448bd986af45e05e85c86557e3ddab63ad97ececce
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a8e5f78a06b573c243009368bcc31a6bc412b54b9ef399ccbc21b6fb582663d8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f230255f83e3cded6147eae9447b88505dc5f3d28a6f75d4b196ae7245a76670(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1599,6 +1647,12 @@ def _typecheckingstub__83031360ae2c1b57012ac874ff39a0718c041d983e9345fa429f3eff1
     subnet_ids: typing.Sequence[builtins.str],
     description: typing.Optional[builtins.str] = None,
     subnet_group_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__568854a3808c43b3057219155f5478652fc2df4f800baf90d9736b19851e2184(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -188,6 +188,18 @@ class CfnDatastore(
             check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
         return typing.cast(_IDatastoreRef_15dedc0d, jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
 
+    @jsii.member(jsii_name="isCfnDatastore")
+    @builtins.classmethod
+    def is_cfn_datastore(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDatastore.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b747001227a61c29cf980dda1aa09300dfdeffe2e50d19afcb67e1ab56166315)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDatastore", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -451,6 +463,12 @@ def _typecheckingstub__314be040c8eb5e03acac65995440ca8ecf395de82c807acd51190e6e6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     datastore_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b747001227a61c29cf980dda1aa09300dfdeffe2e50d19afcb67e1ab56166315(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

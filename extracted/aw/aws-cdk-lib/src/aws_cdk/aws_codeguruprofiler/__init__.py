@@ -218,6 +218,18 @@ class CfnProfilingGroup(
             check_type(argname="argument profiling_group_name", value=profiling_group_name, expected_type=type_hints["profiling_group_name"])
         return typing.cast(_IProfilingGroupRef_d3751e1f, jsii.sinvoke(cls, "fromProfilingGroupName", [scope, id, profiling_group_name]))
 
+    @jsii.member(jsii_name="isCfnProfilingGroup")
+    @builtins.classmethod
+    def is_cfn_profiling_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProfilingGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b6d89b63de3411ba4b7a03c5c67f302d3ff123b88300036a667e79f67a553ef)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfilingGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1094,6 +1106,12 @@ def _typecheckingstub__552edc8b399fb365e317214fcadc79fac39ae04b205363192ae2b4055
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     profiling_group_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b6d89b63de3411ba4b7a03c5c67f302d3ff123b88300036a667e79f67a553ef(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

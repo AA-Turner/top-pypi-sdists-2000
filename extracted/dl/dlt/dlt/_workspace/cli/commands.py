@@ -489,6 +489,8 @@ The `dlt schema` command will load, validate and print out a dlt schema: `dlt sc
                 schema_str = s.to_dbml()
             elif format_ == "dot":
                 schema_str = s.to_dot()
+            elif format == "mermaid":
+                schema_str = s.to_mermaid()
             else:
                 schema_str = s.to_pretty_yaml(remove_defaults=remove_defaults)
 
@@ -693,6 +695,13 @@ If you are reading this on the docs website, you are looking at the rendered ver
         self.parser.add_argument("file_name", nargs=1, help="Output file name")
 
         self.parser.add_argument(
+            "--commands",
+            nargs="*",
+            help="List of command names to render (optional)",
+            default=None,
+        )
+
+        self.parser.add_argument(
             "--compare",
             default=False,
             action="store_true",
@@ -705,7 +714,7 @@ If you are reading this on the docs website, you are looking at the rendered ver
 
         parser, _ = _create_parser()
 
-        result = render_argparse_markdown("dlt", parser)
+        result = render_argparse_markdown("dlt", parser, commands=args.commands)
 
         if args.compare:
             with open(args.file_name[0], "r", encoding="utf-8") as f:
@@ -769,7 +778,8 @@ class WorkspaceCommand(SupportsCliCommand):
     command = "workspace"
     help_string = "Manage current Workspace"
     description = """
-Commands to get info, cleanup local files and launch Workspace MCP
+Commands to get info, cleanup local files and launch Workspace MCP. Run without command get
+workspace info.
 """
 
     def configure_parser(self, parser: argparse.ArgumentParser) -> None:

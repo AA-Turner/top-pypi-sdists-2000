@@ -215,6 +215,18 @@ class CfnServer(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServer", [resource]))
 
+    @jsii.member(jsii_name="isCfnServer")
+    @builtins.classmethod
+    def is_cfn_server(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__122b4ef67f454e988cf51339f770f2945d837a44df7630addaaf012658e1d3f6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServer", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1148,6 +1160,12 @@ def _typecheckingstub__4fcf3005231c62e7682797d2e25d33ceb0c0b9602a2f2ffe6a7c3dabf
 
 def _typecheckingstub__7addaa0f5a0a8dacb6627c6a0d2534172c69540994c4c32158526275f0a932ec(
     resource: _IServerRef_62338428,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__122b4ef67f454e988cf51339f770f2945d837a44df7630addaaf012658e1d3f6(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

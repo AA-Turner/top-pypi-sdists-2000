@@ -128,6 +128,29 @@ class CfnGroup(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForGroup")
+    @builtins.classmethod
+    def arn_for_group(cls, resource: _IGroupRef_28a5ba9a) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01ab3c0d3cca733429f775beb080c97f01d0699872b9a2cf17cb7dec5795d17c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnGroup")
+    @builtins.classmethod
+    def is_cfn_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b25553d499e3434e811a8393022add9b93718a56b976df383923e4e30e5c468f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -273,6 +296,32 @@ class CfnGroupMembership(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForGroupMembership")
+    @builtins.classmethod
+    def arn_for_group_membership(
+        cls,
+        resource: _IGroupMembershipRef_0d737030,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ff9fad22921b91752db10653f5c61dd0bc13a0bf8a3b3888623273813a4e50c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGroupMembership", [resource]))
+
+    @jsii.member(jsii_name="isCfnGroupMembership")
+    @builtins.classmethod
+    def is_cfn_group_membership(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroupMembership.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dc267ec839f05f7b319ddb3ef057abfd744e9c55e1ac011a7d51c236a00817e1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroupMembership", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -637,6 +686,18 @@ def _typecheckingstub__37e27ff46dfa4082cad1981cc4ade1e2a9ce445cf9aad4a8eb75e162b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__01ab3c0d3cca733429f775beb080c97f01d0699872b9a2cf17cb7dec5795d17c(
+    resource: _IGroupRef_28a5ba9a,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b25553d499e3434e811a8393022add9b93718a56b976df383923e4e30e5c468f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__fd30cf433d0f11c47c01b425898b3b3494dae8561dd252ec97cb62a6f3ea01c0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -674,6 +735,18 @@ def _typecheckingstub__76d55a804ce565c6f3a413944bff86b3236786318808951cf53ad4eff
     group_id: builtins.str,
     identity_store_id: builtins.str,
     member_id: typing.Union[_IResolvable_da3f097b, typing.Union[CfnGroupMembership.MemberIdProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ff9fad22921b91752db10653f5c61dd0bc13a0bf8a3b3888623273813a4e50c(
+    resource: _IGroupMembershipRef_0d737030,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc267ec839f05f7b319ddb3ef057abfd744e9c55e1ac011a7d51c236a00817e1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

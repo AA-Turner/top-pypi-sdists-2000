@@ -236,6 +236,18 @@ class CfnEnvironment(
             check_type(argname="argument environment_id", value=environment_id, expected_type=type_hints["environment_id"])
         return typing.cast(_IEnvironmentRef_3a278cee, jsii.sinvoke(cls, "fromEnvironmentId", [scope, id, environment_id]))
 
+    @jsii.member(jsii_name="isCfnEnvironment")
+    @builtins.classmethod
+    def is_cfn_environment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEnvironment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a946b1d41a513a1af40378b2cf3b221a152229e728b12c59e54774c391aabead)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironment", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -943,6 +955,12 @@ def _typecheckingstub__e899cfd66876c330e36451ba1053d74b809f866540b5ee1540ed13738
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     environment_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a946b1d41a513a1af40378b2cf3b221a152229e728b12c59e54774c391aabead(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

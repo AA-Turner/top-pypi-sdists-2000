@@ -249,6 +249,18 @@ class CfnConnector(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnector", [resource]))
 
+    @jsii.member(jsii_name="isCfnConnector")
+    @builtins.classmethod
+    def is_cfn_connector(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnector.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__621d7a1bebdd309eeaafc0d9409414dd3451efaa108cc38aee58f26a0cf2a02c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2299,6 +2311,18 @@ class CfnCustomPlugin(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCustomPlugin", [resource]))
 
+    @jsii.member(jsii_name="isCfnCustomPlugin")
+    @builtins.classmethod
+    def is_cfn_custom_plugin(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCustomPlugin.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c9ccf23482916231d027aa555703e81d949ebaefa1483022c7dcd223bd959b1e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomPlugin", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2889,6 +2913,18 @@ class CfnWorkerConfiguration(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWorkerConfiguration", [resource]))
 
+    @jsii.member(jsii_name="isCfnWorkerConfiguration")
+    @builtins.classmethod
+    def is_cfn_worker_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkerConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c8cff24f3f5b168939a606fea6f19dc4fde9ef680f901591094e2c305ef620ec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkerConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3153,6 +3189,12 @@ def _typecheckingstub__300d015169800cb7d305cead5c1382d5e67bfb30617c5f51d4668a050
 
 def _typecheckingstub__f26d95c6319433bd0cbca899efddd898047f9ba311c93aee12630357d63924c8(
     resource: _IConnectorRef_e9a5be01,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__621d7a1bebdd309eeaafc0d9409414dd3451efaa108cc38aee58f26a0cf2a02c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3427,6 +3469,12 @@ def _typecheckingstub__eeeb6c50c961bd89c3629b90ffb13003ce789a5d4572fff826a635317
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c9ccf23482916231d027aa555703e81d949ebaefa1483022c7dcd223bd959b1e(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2de4a61cefe6c2d25a1cb343ddd4a22e10b259b61229c873a373b2fa9d057114(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3518,6 +3566,12 @@ def _typecheckingstub__5b9b69a356034dd45c5e800dbc80d6a39a12c1880a5d436867eade4d8
 
 def _typecheckingstub__60f0ad67ba01edfeecae2a3d978cc4e44bdf071856117a4a3bc2d1e1355d0521(
     resource: _IWorkerConfigurationRef_7ea18433,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c8cff24f3f5b168939a606fea6f19dc4fde9ef680f901591094e2c305ef620ec(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

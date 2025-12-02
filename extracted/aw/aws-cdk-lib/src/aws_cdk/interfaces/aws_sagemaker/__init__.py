@@ -261,13 +261,22 @@ class ClusterReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.CodeRepositoryReference",
     jsii_struct_bases=[],
-    name_mapping={"code_repository_id": "codeRepositoryId"},
+    name_mapping={
+        "code_repository_id": "codeRepositoryId",
+        "code_repository_name": "codeRepositoryName",
+    },
 )
 class CodeRepositoryReference:
-    def __init__(self, *, code_repository_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        code_repository_id: builtins.str,
+        code_repository_name: builtins.str,
+    ) -> None:
         '''A reference to a CodeRepository resource.
 
         :param code_repository_id: The Id of the CodeRepository resource.
+        :param code_repository_name: The CodeRepositoryName of the CodeRepository resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -278,14 +287,17 @@ class CodeRepositoryReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             code_repository_reference = interfaces_aws_sagemaker.CodeRepositoryReference(
-                code_repository_id="codeRepositoryId"
+                code_repository_id="codeRepositoryId",
+                code_repository_name="codeRepositoryName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d50203d0b8619bba87d6272a7d3180c525e4133465ac661135be4365a5902520)
             check_type(argname="argument code_repository_id", value=code_repository_id, expected_type=type_hints["code_repository_id"])
+            check_type(argname="argument code_repository_name", value=code_repository_name, expected_type=type_hints["code_repository_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "code_repository_id": code_repository_id,
+            "code_repository_name": code_repository_name,
         }
 
     @builtins.property
@@ -293,6 +305,13 @@ class CodeRepositoryReference:
         '''The Id of the CodeRepository resource.'''
         result = self._values.get("code_repository_id")
         assert result is not None, "Required property 'code_repository_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def code_repository_name(self) -> builtins.str:
+        '''The CodeRepositoryName of the CodeRepository resource.'''
+        result = self._values.get("code_repository_name")
+        assert result is not None, "Required property 'code_repository_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -517,13 +536,22 @@ class DomainReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.EndpointConfigReference",
     jsii_struct_bases=[],
-    name_mapping={"endpoint_config_id": "endpointConfigId"},
+    name_mapping={
+        "endpoint_config_id": "endpointConfigId",
+        "endpoint_config_name": "endpointConfigName",
+    },
 )
 class EndpointConfigReference:
-    def __init__(self, *, endpoint_config_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        endpoint_config_id: builtins.str,
+        endpoint_config_name: builtins.str,
+    ) -> None:
         '''A reference to a EndpointConfig resource.
 
         :param endpoint_config_id: The Id of the EndpointConfig resource.
+        :param endpoint_config_name: The EndpointConfigName of the EndpointConfig resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -534,14 +562,17 @@ class EndpointConfigReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             endpoint_config_reference = interfaces_aws_sagemaker.EndpointConfigReference(
-                endpoint_config_id="endpointConfigId"
+                endpoint_config_id="endpointConfigId",
+                endpoint_config_name="endpointConfigName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__671b59e91ff91baea0cef8d7d45d4100318e43b4ba27225394b64570ce952f45)
             check_type(argname="argument endpoint_config_id", value=endpoint_config_id, expected_type=type_hints["endpoint_config_id"])
+            check_type(argname="argument endpoint_config_name", value=endpoint_config_name, expected_type=type_hints["endpoint_config_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "endpoint_config_id": endpoint_config_id,
+            "endpoint_config_name": endpoint_config_name,
         }
 
     @builtins.property
@@ -549,6 +580,13 @@ class EndpointConfigReference:
         '''The Id of the EndpointConfig resource.'''
         result = self._values.get("endpoint_config_id")
         assert result is not None, "Required property 'endpoint_config_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def endpoint_config_name(self) -> builtins.str:
+        '''The EndpointConfigName of the EndpointConfig resource.'''
+        result = self._values.get("endpoint_config_name")
+        assert result is not None, "Required property 'endpoint_config_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2799,13 +2837,14 @@ class ModelQualityJobDefinitionReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.ModelReference",
     jsii_struct_bases=[],
-    name_mapping={"model_id": "modelId"},
+    name_mapping={"model_id": "modelId", "model_name": "modelName"},
 )
 class ModelReference:
-    def __init__(self, *, model_id: builtins.str) -> None:
+    def __init__(self, *, model_id: builtins.str, model_name: builtins.str) -> None:
         '''A reference to a Model resource.
 
         :param model_id: The Id of the Model resource.
+        :param model_name: The ModelName of the Model resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -2816,14 +2855,17 @@ class ModelReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             model_reference = interfaces_aws_sagemaker.ModelReference(
-                model_id="modelId"
+                model_id="modelId",
+                model_name="modelName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8cd61af7df82fd40369c69cb9d02ff44230d37cd682d4ca1b498121f1cc8b4c5)
             check_type(argname="argument model_id", value=model_id, expected_type=type_hints["model_id"])
+            check_type(argname="argument model_name", value=model_name, expected_type=type_hints["model_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "model_id": model_id,
+            "model_name": model_name,
         }
 
     @builtins.property
@@ -2831,6 +2873,13 @@ class ModelReference:
         '''The Id of the Model resource.'''
         result = self._values.get("model_id")
         assert result is not None, "Required property 'model_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def model_name(self) -> builtins.str:
+        '''The ModelName of the Model resource.'''
+        result = self._values.get("model_name")
+        assert result is not None, "Required property 'model_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2899,13 +2948,20 @@ class MonitoringScheduleReference:
     jsii_struct_bases=[],
     name_mapping={
         "notebook_instance_lifecycle_config_id": "notebookInstanceLifecycleConfigId",
+        "notebook_instance_lifecycle_config_name": "notebookInstanceLifecycleConfigName",
     },
 )
 class NotebookInstanceLifecycleConfigReference:
-    def __init__(self, *, notebook_instance_lifecycle_config_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        notebook_instance_lifecycle_config_id: builtins.str,
+        notebook_instance_lifecycle_config_name: builtins.str,
+    ) -> None:
         '''A reference to a NotebookInstanceLifecycleConfig resource.
 
         :param notebook_instance_lifecycle_config_id: The Id of the NotebookInstanceLifecycleConfig resource.
+        :param notebook_instance_lifecycle_config_name: The NotebookInstanceLifecycleConfigName of the NotebookInstanceLifecycleConfig resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -2916,14 +2972,17 @@ class NotebookInstanceLifecycleConfigReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             notebook_instance_lifecycle_config_reference = interfaces_aws_sagemaker.NotebookInstanceLifecycleConfigReference(
-                notebook_instance_lifecycle_config_id="notebookInstanceLifecycleConfigId"
+                notebook_instance_lifecycle_config_id="notebookInstanceLifecycleConfigId",
+                notebook_instance_lifecycle_config_name="notebookInstanceLifecycleConfigName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__3bd4bd8843ef6d70f3dd8ae74880bf978f098b162369119c9940d295166f6c9e)
             check_type(argname="argument notebook_instance_lifecycle_config_id", value=notebook_instance_lifecycle_config_id, expected_type=type_hints["notebook_instance_lifecycle_config_id"])
+            check_type(argname="argument notebook_instance_lifecycle_config_name", value=notebook_instance_lifecycle_config_name, expected_type=type_hints["notebook_instance_lifecycle_config_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "notebook_instance_lifecycle_config_id": notebook_instance_lifecycle_config_id,
+            "notebook_instance_lifecycle_config_name": notebook_instance_lifecycle_config_name,
         }
 
     @builtins.property
@@ -2931,6 +2990,13 @@ class NotebookInstanceLifecycleConfigReference:
         '''The Id of the NotebookInstanceLifecycleConfig resource.'''
         result = self._values.get("notebook_instance_lifecycle_config_id")
         assert result is not None, "Required property 'notebook_instance_lifecycle_config_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def notebook_instance_lifecycle_config_name(self) -> builtins.str:
+        '''The NotebookInstanceLifecycleConfigName of the NotebookInstanceLifecycleConfig resource.'''
+        result = self._values.get("notebook_instance_lifecycle_config_name")
+        assert result is not None, "Required property 'notebook_instance_lifecycle_config_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -2948,13 +3014,22 @@ class NotebookInstanceLifecycleConfigReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.NotebookInstanceReference",
     jsii_struct_bases=[],
-    name_mapping={"notebook_instance_id": "notebookInstanceId"},
+    name_mapping={
+        "notebook_instance_id": "notebookInstanceId",
+        "notebook_instance_name": "notebookInstanceName",
+    },
 )
 class NotebookInstanceReference:
-    def __init__(self, *, notebook_instance_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        notebook_instance_id: builtins.str,
+        notebook_instance_name: builtins.str,
+    ) -> None:
         '''A reference to a NotebookInstance resource.
 
         :param notebook_instance_id: The Id of the NotebookInstance resource.
+        :param notebook_instance_name: The NotebookInstanceName of the NotebookInstance resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -2965,14 +3040,17 @@ class NotebookInstanceReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             notebook_instance_reference = interfaces_aws_sagemaker.NotebookInstanceReference(
-                notebook_instance_id="notebookInstanceId"
+                notebook_instance_id="notebookInstanceId",
+                notebook_instance_name="notebookInstanceName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a755b532c8c9e307e8c797edce2cc8a880caf510ede5ca055a88def8d821580d)
             check_type(argname="argument notebook_instance_id", value=notebook_instance_id, expected_type=type_hints["notebook_instance_id"])
+            check_type(argname="argument notebook_instance_name", value=notebook_instance_name, expected_type=type_hints["notebook_instance_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "notebook_instance_id": notebook_instance_id,
+            "notebook_instance_name": notebook_instance_name,
         }
 
     @builtins.property
@@ -2980,6 +3058,13 @@ class NotebookInstanceReference:
         '''The Id of the NotebookInstance resource.'''
         result = self._values.get("notebook_instance_id")
         assert result is not None, "Required property 'notebook_instance_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def notebook_instance_name(self) -> builtins.str:
+        '''The NotebookInstanceName of the NotebookInstance resource.'''
+        result = self._values.get("notebook_instance_name")
+        assert result is not None, "Required property 'notebook_instance_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -3423,13 +3508,19 @@ class UserProfileReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_sagemaker.WorkteamReference",
     jsii_struct_bases=[],
-    name_mapping={"workteam_id": "workteamId"},
+    name_mapping={"workteam_id": "workteamId", "workteam_name": "workteamName"},
 )
 class WorkteamReference:
-    def __init__(self, *, workteam_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        workteam_id: builtins.str,
+        workteam_name: builtins.str,
+    ) -> None:
         '''A reference to a Workteam resource.
 
         :param workteam_id: The Id of the Workteam resource.
+        :param workteam_name: The WorkteamName of the Workteam resource.
 
         :exampleMetadata: fixture=_generated
 
@@ -3440,14 +3531,17 @@ class WorkteamReference:
             from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
             
             workteam_reference = interfaces_aws_sagemaker.WorkteamReference(
-                workteam_id="workteamId"
+                workteam_id="workteamId",
+                workteam_name="workteamName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__57fcc1ca690db91207cd9de5695c57ca45d13772e64730ab43c815d1704cc2b9)
             check_type(argname="argument workteam_id", value=workteam_id, expected_type=type_hints["workteam_id"])
+            check_type(argname="argument workteam_name", value=workteam_name, expected_type=type_hints["workteam_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "workteam_id": workteam_id,
+            "workteam_name": workteam_name,
         }
 
     @builtins.property
@@ -3455,6 +3549,13 @@ class WorkteamReference:
         '''The Id of the Workteam resource.'''
         result = self._values.get("workteam_id")
         assert result is not None, "Required property 'workteam_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def workteam_name(self) -> builtins.str:
+        '''The WorkteamName of the Workteam resource.'''
+        result = self._values.get("workteam_name")
+        assert result is not None, "Required property 'workteam_name' is missing"
         return typing.cast(builtins.str, result)
 
     def __eq__(self, rhs: typing.Any) -> builtins.bool:
@@ -3571,6 +3672,7 @@ def _typecheckingstub__b41740c83d2043a3c12795517b06ef5392e313ddf64f0baf09ea7a2ce
 def _typecheckingstub__d50203d0b8619bba87d6272a7d3180c525e4133465ac661135be4365a5902520(
     *,
     code_repository_id: builtins.str,
+    code_repository_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3607,6 +3709,7 @@ def _typecheckingstub__3b051cfa5b56c2c44861ce067c6e3e2b5ff6bc49d74d2a599515c501b
 def _typecheckingstub__671b59e91ff91baea0cef8d7d45d4100318e43b4ba27225394b64570ce952f45(
     *,
     endpoint_config_id: builtins.str,
+    endpoint_config_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3707,6 +3810,7 @@ def _typecheckingstub__3bbb410da1ba18623b904a946e29f21cdc36bdf281f4a84f6f7791580
 def _typecheckingstub__8cd61af7df82fd40369c69cb9d02ff44230d37cd682d4ca1b498121f1cc8b4c5(
     *,
     model_id: builtins.str,
+    model_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3721,6 +3825,7 @@ def _typecheckingstub__9d97efa57770ba22be684610fdc6172b3eb4efd10380b38759c295dd7
 def _typecheckingstub__3bd4bd8843ef6d70f3dd8ae74880bf978f098b162369119c9940d295166f6c9e(
     *,
     notebook_instance_lifecycle_config_id: builtins.str,
+    notebook_instance_lifecycle_config_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3728,6 +3833,7 @@ def _typecheckingstub__3bd4bd8843ef6d70f3dd8ae74880bf978f098b162369119c9940d2951
 def _typecheckingstub__a755b532c8c9e307e8c797edce2cc8a880caf510ede5ca055a88def8d821580d(
     *,
     notebook_instance_id: builtins.str,
+    notebook_instance_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -3789,6 +3895,7 @@ def _typecheckingstub__6c8b4ff7d349ddb3632965b5498543cbf7e6d497d2d7bc15f093cf6cf
 def _typecheckingstub__57fcc1ca690db91207cd9de5695c57ca45d13772e64730ab43c815d1704cc2b9(
     *,
     workteam_id: builtins.str,
+    workteam_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass

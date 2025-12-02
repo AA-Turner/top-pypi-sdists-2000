@@ -192,6 +192,18 @@ class CfnCalculatedAttributeDefinition(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnCalculatedAttributeDefinition")
+    @builtins.classmethod
+    def is_cfn_calculated_attribute_definition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCalculatedAttributeDefinition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c8163b7fc23feae673555a9075f0b9ecf4df3ad65182f649fbb16715b2686cd5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCalculatedAttributeDefinition", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1392,6 +1404,18 @@ class CfnDomain(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
         return typing.cast(_IDomainRef_05f5627e, jsii.sinvoke(cls, "fromDomainName", [scope, id, domain_name]))
+
+    @jsii.member(jsii_name="isCfnDomain")
+    @builtins.classmethod
+    def is_cfn_domain(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDomain.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__136e310007fbc1f10d97cd63d4a2ef7a5d9cadea6f915df4982ac387b2deefbd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDomain", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3177,6 +3201,18 @@ class CfnEventStream(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventStream", [resource]))
 
+    @jsii.member(jsii_name="isCfnEventStream")
+    @builtins.classmethod
+    def is_cfn_event_stream(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEventStream.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__30bb94bfb5ac46c1523171eba8ed13e3af1ab4a2327da671f8bd8266e59b3e78)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventStream", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3611,6 +3647,18 @@ class CfnEventTrigger(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnEventTrigger")
+    @builtins.classmethod
+    def is_cfn_event_trigger(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEventTrigger.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d36ef6ace0c9210cfa7cde81e61e4f8857ef14b3522029cf75c6098889004d56)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventTrigger", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4595,6 +4643,18 @@ class CfnIntegration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnIntegration")
+    @builtins.classmethod
+    def is_cfn_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__219d361ae34ba5e8296c11a603aafe56c39f2bbdbeeb976d7c2d8dfb54993f54)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIntegration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6730,6 +6790,18 @@ class CfnObjectType(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnObjectType")
+    @builtins.classmethod
+    def is_cfn_object_type(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnObjectType.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4659769db4a4cc23cf2e2d11c9a47712d05bda0cd739cb1fda2de0ed4af2a243)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnObjectType", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7589,6 +7661,9 @@ class CfnSegmentDefinition(
             display_name="displayName",
             domain_name="domainName",
             segment_definition_name="segmentDefinitionName",
+        
+            # the properties below are optional
+            description="description",
             segment_groups=customerprofiles.CfnSegmentDefinition.SegmentGroupProperty(
                 groups=[customerprofiles.CfnSegmentDefinition.GroupProperty(
                     dimensions=[customerprofiles.CfnSegmentDefinition.DimensionProperty(
@@ -7798,9 +7873,7 @@ class CfnSegmentDefinition(
                 )],
                 include="include"
             ),
-        
-            # the properties below are optional
-            description="description",
+            segment_sql_query="segmentSqlQuery",
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -7816,8 +7889,9 @@ class CfnSegmentDefinition(
         display_name: builtins.str,
         domain_name: builtins.str,
         segment_definition_name: builtins.str,
-        segment_groups: typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegmentDefinition.SegmentGroupProperty", typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
+        segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSegmentDefinition.SegmentGroupProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        segment_sql_query: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::CustomerProfiles::SegmentDefinition``.
@@ -7827,8 +7901,9 @@ class CfnSegmentDefinition(
         :param display_name: Display name of the segment definition.
         :param domain_name: The name of the domain.
         :param segment_definition_name: Name of the segment definition.
-        :param segment_groups: Contains all groups of the segment definition.
         :param description: The description of the segment definition.
+        :param segment_groups: Contains all groups of the segment definition.
+        :param segment_sql_query: The SQL query that defines the segment criteria.
         :param tags: The tags belonging to the segment definition.
         '''
         if __debug__:
@@ -7839,8 +7914,9 @@ class CfnSegmentDefinition(
             display_name=display_name,
             domain_name=domain_name,
             segment_definition_name=segment_definition_name,
-            segment_groups=segment_groups,
             description=description,
+            segment_groups=segment_groups,
+            segment_sql_query=segment_sql_query,
             tags=tags,
         )
 
@@ -7859,6 +7935,18 @@ class CfnSegmentDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__bc55748b09dbe5999a8fd1fcfde799f88320a8e5324e8b6fd81a332e13f828cd)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSegmentDefinition", [resource]))
+
+    @jsii.member(jsii_name="isCfnSegmentDefinition")
+    @builtins.classmethod
+    def is_cfn_segment_definition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSegmentDefinition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5f3a127edae69b50521c71c67735a6582c72c56b523f5ad1edfe62d0f471171b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSegmentDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7907,6 +7995,15 @@ class CfnSegmentDefinition(
         :cloudformationAttribute: SegmentDefinitionArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrSegmentDefinitionArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrSegmentType")
+    def attr_segment_type(self) -> builtins.str:
+        '''The SQL query that defines the segment criteria.
+
+        :cloudformationAttribute: SegmentType
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrSegmentType"))
 
     @builtins.property
     @jsii.member(jsii_name="cdkTagManager")
@@ -7965,24 +8062,6 @@ class CfnSegmentDefinition(
         jsii.set(self, "segmentDefinitionName", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="segmentGroups")
-    def segment_groups(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"]:
-        '''Contains all groups of the segment definition.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"], jsii.get(self, "segmentGroups"))
-
-    @segment_groups.setter
-    def segment_groups(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__744689fb47e84da608e8ce7c410f0a6489728b4132c9e51efab1802d01b77340)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "segmentGroups", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="description")
     def description(self) -> typing.Optional[builtins.str]:
         '''The description of the segment definition.'''
@@ -7994,6 +8073,37 @@ class CfnSegmentDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__223f2ad9551b0ca745b7b727aa69f874d90c37d42f2d71a6e2b2fb44e7ade212)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="segmentGroups")
+    def segment_groups(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"]]:
+        '''Contains all groups of the segment definition.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"]], jsii.get(self, "segmentGroups"))
+
+    @segment_groups.setter
+    def segment_groups(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnSegmentDefinition.SegmentGroupProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__744689fb47e84da608e8ce7c410f0a6489728b4132c9e51efab1802d01b77340)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "segmentGroups", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="segmentSqlQuery")
+    def segment_sql_query(self) -> typing.Optional[builtins.str]:
+        '''The SQL query that defines the segment criteria.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "segmentSqlQuery"))
+
+    @segment_sql_query.setter
+    def segment_sql_query(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dace184319b94ab26365d2f38874f09e109779b2ee272b904f375e8d8d5320e8)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "segmentSqlQuery", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -10296,8 +10406,9 @@ class CfnSegmentDefinition(
         "display_name": "displayName",
         "domain_name": "domainName",
         "segment_definition_name": "segmentDefinitionName",
-        "segment_groups": "segmentGroups",
         "description": "description",
+        "segment_groups": "segmentGroups",
+        "segment_sql_query": "segmentSqlQuery",
         "tags": "tags",
     },
 )
@@ -10308,8 +10419,9 @@ class CfnSegmentDefinitionProps:
         display_name: builtins.str,
         domain_name: builtins.str,
         segment_definition_name: builtins.str,
-        segment_groups: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]],
         description: typing.Optional[builtins.str] = None,
+        segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        segment_sql_query: typing.Optional[builtins.str] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnSegmentDefinition``.
@@ -10317,8 +10429,9 @@ class CfnSegmentDefinitionProps:
         :param display_name: Display name of the segment definition.
         :param domain_name: The name of the domain.
         :param segment_definition_name: Name of the segment definition.
-        :param segment_groups: Contains all groups of the segment definition.
         :param description: The description of the segment definition.
+        :param segment_groups: Contains all groups of the segment definition.
+        :param segment_sql_query: The SQL query that defines the segment criteria.
         :param tags: The tags belonging to the segment definition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-segmentdefinition.html
@@ -10334,6 +10447,9 @@ class CfnSegmentDefinitionProps:
                 display_name="displayName",
                 domain_name="domainName",
                 segment_definition_name="segmentDefinitionName",
+            
+                # the properties below are optional
+                description="description",
                 segment_groups=customerprofiles.CfnSegmentDefinition.SegmentGroupProperty(
                     groups=[customerprofiles.CfnSegmentDefinition.GroupProperty(
                         dimensions=[customerprofiles.CfnSegmentDefinition.DimensionProperty(
@@ -10543,9 +10659,7 @@ class CfnSegmentDefinitionProps:
                     )],
                     include="include"
                 ),
-            
-                # the properties below are optional
-                description="description",
+                segment_sql_query="segmentSqlQuery",
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -10557,17 +10671,21 @@ class CfnSegmentDefinitionProps:
             check_type(argname="argument display_name", value=display_name, expected_type=type_hints["display_name"])
             check_type(argname="argument domain_name", value=domain_name, expected_type=type_hints["domain_name"])
             check_type(argname="argument segment_definition_name", value=segment_definition_name, expected_type=type_hints["segment_definition_name"])
-            check_type(argname="argument segment_groups", value=segment_groups, expected_type=type_hints["segment_groups"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument segment_groups", value=segment_groups, expected_type=type_hints["segment_groups"])
+            check_type(argname="argument segment_sql_query", value=segment_sql_query, expected_type=type_hints["segment_sql_query"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "display_name": display_name,
             "domain_name": domain_name,
             "segment_definition_name": segment_definition_name,
-            "segment_groups": segment_groups,
         }
         if description is not None:
             self._values["description"] = description
+        if segment_groups is not None:
+            self._values["segment_groups"] = segment_groups
+        if segment_sql_query is not None:
+            self._values["segment_sql_query"] = segment_sql_query
         if tags is not None:
             self._values["tags"] = tags
 
@@ -10602,24 +10720,32 @@ class CfnSegmentDefinitionProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def segment_groups(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty]:
-        '''Contains all groups of the segment definition.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-segmentdefinition.html#cfn-customerprofiles-segmentdefinition-segmentgroups
-        '''
-        result = self._values.get("segment_groups")
-        assert result is not None, "Required property 'segment_groups' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty], result)
-
-    @builtins.property
     def description(self) -> typing.Optional[builtins.str]:
         '''The description of the segment definition.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-segmentdefinition.html#cfn-customerprofiles-segmentdefinition-description
         '''
         result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def segment_groups(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty]]:
+        '''Contains all groups of the segment definition.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-segmentdefinition.html#cfn-customerprofiles-segmentdefinition-segmentgroups
+        '''
+        result = self._values.get("segment_groups")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty]], result)
+
+    @builtins.property
+    def segment_sql_query(self) -> typing.Optional[builtins.str]:
+        '''The SQL query that defines the segment criteria.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-customerprofiles-segmentdefinition.html#cfn-customerprofiles-segmentdefinition-segmentsqlquery
+        '''
+        result = self._values.get("segment_sql_query")
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
@@ -10675,6 +10801,12 @@ def _typecheckingstub__3a09ab96caa4db6cfa4ebb0207c025a7f976cac18f814d69b882506cf
     display_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     use_historical_data: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c8163b7fc23feae673555a9075f0b9ecf4df3ad65182f649fbb16715b2686cd5(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10845,6 +10977,12 @@ def _typecheckingstub__fd06f1031d674322ba6de287a0e9b6f98bcf7c1e63ca71ee399b0962f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     domain_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__136e310007fbc1f10d97cd63d4a2ef7a5d9cadea6f915df4982ac387b2deefbd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11056,6 +11194,12 @@ def _typecheckingstub__41977b51f363c143032c0ed9e9887fcad8d2a49c96031285f4df1cdfe
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__30bb94bfb5ac46c1523171eba8ed13e3af1ab4a2327da671f8bd8266e59b3e78(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5d37a000675ecf626a3348ff78d7f60db4441f2bb16c208d8dea0d1a4ecbd88f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11122,6 +11266,12 @@ def _typecheckingstub__3238d15e8be30353d06e9f7813fb0d93d105339df1e3008dc6d5d8891
     event_trigger_limits: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventTrigger.EventTriggerLimitsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     segment_filter: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d36ef6ace0c9210cfa7cde81e61e4f8857ef14b3522029cf75c6098889004d56(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11254,6 +11404,12 @@ def _typecheckingstub__b8211c08b95eabfe008b27ab5b3b74bab34f671b7bd9761e15cdb090d
     object_type_names: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnIntegration.ObjectTypeMappingProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     uri: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__219d361ae34ba5e8296c11a603aafe56c39f2bbdbeeb976d7c2d8dfb54993f54(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11489,6 +11645,12 @@ def _typecheckingstub__e58419cb0a7694b5c554275a8721df95dc40489e742a23c76f7830ca5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4659769db4a4cc23cf2e2d11c9a47712d05bda0cd739cb1fda2de0ed4af2a243(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__091e212a123e3a0cfb8577aebb7068432007378feb06e4af48a00036957ea470(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -11631,8 +11793,9 @@ def _typecheckingstub__350e170fd13ca6586a78a39785ca961e3b7fa8982a5b03ff0799f34c2
     display_name: builtins.str,
     domain_name: builtins.str,
     segment_definition_name: builtins.str,
-    segment_groups: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
+    segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    segment_sql_query: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -11640,6 +11803,12 @@ def _typecheckingstub__350e170fd13ca6586a78a39785ca961e3b7fa8982a5b03ff0799f34c2
 
 def _typecheckingstub__bc55748b09dbe5999a8fd1fcfde799f88320a8e5324e8b6fd81a332e13f828cd(
     resource: _ISegmentDefinitionRef_fb9739e9,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5f3a127edae69b50521c71c67735a6582c72c56b523f5ad1edfe62d0f471171b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -11674,13 +11843,19 @@ def _typecheckingstub__6bc5bbfa19f04ef37dd74fe0dab060cbd192ee5bb1b47e5b1508f67f2
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__744689fb47e84da608e8ce7c410f0a6489728b4132c9e51efab1802d01b77340(
-    value: typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty],
+def _typecheckingstub__223f2ad9551b0ca745b7b727aa69f874d90c37d42f2d71a6e2b2fb44e7ade212(
+    value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__223f2ad9551b0ca745b7b727aa69f874d90c37d42f2d71a6e2b2fb44e7ade212(
+def _typecheckingstub__744689fb47e84da608e8ce7c410f0a6489728b4132c9e51efab1802d01b77340(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnSegmentDefinition.SegmentGroupProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dace184319b94ab26365d2f38874f09e109779b2ee272b904f375e8d8d5320e8(
     value: typing.Optional[builtins.str],
 ) -> None:
     """Type checking stubs"""
@@ -11835,8 +12010,9 @@ def _typecheckingstub__bfe3927b013a59f4b37e001ce8d373fe3d8d8bc374ee6c206d37e74f6
     display_name: builtins.str,
     domain_name: builtins.str,
     segment_definition_name: builtins.str,
-    segment_groups: typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]],
     description: typing.Optional[builtins.str] = None,
+    segment_groups: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSegmentDefinition.SegmentGroupProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    segment_sql_query: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

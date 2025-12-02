@@ -123,6 +123,18 @@ class CfnAccountAlias(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAccountAlias")
+    @builtins.classmethod
+    def is_cfn_account_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccountAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2627c852433b7be2f24451508a5f8b5039463770bf2186254854bbb43207e11a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccountAlias", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -330,6 +342,18 @@ class CfnSlackChannelConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnSlackChannelConfiguration")
+    @builtins.classmethod
+    def is_cfn_slack_channel_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSlackChannelConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7da40d46598615866f47d3400d328caa7cca3ed0bbd9cc29e10c08ac68f2c23)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSlackChannelConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -744,6 +768,18 @@ class CfnSlackWorkspaceConfiguration(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnSlackWorkspaceConfiguration")
+    @builtins.classmethod
+    def is_cfn_slack_workspace_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSlackWorkspaceConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8ac65701df3ec4c31b90d9cb38ed71d90dffa2de0818fd12877ce1b080f669b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSlackWorkspaceConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -910,6 +946,12 @@ def _typecheckingstub__adc663f014a8631377fa42be2ddca3e4697c00856f997592dde64d9a2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2627c852433b7be2f24451508a5f8b5039463770bf2186254854bbb43207e11a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c3dd85fea57bcb6e9e53f9b8689a087277bd089365db5931813d3993e7bada0a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -947,6 +989,12 @@ def _typecheckingstub__e35f22740d18bea5877d00346f0c0dfc0f8a99695f5876d0bb73d3f74
     notify_on_add_correspondence_to_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     notify_on_create_or_reopen_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     notify_on_resolve_case: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7da40d46598615866f47d3400d328caa7cca3ed0bbd9cc29e10c08ac68f2c23(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1031,6 +1079,12 @@ def _typecheckingstub__4d0583297d2e6c375e6cdb181da90b314f05ff30ac14e4871aee08c02
     *,
     team_id: builtins.str,
     version_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8ac65701df3ec4c31b90d9cb38ed71d90dffa2de0818fd12877ce1b080f669b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

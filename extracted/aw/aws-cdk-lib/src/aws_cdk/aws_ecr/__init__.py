@@ -532,6 +532,18 @@ class CfnPublicRepository(
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
         return typing.cast(_IPublicRepositoryRef_fef651e6, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
 
+    @jsii.member(jsii_name="isCfnPublicRepository")
+    @builtins.classmethod
+    def is_cfn_public_repository(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPublicRepository.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be487b156d21b376fa970d80f46ab5f81e0cd19b26308b8723a0f2dfc626b463)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicRepository", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -959,6 +971,18 @@ class CfnPullThroughCacheRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPullThroughCacheRule")
+    @builtins.classmethod
+    def is_cfn_pull_through_cache_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPullThroughCacheRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__82b0f88a2e5cc3c56b672d18f8b93192f31a4a7ddc18192430b768e783607871)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPullThroughCacheRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1251,7 +1275,7 @@ class CfnPullTimeUpdateExclusion(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param principal_arn: Principal arn that should not update image pull times.
+        :param principal_arn: The ARN of the IAM principal to remove from the pull time update exclusion list.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e6255980647f29ac8e203692be6da643c7ebf04a23199750b76c7298cd92795f)
@@ -1260,6 +1284,18 @@ class CfnPullTimeUpdateExclusion(
         props = CfnPullTimeUpdateExclusionProps(principal_arn=principal_arn)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPullTimeUpdateExclusion")
+    @builtins.classmethod
+    def is_cfn_pull_time_update_exclusion(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPullTimeUpdateExclusion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__551f10b31c294ea936e7ef8074a6634a83cb9c0a3a72281010e52e9a5de1d385)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPullTimeUpdateExclusion", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1307,7 +1343,7 @@ class CfnPullTimeUpdateExclusion(
     @builtins.property
     @jsii.member(jsii_name="principalArn")
     def principal_arn(self) -> builtins.str:
-        '''Principal arn that should not update image pull times.'''
+        '''The ARN of the IAM principal to remove from the pull time update exclusion list.'''
         return typing.cast(builtins.str, jsii.get(self, "principalArn"))
 
     @principal_arn.setter
@@ -1327,7 +1363,7 @@ class CfnPullTimeUpdateExclusionProps:
     def __init__(self, *, principal_arn: builtins.str) -> None:
         '''Properties for defining a ``CfnPullTimeUpdateExclusion``.
 
-        :param principal_arn: Principal arn that should not update image pull times.
+        :param principal_arn: The ARN of the IAM principal to remove from the pull time update exclusion list.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html
         :exampleMetadata: fixture=_generated
@@ -1351,7 +1387,7 @@ class CfnPullTimeUpdateExclusionProps:
 
     @builtins.property
     def principal_arn(self) -> builtins.str:
-        '''Principal arn that should not update image pull times.
+        '''The ARN of the IAM principal to remove from the pull time update exclusion list.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-pulltimeupdateexclusion.html#cfn-ecr-pulltimeupdateexclusion-principalarn
         '''
@@ -1418,6 +1454,18 @@ class CfnRegistryPolicy(
         props = CfnRegistryPolicyProps(policy_text=policy_text)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnRegistryPolicy")
+    @builtins.classmethod
+    def is_cfn_registry_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRegistryPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d8a7ff32b23d11ac7a23b1d46e72dbfba40a0a5355f25aff259d873121f6d2c5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistryPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1590,6 +1638,18 @@ class CfnRegistryScanningConfiguration(
         props = CfnRegistryScanningConfigurationProps(rules=rules, scan_type=scan_type)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnRegistryScanningConfiguration")
+    @builtins.classmethod
+    def is_cfn_registry_scanning_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRegistryScanningConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01e087b257184f43bf69587c5b0d66243f5883fa92eca47e5d86e66d4e0df350)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRegistryScanningConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1969,6 +2029,18 @@ class CfnReplicationConfiguration(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnReplicationConfiguration")
+    @builtins.classmethod
+    def is_cfn_replication_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnReplicationConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__292d5e557b7761852b695d1a5d68f24bc1684966f22d7ca9e9012d14f5f9d5d3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnReplicationConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2560,6 +2632,18 @@ class CfnRepository(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument repository_name", value=repository_name, expected_type=type_hints["repository_name"])
         return typing.cast(_IRepositoryRef_f3b81117, jsii.sinvoke(cls, "fromRepositoryName", [scope, id, repository_name]))
+
+    @jsii.member(jsii_name="isCfnRepository")
+    @builtins.classmethod
+    def is_cfn_repository(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRepository.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6086cdc33387338c21c38628f631583d34153e38a2191b194e5475fd15fccc2c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepository", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3166,6 +3250,18 @@ class CfnRepositoryCreationTemplate(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnRepositoryCreationTemplate")
+    @builtins.classmethod
+    def is_cfn_repository_creation_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRepositoryCreationTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ce256b5e9e34e523ff83aa576574fee15b577259ac53e6a702f78992576eaa2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRepositoryCreationTemplate", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4008,7 +4104,7 @@ class CfnSigningConfiguration(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ecr.CfnSigningConfiguration",
 ):
-    '''The AWS::ECR::SigningConfiguration resource creates or updates the signing configuration for an Amazon ECR registry.
+    '''The signing configuration for a registry, which specifies rules for automatically signing images when pushed.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html
     :cloudformationResource: AWS::ECR::SigningConfiguration
@@ -4044,7 +4140,7 @@ class CfnSigningConfiguration(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param rules: Array of signing rules that define which repositories should be signed and with which signing profiles.
+        :param rules: A list of signing rules. Each rule defines a signing profile and optional repository filters that determine which images are automatically signed.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__8f20ec4657cd146c0a7e33dfdc0f7d958c63808be594382cc1c8b832f54fe8a4)
@@ -4053,6 +4149,18 @@ class CfnSigningConfiguration(
         props = CfnSigningConfigurationProps(rules=rules)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnSigningConfiguration")
+    @builtins.classmethod
+    def is_cfn_signing_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSigningConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__242fc3cdbcdbe041f6d2a3ed76b7f725a0a06e4e1bb771065ee8df0fc3c5dc2e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSigningConfiguration", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4087,7 +4195,7 @@ class CfnSigningConfiguration(
     @builtins.property
     @jsii.member(jsii_name="attrRegistryId")
     def attr_registry_id(self) -> builtins.str:
-        '''12-digit AWS account ID of the ECR registry.
+        '''The account ID of the destination registry.
 
         :cloudformationAttribute: RegistryId
         '''
@@ -4109,7 +4217,7 @@ class CfnSigningConfiguration(
     def rules(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]]:
-        '''Array of signing rules that define which repositories should be signed and with which signing profiles.'''
+        '''A list of signing rules.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RuleProperty"]]], jsii.get(self, "rules"))
 
     @rules.setter
@@ -4129,10 +4237,12 @@ class CfnSigningConfiguration(
     )
     class RepositoryFilterProperty:
         def __init__(self, *, filter: builtins.str, filter_type: builtins.str) -> None:
-            '''An array of objects representing the details of a repository filter.
+            '''A repository filter used to determine which repositories have their images automatically signed on push.
 
-            :param filter: Repository name pattern (supports '*' wildcard).
-            :param filter_type: Type of repository filter.
+            Each filter consists of a filter type and filter value.
+
+            :param filter: The filter value used to match repository names. When using ``WILDCARD_MATCH`` , the ``*`` character matches any sequence of characters. Examples: - ``myapp/*`` - Matches all repositories starting with ``myapp/`` - ``* /production`` - Matches all repositories ending with ``/production`` - ``*prod*`` - Matches all repositories containing ``prod``
+            :param filter_type: The type of filter to apply. Currently, only ``WILDCARD_MATCH`` is supported, which uses wildcard patterns to match repository names.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html
             :exampleMetadata: fixture=_generated
@@ -4159,7 +4269,15 @@ class CfnSigningConfiguration(
 
         @builtins.property
         def filter(self) -> builtins.str:
-            '''Repository name pattern (supports '*' wildcard).
+            '''The filter value used to match repository names.
+
+            When using ``WILDCARD_MATCH`` , the ``*`` character matches any sequence of characters.
+
+            Examples:
+
+            - ``myapp/*`` - Matches all repositories starting with ``myapp/``
+            - ``* /production`` - Matches all repositories ending with ``/production``
+            - ``*prod*`` - Matches all repositories containing ``prod``
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html#cfn-ecr-signingconfiguration-repositoryfilter-filter
             '''
@@ -4169,7 +4287,9 @@ class CfnSigningConfiguration(
 
         @builtins.property
         def filter_type(self) -> builtins.str:
-            '''Type of repository filter.
+            '''The type of filter to apply.
+
+            Currently, only ``WILDCARD_MATCH`` is supported, which uses wildcard patterns to match repository names.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-repositoryfilter.html#cfn-ecr-signingconfiguration-repositoryfilter-filtertype
             '''
@@ -4203,9 +4323,12 @@ class CfnSigningConfiguration(
             signing_profile_arn: builtins.str,
             repository_filters: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnSigningConfiguration.RepositoryFilterProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
-            '''
-            :param signing_profile_arn: AWS Signer signing profile ARN to use for matched repositories.
-            :param repository_filters: Optional array of repository filters. If omitted, the rule matches all repositories. If provided, must contain at least one filter. Empty arrays are not allowed.
+            '''A signing rule that specifies a signing profile and optional repository filters.
+
+            When an image is pushed to a matching repository, a signing job is created using the specified profile.
+
+            :param signing_profile_arn: The ARN of the AWS Signer signing profile to use for signing images that match this rule. For more information about signing profiles, see `Signing profiles <https://docs.aws.amazon.com/signer/latest/developerguide/signing-profiles.html>`_ in the *AWS Signer Developer Guide* .
+            :param repository_filters: A list of repository filters that determine which repositories have their images signed on push. If no filters are specified, all images pushed to the registry are signed using the rule's signing profile. Maximum of 100 filters per rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html
             :exampleMetadata: fixture=_generated
@@ -4238,7 +4361,9 @@ class CfnSigningConfiguration(
 
         @builtins.property
         def signing_profile_arn(self) -> builtins.str:
-            '''AWS Signer signing profile ARN to use for matched repositories.
+            '''The ARN of the AWS Signer signing profile to use for signing images that match this rule.
+
+            For more information about signing profiles, see `Signing profiles <https://docs.aws.amazon.com/signer/latest/developerguide/signing-profiles.html>`_ in the *AWS Signer Developer Guide* .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html#cfn-ecr-signingconfiguration-rule-signingprofilearn
             '''
@@ -4250,9 +4375,9 @@ class CfnSigningConfiguration(
         def repository_filters(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnSigningConfiguration.RepositoryFilterProperty"]]]]:
-            '''Optional array of repository filters.
+            '''A list of repository filters that determine which repositories have their images signed on push.
 
-            If omitted, the rule matches all repositories. If provided, must contain at least one filter. Empty arrays are not allowed.
+            If no filters are specified, all images pushed to the registry are signed using the rule's signing profile. Maximum of 100 filters per rule.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecr-signingconfiguration-rule.html#cfn-ecr-signingconfiguration-rule-repositoryfilters
             '''
@@ -4284,7 +4409,7 @@ class CfnSigningConfigurationProps:
     ) -> None:
         '''Properties for defining a ``CfnSigningConfiguration``.
 
-        :param rules: Array of signing rules that define which repositories should be signed and with which signing profiles.
+        :param rules: A list of signing rules. Each rule defines a signing profile and optional repository filters that determine which images are automatically signed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html
         :exampleMetadata: fixture=_generated
@@ -4318,7 +4443,9 @@ class CfnSigningConfigurationProps:
     def rules(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnSigningConfiguration.RuleProperty]]]:
-        '''Array of signing rules that define which repositories should be signed and with which signing profiles.
+        '''A list of signing rules.
+
+        Each rule defines a signing profile and optional repository filters that determine which images are automatically signed.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecr-signingconfiguration.html#cfn-ecr-signingconfiguration-rules
         '''
@@ -6666,6 +6793,12 @@ def _typecheckingstub__a12c8d1af48bfd21b0af8b54f0dfaf211699928aac8fb0ffb2e0ff8ce
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__be487b156d21b376fa970d80f46ab5f81e0cd19b26308b8723a0f2dfc626b463(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__317b166576f7593305ca27885da5cd7a621d59c15390c40d8de8d3e3c28eb94b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6733,6 +6866,12 @@ def _typecheckingstub__d43871e7810dc89346a08c3c9c24a04a2b82bf02da0d8fa05ef0df564
     upstream_registry: typing.Optional[builtins.str] = None,
     upstream_registry_url: typing.Optional[builtins.str] = None,
     upstream_repository_prefix: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__82b0f88a2e5cc3c56b672d18f8b93192f31a4a7ddc18192430b768e783607871(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6806,6 +6945,12 @@ def _typecheckingstub__e6255980647f29ac8e203692be6da643c7ebf04a23199750b76c7298c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__551f10b31c294ea936e7ef8074a6634a83cb9c0a3a72281010e52e9a5de1d385(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__10ff65c5f542ca588c9c426fdec6b6e57a95f212760a4d24b0929c1c8bfc2b3a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6836,6 +6981,12 @@ def _typecheckingstub__46ab6d6ee08d8397c3ef5738c56a6b991e46657e46e9bb7db4c658597
     id: builtins.str,
     *,
     policy_text: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d8a7ff32b23d11ac7a23b1d46e72dbfba40a0a5355f25aff259d873121f6d2c5(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6871,6 +7022,12 @@ def _typecheckingstub__6b68a41065b53c404ecfbf77d1c1dca4759228bec8020c901ec850026
     *,
     rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRegistryScanningConfiguration.ScanningRuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
     scan_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01e087b257184f43bf69587c5b0d66243f5883fa92eca47e5d86e66d4e0df350(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6928,6 +7085,12 @@ def _typecheckingstub__9ec8853622a7046906439da72fd8cf7dc34848650d739a637e7ae30cf
     id: builtins.str,
     *,
     replication_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnReplicationConfiguration.ReplicationConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__292d5e557b7761852b695d1a5d68f24bc1684966f22d7ca9e9012d14f5f9d5d3(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7023,6 +7186,12 @@ def _typecheckingstub__400aec98ced3fb3a08c4f62facc37becec6934bd630cb120fe1d6d380
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     repository_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6086cdc33387338c21c38628f631583d34153e38a2191b194e5475fd15fccc2c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7138,6 +7307,12 @@ def _typecheckingstub__494445c3594e6c48becf87b896b56289e6923275ed1be048e55a955aa
     lifecycle_policy: typing.Optional[builtins.str] = None,
     repository_policy: typing.Optional[builtins.str] = None,
     resource_tags: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ce256b5e9e34e523ff83aa576574fee15b577259ac53e6a702f78992576eaa2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7266,6 +7441,12 @@ def _typecheckingstub__8f20ec4657cd146c0a7e33dfdc0f7d958c63808be594382cc1c8b832f
     id: builtins.str,
     *,
     rules: typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnSigningConfiguration.RuleProperty, typing.Dict[builtins.str, typing.Any]]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__242fc3cdbcdbe041f6d2a3ed76b7f725a0a06e4e1bb771065ee8df0fc3c5dc2e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

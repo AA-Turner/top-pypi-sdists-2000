@@ -7069,6 +7069,18 @@ class CfnCapacityProvider(
             check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
         return typing.cast(_ICapacityProviderRef_2d421d38, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
 
+    @jsii.member(jsii_name="isCfnCapacityProvider")
+    @builtins.classmethod
+    def is_cfn_capacity_provider(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCapacityProvider.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6e42fcb73bfb113ffc3ed087b4967b1d44b4576ed0615b2e88d88ba061cdd4dc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapacityProvider", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -7557,11 +7569,9 @@ class CfnCapacityProvider(
             *,
             scale_in_after: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider.
+            '''The configuration that controls how Amazon ECS optimizes your infrastructure.
 
-            Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
-
-            :param scale_in_after: This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are: Not set (null) - Uses the default optimization behavior, ``-1`` - Disables automatic infrastructure optimization, ``0`` to ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
+            :param scale_in_after: This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized. A longer delay increases the likelihood of placing new tasks on idle or underutilized instances instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle or underutilized instances,instances more quickly. Valid values are: - ``null`` - Uses the default optimization behavior. - ``-1`` - Disables automatic infrastructure optimization. - A value between ``0`` and ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-infrastructureoptimization.html
             :exampleMetadata: fixture=_generated
@@ -7587,7 +7597,13 @@ class CfnCapacityProvider(
         def scale_in_after(self) -> typing.Optional[jsii.Number]:
             '''This parameter defines the number of seconds Amazon ECS Managed Instances waits before optimizing EC2 instances that have become idle or underutilized.
 
-            A longer delay increases the likelihood of placing new tasks on idle instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle instances more quickly. Valid values are: Not set (null) - Uses the default optimization behavior, ``-1`` - Disables automatic infrastructure optimization, ``0`` to ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
+            A longer delay increases the likelihood of placing new tasks on idle or underutilized instances instances, reducing startup time. A shorter delay helps reduce infrastructure costs by optimizing idle or underutilized instances,instances more quickly.
+
+            Valid values are:
+
+            - ``null`` - Uses the default optimization behavior.
+            - ``-1`` - Disables automatic infrastructure optimization.
+            - A value between ``0`` and ``3600`` (inclusive) - Specifies the number of seconds to wait before optimizing instances.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-infrastructureoptimization.html#cfn-ecs-capacityprovider-infrastructureoptimization-scaleinafter
             '''
@@ -8456,7 +8472,7 @@ class CfnCapacityProvider(
 
             :param infrastructure_role_arn: The Amazon Resource Name (ARN) of the infrastructure role that Amazon ECS assumes to manage instances. This role must include permissions for Amazon EC2 instance lifecycle management, networking, and any additional AWS services required for your workloads. For more information, see `Amazon ECS infrastructure IAM role <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/infrastructure_IAM_role.html>`_ in the *Amazon ECS Developer Guide* .
             :param instance_launch_template: The launch template that defines how Amazon ECS launches Amazon ECS Managed Instances. This includes the instance profile for your tasks, network and storage configuration, and instance requirements that determine which Amazon EC2 instance types can be used. For more information, see `Store instance launch parameters in Amazon EC2 launch templates <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html>`_ in the *Amazon EC2 User Guide* .
-            :param infrastructure_optimization: Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+            :param infrastructure_optimization: Defines how Amazon ECS Managed Instances optimizes the infrastastructure in your capacity provider. Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle or underutilized EC2 instances optimization delay.
             :param propagate_tags: Determines whether tags from the capacity provider are automatically applied to Amazon ECS Managed Instances. This helps with cost allocation and resource management by ensuring consistent tagging across your infrastructure.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html
@@ -8601,9 +8617,9 @@ class CfnCapacityProvider(
         def infrastructure_optimization(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InfrastructureOptimizationProperty"]]:
-            '''Defines how Amazon ECS Managed Instances optimizes the infrastructure in your capacity provider.
+            '''Defines how Amazon ECS Managed Instances optimizes the infrastastructure in your capacity provider.
 
-            Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle EC2 instances optimization delay.
+            Configure it to turn on or off the infrastructure optimization in your capacity provider, and to control the idle or underutilized EC2 instances optimization delay.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-capacityprovider-managedinstancesprovider.html#cfn-ecs-capacityprovider-managedinstancesprovider-infrastructureoptimization
             '''
@@ -9683,6 +9699,18 @@ class CfnCluster(
             check_type(argname="argument cluster_name", value=cluster_name, expected_type=type_hints["cluster_name"])
         return typing.cast(_IClusterRef_7ad11494, jsii.sinvoke(cls, "fromClusterName", [scope, id, cluster_name]))
 
+    @jsii.member(jsii_name="isCfnCluster")
+    @builtins.classmethod
+    def is_cfn_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9ed3a6becea8b7898ccff4f4149a6f8a7e4e91f5e45ffbb7e6b35eb046716f9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -10603,6 +10631,21 @@ class CfnClusterCapacityProviderAssociations(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnClusterCapacityProviderAssociations")
+    @builtins.classmethod
+    def is_cfn_cluster_capacity_provider_associations(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''Checks whether the given object is a CfnClusterCapacityProviderAssociations.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__98e91aaffba3c058e69d69359985df8dfe4d676ba9ab0a523a35dbf6949e07d5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnClusterCapacityProviderAssociations", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11161,7 +11204,13 @@ class CfnExpressGatewayService(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_ecs.CfnExpressGatewayService",
 ):
-    '''Resource Type definition for AWS::ECS::ExpressGatewayService.
+    '''Creates an Express service that simplifies deploying containerized web applications on Amazon ECS with managed AWS infrastructure.
+
+    This operation provisions and configures Application Load Balancers, target groups, security groups, and auto-scaling policies automatically.
+
+    Specify a primary container configuration with your application image and basic settings. Amazon ECS creates the necessary AWS resources for traffic distribution, health monitoring, network access control, and capacity management.
+
+    Provide an execution role for task operations and an infrastructure role for managing AWS resources on your behalf.
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html
     :cloudformationResource: AWS::ECS::ExpressGatewayService
@@ -11245,18 +11294,18 @@ class CfnExpressGatewayService(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param execution_role_arn: 
-        :param infrastructure_role_arn: 
-        :param primary_container: 
-        :param cluster: Default: - "default"
-        :param cpu: Default: - "256"
-        :param health_check_path: Default: - "HTTP:80/ping"
-        :param memory: Default: - "512"
-        :param network_configuration: 
-        :param scaling_target: 
-        :param service_name: 
-        :param tags: 
-        :param task_role_arn: 
+        :param execution_role_arn: The ARN of the task execution role for the service revision.
+        :param infrastructure_role_arn: The ARN of the infrastructure role that manages AWS resources for the Express service.
+        :param primary_container: The primary container configuration for this service revision.
+        :param cluster: The short name or full ARN of the cluster that hosts the Express service. Default: - "default"
+        :param cpu: The CPU allocation for tasks in this service revision. Default: - "256"
+        :param health_check_path: The health check path for this service revision. Default: - "HTTP:80/ping"
+        :param memory: The memory allocation for tasks in this service revision. Default: - "512"
+        :param network_configuration: The network configuration for tasks in this service revision.
+        :param scaling_target: The auto-scaling configuration for this service revision.
+        :param service_name: The name of the Express service.
+        :param tags: The metadata applied to the Express service.
+        :param task_role_arn: The ARN of the task role for the service revision.
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__425c9356d4d802d61310648c0d6d347423435aee47505e8809a3756d7fa8882a)
@@ -11278,6 +11327,18 @@ class CfnExpressGatewayService(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnExpressGatewayService")
+    @builtins.classmethod
+    def is_cfn_express_gateway_service(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnExpressGatewayService.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4e5d7fa4143b4387422d3f3fd86281180adf6f475dbb528ccd24ee0bb301356c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExpressGatewayService", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11312,7 +11373,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrActiveConfigurations")
     def attr_active_configurations(self) -> _IResolvable_da3f097b:
-        '''
+        '''The list of active service configurations for the Express service.
+
         :cloudformationAttribute: ActiveConfigurations
         '''
         return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrActiveConfigurations"))
@@ -11320,7 +11382,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrCreatedAt")
     def attr_created_at(self) -> builtins.str:
-        '''
+        '''The Unix timestamp for when the Express service was created.
+
         :cloudformationAttribute: CreatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
@@ -11328,7 +11391,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrServiceArn")
     def attr_service_arn(self) -> builtins.str:
-        '''
+        '''The ARN that identifies the Express service.
+
         :cloudformationAttribute: ServiceArn
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrServiceArn"))
@@ -11344,7 +11408,8 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="attrUpdatedAt")
     def attr_updated_at(self) -> builtins.str:
-        '''
+        '''The Unix timestamp for when the Express service was last updated.
+
         :cloudformationAttribute: UpdatedAt
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrUpdatedAt"))
@@ -11369,6 +11434,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="executionRoleArn")
     def execution_role_arn(self) -> builtins.str:
+        '''The ARN of the task execution role for the service revision.'''
         return typing.cast(builtins.str, jsii.get(self, "executionRoleArn"))
 
     @execution_role_arn.setter
@@ -11381,6 +11447,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="infrastructureRoleArn")
     def infrastructure_role_arn(self) -> builtins.str:
+        '''The ARN of the infrastructure role that manages AWS resources for the Express service.'''
         return typing.cast(builtins.str, jsii.get(self, "infrastructureRoleArn"))
 
     @infrastructure_role_arn.setter
@@ -11395,6 +11462,7 @@ class CfnExpressGatewayService(
     def primary_container(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"]:
+        '''The primary container configuration for this service revision.'''
         return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"], jsii.get(self, "primaryContainer"))
 
     @primary_container.setter
@@ -11410,6 +11478,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="cluster")
     def cluster(self) -> typing.Optional[builtins.str]:
+        '''The short name or full ARN of the cluster that hosts the Express service.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cluster"))
 
     @cluster.setter
@@ -11422,6 +11491,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="cpu")
     def cpu(self) -> typing.Optional[builtins.str]:
+        '''The CPU allocation for tasks in this service revision.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "cpu"))
 
     @cpu.setter
@@ -11434,6 +11504,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="healthCheckPath")
     def health_check_path(self) -> typing.Optional[builtins.str]:
+        '''The health check path for this service revision.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "healthCheckPath"))
 
     @health_check_path.setter
@@ -11446,6 +11517,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="memory")
     def memory(self) -> typing.Optional[builtins.str]:
+        '''The memory allocation for tasks in this service revision.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "memory"))
 
     @memory.setter
@@ -11460,6 +11532,7 @@ class CfnExpressGatewayService(
     def network_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]]:
+        '''The network configuration for tasks in this service revision.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]], jsii.get(self, "networkConfiguration"))
 
     @network_configuration.setter
@@ -11477,6 +11550,7 @@ class CfnExpressGatewayService(
     def scaling_target(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]]:
+        '''The auto-scaling configuration for this service revision.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]], jsii.get(self, "scalingTarget"))
 
     @scaling_target.setter
@@ -11492,6 +11566,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="serviceName")
     def service_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the Express service.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "serviceName"))
 
     @service_name.setter
@@ -11504,6 +11579,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="tags")
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''The metadata applied to the Express service.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
 
     @tags.setter
@@ -11516,6 +11592,7 @@ class CfnExpressGatewayService(
     @builtins.property
     @jsii.member(jsii_name="taskRoleArn")
     def task_role_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the task role for the service revision.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "taskRoleArn"))
 
     @task_role_arn.setter
@@ -11550,14 +11627,19 @@ class CfnExpressGatewayService(
             repository_credentials: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             secrets: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnExpressGatewayService.SecretProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         ) -> None:
-            '''
-            :param image: 
-            :param aws_logs_configuration: 
-            :param command: 
-            :param container_port: Default: - 80
-            :param environment: 
-            :param repository_credentials: 
-            :param secrets: 
+            '''Defines the configuration for the primary container in an Express service.
+
+            This container receives traffic from the Application Load Balancer and runs your application code.
+
+            The container configuration includes the container image, port mapping, logging settings, environment variables, and secrets. The container image is the only required parameter, with sensible defaults provided for other settings.
+
+            :param image: The image used to start a container. This string is passed directly to the Docker daemon. Images in the Docker Hub registry are available by default. Other repositories are specified with either ``repository-url/image:tag`` or ``repository-url/image@digest`` . For Express services, the image typically contains a web application that listens on the specified container port. The image can be stored in Amazon ECR, Docker Hub, or any other container registry accessible to your execution role.
+            :param aws_logs_configuration: The log configuration for the container.
+            :param command: The command that is passed to the container.
+            :param container_port: The port number on the container that receives traffic from the load balancer. Default is 80. Default: - 80
+            :param environment: The environment variables to pass to the container.
+            :param repository_credentials: The configuration for repository credentials for private registry authentication.
+            :param secrets: The secrets to pass to the container.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html
             :exampleMetadata: fixture=_generated
@@ -11618,7 +11700,12 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def image(self) -> builtins.str:
-            '''
+            '''The image used to start a container.
+
+            This string is passed directly to the Docker daemon. Images in the Docker Hub registry are available by default. Other repositories are specified with either ``repository-url/image:tag`` or ``repository-url/image@digest`` .
+
+            For Express services, the image typically contains a web application that listens on the specified container port. The image can be stored in Amazon ECR, Docker Hub, or any other container registry accessible to your execution role.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-image
             '''
             result = self._values.get("image")
@@ -11629,7 +11716,8 @@ class CfnExpressGatewayService(
         def aws_logs_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceAwsLogsConfigurationProperty"]]:
-            '''
+            '''The log configuration for the container.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-awslogsconfiguration
             '''
             result = self._values.get("aws_logs_configuration")
@@ -11637,7 +11725,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def command(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The command that is passed to the container.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-command
             '''
             result = self._values.get("command")
@@ -11645,7 +11734,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def container_port(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The port number on the container that receives traffic from the load balancer.
+
+            Default is 80.
+
             :default: - 80
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-containerport
@@ -11657,7 +11749,8 @@ class CfnExpressGatewayService(
         def environment(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.KeyValuePairProperty"]]]]:
-            '''
+            '''The environment variables to pass to the container.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-environment
             '''
             result = self._values.get("environment")
@@ -11667,7 +11760,8 @@ class CfnExpressGatewayService(
         def repository_credentials(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayRepositoryCredentialsProperty"]]:
-            '''
+            '''The configuration for repository credentials for private registry authentication.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-repositorycredentials
             '''
             result = self._values.get("repository_credentials")
@@ -11677,7 +11771,8 @@ class CfnExpressGatewayService(
         def secrets(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.SecretProperty"]]]]:
-            '''
+            '''The secrets to pass to the container.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewaycontainer.html#cfn-ecs-expressgatewayservice-expressgatewaycontainer-secrets
             '''
             result = self._values.get("secrets")
@@ -11701,8 +11796,9 @@ class CfnExpressGatewayService(
     )
     class ExpressGatewayRepositoryCredentialsProperty:
         def __init__(self, *, credentials_parameter: builtins.str) -> None:
-            '''
-            :param credentials_parameter: 
+            '''The repository credentials for private registry authentication to pass to the container.
+
+            :param credentials_parameter: The Amazon Resource Name (ARN) of the secret containing the private repository credentials.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayrepositorycredentials.html
             :exampleMetadata: fixture=_generated
@@ -11726,7 +11822,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def credentials_parameter(self) -> builtins.str:
-            '''
+            '''The Amazon Resource Name (ARN) of the secret containing the private repository credentials.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayrepositorycredentials.html#cfn-ecs-expressgatewayservice-expressgatewayrepositorycredentials-credentialsparameter
             '''
             result = self._values.get("credentials_parameter")
@@ -11763,11 +11860,16 @@ class CfnExpressGatewayService(
             max_task_count: typing.Optional[jsii.Number] = None,
             min_task_count: typing.Optional[jsii.Number] = None,
         ) -> None:
-            '''
-            :param auto_scaling_metric: Default: - "AVERAGE_CPU"
-            :param auto_scaling_target_value: Default: - 60
-            :param max_task_count: Default: - 1
-            :param min_task_count: Default: - 1
+            '''Defines the auto-scaling configuration for an Express service.
+
+            This determines how the service automatically adjusts the number of running tasks based on demand metrics such as CPU utilization, memory utilization, or request count per target.
+
+            Auto-scaling helps ensure your application can handle varying levels of traffic while optimizing costs by scaling down during low-demand periods. You can specify the minimum and maximum number of tasks, the scaling metric, and the target value for that metric.
+
+            :param auto_scaling_metric: The metric used for auto-scaling decisions. The default metric used for an Express service is ``CPUUtilization`` . Default: - "AVERAGE_CPU"
+            :param auto_scaling_target_value: The target value for the auto-scaling metric. The default value for an Express service is 60. Default: - 60
+            :param max_task_count: The maximum number of tasks to run in the Express service. Default: - 1
+            :param min_task_count: The minimum number of tasks to run in the Express service. Default: - 1
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html
             :exampleMetadata: fixture=_generated
@@ -11803,7 +11905,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def auto_scaling_metric(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The metric used for auto-scaling decisions.
+
+            The default metric used for an Express service is ``CPUUtilization`` .
+
             :default: - "AVERAGE_CPU"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-autoscalingmetric
@@ -11813,7 +11918,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def auto_scaling_target_value(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The target value for the auto-scaling metric.
+
+            The default value for an Express service is 60.
+
             :default: - 60
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-autoscalingtargetvalue
@@ -11823,7 +11931,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def max_task_count(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The maximum number of tasks to run in the Express service.
+
             :default: - 1
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-maxtaskcount
@@ -11833,7 +11942,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def min_task_count(self) -> typing.Optional[jsii.Number]:
-            '''
+            '''The minimum number of tasks to run in the Express service.
+
             :default: - 1
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayscalingtarget.html#cfn-ecs-expressgatewayservice-expressgatewayscalingtarget-mintaskcount
@@ -11864,9 +11974,10 @@ class CfnExpressGatewayService(
             log_group: builtins.str,
             log_stream_prefix: builtins.str,
         ) -> None:
-            '''
-            :param log_group: 
-            :param log_stream_prefix: Default: - "ecs"
+            '''Specifies the Amazon CloudWatch Logs configuration for the Express service container.
+
+            :param log_group: The name of the CloudWatch Logs log group to send container logs to.
+            :param log_stream_prefix: The prefix for the CloudWatch Logs log stream names. The default for an Express service is ``ecs`` . Default: - "ecs"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -11893,7 +12004,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def log_group(self) -> builtins.str:
-            '''
+            '''The name of the CloudWatch Logs log group to send container logs to.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration-loggroup
             '''
             result = self._values.get("log_group")
@@ -11902,7 +12014,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def log_stream_prefix(self) -> builtins.str:
-            '''
+            '''The prefix for the CloudWatch Logs log stream names.
+
+            The default for an Express service is ``ecs`` .
+
             :default: - "ecs"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceawslogsconfiguration-logstreamprefix
@@ -11955,18 +12070,19 @@ class CfnExpressGatewayService(
             service_revision_arn: typing.Optional[builtins.str] = None,
             task_role_arn: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param cpu: 
-            :param created_at: 
-            :param execution_role_arn: 
-            :param health_check_path: 
-            :param ingress_paths: 
-            :param memory: 
-            :param network_configuration: 
-            :param primary_container: 
-            :param scaling_target: 
-            :param service_revision_arn: 
-            :param task_role_arn: 
+            '''Represents a specific configuration revision of an Express service, containing all the settings and parameters for that revision.
+
+            :param cpu: The CPU allocation for tasks in this service revision.
+            :param created_at: The Unix timestamp for when this service revision was created.
+            :param execution_role_arn: The ARN of the task execution role for the service revision.
+            :param health_check_path: The health check path for this service revision.
+            :param ingress_paths: The entry point into this service revision.
+            :param memory: The memory allocation for tasks in this service revision.
+            :param network_configuration: The network configuration for tasks in this service revision.
+            :param primary_container: The primary container configuration for this service revision.
+            :param scaling_target: The auto-scaling configuration for this service revision.
+            :param service_revision_arn: The ARN of the service revision.
+            :param task_role_arn: The ARN of the task role for the service revision.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -12062,7 +12178,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def cpu(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The CPU allocation for tasks in this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-cpu
             '''
             result = self._values.get("cpu")
@@ -12070,7 +12187,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def created_at(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The Unix timestamp for when this service revision was created.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-createdat
             '''
             result = self._values.get("created_at")
@@ -12078,7 +12196,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def execution_role_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the task execution role for the service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-executionrolearn
             '''
             result = self._values.get("execution_role_arn")
@@ -12086,7 +12205,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def health_check_path(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The health check path for this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-healthcheckpath
             '''
             result = self._values.get("health_check_path")
@@ -12096,7 +12216,8 @@ class CfnExpressGatewayService(
         def ingress_paths(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.IngressPathSummaryProperty"]]]]:
-            '''
+            '''The entry point into this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-ingresspaths
             '''
             result = self._values.get("ingress_paths")
@@ -12104,7 +12225,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def memory(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The memory allocation for tasks in this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-memory
             '''
             result = self._values.get("memory")
@@ -12114,7 +12236,8 @@ class CfnExpressGatewayService(
         def network_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty"]]:
-            '''
+            '''The network configuration for tasks in this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-networkconfiguration
             '''
             result = self._values.get("network_configuration")
@@ -12124,7 +12247,8 @@ class CfnExpressGatewayService(
         def primary_container(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayContainerProperty"]]:
-            '''
+            '''The primary container configuration for this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-primarycontainer
             '''
             result = self._values.get("primary_container")
@@ -12134,7 +12258,8 @@ class CfnExpressGatewayService(
         def scaling_target(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnExpressGatewayService.ExpressGatewayScalingTargetProperty"]]:
-            '''
+            '''The auto-scaling configuration for this service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-scalingtarget
             '''
             result = self._values.get("scaling_target")
@@ -12142,7 +12267,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def service_revision_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-servicerevisionarn
             '''
             result = self._values.get("service_revision_arn")
@@ -12150,7 +12276,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def task_role_arn(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The ARN of the task role for the service revision.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayserviceconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayserviceconfiguration-taskrolearn
             '''
             result = self._values.get("task_role_arn")
@@ -12179,9 +12306,12 @@ class CfnExpressGatewayService(
             security_groups: typing.Optional[typing.Sequence[builtins.str]] = None,
             subnets: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param security_groups: 
-            :param subnets: 
+            '''The network configuration for an Express service.
+
+            By default, an Express service utilizes subnets and security groups associated with the default VPC.
+
+            :param security_groups: The IDs of the security groups associated with the Express service.
+            :param subnets: The IDs of the subnets associated with the Express service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -12209,7 +12339,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def security_groups(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The IDs of the security groups associated with the Express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration-securitygroups
             '''
             result = self._values.get("security_groups")
@@ -12217,7 +12348,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def subnets(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''
+            '''The IDs of the subnets associated with the Express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration.html#cfn-ecs-expressgatewayservice-expressgatewayservicenetworkconfiguration-subnets
             '''
             result = self._values.get("subnets")
@@ -12245,8 +12377,9 @@ class CfnExpressGatewayService(
             *,
             status_code: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param status_code: 
+            '''An object that defines the status of Express service creation and information about the status of the service.
+
+            :param status_code: The status of the Express service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicestatus.html
             :exampleMetadata: fixture=_generated
@@ -12270,7 +12403,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def status_code(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The status of the Express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-expressgatewayservicestatus.html#cfn-ecs-expressgatewayservice-expressgatewayservicestatus-statuscode
             '''
             result = self._values.get("status_code")
@@ -12299,9 +12433,10 @@ class CfnExpressGatewayService(
             access_type: typing.Optional[builtins.str] = None,
             endpoint: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''
-            :param access_type: 
-            :param endpoint: 
+            '''The entry point into an Express service.
+
+            :param access_type: The type of access to the endpoint for the Express service.
+            :param endpoint: The endpoint for access to the service.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html
             :exampleMetadata: fixture=_generated
@@ -12329,7 +12464,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def access_type(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The type of access to the endpoint for the Express service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html#cfn-ecs-expressgatewayservice-ingresspathsummary-accesstype
             '''
             result = self._values.get("access_type")
@@ -12337,7 +12473,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def endpoint(self) -> typing.Optional[builtins.str]:
-            '''
+            '''The endpoint for access to the service.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-ingresspathsummary.html#cfn-ecs-expressgatewayservice-ingresspathsummary-endpoint
             '''
             result = self._values.get("endpoint")
@@ -12361,9 +12498,10 @@ class CfnExpressGatewayService(
     )
     class KeyValuePairProperty:
         def __init__(self, *, name: builtins.str, value: builtins.str) -> None:
-            '''
-            :param name: 
-            :param value: 
+            '''A key-value pair object.
+
+            :param name: The name of the key-value pair. For environment variables, this is the name of the environment variable.
+            :param value: The value of the key-value pair. For environment variables, this is the value of the environment variable.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html
             :exampleMetadata: fixture=_generated
@@ -12390,7 +12528,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''
+            '''The name of the key-value pair.
+
+            For environment variables, this is the name of the environment variable.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html#cfn-ecs-expressgatewayservice-keyvaluepair-name
             '''
             result = self._values.get("name")
@@ -12399,7 +12540,10 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def value(self) -> builtins.str:
-            '''
+            '''The value of the key-value pair.
+
+            For environment variables, this is the value of the environment variable.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-keyvaluepair.html#cfn-ecs-expressgatewayservice-keyvaluepair-value
             '''
             result = self._values.get("value")
@@ -12424,9 +12568,17 @@ class CfnExpressGatewayService(
     )
     class SecretProperty:
         def __init__(self, *, name: builtins.str, value_from: builtins.str) -> None:
-            '''
-            :param name: 
-            :param value_from: 
+            '''An object representing the secret to expose to your container.
+
+            Secrets can be exposed to a container in the following ways:
+
+            - To inject sensitive data into your containers as environment variables, use the ``secrets`` container definition parameter.
+            - To reference sensitive information in the log configuration of a container, use the ``secretOptions`` container definition parameter.
+
+            For more information, see `Specifying sensitive data <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html>`_ in the *Amazon Elastic Container Service Developer Guide* .
+
+            :param name: The name of the secret.
+            :param value_from: The secret to expose to the container. The supported values are either the full ARN of the AWS Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store. For information about the require AWS Identity and Access Management permissions, see `Required IAM permissions for Amazon ECS secrets <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-secrets.html#secrets-iam>`_ (for Secrets Manager) or `Required IAM permissions for Amazon ECS secrets <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-parameters.html>`_ (for Systems Manager Parameter store) in the *Amazon Elastic Container Service Developer Guide* . .. epigraph:: If the SSM Parameter Store parameter exists in the same Region as the task you're launching, then you can use either the full ARN or name of the parameter. If the parameter exists in a different Region, then the full ARN must be specified.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html
             :exampleMetadata: fixture=_generated
@@ -12453,7 +12605,8 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''
+            '''The name of the secret.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html#cfn-ecs-expressgatewayservice-secret-name
             '''
             result = self._values.get("name")
@@ -12462,7 +12615,15 @@ class CfnExpressGatewayService(
 
         @builtins.property
         def value_from(self) -> builtins.str:
-            '''
+            '''The secret to expose to the container.
+
+            The supported values are either the full ARN of the AWS Secrets Manager secret or the full ARN of the parameter in the SSM Parameter Store.
+
+            For information about the require AWS Identity and Access Management permissions, see `Required IAM permissions for Amazon ECS secrets <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-secrets.html#secrets-iam>`_ (for Secrets Manager) or `Required IAM permissions for Amazon ECS secrets <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data-parameters.html>`_ (for Systems Manager Parameter store) in the *Amazon Elastic Container Service Developer Guide* .
+            .. epigraph::
+
+               If the SSM Parameter Store parameter exists in the same Region as the task you're launching, then you can use either the full ARN or name of the parameter. If the parameter exists in a different Region, then the full ARN must be specified.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-expressgatewayservice-secret.html#cfn-ecs-expressgatewayservice-secret-valuefrom
             '''
             result = self._values.get("value_from")
@@ -12518,18 +12679,18 @@ class CfnExpressGatewayServiceProps:
     ) -> None:
         '''Properties for defining a ``CfnExpressGatewayService``.
 
-        :param execution_role_arn: 
-        :param infrastructure_role_arn: 
-        :param primary_container: 
-        :param cluster: Default: - "default"
-        :param cpu: Default: - "256"
-        :param health_check_path: Default: - "HTTP:80/ping"
-        :param memory: Default: - "512"
-        :param network_configuration: 
-        :param scaling_target: 
-        :param service_name: 
-        :param tags: 
-        :param task_role_arn: 
+        :param execution_role_arn: The ARN of the task execution role for the service revision.
+        :param infrastructure_role_arn: The ARN of the infrastructure role that manages AWS resources for the Express service.
+        :param primary_container: The primary container configuration for this service revision.
+        :param cluster: The short name or full ARN of the cluster that hosts the Express service. Default: - "default"
+        :param cpu: The CPU allocation for tasks in this service revision. Default: - "256"
+        :param health_check_path: The health check path for this service revision. Default: - "HTTP:80/ping"
+        :param memory: The memory allocation for tasks in this service revision. Default: - "512"
+        :param network_configuration: The network configuration for tasks in this service revision.
+        :param scaling_target: The auto-scaling configuration for this service revision.
+        :param service_name: The name of the Express service.
+        :param tags: The metadata applied to the Express service.
+        :param task_role_arn: The ARN of the task role for the service revision.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html
         :exampleMetadata: fixture=_generated
@@ -12629,7 +12790,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def execution_role_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the task execution role for the service revision.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-executionrolearn
         '''
         result = self._values.get("execution_role_arn")
@@ -12638,7 +12800,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def infrastructure_role_arn(self) -> builtins.str:
-        '''
+        '''The ARN of the infrastructure role that manages AWS resources for the Express service.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-infrastructurerolearn
         '''
         result = self._values.get("infrastructure_role_arn")
@@ -12649,7 +12812,8 @@ class CfnExpressGatewayServiceProps:
     def primary_container(
         self,
     ) -> typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayContainerProperty]:
-        '''
+        '''The primary container configuration for this service revision.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-primarycontainer
         '''
         result = self._values.get("primary_container")
@@ -12658,7 +12822,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def cluster(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The short name or full ARN of the cluster that hosts the Express service.
+
         :default: - "default"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-cluster
@@ -12668,7 +12833,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def cpu(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The CPU allocation for tasks in this service revision.
+
         :default: - "256"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-cpu
@@ -12678,7 +12844,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def health_check_path(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The health check path for this service revision.
+
         :default: - "HTTP:80/ping"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-healthcheckpath
@@ -12688,7 +12855,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def memory(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The memory allocation for tasks in this service revision.
+
         :default: - "512"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-memory
@@ -12700,7 +12868,8 @@ class CfnExpressGatewayServiceProps:
     def network_configuration(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayServiceNetworkConfigurationProperty]]:
-        '''
+        '''The network configuration for tasks in this service revision.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-networkconfiguration
         '''
         result = self._values.get("network_configuration")
@@ -12710,7 +12879,8 @@ class CfnExpressGatewayServiceProps:
     def scaling_target(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnExpressGatewayService.ExpressGatewayScalingTargetProperty]]:
-        '''
+        '''The auto-scaling configuration for this service revision.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-scalingtarget
         '''
         result = self._values.get("scaling_target")
@@ -12718,7 +12888,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def service_name(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The name of the Express service.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-servicename
         '''
         result = self._values.get("service_name")
@@ -12726,7 +12897,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''
+        '''The metadata applied to the Express service.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-tags
         '''
         result = self._values.get("tags")
@@ -12734,7 +12906,8 @@ class CfnExpressGatewayServiceProps:
 
     @builtins.property
     def task_role_arn(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The ARN of the task role for the service revision.
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ecs-expressgatewayservice.html#cfn-ecs-expressgatewayservice-taskrolearn
         '''
         result = self._values.get("task_role_arn")
@@ -12805,6 +12978,18 @@ class CfnPrimaryTaskSet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPrimaryTaskSet")
+    @builtins.classmethod
+    def is_cfn_primary_task_set(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPrimaryTaskSet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__22f4af76001c74f079903a912905b55700b36672ce13d19c7815250e9aa971f2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrimaryTaskSet", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13151,6 +13336,18 @@ class CfnService(
             type_hints = typing.get_type_hints(_typecheckingstub__7c53c69e7f9ad92a8b439e9a3e76bd76dde37100af8dfc523bb2ac24515e13f4)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForService", [resource]))
+
+    @jsii.member(jsii_name="isCfnService")
+    @builtins.classmethod
+    def is_cfn_service(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnService.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3f4d092cc1c455033f715ce91cb8d65674288c3560d9dc32669de9f725f52a36)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnService", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -14287,7 +14484,7 @@ class CfnService(
             :param linear_configuration: Configuration for linear deployment strategy. Only valid when the deployment strategy is ``LINEAR`` . This configuration enables progressive traffic shifting in equal percentage increments with configurable bake times between each step.
             :param maximum_percent: If a service is using the rolling update ( ``ECS`` ) deployment type, the ``maximumPercent`` parameter represents an upper limit on the number of your service's tasks that are allowed in the ``RUNNING`` or ``PENDING`` state during a deployment, as a percentage of the ``desiredCount`` (rounded down to the nearest integer). This parameter enables you to define the deployment batch size. For example, if your service is using the ``REPLICA`` service scheduler and has a ``desiredCount`` of four tasks and a ``maximumPercent`` value of 200%, the scheduler may start four new tasks before stopping the four older tasks (provided that the cluster resources required to do this are available). The default ``maximumPercent`` value for a service using the ``REPLICA`` service scheduler is 200%. The Amazon ECS scheduler uses this parameter to replace unhealthy tasks by starting replacement tasks first and then stopping the unhealthy tasks, as long as cluster resources for starting replacement tasks are available. For more information about how the scheduler replaces unhealthy tasks, see `Amazon ECS services <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html>`_ . If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types, and tasks in the service use the EC2 launch type, the *maximum percent* value is set to the default value. The *maximum percent* value is used to define the upper limit on the number of the tasks in the service that remain in the ``RUNNING`` state while the container instances are in the ``DRAINING`` state. .. epigraph:: You can't specify a custom ``maximumPercent`` value for a service that uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and has tasks that use the EC2 launch type. If the service uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types, and the tasks in the service use the Fargate launch type, the maximum percent value is not used. The value is still returned when describing your service.
             :param minimum_healthy_percent: If a service is using the rolling update ( ``ECS`` ) deployment type, the ``minimumHealthyPercent`` represents a lower limit on the number of your service's tasks that must remain in the ``RUNNING`` state during a deployment, as a percentage of the ``desiredCount`` (rounded up to the nearest integer). This parameter enables you to deploy without using additional cluster capacity. For example, if your service has a ``desiredCount`` of four tasks and a ``minimumHealthyPercent`` of 50%, the service scheduler may stop two existing tasks to free up cluster capacity before starting two new tasks. If any tasks are unhealthy and if ``maximumPercent`` doesn't allow the Amazon ECS scheduler to start replacement tasks, the scheduler stops the unhealthy tasks one-by-one — using the ``minimumHealthyPercent`` as a constraint — to clear up capacity to launch replacement tasks. For more information about how the scheduler replaces unhealthy tasks, see `Amazon ECS services <https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs_services.html>`_ . For services that *do not* use a load balancer, the following should be noted: - A service is considered healthy if all essential containers within the tasks in the service pass their health checks. - If a task has no essential containers with a health check defined, the service scheduler will wait for 40 seconds after a task reaches a ``RUNNING`` state before the task is counted towards the minimum healthy percent total. - If a task has one or more essential containers with a health check defined, the service scheduler will wait for the task to reach a healthy status before counting it towards the minimum healthy percent total. A task is considered healthy when all essential containers within the task have passed their health checks. The amount of time the service scheduler can wait for is determined by the container health check settings. For services that *do* use a load balancer, the following should be noted: - If a task has no essential containers with a health check defined, the service scheduler will wait for the load balancer target group health check to return a healthy status before counting the task towards the minimum healthy percent total. - If a task has an essential container with a health check defined, the service scheduler will wait for both the task to reach a healthy status and the load balancer target group health check to return a healthy status before counting the task towards the minimum healthy percent total. The default value for a replica service for ``minimumHealthyPercent`` is 100%. The default ``minimumHealthyPercent`` value for a service using the ``DAEMON`` service schedule is 0% for the AWS CLI , the AWS SDKs, and the APIs and 50% for the AWS Management Console. The minimum number of healthy tasks during a deployment is the ``desiredCount`` multiplied by the ``minimumHealthyPercent`` /100, rounded up to the nearest integer value. If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and is running tasks that use the EC2 launch type, the *minimum healthy percent* value is set to the default value. The *minimum healthy percent* value is used to define the lower limit on the number of the tasks in the service that remain in the ``RUNNING`` state while the container instances are in the ``DRAINING`` state. .. epigraph:: You can't specify a custom ``minimumHealthyPercent`` value for a service that uses either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and has tasks that use the EC2 launch type. If a service is using either the blue/green ( ``CODE_DEPLOY`` ) or ``EXTERNAL`` deployment types and is running tasks that use the Fargate launch type, the minimum healthy percent value is not used, although it is returned when describing your service.
-            :param strategy: The deployment strategy for the service. Choose from these valid values:. - ``ROLLING`` - When you create a service which uses the rolling update ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration. - ``BLUE_GREEN`` - A blue/green deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed.
+            :param strategy: The deployment strategy for the service. Choose from these valid values:. - ``ROLLING`` - When you create a service which uses the rolling update ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration. - ``BLUE_GREEN`` - A blue/green deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed. - ``LINEAR`` - A *linear* deployment strategy ( ``LINEAR`` ) gradually shifts traffic from the current production environment to a new environment in equal percentages over time. With Amazon ECS linear deployments, you can control the pace of traffic shifting and validate new service revisions with increasing amounts of production traffic. - ``CANARY`` - A *canary* deployment strategy ( ``CANARY`` ) shifts a small percentage of traffic to the new service revision first, then shifts the remaining traffic all at once after a specified time period. This allows you to test the new version with a subset of users before full deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -14502,6 +14699,8 @@ class CfnService(
 
             - ``ROLLING`` - When you create a service which uses the rolling update ( ``ROLLING`` ) deployment strategy, the Amazon ECS service scheduler replaces the currently running tasks with new tasks. The number of tasks that Amazon ECS adds or removes from the service during a rolling update is controlled by the service deployment configuration.
             - ``BLUE_GREEN`` - A blue/green deployment strategy ( ``BLUE_GREEN`` ) is a release methodology that reduces downtime and risk by running two identical production environments called blue and green. With Amazon ECS blue/green deployments, you can validate new service revisions before directing production traffic to them. This approach provides a safer way to deploy changes with the ability to quickly roll back if needed.
+            - ``LINEAR`` - A *linear* deployment strategy ( ``LINEAR`` ) gradually shifts traffic from the current production environment to a new environment in equal percentages over time. With Amazon ECS linear deployments, you can control the pace of traffic shifting and validate new service revisions with increasing amounts of production traffic.
+            - ``CANARY`` - A *canary* deployment strategy ( ``CANARY`` ) shifts a small percentage of traffic to the new service revision first, then shifts the remaining traffic all at once after a specified time period. This allows you to test the new version with a subset of users before full deployment.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ecs-service-deploymentconfiguration.html#cfn-ecs-service-deploymentconfiguration-strategy
             '''
@@ -18492,6 +18691,18 @@ class CfnTaskDefinition(
             type_hints = typing.get_type_hints(_typecheckingstub__0160aeb79e58377e790012a297cb8c40001c2d6ab351815c1d7f4ec174d884c3)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTaskDefinition", [resource]))
+
+    @jsii.member(jsii_name="isCfnTaskDefinition")
+    @builtins.classmethod
+    def is_cfn_task_definition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTaskDefinition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__60e1aaeee68ec3a9be45120dbd59ac0e528223c4f68d54cda0cfc8492d017d71)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTaskDefinition", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -24037,6 +24248,18 @@ class CfnTaskSet(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnTaskSet")
+    @builtins.classmethod
+    def is_cfn_task_set(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTaskSet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6af8a706c000bbaca4e654b9dfd303cc2d416b412e648d270ca04ffbd82741ca)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTaskSet", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -50949,6 +51172,12 @@ def _typecheckingstub__a3210cc1a506360b31eb93a9301cea4ee37fb10be16276e632ecd13d5
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6e42fcb73bfb113ffc3ed087b4967b1d44b4576ed0615b2e88d88ba061cdd4dc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__53c0f84221516e5285bbcd4c1565c1b5af2df9c65da6dfc915f76bb224443013(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -51205,6 +51434,12 @@ def _typecheckingstub__8dd702481aabf1a2f6fa1272c17cda45ce96df207d71c29274cda2cf9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a9ed3a6becea8b7898ccff4f4149a6f8a7e4e91f5e45ffbb7e6b35eb046716f9(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c2cb7cb74fe2c923d0a807e5216751b2af96248eb8da823ea44f5c2902ba8882(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -51330,6 +51565,12 @@ def _typecheckingstub__5b726b14d4a82695a68a7344f7ef1201a7390a69e77c604686bf3a3a1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__98e91aaffba3c058e69d69359985df8dfe4d676ba9ab0a523a35dbf6949e07d5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b8dafa8668b2f8bb87dc45edfa02cb9d6bbf8954e459f23c8e6fb62be9d958c4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -51407,6 +51648,12 @@ def _typecheckingstub__425c9356d4d802d61310648c0d6d347423435aee47505e8809a3756d7
     service_name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     task_role_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4e5d7fa4143b4387422d3f3fd86281180adf6f475dbb528ccd24ee0bb301356c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -51618,6 +51865,12 @@ def _typecheckingstub__4124238541747ca453a0cbaeab47b4113ad0e26c4b5699058307d3bef
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__22f4af76001c74f079903a912905b55700b36672ce13d19c7815250e9aa971f2(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8af8c91ac7f99402228444cedfff4320e98144e15a69e334e73b7d6d7568a717(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -51693,6 +51946,12 @@ def _typecheckingstub__ec1192a1d20e03deef75c7fa1457b92ecf9506c5c5df97b5a4473fc3a
 
 def _typecheckingstub__7c53c69e7f9ad92a8b439e9a3e76bd76dde37100af8dfc523bb2ac24515e13f4(
     resource: _IServiceRef_adcb3d02,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f4d092cc1c455033f715ce91cb8d65674288c3560d9dc32669de9f725f52a36(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -52220,6 +52479,12 @@ def _typecheckingstub__0160aeb79e58377e790012a297cb8c40001c2d6ab351815c1d7f4ec17
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__60e1aaeee68ec3a9be45120dbd59ac0e528223c4f68d54cda0cfc8492d017d71(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4ea38df420ceb9e6eaf9d5bd98fc65ace2c13e416a8da9c3acc7937bf5d6f242(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -52711,6 +52976,12 @@ def _typecheckingstub__f13a8ecfab3b2d02036a947cd1b4f09594da6ce34103f4abe4f947de6
     scale: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskSet.ScaleProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     service_registries: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTaskSet.ServiceRegistryProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6af8a706c000bbaca4e654b9dfd303cc2d416b412e648d270ca04ffbd82741ca(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -375,6 +375,29 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForApplication")
+    @builtins.classmethod
+    def arn_for_application(cls, resource: _IApplicationRef_5a716db2) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0a218480c9114b35549efc94990ff03947f195aebb6d9a490aa5bb6599e7d390)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForApplication", [resource]))
+
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__621fe592d62e96ca6d89676df6e712131e7a811eab5f28d06111c63953a14db2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3304,6 +3327,18 @@ def _typecheckingstub__4243897a1b09da007f04bd9d10c5c58049449cf0c6e94f1290a6e466b
     ops_item_sns_topic_arn: typing.Optional[builtins.str] = None,
     sns_notification_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0a218480c9114b35549efc94990ff03947f195aebb6d9a490aa5bb6599e7d390(
+    resource: _IApplicationRef_5a716db2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__621fe592d62e96ca6d89676df6e712131e7a811eab5f28d06111c63953a14db2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

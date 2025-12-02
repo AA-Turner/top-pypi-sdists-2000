@@ -161,6 +161,18 @@ class CfnGitHubRepository(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnGitHubRepository")
+    @builtins.classmethod
+    def is_cfn_git_hub_repository(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGitHubRepository.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a0d4d6d6ad23e87a52985c32300b3957380b7a0df33cf2b948a36b2d07c09963)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGitHubRepository", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -703,6 +715,12 @@ def _typecheckingstub__d13ca27a3e40bfc95c8316147dae97d61f10a54dc1ae9ea2bdc5a1a33
     is_private: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     repository_access_token: typing.Optional[builtins.str] = None,
     repository_description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a0d4d6d6ad23e87a52985c32300b3957380b7a0df33cf2b948a36b2d07c09963(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

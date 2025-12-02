@@ -207,6 +207,29 @@ class CfnAppMonitor(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="arnForAppMonitor")
+    @builtins.classmethod
+    def arn_for_app_monitor(cls, resource: _IAppMonitorRef_653b27a4) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e5ae31e63cb972dc25c0a6d05ce54a700b1cfa59fc5f90ebedd81bc703fbae36)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAppMonitor", [resource]))
+
+    @jsii.member(jsii_name="isCfnAppMonitor")
+    @builtins.classmethod
+    def is_cfn_app_monitor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAppMonitor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cb6df632dcb333f52650990603571ea7d557b7fc901b79a7e09d270aef4089dd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAppMonitor", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1553,6 +1576,18 @@ def _typecheckingstub__be8f88e750c0e7122a036d486a439c075fc32835a9e8ecd39a432f9d8
     platform: typing.Optional[builtins.str] = None,
     resource_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnAppMonitor.ResourcePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e5ae31e63cb972dc25c0a6d05ce54a700b1cfa59fc5f90ebedd81bc703fbae36(
+    resource: _IAppMonitorRef_653b27a4,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cb6df632dcb333f52650990603571ea7d557b7fc901b79a7e09d270aef4089dd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

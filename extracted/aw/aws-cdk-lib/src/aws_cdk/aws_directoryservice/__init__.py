@@ -78,7 +78,7 @@ class CfnMicrosoftAD(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_directoryservice.CfnMicrosoftAD",
 ):
-    '''The ``AWS::DirectoryService::MicrosoftAD`` resource specifies a Microsoft Active Directory in AWS so that your directory users and groups can access the the console and AWS applications using their existing credentials.
+    '''The ``AWS::DirectoryService::MicrosoftAD`` resource specifies a Microsoft Active Directory in AWS so that your directory users and groups can access the AWS Management Console and AWS applications using their existing credentials.
 
     For more information, see `AWS Managed Microsoft AD <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_microsoft_ad.html>`_ in the *Directory Service Admin Guide* .
 
@@ -148,6 +148,18 @@ class CfnMicrosoftAD(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnMicrosoftAD")
+    @builtins.classmethod
+    def is_cfn_microsoft_ad(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMicrosoftAD.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a5c17bc167140d1b59fa4131e1841d0c6be9699997e487f707e32d685768923d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMicrosoftAD", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -586,7 +598,7 @@ class CfnSimpleAD(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_directoryservice.CfnSimpleAD",
 ):
-    '''The ``AWS::DirectoryService::SimpleAD`` resource specifies an Directory Service Simple Active Directory ( Simple AD ) in AWS so that your directory users and groups can access the the console and AWS applications using their existing credentials.
+    '''The ``AWS::DirectoryService::SimpleAD`` resource specifies an Directory Service Simple Active Directory ( Simple AD ) in AWS so that your directory users and groups can access the AWS Management Console and AWS applications using their existing credentials.
 
     Simple AD is a Microsoft Active Directory–compatible directory. For more information, see `Simple Active Directory <https://docs.aws.amazon.com/directoryservice/latest/admin-guide/directory_simple_ad.html>`_ in the *Directory Service Admin Guide* .
 
@@ -692,6 +704,18 @@ class CfnSimpleAD(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument directory_id", value=directory_id, expected_type=type_hints["directory_id"])
         return typing.cast(_ISimpleADRef_73ed9e5f, jsii.sinvoke(cls, "fromDirectoryId", [scope, id, directory_id]))
+
+    @jsii.member(jsii_name="isCfnSimpleAD")
+    @builtins.classmethod
+    def is_cfn_simple_ad(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSimpleAD.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ff40b203e99e4d155c4bd33ac7ac127cac006b51555c57b903b51de8a39e98fd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSimpleAD", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1185,6 +1209,12 @@ def _typecheckingstub__bd6139d8d11b9a68029fab0f5bc46297bfd5088edc6674f022f826f90
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a5c17bc167140d1b59fa4131e1841d0c6be9699997e487f707e32d685768923d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9a9ef33ce2b22ad5e906e2065f5fb2a109d663bb39d8625ac1c9c5f9290535ae(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1286,6 +1316,12 @@ def _typecheckingstub__4edb8188cf1a787819f9e08e002165b6e7e58550d088f80151ce91f3e
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     directory_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ff40b203e99e4d155c4bd33ac7ac127cac006b51555c57b903b51de8a39e98fd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

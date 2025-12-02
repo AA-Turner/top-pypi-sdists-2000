@@ -194,6 +194,18 @@ class CfnAccount(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccount", [resource]))
 
+    @jsii.member(jsii_name="isCfnAccount")
+    @builtins.classmethod
+    def is_cfn_account(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccount.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9144f00ecfeba678bb624a0941ebc36f76b6c32768c2020b7218983db3e4094a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccount", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -598,6 +610,18 @@ class CfnOrganization(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOrganization", [resource]))
 
+    @jsii.member(jsii_name="isCfnOrganization")
+    @builtins.classmethod
+    def is_cfn_organization(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOrganization.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a8fefa87446a18d6ecbb8b6c93060497fcdbea9c9bcca10800e3a612517b6d17)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganization", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -849,6 +873,18 @@ class CfnOrganizationalUnit(
             type_hints = typing.get_type_hints(_typecheckingstub__56abf8fbaba3dc526d9151677d8242a33cb1605cd3b9f168bb5f98719c4db0b5)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOrganizationalUnit", [resource]))
+
+    @jsii.member(jsii_name="isCfnOrganizationalUnit")
+    @builtins.classmethod
+    def is_cfn_organizational_unit(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOrganizationalUnit.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c7a8bd04f0959cb23678c3cbd0aae67faaad36a84db6dc98a766ea6ec95c27a3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationalUnit", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1127,7 +1163,7 @@ class CfnPolicy(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param content: The policy text content. You can specify the policy content as a JSON object or a JSON string. .. epigraph:: When you specify the policy content as a JSON string, you can't perform drift detection on the CloudFormation stack. For this reason, we recommend specifying the policy content as a JSON object instead. The text that you supply must adhere to the rules of the policy type you specify in the ``Type`` parameter. The following AWS Organizations quotas are enforced for the maximum size of a policy document: - Service control policies: 5,120 characters - Resource control policies: 5,120 characters - Declarative policies: 10,000 characters - Backup policies: 10,000 characters - Tag policies: 10,000 characters - Chat applications policies: 10,000 characters - AI services opt-out policies: 2,500 characters For more information about Organizations service quotas, see `Quotas for AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ in the *AWS Organizations User Guide* .
+        :param content: The policy text content. You can specify the policy content as a JSON object or a JSON string. .. epigraph:: When you specify the policy content as a JSON string, you can't perform drift detection on the CloudFormation stack. For this reason, we recommend specifying the policy content as a JSON object instead. The text that you supply must adhere to the rules of the policy type you specify in the ``Type`` parameter. The following AWS Organizations quotas are enforced for the maximum size of a policy document: - Service control policies: 5,120 characters - Resource control policies: 5,120 characters - Declarative policies: 10,000 characters - Backup policies: 10,000 characters - Tag policies: 10,000 characters - Chat applications policies: 10,000 characters - AI services opt-out policies: 2,500 characters - Security Hub policies: 10,000 characters - Amazon Inspector policies: 10,000 characters - Amazon Bedrock policies: 10,000 characters - Upgrade rollout policies: 10,000 characters For more information about Organizations service quotas, see `Quotas for AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ in the *AWS Organizations User Guide* .
         :param name: Name of the policy. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ that is used to validate this parameter is a string of any of the characters in the ASCII character range.
         :param type: The type of policy to create.
         :param description: Human readable description of the policy.
@@ -1159,6 +1195,18 @@ class CfnPolicy(
             type_hints = typing.get_type_hints(_typecheckingstub__60a099d74c38572686e6ca0eb73e2ec5789c96a4c4975024d468446bb28b8f04)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnPolicy")
+    @builtins.classmethod
+    def is_cfn_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8b66435b5ef6490ef39b8bb5945e323753a52c32c26444046846eb2874e72f2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1347,7 +1395,7 @@ class CfnPolicyProps:
     ) -> None:
         '''Properties for defining a ``CfnPolicy``.
 
-        :param content: The policy text content. You can specify the policy content as a JSON object or a JSON string. .. epigraph:: When you specify the policy content as a JSON string, you can't perform drift detection on the CloudFormation stack. For this reason, we recommend specifying the policy content as a JSON object instead. The text that you supply must adhere to the rules of the policy type you specify in the ``Type`` parameter. The following AWS Organizations quotas are enforced for the maximum size of a policy document: - Service control policies: 5,120 characters - Resource control policies: 5,120 characters - Declarative policies: 10,000 characters - Backup policies: 10,000 characters - Tag policies: 10,000 characters - Chat applications policies: 10,000 characters - AI services opt-out policies: 2,500 characters For more information about Organizations service quotas, see `Quotas for AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ in the *AWS Organizations User Guide* .
+        :param content: The policy text content. You can specify the policy content as a JSON object or a JSON string. .. epigraph:: When you specify the policy content as a JSON string, you can't perform drift detection on the CloudFormation stack. For this reason, we recommend specifying the policy content as a JSON object instead. The text that you supply must adhere to the rules of the policy type you specify in the ``Type`` parameter. The following AWS Organizations quotas are enforced for the maximum size of a policy document: - Service control policies: 5,120 characters - Resource control policies: 5,120 characters - Declarative policies: 10,000 characters - Backup policies: 10,000 characters - Tag policies: 10,000 characters - Chat applications policies: 10,000 characters - AI services opt-out policies: 2,500 characters - Security Hub policies: 10,000 characters - Amazon Inspector policies: 10,000 characters - Amazon Bedrock policies: 10,000 characters - Upgrade rollout policies: 10,000 characters For more information about Organizations service quotas, see `Quotas for AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ in the *AWS Organizations User Guide* .
         :param name: Name of the policy. The `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ that is used to validate this parameter is a string of any of the characters in the ASCII character range.
         :param type: The type of policy to create.
         :param description: Human readable description of the policy.
@@ -1416,6 +1464,10 @@ class CfnPolicyProps:
         - Tag policies: 10,000 characters
         - Chat applications policies: 10,000 characters
         - AI services opt-out policies: 2,500 characters
+        - Security Hub policies: 10,000 characters
+        - Amazon Inspector policies: 10,000 characters
+        - Amazon Bedrock policies: 10,000 characters
+        - Upgrade rollout policies: 10,000 characters
 
         For more information about Organizations service quotas, see `Quotas for AWS Organizations <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_reference_limits.html>`_ in the *AWS Organizations User Guide* .
 
@@ -1570,6 +1622,18 @@ class CfnResourcePolicy(
             type_hints = typing.get_type_hints(_typecheckingstub__4bdf39b3cbefe7d3bf477ad788760a83e4ba09939a7a87a3b1f60153f67418ea)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResourcePolicy", [resource]))
+
+    @jsii.member(jsii_name="isCfnResourcePolicy")
+    @builtins.classmethod
+    def is_cfn_resource_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResourcePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c6d4f07fdbcf608edaa909d0c6cc93cb7179369c254fddcc2f93ec547925c0b9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1790,6 +1854,12 @@ def _typecheckingstub__9ba93a038ccc85e707f22f7b3273c9b66b0d924087ed9c72e5382468c
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9144f00ecfeba678bb624a0941ebc36f76b6c32768c2020b7218983db3e4094a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ee3ea086c724fb0935ee8a727937a17ae19b987a8ade49b1405a7787feb7e3bc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1858,6 +1928,12 @@ def _typecheckingstub__fc87460a7b7e0ef44f3c618cd0a4730422138ef2ee6b63752435c7973
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a8fefa87446a18d6ecbb8b6c93060497fcdbea9c9bcca10800e3a612517b6d17(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a0b1a88993c76738edf5e9d3584d058cabe1cfc259fb5d620589d5c23507de91(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1896,6 +1972,12 @@ def _typecheckingstub__05eb3e3a6c1c8de7f03913252600dcc42e4c1e99dbbab3f47a3fb8e4c
 
 def _typecheckingstub__56abf8fbaba3dc526d9151677d8242a33cb1605cd3b9f168bb5f98719c4db0b5(
     resource: _IOrganizationalUnitRef_1eee9aae,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c7a8bd04f0959cb23678c3cbd0aae67faaad36a84db6dc98a766ea6ec95c27a3(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1955,6 +2037,12 @@ def _typecheckingstub__9c8ac465f7818132d3539ff8d8e22250305dad104185434533d033da8
 
 def _typecheckingstub__60a099d74c38572686e6ca0eb73e2ec5789c96a4c4975024d468446bb28b8f04(
     resource: _IPolicyRef_f285244f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8b66435b5ef6490ef39b8bb5945e323753a52c32c26444046846eb2874e72f2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2031,6 +2119,12 @@ def _typecheckingstub__d9208421dfafb85e674bb3b797871f578fa0566480e15ed57d8dbc67f
 
 def _typecheckingstub__4bdf39b3cbefe7d3bf477ad788760a83e4ba09939a7a87a3b1f60153f67418ea(
     resource: _IResourcePolicyRef_10723097,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c6d4f07fdbcf608edaa909d0c6cc93cb7179369c254fddcc2f93ec547925c0b9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

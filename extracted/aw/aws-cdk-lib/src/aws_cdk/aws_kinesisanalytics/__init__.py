@@ -197,6 +197,18 @@ class CfnApplication(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnApplication")
+    @builtins.classmethod
+    def is_cfn_application(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplication.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4687c88a544419a1198f119353c407f9bed9c5a74819c0e49fb36c05152aceed)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplication", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1424,6 +1436,23 @@ class CfnApplicationCloudWatchLoggingOptionV2(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnApplicationCloudWatchLoggingOptionV2")
+    @builtins.classmethod
+    def is_cfn_application_cloud_watch_logging_option_v2(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''(deprecated) Checks whether the given object is a CfnApplicationCloudWatchLoggingOptionV2.
+
+        :param x: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4e42923286e762879884930af62747616a917c155597c3325f9f23e502b435c4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationCloudWatchLoggingOptionV2", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''(deprecated) Examines the CloudFormation resource and discloses attributes.
@@ -1740,6 +1769,18 @@ class CfnApplicationOutput(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnApplicationOutput")
+    @builtins.classmethod
+    def is_cfn_application_output(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplicationOutput.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__55ad60bebed4691c0a7b148571304c2474a05ec8037e1749f2508a25cefdd66a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationOutput", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2430,6 +2471,20 @@ class CfnApplicationOutputV2(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnApplicationOutputV2")
+    @builtins.classmethod
+    def is_cfn_application_output_v2(cls, x: typing.Any) -> builtins.bool:
+        '''(deprecated) Checks whether the given object is a CfnApplicationOutputV2.
+
+        :param x: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f82650791e820fa43a3941a46b14c3dcb38ce1c9a2cb25c23327de316c5a159)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationOutputV2", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3252,6 +3307,18 @@ class CfnApplicationReferenceDataSource(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnApplicationReferenceDataSource")
+    @builtins.classmethod
+    def is_cfn_application_reference_data_source(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnApplicationReferenceDataSource.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2f2e6e4cb78eef9404de387c63a5ac99fac306c997a02b6d55cae336cfc3b1aa)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationReferenceDataSource", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4276,6 +4343,23 @@ class CfnApplicationReferenceDataSourceV2(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnApplicationReferenceDataSourceV2")
+    @builtins.classmethod
+    def is_cfn_application_reference_data_source_v2(
+        cls,
+        x: typing.Any,
+    ) -> builtins.bool:
+        '''(deprecated) Checks whether the given object is a CfnApplicationReferenceDataSourceV2.
+
+        :param x: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ee8711208f603aba8df7aeb0aaa167af9c12c50a43db369194b15328db7abc65)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationReferenceDataSourceV2", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5484,6 +5568,20 @@ class CfnApplicationV2(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument application_name", value=application_name, expected_type=type_hints["application_name"])
         return typing.cast(_IApplicationRef_f869ed37, jsii.sinvoke(cls, "fromApplicationName", [scope, id, application_name]))
+
+    @jsii.member(jsii_name="isCfnApplicationV2")
+    @builtins.classmethod
+    def is_cfn_application_v2(cls, x: typing.Any) -> builtins.bool:
+        '''(deprecated) Checks whether the given object is a CfnApplicationV2.
+
+        :param x: -
+
+        :stability: deprecated
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dacc926f39615d93ea9463063c5136f4e2f79f62bc82bac5ba0e74da2134b22a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnApplicationV2", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -9610,6 +9708,12 @@ def _typecheckingstub__f4287e75f0f408cee76f1a52f0a30a44e6753fb93aff8646e1b25f20a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4687c88a544419a1198f119353c407f9bed9c5a74819c0e49fb36c05152aceed(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5e8163761495f70e497a127664d84533f601a357073d472f54617263b0bb3b98(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9755,6 +9859,12 @@ def _typecheckingstub__fdc9aaec6fa4f65f6738e4e1aaee7e90800e37a93c5aa29ea0f7f9fc3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4e42923286e762879884930af62747616a917c155597c3325f9f23e502b435c4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3e7c8138ea01464bfe8e4fe9a9650b90574f8bd326c71e4a45793852a9bc43e5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -9800,6 +9910,12 @@ def _typecheckingstub__a27cca9a664b5a3e67a3fc595547c9a1280c471a1fb58296d73ec3929
     *,
     application_name: builtins.str,
     output: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationOutput.OutputProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__55ad60bebed4691c0a7b148571304c2474a05ec8037e1749f2508a25cefdd66a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9884,6 +10000,12 @@ def _typecheckingstub__271bacb10dd6a875577035705b436387f7a448fbf7028ee2ca502030e
     *,
     application_name: builtins.str,
     output: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationOutputV2.OutputProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1f82650791e820fa43a3941a46b14c3dcb38ce1c9a2cb25c23327de316c5a159(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -9975,6 +10097,12 @@ def _typecheckingstub__b2ca03406235ed1c9a2a6505ca6a621fda9eb46fb45577ccf1b734048
     *,
     application_name: builtins.str,
     reference_data_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationReferenceDataSource.ReferenceDataSourceProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2f2e6e4cb78eef9404de387c63a5ac99fac306c997a02b6d55cae336cfc3b1aa(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10084,6 +10212,12 @@ def _typecheckingstub__f2c21e9367b4b82b411ec28921ad848b6f7487f126cfc392bff2c5844
     *,
     application_name: builtins.str,
     reference_data_source: typing.Union[_IResolvable_da3f097b, typing.Union[CfnApplicationReferenceDataSourceV2.ReferenceDataSourceProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ee8711208f603aba8df7aeb0aaa167af9c12c50a43db369194b15328db7abc65(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10213,6 +10347,12 @@ def _typecheckingstub__6ad6fec85f8d8fd2cbda89e4d5e375818d13d6060f328eec41a9330b6
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     application_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dacc926f39615d93ea9463063c5136f4e2f79f62bc82bac5ba0e74da2134b22a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -199,6 +199,39 @@ class CfnFHIRDatastore(
             check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
         return typing.cast(_IFHIRDatastoreRef_e4faecab, jsii.sinvoke(cls, "fromDatastoreId", [scope, id, datastore_id]))
 
+    @jsii.member(jsii_name="fromFHIRDatastoreArn")
+    @builtins.classmethod
+    def from_fhir_datastore_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> _IFHIRDatastoreRef_e4faecab:
+        '''Creates a new IFHIRDatastoreRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb13a8ddb4107ab5128d62b9ccef2aef1a010a8f819b0cbe0bd1abf0438e0d22)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(_IFHIRDatastoreRef_e4faecab, jsii.sinvoke(cls, "fromFHIRDatastoreArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="isCfnFHIRDatastore")
+    @builtins.classmethod
+    def is_cfn_fhir_datastore(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFHIRDatastore.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67828597c6b23eb59e180c8c9477691634e8d3539e804a608e5af42e84fe8bc8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFHIRDatastore", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -996,6 +1029,20 @@ def _typecheckingstub__1aca17223f33eab4c3c32fe59502f6e15af4d519ea58e4d602d2408ce
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     datastore_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb13a8ddb4107ab5128d62b9ccef2aef1a010a8f819b0cbe0bd1abf0438e0d22(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67828597c6b23eb59e180c8c9477691634e8d3539e804a608e5af42e84fe8bc8(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

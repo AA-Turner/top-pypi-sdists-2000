@@ -730,6 +730,18 @@ class CfnAccount(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAccount")
+    @builtins.classmethod
+    def is_cfn_account(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccount.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__61fd5de06341925c40778b787ce88467bb7adedb9df72e931719142c29b68603)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccount", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1048,6 +1060,18 @@ class CfnCertificate(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
         return typing.cast(_ICertificateRef_1878d79b, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
+
+    @jsii.member(jsii_name="isCfnCertificate")
+    @builtins.classmethod
+    def is_cfn_certificate(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCertificate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a7bf367e1e5fef77d7fe49eb5b807bb1245882802d067ab41913b92999222fcf)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2813,6 +2837,12 @@ def _typecheckingstub__db4f656c3005938d36870ee742d58c361b2595cfa8e6518fe38589b36
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__61fd5de06341925c40778b787ce88467bb7adedb9df72e931719142c29b68603(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cb75c7a5c08bac926fc28e0787cb2048b7cf11214a8eb2398e88170bf00af154(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2872,6 +2902,12 @@ def _typecheckingstub__74ad5174285b28bb947e64c6319be4642c1bb37681ea5d0d736a58181
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     certificate_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a7bf367e1e5fef77d7fe49eb5b807bb1245882802d067ab41913b92999222fcf(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

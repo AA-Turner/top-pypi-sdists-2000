@@ -1,6 +1,11 @@
+"""msgspec.Struct model generator.
+
+Generates Python models using msgspec.Struct for high-performance serialization.
+"""
+
 from __future__ import annotations
 
-from functools import wraps
+from functools import lru_cache, wraps
 from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar
 
 from pydantic import Field
@@ -11,6 +16,7 @@ from datamodel_code_generator.imports import (
     IMPORT_DATETIME,
     IMPORT_TIME,
     IMPORT_TIMEDELTA,
+    IMPORT_UNION,
     Import,
 )
 from datamodel_code_generator.model import DataModel, DataModelFieldBase
@@ -20,6 +26,8 @@ from datamodel_code_generator.model.imports import (
     IMPORT_MSGSPEC_CONVERT,
     IMPORT_MSGSPEC_FIELD,
     IMPORT_MSGSPEC_META,
+    IMPORT_MSGSPEC_UNSET,
+    IMPORT_MSGSPEC_UNSETTYPE,
 )
 from datamodel_code_generator.model.pydantic.base_model import (
     Constraints as _Constraints,
@@ -28,12 +36,30 @@ from datamodel_code_generator.model.type_alias import TypeAliasBase
 from datamodel_code_generator.model.types import DataTypeManager as _DataTypeManager
 from datamodel_code_generator.model.types import type_map_factory
 from datamodel_code_generator.types import (
+    NONE,
+    OPTIONAL_PREFIX,
+    UNION_DELIMITER,
+    UNION_OPERATOR_DELIMITER,
+    UNION_PREFIX,
     DataType,
     StrictTypes,
     Types,
+    _remove_none_from_union,
     chain_as_tuple,
-    get_optional_type,
 )
+
+UNSET_TYPE = "UnsetType"
+
+
+class _UNSET:
+    def __str__(self) -> str:
+        return "UNSET"
+
+    __repr__ = __str__
+
+
+UNSET = _UNSET()
+
 
 if TYPE_CHECKING:
     from collections import defaultdict
@@ -51,6 +77,7 @@ DataModelFieldBaseT = TypeVar("DataModelFieldBaseT", bound=DataModelFieldBase)
 
 
 def import_extender(cls: type[DataModelFieldBaseT]) -> type[DataModelFieldBaseT]:
+    """Extend imports property with msgspec-specific imports."""
     original_imports: property = cls.imports
 
     @wraps(original_imports.fget)  # pyright: ignore[reportArgumentType]
@@ -66,6 +93,12 @@ def import_extender(cls: type[DataModelFieldBaseT]) -> type[DataModelFieldBaseT]
             extra_imports.append(IMPORT_MSGSPEC_META)
         if self.extras.get("is_classvar"):
             extra_imports.append(IMPORT_CLASSVAR)
+        if not self.required and not self.nullable:
+            extra_imports.append(IMPORT_MSGSPEC_UNSETTYPE)
+            if not self.data_type.use_union_operator:
+                extra_imports.append(IMPORT_UNION)
+            if self.default is None or self.default is UNDEFINED:
+                extra_imports.append(IMPORT_MSGSPEC_UNSET)
         return chain_as_tuple(original_imports.fget(self), extra_imports)  # pyright: ignore[reportOptionalCall]
 
     cls.imports = property(new_imports)  # pyright: ignore[reportAttributeAccessIssue]
@@ -73,6 +106,8 @@ def import_extender(cls: type[DataModelFieldBaseT]) -> type[DataModelFieldBaseT]
 
 
 class Struct(DataModel):
+    """DataModel implementation for msgspec.Struct."""
+
     TEMPLATE_FILE_PATH: ClassVar[str] = "msgspec.jinja2"
     BASE_CLASS: ClassVar[str] = "msgspec.Struct"
     DEFAULT_IMPORTS: ClassVar[tuple[Import, ...]] = ()
@@ -95,6 +130,7 @@ class Struct(DataModel):
         keyword_only: bool = False,
         treat_dot_as_module: bool = False,
     ) -> None:
+        """Initialize msgspec Struct with fields sorted by field assignment requirement."""
         super().__init__(
             reference=reference,
             fields=sorted(fields, key=_has_field_assignment),
@@ -116,17 +152,38 @@ class Struct(DataModel):
             self.add_base_class_kwarg("kw_only", "True")
 
     def add_base_class_kwarg(self, name: str, value: str) -> None:
+        """Add keyword argument to base class constructor."""
         self.extra_template_data["base_class_kwargs"][name] = value
 
 
 class Constraints(_Constraints):
+    """Constraint model for msgspec fields."""
+
     # To override existing pattern alias
     regex: Optional[str] = Field(None, alias="regex")  # noqa: UP045
     pattern: Optional[str] = Field(None, alias="pattern")  # noqa: UP045
 
 
+@lru_cache
+def get_neither_required_nor_nullable_type(type_: str, use_union_operator: bool) -> str:  # noqa: FBT001
+    """Get type hint for fields that are neither required nor nullable, using UnsetType."""
+    type_ = _remove_none_from_union(type_, use_union_operator=use_union_operator)
+    if type_.startswith(OPTIONAL_PREFIX):  # pragma: no cover
+        type_ = type_[len(OPTIONAL_PREFIX) : -1]
+
+    if not type_ or type_ == NONE:
+        return UNSET_TYPE
+    if use_union_operator:
+        return UNION_OPERATOR_DELIMITER.join((type_, UNSET_TYPE))
+    if type_.startswith(UNION_PREFIX):
+        return f"{type_[:-1]}{UNION_DELIMITER}{UNSET_TYPE}]"
+    return f"{UNION_PREFIX}{type_}{UNION_DELIMITER}{UNSET_TYPE}]"
+
+
 @import_extender
 class DataModelField(DataModelFieldBase):
+    """Field implementation for msgspec Struct models."""
+
     _FIELD_KEYS: ClassVar[set[str]] = {
         "default",
         "default_factory",
@@ -152,11 +209,13 @@ class DataModelField(DataModelFieldBase):
     constraints: Optional[Constraints] = None  # noqa: UP045
 
     def self_reference(self) -> bool:  # pragma: no cover
+        """Check if field references its parent Struct."""
         return isinstance(self.parent, Struct) and self.parent.reference.path in {
             d.reference.path for d in self.data_type.all_data_types if d.reference
         }
 
     def process_const(self) -> None:
+        """Process const field constraint."""
         if "const" not in self.extras:
             return
         self.const = True
@@ -166,6 +225,7 @@ class DataModelField(DataModelFieldBase):
             self.data_type = self.data_type.__class__(literals=[const])
 
     def _get_strict_field_constraint_value(self, constraint: str, value: Any) -> Any:
+        """Get constraint value with appropriate numeric type."""
         if value is None or constraint not in self._COMPARE_EXPRESSIONS:
             return value
 
@@ -175,21 +235,22 @@ class DataModelField(DataModelFieldBase):
 
     @property
     def field(self) -> str | None:
-        """for backwards compatibility"""
+        """For backwards compatibility."""
         result = str(self)
         if not result:
             return None
         return result
 
     def __str__(self) -> str:
+        """Generate field() call or default value representation."""
         data: dict[str, Any] = {k: v for k, v in self.extras.items() if k in self._FIELD_KEYS}
         if self.alias:
             data["name"] = self.alias
 
-        if self.default != UNDEFINED and self.default is not None:
+        if self.default is not UNDEFINED and self.default is not None:
             data["default"] = self.default
-        elif not self.required:
-            data["default"] = None
+        elif self._not_required and "default_factory" not in data:
+            data["default"] = None if self.nullable else UNSET
 
         if self.required:
             data = {
@@ -217,7 +278,25 @@ class DataModelField(DataModelFieldBase):
         return f"field({', '.join(kwargs)})"
 
     @property
+    def type_hint(self) -> str:
+        """Return the type hint, using UnsetType for non-required non-nullable fields."""
+        type_hint = super().type_hint
+        if self._not_required and not self.nullable:
+            return get_neither_required_nor_nullable_type(type_hint, self.data_type.use_union_operator)
+        return type_hint
+
+    @property
+    def _not_required(self) -> bool:
+        return not self.required and isinstance(self.parent, Struct)
+
+    @property
+    def fall_back_to_nullable(self) -> bool:
+        """Return whether to fall back to nullable type instead of UnsetType."""
+        return not self._not_required
+
+    @property
     def annotated(self) -> str | None:
+        """Get Annotated type hint with Meta constraints."""
         if not self.use_annotated:  # pragma: no cover
             return None
 
@@ -241,7 +320,7 @@ class DataModelField(DataModelFieldBase):
         if not self.required and not self.extras.get("is_classvar"):
             type_hint = self.data_type.type_hint
             annotated_type = f"Annotated[{type_hint}, {meta}]"
-            return get_optional_type(annotated_type, self.data_type.use_union_operator)
+            return get_neither_required_nor_nullable_type(annotated_type, self.data_type.use_union_operator)
 
         annotated_type = f"Annotated[{self.type_hint}, {meta}]"
         if self.extras.get("is_classvar"):
@@ -250,6 +329,7 @@ class DataModelField(DataModelFieldBase):
         return annotated_type
 
     def _get_default_as_struct_model(self) -> str | None:
+        """Convert default value to Struct model using msgspec convert."""
         for data_type in self.data_type.data_types or (self.data_type,):
             # TODO: Check nested data_types
             if data_type.is_dict or self.data_type.is_union:
@@ -275,6 +355,8 @@ class DataModelField(DataModelFieldBase):
 
 
 class DataTypeManager(_DataTypeManager):
+    """Type manager for msgspec Struct models."""
+
     def __init__(  # noqa: PLR0913, PLR0917
         self,
         python_version: PythonVersion = PythonVersionMin,
@@ -287,6 +369,7 @@ class DataTypeManager(_DataTypeManager):
         target_datetime_class: DatetimeClassType | None = None,
         treat_dot_as_module: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
+        """Initialize type manager with optional datetime type mapping."""
         super().__init__(
             python_version,
             use_standard_collections,

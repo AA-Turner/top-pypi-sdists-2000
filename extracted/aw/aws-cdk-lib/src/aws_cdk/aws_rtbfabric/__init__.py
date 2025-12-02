@@ -85,10 +85,12 @@ from ..interfaces.aws_ec2 import (
 from ..interfaces.aws_rtbfabric import (
     IInboundExternalLinkRef as _IInboundExternalLinkRef_087c1bc6,
     ILinkRef as _ILinkRef_1c71e733,
+    IOutboundExternalLinkRef as _IOutboundExternalLinkRef_06bb6289,
     IRequesterGatewayRef as _IRequesterGatewayRef_d92bcdf1,
     IResponderGatewayRef as _IResponderGatewayRef_2bdaa070,
     InboundExternalLinkReference as _InboundExternalLinkReference_89bab665,
     LinkReference as _LinkReference_a62a8bc7,
+    OutboundExternalLinkReference as _OutboundExternalLinkReference_b1d46069,
     RequesterGatewayReference as _RequesterGatewayReference_37e2965b,
     ResponderGatewayReference as _ResponderGatewayReference_a8195bef,
 )
@@ -187,6 +189,18 @@ class CfnInboundExternalLink(
             type_hints = typing.get_type_hints(_typecheckingstub__e45579c24ba39e7cbd88d8a1dcb187104127b5c4c031b298b39214f40fb1a36e)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInboundExternalLink", [resource]))
+
+    @jsii.member(jsii_name="isCfnInboundExternalLink")
+    @builtins.classmethod
+    def is_cfn_inbound_external_link(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInboundExternalLink.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1943b47f9f91218da538fb23adeca699c3f23ed379e5dc88cefa0f1b8902d146)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInboundExternalLink", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -966,6 +980,18 @@ class CfnLink(
             type_hints = typing.get_type_hints(_typecheckingstub__8441d9ec3f0e33dc15a6b6f9feae93734b736d627e3b8c39efcec62db2104c90)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLink", [resource]))
+
+    @jsii.member(jsii_name="isCfnLink")
+    @builtins.classmethod
+    def is_cfn_link(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLink.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7c8c5e17bdd0c74102b57d33eeaaf08efbc39f50454b30bdc54f29e0df1e47e9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLink", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2546,6 +2572,785 @@ class CfnLinkProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IOutboundExternalLinkRef_06bb6289, _ITaggableV2_4e6798f8)
+class CfnOutboundExternalLink(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink",
+):
+    '''Resource Type definition for AWS::RTBFabric::OutboundExternalLink Resource Type.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html
+    :cloudformationResource: AWS::RTBFabric::OutboundExternalLink
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_rtbfabric as rtbfabric
+        
+        cfn_outbound_external_link = rtbfabric.CfnOutboundExternalLink(self, "MyCfnOutboundExternalLink",
+            gateway_id="gatewayId",
+            link_log_settings=rtbfabric.CfnOutboundExternalLink.LinkLogSettingsProperty(
+                application_logs=rtbfabric.CfnOutboundExternalLink.ApplicationLogsProperty(
+                    link_application_log_sampling=rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty(
+                        error_log=123,
+                        filter_log=123
+                    )
+                )
+            ),
+            public_endpoint="publicEndpoint",
+        
+            # the properties below are optional
+            link_attributes=rtbfabric.CfnOutboundExternalLink.LinkAttributesProperty(
+                customer_provided_id="customerProvidedId",
+                responder_error_masking=[rtbfabric.CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty(
+                    action="action",
+                    http_code="httpCode",
+                    logging_types=["loggingTypes"],
+        
+                    # the properties below are optional
+                    response_logging_percentage=123
+                )]
+            ),
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        gateway_id: builtins.str,
+        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkLogSettingsProperty", typing.Dict[builtins.str, typing.Any]]],
+        public_endpoint: builtins.str,
+        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkAttributesProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::RTBFabric::OutboundExternalLink``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param gateway_id: 
+        :param link_log_settings: 
+        :param public_endpoint: 
+        :param link_attributes: 
+        :param tags: Tags to assign to the Link.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b83212e7efe505cb3ee08383229ed92a52ff4ae1914a3bae275aa32769a538f2)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnOutboundExternalLinkProps(
+            gateway_id=gateway_id,
+            link_log_settings=link_log_settings,
+            public_endpoint=public_endpoint,
+            link_attributes=link_attributes,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForOutboundExternalLink")
+    @builtins.classmethod
+    def arn_for_outbound_external_link(
+        cls,
+        resource: _IOutboundExternalLinkRef_06bb6289,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f750d09898fee559d9d8fea7e122b94e612d5000fc57a92e18a8f25e09f82fa3)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOutboundExternalLink", [resource]))
+
+    @jsii.member(jsii_name="isCfnOutboundExternalLink")
+    @builtins.classmethod
+    def is_cfn_outbound_external_link(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOutboundExternalLink.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__646cbb509a7c181366f50146e6d34dd1709c05a1bf1bee7ca9c1268e384db068)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOutboundExternalLink", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__94c554a77d3e3ec5d6846c452288c7fd3554604db45d13548cbe1057b1390676)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d29126bce97e6163947ad92cc93367b86d9ba45647deac7343b697994a0b0353)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedTimestamp")
+    def attr_created_timestamp(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: CreatedTimestamp
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedTimestamp"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLinkId")
+    def attr_link_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LinkId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLinkId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLinkStatus")
+    def attr_link_status(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LinkStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLinkStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrUpdatedTimestamp")
+    def attr_updated_timestamp(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: UpdatedTimestamp
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrUpdatedTimestamp"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="outboundExternalLinkRef")
+    def outbound_external_link_ref(self) -> _OutboundExternalLinkReference_b1d46069:
+        '''A reference to a OutboundExternalLink resource.'''
+        return typing.cast(_OutboundExternalLinkReference_b1d46069, jsii.get(self, "outboundExternalLinkRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="gatewayId")
+    def gateway_id(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "gatewayId"))
+
+    @gateway_id.setter
+    def gateway_id(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__238843eabee398c3632a13fa1c1960dac944a8392e27b87e031688ea7cdf1ec6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "gatewayId", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="linkLogSettings")
+    def link_log_settings(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"], jsii.get(self, "linkLogSettings"))
+
+    @link_log_settings.setter
+    def link_log_settings(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkLogSettingsProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__26f049e3b14063d70306af34d8e4502f4010b3af3beefbbccf55ef545809a845)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkLogSettings", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="publicEndpoint")
+    def public_endpoint(self) -> builtins.str:
+        return typing.cast(builtins.str, jsii.get(self, "publicEndpoint"))
+
+    @public_endpoint.setter
+    def public_endpoint(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7e4fb1b12fa9b92810ee792acd6f261cddb5b628377308f8f917d480acc5055)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "publicEndpoint", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="linkAttributes")
+    def link_attributes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]], jsii.get(self, "linkAttributes"))
+
+    @link_attributes.setter
+    def link_attributes(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkAttributesProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6db7a26ace700bb14301fd54fb67deca8e1afc5000c0c296662435bef28b3372)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "linkAttributes", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Tags to assign to the Link.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67ca7cd3c98009f70e07dfe4c683484c616d5a03de5ece23f5b3f87bdc80d986)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink.ApplicationLogsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"link_application_log_sampling": "linkApplicationLogSampling"},
+    )
+    class ApplicationLogsProperty:
+        def __init__(
+            self,
+            *,
+            link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.LinkApplicationLogSamplingProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param link_application_log_sampling: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-applicationlogs.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                application_logs_property = rtbfabric.CfnOutboundExternalLink.ApplicationLogsProperty(
+                    link_application_log_sampling=rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty(
+                        error_log=123,
+                        filter_log=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__a9b229edccbdfb67f4339c40a0ca2e3b00d4634b2837ac239db564cec3868684)
+                check_type(argname="argument link_application_log_sampling", value=link_application_log_sampling, expected_type=type_hints["link_application_log_sampling"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "link_application_log_sampling": link_application_log_sampling,
+            }
+
+        @builtins.property
+        def link_application_log_sampling(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-applicationlogs.html#cfn-rtbfabric-outboundexternallink-applicationlogs-linkapplicationlogsampling
+            '''
+            result = self._values.get("link_application_log_sampling")
+            assert result is not None, "Required property 'link_application_log_sampling' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.LinkApplicationLogSamplingProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ApplicationLogsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty",
+        jsii_struct_bases=[],
+        name_mapping={"error_log": "errorLog", "filter_log": "filterLog"},
+    )
+    class LinkApplicationLogSamplingProperty:
+        def __init__(self, *, error_log: jsii.Number, filter_log: jsii.Number) -> None:
+            '''
+            :param error_log: 
+            :param filter_log: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkapplicationlogsampling.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_application_log_sampling_property = rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty(
+                    error_log=123,
+                    filter_log=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__4795d6d14a69cfacf0369b73be38f15dc83058bfc07f12af59548536cd71d175)
+                check_type(argname="argument error_log", value=error_log, expected_type=type_hints["error_log"])
+                check_type(argname="argument filter_log", value=filter_log, expected_type=type_hints["filter_log"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "error_log": error_log,
+                "filter_log": filter_log,
+            }
+
+        @builtins.property
+        def error_log(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkapplicationlogsampling.html#cfn-rtbfabric-outboundexternallink-linkapplicationlogsampling-errorlog
+            '''
+            result = self._values.get("error_log")
+            assert result is not None, "Required property 'error_log' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def filter_log(self) -> jsii.Number:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkapplicationlogsampling.html#cfn-rtbfabric-outboundexternallink-linkapplicationlogsampling-filterlog
+            '''
+            result = self._values.get("filter_log")
+            assert result is not None, "Required property 'filter_log' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkApplicationLogSamplingProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink.LinkAttributesProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "customer_provided_id": "customerProvidedId",
+            "responder_error_masking": "responderErrorMasking",
+        },
+    )
+    class LinkAttributesProperty:
+        def __init__(
+            self,
+            *,
+            customer_provided_id: typing.Optional[builtins.str] = None,
+            responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''
+            :param customer_provided_id: 
+            :param responder_error_masking: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkattributes.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_attributes_property = rtbfabric.CfnOutboundExternalLink.LinkAttributesProperty(
+                    customer_provided_id="customerProvidedId",
+                    responder_error_masking=[rtbfabric.CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty(
+                        action="action",
+                        http_code="httpCode",
+                        logging_types=["loggingTypes"],
+                
+                        # the properties below are optional
+                        response_logging_percentage=123
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__ab7f89fad048d65160fee1cdd9ee351aa26472e598659007bfb8a25a6c2f20a8)
+                check_type(argname="argument customer_provided_id", value=customer_provided_id, expected_type=type_hints["customer_provided_id"])
+                check_type(argname="argument responder_error_masking", value=responder_error_masking, expected_type=type_hints["responder_error_masking"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if customer_provided_id is not None:
+                self._values["customer_provided_id"] = customer_provided_id
+            if responder_error_masking is not None:
+                self._values["responder_error_masking"] = responder_error_masking
+
+        @builtins.property
+        def customer_provided_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkattributes.html#cfn-rtbfabric-outboundexternallink-linkattributes-customerprovidedid
+            '''
+            result = self._values.get("customer_provided_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def responder_error_masking(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linkattributes.html#cfn-rtbfabric-outboundexternallink-linkattributes-respondererrormasking
+            '''
+            result = self._values.get("responder_error_masking")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkAttributesProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink.LinkLogSettingsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"application_logs": "applicationLogs"},
+    )
+    class LinkLogSettingsProperty:
+        def __init__(
+            self,
+            *,
+            application_logs: typing.Union[_IResolvable_da3f097b, typing.Union["CfnOutboundExternalLink.ApplicationLogsProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param application_logs: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linklogsettings.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                link_log_settings_property = rtbfabric.CfnOutboundExternalLink.LinkLogSettingsProperty(
+                    application_logs=rtbfabric.CfnOutboundExternalLink.ApplicationLogsProperty(
+                        link_application_log_sampling=rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty(
+                            error_log=123,
+                            filter_log=123
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__52c438d627d877d014a66c5800991149741928cee0830d167e9a92376109f1fb)
+                check_type(argname="argument application_logs", value=application_logs, expected_type=type_hints["application_logs"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "application_logs": application_logs,
+            }
+
+        @builtins.property
+        def application_logs(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ApplicationLogsProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-linklogsettings.html#cfn-rtbfabric-outboundexternallink-linklogsettings-applicationlogs
+            '''
+            result = self._values.get("application_logs")
+            assert result is not None, "Required property 'application_logs' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnOutboundExternalLink.ApplicationLogsProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LinkLogSettingsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "action": "action",
+            "http_code": "httpCode",
+            "logging_types": "loggingTypes",
+            "response_logging_percentage": "responseLoggingPercentage",
+        },
+    )
+    class ResponderErrorMaskingForHttpCodeProperty:
+        def __init__(
+            self,
+            *,
+            action: builtins.str,
+            http_code: builtins.str,
+            logging_types: typing.Sequence[builtins.str],
+            response_logging_percentage: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param action: 
+            :param http_code: 
+            :param logging_types: 
+            :param response_logging_percentage: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_rtbfabric as rtbfabric
+                
+                responder_error_masking_for_http_code_property = rtbfabric.CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty(
+                    action="action",
+                    http_code="httpCode",
+                    logging_types=["loggingTypes"],
+                
+                    # the properties below are optional
+                    response_logging_percentage=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c24dd49b3cfd077aaf0d4d437d27cc349742733f2fbf408918f211c3c1ebbe81)
+                check_type(argname="argument action", value=action, expected_type=type_hints["action"])
+                check_type(argname="argument http_code", value=http_code, expected_type=type_hints["http_code"])
+                check_type(argname="argument logging_types", value=logging_types, expected_type=type_hints["logging_types"])
+                check_type(argname="argument response_logging_percentage", value=response_logging_percentage, expected_type=type_hints["response_logging_percentage"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "action": action,
+                "http_code": http_code,
+                "logging_types": logging_types,
+            }
+            if response_logging_percentage is not None:
+                self._values["response_logging_percentage"] = response_logging_percentage
+
+        @builtins.property
+        def action(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode.html#cfn-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode-action
+            '''
+            result = self._values.get("action")
+            assert result is not None, "Required property 'action' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def http_code(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode.html#cfn-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode-httpcode
+            '''
+            result = self._values.get("http_code")
+            assert result is not None, "Required property 'http_code' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def logging_types(self) -> typing.List[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode.html#cfn-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode-loggingtypes
+            '''
+            result = self._values.get("logging_types")
+            assert result is not None, "Required property 'logging_types' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def response_logging_percentage(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode.html#cfn-rtbfabric-outboundexternallink-respondererrormaskingforhttpcode-responseloggingpercentage
+            '''
+            result = self._values.get("response_logging_percentage")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ResponderErrorMaskingForHttpCodeProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_rtbfabric.CfnOutboundExternalLinkProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "gateway_id": "gatewayId",
+        "link_log_settings": "linkLogSettings",
+        "public_endpoint": "publicEndpoint",
+        "link_attributes": "linkAttributes",
+        "tags": "tags",
+    },
+)
+class CfnOutboundExternalLinkProps:
+    def __init__(
+        self,
+        *,
+        gateway_id: builtins.str,
+        link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+        public_endpoint: builtins.str,
+        link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnOutboundExternalLink``.
+
+        :param gateway_id: 
+        :param link_log_settings: 
+        :param public_endpoint: 
+        :param link_attributes: 
+        :param tags: Tags to assign to the Link.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_rtbfabric as rtbfabric
+            
+            cfn_outbound_external_link_props = rtbfabric.CfnOutboundExternalLinkProps(
+                gateway_id="gatewayId",
+                link_log_settings=rtbfabric.CfnOutboundExternalLink.LinkLogSettingsProperty(
+                    application_logs=rtbfabric.CfnOutboundExternalLink.ApplicationLogsProperty(
+                        link_application_log_sampling=rtbfabric.CfnOutboundExternalLink.LinkApplicationLogSamplingProperty(
+                            error_log=123,
+                            filter_log=123
+                        )
+                    )
+                ),
+                public_endpoint="publicEndpoint",
+            
+                # the properties below are optional
+                link_attributes=rtbfabric.CfnOutboundExternalLink.LinkAttributesProperty(
+                    customer_provided_id="customerProvidedId",
+                    responder_error_masking=[rtbfabric.CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty(
+                        action="action",
+                        http_code="httpCode",
+                        logging_types=["loggingTypes"],
+            
+                        # the properties below are optional
+                        response_logging_percentage=123
+                    )]
+                ),
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c76a09410a4a7820f14f2f07d663bc52013017381c28be06dd077613ba2c9385)
+            check_type(argname="argument gateway_id", value=gateway_id, expected_type=type_hints["gateway_id"])
+            check_type(argname="argument link_log_settings", value=link_log_settings, expected_type=type_hints["link_log_settings"])
+            check_type(argname="argument public_endpoint", value=public_endpoint, expected_type=type_hints["public_endpoint"])
+            check_type(argname="argument link_attributes", value=link_attributes, expected_type=type_hints["link_attributes"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "gateway_id": gateway_id,
+            "link_log_settings": link_log_settings,
+            "public_endpoint": public_endpoint,
+        }
+        if link_attributes is not None:
+            self._values["link_attributes"] = link_attributes
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def gateway_id(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-gatewayid
+        '''
+        result = self._values.get("gateway_id")
+        assert result is not None, "Required property 'gateway_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def link_log_settings(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkLogSettingsProperty]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-linklogsettings
+        '''
+        result = self._values.get("link_log_settings")
+        assert result is not None, "Required property 'link_log_settings' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkLogSettingsProperty], result)
+
+    @builtins.property
+    def public_endpoint(self) -> builtins.str:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-publicendpoint
+        '''
+        result = self._values.get("public_endpoint")
+        assert result is not None, "Required property 'public_endpoint' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def link_attributes(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkAttributesProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-linkattributes
+        '''
+        result = self._values.get("link_attributes")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkAttributesProperty]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''Tags to assign to the Link.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-rtbfabric-outboundexternallink.html#cfn-rtbfabric-outboundexternallink-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnOutboundExternalLinkProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IRequesterGatewayRef_d92bcdf1, _ITaggableV2_4e6798f8)
 class CfnRequesterGateway(
     _CfnResource_9df397a6,
@@ -2626,6 +3431,18 @@ class CfnRequesterGateway(
             type_hints = typing.get_type_hints(_typecheckingstub__bfb862aae5f5ac5590b2e30cf6f7bd41dd788937fd184bc1afb6341c0375ea45)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRequesterGateway", [resource]))
+
+    @jsii.member(jsii_name="isCfnRequesterGateway")
+    @builtins.classmethod
+    def is_cfn_requester_gateway(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRequesterGateway.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1a9f5f2b085719975110c2c7cb3f46a272d19779c29aef9df8c208a56ded5141)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRequesterGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3055,6 +3872,18 @@ class CfnResponderGateway(
             type_hints = typing.get_type_hints(_typecheckingstub__d03c637f67985067e0671715031f91341dab89c06faa85ff0ef8ac5fda7755ad)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForResponderGateway", [resource]))
+
+    @jsii.member(jsii_name="isCfnResponderGateway")
+    @builtins.classmethod
+    def is_cfn_responder_gateway(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResponderGateway.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b74e42482b63ce0a50334b157f355ffb0e00bd0de13bb57fe8651a695fc0591)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResponderGateway", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3877,6 +4706,8 @@ __all__ = [
     "CfnInboundExternalLinkProps",
     "CfnLink",
     "CfnLinkProps",
+    "CfnOutboundExternalLink",
+    "CfnOutboundExternalLinkProps",
     "CfnRequesterGateway",
     "CfnRequesterGatewayProps",
     "CfnResponderGateway",
@@ -3899,6 +4730,12 @@ def _typecheckingstub__1a5afae55006ef90edfe40aa8e5117e329b49d245830f9f3781bf45c5
 
 def _typecheckingstub__e45579c24ba39e7cbd88d8a1dcb187104127b5c4c031b298b39214f40fb1a36e(
     resource: _IInboundExternalLinkRef_087c1bc6,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1943b47f9f91218da538fb23adeca699c3f23ed379e5dc88cefa0f1b8902d146(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4006,6 +4843,12 @@ def _typecheckingstub__33e403b84fbb081fd16a0097272c1b774ceb7dfcf2ef00e8d7edb2e0f
 
 def _typecheckingstub__8441d9ec3f0e33dc15a6b6f9feae93734b736d627e3b8c39efcec62db2104c90(
     resource: _ILinkRef_1c71e733,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7c8c5e17bdd0c74102b57d33eeaaf08efbc39f50454b30bdc54f29e0df1e47e9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4192,6 +5035,124 @@ def _typecheckingstub__012c58c752deffb32adb9b9c3e8a29a8373d9f395d7e2679c67f05f37
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b83212e7efe505cb3ee08383229ed92a52ff4ae1914a3bae275aa32769a538f2(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    gateway_id: builtins.str,
+    link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+    public_endpoint: builtins.str,
+    link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f750d09898fee559d9d8fea7e122b94e612d5000fc57a92e18a8f25e09f82fa3(
+    resource: _IOutboundExternalLinkRef_06bb6289,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__646cbb509a7c181366f50146e6d34dd1709c05a1bf1bee7ca9c1268e384db068(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__94c554a77d3e3ec5d6846c452288c7fd3554604db45d13548cbe1057b1390676(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d29126bce97e6163947ad92cc93367b86d9ba45647deac7343b697994a0b0353(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__238843eabee398c3632a13fa1c1960dac944a8392e27b87e031688ea7cdf1ec6(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__26f049e3b14063d70306af34d8e4502f4010b3af3beefbbccf55ef545809a845(
+    value: typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkLogSettingsProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d7e4fb1b12fa9b92810ee792acd6f261cddb5b628377308f8f917d480acc5055(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6db7a26ace700bb14301fd54fb67deca8e1afc5000c0c296662435bef28b3372(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnOutboundExternalLink.LinkAttributesProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67ca7cd3c98009f70e07dfe4c683484c616d5a03de5ece23f5b3f87bdc80d986(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9b229edccbdfb67f4339c40a0ca2e3b00d4634b2837ac239db564cec3868684(
+    *,
+    link_application_log_sampling: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkApplicationLogSamplingProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4795d6d14a69cfacf0369b73be38f15dc83058bfc07f12af59548536cd71d175(
+    *,
+    error_log: jsii.Number,
+    filter_log: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ab7f89fad048d65160fee1cdd9ee351aa26472e598659007bfb8a25a6c2f20a8(
+    *,
+    customer_provided_id: typing.Optional[builtins.str] = None,
+    responder_error_masking: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.ResponderErrorMaskingForHttpCodeProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__52c438d627d877d014a66c5800991149741928cee0830d167e9a92376109f1fb(
+    *,
+    application_logs: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.ApplicationLogsProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c24dd49b3cfd077aaf0d4d437d27cc349742733f2fbf408918f211c3c1ebbe81(
+    *,
+    action: builtins.str,
+    http_code: builtins.str,
+    logging_types: typing.Sequence[builtins.str],
+    response_logging_percentage: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c76a09410a4a7820f14f2f07d663bc52013017381c28be06dd077613ba2c9385(
+    *,
+    gateway_id: builtins.str,
+    link_log_settings: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkLogSettingsProperty, typing.Dict[builtins.str, typing.Any]]],
+    public_endpoint: builtins.str,
+    link_attributes: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOutboundExternalLink.LinkAttributesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f422ad74a878dd27ca273fe5fdb545d09c78a5ac256926db3df20c37e5494bcb(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -4207,6 +5168,12 @@ def _typecheckingstub__f422ad74a878dd27ca273fe5fdb545d09c78a5ac256926db3df20c37e
 
 def _typecheckingstub__bfb862aae5f5ac5590b2e30cf6f7bd41dd788937fd184bc1afb6341c0375ea45(
     resource: _IRequesterGatewayRef_d92bcdf1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1a9f5f2b085719975110c2c7cb3f46a272d19779c29aef9df8c208a56ded5141(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -4284,6 +5251,12 @@ def _typecheckingstub__cb840846f651123d9a88e886198c38a19418b49d00a405569125e9b5f
 
 def _typecheckingstub__d03c637f67985067e0671715031f91341dab89c06faa85ff0ef8ac5fda7755ad(
     resource: _IResponderGatewayRef_2bdaa070,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b74e42482b63ce0a50334b157f355ffb0e00bd0de13bb57fe8651a695fc0591(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

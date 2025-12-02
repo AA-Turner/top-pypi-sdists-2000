@@ -774,6 +774,202 @@ lambda_.LayerVersion(self, "MyLayer",
 )
 ```
 
+## Capacity Providers
+
+Lambda capacity providers allow you to run Lambda functions on dedicated compute resources instead of the default serverless execution environment. Capacity providers can have multiple functions and function versions associated with them, but a function can be attached to at most one capacity provider.
+
+### Creating a Capacity Provider
+
+To create a capacity provider, you need to specify the VPC configuration and optionally configure permissions, scaling, and instance requirements:
+
+```python
+import aws_cdk.aws_ec2 as ec2
+
+
+# Create a VPC for the capacity provider
+vpc = ec2.Vpc(self, "MyVpc")
+security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+
+# Create a basic capacity provider
+capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+    capacity_provider_name="my-capacity-provider",
+    subnets=vpc.private_subnets,
+    security_groups=[security_group]
+)
+```
+
+By default, permissions are granted to the capacity provider to manage instances using the AWS managed policy AWSLambdaManagedEC2ResourceOperator. You can also supply a custom role via the `operatorRole` parameter.
+
+### Configuring Scaling Policies
+
+You can configure target tracking scaling policies to automatically scale your capacity provider based on CPU utilization:
+
+```python
+import aws_cdk.aws_ec2 as ec2
+
+
+vpc = ec2.Vpc(self, "MyVpc")
+security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+
+capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+    subnets=vpc.private_subnets,
+    security_groups=[security_group],
+    scaling_options=lambda_.ScalingOptions.manual([
+        lambda_.TargetTrackingScalingPolicy.cpu_utilization(70)
+    ])
+)
+```
+
+### Instance Type Configuration
+
+You can control which EC2 instance types the capacity provider can use:
+
+```python
+import aws_cdk.aws_ec2 as ec2
+
+
+vpc = ec2.Vpc(self, "MyVpc")
+security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+
+# Allow only specific instance families
+allow_capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProviderAllowed",
+    subnets=vpc.private_subnets,
+    security_groups=[security_group],
+    instance_type_filter=lambda_.InstanceTypeFilter.allow([
+        ec2.InstanceType.of(ec2.InstanceClass.M5, ec2.InstanceSize.LARGE),
+        ec2.InstanceType.of(ec2.InstanceClass.M5, ec2.InstanceSize.XLARGE)
+    ])
+)
+
+# Or exclude specific instance types
+exclude_capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProviderExcluded",
+    subnets=vpc.private_subnets,
+    security_groups=[security_group],
+    instance_type_filter=lambda_.InstanceTypeFilter.exclude([
+        ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
+    ])
+)
+```
+
+### Using a Capacity Provider with Lambda Functions
+
+Once you have a capacity provider, you can configure Lambda functions to use it:
+
+```python
+# capacity_provider: lambda.CapacityProvider
+
+
+fn = lambda_.Function(self, "MyFunction",
+    # Runtime must be equal to or newer than NODEJS_22_X
+    runtime=lambda_.Runtime.NODEJS_22_X,
+    handler="index.handler",
+    code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler"))
+)
+
+# Associate the function with the capacity provider
+capacity_provider.add_function(fn,
+    per_execution_environment_max_concurrency=10,
+    execution_environment_memory_gi_bPer_vCpu=4
+)
+```
+
+Note that once you use a capacity provider in a function, it cannot be removed, only changed.
+
+#### CapacityProviderFunctionOptions (addFunction method)
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| perExecutionEnvironmentMaxConcurrency | number | No | Maximum concurrent invokes per execution environment. |
+| executionEnvironmentMemoryGiBPerVCpu | number | No | Memory per VCPU in GiB. |
+| publishToLatestPublished | boolean | No | Whether to automatically publish to $LATEST.PUBLISHED version. |
+| latestPublishedScalingConfig | LatestPublishedScalingConfig | No | Scaling configuration for $LATEST.PUBLISHED version. |
+
+#### LatestPublishedScalingConfig
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| minExecutionEnvironments | number | No | Minimum execution environments for $LATEST.PUBLISHED version. |
+| maxExecutionEnvironments | number | No | Maximum execution environments for $LATEST.PUBLISHED version. |
+
+### Capacity Provider Versions
+
+When publishing Lambda versions that use capacity providers, you can configure scaling settings specific to each version.
+
+To publish a permanent version with specific scaling properties, you can use the [`currentVersion`](#currentversion-updated-hashing-logic) property of the function:
+
+```python
+fn = lambda_.Function(self, "MyFunction",
+    runtime=lambda_.Runtime.NODEJS_22_X,
+    handler="index.handler",
+    code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler")),
+    current_version_options=lambda.VersionOptions(
+        min_execution_environments=3
+    )
+)
+
+version = fn.latest_version
+```
+
+You can also specify scaling properties for the special `$LATEST.PUBLISHED` version when attaching the function to the capacity provider.
+
+`$LATEST.PUBLISHED` is a version that is automatically published when you deploy changes to your function.
+
+```python
+# capacity_provider: lambda.CapacityProvider
+# fn: lambda.Function
+
+
+capacity_provider.add_function(fn,
+    latest_published_scaling_config=lambda.LatestPublishedScalingConfig(
+        min_execution_environments=5,
+        max_execution_environments=25
+    )
+)
+```
+
+#### VersionOptions (Capacity Provider Related Fields)
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| minExecutionEnvironments | number | No | Minimum execution environments to maintain for this version. |
+| maxExecutionEnvironments | number | No | Maximum execution environments allowed for this version. |
+
+### Security and Encryption
+
+Capacity providers support encryption using AWS KMS keys:
+
+```python
+import aws_cdk.aws_kms as kms
+import aws_cdk.aws_ec2 as ec2
+
+
+vpc = ec2.Vpc(self, "MyVpc")
+security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+kms_key = kms.Key(self, "MyKey")
+
+capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+    subnets=vpc.private_subnets,
+    security_groups=[security_group],
+    kms_key=kms_key
+)
+```
+
+### Capacity Provider Configuration Reference
+
+#### CapacityProviderProps
+
+| Name | Type | Required | Description |
+|------|------|----------|-------------|
+| capacityProviderName | string | No | Name of the capacity provider. Must be unique within the AWS account and region. |
+| securityGroups | ISecurityGroup[] | Yes | Security groups to associate with EC2 instances. Up to 5 allowed. |
+| subnets | ISubnet[] | Yes | Subnets where the capacity provider can launch EC2 instances. 1-16 subnets supported. |
+| operatorRole | IRole | No | IAM role for Lambda to manage the capacity provider. Uses AWS Managed Policy AWSLambdaManagedEC2ResourceOperator by default. |
+| architectures | Architecture[] | No | Instruction set architecture for compute instances. |
+| instanceTypeFilter | InstanceTypeFilter | No | Filter for allowed or excluded instance types. |
+| maxVCpuCount | number | No | Maximum number of EC2 instances for scaling. |
+| scalingOptions | ScalingOptions | No | Scaling configuration including policies. |
+| kmsKey | IKey | No | KMS key for encrypting capacity provider data. |
+
 ## Lambda Insights
 
 Lambda functions can be configured to use CloudWatch [Lambda Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights.html)
@@ -1759,7 +1955,9 @@ from ..aws_ec2 import (
     IClientVpnConnectionHandler as _IClientVpnConnectionHandler_715171c2,
     IConnectable as _IConnectable_10015a05,
     ISecurityGroup as _ISecurityGroup_acf8a799,
+    ISubnet as _ISubnet_d57d1229,
     IVpc as _IVpc_f30d5663,
+    InstanceType as _InstanceType_f64915b9,
     SubnetSelection as _SubnetSelection_e57d76df,
 )
 from ..aws_ecr import IRepository as _IRepository_e6004aa6
@@ -1803,11 +2001,13 @@ from ..interfaces.aws_kinesisfirehose import (
 from ..interfaces.aws_kms import IKeyRef as _IKeyRef_d4fc6ef3
 from ..interfaces.aws_lambda import (
     AliasReference as _AliasReference_de21ecaa,
+    CapacityProviderReference as _CapacityProviderReference_4bee18a0,
     CodeSigningConfigReference as _CodeSigningConfigReference_5381ca24,
     EventInvokeConfigReference as _EventInvokeConfigReference_97d3225e,
     EventSourceMappingReference as _EventSourceMappingReference_943d80a5,
     FunctionReference as _FunctionReference_82f2efe9,
     IAliasRef as _IAliasRef_ff1cf51c,
+    ICapacityProviderRef as _ICapacityProviderRef_2d9bc4af,
     ICodeSigningConfigRef as _ICodeSigningConfigRef_1d909622,
     IEventInvokeConfigRef as _IEventInvokeConfigRef_3146aa20,
     IEventSourceMappingRef as _IEventSourceMappingRef_4f65ddd1,
@@ -3335,6 +3535,365 @@ class BucketOptions:
         )
 
 
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.CapacityProviderAttributes",
+    jsii_struct_bases=[],
+    name_mapping={"capacity_provider_arn": "capacityProviderArn"},
+)
+class CapacityProviderAttributes:
+    def __init__(self, *, capacity_provider_arn: builtins.str) -> None:
+        '''Attributes for importing an existing Lambda capacity provider.
+
+        :param capacity_provider_arn: The Amazon Resource Name (ARN) of the capacity provider. Format: arn::lambda:::capacity-provider:
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_lambda as lambda_
+            
+            capacity_provider_attributes = lambda.CapacityProviderAttributes(
+                capacity_provider_arn="capacityProviderArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b12c41ab227dbfaabf525223592398105390445b0b7c4192f00d29360c2f381c)
+            check_type(argname="argument capacity_provider_arn", value=capacity_provider_arn, expected_type=type_hints["capacity_provider_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "capacity_provider_arn": capacity_provider_arn,
+        }
+
+    @builtins.property
+    def capacity_provider_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the capacity provider.
+
+        Format: arn::lambda:::capacity-provider:
+        '''
+        result = self._values.get("capacity_provider_arn")
+        assert result is not None, "Required property 'capacity_provider_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CapacityProviderAttributes(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.CapacityProviderFunctionOptions",
+    jsii_struct_bases=[],
+    name_mapping={
+        "execution_environment_memory_gib_per_v_cpu": "executionEnvironmentMemoryGiBPerVCpu",
+        "latest_published_scaling_config": "latestPublishedScalingConfig",
+        "per_execution_environment_max_concurrency": "perExecutionEnvironmentMaxConcurrency",
+        "publish_to_latest_published": "publishToLatestPublished",
+    },
+)
+class CapacityProviderFunctionOptions:
+    def __init__(
+        self,
+        *,
+        execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+        latest_published_scaling_config: typing.Optional[typing.Union["LatestPublishedScalingConfig", typing.Dict[builtins.str, typing.Any]]] = None,
+        per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
+        publish_to_latest_published: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''Options for creating a function associated with a capacity provider.
+
+        :param execution_environment_memory_gib_per_v_cpu: Specifies the execution environment memory per VCPU, in GiB. Default: 2.0
+        :param latest_published_scaling_config: The scaling options that are applied to the $LATEST.PUBLISHED version. Default: - No scaling limitations are applied to the $LATEST.PUBLISHED version.
+        :param per_execution_environment_max_concurrency: Specifies the maximum number of concurrent invokes a single execution environment can handle. Default: Maximum is set to 10
+        :param publish_to_latest_published: A boolean determining whether or not to automatically publish to the $LATEST.PUBLISHED version. Default: - True
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # capacity_provider: lambda.CapacityProvider
+            
+            
+            fn = lambda_.Function(self, "MyFunction",
+                # Runtime must be equal to or newer than NODEJS_22_X
+                runtime=lambda_.Runtime.NODEJS_22_X,
+                handler="index.handler",
+                code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler"))
+            )
+            
+            # Associate the function with the capacity provider
+            capacity_provider.add_function(fn,
+                per_execution_environment_max_concurrency=10,
+                execution_environment_memory_gi_bPer_vCpu=4
+            )
+        '''
+        if isinstance(latest_published_scaling_config, dict):
+            latest_published_scaling_config = LatestPublishedScalingConfig(**latest_published_scaling_config)
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3fa2ccde56c79b24b785b5b60097bb72efaa3613bbb7c614f67ee39e67e12c59)
+            check_type(argname="argument execution_environment_memory_gib_per_v_cpu", value=execution_environment_memory_gib_per_v_cpu, expected_type=type_hints["execution_environment_memory_gib_per_v_cpu"])
+            check_type(argname="argument latest_published_scaling_config", value=latest_published_scaling_config, expected_type=type_hints["latest_published_scaling_config"])
+            check_type(argname="argument per_execution_environment_max_concurrency", value=per_execution_environment_max_concurrency, expected_type=type_hints["per_execution_environment_max_concurrency"])
+            check_type(argname="argument publish_to_latest_published", value=publish_to_latest_published, expected_type=type_hints["publish_to_latest_published"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if execution_environment_memory_gib_per_v_cpu is not None:
+            self._values["execution_environment_memory_gib_per_v_cpu"] = execution_environment_memory_gib_per_v_cpu
+        if latest_published_scaling_config is not None:
+            self._values["latest_published_scaling_config"] = latest_published_scaling_config
+        if per_execution_environment_max_concurrency is not None:
+            self._values["per_execution_environment_max_concurrency"] = per_execution_environment_max_concurrency
+        if publish_to_latest_published is not None:
+            self._values["publish_to_latest_published"] = publish_to_latest_published
+
+    @builtins.property
+    def execution_environment_memory_gib_per_v_cpu(
+        self,
+    ) -> typing.Optional[jsii.Number]:
+        '''Specifies the execution environment memory per VCPU, in GiB.
+
+        :default: 2.0
+        '''
+        result = self._values.get("execution_environment_memory_gib_per_v_cpu")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def latest_published_scaling_config(
+        self,
+    ) -> typing.Optional["LatestPublishedScalingConfig"]:
+        '''The scaling options that are applied to the $LATEST.PUBLISHED version.
+
+        :default: - No scaling limitations are applied to the $LATEST.PUBLISHED version.
+        '''
+        result = self._values.get("latest_published_scaling_config")
+        return typing.cast(typing.Optional["LatestPublishedScalingConfig"], result)
+
+    @builtins.property
+    def per_execution_environment_max_concurrency(self) -> typing.Optional[jsii.Number]:
+        '''Specifies the maximum number of concurrent invokes a single execution environment can handle.
+
+        :default: Maximum is set to 10
+        '''
+        result = self._values.get("per_execution_environment_max_concurrency")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def publish_to_latest_published(self) -> typing.Optional[builtins.bool]:
+        '''A boolean determining whether or not to automatically publish to the $LATEST.PUBLISHED version.
+
+        :default: - True
+        '''
+        result = self._values.get("publish_to_latest_published")
+        return typing.cast(typing.Optional[builtins.bool], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CapacityProviderFunctionOptions(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.CapacityProviderProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "security_groups": "securityGroups",
+        "subnets": "subnets",
+        "architectures": "architectures",
+        "capacity_provider_name": "capacityProviderName",
+        "instance_type_filter": "instanceTypeFilter",
+        "kms_key": "kmsKey",
+        "max_v_cpu_count": "maxVCpuCount",
+        "operator_role": "operatorRole",
+        "scaling_options": "scalingOptions",
+    },
+)
+class CapacityProviderProps:
+    def __init__(
+        self,
+        *,
+        security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
+        subnets: typing.Sequence[_ISubnet_d57d1229],
+        architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        instance_type_filter: typing.Optional["InstanceTypeFilter"] = None,
+        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        max_v_cpu_count: typing.Optional[jsii.Number] = None,
+        operator_role: typing.Optional[_IRole_235f5d8e] = None,
+        scaling_options: typing.Optional["ScalingOptions"] = None,
+    ) -> None:
+        '''Properties for creating a Lambda capacity provider.
+
+        :param security_groups: A list of security group IDs to associate with EC2 instances launched by the capacity provider. Up to 5 security groups can be specified.
+        :param subnets: A list of subnets where the capacity provider can launch EC2 instances. At least one subnet must be specified, and up to 16 subnets are supported.
+        :param architectures: The instruction set architecture required for compute instances. Only one architecture can be specified per capacity provider. Default: - No architecture constraints specified
+        :param capacity_provider_name: The name of the capacity provider. The name must be unique within the AWS account and region. Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the capacity provider's name.
+        :param instance_type_filter: Configuration for filtering instance types that the capacity provider can use. Default: - No instance type filtering applied
+        :param kms_key: The AWS Key Management Service (KMS) key used to encrypt data associated with the capacity provider. Default: - No KMS key specified, uses an AWS-managed key instead
+        :param max_v_cpu_count: The maximum number of vCPUs that the capacity provider can scale up to. Default: - No maximum limit specified, service default is 400
+        :param operator_role: The IAM role that the Lambda service assumes to manage the capacity provider. Default: - A role will be generated containing the AWSLambdaManagedEC2ResourceOperator managed policy
+        :param scaling_options: The options for scaling a capacity provider, including scaling policies. Default: - The ``Auto`` option is applied by default
+
+        :exampleMetadata: infused
+
+        Example::
+
+            import aws_cdk.aws_ec2 as ec2
+            
+            
+            vpc = ec2.Vpc(self, "MyVpc")
+            security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+            
+            capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+                subnets=vpc.private_subnets,
+                security_groups=[security_group],
+                scaling_options=lambda_.ScalingOptions.manual([
+                    lambda_.TargetTrackingScalingPolicy.cpu_utilization(70)
+                ])
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a6f4b5199de340c52e0147f830c39a3b4e815c8b3be5316d1a4cfe1bfc1faf30)
+            check_type(argname="argument security_groups", value=security_groups, expected_type=type_hints["security_groups"])
+            check_type(argname="argument subnets", value=subnets, expected_type=type_hints["subnets"])
+            check_type(argname="argument architectures", value=architectures, expected_type=type_hints["architectures"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+            check_type(argname="argument instance_type_filter", value=instance_type_filter, expected_type=type_hints["instance_type_filter"])
+            check_type(argname="argument kms_key", value=kms_key, expected_type=type_hints["kms_key"])
+            check_type(argname="argument max_v_cpu_count", value=max_v_cpu_count, expected_type=type_hints["max_v_cpu_count"])
+            check_type(argname="argument operator_role", value=operator_role, expected_type=type_hints["operator_role"])
+            check_type(argname="argument scaling_options", value=scaling_options, expected_type=type_hints["scaling_options"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "security_groups": security_groups,
+            "subnets": subnets,
+        }
+        if architectures is not None:
+            self._values["architectures"] = architectures
+        if capacity_provider_name is not None:
+            self._values["capacity_provider_name"] = capacity_provider_name
+        if instance_type_filter is not None:
+            self._values["instance_type_filter"] = instance_type_filter
+        if kms_key is not None:
+            self._values["kms_key"] = kms_key
+        if max_v_cpu_count is not None:
+            self._values["max_v_cpu_count"] = max_v_cpu_count
+        if operator_role is not None:
+            self._values["operator_role"] = operator_role
+        if scaling_options is not None:
+            self._values["scaling_options"] = scaling_options
+
+    @builtins.property
+    def security_groups(self) -> typing.List[_ISecurityGroup_acf8a799]:
+        '''A list of security group IDs to associate with EC2 instances launched by the capacity provider.
+
+        Up to 5 security groups can be specified.
+        '''
+        result = self._values.get("security_groups")
+        assert result is not None, "Required property 'security_groups' is missing"
+        return typing.cast(typing.List[_ISecurityGroup_acf8a799], result)
+
+    @builtins.property
+    def subnets(self) -> typing.List[_ISubnet_d57d1229]:
+        '''A list of subnets where the capacity provider can launch EC2 instances.
+
+        At least one subnet must be specified, and up to 16 subnets are supported.
+        '''
+        result = self._values.get("subnets")
+        assert result is not None, "Required property 'subnets' is missing"
+        return typing.cast(typing.List[_ISubnet_d57d1229], result)
+
+    @builtins.property
+    def architectures(self) -> typing.Optional[typing.List[Architecture]]:
+        '''The instruction set architecture required for compute instances.
+
+        Only one architecture can be specified per capacity provider.
+
+        :default: - No architecture constraints specified
+        '''
+        result = self._values.get("architectures")
+        return typing.cast(typing.Optional[typing.List[Architecture]], result)
+
+    @builtins.property
+    def capacity_provider_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the capacity provider.
+
+        The name must be unique within the AWS account and region.
+
+        :default:
+
+        - AWS CloudFormation generates a unique physical ID and uses that
+        ID for the capacity provider's name.
+        '''
+        result = self._values.get("capacity_provider_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def instance_type_filter(self) -> typing.Optional["InstanceTypeFilter"]:
+        '''Configuration for filtering instance types that the capacity provider can use.
+
+        :default: - No instance type filtering applied
+        '''
+        result = self._values.get("instance_type_filter")
+        return typing.cast(typing.Optional["InstanceTypeFilter"], result)
+
+    @builtins.property
+    def kms_key(self) -> typing.Optional[_IKey_5f11635f]:
+        '''The AWS Key Management Service (KMS) key used to encrypt data associated with the capacity provider.
+
+        :default: - No KMS key specified, uses an AWS-managed key instead
+        '''
+        result = self._values.get("kms_key")
+        return typing.cast(typing.Optional[_IKey_5f11635f], result)
+
+    @builtins.property
+    def max_v_cpu_count(self) -> typing.Optional[jsii.Number]:
+        '''The maximum number of vCPUs that the capacity provider can scale up to.
+
+        :default: - No maximum limit specified, service default is 400
+        '''
+        result = self._values.get("max_v_cpu_count")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def operator_role(self) -> typing.Optional[_IRole_235f5d8e]:
+        '''The IAM role that the Lambda service assumes to manage the capacity provider.
+
+        :default: - A role will be generated containing the AWSLambdaManagedEC2ResourceOperator managed policy
+        '''
+        result = self._values.get("operator_role")
+        return typing.cast(typing.Optional[_IRole_235f5d8e], result)
+
+    @builtins.property
+    def scaling_options(self) -> typing.Optional["ScalingOptions"]:
+        '''The options for scaling a capacity provider, including scaling policies.
+
+        :default: - The ``Auto`` option is applied by default
+        '''
+        result = self._values.get("scaling_options")
+        return typing.cast(typing.Optional["ScalingOptions"], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CapacityProviderProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _IAliasRef_ff1cf51c)
 class CfnAlias(
     _CfnResource_9df397a6,
@@ -3422,6 +3981,18 @@ class CfnAlias(
             type_hints = typing.get_type_hints(_typecheckingstub__be2b336adaa6a3baddb386ebe76ea44a8fc21caf406ad043b9f5df28f691a070)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAlias", [resource]))
+
+    @jsii.member(jsii_name="isCfnAlias")
+    @builtins.classmethod
+    def is_cfn_alias(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAlias.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f66c82da6adfe37f988142a0889a6cc9aaab13cbdbde7bbbb7e34689bf0a1958)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAlias", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3909,6 +4480,885 @@ class CfnAliasProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _ICapacityProviderRef_2d9bc4af, _ITaggableV2_4e6798f8)
+class CfnCapacityProvider(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider",
+):
+    '''Resource Type definition for AWS::Lambda::CapacityProvider.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html
+    :cloudformationResource: AWS::Lambda::CapacityProvider
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_lambda as lambda_
+        
+        cfn_capacity_provider = lambda_.CfnCapacityProvider(self, "MyCfnCapacityProvider",
+            permissions_config=lambda.CfnCapacityProvider.CapacityProviderPermissionsConfigProperty(
+                capacity_provider_operator_role_arn="capacityProviderOperatorRoleArn"
+            ),
+            vpc_config=lambda.CfnCapacityProvider.CapacityProviderVpcConfigProperty(
+                security_group_ids=["securityGroupIds"],
+                subnet_ids=["subnetIds"]
+            ),
+        
+            # the properties below are optional
+            capacity_provider_name="capacityProviderName",
+            capacity_provider_scaling_config=lambda.CfnCapacityProvider.CapacityProviderScalingConfigProperty(
+                max_vCpu_count=123,
+                scaling_mode="scalingMode",
+                scaling_policies=[lambda.CfnCapacityProvider.TargetTrackingScalingPolicyProperty(
+                    predefined_metric_type="predefinedMetricType",
+                    target_value=123
+                )]
+            ),
+            instance_requirements=lambda.CfnCapacityProvider.InstanceRequirementsProperty(
+                allowed_instance_types=["allowedInstanceTypes"],
+                architectures=["architectures"],
+                excluded_instance_types=["excludedInstanceTypes"]
+            ),
+            kms_key_arn="kmsKeyArn",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderPermissionsConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderVpcConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.CapacityProviderScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.InstanceRequirementsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::Lambda::CapacityProvider``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param permissions_config: IAM permissions configuration for the capacity provider.
+        :param vpc_config: VPC configuration for the capacity provider.
+        :param capacity_provider_name: The name of the capacity provider. The name must be unique within your AWS account and region. If you don't specify a name, CloudFormation generates one.
+        :param capacity_provider_scaling_config: The scaling configuration for the capacity provider.
+        :param instance_requirements: Specifications for the types of EC2 instances that the capacity provider can use.
+        :param kms_key_arn: The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
+        :param tags: A list of tags to apply to the capacity provider.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a330cee966095402be57b20cbf348c99c8e7dbae1f12bacb4337a86817b66c21)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnCapacityProviderProps(
+            permissions_config=permissions_config,
+            vpc_config=vpc_config,
+            capacity_provider_name=capacity_provider_name,
+            capacity_provider_scaling_config=capacity_provider_scaling_config,
+            instance_requirements=instance_requirements,
+            kms_key_arn=kms_key_arn,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForCapacityProvider")
+    @builtins.classmethod
+    def arn_for_capacity_provider(
+        cls,
+        resource: _ICapacityProviderRef_2d9bc4af,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1ee84dc64a4d013d3e3844e200e21b7f164f926ad0dfb29a11a63fd570b6a426)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapacityProvider", [resource]))
+
+    @jsii.member(jsii_name="isCfnCapacityProvider")
+    @builtins.classmethod
+    def is_cfn_capacity_provider(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCapacityProvider.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9161752fd6a97a05e6d2a0ea81c76df8f52ceb96755aebd037cc78db7078493)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCapacityProvider", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d727b92ae3efb980e4404dd15d7f053589e6b8d56da0d8840dceaebcec0ea57c)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e59dbc98237201b65ab02b2af90ea4a70066acf83ba40cc471cb036cc88e764b)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the capacity provider.
+
+        This is a read-only property that is automatically generated when the capacity provider is created.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrState")
+    def attr_state(self) -> builtins.str:
+        '''The current state of the capacity provider.
+
+        Indicates whether the provider is being created, is active and ready for use, has failed, or is being deleted.
+
+        :cloudformationAttribute: State
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrState"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderRef")
+    def capacity_provider_ref(self) -> _CapacityProviderReference_4bee18a0:
+        '''A reference to a CapacityProvider resource.'''
+        return typing.cast(_CapacityProviderReference_4bee18a0, jsii.get(self, "capacityProviderRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="permissionsConfig")
+    def permissions_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"]:
+        '''IAM permissions configuration for the capacity provider.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"], jsii.get(self, "permissionsConfig"))
+
+    @permissions_config.setter
+    def permissions_config(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderPermissionsConfigProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4da5c865971ec867455f111a65aeeea18373d1202c6155c3b3f2643d959dbb9e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "permissionsConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="vpcConfig")
+    def vpc_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"]:
+        '''VPC configuration for the capacity provider.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"], jsii.get(self, "vpcConfig"))
+
+    @vpc_config.setter
+    def vpc_config(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderVpcConfigProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__be843671d3accd5ecfc5957632a0f96a0331f0914704d3db7433c61c7b2c6ff2)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "vpcConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderName")
+    def capacity_provider_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the capacity provider.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "capacityProviderName"))
+
+    @capacity_provider_name.setter
+    def capacity_provider_name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d9db77d2e09e1fb06132dbfcf4e756601ddd4a34f104c440e4c622049577fd23)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "capacityProviderName", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderScalingConfig")
+    def capacity_provider_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]]:
+        '''The scaling configuration for the capacity provider.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]], jsii.get(self, "capacityProviderScalingConfig"))
+
+    @capacity_provider_scaling_config.setter
+    def capacity_provider_scaling_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.CapacityProviderScalingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__af37ed055df6865ea66e2c1d678b2ec8c66ffbd4b9a02dc52c0bfb5687082f59)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "capacityProviderScalingConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceRequirements")
+    def instance_requirements(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]]:
+        '''Specifications for the types of EC2 instances that the capacity provider can use.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]], jsii.get(self, "instanceRequirements"))
+
+    @instance_requirements.setter
+    def instance_requirements(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.InstanceRequirementsProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0b75930e1c1908e1a06f76e3a5593ecdc271d89365c7584c1f7a9b397f1774f5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceRequirements", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="kmsKeyArn")
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
+
+    @kms_key_arn.setter
+    def kms_key_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d774454c4b35b3269d49f48aecd5a9a875331079101c1c73a238976d56476210)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "kmsKeyArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A list of tags to apply to the capacity provider.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a3d57757477f5395c4e105ab2ba74a856bc7d4a2af7c4b17d35842fa01c99151)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider.CapacityProviderPermissionsConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "capacity_provider_operator_role_arn": "capacityProviderOperatorRoleArn",
+        },
+    )
+    class CapacityProviderPermissionsConfigProperty:
+        def __init__(
+            self,
+            *,
+            capacity_provider_operator_role_arn: builtins.str,
+        ) -> None:
+            '''IAM permissions configuration for the capacity provider.
+
+            :param capacity_provider_operator_role_arn: The ARN of the IAM role that Lambda assumes to manage the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderpermissionsconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                capacity_provider_permissions_config_property = lambda.CfnCapacityProvider.CapacityProviderPermissionsConfigProperty(
+                    capacity_provider_operator_role_arn="capacityProviderOperatorRoleArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0e762622e7c444c9aaab6f9c2bc7c925219c77600f45392a3db6d67e39792acc)
+                check_type(argname="argument capacity_provider_operator_role_arn", value=capacity_provider_operator_role_arn, expected_type=type_hints["capacity_provider_operator_role_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "capacity_provider_operator_role_arn": capacity_provider_operator_role_arn,
+            }
+
+        @builtins.property
+        def capacity_provider_operator_role_arn(self) -> builtins.str:
+            '''The ARN of the IAM role that Lambda assumes to manage the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderpermissionsconfig.html#cfn-lambda-capacityprovider-capacityproviderpermissionsconfig-capacityprovideroperatorrolearn
+            '''
+            result = self._values.get("capacity_provider_operator_role_arn")
+            assert result is not None, "Required property 'capacity_provider_operator_role_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityProviderPermissionsConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider.CapacityProviderScalingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "max_v_cpu_count": "maxVCpuCount",
+            "scaling_mode": "scalingMode",
+            "scaling_policies": "scalingPolicies",
+        },
+    )
+    class CapacityProviderScalingConfigProperty:
+        def __init__(
+            self,
+            *,
+            max_v_cpu_count: typing.Optional[jsii.Number] = None,
+            scaling_mode: typing.Optional[builtins.str] = None,
+            scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCapacityProvider.TargetTrackingScalingPolicyProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        ) -> None:
+            '''The scaling configuration for the capacity provider.
+
+            :param max_v_cpu_count: The maximum number of EC2 instances that the capacity provider can scale up to.
+            :param scaling_mode: The scaling mode for the capacity provider.
+            :param scaling_policies: A list of target tracking scaling policies for the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                capacity_provider_scaling_config_property = lambda.CfnCapacityProvider.CapacityProviderScalingConfigProperty(
+                    max_vCpu_count=123,
+                    scaling_mode="scalingMode",
+                    scaling_policies=[lambda.CfnCapacityProvider.TargetTrackingScalingPolicyProperty(
+                        predefined_metric_type="predefinedMetricType",
+                        target_value=123
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b1baad71cad92a313ccf7c7e2572c6c5377ec18e7460e3e187253a281c453c6e)
+                check_type(argname="argument max_v_cpu_count", value=max_v_cpu_count, expected_type=type_hints["max_v_cpu_count"])
+                check_type(argname="argument scaling_mode", value=scaling_mode, expected_type=type_hints["scaling_mode"])
+                check_type(argname="argument scaling_policies", value=scaling_policies, expected_type=type_hints["scaling_policies"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max_v_cpu_count is not None:
+                self._values["max_v_cpu_count"] = max_v_cpu_count
+            if scaling_mode is not None:
+                self._values["scaling_mode"] = scaling_mode
+            if scaling_policies is not None:
+                self._values["scaling_policies"] = scaling_policies
+
+        @builtins.property
+        def max_v_cpu_count(self) -> typing.Optional[jsii.Number]:
+            '''The maximum number of EC2 instances that the capacity provider can scale up to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-maxvcpucount
+            '''
+            result = self._values.get("max_v_cpu_count")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def scaling_mode(self) -> typing.Optional[builtins.str]:
+            '''The scaling mode for the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-scalingmode
+            '''
+            result = self._values.get("scaling_mode")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def scaling_policies(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]]:
+            '''A list of target tracking scaling policies for the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityproviderscalingconfig.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig-scalingpolicies
+            '''
+            result = self._values.get("scaling_policies")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnCapacityProvider.TargetTrackingScalingPolicyProperty"]]]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityProviderScalingConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider.CapacityProviderVpcConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "security_group_ids": "securityGroupIds",
+            "subnet_ids": "subnetIds",
+        },
+    )
+    class CapacityProviderVpcConfigProperty:
+        def __init__(
+            self,
+            *,
+            security_group_ids: typing.Sequence[builtins.str],
+            subnet_ids: typing.Sequence[builtins.str],
+        ) -> None:
+            '''VPC configuration for the capacity provider.
+
+            :param security_group_ids: A list of security group IDs to associate with EC2 instances.
+            :param subnet_ids: A list of subnet IDs where the capacity provider can launch EC2 instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                capacity_provider_vpc_config_property = lambda.CfnCapacityProvider.CapacityProviderVpcConfigProperty(
+                    security_group_ids=["securityGroupIds"],
+                    subnet_ids=["subnetIds"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__5f62324678d1ab247f8c220bf006d5f0d928aa1a221fbbfb82a5db6d3bbe716c)
+                check_type(argname="argument security_group_ids", value=security_group_ids, expected_type=type_hints["security_group_ids"])
+                check_type(argname="argument subnet_ids", value=subnet_ids, expected_type=type_hints["subnet_ids"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "security_group_ids": security_group_ids,
+                "subnet_ids": subnet_ids,
+            }
+
+        @builtins.property
+        def security_group_ids(self) -> typing.List[builtins.str]:
+            '''A list of security group IDs to associate with EC2 instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html#cfn-lambda-capacityprovider-capacityprovidervpcconfig-securitygroupids
+            '''
+            result = self._values.get("security_group_ids")
+            assert result is not None, "Required property 'security_group_ids' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        @builtins.property
+        def subnet_ids(self) -> typing.List[builtins.str]:
+            '''A list of subnet IDs where the capacity provider can launch EC2 instances.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-capacityprovidervpcconfig.html#cfn-lambda-capacityprovider-capacityprovidervpcconfig-subnetids
+            '''
+            result = self._values.get("subnet_ids")
+            assert result is not None, "Required property 'subnet_ids' is missing"
+            return typing.cast(typing.List[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityProviderVpcConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider.InstanceRequirementsProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "allowed_instance_types": "allowedInstanceTypes",
+            "architectures": "architectures",
+            "excluded_instance_types": "excludedInstanceTypes",
+        },
+    )
+    class InstanceRequirementsProperty:
+        def __init__(
+            self,
+            *,
+            allowed_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+            architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+            excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''Specifications for the types of EC2 instances that the capacity provider can use.
+
+            :param allowed_instance_types: A list of instance types that the capacity provider can use. Supports wildcards (for example, m5.*).
+            :param architectures: The instruction set architecture for EC2 instances. Specify either x86_64 or arm64.
+            :param excluded_instance_types: A list of instance types that the capacity provider should not use. Takes precedence over AllowedInstanceTypes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                instance_requirements_property = lambda.CfnCapacityProvider.InstanceRequirementsProperty(
+                    allowed_instance_types=["allowedInstanceTypes"],
+                    architectures=["architectures"],
+                    excluded_instance_types=["excludedInstanceTypes"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__dc4c978cf6a4fccae276db5549b7db57915557a7aee97385981b3d21e33d6e53)
+                check_type(argname="argument allowed_instance_types", value=allowed_instance_types, expected_type=type_hints["allowed_instance_types"])
+                check_type(argname="argument architectures", value=architectures, expected_type=type_hints["architectures"])
+                check_type(argname="argument excluded_instance_types", value=excluded_instance_types, expected_type=type_hints["excluded_instance_types"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if allowed_instance_types is not None:
+                self._values["allowed_instance_types"] = allowed_instance_types
+            if architectures is not None:
+                self._values["architectures"] = architectures
+            if excluded_instance_types is not None:
+                self._values["excluded_instance_types"] = excluded_instance_types
+
+        @builtins.property
+        def allowed_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of instance types that the capacity provider can use.
+
+            Supports wildcards (for example, m5.*).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-allowedinstancetypes
+            '''
+            result = self._values.get("allowed_instance_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def architectures(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''The instruction set architecture for EC2 instances.
+
+            Specify either x86_64 or arm64.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-architectures
+            '''
+            result = self._values.get("architectures")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        @builtins.property
+        def excluded_instance_types(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''A list of instance types that the capacity provider should not use.
+
+            Takes precedence over AllowedInstanceTypes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-instancerequirements.html#cfn-lambda-capacityprovider-instancerequirements-excludedinstancetypes
+            '''
+            result = self._values.get("excluded_instance_types")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "InstanceRequirementsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProvider.TargetTrackingScalingPolicyProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "predefined_metric_type": "predefinedMetricType",
+            "target_value": "targetValue",
+        },
+    )
+    class TargetTrackingScalingPolicyProperty:
+        def __init__(
+            self,
+            *,
+            predefined_metric_type: builtins.str,
+            target_value: jsii.Number,
+        ) -> None:
+            '''A target tracking scaling policy for the capacity provider.
+
+            :param predefined_metric_type: The predefined metric for target tracking.
+            :param target_value: The target value for the metric as a percentage (for example, 70.0 for 70%).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                target_tracking_scaling_policy_property = lambda.CfnCapacityProvider.TargetTrackingScalingPolicyProperty(
+                    predefined_metric_type="predefinedMetricType",
+                    target_value=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c36d98ecc955ee57aee801e396cc564c88abe1a34091c2875a7cdfaf2d5653ab)
+                check_type(argname="argument predefined_metric_type", value=predefined_metric_type, expected_type=type_hints["predefined_metric_type"])
+                check_type(argname="argument target_value", value=target_value, expected_type=type_hints["target_value"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "predefined_metric_type": predefined_metric_type,
+                "target_value": target_value,
+            }
+
+        @builtins.property
+        def predefined_metric_type(self) -> builtins.str:
+            '''The predefined metric for target tracking.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html#cfn-lambda-capacityprovider-targettrackingscalingpolicy-predefinedmetrictype
+            '''
+            result = self._values.get("predefined_metric_type")
+            assert result is not None, "Required property 'predefined_metric_type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def target_value(self) -> jsii.Number:
+            '''The target value for the metric as a percentage (for example, 70.0 for 70%).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-capacityprovider-targettrackingscalingpolicy.html#cfn-lambda-capacityprovider-targettrackingscalingpolicy-targetvalue
+            '''
+            result = self._values.get("target_value")
+            assert result is not None, "Required property 'target_value' is missing"
+            return typing.cast(jsii.Number, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TargetTrackingScalingPolicyProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.CfnCapacityProviderProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "permissions_config": "permissionsConfig",
+        "vpc_config": "vpcConfig",
+        "capacity_provider_name": "capacityProviderName",
+        "capacity_provider_scaling_config": "capacityProviderScalingConfig",
+        "instance_requirements": "instanceRequirements",
+        "kms_key_arn": "kmsKeyArn",
+        "tags": "tags",
+    },
+)
+class CfnCapacityProviderProps:
+    def __init__(
+        self,
+        *,
+        permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderPermissionsConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnCapacityProvider``.
+
+        :param permissions_config: IAM permissions configuration for the capacity provider.
+        :param vpc_config: VPC configuration for the capacity provider.
+        :param capacity_provider_name: The name of the capacity provider. The name must be unique within your AWS account and region. If you don't specify a name, CloudFormation generates one.
+        :param capacity_provider_scaling_config: The scaling configuration for the capacity provider.
+        :param instance_requirements: Specifications for the types of EC2 instances that the capacity provider can use.
+        :param kms_key_arn: The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
+        :param tags: A list of tags to apply to the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_lambda as lambda_
+            
+            cfn_capacity_provider_props = lambda.CfnCapacityProviderProps(
+                permissions_config=lambda.CfnCapacityProvider.CapacityProviderPermissionsConfigProperty(
+                    capacity_provider_operator_role_arn="capacityProviderOperatorRoleArn"
+                ),
+                vpc_config=lambda.CfnCapacityProvider.CapacityProviderVpcConfigProperty(
+                    security_group_ids=["securityGroupIds"],
+                    subnet_ids=["subnetIds"]
+                ),
+            
+                # the properties below are optional
+                capacity_provider_name="capacityProviderName",
+                capacity_provider_scaling_config=lambda.CfnCapacityProvider.CapacityProviderScalingConfigProperty(
+                    max_vCpu_count=123,
+                    scaling_mode="scalingMode",
+                    scaling_policies=[lambda.CfnCapacityProvider.TargetTrackingScalingPolicyProperty(
+                        predefined_metric_type="predefinedMetricType",
+                        target_value=123
+                    )]
+                ),
+                instance_requirements=lambda.CfnCapacityProvider.InstanceRequirementsProperty(
+                    allowed_instance_types=["allowedInstanceTypes"],
+                    architectures=["architectures"],
+                    excluded_instance_types=["excludedInstanceTypes"]
+                ),
+                kms_key_arn="kmsKeyArn",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ac7403cb426712d5ba0f6bfc8a4c3e190442b508eaf06e47b5ff9676c233c40)
+            check_type(argname="argument permissions_config", value=permissions_config, expected_type=type_hints["permissions_config"])
+            check_type(argname="argument vpc_config", value=vpc_config, expected_type=type_hints["vpc_config"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+            check_type(argname="argument capacity_provider_scaling_config", value=capacity_provider_scaling_config, expected_type=type_hints["capacity_provider_scaling_config"])
+            check_type(argname="argument instance_requirements", value=instance_requirements, expected_type=type_hints["instance_requirements"])
+            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "permissions_config": permissions_config,
+            "vpc_config": vpc_config,
+        }
+        if capacity_provider_name is not None:
+            self._values["capacity_provider_name"] = capacity_provider_name
+        if capacity_provider_scaling_config is not None:
+            self._values["capacity_provider_scaling_config"] = capacity_provider_scaling_config
+        if instance_requirements is not None:
+            self._values["instance_requirements"] = instance_requirements
+        if kms_key_arn is not None:
+            self._values["kms_key_arn"] = kms_key_arn
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def permissions_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderPermissionsConfigProperty]:
+        '''IAM permissions configuration for the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-permissionsconfig
+        '''
+        result = self._values.get("permissions_config")
+        assert result is not None, "Required property 'permissions_config' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderPermissionsConfigProperty], result)
+
+    @builtins.property
+    def vpc_config(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderVpcConfigProperty]:
+        '''VPC configuration for the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-vpcconfig
+        '''
+        result = self._values.get("vpc_config")
+        assert result is not None, "Required property 'vpc_config' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderVpcConfigProperty], result)
+
+    @builtins.property
+    def capacity_provider_name(self) -> typing.Optional[builtins.str]:
+        '''The name of the capacity provider.
+
+        The name must be unique within your AWS account and region. If you don't specify a name, CloudFormation generates one.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-capacityprovidername
+        '''
+        result = self._values.get("capacity_provider_name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def capacity_provider_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderScalingConfigProperty]]:
+        '''The scaling configuration for the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-capacityproviderscalingconfig
+        '''
+        result = self._values.get("capacity_provider_scaling_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderScalingConfigProperty]], result)
+
+    @builtins.property
+    def instance_requirements(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.InstanceRequirementsProperty]]:
+        '''Specifications for the types of EC2 instances that the capacity provider can use.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-instancerequirements
+        '''
+        result = self._values.get("instance_requirements")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.InstanceRequirementsProperty]], result)
+
+    @builtins.property
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of the AWS Key Management Service (KMS) key used by the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-kmskeyarn
+        '''
+        result = self._values.get("kms_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''A list of tags to apply to the capacity provider.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-capacityprovider.html#cfn-lambda-capacityprovider-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnCapacityProviderProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _ICodeSigningConfigRef_1d909622, _ITaggableV2_4e6798f8)
 class CfnCodeSigningConfig(
     _CfnResource_9df397a6,
@@ -3989,6 +5439,18 @@ class CfnCodeSigningConfig(
             type_hints = typing.get_type_hints(_typecheckingstub__4354bcf64a3d47874832c73a1dbc66c91c2012cfe7b46cbeafc0f192fbf49022)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCodeSigningConfig", [resource]))
+
+    @jsii.member(jsii_name="isCfnCodeSigningConfig")
+    @builtins.classmethod
+    def is_cfn_code_signing_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCodeSigningConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__acf85f5f30c674b06ff3a607107dc75e1cad8b88decfd48dedfd81d397ca40ec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCodeSigningConfig", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4433,6 +5895,18 @@ class CfnEventInvokeConfig(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnEventInvokeConfig")
+    @builtins.classmethod
+    def is_cfn_event_invoke_config(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEventInvokeConfig.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__31192cd8c9db0ac8494e99d30d29bf7c725271753227ed5833d1f104bae86f35)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventInvokeConfig", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4643,7 +6117,7 @@ class CfnEventInvokeConfig(
 
             For more information, see `Adding a destination <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html#invocation-async-destinations>`_ .
 
-            :param destination: The Amazon Resource Name (ARN) of the destination resource. To retain records of unsuccessful `asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, Lambda function, or Amazon EventBridge event bus as the destination. .. epigraph:: Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ . To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Kafka <https://docs.aws.amazon.com/lambda/latest/dg/with-kafka.html#services-smaa-onfailure-destination>`_ or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#services-msk-onfailure-destination>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, or Amazon S3 bucket as the destination.
+            :param destination: The Amazon Resource Name (ARN) of the destination resource. To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Apache Kafka <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, or Kafka topic as the destination. .. epigraph:: Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ . To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Kafka <https://docs.aws.amazon.com/lambda/latest/dg/with-kafka.html#services-smaa-onfailure-destination>`_ or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#services-msk-onfailure-destination>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, or Amazon S3 bucket as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventinvokeconfig-onfailure.html
             :exampleMetadata: fixture=_generated
@@ -4669,7 +6143,7 @@ class CfnEventInvokeConfig(
         def destination(self) -> builtins.str:
             '''The Amazon Resource Name (ARN) of the destination resource.
 
-            To retain records of unsuccessful `asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, Lambda function, or Amazon EventBridge event bus as the destination.
+            To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Apache Kafka <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, or Kafka topic as the destination.
             .. epigraph::
 
                Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ .
@@ -5074,7 +6548,7 @@ class CfnEventSourceMapping(
         :param amazon_managed_kafka_event_source_config: Specific configuration settings for an Amazon Managed Streaming for Apache Kafka (Amazon MSK) event source.
         :param batch_size: The maximum number of records in each batch that Lambda pulls from your stream or queue and sends to your function. Lambda passes all of the records in the batch to the function in a single call, up to the payload limit for synchronous invocation (6 MB). - *Amazon Kinesis* – Default 100. Max 10,000. - *Amazon DynamoDB Streams* – Default 100. Max 10,000. - *Amazon Simple Queue Service* – Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10. - *Amazon Managed Streaming for Apache Kafka* – Default 100. Max 10,000. - *Self-managed Apache Kafka* – Default 100. Max 10,000. - *Amazon MQ (ActiveMQ and RabbitMQ)* – Default 100. Max 10,000. - *DocumentDB* – Default 100. Max 10,000.
         :param bisect_batch_on_function_error: (Kinesis and DynamoDB Streams only) If the function returns an error, split the batch in two and retry. The default value is false. .. epigraph:: When using ``BisectBatchOnFunctionError`` , check the ``BatchSize`` parameter in the ``OnFailure`` destination message's metadata. The ``BatchSize`` could be greater than 1 since Lambda consolidates failed messages metadata when writing to the ``OnFailure`` destination.
-        :param destination_config: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka event sources only) A configuration object that specifies the destination of an event after Lambda processes it.
+        :param destination_config: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.
         :param document_db_event_source_config: Specific configuration settings for a DocumentDB event source.
         :param enabled: When true, the event source mapping is active. When false, Lambda pauses polling and invocation. Default: True
         :param event_source_arn: The Amazon Resource Name (ARN) of the event source. - *Amazon Kinesis* – The ARN of the data stream or a stream consumer. - *Amazon DynamoDB Streams* – The ARN of the stream. - *Amazon Simple Queue Service* – The ARN of the queue. - *Amazon Managed Streaming for Apache Kafka* – The ARN of the cluster or the ARN of the VPC connection (for `cross-account event source mappings <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#msk-multi-vpc>`_ ). - *Amazon MQ* – The ARN of the broker. - *Amazon DocumentDB* – The ARN of the DocumentDB change stream.
@@ -5083,8 +6557,8 @@ class CfnEventSourceMapping(
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param maximum_batching_window_in_seconds: The maximum amount of time, in seconds, that Lambda spends gathering records before invoking the function. *Default ( Kinesis , DynamoDB , Amazon SQS event sources)* : 0 *Default ( Amazon MSK , Kafka, Amazon MQ , Amazon DocumentDB event sources)* : 500 ms *Related setting:* For Amazon SQS event sources, when you set ``BatchSize`` to a value greater than 10, you must set ``MaximumBatchingWindowInSeconds`` to at least 1.
-        :param maximum_record_age_in_seconds: (Kinesis and DynamoDB Streams only) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
-        :param maximum_retry_attempts: (Kinesis and DynamoDB Streams only) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
+        :param maximum_record_age_in_seconds: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
+        :param maximum_retry_attempts: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
         :param metrics_config: The metrics configuration for your event source. For more information, see `Event source mapping metrics <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#event-source-mapping-metrics>`_ .
         :param parallelization_factor: (Kinesis and DynamoDB Streams only) The number of batches to process concurrently from each shard. The default value is 1.
         :param provisioned_poller_config: (Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
@@ -5149,6 +6623,18 @@ class CfnEventSourceMapping(
             type_hints = typing.get_type_hints(_typecheckingstub__8008b865c4dba070edd3cc4b8abba8299cc9642118e7f4c9ba62f362515ef388)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEventSourceMapping", [resource]))
+
+    @jsii.member(jsii_name="isCfnEventSourceMapping")
+    @builtins.classmethod
+    def is_cfn_event_source_mapping(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEventSourceMapping.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d56fb83ed575d34d3eb042a569b3d8aeb34d1739221cbd7e6fda3f53dc5ed830)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEventSourceMapping", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5282,7 +6768,7 @@ class CfnEventSourceMapping(
     def destination_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DestinationConfigProperty"]]:
-        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka event sources only) A configuration object that specifies the destination of an event after Lambda processes it.'''
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.'''
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnEventSourceMapping.DestinationConfigProperty"]], jsii.get(self, "destinationConfig"))
 
     @destination_config.setter
@@ -5431,7 +6917,7 @@ class CfnEventSourceMapping(
     @builtins.property
     @jsii.member(jsii_name="maximumRecordAgeInSeconds")
     def maximum_record_age_in_seconds(self) -> typing.Optional[jsii.Number]:
-        '''(Kinesis and DynamoDB Streams only) Discard records older than the specified age.'''
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records older than the specified age.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "maximumRecordAgeInSeconds"))
 
     @maximum_record_age_in_seconds.setter
@@ -5447,7 +6933,7 @@ class CfnEventSourceMapping(
     @builtins.property
     @jsii.member(jsii_name="maximumRetryAttempts")
     def maximum_retry_attempts(self) -> typing.Optional[jsii.Number]:
-        '''(Kinesis and DynamoDB Streams only) Discard records after the specified number of retries.'''
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records after the specified number of retries.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "maximumRetryAttempts"))
 
     @maximum_retry_attempts.setter
@@ -6198,7 +7684,7 @@ class CfnEventSourceMapping(
 
             For more information, see `Adding a destination <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html#invocation-async-destinations>`_ .
 
-            :param destination: The Amazon Resource Name (ARN) of the destination resource. To retain records of unsuccessful `asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, Lambda function, or Amazon EventBridge event bus as the destination. .. epigraph:: Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ . To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Kafka <https://docs.aws.amazon.com/lambda/latest/dg/with-kafka.html#services-smaa-onfailure-destination>`_ or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#services-msk-onfailure-destination>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, or Amazon S3 bucket as the destination.
+            :param destination: The Amazon Resource Name (ARN) of the destination resource. To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Apache Kafka <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, or Kafka topic as the destination. .. epigraph:: Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ . To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Kafka <https://docs.aws.amazon.com/lambda/latest/dg/with-kafka.html#services-smaa-onfailure-destination>`_ or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#services-msk-onfailure-destination>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, or Amazon S3 bucket as the destination.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-onfailure.html
             :exampleMetadata: fixture=_generated
@@ -6224,7 +7710,7 @@ class CfnEventSourceMapping(
         def destination(self) -> typing.Optional[builtins.str]:
             '''The Amazon Resource Name (ARN) of the destination resource.
 
-            To retain records of unsuccessful `asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-async-destinations>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, Lambda function, or Amazon EventBridge event bus as the destination.
+            To retain records of failed invocations from `Kinesis <https://docs.aws.amazon.com/lambda/latest/dg/with-kinesis.html>`_ , `DynamoDB <https://docs.aws.amazon.com/lambda/latest/dg/with-ddb.html>`_ , `self-managed Apache Kafka <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , or `Amazon MSK <https://docs.aws.amazon.com/lambda/latest/dg/kafka-on-failure.html>`_ , you can configure an Amazon SNS topic, Amazon SQS queue, Amazon S3 bucket, or Kafka topic as the destination.
             .. epigraph::
 
                Amazon SNS destinations have a message size limit of 256 KB. If the combined size of the function request and response payload exceeds the limit, Lambda will drop the payload when sending ``OnFailure`` event to the destination. For details on this behavior, refer to `Retaining records of asynchronous invocations <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-retain-records.html>`_ .
@@ -6268,7 +7754,7 @@ class CfnEventSourceMapping(
 
             :param maximum_pollers: The maximum number of event pollers this event source can scale up to. For Amazon SQS events source mappings, default is 200, and minimum value allowed is 2. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 200, and minimum value allowed is 1.
             :param minimum_pollers: The minimum number of event pollers this event source can scale down to. For Amazon SQS events source mappings, default is 2, and minimum 2 required. For Amazon MSK and self-managed Apache Kafka event source mappings, default is 1.
-            :param poller_group_name: 
+            :param poller_group_name: (Amazon MSK and self-managed Apache Kafka) The name of the provisioned poller group. Use this option to group multiple ESMs within the event source's VPC to share Event Poller Unit (EPU) capacity. You can use this option to optimize Provisioned mode costs for your ESMs. You can group up to 100 ESMs per poller group and aggregate maximum pollers across all ESMs in a group cannot exceed 2000.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html
             :exampleMetadata: fixture=_generated
@@ -6322,7 +7808,10 @@ class CfnEventSourceMapping(
 
         @builtins.property
         def poller_group_name(self) -> typing.Optional[builtins.str]:
-            '''
+            '''(Amazon MSK and self-managed Apache Kafka) The name of the provisioned poller group.
+
+            Use this option to group multiple ESMs within the event source's VPC to share Event Poller Unit (EPU) capacity. You can use this option to optimize Provisioned mode costs for your ESMs. You can group up to 100 ESMs per poller group and aggregate maximum pollers across all ESMs in a group cannot exceed 2000.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-eventsourcemapping-provisionedpollerconfig.html#cfn-lambda-eventsourcemapping-provisionedpollerconfig-pollergroupname
             '''
             result = self._values.get("poller_group_name")
@@ -6945,7 +8434,7 @@ class CfnEventSourceMappingProps:
         :param amazon_managed_kafka_event_source_config: Specific configuration settings for an Amazon Managed Streaming for Apache Kafka (Amazon MSK) event source.
         :param batch_size: The maximum number of records in each batch that Lambda pulls from your stream or queue and sends to your function. Lambda passes all of the records in the batch to the function in a single call, up to the payload limit for synchronous invocation (6 MB). - *Amazon Kinesis* – Default 100. Max 10,000. - *Amazon DynamoDB Streams* – Default 100. Max 10,000. - *Amazon Simple Queue Service* – Default 10. For standard queues the max is 10,000. For FIFO queues the max is 10. - *Amazon Managed Streaming for Apache Kafka* – Default 100. Max 10,000. - *Self-managed Apache Kafka* – Default 100. Max 10,000. - *Amazon MQ (ActiveMQ and RabbitMQ)* – Default 100. Max 10,000. - *DocumentDB* – Default 100. Max 10,000.
         :param bisect_batch_on_function_error: (Kinesis and DynamoDB Streams only) If the function returns an error, split the batch in two and retry. The default value is false. .. epigraph:: When using ``BisectBatchOnFunctionError`` , check the ``BatchSize`` parameter in the ``OnFailure`` destination message's metadata. The ``BatchSize`` could be greater than 1 since Lambda consolidates failed messages metadata when writing to the ``OnFailure`` destination.
-        :param destination_config: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka event sources only) A configuration object that specifies the destination of an event after Lambda processes it.
+        :param destination_config: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.
         :param document_db_event_source_config: Specific configuration settings for a DocumentDB event source.
         :param enabled: When true, the event source mapping is active. When false, Lambda pauses polling and invocation. Default: True
         :param event_source_arn: The Amazon Resource Name (ARN) of the event source. - *Amazon Kinesis* – The ARN of the data stream or a stream consumer. - *Amazon DynamoDB Streams* – The ARN of the stream. - *Amazon Simple Queue Service* – The ARN of the queue. - *Amazon Managed Streaming for Apache Kafka* – The ARN of the cluster or the ARN of the VPC connection (for `cross-account event source mappings <https://docs.aws.amazon.com/lambda/latest/dg/with-msk.html#msk-multi-vpc>`_ ). - *Amazon MQ* – The ARN of the broker. - *Amazon DocumentDB* – The ARN of the DocumentDB change stream.
@@ -6954,8 +8443,8 @@ class CfnEventSourceMappingProps:
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that Lambda uses to encrypt your function's `filter criteria <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventfiltering.html#filtering-basics>`_ .
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param maximum_batching_window_in_seconds: The maximum amount of time, in seconds, that Lambda spends gathering records before invoking the function. *Default ( Kinesis , DynamoDB , Amazon SQS event sources)* : 0 *Default ( Amazon MSK , Kafka, Amazon MQ , Amazon DocumentDB event sources)* : 500 ms *Related setting:* For Amazon SQS event sources, when you set ``BatchSize`` to a value greater than 10, you must set ``MaximumBatchingWindowInSeconds`` to at least 1.
-        :param maximum_record_age_in_seconds: (Kinesis and DynamoDB Streams only) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
-        :param maximum_retry_attempts: (Kinesis and DynamoDB Streams only) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
+        :param maximum_record_age_in_seconds: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records older than the specified age. The default value is -1, which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records. .. epigraph:: The minimum valid value for maximum record age is 60s. Although values less than 60 and greater than -1 fall within the parameter's absolute range, they are not allowed
+        :param maximum_retry_attempts: (Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records after the specified number of retries. The default value is -1, which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
         :param metrics_config: The metrics configuration for your event source. For more information, see `Event source mapping metrics <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html#event-source-mapping-metrics>`_ .
         :param parallelization_factor: (Kinesis and DynamoDB Streams only) The number of batches to process concurrently from each shard. The default value is 1.
         :param provisioned_poller_config: (Amazon SQS, Amazon MSK, and self-managed Apache Kafka only) The provisioned mode configuration for the event source. For more information, see `provisioned mode <https://docs.aws.amazon.com/lambda/latest/dg/invocation-eventsourcemapping.html#invocation-eventsourcemapping-provisioned-mode>`_ .
@@ -7228,7 +8717,7 @@ class CfnEventSourceMappingProps:
     def destination_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnEventSourceMapping.DestinationConfigProperty]]:
-        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka event sources only) A configuration object that specifies the destination of an event after Lambda processes it.
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) A configuration object that specifies the destination of an event after Lambda processes it.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-eventsourcemapping.html#cfn-lambda-eventsourcemapping-destinationconfig
         '''
@@ -7338,7 +8827,7 @@ class CfnEventSourceMappingProps:
 
     @builtins.property
     def maximum_record_age_in_seconds(self) -> typing.Optional[jsii.Number]:
-        '''(Kinesis and DynamoDB Streams only) Discard records older than the specified age.
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records older than the specified age.
 
         The default value is -1,
         which sets the maximum age to infinite. When the value is set to infinite, Lambda never discards old records.
@@ -7353,7 +8842,7 @@ class CfnEventSourceMappingProps:
 
     @builtins.property
     def maximum_retry_attempts(self) -> typing.Optional[jsii.Number]:
-        '''(Kinesis and DynamoDB Streams only) Discard records after the specified number of retries.
+        '''(Kinesis, DynamoDB Streams, Amazon MSK, and self-managed Apache Kafka) Discard records after the specified number of retries.
 
         The default value is -1,
         which sets the maximum number of retries to infinite. When MaximumRetryAttempts is infinite, Lambda retries failed records until the record expires in the event source.
@@ -7569,6 +9058,15 @@ class CfnFunction(
         
             # the properties below are optional
             architectures=["architectures"],
+            capacity_provider_config=lambda.CfnFunction.CapacityProviderConfigProperty(
+                lambda_managed_instances_capacity_provider_config=lambda.CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty(
+                    capacity_provider_arn="capacityProviderArn",
+        
+                    # the properties below are optional
+                    execution_environment_memory_gi_bPer_vCpu=123,
+                    per_execution_environment_max_concurrency=123
+                )
+            ),
             code_signing_config_arn="codeSigningConfigArn",
             dead_letter_config=lambda.CfnFunction.DeadLetterConfigProperty(
                 target_arn="targetArn"
@@ -7587,6 +9085,10 @@ class CfnFunction(
                 local_mount_path="localMountPath"
             )],
             function_name="functionName",
+            function_scaling_config=lambda.CfnFunction.FunctionScalingConfigProperty(
+                max_execution_environments=123,
+                min_execution_environments=123
+            ),
             handler="handler",
             image_config=lambda.CfnFunction.ImageConfigProperty(
                 command=["command"],
@@ -7603,6 +9105,7 @@ class CfnFunction(
             ),
             memory_size=123,
             package_type="packageType",
+            publish_to_latest_published=False,
             recursive_loop="recursiveLoop",
             reserved_concurrent_executions=123,
             runtime="runtime",
@@ -7642,6 +9145,7 @@ class CfnFunction(
         code: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.CodeProperty", typing.Dict[builtins.str, typing.Any]]],
         role: typing.Union[builtins.str, _IRoleRef_8400221f],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.CapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
@@ -7649,6 +9153,7 @@ class CfnFunction(
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FileSystemConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
         function_name: typing.Optional[builtins.str] = None,
+        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         handler: typing.Optional[builtins.str] = None,
         image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.ImageConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
@@ -7656,6 +9161,7 @@ class CfnFunction(
         logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.LoggingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
+        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         recursive_loop: typing.Optional[builtins.str] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
         runtime: typing.Optional[builtins.str] = None,
@@ -7674,6 +9180,7 @@ class CfnFunction(
         :param code: The code for the function. You can define your function code in multiple ways:. - For .zip deployment packages, you can specify the Amazon S3 location of the .zip file in the ``S3Bucket`` , ``S3Key`` , and ``S3ObjectVersion`` properties. - For .zip deployment packages, you can alternatively define the function code inline in the ``ZipFile`` property. This method works only for Node.js and Python functions. - For container images, specify the URI of your container image in the Amazon ECR registry in the ``ImageUri`` property.
         :param role: The Amazon Resource Name (ARN) of the function's execution role.
         :param architectures: The instruction set architecture that the function supports. Enter a string array with one of the valid values (arm64 or x86_64). The default value is ``x86_64`` .
+        :param capacity_provider_config: 
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
@@ -7681,6 +9188,7 @@ class CfnFunction(
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param function_scaling_config: 
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
@@ -7688,6 +9196,7 @@ class CfnFunction(
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param memory_size: The amount of `memory available to the function <https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console>`_ at runtime. Increasing the function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB. Note that new AWS accounts have reduced concurrency and memory quotas. AWS raises these quotas automatically based on your usage. You can also request a quota increase.
         :param package_type: The type of deployment package. Set to ``Image`` for container image and set ``Zip`` for .zip file archive.
+        :param publish_to_latest_published: 
         :param recursive_loop: The status of your function's recursive loop detection configuration. When this value is set to ``Allow`` and Lambda detects your function being invoked as part of a recursive loop, it doesn't take any action. When this value is set to ``Terminate`` and Lambda detects your function being invoked as part of a recursive loop, it stops your function being invoked and notifies you.
         :param reserved_concurrent_executions: The number of simultaneous executions to reserve for the function.
         :param runtime: The identifier of the function's `runtime <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html>`_ . Runtime is required if the deployment package is a .zip file archive. Specifying a runtime results in an error if you're deploying a function using a container image. The following list includes deprecated runtimes. Lambda blocks creating new functions and updating existing functions shortly after each runtime is deprecated. For more information, see `Runtime use after deprecation <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-deprecation-levels>`_ . For a list of all currently supported runtimes, see `Supported runtimes <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtimes-supported>`_ .
@@ -7707,6 +9216,7 @@ class CfnFunction(
             code=code,
             role=role,
             architectures=architectures,
+            capacity_provider_config=capacity_provider_config,
             code_signing_config_arn=code_signing_config_arn,
             dead_letter_config=dead_letter_config,
             description=description,
@@ -7714,6 +9224,7 @@ class CfnFunction(
             ephemeral_storage=ephemeral_storage,
             file_system_configs=file_system_configs,
             function_name=function_name,
+            function_scaling_config=function_scaling_config,
             handler=handler,
             image_config=image_config,
             kms_key_arn=kms_key_arn,
@@ -7721,6 +9232,7 @@ class CfnFunction(
             logging_config=logging_config,
             memory_size=memory_size,
             package_type=package_type,
+            publish_to_latest_published=publish_to_latest_published,
             recursive_loop=recursive_loop,
             reserved_concurrent_executions=reserved_concurrent_executions,
             runtime=runtime,
@@ -7787,6 +9299,18 @@ class CfnFunction(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
         return typing.cast(_IFunctionRef_2601eb33, jsii.sinvoke(cls, "fromFunctionName", [scope, id, function_name]))
+
+    @jsii.member(jsii_name="isCfnFunction")
+    @builtins.classmethod
+    def is_cfn_function(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFunction.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f6982a47095e9426bca153e3c7e52fd83d2e1c3fbbb4295002d6445de87f72c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFunction", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7917,6 +9441,23 @@ class CfnFunction(
         jsii.set(self, "architectures", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="capacityProviderConfig")
+    def capacity_provider_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]], jsii.get(self, "capacityProviderConfig"))
+
+    @capacity_provider_config.setter
+    def capacity_provider_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.CapacityProviderConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8e95fb4274a98029e1c2cba30dd84cdeec86aba8b7dd475bf48c9825be092329)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "capacityProviderConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="codeSigningConfigArn")
     def code_signing_config_arn(self) -> typing.Optional[builtins.str]:
         '''To enable code signing for this function, specify the ARN of a code-signing configuration.'''
@@ -8028,6 +9569,23 @@ class CfnFunction(
         jsii.set(self, "functionName", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="functionScalingConfig")
+    def function_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
+
+    @function_scaling_config.setter
+    def function_scaling_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.FunctionScalingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__59b4ae04dc699803bc702a21c13064ef8eb4a76d8bd334722ef3ac7f1c254de6)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "functionScalingConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="handler")
     def handler(self) -> typing.Optional[builtins.str]:
         '''The name of the method within your code that Lambda calls to run your function.'''
@@ -8127,6 +9685,23 @@ class CfnFunction(
             type_hints = typing.get_type_hints(_typecheckingstub__7f9bb5c748b58d456d8f996b07509c9991044629122c76de58eaabc34056846e)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "packageType", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="publishToLatestPublished")
+    def publish_to_latest_published(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "publishToLatestPublished"))
+
+    @publish_to_latest_published.setter
+    def publish_to_latest_published(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8dfcd9e5465e988ca53cb0a12e23c9593b87f05a07151fdcc1b2c852531d8d07)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "publishToLatestPublished", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="recursiveLoop")
@@ -8287,6 +9862,70 @@ class CfnFunction(
         jsii.set(self, "vpcConfig", value) # pyright: ignore[reportArgumentType]
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.CapacityProviderConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "lambda_managed_instances_capacity_provider_config": "lambdaManagedInstancesCapacityProviderConfig",
+        },
+    )
+    class CapacityProviderConfigProperty:
+        def __init__(
+            self,
+            *,
+            lambda_managed_instances_capacity_provider_config: typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        ) -> None:
+            '''
+            :param lambda_managed_instances_capacity_provider_config: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-capacityproviderconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                capacity_provider_config_property = lambda.CfnFunction.CapacityProviderConfigProperty(
+                    lambda_managed_instances_capacity_provider_config=lambda.CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty(
+                        capacity_provider_arn="capacityProviderArn",
+                
+                        # the properties below are optional
+                        execution_environment_memory_gi_bPer_vCpu=123,
+                        per_execution_environment_max_concurrency=123
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__3962da17a38ed1bcb4d2eb9fecc762eeb868bf86c6305759bb3946018cf0fd5e)
+                check_type(argname="argument lambda_managed_instances_capacity_provider_config", value=lambda_managed_instances_capacity_provider_config, expected_type=type_hints["lambda_managed_instances_capacity_provider_config"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "lambda_managed_instances_capacity_provider_config": lambda_managed_instances_capacity_provider_config,
+            }
+
+        @builtins.property
+        def lambda_managed_instances_capacity_provider_config(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-capacityproviderconfig.html#cfn-lambda-function-capacityproviderconfig-lambdamanagedinstancescapacityproviderconfig
+            '''
+            result = self._values.get("lambda_managed_instances_capacity_provider_config")
+            assert result is not None, "Required property 'lambda_managed_instances_capacity_provider_config' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty"], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "CapacityProviderConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.CodeProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -8313,7 +9952,7 @@ class CfnFunction(
 
             .. epigraph::
 
-               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
+               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Node.js treats the file as a CommonJS module.
 
             Changes to a deployment package in Amazon S3 or a container image in ECR are not detected automatically during stack updates. To update the function code, change the object key or version in the template.
 
@@ -8322,7 +9961,7 @@ class CfnFunction(
             :param s3_key: The Amazon S3 key of the deployment package.
             :param s3_object_version: For versioned objects, the version of the deployment package object to use.
             :param source_kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ .
-            :param zip_file: (Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` . .. epigraph:: When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions. For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash. If you specify a function that interacts with an AWS CloudFormation custom resource, you don't have to write your own functions to send responses to the custom resource that invoked the function. AWS CloudFormation provides a response module ( `cfn-response <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html>`_ ) that simplifies sending responses. See `Using AWS Lambda with AWS CloudFormation <https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html>`_ for details.
+            :param zip_file: (Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, CloudFormation places it in a file named ``index`` and zips it to create a `deployment package <https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html>`_ . This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index`` . For example, ``index.handler`` . .. epigraph:: When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Node.js treats the file as a CommonJS module. When using Node.js 24 or later, Node.js can automatically detect if a ``.js`` file should be treated as CommonJS or as an ES module. To enable auto-detection, add the ``--experimental-detect-module`` flag to the ``NODE_OPTIONS`` environment variable. For more information, see `Experimental Node.js features <https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features>`_ . For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash. If you specify a function that interacts with an AWS CloudFormation custom resource, you don't have to write your own functions to send responses to the custom resource that invoked the function. AWS CloudFormation provides a response module ( `cfn-response <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html>`_ ) that simplifies sending responses. See `Using AWS Lambda with AWS CloudFormation <https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html>`_ for details.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-code.html
             :exampleMetadata: fixture=_generated
@@ -8417,7 +10056,9 @@ class CfnFunction(
 
             .. epigraph::
 
-               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Lambda treats the file as a CommonJS module. ES modules aren't supported for inline functions.
+               When you specify source code inline for a Node.js function, the ``index`` file that CloudFormation creates uses the extension ``.js`` . This means that Node.js treats the file as a CommonJS module.
+
+               When using Node.js 24 or later, Node.js can automatically detect if a ``.js`` file should be treated as CommonJS or as an ES module. To enable auto-detection, add the ``--experimental-detect-module`` flag to the ``NODE_OPTIONS`` environment variable. For more information, see `Experimental Node.js features <https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features>`_ .
 
             For JSON, you must escape quotes and special characters such as newline ( ``\\n`` ) with a backslash.
 
@@ -8679,6 +10320,78 @@ class CfnFunction(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.FunctionScalingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "max_execution_environments": "maxExecutionEnvironments",
+            "min_execution_environments": "minExecutionEnvironments",
+        },
+    )
+    class FunctionScalingConfigProperty:
+        def __init__(
+            self,
+            *,
+            max_execution_environments: typing.Optional[jsii.Number] = None,
+            min_execution_environments: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param max_execution_environments: The maximum number of execution environments that can be provisioned for the function.
+            :param min_execution_environments: The minimum number of execution environments to maintain for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-functionscalingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                function_scaling_config_property = lambda.CfnFunction.FunctionScalingConfigProperty(
+                    max_execution_environments=123,
+                    min_execution_environments=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__0ce316517e8aba93ed94d4f7adea65b45ea4246de95159b61ce9f74be3b01b35)
+                check_type(argname="argument max_execution_environments", value=max_execution_environments, expected_type=type_hints["max_execution_environments"])
+                check_type(argname="argument min_execution_environments", value=min_execution_environments, expected_type=type_hints["min_execution_environments"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max_execution_environments is not None:
+                self._values["max_execution_environments"] = max_execution_environments
+            if min_execution_environments is not None:
+                self._values["min_execution_environments"] = min_execution_environments
+
+        @builtins.property
+        def max_execution_environments(self) -> typing.Optional[jsii.Number]:
+            '''The maximum number of execution environments that can be provisioned for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-functionscalingconfig.html#cfn-lambda-function-functionscalingconfig-maxexecutionenvironments
+            '''
+            result = self._values.get("max_execution_environments")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_execution_environments(self) -> typing.Optional[jsii.Number]:
+            '''The minimum number of execution environments to maintain for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-functionscalingconfig.html#cfn-lambda-function-functionscalingconfig-minexecutionenvironments
+            '''
+            result = self._values.get("min_execution_environments")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FunctionScalingConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.ImageConfigProperty",
         jsii_struct_bases=[],
         name_mapping={
@@ -8772,6 +10485,101 @@ class CfnFunction(
 
         def __repr__(self) -> str:
             return "ImageConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "capacity_provider_arn": "capacityProviderArn",
+            "execution_environment_memory_gib_per_v_cpu": "executionEnvironmentMemoryGiBPerVCpu",
+            "per_execution_environment_max_concurrency": "perExecutionEnvironmentMaxConcurrency",
+        },
+    )
+    class LambdaManagedInstancesCapacityProviderConfigProperty:
+        def __init__(
+            self,
+            *,
+            capacity_provider_arn: builtins.str,
+            execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+            per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param capacity_provider_arn: The Amazon Resource Name (ARN) of the capacity provider.
+            :param execution_environment_memory_gib_per_v_cpu: The amount of memory in GiB allocated per vCPU for execution environments.
+            :param per_execution_environment_max_concurrency: The maximum number of concurrent execution environments that can run on each compute instance.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                lambda_managed_instances_capacity_provider_config_property = lambda.CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty(
+                    capacity_provider_arn="capacityProviderArn",
+                
+                    # the properties below are optional
+                    execution_environment_memory_gi_bPer_vCpu=123,
+                    per_execution_environment_max_concurrency=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__13617111b10f9f0e997422d267ed50cd5885ae342e3353ff607e652cadfd251f)
+                check_type(argname="argument capacity_provider_arn", value=capacity_provider_arn, expected_type=type_hints["capacity_provider_arn"])
+                check_type(argname="argument execution_environment_memory_gib_per_v_cpu", value=execution_environment_memory_gib_per_v_cpu, expected_type=type_hints["execution_environment_memory_gib_per_v_cpu"])
+                check_type(argname="argument per_execution_environment_max_concurrency", value=per_execution_environment_max_concurrency, expected_type=type_hints["per_execution_environment_max_concurrency"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "capacity_provider_arn": capacity_provider_arn,
+            }
+            if execution_environment_memory_gib_per_v_cpu is not None:
+                self._values["execution_environment_memory_gib_per_v_cpu"] = execution_environment_memory_gib_per_v_cpu
+            if per_execution_environment_max_concurrency is not None:
+                self._values["per_execution_environment_max_concurrency"] = per_execution_environment_max_concurrency
+
+        @builtins.property
+        def capacity_provider_arn(self) -> builtins.str:
+            '''The Amazon Resource Name (ARN) of the capacity provider.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html#cfn-lambda-function-lambdamanagedinstancescapacityproviderconfig-capacityproviderarn
+            '''
+            result = self._values.get("capacity_provider_arn")
+            assert result is not None, "Required property 'capacity_provider_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def execution_environment_memory_gib_per_v_cpu(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''The amount of memory in GiB allocated per vCPU for execution environments.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html#cfn-lambda-function-lambdamanagedinstancescapacityproviderconfig-executionenvironmentmemorygibpervcpu
+            '''
+            result = self._values.get("execution_environment_memory_gib_per_v_cpu")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def per_execution_environment_max_concurrency(
+            self,
+        ) -> typing.Optional[jsii.Number]:
+            '''The maximum number of concurrent execution environments that can run on each compute instance.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-lambdamanagedinstancescapacityproviderconfig.html#cfn-lambda-function-lambdamanagedinstancescapacityproviderconfig-perexecutionenvironmentmaxconcurrency
+            '''
+            result = self._values.get("per_execution_environment_max_concurrency")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LambdaManagedInstancesCapacityProviderConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -9312,6 +11120,7 @@ class CfnFunction(
         "code": "code",
         "role": "role",
         "architectures": "architectures",
+        "capacity_provider_config": "capacityProviderConfig",
         "code_signing_config_arn": "codeSigningConfigArn",
         "dead_letter_config": "deadLetterConfig",
         "description": "description",
@@ -9319,6 +11128,7 @@ class CfnFunction(
         "ephemeral_storage": "ephemeralStorage",
         "file_system_configs": "fileSystemConfigs",
         "function_name": "functionName",
+        "function_scaling_config": "functionScalingConfig",
         "handler": "handler",
         "image_config": "imageConfig",
         "kms_key_arn": "kmsKeyArn",
@@ -9326,6 +11136,7 @@ class CfnFunction(
         "logging_config": "loggingConfig",
         "memory_size": "memorySize",
         "package_type": "packageType",
+        "publish_to_latest_published": "publishToLatestPublished",
         "recursive_loop": "recursiveLoop",
         "reserved_concurrent_executions": "reservedConcurrentExecutions",
         "runtime": "runtime",
@@ -9345,6 +11156,7 @@ class CfnFunctionProps:
         code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
         role: typing.Union[builtins.str, _IRoleRef_8400221f],
         architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+        capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CapacityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
@@ -9352,6 +11164,7 @@ class CfnFunctionProps:
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
         function_name: typing.Optional[builtins.str] = None,
+        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         handler: typing.Optional[builtins.str] = None,
         image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
@@ -9359,6 +11172,7 @@ class CfnFunctionProps:
         logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         memory_size: typing.Optional[jsii.Number] = None,
         package_type: typing.Optional[builtins.str] = None,
+        publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         recursive_loop: typing.Optional[builtins.str] = None,
         reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
         runtime: typing.Optional[builtins.str] = None,
@@ -9375,6 +11189,7 @@ class CfnFunctionProps:
         :param code: The code for the function. You can define your function code in multiple ways:. - For .zip deployment packages, you can specify the Amazon S3 location of the .zip file in the ``S3Bucket`` , ``S3Key`` , and ``S3ObjectVersion`` properties. - For .zip deployment packages, you can alternatively define the function code inline in the ``ZipFile`` property. This method works only for Node.js and Python functions. - For container images, specify the URI of your container image in the Amazon ECR registry in the ``ImageUri`` property.
         :param role: The Amazon Resource Name (ARN) of the function's execution role.
         :param architectures: The instruction set architecture that the function supports. Enter a string array with one of the valid values (arm64 or x86_64). The default value is ``x86_64`` .
+        :param capacity_provider_config: 
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
@@ -9382,6 +11197,7 @@ class CfnFunctionProps:
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
         :param function_name: The name of the Lambda function, up to 64 characters in length. If you don't specify a name, CloudFormation generates one. If you specify a name, you cannot perform updates that require replacement of this resource. You can perform updates that require no or some interruption. If you must replace the resource, specify a new name.
+        :param function_scaling_config: 
         :param handler: The name of the method within your code that Lambda calls to run your function. Handler is required if the deployment package is a .zip file archive. The format includes the file name. It can also include namespaces and other qualifiers, depending on the runtime. For more information, see `Lambda programming model <https://docs.aws.amazon.com/lambda/latest/dg/foundation-progmodel.html>`_ .
         :param image_config: Configuration values that override the container image Dockerfile settings. For more information, see `Container image settings <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms>`_ .
         :param kms_key_arn: The ARN of the AWS Key Management Service ( AWS ) customer managed key that's used to encrypt the following resources:. - The function's `environment variables <https://docs.aws.amazon.com/lambda/latest/dg/configuration-envvars.html#configuration-envvars-encryption>`_ . - The function's `Lambda SnapStart <https://docs.aws.amazon.com/lambda/latest/dg/snapstart-security.html>`_ snapshots. - When used with ``SourceKMSKeyArn`` , the unzipped version of the .zip deployment package that's used for function invocations. For more information, see `Specifying a customer managed key for Lambda <https://docs.aws.amazon.com/lambda/latest/dg/encrypt-zip-package.html#enable-zip-custom-encryption>`_ . - The optimized version of the container image that's used for function invocations. Note that this is not the same key that's used to protect your container image in the Amazon Elastic Container Registry (Amazon ECR). For more information, see `Function lifecycle <https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-lifecycle>`_ . If you don't provide a customer managed key, Lambda uses an `AWS owned key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk>`_ or an `AWS managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-managed-cmk>`_ .
@@ -9389,6 +11205,7 @@ class CfnFunctionProps:
         :param logging_config: The function's Amazon CloudWatch Logs configuration settings.
         :param memory_size: The amount of `memory available to the function <https://docs.aws.amazon.com/lambda/latest/dg/configuration-function-common.html#configuration-memory-console>`_ at runtime. Increasing the function memory also increases its CPU allocation. The default value is 128 MB. The value can be any multiple of 1 MB. Note that new AWS accounts have reduced concurrency and memory quotas. AWS raises these quotas automatically based on your usage. You can also request a quota increase.
         :param package_type: The type of deployment package. Set to ``Image`` for container image and set ``Zip`` for .zip file archive.
+        :param publish_to_latest_published: 
         :param recursive_loop: The status of your function's recursive loop detection configuration. When this value is set to ``Allow`` and Lambda detects your function being invoked as part of a recursive loop, it doesn't take any action. When this value is set to ``Terminate`` and Lambda detects your function being invoked as part of a recursive loop, it stops your function being invoked and notifies you.
         :param reserved_concurrent_executions: The number of simultaneous executions to reserve for the function.
         :param runtime: The identifier of the function's `runtime <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html>`_ . Runtime is required if the deployment package is a .zip file archive. Specifying a runtime results in an error if you're deploying a function using a container image. The following list includes deprecated runtimes. Lambda blocks creating new functions and updating existing functions shortly after each runtime is deprecated. For more information, see `Runtime use after deprecation <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtime-deprecation-levels>`_ . For a list of all currently supported runtimes, see `Supported runtimes <https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html#runtimes-supported>`_ .
@@ -9422,6 +11239,15 @@ class CfnFunctionProps:
             
                 # the properties below are optional
                 architectures=["architectures"],
+                capacity_provider_config=lambda.CfnFunction.CapacityProviderConfigProperty(
+                    lambda_managed_instances_capacity_provider_config=lambda.CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty(
+                        capacity_provider_arn="capacityProviderArn",
+            
+                        # the properties below are optional
+                        execution_environment_memory_gi_bPer_vCpu=123,
+                        per_execution_environment_max_concurrency=123
+                    )
+                ),
                 code_signing_config_arn="codeSigningConfigArn",
                 dead_letter_config=lambda.CfnFunction.DeadLetterConfigProperty(
                     target_arn="targetArn"
@@ -9440,6 +11266,10 @@ class CfnFunctionProps:
                     local_mount_path="localMountPath"
                 )],
                 function_name="functionName",
+                function_scaling_config=lambda.CfnFunction.FunctionScalingConfigProperty(
+                    max_execution_environments=123,
+                    min_execution_environments=123
+                ),
                 handler="handler",
                 image_config=lambda.CfnFunction.ImageConfigProperty(
                     command=["command"],
@@ -9456,6 +11286,7 @@ class CfnFunctionProps:
                 ),
                 memory_size=123,
                 package_type="packageType",
+                publish_to_latest_published=False,
                 recursive_loop="recursiveLoop",
                 reserved_concurrent_executions=123,
                 runtime="runtime",
@@ -9491,6 +11322,7 @@ class CfnFunctionProps:
             check_type(argname="argument code", value=code, expected_type=type_hints["code"])
             check_type(argname="argument role", value=role, expected_type=type_hints["role"])
             check_type(argname="argument architectures", value=architectures, expected_type=type_hints["architectures"])
+            check_type(argname="argument capacity_provider_config", value=capacity_provider_config, expected_type=type_hints["capacity_provider_config"])
             check_type(argname="argument code_signing_config_arn", value=code_signing_config_arn, expected_type=type_hints["code_signing_config_arn"])
             check_type(argname="argument dead_letter_config", value=dead_letter_config, expected_type=type_hints["dead_letter_config"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
@@ -9498,6 +11330,7 @@ class CfnFunctionProps:
             check_type(argname="argument ephemeral_storage", value=ephemeral_storage, expected_type=type_hints["ephemeral_storage"])
             check_type(argname="argument file_system_configs", value=file_system_configs, expected_type=type_hints["file_system_configs"])
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
+            check_type(argname="argument function_scaling_config", value=function_scaling_config, expected_type=type_hints["function_scaling_config"])
             check_type(argname="argument handler", value=handler, expected_type=type_hints["handler"])
             check_type(argname="argument image_config", value=image_config, expected_type=type_hints["image_config"])
             check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
@@ -9505,6 +11338,7 @@ class CfnFunctionProps:
             check_type(argname="argument logging_config", value=logging_config, expected_type=type_hints["logging_config"])
             check_type(argname="argument memory_size", value=memory_size, expected_type=type_hints["memory_size"])
             check_type(argname="argument package_type", value=package_type, expected_type=type_hints["package_type"])
+            check_type(argname="argument publish_to_latest_published", value=publish_to_latest_published, expected_type=type_hints["publish_to_latest_published"])
             check_type(argname="argument recursive_loop", value=recursive_loop, expected_type=type_hints["recursive_loop"])
             check_type(argname="argument reserved_concurrent_executions", value=reserved_concurrent_executions, expected_type=type_hints["reserved_concurrent_executions"])
             check_type(argname="argument runtime", value=runtime, expected_type=type_hints["runtime"])
@@ -9521,6 +11355,8 @@ class CfnFunctionProps:
         }
         if architectures is not None:
             self._values["architectures"] = architectures
+        if capacity_provider_config is not None:
+            self._values["capacity_provider_config"] = capacity_provider_config
         if code_signing_config_arn is not None:
             self._values["code_signing_config_arn"] = code_signing_config_arn
         if dead_letter_config is not None:
@@ -9535,6 +11371,8 @@ class CfnFunctionProps:
             self._values["file_system_configs"] = file_system_configs
         if function_name is not None:
             self._values["function_name"] = function_name
+        if function_scaling_config is not None:
+            self._values["function_scaling_config"] = function_scaling_config
         if handler is not None:
             self._values["handler"] = handler
         if image_config is not None:
@@ -9549,6 +11387,8 @@ class CfnFunctionProps:
             self._values["memory_size"] = memory_size
         if package_type is not None:
             self._values["package_type"] = package_type
+        if publish_to_latest_published is not None:
+            self._values["publish_to_latest_published"] = publish_to_latest_published
         if recursive_loop is not None:
             self._values["recursive_loop"] = recursive_loop
         if reserved_concurrent_executions is not None:
@@ -9604,6 +11444,16 @@ class CfnFunctionProps:
         '''
         result = self._values.get("architectures")
         return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+    @builtins.property
+    def capacity_provider_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.CapacityProviderConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-capacityproviderconfig
+        '''
+        result = self._values.get("capacity_provider_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.CapacityProviderConfigProperty]], result)
 
     @builtins.property
     def code_signing_config_arn(
@@ -9694,6 +11544,16 @@ class CfnFunctionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def function_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionScalingConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-functionscalingconfig
+        '''
+        result = self._values.get("function_scaling_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionScalingConfigProperty]], result)
+
+    @builtins.property
     def handler(self) -> typing.Optional[builtins.str]:
         '''The name of the method within your code that Lambda calls to run your function.
 
@@ -9776,6 +11636,16 @@ class CfnFunctionProps:
         '''
         result = self._values.get("package_type")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def publish_to_latest_published(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-publishtolatestpublished
+        '''
+        result = self._values.get("publish_to_latest_published")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
 
     @builtins.property
     def recursive_loop(self) -> typing.Optional[builtins.str]:
@@ -9996,6 +11866,18 @@ class CfnLayerVersion(
             type_hints = typing.get_type_hints(_typecheckingstub__e89f4e428e926bc517531a6abef6877f97f8955718bc357a97d453d3226e6546)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLayerVersion", [resource]))
+
+    @jsii.member(jsii_name="isCfnLayerVersion")
+    @builtins.classmethod
+    def is_cfn_layer_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLayerVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__630423845b2caf962cb825173432cb48399c9f2bde814c32598d12fae072ef74)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLayerVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10295,6 +12177,18 @@ class CfnLayerVersionPermission(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnLayerVersionPermission")
+    @builtins.classmethod
+    def is_cfn_layer_version_permission(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLayerVersionPermission.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1f11b41ebfab09b709847fb6904c092018bf2d8dade96096a182200e7fbe1219)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLayerVersionPermission", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10853,6 +12747,18 @@ class CfnPermission(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPermission")
+    @builtins.classmethod
+    def is_cfn_permission(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPermission.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fbecb2d401999e47b264ca27cf9c66ece3af35354740e35df6cb39c7d557f093)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPermission", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11318,6 +13224,18 @@ class CfnUrl(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnUrl")
+    @builtins.classmethod
+    def is_cfn_url(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUrl.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0440ecb17a7c88a02e92495bc772835258135242debddd0776f8ab96e08fd09f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUrl", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -11771,6 +13689,10 @@ class CfnVersion(
             # the properties below are optional
             code_sha256="codeSha256",
             description="description",
+            function_scaling_config=lambda.CfnVersion.FunctionScalingConfigProperty(
+                max_execution_environments=123,
+                min_execution_environments=123
+            ),
             provisioned_concurrency_config=lambda.CfnVersion.ProvisionedConcurrencyConfigurationProperty(
                 provisioned_concurrent_executions=123
             ),
@@ -11791,6 +13713,7 @@ class CfnVersion(
         function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.FunctionScalingConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.ProvisionedConcurrencyConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnVersion.RuntimePolicyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -11801,6 +13724,7 @@ class CfnVersion(
         :param function_name: The name or ARN of the Lambda function. **Name formats** - *Function name* - ``MyFunction`` . - *Function ARN* - ``arn:aws:lambda:us-west-2:123456789012:function:MyFunction`` . - *Partial ARN* - ``123456789012:function:MyFunction`` . The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.
         :param code_sha256: Only publish a version if the hash value matches the value that's specified. Use this option to avoid publishing a version if the function code has changed since you last updated it. Updates are not supported for this property.
         :param description: A description for the version to override the description in the function configuration. Updates are not supported for this property.
+        :param function_scaling_config: Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
         :param provisioned_concurrency_config: Specifies a provisioned concurrency configuration for a function's version. Updates are not supported for this property.
         :param runtime_policy: Runtime Management Config of a function.
         '''
@@ -11812,11 +13736,24 @@ class CfnVersion(
             function_name=function_name,
             code_sha256=code_sha256,
             description=description,
+            function_scaling_config=function_scaling_config,
             provisioned_concurrency_config=provisioned_concurrency_config,
             runtime_policy=runtime_policy,
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnVersion")
+    @builtins.classmethod
+    def is_cfn_version(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVersion.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27430522a937f6c7cdc452d574248aac1ac821355d46cf8618352b5dd698bd5b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVersion", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -11917,6 +13854,24 @@ class CfnVersion(
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
+    @jsii.member(jsii_name="functionScalingConfig")
+    def function_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]]:
+        '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]], jsii.get(self, "functionScalingConfig"))
+
+    @function_scaling_config.setter
+    def function_scaling_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnVersion.FunctionScalingConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a05734859d1b39a13f71bc2c259b3b20118b152c494683544a20b341ae92800a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "functionScalingConfig", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
     @jsii.member(jsii_name="provisionedConcurrencyConfig")
     def provisioned_concurrency_config(
         self,
@@ -11951,6 +13906,79 @@ class CfnVersion(
             type_hints = typing.get_type_hints(_typecheckingstub__584bd4a88ccc7115243718679495b0e532174830ccb955a353592cc13c8ac084)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "runtimePolicy", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnVersion.FunctionScalingConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "max_execution_environments": "maxExecutionEnvironments",
+            "min_execution_environments": "minExecutionEnvironments",
+        },
+    )
+    class FunctionScalingConfigProperty:
+        def __init__(
+            self,
+            *,
+            max_execution_environments: typing.Optional[jsii.Number] = None,
+            min_execution_environments: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
+
+            :param max_execution_environments: The maximum number of execution environments that can be provisioned for the function.
+            :param min_execution_environments: The minimum number of execution environments to maintain for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-functionscalingconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                function_scaling_config_property = lambda.CfnVersion.FunctionScalingConfigProperty(
+                    max_execution_environments=123,
+                    min_execution_environments=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__67b9db9415a0301ba9d5141ea8a66fac86ea2bb2f1bd99ac6c10f812b6cceef8)
+                check_type(argname="argument max_execution_environments", value=max_execution_environments, expected_type=type_hints["max_execution_environments"])
+                check_type(argname="argument min_execution_environments", value=min_execution_environments, expected_type=type_hints["min_execution_environments"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if max_execution_environments is not None:
+                self._values["max_execution_environments"] = max_execution_environments
+            if min_execution_environments is not None:
+                self._values["min_execution_environments"] = min_execution_environments
+
+        @builtins.property
+        def max_execution_environments(self) -> typing.Optional[jsii.Number]:
+            '''The maximum number of execution environments that can be provisioned for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-functionscalingconfig.html#cfn-lambda-version-functionscalingconfig-maxexecutionenvironments
+            '''
+            result = self._values.get("max_execution_environments")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_execution_environments(self) -> typing.Optional[jsii.Number]:
+            '''The minimum number of execution environments to maintain for the function.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-version-functionscalingconfig.html#cfn-lambda-version-functionscalingconfig-minexecutionenvironments
+            '''
+            result = self._values.get("min_execution_environments")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "FunctionScalingConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
 
     @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_lambda.CfnVersion.ProvisionedConcurrencyConfigurationProperty",
@@ -12102,6 +14130,7 @@ class CfnVersion(
         "function_name": "functionName",
         "code_sha256": "codeSha256",
         "description": "description",
+        "function_scaling_config": "functionScalingConfig",
         "provisioned_concurrency_config": "provisionedConcurrencyConfig",
         "runtime_policy": "runtimePolicy",
     },
@@ -12113,6 +14142,7 @@ class CfnVersionProps:
         function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -12121,6 +14151,7 @@ class CfnVersionProps:
         :param function_name: The name or ARN of the Lambda function. **Name formats** - *Function name* - ``MyFunction`` . - *Function ARN* - ``arn:aws:lambda:us-west-2:123456789012:function:MyFunction`` . - *Partial ARN* - ``123456789012:function:MyFunction`` . The length constraint applies only to the full ARN. If you specify only the function name, it is limited to 64 characters in length.
         :param code_sha256: Only publish a version if the hash value matches the value that's specified. Use this option to avoid publishing a version if the function code has changed since you last updated it. Updates are not supported for this property.
         :param description: A description for the version to override the description in the function configuration. Updates are not supported for this property.
+        :param function_scaling_config: Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
         :param provisioned_concurrency_config: Specifies a provisioned concurrency configuration for a function's version. Updates are not supported for this property.
         :param runtime_policy: Runtime Management Config of a function.
 
@@ -12139,6 +14170,10 @@ class CfnVersionProps:
                 # the properties below are optional
                 code_sha256="codeSha256",
                 description="description",
+                function_scaling_config=lambda.CfnVersion.FunctionScalingConfigProperty(
+                    max_execution_environments=123,
+                    min_execution_environments=123
+                ),
                 provisioned_concurrency_config=lambda.CfnVersion.ProvisionedConcurrencyConfigurationProperty(
                     provisioned_concurrent_executions=123
                 ),
@@ -12155,6 +14190,7 @@ class CfnVersionProps:
             check_type(argname="argument function_name", value=function_name, expected_type=type_hints["function_name"])
             check_type(argname="argument code_sha256", value=code_sha256, expected_type=type_hints["code_sha256"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument function_scaling_config", value=function_scaling_config, expected_type=type_hints["function_scaling_config"])
             check_type(argname="argument provisioned_concurrency_config", value=provisioned_concurrency_config, expected_type=type_hints["provisioned_concurrency_config"])
             check_type(argname="argument runtime_policy", value=runtime_policy, expected_type=type_hints["runtime_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -12164,6 +14200,8 @@ class CfnVersionProps:
             self._values["code_sha256"] = code_sha256
         if description is not None:
             self._values["description"] = description
+        if function_scaling_config is not None:
+            self._values["function_scaling_config"] = function_scaling_config
         if provisioned_concurrency_config is not None:
             self._values["provisioned_concurrency_config"] = provisioned_concurrency_config
         if runtime_policy is not None:
@@ -12209,6 +14247,17 @@ class CfnVersionProps:
         return typing.cast(typing.Optional[builtins.str], result)
 
     @builtins.property
+    def function_scaling_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.FunctionScalingConfigProperty]]:
+        '''Configuration that defines the scaling behavior for a Lambda Managed Instances function, including the minimum and maximum number of execution environments that can be provisioned.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-version.html#cfn-lambda-version-functionscalingconfig
+        '''
+        result = self._values.get("function_scaling_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.FunctionScalingConfigProperty]], result)
+
+    @builtins.property
     def provisioned_concurrency_config(
         self,
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.ProvisionedConcurrencyConfigurationProperty]]:
@@ -12247,30 +14296,27 @@ class CfnVersionProps:
 class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.Code"):
     '''Represents the Lambda Handler Code.
 
-    :exampleMetadata: fixture=default infused
+    :exampleMetadata: infused
 
     Example::
 
-        # Create or reference an existing L1 CfnApplicationInferenceProfile
-        cfn_profile = aws_bedrock_cfn.CfnApplicationInferenceProfile(self, "CfnProfile",
-            inference_profile_name="my-cfn-profile",
-            model_source=aws_bedrock_cfn.CfnApplicationInferenceProfile.InferenceProfileModelSourceProperty(
-                copy_from=bedrock.BedrockFoundationModel.ANTHROPIC_CLAUDE_3_5_SONNET_V1_0.invokable_arn
-            ),
-            description="Profile created via L1 construct"
+        import aws_cdk.aws_signer as signer
+        
+        
+        signing_profile = signer.SigningProfile(self, "SigningProfile",
+            platform=signer.Platform.AWS_LAMBDA_SHA384_ECDSA
         )
         
-        # Import the L1 construct as an L2 ApplicationInferenceProfile
-        imported_from_cfn = bedrock.ApplicationInferenceProfile.from_cfn_application_inference_profile(cfn_profile)
+        code_signing_config = lambda_.CodeSigningConfig(self, "CodeSigningConfig",
+            signing_profiles=[signing_profile]
+        )
         
-        # Grant permissions to use the imported profile
-        lambda_function = lambda_.Function(self, "MyFunction",
-            runtime=lambda_.Runtime.PYTHON_3_11,
+        lambda_.Function(self, "Function",
+            code_signing_config=code_signing_config,
+            runtime=lambda_.Runtime.NODEJS_18_X,
             handler="index.handler",
-            code=lambda_.Code.from_inline("def handler(event, context): return \"Hello\"")
+            code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler"))
         )
-        
-        imported_from_cfn.grant_profile_usage(lambda_function)
     '''
 
     def __init__(self) -> None:
@@ -16407,6 +18453,8 @@ class FunctionOptions(EventInvokeConfigOptions):
                     code_sha256="codeSha256",
                     description="description",
                     max_event_age=cdk.Duration.minutes(30),
+                    max_execution_environments=123,
+                    min_execution_environments=123,
                     on_failure=destination,
                     on_success=destination,
                     provisioned_concurrent_executions=123,
@@ -18774,6 +20822,58 @@ class HttpMethod(enum.Enum):
     '''The wildcard entry to allow all methods.'''
 
 
+@jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ICapacityProvider")
+class ICapacityProvider(_IResource_c80c4260, typing_extensions.Protocol):
+    '''Represents a Lambda capacity provider.'''
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderArn")
+    def capacity_provider_arn(self) -> builtins.str:
+        '''The ARN of the capacity provider.
+
+        :attribute: true
+        '''
+        ...
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderName")
+    def capacity_provider_name(self) -> builtins.str:
+        '''The name of the capacity provider.
+
+        :attribute: true
+        '''
+        ...
+
+
+class _ICapacityProviderProxy(
+    jsii.proxy_for(_IResource_c80c4260), # type: ignore[misc]
+):
+    '''Represents a Lambda capacity provider.'''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.aws_lambda.ICapacityProvider"
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderArn")
+    def capacity_provider_arn(self) -> builtins.str:
+        '''The ARN of the capacity provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "capacityProviderArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderName")
+    def capacity_provider_name(self) -> builtins.str:
+        '''The name of the capacity provider.
+
+        :attribute: true
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "capacityProviderName"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, ICapacityProvider).__jsii_proxy_class__ = lambda : _ICapacityProviderProxy
+
+
 @jsii.interface(jsii_type="aws-cdk-lib.aws_lambda.ICodeSigningConfig")
 class ICodeSigningConfig(
     _IResource_c80c4260,
@@ -20677,6 +22777,91 @@ class InlineCode(
         return typing.cast(builtins.bool, jsii.get(self, "isInline"))
 
 
+class InstanceTypeFilter(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.InstanceTypeFilter",
+):
+    '''Configuration for filtering instance types that a capacity provider can use.
+
+    Instances types can either be allowed or excluded, not both.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_ec2 as ec2
+        
+        
+        vpc = ec2.Vpc(self, "MyVpc")
+        security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+        
+        # Allow only specific instance families
+        allow_capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProviderAllowed",
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            instance_type_filter=lambda_.InstanceTypeFilter.allow([
+                ec2.InstanceType.of(ec2.InstanceClass.M5, ec2.InstanceSize.LARGE),
+                ec2.InstanceType.of(ec2.InstanceClass.M5, ec2.InstanceSize.XLARGE)
+            ])
+        )
+        
+        # Or exclude specific instance types
+        exclude_capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProviderExcluded",
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            instance_type_filter=lambda_.InstanceTypeFilter.exclude([
+                ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO)
+            ])
+        )
+    '''
+
+    @jsii.member(jsii_name="allow")
+    @builtins.classmethod
+    def allow(
+        cls,
+        instance_types: typing.Sequence[_InstanceType_f64915b9],
+    ) -> "InstanceTypeFilter":
+        '''Creates an instance type filter that allows only the specified instance types.
+
+        :param instance_types: A list of instance types that the capacity provider is allowed to use.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d31d88d8bf73e69b3c63857d84961130efa20940b8d2f8e313ce05a3ebcd6317)
+            check_type(argname="argument instance_types", value=instance_types, expected_type=type_hints["instance_types"])
+        return typing.cast("InstanceTypeFilter", jsii.sinvoke(cls, "allow", [instance_types]))
+
+    @jsii.member(jsii_name="exclude")
+    @builtins.classmethod
+    def exclude(
+        cls,
+        instance_types: typing.Sequence[_InstanceType_f64915b9],
+    ) -> "InstanceTypeFilter":
+        '''Creates an instance type filter that excludes the specified instance types.
+
+        :param instance_types: A list of instance types that the capacity provider should not use.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9488a49062709f5874c5766cbe7ff91a81f2c6cafd4ce4cd560f3ea36109a4e6)
+            check_type(argname="argument instance_types", value=instance_types, expected_type=type_hints["instance_types"])
+        return typing.cast("InstanceTypeFilter", jsii.sinvoke(cls, "exclude", [instance_types]))
+
+    @builtins.property
+    @jsii.member(jsii_name="allowedInstanceTypes")
+    def allowed_instance_types(
+        self,
+    ) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+        '''A list of instance types that the capacity provider is allowed to use.'''
+        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], jsii.get(self, "allowedInstanceTypes"))
+
+    @builtins.property
+    @jsii.member(jsii_name="excludedInstanceTypes")
+    def excluded_instance_types(
+        self,
+    ) -> typing.Optional[typing.List[_InstanceType_f64915b9]]:
+        '''A list of instance types that the capacity provider should not use.'''
+        return typing.cast(typing.Optional[typing.List[_InstanceType_f64915b9]], jsii.get(self, "excludedInstanceTypes"))
+
+
 @jsii.enum(jsii_type="aws-cdk-lib.aws_lambda.InvokeMode")
 class InvokeMode(enum.Enum):
     '''The invoke modes for a Lambda function.
@@ -21412,6 +23597,87 @@ class LambdaRuntimeProps:
 
     def __repr__(self) -> str:
         return "LambdaRuntimeProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.LatestPublishedScalingConfig",
+    jsii_struct_bases=[],
+    name_mapping={
+        "max_execution_environments": "maxExecutionEnvironments",
+        "min_execution_environments": "minExecutionEnvironments",
+    },
+)
+class LatestPublishedScalingConfig:
+    def __init__(
+        self,
+        *,
+        max_execution_environments: typing.Optional[jsii.Number] = None,
+        min_execution_environments: typing.Optional[jsii.Number] = None,
+    ) -> None:
+        '''The scaling configuration that will be applied to the $LATEST.PUBLISHED version.
+
+        :param max_execution_environments: The maximum number of execution environments allowed for the $LATEST.PUBLISHED version when published into a capacity provider. This setting limits the total number of execution environments that can be created to handle concurrent invocations of this specific version. Default: - No maximum specified
+        :param min_execution_environments: The minimum number of execution environments to maintain for the $LATEST.PUBLISHED version when published into a capacity provider. This setting ensures that at least this many execution environments are always available to handle function invocations for this specific version, reducing cold start latency. Default: - 3 execution environments are set to be the minimum
+
+        :exampleMetadata: infused
+
+        Example::
+
+            # capacity_provider: lambda.CapacityProvider
+            # fn: lambda.Function
+            
+            
+            capacity_provider.add_function(fn,
+                latest_published_scaling_config=lambda.LatestPublishedScalingConfig(
+                    min_execution_environments=5,
+                    max_execution_environments=25
+                )
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9ffc2a5e75285cc3e8fbeae275ecbc447b1922130c46917a97ebeab0a5783f40)
+            check_type(argname="argument max_execution_environments", value=max_execution_environments, expected_type=type_hints["max_execution_environments"])
+            check_type(argname="argument min_execution_environments", value=min_execution_environments, expected_type=type_hints["min_execution_environments"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if max_execution_environments is not None:
+            self._values["max_execution_environments"] = max_execution_environments
+        if min_execution_environments is not None:
+            self._values["min_execution_environments"] = min_execution_environments
+
+    @builtins.property
+    def max_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The maximum number of execution environments allowed for the $LATEST.PUBLISHED version when published into a capacity provider.
+
+        This setting limits the total number of execution environments that can be created
+        to handle concurrent invocations of this specific version.
+
+        :default: - No maximum specified
+        '''
+        result = self._values.get("max_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def min_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The minimum number of execution environments to maintain for the $LATEST.PUBLISHED version when published into a capacity provider.
+
+        This setting ensures that at least this many execution environments are always
+        available to handle function invocations for this specific version, reducing cold start latency.
+
+        :default: - 3 execution environments are set to be the minimum
+        '''
+        result = self._values.get("min_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "LatestPublishedScalingConfig(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -23800,6 +26066,69 @@ class S3CodeV2(
         return typing.cast(builtins.bool, jsii.get(self, "isInline"))
 
 
+class ScalingOptions(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.ScalingOptions",
+):
+    '''Configuration options for scaling a capacity provider, including scaling mode and policies.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_ec2 as ec2
+        
+        
+        vpc = ec2.Vpc(self, "MyVpc")
+        security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+        
+        capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            scaling_options=lambda_.ScalingOptions.manual([
+                lambda_.TargetTrackingScalingPolicy.cpu_utilization(70)
+            ])
+        )
+    '''
+
+    @jsii.member(jsii_name="auto")
+    @builtins.classmethod
+    def auto(cls) -> "ScalingOptions":
+        '''Creates scaling options where the capacity provider manages scaling automatically.'''
+        return typing.cast("ScalingOptions", jsii.sinvoke(cls, "auto", []))
+
+    @jsii.member(jsii_name="manual")
+    @builtins.classmethod
+    def manual(
+        cls,
+        scaling_policies: typing.Sequence["TargetTrackingScalingPolicy"],
+    ) -> "ScalingOptions":
+        '''Creates manual scaling options with custom target tracking scaling policies.
+
+        At least one policy is required.
+
+        :param scaling_policies: The target tracking scaling policies to use for manual scaling.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__adcce8f7a81b7bbfdc06ba1f385c17d35e2d7567cad6e4b026a47c4e440a05b8)
+            check_type(argname="argument scaling_policies", value=scaling_policies, expected_type=type_hints["scaling_policies"])
+        return typing.cast("ScalingOptions", jsii.sinvoke(cls, "manual", [scaling_policies]))
+
+    @builtins.property
+    @jsii.member(jsii_name="scalingMode")
+    def scaling_mode(self) -> builtins.str:
+        '''The scaling mode for the capacity provider.'''
+        return typing.cast(builtins.str, jsii.get(self, "scalingMode"))
+
+    @builtins.property
+    @jsii.member(jsii_name="scalingPolicies")
+    def scaling_policies(
+        self,
+    ) -> typing.Optional[typing.List["TargetTrackingScalingPolicy"]]:
+        '''The target tracking scaling policies used when scaling mode is 'Manual'.'''
+        return typing.cast(typing.Optional[typing.List["TargetTrackingScalingPolicy"]], jsii.get(self, "scalingPolicies"))
+
+
 @jsii.data_type(
     jsii_type="aws-cdk-lib.aws_lambda.SchemaRegistryProps",
     jsii_struct_bases=[],
@@ -25224,6 +27553,74 @@ class SystemLogLevel(enum.Enum):
     '''Lambda will capture only logs at warn level.'''
 
 
+class TargetTrackingScalingPolicy(
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.TargetTrackingScalingPolicy",
+):
+    '''A target tracking scaling policy that automatically adjusts the capacity provider's compute resources to maintain a specified target value by tracking the required CloudWatch metric.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_ec2 as ec2
+        
+        
+        vpc = ec2.Vpc(self, "MyVpc")
+        security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+        
+        capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            scaling_options=lambda_.ScalingOptions.manual([
+                lambda_.TargetTrackingScalingPolicy.cpu_utilization(70)
+            ])
+        )
+    '''
+
+    @jsii.member(jsii_name="cpuUtilization")
+    @builtins.classmethod
+    def cpu_utilization(
+        cls,
+        target_cpu_utilization: jsii.Number,
+    ) -> "TargetTrackingScalingPolicy":
+        '''Creates a target tracking scaling policy for CPU utilization.
+
+        :param target_cpu_utilization: The target value for CPU utilization. The capacity provider will scale resources to maintain this target value.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e2646e1258f4f26c8154b755fb05a0dd854a4b96cba5838c1973e1fd3d598f4)
+            check_type(argname="argument target_cpu_utilization", value=target_cpu_utilization, expected_type=type_hints["target_cpu_utilization"])
+        return typing.cast("TargetTrackingScalingPolicy", jsii.sinvoke(cls, "cpuUtilization", [target_cpu_utilization]))
+
+    @builtins.property
+    @jsii.member(jsii_name="metricType")
+    def metric_type(self) -> builtins.str:
+        '''The predefined metric type.'''
+        return typing.cast(builtins.str, jsii.get(self, "metricType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="predefinedMetricType")
+    def predefined_metric_type(self) -> builtins.str:
+        '''The predefined metric type for this scaling policy.'''
+        return typing.cast(builtins.str, jsii.get(self, "predefinedMetricType"))
+
+    @builtins.property
+    @jsii.member(jsii_name="targetValue")
+    def target_value(self) -> jsii.Number:
+        '''The target value for the specified metric as a percentage.
+
+        The capacity provider will scale resources to maintain this target value.
+        '''
+        return typing.cast(jsii.Number, jsii.get(self, "targetValue"))
+
+    @builtins.property
+    @jsii.member(jsii_name="value")
+    def value(self) -> jsii.Number:
+        '''The target value for the metric.'''
+        return typing.cast(jsii.Number, jsii.get(self, "value"))
+
+
 class TenancyConfig(
     metaclass=jsii.JSIIMeta,
     jsii_type="aws-cdk-lib.aws_lambda.TenancyConfig",
@@ -25535,6 +27932,8 @@ class VersionAttributes:
         "retry_attempts": "retryAttempts",
         "code_sha256": "codeSha256",
         "description": "description",
+        "max_execution_environments": "maxExecutionEnvironments",
+        "min_execution_environments": "minExecutionEnvironments",
         "provisioned_concurrent_executions": "provisionedConcurrentExecutions",
         "removal_policy": "removalPolicy",
     },
@@ -25549,6 +27948,8 @@ class VersionOptions(EventInvokeConfigOptions):
         retry_attempts: typing.Optional[jsii.Number] = None,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        max_execution_environments: typing.Optional[jsii.Number] = None,
+        min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     ) -> None:
@@ -25560,6 +27961,8 @@ class VersionOptions(EventInvokeConfigOptions):
         :param retry_attempts: The maximum number of times to retry when the function returns an error. Minimum: 0 Maximum: 2 Default: 2
         :param code_sha256: SHA256 of the version of the Lambda source code. Specify to validate that you're deploying the right version. Default: No validation is performed
         :param description: Description of the version. Default: Description of the Lambda
+        :param max_execution_environments: The maximum number of execution environments allowed for this version when published into a capacity provider. This setting limits the total number of execution environments that can be created to handle concurrent invocations of this specific version. Default: - No maximum specified
+        :param min_execution_environments: The minimum number of execution environments to maintain for this version when published into a capacity provider. This setting ensures that at least this many execution environments are always available to handle function invocations for this specific version, reducing cold start latency. Default: - 3 execution environments are set to be the minimum
         :param provisioned_concurrent_executions: Specifies a provisioned concurrency configuration for a function's version. Default: No provisioned concurrency
         :param removal_policy: Whether to retain old versions of this function when a new version is created. Default: RemovalPolicy.DESTROY
 
@@ -25587,6 +27990,8 @@ class VersionOptions(EventInvokeConfigOptions):
             check_type(argname="argument retry_attempts", value=retry_attempts, expected_type=type_hints["retry_attempts"])
             check_type(argname="argument code_sha256", value=code_sha256, expected_type=type_hints["code_sha256"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument max_execution_environments", value=max_execution_environments, expected_type=type_hints["max_execution_environments"])
+            check_type(argname="argument min_execution_environments", value=min_execution_environments, expected_type=type_hints["min_execution_environments"])
             check_type(argname="argument provisioned_concurrent_executions", value=provisioned_concurrent_executions, expected_type=type_hints["provisioned_concurrent_executions"])
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
         self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -25602,6 +28007,10 @@ class VersionOptions(EventInvokeConfigOptions):
             self._values["code_sha256"] = code_sha256
         if description is not None:
             self._values["description"] = description
+        if max_execution_environments is not None:
+            self._values["max_execution_environments"] = max_execution_environments
+        if min_execution_environments is not None:
+            self._values["min_execution_environments"] = min_execution_environments
         if provisioned_concurrent_executions is not None:
             self._values["provisioned_concurrent_executions"] = provisioned_concurrent_executions
         if removal_policy is not None:
@@ -25668,6 +28077,30 @@ class VersionOptions(EventInvokeConfigOptions):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def max_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The maximum number of execution environments allowed for this version when published into a capacity provider.
+
+        This setting limits the total number of execution environments that can be created
+        to handle concurrent invocations of this specific version.
+
+        :default: - No maximum specified
+        '''
+        result = self._values.get("max_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def min_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The minimum number of execution environments to maintain for this version when published into a capacity provider.
+
+        This setting ensures that at least this many execution environments are always
+        available to handle function invocations for this specific version, reducing cold start latency.
+
+        :default: - 3 execution environments are set to be the minimum
+        '''
+        result = self._values.get("min_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
     def provisioned_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -25709,6 +28142,8 @@ class VersionOptions(EventInvokeConfigOptions):
         "retry_attempts": "retryAttempts",
         "code_sha256": "codeSha256",
         "description": "description",
+        "max_execution_environments": "maxExecutionEnvironments",
+        "min_execution_environments": "minExecutionEnvironments",
         "provisioned_concurrent_executions": "provisionedConcurrentExecutions",
         "removal_policy": "removalPolicy",
         "lambda_": "lambda",
@@ -25724,6 +28159,8 @@ class VersionProps(VersionOptions):
         retry_attempts: typing.Optional[jsii.Number] = None,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        max_execution_environments: typing.Optional[jsii.Number] = None,
+        min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         lambda_: IFunction,
@@ -25736,6 +28173,8 @@ class VersionProps(VersionOptions):
         :param retry_attempts: The maximum number of times to retry when the function returns an error. Minimum: 0 Maximum: 2 Default: 2
         :param code_sha256: SHA256 of the version of the Lambda source code. Specify to validate that you're deploying the right version. Default: No validation is performed
         :param description: Description of the version. Default: Description of the Lambda
+        :param max_execution_environments: The maximum number of execution environments allowed for this version when published into a capacity provider. This setting limits the total number of execution environments that can be created to handle concurrent invocations of this specific version. Default: - No maximum specified
+        :param min_execution_environments: The minimum number of execution environments to maintain for this version when published into a capacity provider. This setting ensures that at least this many execution environments are always available to handle function invocations for this specific version, reducing cold start latency. Default: - 3 execution environments are set to be the minimum
         :param provisioned_concurrent_executions: Specifies a provisioned concurrency configuration for a function's version. Default: No provisioned concurrency
         :param removal_policy: Whether to retain old versions of this function when a new version is created. Default: RemovalPolicy.DESTROY
         :param lambda_: Function to get the value of.
@@ -25758,6 +28197,8 @@ class VersionProps(VersionOptions):
             check_type(argname="argument retry_attempts", value=retry_attempts, expected_type=type_hints["retry_attempts"])
             check_type(argname="argument code_sha256", value=code_sha256, expected_type=type_hints["code_sha256"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument max_execution_environments", value=max_execution_environments, expected_type=type_hints["max_execution_environments"])
+            check_type(argname="argument min_execution_environments", value=min_execution_environments, expected_type=type_hints["min_execution_environments"])
             check_type(argname="argument provisioned_concurrent_executions", value=provisioned_concurrent_executions, expected_type=type_hints["provisioned_concurrent_executions"])
             check_type(argname="argument removal_policy", value=removal_policy, expected_type=type_hints["removal_policy"])
             check_type(argname="argument lambda_", value=lambda_, expected_type=type_hints["lambda_"])
@@ -25776,6 +28217,10 @@ class VersionProps(VersionOptions):
             self._values["code_sha256"] = code_sha256
         if description is not None:
             self._values["description"] = description
+        if max_execution_environments is not None:
+            self._values["max_execution_environments"] = max_execution_environments
+        if min_execution_environments is not None:
+            self._values["min_execution_environments"] = min_execution_environments
         if provisioned_concurrent_executions is not None:
             self._values["provisioned_concurrent_executions"] = provisioned_concurrent_executions
         if removal_policy is not None:
@@ -25842,6 +28287,30 @@ class VersionProps(VersionOptions):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def max_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The maximum number of execution environments allowed for this version when published into a capacity provider.
+
+        This setting limits the total number of execution environments that can be created
+        to handle concurrent invocations of this specific version.
+
+        :default: - No maximum specified
+        '''
+        result = self._values.get("max_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
+
+    @builtins.property
+    def min_execution_environments(self) -> typing.Optional[jsii.Number]:
+        '''The minimum number of execution environments to maintain for this version when published into a capacity provider.
+
+        This setting ensures that at least this many execution environments are always
+        available to handle function invocations for this specific version, reducing cold start latency.
+
+        :default: - 3 execution environments are set to be the minimum
+        '''
+        result = self._values.get("min_execution_environments")
+        return typing.cast(typing.Optional[jsii.Number], result)
 
     @builtins.property
     def provisioned_concurrent_executions(self) -> typing.Optional[jsii.Number]:
@@ -26643,6 +29112,194 @@ class AssetImageCode(
     def is_inline(self) -> builtins.bool:
         '''Determines whether this Code is inline code or not.'''
         return typing.cast(builtins.bool, jsii.get(self, "isInline"))
+
+
+@jsii.implements(ICapacityProvider)
+class CapacityProvider(
+    _Resource_45bc6135,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_lambda.CapacityProvider",
+):
+    '''A Lambda capacity provider that manages compute resources for Lambda functions.
+
+    :exampleMetadata: infused
+
+    Example::
+
+        import aws_cdk.aws_ec2 as ec2
+        
+        
+        vpc = ec2.Vpc(self, "MyVpc")
+        security_group = ec2.SecurityGroup(self, "SecurityGroup", vpc=vpc)
+        
+        capacity_provider = lambda_.CapacityProvider(self, "MyCapacityProvider",
+            subnets=vpc.private_subnets,
+            security_groups=[security_group],
+            scaling_options=lambda_.ScalingOptions.manual([
+                lambda_.TargetTrackingScalingPolicy.cpu_utilization(70)
+            ])
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
+        subnets: typing.Sequence[_ISubnet_d57d1229],
+        architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+        capacity_provider_name: typing.Optional[builtins.str] = None,
+        instance_type_filter: typing.Optional[InstanceTypeFilter] = None,
+        kms_key: typing.Optional[_IKey_5f11635f] = None,
+        max_v_cpu_count: typing.Optional[jsii.Number] = None,
+        operator_role: typing.Optional[_IRole_235f5d8e] = None,
+        scaling_options: typing.Optional[ScalingOptions] = None,
+    ) -> None:
+        '''Creates a new Lambda capacity provider.
+
+        :param scope: The parent construct.
+        :param id: The construct ID.
+        :param security_groups: A list of security group IDs to associate with EC2 instances launched by the capacity provider. Up to 5 security groups can be specified.
+        :param subnets: A list of subnets where the capacity provider can launch EC2 instances. At least one subnet must be specified, and up to 16 subnets are supported.
+        :param architectures: The instruction set architecture required for compute instances. Only one architecture can be specified per capacity provider. Default: - No architecture constraints specified
+        :param capacity_provider_name: The name of the capacity provider. The name must be unique within the AWS account and region. Default: - AWS CloudFormation generates a unique physical ID and uses that ID for the capacity provider's name.
+        :param instance_type_filter: Configuration for filtering instance types that the capacity provider can use. Default: - No instance type filtering applied
+        :param kms_key: The AWS Key Management Service (KMS) key used to encrypt data associated with the capacity provider. Default: - No KMS key specified, uses an AWS-managed key instead
+        :param max_v_cpu_count: The maximum number of vCPUs that the capacity provider can scale up to. Default: - No maximum limit specified, service default is 400
+        :param operator_role: The IAM role that the Lambda service assumes to manage the capacity provider. Default: - A role will be generated containing the AWSLambdaManagedEC2ResourceOperator managed policy
+        :param scaling_options: The options for scaling a capacity provider, including scaling policies. Default: - The ``Auto`` option is applied by default
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e0d17c9290a2148c3386b21ff0a283e6f6f88e91bf3450aa12985cd16b3a21e3)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CapacityProviderProps(
+            security_groups=security_groups,
+            subnets=subnets,
+            architectures=architectures,
+            capacity_provider_name=capacity_provider_name,
+            instance_type_filter=instance_type_filter,
+            kms_key=kms_key,
+            max_v_cpu_count=max_v_cpu_count,
+            operator_role=operator_role,
+            scaling_options=scaling_options,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="fromCapacityProviderArn")
+    @builtins.classmethod
+    def from_capacity_provider_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        capacity_provider_arn: builtins.str,
+    ) -> ICapacityProvider:
+        '''Import an existing capacity provider by ARN.
+
+        :param scope: The parent construct.
+        :param id: The construct ID.
+        :param capacity_provider_arn: The ARN of the capacity provider to import.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__14b09face820754682db2da4422773637ff2256468dfadd1f63854629d0543ab)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument capacity_provider_arn", value=capacity_provider_arn, expected_type=type_hints["capacity_provider_arn"])
+        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, capacity_provider_arn]))
+
+    @jsii.member(jsii_name="fromCapacityProviderAttributes")
+    @builtins.classmethod
+    def from_capacity_provider_attributes(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        capacity_provider_arn: builtins.str,
+    ) -> ICapacityProvider:
+        '''Import an existing capacity provider using its attributes.
+
+        :param scope: The parent construct.
+        :param id: The construct ID.
+        :param capacity_provider_arn: The Amazon Resource Name (ARN) of the capacity provider. Format: arn::lambda:::capacity-provider:
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7113eddd9ec525bf3e8ca3d0e666758395ca5c03a27b83580efc19df49cdf3da)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        attrs = CapacityProviderAttributes(capacity_provider_arn=capacity_provider_arn)
+
+        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderAttributes", [scope, id, attrs]))
+
+    @jsii.member(jsii_name="fromCapacityProviderName")
+    @builtins.classmethod
+    def from_capacity_provider_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        capacity_provider_name: builtins.str,
+    ) -> ICapacityProvider:
+        '''Import an existing capacity provider by name.
+
+        :param scope: The parent construct.
+        :param id: The construct ID.
+        :param capacity_provider_name: The name of the capacity provider to import.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d5efab8ae031ed4c73e7603ee91ef43197aac6fad0fae1f58d6c12d40a125f92)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+        return typing.cast(ICapacityProvider, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
+
+    @jsii.member(jsii_name="addFunction")
+    def add_function(
+        self,
+        func: IFunction,
+        *,
+        execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+        latest_published_scaling_config: typing.Optional[typing.Union[LatestPublishedScalingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+        per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
+        publish_to_latest_published: typing.Optional[builtins.bool] = None,
+    ) -> None:
+        '''Configures a Lambda function to use this capacity provider.
+
+        :param func: The Lambda function to configure.
+        :param execution_environment_memory_gib_per_v_cpu: Specifies the execution environment memory per VCPU, in GiB. Default: 2.0
+        :param latest_published_scaling_config: The scaling options that are applied to the $LATEST.PUBLISHED version. Default: - No scaling limitations are applied to the $LATEST.PUBLISHED version.
+        :param per_execution_environment_max_concurrency: Specifies the maximum number of concurrent invokes a single execution environment can handle. Default: Maximum is set to 10
+        :param publish_to_latest_published: A boolean determining whether or not to automatically publish to the $LATEST.PUBLISHED version. Default: - True
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8db763287a95631178c54dca1dc74e2bea07068ad4f08bd5a7a8858a13c1c384)
+            check_type(argname="argument func", value=func, expected_type=type_hints["func"])
+        options = CapacityProviderFunctionOptions(
+            execution_environment_memory_gib_per_v_cpu=execution_environment_memory_gib_per_v_cpu,
+            latest_published_scaling_config=latest_published_scaling_config,
+            per_execution_environment_max_concurrency=per_execution_environment_max_concurrency,
+            publish_to_latest_published=publish_to_latest_published,
+        )
+
+        return typing.cast(None, jsii.invoke(self, "addFunction", [func, options]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="PROPERTY_INJECTION_ID")
+    def PROPERTY_INJECTION_ID(cls) -> builtins.str:
+        '''Uniquely identifies this class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "PROPERTY_INJECTION_ID"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderArn")
+    def capacity_provider_arn(self) -> builtins.str:
+        '''The Amazon Resource Name (ARN) of the capacity provider.'''
+        return typing.cast(builtins.str, jsii.get(self, "capacityProviderArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="capacityProviderName")
+    def capacity_provider_name(self) -> builtins.str:
+        '''The name of the capacity provider.'''
+        return typing.cast(builtins.str, jsii.get(self, "capacityProviderName"))
 
 
 class CfnParametersCode(
@@ -29781,6 +32438,8 @@ class Version(
         lambda_: IFunction,
         code_sha256: typing.Optional[builtins.str] = None,
         description: typing.Optional[builtins.str] = None,
+        max_execution_environments: typing.Optional[jsii.Number] = None,
+        min_execution_environments: typing.Optional[jsii.Number] = None,
         provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
         removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
         max_event_age: typing.Optional[_Duration_4839e8c3] = None,
@@ -29794,6 +32453,8 @@ class Version(
         :param lambda_: Function to get the value of.
         :param code_sha256: SHA256 of the version of the Lambda source code. Specify to validate that you're deploying the right version. Default: No validation is performed
         :param description: Description of the version. Default: Description of the Lambda
+        :param max_execution_environments: The maximum number of execution environments allowed for this version when published into a capacity provider. This setting limits the total number of execution environments that can be created to handle concurrent invocations of this specific version. Default: - No maximum specified
+        :param min_execution_environments: The minimum number of execution environments to maintain for this version when published into a capacity provider. This setting ensures that at least this many execution environments are always available to handle function invocations for this specific version, reducing cold start latency. Default: - 3 execution environments are set to be the minimum
         :param provisioned_concurrent_executions: Specifies a provisioned concurrency configuration for a function's version. Default: No provisioned concurrency
         :param removal_policy: Whether to retain old versions of this function when a new version is created. Default: RemovalPolicy.DESTROY
         :param max_event_age: The maximum age of a request that Lambda sends to a function for processing. Minimum: 60 seconds Maximum: 6 hours Default: Duration.hours(6)
@@ -29809,6 +32470,8 @@ class Version(
             lambda_=lambda_,
             code_sha256=code_sha256,
             description=description,
+            max_execution_environments=max_execution_environments,
+            min_execution_environments=min_execution_environments,
             provisioned_concurrent_executions=provisioned_concurrent_executions,
             removal_policy=removal_policy,
             max_event_age=max_event_age,
@@ -31454,8 +34117,14 @@ __all__ = [
     "AssetImageCodeProps",
     "AutoScalingOptions",
     "BucketOptions",
+    "CapacityProvider",
+    "CapacityProviderAttributes",
+    "CapacityProviderFunctionOptions",
+    "CapacityProviderProps",
     "CfnAlias",
     "CfnAliasProps",
+    "CfnCapacityProvider",
+    "CfnCapacityProviderProps",
     "CfnCodeSigningConfig",
     "CfnCodeSigningConfigProps",
     "CfnEventInvokeConfig",
@@ -31518,6 +34187,7 @@ __all__ = [
     "Handler",
     "HttpMethod",
     "IAlias",
+    "ICapacityProvider",
     "ICodeSigningConfig",
     "IDestination",
     "IEventSource",
@@ -31530,6 +34200,7 @@ __all__ = [
     "ISchemaRegistry",
     "IVersion",
     "InlineCode",
+    "InstanceTypeFilter",
     "InvokeMode",
     "KafkaSchemaRegistryAccessConfig",
     "KafkaSchemaRegistryAccessConfigType",
@@ -31538,6 +34209,7 @@ __all__ = [
     "KafkaSchemaValidationConfig",
     "LambdaInsightsVersion",
     "LambdaRuntimeProps",
+    "LatestPublishedScalingConfig",
     "LayerVersion",
     "LayerVersionAttributes",
     "LayerVersionOptions",
@@ -31562,6 +34234,7 @@ __all__ = [
     "RuntimeManagementMode",
     "S3Code",
     "S3CodeV2",
+    "ScalingOptions",
     "SchemaRegistryProps",
     "SingletonFunction",
     "SingletonFunctionProps",
@@ -31570,6 +34243,7 @@ __all__ = [
     "SourceAccessConfigurationType",
     "StartingPosition",
     "SystemLogLevel",
+    "TargetTrackingScalingPolicy",
     "TenancyConfig",
     "Tracing",
     "UntrustedArtifactOnDeployment",
@@ -31714,6 +34388,38 @@ def _typecheckingstub__ea5994c9827298565c305f3f7f771ab57a19a60665d41006e56da4741
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b12c41ab227dbfaabf525223592398105390445b0b7c4192f00d29360c2f381c(
+    *,
+    capacity_provider_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3fa2ccde56c79b24b785b5b60097bb72efaa3613bbb7c614f67ee39e67e12c59(
+    *,
+    execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+    latest_published_scaling_config: typing.Optional[typing.Union[LatestPublishedScalingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+    per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
+    publish_to_latest_published: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a6f4b5199de340c52e0147f830c39a3b4e815c8b3be5316d1a4cfe1bfc1faf30(
+    *,
+    security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
+    subnets: typing.Sequence[_ISubnet_d57d1229],
+    architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    instance_type_filter: typing.Optional[InstanceTypeFilter] = None,
+    kms_key: typing.Optional[_IKey_5f11635f] = None,
+    max_v_cpu_count: typing.Optional[jsii.Number] = None,
+    operator_role: typing.Optional[_IRole_235f5d8e] = None,
+    scaling_options: typing.Optional[ScalingOptions] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__681471c67952a7e725f76572ad9bf09e1c634a81914690dff68e934c039fd2f9(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -31730,6 +34436,12 @@ def _typecheckingstub__681471c67952a7e725f76572ad9bf09e1c634a81914690dff68e934c0
 
 def _typecheckingstub__be2b336adaa6a3baddb386ebe76ea44a8fc21caf406ad043b9f5df28f691a070(
     resource: _IAliasRef_ff1cf51c,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f66c82da6adfe37f988142a0889a6cc9aaab13cbdbde7bbbb7e34689bf0a1958(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31816,6 +34528,141 @@ def _typecheckingstub__c720b06c69637819f49e584891d37db068ae9dfc03bd6ad67a979d3f6
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a330cee966095402be57b20cbf348c99c8e7dbae1f12bacb4337a86817b66c21(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderPermissionsConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ee84dc64a4d013d3e3844e200e21b7f164f926ad0dfb29a11a63fd570b6a426(
+    resource: _ICapacityProviderRef_2d9bc4af,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9161752fd6a97a05e6d2a0ea81c76df8f52ceb96755aebd037cc78db7078493(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d727b92ae3efb980e4404dd15d7f053589e6b8d56da0d8840dceaebcec0ea57c(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e59dbc98237201b65ab02b2af90ea4a70066acf83ba40cc471cb036cc88e764b(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__4da5c865971ec867455f111a65aeeea18373d1202c6155c3b3f2643d959dbb9e(
+    value: typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderPermissionsConfigProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__be843671d3accd5ecfc5957632a0f96a0331f0914704d3db7433c61c7b2c6ff2(
+    value: typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderVpcConfigProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d9db77d2e09e1fb06132dbfcf4e756601ddd4a34f104c440e4c622049577fd23(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__af37ed055df6865ea66e2c1d678b2ec8c66ffbd4b9a02dc52c0bfb5687082f59(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.CapacityProviderScalingConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0b75930e1c1908e1a06f76e3a5593ecdc271d89365c7584c1f7a9b397f1774f5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnCapacityProvider.InstanceRequirementsProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d774454c4b35b3269d49f48aecd5a9a875331079101c1c73a238976d56476210(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a3d57757477f5395c4e105ab2ba74a856bc7d4a2af7c4b17d35842fa01c99151(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0e762622e7c444c9aaab6f9c2bc7c925219c77600f45392a3db6d67e39792acc(
+    *,
+    capacity_provider_operator_role_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b1baad71cad92a313ccf7c7e2572c6c5377ec18e7460e3e187253a281c453c6e(
+    *,
+    max_v_cpu_count: typing.Optional[jsii.Number] = None,
+    scaling_mode: typing.Optional[builtins.str] = None,
+    scaling_policies: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.TargetTrackingScalingPolicyProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5f62324678d1ab247f8c220bf006d5f0d928aa1a221fbbfb82a5db6d3bbe716c(
+    *,
+    security_group_ids: typing.Sequence[builtins.str],
+    subnet_ids: typing.Sequence[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__dc4c978cf6a4fccae276db5549b7db57915557a7aee97385981b3d21e33d6e53(
+    *,
+    allowed_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+    architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+    excluded_instance_types: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c36d98ecc955ee57aee801e396cc564c88abe1a34091c2875a7cdfaf2d5653ab(
+    *,
+    predefined_metric_type: builtins.str,
+    target_value: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ac7403cb426712d5ba0f6bfc8a4c3e190442b508eaf06e47b5ff9676c233c40(
+    *,
+    permissions_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderPermissionsConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    vpc_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderVpcConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    capacity_provider_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.CapacityProviderScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    instance_requirements: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnCapacityProvider.InstanceRequirementsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__df94ded3fb87e8ca56187dcab5a6bf12d335e2671120df0386f527f736b58b76(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -31830,6 +34677,12 @@ def _typecheckingstub__df94ded3fb87e8ca56187dcab5a6bf12d335e2671120df0386f527f73
 
 def _typecheckingstub__4354bcf64a3d47874832c73a1dbc66c91c2012cfe7b46cbeafc0f192fbf49022(
     resource: _ICodeSigningConfigRef_1d909622,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__acf85f5f30c674b06ff3a607107dc75e1cad8b88decfd48dedfd81d397ca40ec(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -31903,6 +34756,12 @@ def _typecheckingstub__6bd7732654f4625d1267d5f7861f25ea037a2874bbbd321167126c1bb
     destination_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnEventInvokeConfig.DestinationConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     maximum_event_age_in_seconds: typing.Optional[jsii.Number] = None,
     maximum_retry_attempts: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__31192cd8c9db0ac8494e99d30d29bf7c725271753227ed5833d1f104bae86f35(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32020,6 +34879,12 @@ def _typecheckingstub__2fc9432254acf5a7dbe3c68dcedbda61de1f0e804a81d20ae79e04857
 
 def _typecheckingstub__8008b865c4dba070edd3cc4b8abba8299cc9642118e7f4c9ba62f362515ef388(
     resource: _IEventSourceMappingRef_4f65ddd1,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d56fb83ed575d34d3eb042a569b3d8aeb34d1739221cbd7e6fda3f53dc5ed830(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32375,6 +35240,7 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
     role: typing.Union[builtins.str, _IRoleRef_8400221f],
     architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CapacityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
@@ -32382,6 +35248,7 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     function_name: typing.Optional[builtins.str] = None,
+    function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     handler: typing.Optional[builtins.str] = None,
     image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
@@ -32389,6 +35256,7 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     package_type: typing.Optional[builtins.str] = None,
+    publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     recursive_loop: typing.Optional[builtins.str] = None,
     reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
     runtime: typing.Optional[builtins.str] = None,
@@ -32425,6 +35293,12 @@ def _typecheckingstub__7302d6fbe27b6ce250ef5234f0c0dd25229f5a3ea8a65ee6de6f6ba4e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1f6982a47095e9426bca153e3c7e52fd83d2e1c3fbbb4295002d6445de87f72c(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__23f7f329458448a99a6be54e2f842c699a159be1c8aa208602a46d495a891364(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -32451,6 +35325,12 @@ def _typecheckingstub__0087a2968c8a22b8dd1ff3bf410b2d9939dd4741222544ab3d1519ae8
 
 def _typecheckingstub__939e9547234560a62ae5c4e5194b2aba7beab9431fc0692025911c49ac554075(
     value: typing.Optional[typing.List[builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8e95fb4274a98029e1c2cba30dd84cdeec86aba8b7dd475bf48c9825be092329(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.CapacityProviderConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32497,6 +35377,12 @@ def _typecheckingstub__9b755bdfff9c92d112f48fabc138610cb95c629791eb94011add8f30b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__59b4ae04dc699803bc702a21c13064ef8eb4a76d8bd334722ef3ac7f1c254de6(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.FunctionScalingConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__baa7eecceb76515056bd0313e9ea4d285ed7f4fb588cfa29fbf02e30807dc972(
     value: typing.Optional[builtins.str],
 ) -> None:
@@ -32535,6 +35421,12 @@ def _typecheckingstub__1cad27a1fc937a1ee790969066fef17df69ed3826b2b85f10db980930
 
 def _typecheckingstub__7f9bb5c748b58d456d8f996b07509c9991044629122c76de58eaabc34056846e(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8dfcd9e5465e988ca53cb0a12e23c9593b87f05a07151fdcc1b2c852531d8d07(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32599,6 +35491,13 @@ def _typecheckingstub__033cfa97016c411e045aae5002e1ed6a505aefcc7ef38007d08100468
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3962da17a38ed1bcb4d2eb9fecc762eeb868bf86c6305759bb3946018cf0fd5e(
+    *,
+    lambda_managed_instances_capacity_provider_config: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LambdaManagedInstancesCapacityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__7102a6215772d5cf5b9392746e4c0cd11ba84424f7dbcd39e9d78ba0840d4e5c(
     *,
     image_uri: typing.Optional[builtins.str] = None,
@@ -32640,11 +35539,28 @@ def _typecheckingstub__c0060fc6e723ccc0f68bebab137926b678e758f90348279d34ce1f7ff
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0ce316517e8aba93ed94d4f7adea65b45ea4246de95159b61ce9f74be3b01b35(
+    *,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__58e6ee2d8441c4bd7e4483bde9f8b942dfb9f61120db1c1e4d4fb7c17a110b59(
     *,
     command: typing.Optional[typing.Sequence[builtins.str]] = None,
     entry_point: typing.Optional[typing.Sequence[builtins.str]] = None,
     working_directory: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__13617111b10f9f0e997422d267ed50cd5885ae342e3353ff607e652cadfd251f(
+    *,
+    capacity_provider_arn: builtins.str,
+    execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+    per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32710,6 +35626,7 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     code: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CodeProperty, typing.Dict[builtins.str, typing.Any]]],
     role: typing.Union[builtins.str, _IRoleRef_8400221f],
     architectures: typing.Optional[typing.Sequence[builtins.str]] = None,
+    capacity_provider_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.CapacityProviderConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
@@ -32717,6 +35634,7 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     function_name: typing.Optional[builtins.str] = None,
+    function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     handler: typing.Optional[builtins.str] = None,
     image_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.ImageConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     kms_key_arn: typing.Optional[typing.Union[builtins.str, _IKeyRef_d4fc6ef3]] = None,
@@ -32724,6 +35642,7 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     logging_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.LoggingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     memory_size: typing.Optional[jsii.Number] = None,
     package_type: typing.Optional[builtins.str] = None,
+    publish_to_latest_published: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     recursive_loop: typing.Optional[builtins.str] = None,
     reserved_concurrent_executions: typing.Optional[jsii.Number] = None,
     runtime: typing.Optional[builtins.str] = None,
@@ -32754,6 +35673,12 @@ def _typecheckingstub__429b31c977f42a0ad4faddf9465b3e17e6ec6694dad3dbc572a06eef3
 
 def _typecheckingstub__e89f4e428e926bc517531a6abef6877f97f8955718bc357a97d453d3226e6546(
     resource: _ILayerVersionRef_45d18037,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__630423845b2caf962cb825173432cb48399c9f2bde814c32598d12fae072ef74(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32823,6 +35748,12 @@ def _typecheckingstub__a34577503cda5332d6d532dd850e19bd6607e7fdf611f9085d56969de
     layer_version_arn: typing.Union[builtins.str, _ILayerVersionRef_45d18037],
     principal: builtins.str,
     organization_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1f11b41ebfab09b709847fb6904c092018bf2d8dade96096a182200e7fbe1219(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -32907,6 +35838,12 @@ def _typecheckingstub__c457a277b84dbba5bd94a2c0135335b8d7dbb3d409b1fa988b4f5a219
     principal_org_id: typing.Optional[builtins.str] = None,
     source_account: typing.Optional[builtins.str] = None,
     source_arn: typing.Optional[typing.Union[builtins.str, _IRoleRef_8400221f, _IUserPoolRef_0b7d02b5, _ITopicRef_29aa9a88, _IDeliveryStreamRef_678f5e53, _IFunctionRef_2601eb33, _IRuleRef_4038a611, _IQueueRef_fa8b2198, _ITopicRuleRef_748e9f37, _IBucketRef_3debe44e, _ILogGroupRef_874d025a]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fbecb2d401999e47b264ca27cf9c66ece3af35354740e35df6cb39c7d557f093(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33005,6 +35942,12 @@ def _typecheckingstub__850b2a3a2e0bfd3ea79643487b3e93ff15d7e3bd7ad17ee73f8cd8e69
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0440ecb17a7c88a02e92495bc772835258135242debddd0776f8ab96e08fd09f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a06c94f0eef5ba959a451758db2ef1e6b6ede9418c7b6df63cfb027f8128d85f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -33077,8 +36020,15 @@ def _typecheckingstub__1d4b3bf8a38fd246db911713fe99ad93f55dc635dbdaae114631921a1
     function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__27430522a937f6c7cdc452d574248aac1ac821355d46cf8618352b5dd698bd5b(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33113,6 +36063,12 @@ def _typecheckingstub__f00e141771e43b8312d6a22399ba2d956886a5861db2296d1a2f16f8b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a05734859d1b39a13f71bc2c259b3b20118b152c494683544a20b341ae92800a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.FunctionScalingConfigProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e46534e1d83b58a93edc70a851ca891701ea58cfe9a3fc7dc106915c1a475fa6(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.ProvisionedConcurrencyConfigurationProperty]],
 ) -> None:
@@ -33121,6 +36077,14 @@ def _typecheckingstub__e46534e1d83b58a93edc70a851ca891701ea58cfe9a3fc7dc106915c1
 
 def _typecheckingstub__584bd4a88ccc7115243718679495b0e532174830ccb955a353592cc13c8ac084(
     value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnVersion.RuntimePolicyProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67b9db9415a0301ba9d5141ea8a66fac86ea2bb2f1bd99ac6c10f812b6cceef8(
+    *,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -33145,6 +36109,7 @@ def _typecheckingstub__63ba63c43bc52bb365203cebb308fd393d4c03a8aee52a0336a139696
     function_name: typing.Union[builtins.str, _IFunctionRef_2601eb33],
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    function_scaling_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.FunctionScalingConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     provisioned_concurrency_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.ProvisionedConcurrencyConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     runtime_policy: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnVersion.RuntimePolicyProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -33965,6 +36930,18 @@ def _typecheckingstub__68701e0be659943818e792689f9c11f6ea386ae16b7e76ef2e090037d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d31d88d8bf73e69b3c63857d84961130efa20940b8d2f8e313ce05a3ebcd6317(
+    instance_types: typing.Sequence[_InstanceType_f64915b9],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9488a49062709f5874c5766cbe7ff91a81f2c6cafd4ce4cd560f3ea36109a4e6(
+    instance_types: typing.Sequence[_InstanceType_f64915b9],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a9ed7f710fdd20a96eb8eeb709bbea9f1e52b3ca20bed4ca85cf8341031090d2(
     *,
     type: KafkaSchemaRegistryAccessConfigType,
@@ -34015,6 +36992,14 @@ def _typecheckingstub__0906a4e23e81cdfe27acadf43b5568923c7c0b235e2f77d37224e4553
     supports_code_guru_profiling: typing.Optional[builtins.bool] = None,
     supports_inline_code: typing.Optional[builtins.bool] = None,
     supports_snap_start: typing.Optional[builtins.bool] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9ffc2a5e75285cc3e8fbeae275ecbc447b1922130c46917a97ebeab0a5783f40(
+    *,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34261,6 +37246,12 @@ def _typecheckingstub__304505e97ff3b397f5306079c5410e06bb217281e1cc348ada6eef6ae
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__adcce8f7a81b7bbfdc06ba1f385c17d35e2d7567cad6e4b026a47c4e440a05b8(
+    scaling_policies: typing.Sequence[TargetTrackingScalingPolicy],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0915a5e0439a722acf480d4010d03236559e242684c698d0a460dffc5709933b(
     *,
     event_record_format: EventRecordFormat,
@@ -34345,6 +37336,12 @@ def _typecheckingstub__7d36f0cc329a26624261dbdd6abf45bf17eba23520a5a3a92f7c390bd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3e2646e1258f4f26c8154b755fb05a0dd854a4b96cba5838c1973e1fd3d598f4(
+    target_cpu_utilization: jsii.Number,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a96cdcd99dfc0b63e9703fa17111ce6b3a9ba8da5959bc9fedebe88e086e0b09(
     mode: builtins.str,
 ) -> None:
@@ -34378,6 +37375,8 @@ def _typecheckingstub__8370f7662bc799fa14f02e12dd4cd7190b668cd4243db432778f7639e
     retry_attempts: typing.Optional[jsii.Number] = None,
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
     provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
 ) -> None:
@@ -34392,6 +37391,8 @@ def _typecheckingstub__c2cdd0a764d5016d1efc68808e179884428d881d5a94670501bc909c6
     retry_attempts: typing.Optional[jsii.Number] = None,
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
     provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     lambda_: IFunction,
@@ -34504,6 +37505,59 @@ def _typecheckingstub__84e4f03f358643a086d54c0929f949246bce5d3438e9dcd203bd99e78
     resource: _CfnResource_9df397a6,
     *,
     resource_property: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e0d17c9290a2148c3386b21ff0a283e6f6f88e91bf3450aa12985cd16b3a21e3(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    security_groups: typing.Sequence[_ISecurityGroup_acf8a799],
+    subnets: typing.Sequence[_ISubnet_d57d1229],
+    architectures: typing.Optional[typing.Sequence[Architecture]] = None,
+    capacity_provider_name: typing.Optional[builtins.str] = None,
+    instance_type_filter: typing.Optional[InstanceTypeFilter] = None,
+    kms_key: typing.Optional[_IKey_5f11635f] = None,
+    max_v_cpu_count: typing.Optional[jsii.Number] = None,
+    operator_role: typing.Optional[_IRole_235f5d8e] = None,
+    scaling_options: typing.Optional[ScalingOptions] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__14b09face820754682db2da4422773637ff2256468dfadd1f63854629d0543ab(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    capacity_provider_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7113eddd9ec525bf3e8ca3d0e666758395ca5c03a27b83580efc19df49cdf3da(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    capacity_provider_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d5efab8ae031ed4c73e7603ee91ef43197aac6fad0fae1f58d6c12d40a125f92(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    capacity_provider_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8db763287a95631178c54dca1dc74e2bea07068ad4f08bd5a7a8858a13c1c384(
+    func: IFunction,
+    *,
+    execution_environment_memory_gib_per_v_cpu: typing.Optional[jsii.Number] = None,
+    latest_published_scaling_config: typing.Optional[typing.Union[LatestPublishedScalingConfig, typing.Dict[builtins.str, typing.Any]]] = None,
+    per_execution_environment_max_concurrency: typing.Optional[jsii.Number] = None,
+    publish_to_latest_published: typing.Optional[builtins.bool] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -34927,6 +37981,8 @@ def _typecheckingstub__78400fcd1bdfbddfbe95226816742a7325f11fd53d7136f0f92cfbbde
     lambda_: IFunction,
     code_sha256: typing.Optional[builtins.str] = None,
     description: typing.Optional[builtins.str] = None,
+    max_execution_environments: typing.Optional[jsii.Number] = None,
+    min_execution_environments: typing.Optional[jsii.Number] = None,
     provisioned_concurrent_executions: typing.Optional[jsii.Number] = None,
     removal_policy: typing.Optional[_RemovalPolicy_9f93c814] = None,
     max_event_age: typing.Optional[_Duration_4839e8c3] = None,
@@ -35248,5 +38304,5 @@ def _typecheckingstub__368a49fe1f866c7ea7986c57b6f8488d0fddea8f62bf05ec1ed7eb09b
     """Type checking stubs"""
     pass
 
-for cls in [IAlias, ICodeSigningConfig, IDestination, IEventSource, IEventSourceDlq, IEventSourceMapping, IFunction, IFunctionUrl, ILayerVersion, IScalableFunctionAttribute, ISchemaRegistry, IVersion]:
+for cls in [IAlias, ICapacityProvider, ICodeSigningConfig, IDestination, IEventSource, IEventSourceDlq, IEventSourceMapping, IFunction, IFunctionUrl, ILayerVersion, IScalableFunctionAttribute, ISchemaRegistry, IVersion]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

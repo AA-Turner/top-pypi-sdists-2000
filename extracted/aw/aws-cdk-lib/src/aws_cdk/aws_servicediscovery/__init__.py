@@ -582,6 +582,18 @@ class CfnHttpNamespace(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForHttpNamespace", [resource]))
 
+    @jsii.member(jsii_name="isCfnHttpNamespace")
+    @builtins.classmethod
+    def is_cfn_http_namespace(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnHttpNamespace.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ef90a207a2a83d59586f4824d5fd2b2fccd99158a3719834346e40f5338cd11)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnHttpNamespace", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -838,6 +850,18 @@ class CfnInstance(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnInstance")
+    @builtins.classmethod
+    def is_cfn_instance(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInstance.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ef9c3f51e9da4eab0ef1417919da9a2062604418fc7603ee00f2b2aa4052d46d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstance", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1154,6 +1178,18 @@ class CfnPrivateDnsNamespace(
             type_hints = typing.get_type_hints(_typecheckingstub__4fa51de8a34cd48bd840f8655aa12d37730b8c093f1ac48027f143bc9783ec2a)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPrivateDnsNamespace", [resource]))
+
+    @jsii.member(jsii_name="isCfnPrivateDnsNamespace")
+    @builtins.classmethod
+    def is_cfn_private_dns_namespace(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPrivateDnsNamespace.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__69f007f9c5d73a810ba70b7acb81d44a7c6f5b743ee06987dbfa56e1e49d3f09)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrivateDnsNamespace", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1695,6 +1731,18 @@ class CfnPublicDnsNamespace(
             type_hints = typing.get_type_hints(_typecheckingstub__e2e70c6ff56425526e47baa5ed85a05f84151ce106bdb104538b7c7adca34446)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForPublicDnsNamespace", [resource]))
+
+    @jsii.member(jsii_name="isCfnPublicDnsNamespace")
+    @builtins.classmethod
+    def is_cfn_public_dns_namespace(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPublicDnsNamespace.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2279e30b3dd196887e0f672d28dac01153be6c210216904f12860e3c5b79c5a2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPublicDnsNamespace", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2277,6 +2325,18 @@ class CfnService(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument service_id", value=service_id, expected_type=type_hints["service_id"])
         return typing.cast(_IServiceRef_687c8f74, jsii.sinvoke(cls, "fromServiceId", [scope, id, service_id]))
+
+    @jsii.member(jsii_name="isCfnService")
+    @builtins.classmethod
+    def is_cfn_service(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnService.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6a327bd1b9b9aa4e1cc3b49baf70bbce3c22a72c209dc820f77251ce3ff6a3e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnService", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7096,6 +7156,12 @@ def _typecheckingstub__8a2cd7aaf6ae46bf3b85bb929522dfa5b481e81aeebd02f9343ee4fcb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__0ef90a207a2a83d59586f4824d5fd2b2fccd99158a3719834346e40f5338cd11(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__349bb642a1fa35eed2b8cfbfb6816c2624e92b2b798c47c511d785aaaaed4395(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7142,6 +7208,12 @@ def _typecheckingstub__53cddcf8f52bbabdc74ba7b36fc8116615f126e10decf3c988f3d9d63
     instance_attributes: typing.Any,
     service_id: builtins.str,
     instance_id: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ef9c3f51e9da4eab0ef1417919da9a2062604418fc7603ee00f2b2aa4052d46d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7200,6 +7272,12 @@ def _typecheckingstub__9c2d0f705fb36b36fc7feaf539456a26c7c18338d9006b092bacaa844
 
 def _typecheckingstub__4fa51de8a34cd48bd840f8655aa12d37730b8c093f1ac48027f143bc9783ec2a(
     resource: _IPrivateDnsNamespaceRef_19402306,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__69f007f9c5d73a810ba70b7acb81d44a7c6f5b743ee06987dbfa56e1e49d3f09(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7292,6 +7370,12 @@ def _typecheckingstub__fb34a43fa0481e548e83f0fa71d212942ab0a37e2e50f959c191883e7
 
 def _typecheckingstub__e2e70c6ff56425526e47baa5ed85a05f84151ce106bdb104538b7c7adca34446(
     resource: _IPublicDnsNamespaceRef_1d27bfe2,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2279e30b3dd196887e0f672d28dac01153be6c210216904f12860e3c5b79c5a2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7398,6 +7482,12 @@ def _typecheckingstub__bc01dac739c93292486dd4ca3d1b7f12acb51088c4fe602fe2714b29f
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     service_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b6a327bd1b9b9aa4e1cc3b49baf70bbce3c22a72c209dc820f77251ce3ff6a3e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

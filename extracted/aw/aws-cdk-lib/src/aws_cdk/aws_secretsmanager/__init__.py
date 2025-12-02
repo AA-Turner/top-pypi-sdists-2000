@@ -515,6 +515,18 @@ class CfnResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnResourcePolicy")
+    @builtins.classmethod
+    def is_cfn_resource_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResourcePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__35ad28b3c32da531982746c04a0c9646c0e6b2907f9b2a1ae1f68c721c2048f2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -823,6 +835,18 @@ class CfnRotationSchedule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnRotationSchedule")
+    @builtins.classmethod
+    def is_cfn_rotation_schedule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRotationSchedule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d542680f98c100d6fc40efc3cafa23e5a0eb4a4f1352593f1c9454aa4f237785)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRotationSchedule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -999,10 +1023,10 @@ class CfnRotationSchedule(
         def __init__(self, *, key: builtins.str, value: builtins.str) -> None:
             '''The metadata needed to successfully rotate a managed external secret.
 
-            Each metadata item is a key and value pair of strings in a JSON text string.
+            A list of key value pairs in JSON format specified by the partner. For more information, see `Managed external secret partners <https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html>`_ .
 
-            :param key: The key name of the metadata item. You can specify a value that's 1 to 256 characters in length.
-            :param value: The value for the metadata item. You can specify a value that's 1 to 2048 characters in length.
+            :param key: The key that identifies the item.
+            :param value: The value of the specified item.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html
             :exampleMetadata: fixture=_generated
@@ -1029,9 +1053,7 @@ class CfnRotationSchedule(
 
         @builtins.property
         def key(self) -> builtins.str:
-            '''The key name of the metadata item.
-
-            You can specify a value that's 1 to 256 characters in length.
+            '''The key that identifies the item.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadataitem-key
             '''
@@ -1041,9 +1063,7 @@ class CfnRotationSchedule(
 
         @builtins.property
         def value(self) -> builtins.str:
-            '''The value for the metadata item.
-
-            You can specify a value that's 1 to 2048 characters in length.
+            '''The value of the specified item.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-secretsmanager-rotationschedule-externalsecretrotationmetadataitem.html#cfn-secretsmanager-rotationschedule-externalsecretrotationmetadataitem-value
             '''
@@ -1756,7 +1776,7 @@ class CfnSecret(
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
         :param tags: A list of tags to attach to the secret. Each tag is a key and value pair of strings in a JSON text string, for example: ``[{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}]`` Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". Stack-level tags, tags you apply to the CloudFormation stack, are also attached to the secret. If you check tags in permissions policies as part of your security strategy, then adding or removing a tag can change permissions. If the completion of this operation would result in you losing your permissions for this secret, then Secrets Manager blocks the operation and returns an ``Access Denied`` error. For more information, see `Control access to secrets using tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#tag-secrets-abac>`_ and `Limit access to identities with tags that match secrets' tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#auth-and-access_tags2>`_ . For information about how to format a JSON parameter for the various command line tool environments, see `Using JSON for Parameters <https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json>`_ . If your command-line tool or SDK requires quotation marks around the parameter, you should use single quotes to avoid confusion with the double quotes required in the JSON text. The following restrictions apply to tags: - Maximum number of tags per secret: 50 - Maximum key length: 127 Unicode characters in UTF-8 - Maximum value length: 255 Unicode characters in UTF-8 - Tag keys and values are case sensitive. - Do not use the ``aws:`` prefix in your tag names or values because AWS reserves it for AWS use. You can't edit or delete tag names or values with this prefix. Tags with this prefix do not count against your tags per secret limit. - If you use your tagging schema across multiple services and resources, other services might have restrictions on allowed characters. Generally allowed characters: letters, spaces, and numbers representable in UTF-8, plus the following special characters: + - = . _ : /
-        :param type: 
+        :param type: The exact string that identifies the third-party partner that holds the external secret. For more information, see `Managed external secret partners <https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html>`_ .
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__85d618e732c6b1f020908289780221a8947553437136d3d13945c0f22642cf97)
@@ -1806,6 +1826,18 @@ class CfnSecret(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument secret_id", value=secret_id, expected_type=type_hints["secret_id"])
         return typing.cast(_ISecretRef_3a7b28a3, jsii.sinvoke(cls, "fromSecretId", [scope, id, secret_id]))
+
+    @jsii.member(jsii_name="isCfnSecret")
+    @builtins.classmethod
+    def is_cfn_secret(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSecret.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__24eed6944e52de3e9e8e6547d31e08e5a13e7c3589a98273ec505c3eb25a501b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecret", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1967,6 +1999,7 @@ class CfnSecret(
     @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> typing.Optional[builtins.str]:
+        '''The exact string that identifies the third-party partner that holds the external secret.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "type"))
 
     @type.setter
@@ -2323,7 +2356,7 @@ class CfnSecretProps:
         :param replica_regions: A custom type that specifies a ``Region`` and the ``KmsKeyId`` for a replica secret.
         :param secret_string: The text to encrypt and store in the secret. We recommend you use a JSON structure of key/value pairs for your secret value. To generate a random password, use ``GenerateSecretString`` instead. If you omit both ``GenerateSecretString`` and ``SecretString`` , you create an empty secret. When you make a change to this property, a new secret version is created.
         :param tags: A list of tags to attach to the secret. Each tag is a key and value pair of strings in a JSON text string, for example: ``[{"Key":"CostCenter","Value":"12345"},{"Key":"environment","Value":"production"}]`` Secrets Manager tag key names are case sensitive. A tag with the key "ABC" is a different tag from one with key "abc". Stack-level tags, tags you apply to the CloudFormation stack, are also attached to the secret. If you check tags in permissions policies as part of your security strategy, then adding or removing a tag can change permissions. If the completion of this operation would result in you losing your permissions for this secret, then Secrets Manager blocks the operation and returns an ``Access Denied`` error. For more information, see `Control access to secrets using tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#tag-secrets-abac>`_ and `Limit access to identities with tags that match secrets' tags <https://docs.aws.amazon.com/secretsmanager/latest/userguide/auth-and-access_examples.html#auth-and-access_tags2>`_ . For information about how to format a JSON parameter for the various command line tool environments, see `Using JSON for Parameters <https://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json>`_ . If your command-line tool or SDK requires quotation marks around the parameter, you should use single quotes to avoid confusion with the double quotes required in the JSON text. The following restrictions apply to tags: - Maximum number of tags per secret: 50 - Maximum key length: 127 Unicode characters in UTF-8 - Maximum value length: 255 Unicode characters in UTF-8 - Tag keys and values are case sensitive. - Do not use the ``aws:`` prefix in your tag names or values because AWS reserves it for AWS use. You can't edit or delete tag names or values with this prefix. Tags with this prefix do not count against your tags per secret limit. - If you use your tagging schema across multiple services and resources, other services might have restrictions on allowed characters. Generally allowed characters: letters, spaces, and numbers representable in UTF-8, plus the following special characters: + - = . _ : /
-        :param type: 
+        :param type: The exact string that identifies the third-party partner that holds the external secret. For more information, see `Managed external secret partners <https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html
         :exampleMetadata: fixture=_generated
@@ -2503,7 +2536,10 @@ class CfnSecretProps:
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The exact string that identifies the third-party partner that holds the external secret.
+
+        For more information, see `Managed external secret partners <https://docs.aws.amazon.com/secretsmanager/latest/userguide/mes-partners.html>`_ .
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-secretsmanager-secret.html#cfn-secretsmanager-secret-type
         '''
         result = self._values.get("type")
@@ -2582,6 +2618,18 @@ class CfnSecretTargetAttachment(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnSecretTargetAttachment")
+    @builtins.classmethod
+    def is_cfn_secret_target_attachment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSecretTargetAttachment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__741db663c2c651f06b47c370f6e63ddeab1d72de1772539df0d37393eacde946)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSecretTargetAttachment", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6588,6 +6636,12 @@ def _typecheckingstub__82c9dc2ed30dab76a3a8fb3272dfbaabcd66f53e653bb3065f88e3262
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__35ad28b3c32da531982746c04a0c9646c0e6b2907f9b2a1ae1f68c721c2048f2(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9c510cb3ab1bd05f0eb24a92d03df29302e7d2fc4d67b0f34fb335485b8e6fa9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6638,6 +6692,12 @@ def _typecheckingstub__7b6c1ae14c467b88b6b0e8e2da843e829b14564b0df4f6b16f07a7260
     rotate_immediately_on_update: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     rotation_lambda_arn: typing.Optional[builtins.str] = None,
     rotation_rules: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnRotationSchedule.RotationRulesProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d542680f98c100d6fc40efc3cafa23e5a0eb4a4f1352593f1c9454aa4f237785(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6773,6 +6833,12 @@ def _typecheckingstub__e3c3961c2a9f7641d6de2ed58080b5085d027497e32beb9b7b96c3365
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__24eed6944e52de3e9e8e6547d31e08e5a13e7c3589a98273ec505c3eb25a501b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3e292aeb07dc3753c7a4e07c46e793e9a5c7266734d09d7d045223f304d4275f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6878,6 +6944,12 @@ def _typecheckingstub__f27548ced74eb3d06a9cd3710e7d562d307b5a2c264476a3e685fcb94
     secret_id: builtins.str,
     target_id: builtins.str,
     target_type: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__741db663c2c651f06b47c370f6e63ddeab1d72de1772539df0d37393eacde946(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

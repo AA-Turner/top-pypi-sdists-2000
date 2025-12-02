@@ -140,6 +140,18 @@ class CfnGraph(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGraph", [resource]))
 
+    @jsii.member(jsii_name="isCfnGraph")
+    @builtins.classmethod
+    def is_cfn_graph(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGraph.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__51a6c404916dea97e1c396fd803b5f0059e2315ce570b30e79ad7e6b5421962b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraph", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -373,6 +385,18 @@ class CfnMemberInvitation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnMemberInvitation")
+    @builtins.classmethod
+    def is_cfn_member_invitation(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMemberInvitation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c5b601db949bfc9e1868b1fb9cd55816bae11a85f5a4b181db1a8be360e8fc6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMemberInvitation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -665,6 +689,18 @@ class CfnOrganizationAdmin(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnOrganizationAdmin")
+    @builtins.classmethod
+    def is_cfn_organization_admin(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOrganizationAdmin.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7be945caa1a2ff33d55eeeb6c0d6e77e1f0ecedce043aed1024bb9502524f939)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationAdmin", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -809,6 +845,12 @@ def _typecheckingstub__47d955a178de7e694206be3ee5a37c1d6d623109fa39bca76b6432650
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__51a6c404916dea97e1c396fd803b5f0059e2315ce570b30e79ad7e6b5421962b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__759c0a91a60111bc6af09d55e323cbfdd01e2a1beda41d95d78c666e94579275(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -850,6 +892,12 @@ def _typecheckingstub__e34d274362e0f21d70fec2895986898f3c3ecf0e61cfff18301ece8bb
     member_id: builtins.str,
     disable_email_notification: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     message: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c5b601db949bfc9e1868b1fb9cd55816bae11a85f5a4b181db1a8be360e8fc6(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -912,6 +960,12 @@ def _typecheckingstub__4af46c55b142c272aabfd3b293f9ccf1547910145fb8eb3c1a9a01965
     id: builtins.str,
     *,
     account_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7be945caa1a2ff33d55eeeb6c0d6e77e1f0ecedce043aed1024bb9502524f939(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -1385,6 +1385,18 @@ class CfnAccessKey(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnAccessKey")
+    @builtins.classmethod
+    def is_cfn_access_key(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessKey.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__44af7447864a754d9df484db5d272901a378e9dd7da128a28741b73a5d53eb4a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessKey", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1657,6 +1669,18 @@ class CfnGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnGroup")
+    @builtins.classmethod
+    def is_cfn_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__109520d0ac5eced5701e6bfb840752f4a4c55e5408f1fc48af017b584d08be03)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1917,6 +1941,18 @@ class CfnGroupPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnGroupPolicy")
+    @builtins.classmethod
+    def is_cfn_group_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGroupPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2b1f15a5e63e650cc6c55b8ec0153a01c2d4b292546026f27c56c750c214ff39)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGroupPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2314,6 +2350,18 @@ class CfnInstanceProfile(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInstanceProfile", [resource]))
 
+    @jsii.member(jsii_name="isCfnInstanceProfile")
+    @builtins.classmethod
+    def is_cfn_instance_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInstanceProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b593290cbc770e9142ad849fa0c3ac70ba9811f3da5475a95ec1753ed5e44a52)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInstanceProfile", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2590,6 +2638,18 @@ class CfnManagedPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnManagedPolicy")
+    @builtins.classmethod
+    def is_cfn_managed_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnManagedPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ddaff230cd62363f571d1c69690fe7f8e88bd1b1eefa314ac6a2020c1a9d9a8c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnManagedPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3113,6 +3173,18 @@ class CfnOIDCProvider(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOIDCProvider", [resource]))
 
+    @jsii.member(jsii_name="isCfnOIDCProvider")
+    @builtins.classmethod
+    def is_cfn_oidc_provider(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOIDCProvider.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7f5057f964f9bab1fcc32fce6ba173b262ffb5b477e91cae47ca4b093e0a2465)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOIDCProvider", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3424,6 +3496,18 @@ class CfnPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnPolicy")
+    @builtins.classmethod
+    def is_cfn_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3ee23fc195087e9166c203ff6e5a0a6d7f961f5dee39d0ea4ad91b3bea8f9a36)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3791,6 +3875,18 @@ class CfnRole(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRole", [resource]))
 
+    @jsii.member(jsii_name="isCfnRole")
+    @builtins.classmethod
+    def is_cfn_role(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRole.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ff3f97b4de0b51871305eb5dbe778f76bd225254ccf6a281eb5ad37441bd9365)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRole", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4136,6 +4232,18 @@ class CfnRolePolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnRolePolicy")
+    @builtins.classmethod
+    def is_cfn_role_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRolePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8728946f5288abc0306a5d628f001064b1d982cebea9643c6ac987974a032a61)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRolePolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4575,14 +4683,14 @@ class CfnSAMLProvider(
 ):
     '''Creates an IAM resource that describes an identity provider (IdP) that supports SAML 2.0.
 
-    The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the the console or one that supports API access to AWS .
+    The SAML provider resource that you create with this operation can be used as a principal in an IAM role's trust policy. Such a policy can enable federated users who sign in using the SAML IdP to assume the role. You can create an IAM role that supports Web-based single sign-on (SSO) to the AWS Management Console or one that supports API access to AWS .
 
     When you create the SAML provider resource, you upload a SAML metadata document that you get from your IdP. That document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that the IdP sends. You must generate the metadata document using the identity management software that is used as your organization's IdP.
     .. epigraph::
 
        This operation requires `Signature Version 4 <https://docs.aws.amazon.com/general/latest/gr/signature-version-4.html>`_ .
 
-    For more information, see `Enabling SAML 2.0 federated users to access the the console <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html>`_ and `About SAML 2.0-based federation <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html>`_ in the *IAM User Guide* .
+    For more information, see `Enabling SAML 2.0 federated users to access the AWS Management Console <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_enable-console-saml.html>`_ and `About SAML 2.0-based federation <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html>`_ in the *IAM User Guide* .
 
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-samlprovider.html
     :cloudformationResource: AWS::IAM::SAMLProvider
@@ -4665,6 +4773,18 @@ class CfnSAMLProvider(
             type_hints = typing.get_type_hints(_typecheckingstub__b1f1e65df7127c08c1603f184585a56d767362a3b5afeaa5a74ddaabf619b5da)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForSAMLProvider", [resource]))
+
+    @jsii.member(jsii_name="isCfnSAMLProvider")
+    @builtins.classmethod
+    def is_cfn_saml_provider(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSAMLProvider.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bc9dc8f4401f1aaf9a9981044bc588dc6bdc25dc997eeedb4fa39af1ecd2529f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSAMLProvider", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5163,6 +5283,18 @@ class CfnServerCertificate(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServerCertificate", [resource]))
 
+    @jsii.member(jsii_name="isCfnServerCertificate")
+    @builtins.classmethod
+    def is_cfn_server_certificate(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServerCertificate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3287a2c8df8f2cca57e9ef3ac067d25816a83b556c24ac1057b3b2ae573636bd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServerCertificate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5510,6 +5642,18 @@ class CfnServiceLinkedRole(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnServiceLinkedRole")
+    @builtins.classmethod
+    def is_cfn_service_linked_role(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServiceLinkedRole.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1e15cbef59f1c57bd0a07b6dc7673834547880709ca660f114c9b692de877ffc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceLinkedRole", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5758,7 +5902,7 @@ class CfnUser(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param groups: A list of group names to which you want to add the user.
-        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the the console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
+        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
         :param managed_policy_arns: A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the user. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path for the user name. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param permissions_boundary: The ARN of the managed policy that is used to set the permissions boundary for the user. A permissions boundary policy defines the maximum permissions that identity-based policies can grant to an entity, but does not grant permissions. Permissions boundaries do not define the maximum permissions that a resource-based policy can grant to an entity. To learn more, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* . For more information about policy types, see `Policy types <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policy-types>`_ in the *IAM User Guide* .
@@ -5793,6 +5937,18 @@ class CfnUser(
             type_hints = typing.get_type_hints(_typecheckingstub__53586ff3825069b3269d54a7efd5838a24c958e3815fb51409e5578af38ed8a2)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
+
+    @jsii.member(jsii_name="isCfnUser")
+    @builtins.classmethod
+    def is_cfn_user(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUser.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__39d477467a398dca23b6324aaa1b79887f96a2ebb288e56f19f2715de1901378)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5987,7 +6143,7 @@ class CfnUser(
             password: builtins.str,
             password_reset_required: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
         ) -> None:
-            '''Creates a password for the specified user, giving the user the ability to access AWS services through the the console .
+            '''Creates a password for the specified user, giving the user the ability to access AWS services through the AWS Management Console .
 
             For more information about managing passwords, see `Managing Passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
 
@@ -6196,6 +6352,18 @@ class CfnUserPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserPolicy")
+    @builtins.classmethod
+    def is_cfn_user_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__50148d4dcf0c6b86c32afab139135ccee1e0f58e20fc54e8b91ef9b40bc88560)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6415,7 +6583,7 @@ class CfnUserProps:
         '''Properties for defining a ``CfnUser``.
 
         :param groups: A list of group names to which you want to add the user.
-        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the the console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
+        :param login_profile: Creates a password for the specified IAM user. A password allows an IAM user to access AWS services through the AWS Management Console . You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console . For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
         :param managed_policy_arns: A list of Amazon Resource Names (ARNs) of the IAM managed policies that you want to attach to the user. For more information about ARNs, see `Amazon Resource Names (ARNs) and AWS Service Namespaces <https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html>`_ in the *AWS General Reference* .
         :param path: The path for the user name. For more information about paths, see `IAM identifiers <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html>`_ in the *IAM User Guide* . This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its `regex pattern <https://docs.aws.amazon.com/http://wikipedia.org/wiki/regex>`_ ) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! ( ``\\u0021`` ) through the DEL character ( ``\\u007F`` ), including most punctuation characters, digits, and upper and lowercased letters.
         :param permissions_boundary: The ARN of the managed policy that is used to set the permissions boundary for the user. A permissions boundary policy defines the maximum permissions that identity-based policies can grant to an entity, but does not grant permissions. Permissions boundaries do not define the maximum permissions that a resource-based policy can grant to an entity. To learn more, see `Permissions boundaries for IAM entities <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html>`_ in the *IAM User Guide* . For more information about policy types, see `Policy types <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html#access_policy-types>`_ in the *IAM User Guide* .
@@ -6501,9 +6669,9 @@ class CfnUserProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnUser.LoginProfileProperty]]:
         '''Creates a password for the specified IAM user.
 
-        A password allows an IAM user to access AWS services through the the console .
+        A password allows an IAM user to access AWS services through the AWS Management Console .
 
-        You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the the console .
+        You can use the AWS CLI , the AWS API, or the *Users* page in the IAM console to create a password for any IAM user. Use `ChangePassword <https://docs.aws.amazon.com/IAM/latest/APIReference/API_ChangePassword.html>`_ to update your own existing password in the *My Security Credentials* page in the AWS Management Console .
 
         For more information about managing passwords, see `Managing passwords <https://docs.aws.amazon.com/IAM/latest/UserGuide/Using_ManagingLogins.html>`_ in the *IAM User Guide* .
 
@@ -6663,6 +6831,18 @@ class CfnUserToGroupAddition(
         props = CfnUserToGroupAdditionProps(group_name=group_name, users=users)
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnUserToGroupAddition")
+    @builtins.classmethod
+    def is_cfn_user_to_group_addition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUserToGroupAddition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ad9fff616a1b1f3024a67ea7adb60a1ee244e8400579a12825ab7e5c6bd17771)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUserToGroupAddition", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6886,6 +7066,18 @@ class CfnVirtualMFADevice(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnVirtualMFADevice")
+    @builtins.classmethod
+    def is_cfn_virtual_mfa_device(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVirtualMFADevice.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__484a1c7065ccbe3212fb35fb07f8f11e400d775147f533660fc3ebc70c5b8802)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVirtualMFADevice", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -16679,6 +16871,12 @@ def _typecheckingstub__8d6875d360f4b68d81822160010f3dcab4fad75219310207a67ebdbd7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__44af7447864a754d9df484db5d272901a378e9dd7da128a28741b73a5d53eb4a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__253c114f9b2f2b6b08dd9a5564956df556fd7f0ff623cf82d94801cb17f499b2(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16736,6 +16934,12 @@ def _typecheckingstub__3980f39025e91ce99b498701692fb8425cc9af4321db09d71dbd3368a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__109520d0ac5eced5701e6bfb840752f4a4c55e5408f1fc48af017b584d08be03(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8cd8f3cc95c07c18415e709564850ea545ed675e3f0b6e3505e763a15b48e963(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16787,6 +16991,12 @@ def _typecheckingstub__4f890caaa5f6b29722a17bf5c714640d202cb740a7f07aec5a5ced9b5
     group_name: builtins.str,
     policy_name: builtins.str,
     policy_document: typing.Any = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2b1f15a5e63e650cc6c55b8ec0153a01c2d4b292546026f27c56c750c214ff39(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16857,6 +17067,12 @@ def _typecheckingstub__511cf624861b94d053cb656d41bfb85226b39bae88821676b01740944
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b593290cbc770e9142ad849fa0c3ac70ba9811f3da5475a95ec1753ed5e44a52(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__014a9e16c0ce84f545ddc2fd74080cc35e47d194639e0b8133383c054c81a206(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -16907,6 +17123,12 @@ def _typecheckingstub__3a8c17449d46e088e632540cdf9eb1a587f03d90f16e24cec8b7c30c9
     path: typing.Optional[builtins.str] = None,
     roles: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IRoleRef_8400221f]]] = None,
     users: typing.Optional[typing.Sequence[typing.Union[builtins.str, _IUserRef_b0ccca76]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ddaff230cd62363f571d1c69690fe7f8e88bd1b1eefa314ac6a2020c1a9d9a8c(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -16996,6 +17218,12 @@ def _typecheckingstub__fab4fe6f3e4db72e34d9bb9535a6cd4366d92f1c50e499ef665ae1a82
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__7f5057f964f9bab1fcc32fce6ba173b262ffb5b477e91cae47ca4b093e0a2465(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__5e414fee3e3f5f30b79be56e642403e70f811157ff8d43b791b5526b812061d8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17051,6 +17279,12 @@ def _typecheckingstub__cb67178fe7e1b31e1be07438cbe12957995260af0ad90c58a3ab490fe
     groups: typing.Optional[typing.Sequence[builtins.str]] = None,
     roles: typing.Optional[typing.Sequence[builtins.str]] = None,
     users: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3ee23fc195087e9166c203ff6e5a0a6d7f961f5dee39d0ea4ad91b3bea8f9a36(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17127,6 +17361,12 @@ def _typecheckingstub__b418623e6c6b819228e2a7c5d9c5341241e5b0e738f77eeabd6cacec7
 
 def _typecheckingstub__aed7930ffdab40f4113234c4ce249e72c7b8fb0328ee2238e91d57b3368ac29b(
     resource: _IRoleRef_8400221f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ff3f97b4de0b51871305eb5dbe778f76bd225254ccf6a281eb5ad37441bd9365(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17216,6 +17456,12 @@ def _typecheckingstub__f1532590762c98b830f41db58b5d7333f7f995a90f128be89292c180e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8728946f5288abc0306a5d628f001064b1d982cebea9643c6ac987974a032a61(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f878b18113dc1f16c459595683f03c065b56afd62d2918c65c6cde7539984412(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17287,6 +17533,12 @@ def _typecheckingstub__f64934981377388842130b01da042285d0dfa38ef82a7537c7ff86f5d
 
 def _typecheckingstub__b1f1e65df7127c08c1603f184585a56d767362a3b5afeaa5a74ddaabf619b5da(
     resource: _ISAMLProviderRef_6e369856,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bc9dc8f4401f1aaf9a9981044bc588dc6bdc25dc997eeedb4fa39af1ecd2529f(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17386,6 +17638,12 @@ def _typecheckingstub__bdc593551fa8cc6ccbfd2bc0375f5568203a3f854d4f715a6b618e4b8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3287a2c8df8f2cca57e9ef3ac067d25816a83b556c24ac1057b3b2ae573636bd(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__366b62f33040d7a5e531fab130ce2a8bbbba719ed080e892236f3127f59f0273(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17457,6 +17715,12 @@ def _typecheckingstub__d428bb539fd6df78e6e28b0695f366af555fe1f958879857ee30c8067
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1e15cbef59f1c57bd0a07b6dc7673834547880709ca660f114c9b692de877ffc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8cc7c392a2b0731277a0218b6b90c103a720e9d973fe65098c66c9cbdbc1777d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17514,6 +17778,12 @@ def _typecheckingstub__b453e8e55124e84a27aa60acd149280051b756df30318da37839b1e4c
 
 def _typecheckingstub__53586ff3825069b3269d54a7efd5838a24c958e3815fb51409e5578af38ed8a2(
     resource: _IUserRef_b0ccca76,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__39d477467a398dca23b6324aaa1b79887f96a2ebb288e56f19f2715de1901378(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -17605,6 +17875,12 @@ def _typecheckingstub__b09938208fba24d256ecd68450b14a065d6488754943e666f9c0528cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__50148d4dcf0c6b86c32afab139135ccee1e0f58e20fc54e8b91ef9b40bc88560(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__cde7256763c767d2775e466edc810c10426403d26df61b45c5e90e87328e04f1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17668,6 +17944,12 @@ def _typecheckingstub__8cff069f9e69e3551ebb007914281abb14f05e8d822825ab91577ecf9
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ad9fff616a1b1f3024a67ea7adb60a1ee244e8400579a12825ab7e5c6bd17771(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__839f86071dc7f367d40ea9ba8b644702b8c3f40d83e2a8d6821a097013d1a603(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -17708,6 +17990,12 @@ def _typecheckingstub__e13769e4d8767c55f844c7fd4df38f85edde39c6b8cf55033fe2d0cc4
     path: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     virtual_mfa_device_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__484a1c7065ccbe3212fb35fb07f8f11e400d775147f533660fc3ebc70c5b8802(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

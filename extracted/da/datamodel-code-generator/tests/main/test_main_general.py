@@ -1,52 +1,52 @@
+"""General integration tests for main code generation functionality."""
+
 from __future__ import annotations
 
-from argparse import Namespace
-from pathlib import Path
+from argparse import ArgumentTypeError, Namespace
 from typing import TYPE_CHECKING
 
 import pytest
-from freezegun import freeze_time
 
 from datamodel_code_generator import (
     DataModelType,
+    Error,
     InputFileType,
     generate,
     snooper_to_methods,
 )
-from datamodel_code_generator.__main__ import Config, Exit, main
+from datamodel_code_generator.__main__ import Config, Exit
+from datamodel_code_generator.arguments import _dataclass_arguments
 from datamodel_code_generator.format import PythonVersion
-from tests.conftest import create_assert_file_content
+from tests.conftest import create_assert_file_content, freeze_time
+from tests.main.conftest import (
+    DATA_PATH,
+    EXPECTED_MAIN_PATH,
+    PYTHON_DATA_PATH,
+    TIMESTAMP,
+    run_main_and_assert,
+    run_main_with_args,
+)
 
 if TYPE_CHECKING:
-    from pytest_mock import MockerFixture
+    from pathlib import Path
 
-DATA_PATH: Path = Path(__file__).parent.parent / "data"
-PYTHON_DATA_PATH: Path = DATA_PATH / "python"
-EXPECTED_MAIN_PATH = DATA_PATH / "expected" / "main"
+    from pytest_mock import MockerFixture
 
 assert_file_content = create_assert_file_content(EXPECTED_MAIN_PATH)
 
-TIMESTAMP = "1985-10-26T01:21:00-07:00"
-
-
-@pytest.fixture(autouse=True)
-def reset_namespace(monkeypatch: pytest.MonkeyPatch) -> None:
-    namespace_ = Namespace(no_color=False)
-    monkeypatch.setattr("datamodel_code_generator.__main__.namespace", namespace_)
-    monkeypatch.setattr("datamodel_code_generator.arguments.namespace", namespace_)
-
 
 def test_debug(mocker: MockerFixture) -> None:
+    """Test debug flag functionality."""
     with pytest.raises(expected_exception=SystemExit):
-        main(["--debug", "--help"])
+        run_main_with_args(["--debug", "--help"])
 
     mocker.patch("datamodel_code_generator.pysnooper", None)
     with pytest.raises(expected_exception=SystemExit):
-        main(["--debug", "--help"])
+        run_main_with_args(["--debug", "--help"])
 
 
-@freeze_time("2019-07-26")
 def test_snooper_to_methods_without_pysnooper(mocker: MockerFixture) -> None:
+    """Test snooper_to_methods function without pysnooper installed."""
     mocker.patch("datamodel_code_generator.pysnooper", None)
     mock = mocker.Mock()
     assert snooper_to_methods()(mock) == mock
@@ -54,11 +54,12 @@ def test_snooper_to_methods_without_pysnooper(mocker: MockerFixture) -> None:
 
 @pytest.mark.parametrize(argnames="no_color", argvalues=[False, True])
 def test_show_help(no_color: bool, capsys: pytest.CaptureFixture[str]) -> None:
+    """Test help output with and without color."""
     args = ["--no-color"] if no_color else []
     args += ["--help"]
 
     with pytest.raises(expected_exception=SystemExit) as context:
-        main(args)
+        run_main_with_args(args)
     assert context.value.code == Exit.OK
 
     output = capsys.readouterr().out
@@ -66,44 +67,40 @@ def test_show_help(no_color: bool, capsys: pytest.CaptureFixture[str]) -> None:
 
 
 def test_show_help_when_no_input(mocker: MockerFixture) -> None:
+    """Test help display when no input is provided."""
     print_help_mock = mocker.patch("datamodel_code_generator.__main__.arg_parser.print_help")
     isatty_mock = mocker.patch("sys.stdin.isatty", return_value=True)
-    return_code: Exit = main([])
+    return_code: Exit = run_main_with_args([], expected_exit=Exit.ERROR)
     assert return_code == Exit.ERROR
     assert isatty_mock.called
     assert print_help_mock.called
 
 
 def test_no_args_has_default(monkeypatch: pytest.MonkeyPatch) -> None:
-    """
-    No argument should have a default value set because it would override pyproject.toml values.
+    """No argument should have a default value set because it would override pyproject.toml values.
 
     Default values are set in __main__.Config class.
     """
     namespace = Namespace()
     monkeypatch.setattr("datamodel_code_generator.__main__.namespace", namespace)
-    main([])
+    run_main_with_args([], expected_exit=Exit.ERROR)
     for field in Config.get_fields():
         assert getattr(namespace, field, None) is None
 
 
-@freeze_time("2019-07-26")
-def test_space_and_special_characters_dict(tmp_path: Path) -> None:
-    output_file: Path = tmp_path / "output.py"
-    return_code: Exit = main([
-        "--input",
-        str(PYTHON_DATA_PATH / "space_and_special_characters_dict.py"),
-        "--output",
-        str(output_file),
-        "--input-file-type",
-        "dict",
-    ])
-    assert return_code == Exit.OK
-    assert_file_content(output_file)
+def test_space_and_special_characters_dict(output_file: Path) -> None:
+    """Test dict input with space and special characters."""
+    run_main_and_assert(
+        input_path=PYTHON_DATA_PATH / "space_and_special_characters_dict.py",
+        output_path=output_file,
+        input_file_type="dict",
+        assert_func=assert_file_content,
+    )
 
 
 @freeze_time("2024-12-14")
 def test_direct_input_dict(tmp_path: Path) -> None:
+    """Test direct dict input code generation."""
     output_file = tmp_path / "output.py"
     generate(
         {"foo": 1, "bar": {"baz": 2}},
@@ -116,7 +113,19 @@ def test_direct_input_dict(tmp_path: Path) -> None:
 
 
 @freeze_time(TIMESTAMP)
-def test_frozen_dataclasses(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    ("keyword_only", "target_python_version", "expected_file"),
+    [
+        (False, PythonVersion.PY_39, "frozen_dataclasses.py"),
+        (True, PythonVersion.PY_310, "frozen_dataclasses_keyword_only.py"),
+    ],
+)
+def test_frozen_dataclasses(
+    tmp_path: Path,
+    keyword_only: bool,
+    target_python_version: PythonVersion,
+    expected_file: str,
+) -> None:
     """Test --frozen-dataclasses flag functionality."""
     output_file = tmp_path / "output.py"
     generate(
@@ -125,71 +134,77 @@ def test_frozen_dataclasses(tmp_path: Path) -> None:
         output=output_file,
         output_model_type=DataModelType.DataclassesDataclass,
         frozen_dataclasses=True,
+        keyword_only=keyword_only,
+        target_python_version=target_python_version,
+    )
+    assert_file_content(output_file, expected_file)
+
+
+@freeze_time(TIMESTAMP)
+@pytest.mark.parametrize(
+    ("extra_args", "expected_file"),
+    [
+        (["--output-model-type", "dataclasses.dataclass", "--frozen-dataclasses"], "frozen_dataclasses.py"),
+        (
+            [
+                "--output-model-type",
+                "dataclasses.dataclass",
+                "--frozen-dataclasses",
+                "--keyword-only",
+                "--target-python-version",
+                "3.10",
+            ],
+            "frozen_dataclasses_keyword_only.py",
+        ),
+    ],
+)
+def test_frozen_dataclasses_command_line(output_file: Path, extra_args: list[str], expected_file: str) -> None:
+    """Test --frozen-dataclasses flag via command line."""
+    run_main_and_assert(
+        input_path=DATA_PATH / "jsonschema" / "simple_frozen_test.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file=expected_file,
+        extra_args=extra_args,
+    )
+
+
+@freeze_time(TIMESTAMP)
+def test_use_attribute_docstrings(tmp_path: Path) -> None:
+    """Test --use-attribute-docstrings flag functionality."""
+    output_file = tmp_path / "output.py"
+    generate(
+        DATA_PATH / "jsonschema" / "use_attribute_docstrings_test.json",
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2BaseModel,
+        use_field_description=True,
+        use_attribute_docstrings=True,
     )
     assert_file_content(output_file)
 
 
 @freeze_time(TIMESTAMP)
-def test_frozen_dataclasses_with_keyword_only(tmp_path: Path) -> None:
-    """Test --frozen-dataclasses with --keyword-only flag combination."""
-
-    output_file = tmp_path / "output.py"
-    generate(
-        DATA_PATH / "jsonschema" / "simple_frozen_test.json",
-        input_file_type=InputFileType.JsonSchema,
-        output=output_file,
-        output_model_type=DataModelType.DataclassesDataclass,
-        frozen_dataclasses=True,
-        keyword_only=True,
-        target_python_version=PythonVersion.PY_310,
+def test_use_attribute_docstrings_command_line(output_file: Path) -> None:
+    """Test --use-attribute-docstrings flag via command line."""
+    run_main_and_assert(
+        input_path=DATA_PATH / "jsonschema" / "use_attribute_docstrings_test.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="use_attribute_docstrings.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-field-description",
+            "--use-attribute-docstrings",
+        ],
     )
-    assert_file_content(output_file, "frozen_dataclasses_keyword_only.py")
-
-
-@freeze_time(TIMESTAMP)
-def test_frozen_dataclasses_command_line(tmp_path: Path) -> None:
-    """Test --frozen-dataclasses flag via command line."""
-    output_file: Path = tmp_path / "output.py"
-    return_code: Exit = main([
-        "--input",
-        str(DATA_PATH / "jsonschema" / "simple_frozen_test.json"),
-        "--output",
-        str(output_file),
-        "--input-file-type",
-        "jsonschema",
-        "--output-model-type",
-        "dataclasses.dataclass",
-        "--frozen-dataclasses",
-    ])
-    assert return_code == Exit.OK
-    assert_file_content(output_file, "frozen_dataclasses.py")
-
-
-@freeze_time(TIMESTAMP)
-def test_frozen_dataclasses_with_keyword_only_command_line(tmp_path: Path) -> None:
-    """Test --frozen-dataclasses with --keyword-only flag via command line."""
-    output_file: Path = tmp_path / "output.py"
-    return_code: Exit = main([
-        "--input",
-        str(DATA_PATH / "jsonschema" / "simple_frozen_test.json"),
-        "--output",
-        str(output_file),
-        "--input-file-type",
-        "jsonschema",
-        "--output-model-type",
-        "dataclasses.dataclass",
-        "--frozen-dataclasses",
-        "--keyword-only",
-        "--target-python-version",
-        "3.10",
-    ])
-    assert return_code == Exit.OK
-    assert_file_content(output_file, "frozen_dataclasses_keyword_only.py")
 
 
 def test_filename_with_newline_injection(tmp_path: Path) -> None:
-    """Test that filenames with newlines cannot inject code into generated files"""
-
+    """Test that filenames with newlines cannot inject code into generated files."""
     schema_content = """{"type": "object", "properties": {"name": {"type": "string"}}}"""
 
     malicious_filename = """schema.json
@@ -223,8 +238,7 @@ os.system('echo INJECTED')
 
 
 def test_filename_with_various_control_characters(tmp_path: Path) -> None:
-    """Test that various control characters in filenames are properly sanitized"""
-
+    """Test that various control characters in filenames are properly sanitized."""
     schema_content = """{"type": "object", "properties": {"test": {"type": "string"}}}"""
 
     test_cases = [
@@ -262,3 +276,82 @@ def test_filename_with_various_control_characters(tmp_path: Path) -> None:
         ), f"System call found for {test_name}"
 
         compile(generated_content, str(output_path), "exec")
+
+
+def test_generate_with_nonexistent_file(tmp_path: Path) -> None:
+    """Test that generating from a nonexistent file raises an error."""
+    nonexistent_file = tmp_path / "nonexistent.json"
+    output_file = tmp_path / "output.py"
+
+    with pytest.raises(Error, match="File not found"):
+        generate(
+            input_=nonexistent_file,
+            output=output_file,
+        )
+
+
+def test_generate_with_invalid_file_format(tmp_path: Path) -> None:
+    """Test that generating from an invalid file format raises an error."""
+    invalid_file = tmp_path / "invalid.txt"
+    invalid_file.write_text("this is not valid json or yaml or anything")
+    output_file = tmp_path / "output.py"
+
+    with pytest.raises(Error, match="Invalid file format"):
+        generate(
+            input_=invalid_file,
+            output=output_file,
+        )
+
+
+@pytest.mark.parametrize(
+    ("json_str", "expected"),
+    [
+        ('{"frozen": true, "slots": true}', {"frozen": True, "slots": True}),
+        ("{}", {}),
+    ],
+)
+def test_dataclass_arguments_valid(json_str: str, expected: dict) -> None:
+    """Test that valid JSON is parsed correctly."""
+    assert _dataclass_arguments(json_str) == expected
+
+
+@pytest.mark.parametrize(
+    ("json_str", "match"),
+    [
+        ("not-valid-json", "Invalid JSON:"),
+        ("[1, 2, 3]", "Expected a JSON dictionary, got list"),
+        ('"just a string"', "Expected a JSON dictionary, got str"),
+        ("42", "Expected a JSON dictionary, got int"),
+        ('{"invalid_key": true}', "Invalid keys:"),
+        ('{"frozen": "not_bool"}', "Expected bool for 'frozen', got str"),
+    ],
+)
+def test_dataclass_arguments_invalid(json_str: str, match: str) -> None:
+    """Test that invalid input raises ArgumentTypeError."""
+    with pytest.raises(ArgumentTypeError, match=match):
+        _dataclass_arguments(json_str)
+
+
+def test_skip_root_model(tmp_path: Path) -> None:
+    """Test --skip-root-model flag functionality using generate()."""
+    output_file = tmp_path / "output.py"
+    generate(
+        DATA_PATH / "jsonschema" / "skip_root_model_test.json",
+        input_file_type=InputFileType.JsonSchema,
+        output=output_file,
+        output_model_type=DataModelType.PydanticV2BaseModel,
+        skip_root_model=True,
+    )
+    assert_file_content(output_file, "skip_root_model.py")
+
+
+def test_skip_root_model_command_line(output_file: Path) -> None:
+    """Test --skip-root-model flag via command line."""
+    run_main_and_assert(
+        input_path=DATA_PATH / "jsonschema" / "skip_root_model_test.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="skip_root_model.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--skip-root-model"],
+    )

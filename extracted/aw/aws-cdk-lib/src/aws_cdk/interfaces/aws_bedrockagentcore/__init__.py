@@ -37,12 +37,13 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_bedrockagentcore.BrowserCustomReference",
     jsii_struct_bases=[],
-    name_mapping={"browser_id": "browserId"},
+    name_mapping={"browser_arn": "browserArn", "browser_id": "browserId"},
 )
 class BrowserCustomReference:
-    def __init__(self, *, browser_id: builtins.str) -> None:
+    def __init__(self, *, browser_arn: builtins.str, browser_id: builtins.str) -> None:
         '''A reference to a BrowserCustom resource.
 
+        :param browser_arn: The ARN of the BrowserCustom resource.
         :param browser_id: The BrowserId of the BrowserCustom resource.
 
         :exampleMetadata: fixture=_generated
@@ -54,15 +55,25 @@ class BrowserCustomReference:
             from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
             
             browser_custom_reference = interfaces_aws_bedrockagentcore.BrowserCustomReference(
+                browser_arn="browserArn",
                 browser_id="browserId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__30d539b77517d652d5c6fba79e5a649664ea046fd158b0c2a9c0c103e93f28a2)
+            check_type(argname="argument browser_arn", value=browser_arn, expected_type=type_hints["browser_arn"])
             check_type(argname="argument browser_id", value=browser_id, expected_type=type_hints["browser_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "browser_arn": browser_arn,
             "browser_id": browser_id,
         }
+
+    @builtins.property
+    def browser_arn(self) -> builtins.str:
+        '''The ARN of the BrowserCustom resource.'''
+        result = self._values.get("browser_arn")
+        assert result is not None, "Required property 'browser_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def browser_id(self) -> builtins.str:
@@ -86,12 +97,21 @@ class BrowserCustomReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_bedrockagentcore.CodeInterpreterCustomReference",
     jsii_struct_bases=[],
-    name_mapping={"code_interpreter_id": "codeInterpreterId"},
+    name_mapping={
+        "code_interpreter_arn": "codeInterpreterArn",
+        "code_interpreter_id": "codeInterpreterId",
+    },
 )
 class CodeInterpreterCustomReference:
-    def __init__(self, *, code_interpreter_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        code_interpreter_arn: builtins.str,
+        code_interpreter_id: builtins.str,
+    ) -> None:
         '''A reference to a CodeInterpreterCustom resource.
 
+        :param code_interpreter_arn: The ARN of the CodeInterpreterCustom resource.
         :param code_interpreter_id: The CodeInterpreterId of the CodeInterpreterCustom resource.
 
         :exampleMetadata: fixture=_generated
@@ -103,15 +123,25 @@ class CodeInterpreterCustomReference:
             from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
             
             code_interpreter_custom_reference = interfaces_aws_bedrockagentcore.CodeInterpreterCustomReference(
+                code_interpreter_arn="codeInterpreterArn",
                 code_interpreter_id="codeInterpreterId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__31803efaee1e805b6555da7f5c0c2c409540346b67d7cb412b9f78fbe7b6198d)
+            check_type(argname="argument code_interpreter_arn", value=code_interpreter_arn, expected_type=type_hints["code_interpreter_arn"])
             check_type(argname="argument code_interpreter_id", value=code_interpreter_id, expected_type=type_hints["code_interpreter_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "code_interpreter_arn": code_interpreter_arn,
             "code_interpreter_id": code_interpreter_id,
         }
+
+    @builtins.property
+    def code_interpreter_arn(self) -> builtins.str:
+        '''The ARN of the CodeInterpreterCustom resource.'''
+        result = self._values.get("code_interpreter_arn")
+        assert result is not None, "Required property 'code_interpreter_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def code_interpreter_id(self) -> builtins.str:
@@ -736,12 +766,21 @@ class RuntimeEndpointReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_bedrockagentcore.RuntimeReference",
     jsii_struct_bases=[],
-    name_mapping={"agent_runtime_id": "agentRuntimeId"},
+    name_mapping={
+        "agent_runtime_arn": "agentRuntimeArn",
+        "agent_runtime_id": "agentRuntimeId",
+    },
 )
 class RuntimeReference:
-    def __init__(self, *, agent_runtime_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        agent_runtime_arn: builtins.str,
+        agent_runtime_id: builtins.str,
+    ) -> None:
         '''A reference to a Runtime resource.
 
+        :param agent_runtime_arn: The ARN of the Runtime resource.
         :param agent_runtime_id: The AgentRuntimeId of the Runtime resource.
 
         :exampleMetadata: fixture=_generated
@@ -753,15 +792,25 @@ class RuntimeReference:
             from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
             
             runtime_reference = interfaces_aws_bedrockagentcore.RuntimeReference(
+                agent_runtime_arn="agentRuntimeArn",
                 agent_runtime_id="agentRuntimeId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__a1435ab047fbb10ad1262aabe5dcc3598ed76fcfee17487287cbf9bfe742cb8a)
+            check_type(argname="argument agent_runtime_arn", value=agent_runtime_arn, expected_type=type_hints["agent_runtime_arn"])
             check_type(argname="argument agent_runtime_id", value=agent_runtime_id, expected_type=type_hints["agent_runtime_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "agent_runtime_arn": agent_runtime_arn,
             "agent_runtime_id": agent_runtime_id,
         }
+
+    @builtins.property
+    def agent_runtime_arn(self) -> builtins.str:
+        '''The ARN of the Runtime resource.'''
+        result = self._values.get("agent_runtime_arn")
+        assert result is not None, "Required property 'agent_runtime_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def agent_runtime_id(self) -> builtins.str:
@@ -873,6 +922,7 @@ publication.publish()
 
 def _typecheckingstub__30d539b77517d652d5c6fba79e5a649664ea046fd158b0c2a9c0c103e93f28a2(
     *,
+    browser_arn: builtins.str,
     browser_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -880,6 +930,7 @@ def _typecheckingstub__30d539b77517d652d5c6fba79e5a649664ea046fd158b0c2a9c0c103e
 
 def _typecheckingstub__31803efaee1e805b6555da7f5c0c2c409540346b67d7cb412b9f78fbe7b6198d(
     *,
+    code_interpreter_arn: builtins.str,
     code_interpreter_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -917,6 +968,7 @@ def _typecheckingstub__77f731eb99d3edd4594a77aea4dc91d39b42d1521809385fa10f06922
 
 def _typecheckingstub__a1435ab047fbb10ad1262aabe5dcc3598ed76fcfee17487287cbf9bfe742cb8a(
     *,
+    agent_runtime_arn: builtins.str,
     agent_runtime_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

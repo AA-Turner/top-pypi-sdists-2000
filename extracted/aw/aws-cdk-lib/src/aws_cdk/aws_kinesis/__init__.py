@@ -467,6 +467,18 @@ class CfnResourcePolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnResourcePolicy")
+    @builtins.classmethod
+    def is_cfn_resource_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnResourcePolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a87a633e8a051308eb82b9fe958abb6ef411fcd68b6a6a40aa7b2d990bd6fc4b)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnResourcePolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -751,6 +763,18 @@ class CfnStream(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument stream_name", value=stream_name, expected_type=type_hints["stream_name"])
         return typing.cast(_IStreamRef_b484e253, jsii.sinvoke(cls, "fromStreamName", [scope, id, stream_name]))
+
+    @jsii.member(jsii_name="isCfnStream")
+    @builtins.classmethod
+    def is_cfn_stream(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStream.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb56f0d0206179022ce0ac82fd83fad92c062331de20b2f494c1037a0244cbf4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStream", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1238,6 +1262,18 @@ class CfnStreamConsumer(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnStreamConsumer")
+    @builtins.classmethod
+    def is_cfn_stream_consumer(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStreamConsumer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5bc1cfdf9852f9d91614aeac9917e2dbc70f3fd26e8ff3c1c11e67d26b30abb1)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStreamConsumer", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6026,6 +6062,12 @@ def _typecheckingstub__d637108cee3cd0781f4431aaf5dbbdcd6254ef22d3f2922cee25b64d4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a87a633e8a051308eb82b9fe958abb6ef411fcd68b6a6a40aa7b2d990bd6fc4b(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__045925af979db6aed97959dc574fc91b8ebab52940589dd4ac5cea22d9e1c37f(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6093,6 +6135,12 @@ def _typecheckingstub__29cb46b7ceb2cd8a127a3866d6508b48f921857bfb60faeb20b84a87c
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     stream_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb56f0d0206179022ce0ac82fd83fad92c062331de20b2f494c1037a0244cbf4(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6193,6 +6241,12 @@ def _typecheckingstub__40129c585ad941f6708a726728b53f8f98c392e9aac49550e397150ee
     consumer_name: builtins.str,
     stream_arn: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5bc1cfdf9852f9d91614aeac9917e2dbc70f3fd26e8ff3c1c11e67d26b30abb1(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

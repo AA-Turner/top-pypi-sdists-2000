@@ -201,6 +201,18 @@ class CfnCluster(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCluster", [resource]))
 
+    @jsii.member(jsii_name="isCfnCluster")
+    @builtins.classmethod
+    def is_cfn_cluster(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCluster.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__1ed02fa1ce15bb8dc71aaa2414dc9d0c8ee4d9d106cfb1d87e66d34f872cf665)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCluster", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -768,9 +780,9 @@ class CfnCluster(
             *,
             jwt_key: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnCluster.JwtKeyProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''JWT authentication configuration for Slurm.
+            '''The JWT authentication configuration for Slurm REST API access.
 
-            :param jwt_key: JWT key configuration.
+            :param jwt_key: The JWT key for Slurm REST API authentication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtauth.html
             :exampleMetadata: fixture=_generated
@@ -799,7 +811,7 @@ class CfnCluster(
         def jwt_key(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtKeyProperty"]]:
-            '''JWT key configuration.
+            '''The JWT key for Slurm REST API authentication.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtauth.html#cfn-pcs-cluster-jwtauth-jwtkey
             '''
@@ -829,10 +841,10 @@ class CfnCluster(
             secret_arn: builtins.str,
             secret_version: builtins.str,
         ) -> None:
-            '''JWT key configuration.
+            '''The JWT key stored in AWS Secrets Manager for Slurm REST API authentication.
 
-            :param secret_arn: The Amazon Resource Name (ARN) of the JWT key secret.
-            :param secret_version: The version of the JWT key secret.
+            :param secret_arn: The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the JWT key.
+            :param secret_version: The version of the AWS Secrets Manager secret containing the JWT key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html
             :exampleMetadata: fixture=_generated
@@ -859,7 +871,7 @@ class CfnCluster(
 
         @builtins.property
         def secret_arn(self) -> builtins.str:
-            '''The Amazon Resource Name (ARN) of the JWT key secret.
+            '''The Amazon Resource Name (ARN) of the AWS Secrets Manager secret containing the JWT key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html#cfn-pcs-cluster-jwtkey-secretarn
             '''
@@ -869,7 +881,7 @@ class CfnCluster(
 
         @builtins.property
         def secret_version(self) -> builtins.str:
-            '''The version of the JWT key secret.
+            '''The version of the AWS Secrets Manager secret containing the JWT key.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-jwtkey.html#cfn-pcs-cluster-jwtkey-secretversion
             '''
@@ -1095,10 +1107,10 @@ class CfnCluster(
 
             :param accounting: The accounting configuration includes configurable settings for Slurm accounting.
             :param auth_key: The shared Slurm key for authentication, also known as the *cluster secret* .
-            :param jwt_auth: JWT authentication configuration for Slurm.
+            :param jwt_auth: The JWT authentication configuration for Slurm REST API access.
             :param scale_down_idle_time_in_seconds: The time (in seconds) before an idle node is scaled down. Default: ``600``
             :param slurm_custom_settings: Additional Slurm-specific configuration that directly maps to Slurm settings.
-            :param slurm_rest: The SlurmRest configuration includes configurable settings for Slurm Rest.
+            :param slurm_rest: The Slurm REST API configuration for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1184,7 +1196,7 @@ class CfnCluster(
         def jwt_auth(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.JwtAuthProperty"]]:
-            '''JWT authentication configuration for Slurm.
+            '''The JWT authentication configuration for Slurm REST API access.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-jwtauth
             '''
@@ -1217,7 +1229,7 @@ class CfnCluster(
         def slurm_rest(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnCluster.SlurmRestProperty"]]:
-            '''The SlurmRest configuration includes configurable settings for Slurm Rest.
+            '''The Slurm REST API configuration for the cluster.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html#cfn-pcs-cluster-slurmconfiguration-slurmrest
             '''
@@ -1322,9 +1334,11 @@ class CfnCluster(
     )
     class SlurmRestProperty:
         def __init__(self, *, mode: builtins.str) -> None:
-            '''The SlurmRest configuration includes configurable settings for Slurm Rest.
+            '''The Slurm REST API configuration includes settings for enabling and configuring the Slurm REST API.
 
-            :param mode: The default value is ``STANDARD``. A value of ``STANDARD`` means that Slurm Rest is enabled. Default: - "NONE"
+            It's a property of the `ClusterSlurmConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmconfiguration.html>`_ object.
+
+            :param mode: The default value for ``mode`` is ``STANDARD`` . A value of ``STANDARD`` means the Slurm REST API is enabled. Default: - "NONE"
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-pcs-cluster-slurmrest.html
             :exampleMetadata: fixture=_generated
@@ -1348,9 +1362,9 @@ class CfnCluster(
 
         @builtins.property
         def mode(self) -> builtins.str:
-            '''The default value is ``STANDARD``.
+            '''The default value for ``mode`` is ``STANDARD`` .
 
-            A value of ``STANDARD`` means that Slurm Rest is enabled.
+            A value of ``STANDARD`` means the Slurm REST API is enabled.
 
             :default: - "NONE"
 
@@ -1685,6 +1699,18 @@ class CfnComputeNodeGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__0ead4ed58fb5b442789d7f88a94e3784b4e6e3c35e279cd10cd99a9c1c8f44c6)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForComputeNodeGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnComputeNodeGroup")
+    @builtins.classmethod
+    def is_cfn_compute_node_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnComputeNodeGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ab2888bf019c4cf043b6279b9e2f4dd8c6dbbd2881a3374bd4bae95e26867678)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnComputeNodeGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2791,6 +2817,18 @@ class CfnQueue(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
 
+    @jsii.member(jsii_name="isCfnQueue")
+    @builtins.classmethod
+    def is_cfn_queue(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueue.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__75f016a4bec8c4e8edaee9bf1c7c4bfbccb0798664530a6813f3ffae9967ac29)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3389,6 +3427,12 @@ def _typecheckingstub__125754b69e7c5c96c51dc26b170d976ea4822cbcc2f9a86021b57c870
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__1ed02fa1ce15bb8dc71aaa2414dc9d0c8ee4d9d106cfb1d87e66d34f872cf665(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__ad41b9587f0f8c306a5663de2a8a6102111fcb7fc8d0e9a53a589055d6beaedc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3569,6 +3613,12 @@ def _typecheckingstub__0ead4ed58fb5b442789d7f88a94e3784b4e6e3c35e279cd10cd99a9c1
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ab2888bf019c4cf043b6279b9e2f4dd8c6dbbd2881a3374bd4bae95e26867678(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__d833050301c35ecc35d9e2cf88fc748a8f8174e49289d0e2719e757def93e83c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -3739,6 +3789,12 @@ def _typecheckingstub__456edeb02414f262683a35f15a1fae223f92feec590d98024478f680e
 
 def _typecheckingstub__4ae706e8479931ce73b0ef1453485b7468c32e757d8b94bf5600e44b11b9e6e7(
     resource: _IQueueRef_533cbfaf,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__75f016a4bec8c4e8edaee9bf1c7c4bfbccb0798664530a6813f3ffae9967ac29(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

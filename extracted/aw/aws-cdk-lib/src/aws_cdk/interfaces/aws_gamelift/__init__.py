@@ -157,12 +157,13 @@ class BuildReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_gamelift.ContainerFleetReference",
     jsii_struct_bases=[],
-    name_mapping={"fleet_id": "fleetId"},
+    name_mapping={"fleet_arn": "fleetArn", "fleet_id": "fleetId"},
 )
 class ContainerFleetReference:
-    def __init__(self, *, fleet_id: builtins.str) -> None:
+    def __init__(self, *, fleet_arn: builtins.str, fleet_id: builtins.str) -> None:
         '''A reference to a ContainerFleet resource.
 
+        :param fleet_arn: The ARN of the ContainerFleet resource.
         :param fleet_id: The FleetId of the ContainerFleet resource.
 
         :exampleMetadata: fixture=_generated
@@ -174,15 +175,25 @@ class ContainerFleetReference:
             from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
             
             container_fleet_reference = interfaces_aws_gamelift.ContainerFleetReference(
+                fleet_arn="fleetArn",
                 fleet_id="fleetId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__16c358839d20499f02bc5631233f96eaee22a25eb9ec5256f6a4d30651735d82)
+            check_type(argname="argument fleet_arn", value=fleet_arn, expected_type=type_hints["fleet_arn"])
             check_type(argname="argument fleet_id", value=fleet_id, expected_type=type_hints["fleet_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "fleet_arn": fleet_arn,
             "fleet_id": fleet_id,
         }
+
+    @builtins.property
+    def fleet_arn(self) -> builtins.str:
+        '''The ARN of the ContainerFleet resource.'''
+        result = self._values.get("fleet_arn")
+        assert result is not None, "Required property 'fleet_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def fleet_id(self) -> builtins.str:
@@ -1253,6 +1264,7 @@ def _typecheckingstub__e39afd357979864cdb0a0e965025e9600edb7d1d723c5d80bd567e336
 
 def _typecheckingstub__16c358839d20499f02bc5631233f96eaee22a25eb9ec5256f6a4d30651735d82(
     *,
+    fleet_arn: builtins.str,
     fleet_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

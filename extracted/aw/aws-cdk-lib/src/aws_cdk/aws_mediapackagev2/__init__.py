@@ -184,6 +184,18 @@ class CfnChannel(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannel", [resource]))
 
+    @jsii.member(jsii_name="isCfnChannel")
+    @builtins.classmethod
+    def is_cfn_channel(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnChannel.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__18abf160c132a61689605df991b120100014f1b20712f4b846fa52580cf992a0)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannel", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -656,6 +668,18 @@ class CfnChannelGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForChannelGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnChannelGroup")
+    @builtins.classmethod
+    def is_cfn_channel_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnChannelGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__874bd4282342a553794d79f46d320e676199ba62073af11c11797cab61a9f05c)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannelGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -930,6 +954,18 @@ class CfnChannelPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnChannelPolicy")
+    @builtins.classmethod
+    def is_cfn_channel_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnChannelPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8bd46cb97eff2dd315ef9468e665de58c6547a2dd7cf516ba62c62282eafbc6e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnChannelPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1548,6 +1584,18 @@ class CfnOriginEndpoint(
             type_hints = typing.get_type_hints(_typecheckingstub__088dd42120adc4b1441a9341c86b2cb87e16b9cdf0510c7b926c01862c901a7a)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForOriginEndpoint", [resource]))
+
+    @jsii.member(jsii_name="isCfnOriginEndpoint")
+    @builtins.classmethod
+    def is_cfn_origin_endpoint(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOriginEndpoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ed550831f3269de343ab42dad54a428aa4dbed7f4d2b1b97bcd6ae3f68344ff)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginEndpoint", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4652,6 +4700,18 @@ class CfnOriginEndpointPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnOriginEndpointPolicy")
+    @builtins.classmethod
+    def is_cfn_origin_endpoint_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOriginEndpointPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__962f82fa0cbb0a639554fe5c3828521628a2b84415dddf720acf3806877dfe88)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOriginEndpointPolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5434,6 +5494,12 @@ def _typecheckingstub__4f2fbbc07607d70e24aa38fb56a7d832c03ddbd7253a9086cff4a4f28
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__18abf160c132a61689605df991b120100014f1b20712f4b846fa52580cf992a0(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e420705ca6e035f67df6dc549d10387c546517b6ba6c086e3e8a2aa9d31185d9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5528,6 +5594,12 @@ def _typecheckingstub__47c614cdf8b613a37bbbe710ed5424a75298a86b8d731c8cff13d2379
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__874bd4282342a553794d79f46d320e676199ba62073af11c11797cab61a9f05c(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__85339d527078ada2373603756ae52ddf1f0419ece647a7ea7d90b5a88cd80494(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -5574,6 +5646,12 @@ def _typecheckingstub__b3bd3df241e2da49b066856cd5205c086667bdeae2c7accc2fb87dc6c
     channel_group_name: builtins.str,
     channel_name: builtins.str,
     policy: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8bd46cb97eff2dd315ef9468e665de58c6547a2dd7cf516ba62c62282eafbc6e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5653,6 +5731,12 @@ def _typecheckingstub__7dba3dfc2892c78e53aee7675a7a24aa25c0b29481aca92446e31a0d8
 
 def _typecheckingstub__088dd42120adc4b1441a9341c86b2cb87e16b9cdf0510c7b926c01862c901a7a(
     resource: _IOriginEndpointRef_33e12a65,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ed550831f3269de343ab42dad54a428aa4dbed7f4d2b1b97bcd6ae3f68344ff(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -5986,6 +6070,12 @@ def _typecheckingstub__aac7ba5cbcac1c12933a477adf316805431ea433d0ce36ca80901377b
     origin_endpoint_name: builtins.str,
     policy: typing.Any,
     cdn_auth_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnOriginEndpointPolicy.CdnAuthConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__962f82fa0cbb0a639554fe5c3828521628a2b84415dddf720acf3806877dfe88(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

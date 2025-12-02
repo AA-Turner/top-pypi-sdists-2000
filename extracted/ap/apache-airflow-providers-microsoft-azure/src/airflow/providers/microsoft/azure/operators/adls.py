@@ -19,7 +19,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Sequence
 from typing import IO, TYPE_CHECKING, Any, AnyStr
 
-from airflow.models import BaseOperator
+from airflow.providers.common.compat.sdk import BaseOperator
 from airflow.providers.microsoft.azure.hooks.data_lake import AzureDataLakeHook, AzureDataLakeStorageV2Hook
 
 if TYPE_CHECKING:

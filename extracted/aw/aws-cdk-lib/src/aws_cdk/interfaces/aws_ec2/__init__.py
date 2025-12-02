@@ -3487,13 +3487,20 @@ class IPAMReference:
     jsii_type="aws-cdk-lib.interfaces.aws_ec2.IPAMResourceDiscoveryAssociationReference",
     jsii_struct_bases=[],
     name_mapping={
+        "ipam_resource_discovery_association_arn": "ipamResourceDiscoveryAssociationArn",
         "ipam_resource_discovery_association_id": "ipamResourceDiscoveryAssociationId",
     },
 )
 class IPAMResourceDiscoveryAssociationReference:
-    def __init__(self, *, ipam_resource_discovery_association_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        ipam_resource_discovery_association_arn: builtins.str,
+        ipam_resource_discovery_association_id: builtins.str,
+    ) -> None:
         '''A reference to a IPAMResourceDiscoveryAssociation resource.
 
+        :param ipam_resource_discovery_association_arn: The ARN of the IPAMResourceDiscoveryAssociation resource.
         :param ipam_resource_discovery_association_id: The IpamResourceDiscoveryAssociationId of the IPAMResourceDiscoveryAssociation resource.
 
         :exampleMetadata: fixture=_generated
@@ -3505,15 +3512,25 @@ class IPAMResourceDiscoveryAssociationReference:
             from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
             
             i_pAMResource_discovery_association_reference = {
+                "ipam_resource_discovery_association_arn": "ipamResourceDiscoveryAssociationArn",
                 "ipam_resource_discovery_association_id": "ipamResourceDiscoveryAssociationId"
             }
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__adc737e46a3649729021f88f43561d31e8fdcefc112469a6222d8a7681574227)
+            check_type(argname="argument ipam_resource_discovery_association_arn", value=ipam_resource_discovery_association_arn, expected_type=type_hints["ipam_resource_discovery_association_arn"])
             check_type(argname="argument ipam_resource_discovery_association_id", value=ipam_resource_discovery_association_id, expected_type=type_hints["ipam_resource_discovery_association_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "ipam_resource_discovery_association_arn": ipam_resource_discovery_association_arn,
             "ipam_resource_discovery_association_id": ipam_resource_discovery_association_id,
         }
+
+    @builtins.property
+    def ipam_resource_discovery_association_arn(self) -> builtins.str:
+        '''The ARN of the IPAMResourceDiscoveryAssociation resource.'''
+        result = self._values.get("ipam_resource_discovery_association_arn")
+        assert result is not None, "Required property 'ipam_resource_discovery_association_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def ipam_resource_discovery_association_id(self) -> builtins.str:
@@ -3537,12 +3554,21 @@ class IPAMResourceDiscoveryAssociationReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_ec2.IPAMResourceDiscoveryReference",
     jsii_struct_bases=[],
-    name_mapping={"ipam_resource_discovery_id": "ipamResourceDiscoveryId"},
+    name_mapping={
+        "ipam_resource_discovery_arn": "ipamResourceDiscoveryArn",
+        "ipam_resource_discovery_id": "ipamResourceDiscoveryId",
+    },
 )
 class IPAMResourceDiscoveryReference:
-    def __init__(self, *, ipam_resource_discovery_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        ipam_resource_discovery_arn: builtins.str,
+        ipam_resource_discovery_id: builtins.str,
+    ) -> None:
         '''A reference to a IPAMResourceDiscovery resource.
 
+        :param ipam_resource_discovery_arn: The ARN of the IPAMResourceDiscovery resource.
         :param ipam_resource_discovery_id: The IpamResourceDiscoveryId of the IPAMResourceDiscovery resource.
 
         :exampleMetadata: fixture=_generated
@@ -3554,15 +3580,25 @@ class IPAMResourceDiscoveryReference:
             from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
             
             i_pAMResource_discovery_reference = {
+                "ipam_resource_discovery_arn": "ipamResourceDiscoveryArn",
                 "ipam_resource_discovery_id": "ipamResourceDiscoveryId"
             }
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c2ea9e66efdddfa8669cc157e45981e03ce182eab234c9a9ea016baa95bd4659)
+            check_type(argname="argument ipam_resource_discovery_arn", value=ipam_resource_discovery_arn, expected_type=type_hints["ipam_resource_discovery_arn"])
             check_type(argname="argument ipam_resource_discovery_id", value=ipam_resource_discovery_id, expected_type=type_hints["ipam_resource_discovery_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "ipam_resource_discovery_arn": ipam_resource_discovery_arn,
             "ipam_resource_discovery_id": ipam_resource_discovery_id,
         }
+
+    @builtins.property
+    def ipam_resource_discovery_arn(self) -> builtins.str:
+        '''The ARN of the IPAMResourceDiscovery resource.'''
+        result = self._values.get("ipam_resource_discovery_arn")
+        assert result is not None, "Required property 'ipam_resource_discovery_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def ipam_resource_discovery_id(self) -> builtins.str:
@@ -11754,6 +11790,7 @@ def _typecheckingstub__f4b18eb7f984a38a0d1b97de048402fd4bff3a9c791619a68aa7bba3b
 
 def _typecheckingstub__adc737e46a3649729021f88f43561d31e8fdcefc112469a6222d8a7681574227(
     *,
+    ipam_resource_discovery_association_arn: builtins.str,
     ipam_resource_discovery_association_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
@@ -11761,6 +11798,7 @@ def _typecheckingstub__adc737e46a3649729021f88f43561d31e8fdcefc112469a6222d8a768
 
 def _typecheckingstub__c2ea9e66efdddfa8669cc157e45981e03ce182eab234c9a9ea016baa95bd4659(
     *,
+    ipam_resource_discovery_arn: builtins.str,
     ipam_resource_discovery_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

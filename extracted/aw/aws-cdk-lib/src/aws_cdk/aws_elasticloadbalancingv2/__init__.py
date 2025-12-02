@@ -3980,7 +3980,7 @@ class CfnListener(
         :param listener_attributes: The listener attributes. Attributes that you do not modify retain their current values.
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
-        :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
+        :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC. You can’t specify the UDP, TCP_UDP, QUIC, or TCP_QUIC protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
         :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . [HTTPS listeners] Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
         '''
         if __debug__:
@@ -4011,6 +4011,18 @@ class CfnListener(
             type_hints = typing.get_type_hints(_typecheckingstub__3b32f9e25c97f61f00e538ef04d5fa27f0d651f1b719ada79f2c6a3f7f1a034a)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForListener", [resource]))
+
+    @jsii.member(jsii_name="isCfnListener")
+    @builtins.classmethod
+    def is_cfn_listener(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnListener.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__93e7a4de821491d74dc6d5dd92ce453becd3cfe080495a9a6126d4d3c8ad7ca7)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnListener", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4238,7 +4250,7 @@ class CfnListener(
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
             :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
-            :param jwt_validation_config: 
+            :param jwt_validation_config: [HTTPS listeners] Information for validating JWT access tokens in client requests. Specify only when ``Type`` is ``jwt-validation`` .
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
             :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -4427,7 +4439,10 @@ class CfnListener(
         def jwt_validation_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListener.JwtValidationConfigProperty"]]:
-            '''
+            '''[HTTPS listeners] Information for validating JWT access tokens in client requests.
+
+            Specify only when ``Type`` is ``jwt-validation`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-action.html#cfn-elasticloadbalancingv2-listener-action-jwtvalidationconfig
             '''
             result = self._values.get("jwt_validation_config")
@@ -5174,10 +5189,11 @@ class CfnListener(
             name: builtins.str,
             values: typing.Sequence[builtins.str],
         ) -> None:
-            '''
-            :param format: 
-            :param name: 
-            :param values: 
+            '''Information about an additional claim to validate.
+
+            :param format: The format of the claim value.
+            :param name: The name of the claim. You can't specify ``exp`` , ``iss`` , ``nbf`` , or ``iat`` because we validate them by default.
+            :param values: The claim value. The maximum size of the list is 10. Each value can be up to 256 characters in length. If the format is ``space-separated-values`` , the values can't include spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html
             :exampleMetadata: fixture=_generated
@@ -5207,7 +5223,8 @@ class CfnListener(
 
         @builtins.property
         def format(self) -> builtins.str:
-            '''
+            '''The format of the claim value.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-format
             '''
             result = self._values.get("format")
@@ -5216,7 +5233,10 @@ class CfnListener(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''
+            '''The name of the claim.
+
+            You can't specify ``exp`` , ``iss`` , ``nbf`` , or ``iat`` because we validate them by default.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-name
             '''
             result = self._values.get("name")
@@ -5225,7 +5245,10 @@ class CfnListener(
 
         @builtins.property
         def values(self) -> typing.List[builtins.str]:
-            '''
+            '''The claim value.
+
+            The maximum size of the list is 10. Each value can be up to 256 characters in length. If the format is ``space-separated-values`` , the values can't include spaces.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listener-jwtvalidationactionadditionalclaim-values
             '''
             result = self._values.get("values")
@@ -5904,6 +5927,18 @@ class CfnListenerCertificate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnListenerCertificate")
+    @builtins.classmethod
+    def is_cfn_listener_certificate(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnListenerCertificate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96751b83a1cd9cc2f72a65bbb99e496e3fb6932710e0e9adc5e615ea12fb17da)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnListenerCertificate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6156,7 +6191,7 @@ class CfnListenerProps:
         :param listener_attributes: The listener attributes. Attributes that you do not modify retain their current values.
         :param mutual_authentication: The mutual authentication configuration information.
         :param port: The port on which the load balancer is listening. You can't specify a port for a Gateway Load Balancer.
-        :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
+        :param protocol: The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC. You can’t specify the UDP, TCP_UDP, QUIC, or TCP_QUIC protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
         :param ssl_policy: [HTTPS and TLS listeners] The security policy that defines which protocols and ciphers are supported. For more information, see `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/describe-ssl-policies.html>`_ in the *Application Load Balancers Guide* and `Security policies <https://docs.aws.amazon.com/elasticloadbalancing/latest/network/describe-ssl-policies.html>`_ in the *Network Load Balancers Guide* . [HTTPS listeners] Updating the security policy can result in interruptions if the load balancer is handling a high volume of traffic. To decrease the possibility of an interruption if your load balancer is handling a high volume of traffic, create an additional load balancer or request an LCU reservation.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html
@@ -6389,7 +6424,7 @@ class CfnListenerProps:
     def protocol(self) -> typing.Optional[builtins.str]:
         '''The protocol for connections from clients to the load balancer.
 
-        For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, and TCP_UDP. You can’t specify the UDP or TCP_UDP protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
+        For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC. You can’t specify the UDP, TCP_UDP, QUIC, or TCP_QUIC protocol if dual-stack mode is enabled. You can't specify a protocol for a Gateway Load Balancer.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-listener.html#cfn-elasticloadbalancingv2-listener-protocol
         '''
@@ -6610,6 +6645,18 @@ class CfnListenerRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnListenerRule")
+    @builtins.classmethod
+    def is_cfn_listener_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnListenerRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9abf85968e2b444dc88316757550a2dc49a8b93388a5fa9a41bef6d564f0337e)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnListenerRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6787,7 +6834,7 @@ class CfnListenerRule(
             :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
             :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
             :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
-            :param jwt_validation_config: 
+            :param jwt_validation_config: [HTTPS listeners] Information for validating JWT access tokens in client requests. Specify only when ``Type`` is ``jwt-validation`` .
             :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
             :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
             :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -6976,7 +7023,10 @@ class CfnListenerRule(
         def jwt_validation_config(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnListenerRule.JwtValidationConfigProperty"]]:
-            '''
+            '''[HTTPS listeners] Information for validating JWT access tokens in client requests.
+
+            Specify only when ``Type`` is ``jwt-validation`` .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-action.html#cfn-elasticloadbalancingv2-listenerrule-action-jwtvalidationconfig
             '''
             result = self._values.get("jwt_validation_config")
@@ -7900,10 +7950,11 @@ class CfnListenerRule(
             name: builtins.str,
             values: typing.Sequence[builtins.str],
         ) -> None:
-            '''
-            :param format: 
-            :param name: 
-            :param values: 
+            '''Information about an additional claim to validate.
+
+            :param format: The format of the claim value.
+            :param name: The name of the claim. You can't specify ``exp`` , ``iss`` , ``nbf`` , or ``iat`` because we validate them by default.
+            :param values: The claim value. The maximum size of the list is 10. Each value can be up to 256 characters in length. If the format is ``space-separated-values`` , the values can't include spaces.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html
             :exampleMetadata: fixture=_generated
@@ -7933,7 +7984,8 @@ class CfnListenerRule(
 
         @builtins.property
         def format(self) -> builtins.str:
-            '''
+            '''The format of the claim value.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-format
             '''
             result = self._values.get("format")
@@ -7942,7 +7994,10 @@ class CfnListenerRule(
 
         @builtins.property
         def name(self) -> builtins.str:
-            '''
+            '''The name of the claim.
+
+            You can't specify ``exp`` , ``iss`` , ``nbf`` , or ``iat`` because we validate them by default.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-name
             '''
             result = self._values.get("name")
@@ -7951,7 +8006,10 @@ class CfnListenerRule(
 
         @builtins.property
         def values(self) -> typing.List[builtins.str]:
-            '''
+            '''The claim value.
+
+            The maximum size of the list is 10. Each value can be up to 256 characters in length. If the format is ``space-separated-values`` , the values can't include spaces.
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim.html#cfn-elasticloadbalancingv2-listenerrule-jwtvalidationactionadditionalclaim-values
             '''
             result = self._values.get("values")
@@ -9524,6 +9582,18 @@ class CfnLoadBalancer(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoadBalancer", [resource]))
 
+    @jsii.member(jsii_name="isCfnLoadBalancer")
+    @builtins.classmethod
+    def is_cfn_load_balancer(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLoadBalancer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fc01363eba65a15339b7d7a0904f751522a7b6ffdd25065cc93d9b96b0db9d9d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoadBalancer", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -9863,7 +9933,7 @@ class CfnLoadBalancer(
         ) -> None:
             '''Specifies an attribute for an Application Load Balancer, a Network Load Balancer, or a Gateway Load Balancer.
 
-            :param key: The name of the attribute. The following attributes are supported by all load balancers: - ``deletion_protection.enabled`` - Indicates whether deletion protection is enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``load_balancing.cross_zone.enabled`` - Indicates whether cross-zone load balancing is enabled. The possible values are ``true`` and ``false`` . The default for Network Load Balancers and Gateway Load Balancers is ``false`` . The default for Application Load Balancers is ``true`` , and can't be changed. The following attributes are supported by both Application Load Balancers and Network Load Balancers: - ``access_logs.s3.enabled`` - Indicates whether access logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``access_logs.s3.bucket`` - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket. - ``access_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the access logs. - ``ipv6.deny_all_igw_traffic`` - Blocks internet gateway (IGW) access to the load balancer. It is set to ``false`` for internet-facing load balancers and ``true`` for internal load balancers, preventing unintended access to your internal load balancer through an internet gateway. - ``zonal_shift.config.enabled`` - Indicates whether zonal shift is enabled. The possible values are ``true`` and ``false`` . The default is ``false`` . The following attributes are supported by only Application Load Balancers: - ``idle_timeout.timeout_seconds`` - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds. - ``client_keep_alive.seconds`` - The client keep alive value, in seconds. The valid range is 60-604800 seconds. The default is 3600 seconds. - ``connection_logs.s3.enabled`` - Indicates whether connection logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``connection_logs.s3.bucket`` - The name of the S3 bucket for the connection logs. This attribute is required if connection logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket. - ``connection_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the connection logs. - ``routing.http.desync_mitigation_mode`` - Determines how the load balancer handles requests that might pose a security risk to your application. The possible values are ``monitor`` , ``defensive`` , and ``strictest`` . The default is ``defensive`` . - ``routing.http.drop_invalid_header_fields.enabled`` - Indicates whether HTTP headers with invalid header fields are removed by the load balancer ( ``true`` ) or routed to targets ( ``false`` ). The default is ``false`` . - ``routing.http.preserve_host_header.enabled`` - Indicates whether the Application Load Balancer should preserve the ``Host`` header in the HTTP request and send it to the target without any change. The possible values are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.x_amzn_tls_version_and_cipher_suite.enabled`` - Indicates whether the two headers ( ``x-amzn-tls-version`` and ``x-amzn-tls-cipher-suite`` ), which contain information about the negotiated TLS version and cipher suite, are added to the client request before sending it to the target. The ``x-amzn-tls-version`` header has information about the TLS protocol version negotiated with the client, and the ``x-amzn-tls-cipher-suite`` header has information about the cipher suite negotiated with the client. Both headers are in OpenSSL format. The possible values for the attribute are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.xff_client_port.enabled`` - Indicates whether the ``X-Forwarded-For`` header should preserve the source port that the client used to connect to the load balancer. The possible values are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.xff_header_processing.mode`` - Enables you to modify, preserve, or remove the ``X-Forwarded-For`` header in the HTTP request before the Application Load Balancer sends the request to the target. The possible values are ``append`` , ``preserve`` , and ``remove`` . The default is ``append`` . - If the value is ``append`` , the Application Load Balancer adds the client IP address (of the last hop) to the ``X-Forwarded-For`` header in the HTTP request before it sends it to targets. - If the value is ``preserve`` the Application Load Balancer preserves the ``X-Forwarded-For`` header in the HTTP request, and sends it to targets without any change. - If the value is ``remove`` , the Application Load Balancer removes the ``X-Forwarded-For`` header in the HTTP request before it sends it to targets. - ``routing.http2.enabled`` - Indicates whether clients can connect to the load balancer using HTTP/2. If ``true`` , clients can connect using HTTP/2 or HTTP/1.1. However, all client requests are subject to the stricter HTTP/2 header validation rules. For example, message header names must contain only alphanumeric characters and hyphens. If ``false`` , clients must connect using HTTP/1.1. The default is ``true`` . - ``waf.fail_open.enabled`` - Indicates whether to allow a WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. The possible values are ``true`` and ``false`` . The default is ``false`` . The following attributes are supported by only Network Load Balancers: - ``dns_record.client_routing_policy`` - Indicates how traffic is distributed among the load balancer Availability Zones. The possible values are ``availability_zone_affinity`` with 100 percent zonal affinity, ``partial_availability_zone_affinity`` with 85 percent zonal affinity, and ``any_availability_zone`` with 0 percent zonal affinity. - ``secondary_ips.auto_assigned.per_subnet`` - The number of secondary IP addresses to configure for your load balancer nodes. Use to address port allocation errors if you can't add targets. The valid range is 0 to 7. The default is 0. After you set this value, you can't decrease it.
+            :param key: The name of the attribute. The following attributes are supported by all load balancers: - ``deletion_protection.enabled`` - Indicates whether deletion protection is enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``load_balancing.cross_zone.enabled`` - Indicates whether cross-zone load balancing is enabled. The possible values are ``true`` and ``false`` . The default for Network Load Balancers and Gateway Load Balancers is ``false`` . The default for Application Load Balancers is ``true`` , and can't be changed. The following attributes are supported by both Application Load Balancers and Network Load Balancers: - ``access_logs.s3.enabled`` - Indicates whether access logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``access_logs.s3.bucket`` - The name of the S3 bucket for the access logs. This attribute is required if access logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket. - ``access_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the access logs. - ``ipv6.deny_all_igw_traffic`` - Blocks internet gateway (IGW) access to the load balancer. It is set to ``false`` for internet-facing load balancers and ``true`` for internal load balancers, preventing unintended access to your internal load balancer through an internet gateway. - ``zonal_shift.config.enabled`` - Indicates whether zonal shift is enabled. The possible values are ``true`` and ``false`` . The default is ``false`` . The following attributes are supported by only Application Load Balancers: - ``idle_timeout.timeout_seconds`` - The idle timeout value, in seconds. The valid range is 1-4000 seconds. The default is 60 seconds. - ``client_keep_alive.seconds`` - The client keep alive value, in seconds. The valid range is 60-604800 seconds. The default is 3600 seconds. - ``connection_logs.s3.enabled`` - Indicates whether connection logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``connection_logs.s3.bucket`` - The name of the S3 bucket for the connection logs. This attribute is required if connection logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket. - ``connection_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the connection logs. - ``health_check_logs.s3.enabled`` - Indicates whether health check logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` . - ``health_check_logs.s3.bucket`` - The name of the S3 bucket for the health check logs. This attribute is required if health check logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket. - ``health_check_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the health check logs. - ``routing.http.desync_mitigation_mode`` - Determines how the load balancer handles requests that might pose a security risk to your application. The possible values are ``monitor`` , ``defensive`` , and ``strictest`` . The default is ``defensive`` . - ``routing.http.drop_invalid_header_fields.enabled`` - Indicates whether HTTP headers with invalid header fields are removed by the load balancer ( ``true`` ) or routed to targets ( ``false`` ). The default is ``false`` . - ``routing.http.preserve_host_header.enabled`` - Indicates whether the Application Load Balancer should preserve the ``Host`` header in the HTTP request and send it to the target without any change. The possible values are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.x_amzn_tls_version_and_cipher_suite.enabled`` - Indicates whether the two headers ( ``x-amzn-tls-version`` and ``x-amzn-tls-cipher-suite`` ), which contain information about the negotiated TLS version and cipher suite, are added to the client request before sending it to the target. The ``x-amzn-tls-version`` header has information about the TLS protocol version negotiated with the client, and the ``x-amzn-tls-cipher-suite`` header has information about the cipher suite negotiated with the client. Both headers are in OpenSSL format. The possible values for the attribute are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.xff_client_port.enabled`` - Indicates whether the ``X-Forwarded-For`` header should preserve the source port that the client used to connect to the load balancer. The possible values are ``true`` and ``false`` . The default is ``false`` . - ``routing.http.xff_header_processing.mode`` - Enables you to modify, preserve, or remove the ``X-Forwarded-For`` header in the HTTP request before the Application Load Balancer sends the request to the target. The possible values are ``append`` , ``preserve`` , and ``remove`` . The default is ``append`` . - If the value is ``append`` , the Application Load Balancer adds the client IP address (of the last hop) to the ``X-Forwarded-For`` header in the HTTP request before it sends it to targets. - If the value is ``preserve`` the Application Load Balancer preserves the ``X-Forwarded-For`` header in the HTTP request, and sends it to targets without any change. - If the value is ``remove`` , the Application Load Balancer removes the ``X-Forwarded-For`` header in the HTTP request before it sends it to targets. - ``routing.http2.enabled`` - Indicates whether clients can connect to the load balancer using HTTP/2. If ``true`` , clients can connect using HTTP/2 or HTTP/1.1. However, all client requests are subject to the stricter HTTP/2 header validation rules. For example, message header names must contain only alphanumeric characters and hyphens. If ``false`` , clients must connect using HTTP/1.1. The default is ``true`` . - ``waf.fail_open.enabled`` - Indicates whether to allow a WAF-enabled load balancer to route requests to targets if it is unable to forward the request to AWS WAF. The possible values are ``true`` and ``false`` . The default is ``false`` . The following attributes are supported by only Network Load Balancers: - ``dns_record.client_routing_policy`` - Indicates how traffic is distributed among the load balancer Availability Zones. The possible values are ``availability_zone_affinity`` with 100 percent zonal affinity, ``partial_availability_zone_affinity`` with 85 percent zonal affinity, and ``any_availability_zone`` with 0 percent zonal affinity. - ``secondary_ips.auto_assigned.per_subnet`` - The number of secondary IP addresses to configure for your load balancer nodes. Use to address port allocation errors if you can't add targets. The valid range is 0 to 7. The default is 0. After you set this value, you can't decrease it.
             :param value: The value of the attribute.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-loadbalancer-loadbalancerattribute.html
@@ -9914,6 +9984,9 @@ class CfnLoadBalancer(
             - ``connection_logs.s3.enabled`` - Indicates whether connection logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` .
             - ``connection_logs.s3.bucket`` - The name of the S3 bucket for the connection logs. This attribute is required if connection logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.
             - ``connection_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the connection logs.
+            - ``health_check_logs.s3.enabled`` - Indicates whether health check logs are enabled. The value is ``true`` or ``false`` . The default is ``false`` .
+            - ``health_check_logs.s3.bucket`` - The name of the S3 bucket for the health check logs. This attribute is required if health check logs are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permissions to write to the bucket.
+            - ``health_check_logs.s3.prefix`` - The prefix for the location in the S3 bucket for the health check logs.
             - ``routing.http.desync_mitigation_mode`` - Determines how the load balancer handles requests that might pose a security risk to your application. The possible values are ``monitor`` , ``defensive`` , and ``strictest`` . The default is ``defensive`` .
             - ``routing.http.drop_invalid_header_fields.enabled`` - Indicates whether HTTP headers with invalid header fields are removed by the load balancer ( ``true`` ) or routed to targets ( ``false`` ). The default is ``false`` .
             - ``routing.http.preserve_host_header.enabled`` - Indicates whether the Application Load Balancer should preserve the ``Host`` header in the HTTP request and send it to the target without any change. The possible values are ``true`` and ``false`` . The default is ``false`` .
@@ -10576,24 +10649,24 @@ class CfnTargetGroup(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param health_check_enabled: Indicates whether health checks are enabled. If the target type is ``lambda`` , health checks are disabled by default but can be enabled. If the target type is ``instance`` , ``ip`` , or ``alb`` , health checks are always enabled and can't be disabled.
-        :param health_check_interval_seconds: The approximate amount of time, in seconds, between health checks of an individual target. The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
+        :param health_check_interval_seconds: The approximate amount of time, in seconds, between health checks of an individual target. The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
         :param health_check_path: [HTTP/HTTPS health checks] The destination for health checks on the targets. [HTTP1 or HTTP2 protocol version] The ping path. The default is /. [GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is / AWS .ALB/healthcheck.
-        :param health_check_port: The port the load balancer uses when performing health checks on targets. If the protocol is HTTP, HTTPS, TCP, TLS, UDP, or TCP_UDP, the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
-        :param health_check_protocol: The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.
+        :param health_check_port: The port the load balancer uses when performing health checks on targets. If the protocol is HTTP, HTTPS, TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
+        :param health_check_protocol: The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC protocols are not supported for health checks.
         :param health_check_timeout_seconds: The amount of time, in seconds, during which no response from a target means a failed health check. The range is 2–120 seconds. For target groups with a protocol of HTTP, the default is 6 seconds. For target groups with a protocol of TCP, TLS or HTTPS, the default is 10 seconds. For target groups with a protocol of GENEVE, the default is 5 seconds. If the target type is ``lambda`` , the default is 30 seconds.
         :param healthy_threshold_count: The number of consecutive health check successes required before considering a target healthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 5. For target groups with a protocol of GENEVE, the default is 5. If the target type is ``lambda`` , the default is 5.
         :param ip_address_type: The IP address type. The default value is ``ipv4`` .
-        :param matcher: [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target. For target groups with a protocol of TCP, TCP_UDP, UDP or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
+        :param matcher: [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target. For target groups with a protocol of TCP, TCP_UDP, UDP, QUIC, TCP_QUIC, or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
         :param name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.
         :param port: The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.
-        :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
+        :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. A TCP_QUIC listener must be associated with a TCP_QUIC target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
-        :param target_control_port: The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
+        :param target_control_port: The port on which the target control agent and application load balancer exchange management traffic for the target optimizer feature.
         :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
-        :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
+        :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
         :param vpc_id: The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply. Otherwise, this parameter is required.
         '''
         if __debug__:
@@ -10635,6 +10708,18 @@ class CfnTargetGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__07fba500111e022c7be67da6de404b437c3736e8cd6eca38d13fef52aa95b59c)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTargetGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnTargetGroup")
+    @builtins.classmethod
+    def is_cfn_target_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTargetGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__144addb332a950df27b1528339408e5ec92b0b65b2d860f32a54aaf2cb205a81)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTargetGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -10921,7 +11006,7 @@ class CfnTargetGroup(
     @builtins.property
     @jsii.member(jsii_name="targetControlPort")
     def target_control_port(self) -> typing.Optional[jsii.Number]:
-        '''The port that the target control agent uses to communicate the available capacity of targets to the load balancer.'''
+        '''The port on which the target control agent and application load balancer exchange management traffic for the target optimizer feature.'''
         return typing.cast(typing.Optional[jsii.Number], jsii.get(self, "targetControlPort"))
 
     @target_control_port.setter
@@ -11110,7 +11195,7 @@ class CfnTargetGroup(
             :param id: The ID of the target. If the target type of the target group is ``instance`` , specify an instance ID. If the target type is ``ip`` , specify an IP address. If the target type is ``lambda`` , specify the ARN of the Lambda function. If the target type is ``alb`` , specify the ARN of the Application Load Balancer target.
             :param availability_zone: An Availability Zone or ``all`` . This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer. For Application Load Balancer target groups, the specified Availability Zone value is only applicable when cross-zone load balancing is off. Otherwise the parameter is ignored and treated as ``all`` . This parameter is not supported if the target type of the target group is ``instance`` or ``alb`` . If the target type is ``ip`` and the IP address is in a subnet of the VPC for the target group, the Availability Zone is automatically detected and this parameter is optional. If the IP address is outside the VPC, this parameter is required. For Application Load Balancer target groups with cross-zone load balancing off, if the target type is ``ip`` and the IP address is outside of the VPC for the target group, this should be an Availability Zone inside the VPC for the target group. If the target type is ``lambda`` , this parameter is optional and the only supported value is ``all`` .
             :param port: The port on which the target is listening. If the target group protocol is GENEVE, the supported port is 6081. If the target type is ``alb`` , the targeted Application Load Balancer must have at least one listener whose port matches the target group port. This parameter is not used if the target is a Lambda function.
-            :param quic_server_id: The Server ID used by targets when using QUIC or TCP_QUIC protocols.
+            :param quic_server_id: The server ID for the targets. This value is required if the protocol is ``QUIC`` or ``TCP_QUIC`` and can't be used with other protocols. The ID consists of the ``0x`` prefix followed by 16 hexadecimal characters. Any letters must be lowercase. The value must be unique at the listener level. You can't modify the server ID for a registered target. You must deregister the target and then provide a new server ID when you register the target again.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-targetgroup-targetdescription.html
             :exampleMetadata: fixture=_generated
@@ -11192,7 +11277,11 @@ class CfnTargetGroup(
 
         @builtins.property
         def quic_server_id(self) -> typing.Optional[builtins.str]:
-            '''The Server ID used by targets when using QUIC or TCP_QUIC protocols.
+            '''The server ID for the targets.
+
+            This value is required if the protocol is ``QUIC`` or ``TCP_QUIC`` and can't be used with other protocols.
+
+            The ID consists of the ``0x`` prefix followed by 16 hexadecimal characters. Any letters must be lowercase. The value must be unique at the listener level. You can't modify the server ID for a registered target. You must deregister the target and then provide a new server ID when you register the target again.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-elasticloadbalancingv2-targetgroup-targetdescription.html#cfn-elasticloadbalancingv2-targetgroup-targetdescription-quicserverid
             '''
@@ -11380,24 +11469,24 @@ class CfnTargetGroupProps:
         '''Properties for defining a ``CfnTargetGroup``.
 
         :param health_check_enabled: Indicates whether health checks are enabled. If the target type is ``lambda`` , health checks are disabled by default but can be enabled. If the target type is ``instance`` , ``ip`` , or ``alb`` , health checks are always enabled and can't be disabled.
-        :param health_check_interval_seconds: The approximate amount of time, in seconds, between health checks of an individual target. The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
+        :param health_check_interval_seconds: The approximate amount of time, in seconds, between health checks of an individual target. The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
         :param health_check_path: [HTTP/HTTPS health checks] The destination for health checks on the targets. [HTTP1 or HTTP2 protocol version] The ping path. The default is /. [GRPC protocol version] The path of a custom health check method with the format /package.service/method. The default is / AWS .ALB/healthcheck.
-        :param health_check_port: The port the load balancer uses when performing health checks on targets. If the protocol is HTTP, HTTPS, TCP, TLS, UDP, or TCP_UDP, the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
-        :param health_check_protocol: The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.
+        :param health_check_port: The port the load balancer uses when performing health checks on targets. If the protocol is HTTP, HTTPS, TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
+        :param health_check_protocol: The protocol the load balancer uses when performing health checks on targets. For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC protocols are not supported for health checks.
         :param health_check_timeout_seconds: The amount of time, in seconds, during which no response from a target means a failed health check. The range is 2–120 seconds. For target groups with a protocol of HTTP, the default is 6 seconds. For target groups with a protocol of TCP, TLS or HTTPS, the default is 10 seconds. For target groups with a protocol of GENEVE, the default is 5 seconds. If the target type is ``lambda`` , the default is 30 seconds.
         :param healthy_threshold_count: The number of consecutive health check successes required before considering a target healthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 5. For target groups with a protocol of GENEVE, the default is 5. If the target type is ``lambda`` , the default is 5.
         :param ip_address_type: The IP address type. The default value is ``ipv4`` .
-        :param matcher: [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target. For target groups with a protocol of TCP, TCP_UDP, UDP or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
+        :param matcher: [HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target. For target groups with a protocol of TCP, TCP_UDP, UDP, QUIC, TCP_QUIC, or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
         :param name: The name of the target group. This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.
         :param port: The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target. If the target is a Lambda function, this parameter does not apply. If the protocol is GENEVE, the supported port is 6081.
-        :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
+        :param protocol: The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. A TCP_QUIC listener must be associated with a TCP_QUIC target group. If the target is a Lambda function, this parameter does not apply.
         :param protocol_version: [HTTP/HTTPS protocol] The protocol version. The possible values are ``GRPC`` , ``HTTP1`` , and ``HTTP2`` .
         :param tags: The tags.
-        :param target_control_port: The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
+        :param target_control_port: The port on which the target control agent and application load balancer exchange management traffic for the target optimizer feature.
         :param target_group_attributes: The target group attributes. Attributes that you do not modify retain their current values.
         :param targets: The targets.
         :param target_type: The type of target that you must specify when registering targets with this target group. You can't specify targets for a target group using more than one target type. - ``instance`` - Register targets by instance ID. This is the default value. - ``ip`` - Register targets by IP address. You can specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses. - ``lambda`` - Register a single Lambda function as a target. - ``alb`` - Register a single Application Load Balancer as a target.
-        :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
+        :param unhealthy_threshold_count: The number of consecutive health check failures required before considering a target unhealthy. The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
         :param vpc_id: The identifier of the virtual private cloud (VPC). If the target is a Lambda function, this parameter does not apply. Otherwise, this parameter is required.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html
@@ -11529,7 +11618,7 @@ class CfnTargetGroupProps:
     def health_check_interval_seconds(self) -> typing.Optional[jsii.Number]:
         '''The approximate amount of time, in seconds, between health checks of an individual target.
 
-        The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
+        The range is 5-300. If the target group protocol is TCP, TLS, UDP, TCP_UDP, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 30 seconds. If the target group protocol is GENEVE, the default is 10 seconds. If the target type is ``lambda`` , the default is 35 seconds.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckintervalseconds
         '''
@@ -11553,7 +11642,7 @@ class CfnTargetGroupProps:
     def health_check_port(self) -> typing.Optional[builtins.str]:
         '''The port the load balancer uses when performing health checks on targets.
 
-        If the protocol is HTTP, HTTPS, TCP, TLS, UDP, or TCP_UDP, the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
+        If the protocol is HTTP, HTTPS, TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC the default is ``traffic-port`` , which is the port on which each target receives traffic from the load balancer. If the protocol is GENEVE, the default is port 80.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckport
         '''
@@ -11564,7 +11653,7 @@ class CfnTargetGroupProps:
     def health_check_protocol(self) -> typing.Optional[builtins.str]:
         '''The protocol the load balancer uses when performing health checks on targets.
 
-        For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, and TCP_UDP protocols are not supported for health checks.
+        For Application Load Balancers, the default is HTTP. For Network Load Balancers and Gateway Load Balancers, the default is TCP. The TCP protocol is not supported for health checks if the protocol of the target group is HTTP or HTTPS. The GENEVE, TLS, UDP, TCP_UDP, QUIC, and TCP_QUIC protocols are not supported for health checks.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-healthcheckprotocol
         '''
@@ -11610,7 +11699,7 @@ class CfnTargetGroupProps:
     ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTargetGroup.MatcherProperty]]:
         '''[HTTP/HTTPS health checks] The HTTP or gRPC codes to use when checking for a successful response from a target.
 
-        For target groups with a protocol of TCP, TCP_UDP, UDP or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
+        For target groups with a protocol of TCP, TCP_UDP, UDP, QUIC, TCP_QUIC, or TLS the range is 200-599. For target groups with a protocol of HTTP or HTTPS, the range is 200-499. For target groups with a protocol of GENEVE, the range is 200-399.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-matcher
         '''
@@ -11643,7 +11732,7 @@ class CfnTargetGroupProps:
     def protocol(self) -> typing.Optional[builtins.str]:
         '''The protocol to use for routing traffic to the targets.
 
-        For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, or TCP_UDP. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. If the target is a Lambda function, this parameter does not apply.
+        For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocols are TCP, TLS, UDP, TCP_UDP, QUIC, or TCP_QUIC. For Gateway Load Balancers, the supported protocol is GENEVE. A TCP_UDP listener must be associated with a TCP_UDP target group. A TCP_QUIC listener must be associated with a TCP_QUIC target group. If the target is a Lambda function, this parameter does not apply.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-protocol
         '''
@@ -11672,7 +11761,7 @@ class CfnTargetGroupProps:
 
     @builtins.property
     def target_control_port(self) -> typing.Optional[jsii.Number]:
-        '''The port that the target control agent uses to communicate the available capacity of targets to the load balancer.
+        '''The port on which the target control agent and application load balancer exchange management traffic for the target optimizer feature.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-targetcontrolport
         '''
@@ -11723,7 +11812,7 @@ class CfnTargetGroupProps:
     def unhealthy_threshold_count(self) -> typing.Optional[jsii.Number]:
         '''The number of consecutive health check failures required before considering a target unhealthy.
 
-        The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
+        The range is 2-10. If the target group protocol is TCP, TCP_UDP, UDP, TLS, QUIC, TCP_QUIC, HTTP or HTTPS, the default is 2. For target groups with a protocol of GENEVE, the default is 2. If the target type is ``lambda`` , the default is 5.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-elasticloadbalancingv2-targetgroup.html#cfn-elasticloadbalancingv2-targetgroup-unhealthythresholdcount
         '''
@@ -11830,6 +11919,18 @@ class CfnTrustStore(
             type_hints = typing.get_type_hints(_typecheckingstub__68e5e87be3d08234a1972242a96946c9d8968b318d01a17a2e4d689b09d5c693)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTrustStore", [resource]))
+
+    @jsii.member(jsii_name="isCfnTrustStore")
+    @builtins.classmethod
+    def is_cfn_trust_store(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrustStore.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7810897092510f20249e88bd16dc048f1cafb8892acb2f2c9e44891621c445f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustStore", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12164,6 +12265,18 @@ class CfnTrustStoreRevocation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnTrustStoreRevocation")
+    @builtins.classmethod
+    def is_cfn_trust_store_revocation(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTrustStoreRevocation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2beebf4c7c80ce08032d3bc60fd271257f44ef22af0b496b04b426d0486f30d9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTrustStoreRevocation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18001,7 +18114,7 @@ class ListenerAction(
         :param authenticate_oidc_config: [HTTPS listeners] Information about an identity provider that is compliant with OpenID Connect (OIDC). Specify only when ``Type`` is ``authenticate-oidc`` .
         :param fixed_response_config: [Application Load Balancer] Information for creating an action that returns a custom HTTP response. Specify only when ``Type`` is ``fixed-response`` .
         :param forward_config: Information for creating an action that distributes requests among multiple target groups. Specify only when ``Type`` is ``forward`` . If you specify both ``ForwardConfig`` and ``TargetGroupArn`` , you can specify only one target group using ``ForwardConfig`` and it must be the same target group specified in ``TargetGroupArn`` .
-        :param jwt_validation_config: 
+        :param jwt_validation_config: [HTTPS listeners] Information for validating JWT access tokens in client requests. Specify only when ``Type`` is ``jwt-validation`` .
         :param order: The order for the action. This value is required for rules with multiple actions. The action with the lowest value for order is performed first.
         :param redirect_config: [Application Load Balancer] Information for creating a redirect action. Specify only when ``Type`` is ``redirect`` .
         :param target_group_arn: The Amazon Resource Name (ARN) of the target group. Specify only when ``Type`` is ``forward`` and you want to route to a single target group. To route to multiple target groups, you must use ``ForwardConfig`` instead.
@@ -28787,6 +28900,12 @@ def _typecheckingstub__3b32f9e25c97f61f00e538ef04d5fa27f0d651f1b719ada79f2c6a3f7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__93e7a4de821491d74dc6d5dd92ce453becd3cfe080495a9a6126d4d3c8ad7ca7(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__efb1ba6a44ddc5750b7c27766f69fb76bff6c198064023e2c38b788014a18950(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -28998,6 +29117,12 @@ def _typecheckingstub__6e89f9e0136e3c488e5128ccef62a0eafcc0c1604b19981f275b49a69
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__96751b83a1cd9cc2f72a65bbb99e496e3fb6932710e0e9adc5e615ea12fb17da(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f866eef42e6d20c2d7df98041853138047231413669ee62d9b81c8356e472bb7(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -29061,6 +29186,12 @@ def _typecheckingstub__ae1e13bd1e6ee2145702f187cf74339faebe22401d39b3e4507fd776f
     priority: jsii.Number,
     listener_arn: typing.Optional[typing.Union[builtins.str, _IListenerRef_a8ced6a8]] = None,
     transforms: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnListenerRule.TransformProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9abf85968e2b444dc88316757550a2dc49a8b93388a5fa9a41bef6d564f0337e(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29349,6 +29480,12 @@ def _typecheckingstub__38532b8cac7bb336657c64de1390b7fd8b8427986014d4c73da1458d4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fc01363eba65a15339b7d7a0904f751522a7b6ffdd25065cc93d9b96b0db9d9d(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3f4fc1db72c9bbcfbaddb7ea6d8213545b1ac543356f1721fbbcb27941d7b19d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -29521,6 +29658,12 @@ def _typecheckingstub__7aee86566cb3e5ba745d0d4e2346762fa85e2c43821ab0996eaa139c5
 
 def _typecheckingstub__07fba500111e022c7be67da6de404b437c3736e8cd6eca38d13fef52aa95b59c(
     resource: _ITargetGroupRef_9ed19d5e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__144addb332a950df27b1528339408e5ec92b0b65b2d860f32a54aaf2cb205a81(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -29728,6 +29871,12 @@ def _typecheckingstub__68e5e87be3d08234a1972242a96946c9d8968b318d01a17a2e4d689b0
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__d7810897092510f20249e88bd16dc048f1cafb8892acb2f2c9e44891621c445f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2c83d4a209c996a20f7896e23f28ebc0f58b9744048683b4a39418b67e5f8caa(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -29787,6 +29936,12 @@ def _typecheckingstub__6ee91151ae6c85e85f0ed9fa1e43ed83de726251e4cf02c510eeb1432
     *,
     revocation_contents: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTrustStoreRevocation.RevocationContentProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
     trust_store_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2beebf4c7c80ce08032d3bc60fd271257f44ef22af0b496b04b426d0486f30d9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

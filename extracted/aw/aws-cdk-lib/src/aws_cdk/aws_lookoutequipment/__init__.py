@@ -178,6 +178,18 @@ class CfnInferenceScheduler(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInferenceScheduler", [resource]))
 
+    @jsii.member(jsii_name="isCfnInferenceScheduler")
+    @builtins.classmethod
+    def is_cfn_inference_scheduler(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInferenceScheduler.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9802ab233a458aec61a0b741e480308e960cfffcb7f2618a7000af54b802551a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInferenceScheduler", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -981,6 +993,12 @@ def _typecheckingstub__28ccba613c6dd6bc7182eb74423ae99fe0414b38931a2a99663f06223
 
 def _typecheckingstub__d594f91a9fa8232ca01fb5bcb3f8410a2ccc44f0e52c1d53510222a8d27c1b6c(
     resource: _IInferenceSchedulerRef_ff214e3d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9802ab233a458aec61a0b741e480308e960cfffcb7f2618a7000af54b802551a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

@@ -187,6 +187,18 @@ class CfnSuiteDefinition(
             check_type(argname="argument suite_definition_id", value=suite_definition_id, expected_type=type_hints["suite_definition_id"])
         return typing.cast(_ISuiteDefinitionRef_45c0f8ee, jsii.sinvoke(cls, "fromSuiteDefinitionId", [scope, id, suite_definition_id]))
 
+    @jsii.member(jsii_name="isCfnSuiteDefinition")
+    @builtins.classmethod
+    def is_cfn_suite_definition(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnSuiteDefinition.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e540b472fed06960e661ae84c8ecb11e27565952bd169e8dd0fe3ceca1734604)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnSuiteDefinition", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -646,6 +658,12 @@ def _typecheckingstub__a8ff18a5c90695b982075ba4cfa4b364bf1607a9f227a0851fadfc97a
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     suite_definition_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e540b472fed06960e661ae84c8ecb11e27565952bd169e8dd0fe3ceca1734604(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

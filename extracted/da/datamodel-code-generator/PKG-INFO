@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.36.0
+Version: 0.37.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -303,17 +303,11 @@ class Apis(BaseModel):
 <table>
   <tr>
     <td valign="top" align="center">
-    <a href="https://github.com/JetBrainsOfficial">
-      <img src="https://avatars.githubusercontent.com/u/60931315?s=100&v=4" alt="JetBrains Logo" style="width: 100px;">
-      <p>JetBrains</p>
-    </a>
+      <a href="https://github.com/astral-sh">
+        <img src="https://avatars.githubusercontent.com/u/115962839?s=200&v=4" alt="Astral Logo" style="width: 100px;">
+        <p>Astral</p>
+      </a>
     </td>
-  <td valign="top" align="center">
-    <a href="https://github.com/astral-sh">
-      <img src="https://avatars.githubusercontent.com/u/115962839?s=200&v=4" alt="Astral Logo" style="width: 100px;">
-      <p>Astral</p>
-    </a>
-  </td>
   </tr>
 </table>
 
@@ -431,6 +425,11 @@ Typing customization:
                         Set enum members as default values for enum field
   --strict-types {str,bytes,int,float,bool} [{str,bytes,int,float,bool} ...]
                         Use strict types
+  --type-mappings TYPE_MAPPINGS [TYPE_MAPPINGS ...]
+                        Override default type mappings. Format: "type+format=target" (e.g.,
+                        "string+binary=string" to map binary format to string type) or
+                        "format=target" (e.g., "binary=string"). Can be specified multiple
+                        times.
   --use-annotated       Use typing.Annotated for Field(). Also, `--field-constraints` option
                         will be enabled.
   --use-generic-container-types
@@ -483,6 +482,8 @@ Field customization:
   --strip-default-none  Strip default None on fields
   --union-mode {smart,left_to_right}
                         Union mode for only pydantic v2 field
+  --use-attribute-docstrings
+                        Set use_attribute_docstrings=True in Pydantic v2 ConfigDict
   --use-default         Use default value even if a field is required
   --use-default-kwarg   Use `default=` instead of a positional argument for Fields that have
                         default values.
@@ -502,6 +503,10 @@ Model customization:
   --collapse-root-models
                         Models generated with a root-type field will be merged into the
                         models using that root-type model
+  --dataclass-arguments DATACLASS_ARGUMENTS
+                        Custom dataclass arguments as a JSON dictionary, e.g. ''{"frozen":
+                        true, "kw_only": true}''. Overrides --frozen-dataclasses and similar
+                        flags.
   --disable-appending-item-suffix
                         Disable appending `Item` suffix to model name in an array
   --disable-timestamp   Disable timestamp on file headers
@@ -524,6 +529,14 @@ Model customization:
                         Set name of models defined inline from the parent model
   --reuse-model         Reuse models on the field when a module has the model with the same
                         content
+  --reuse-scope {module,tree}
+                        Scope for model reuse deduplication: module (per-file, default) or
+                        tree (cross-file with shared module). Only effective when --reuse-
+                        model is set.
+  --shared-module-name SHARED_MODULE_NAME
+                        Name of the shared module for --reuse-scope=tree (default:
+                        "shared"). Use this option if your schema has a file named "shared".
+  --skip-root-model     Skip generating the model for the root schema element
   --target-python-version {3.9,3.10,3.11,3.12,3.13,3.14}
                         target python version
   --treat-dot-as-module
@@ -564,7 +577,7 @@ OpenAPI-only options:
   --include-path-parameters
                         Include path parameters in generated parameter models in addition to
                         query parameters (Only OpenAPI)
-  --openapi-scopes {schemas,paths,tags,parameters} [{schemas,paths,tags,parameters} ...]
+  --openapi-scopes {schemas,paths,tags,parameters,webhooks} [{schemas,paths,tags,parameters,webhooks} ...]
                         Scopes of OpenAPI model generation (default: schemas)
   --strict-nullable     Treat default field as a non-nullable field (Only OpenAPI)
   --use-operation-id-as-name
@@ -576,6 +589,9 @@ General options:
   --debug               show debug message (require "debug". `$ pip install ''datamodel-code-
                         generator[debug]''`)
   --disable-warnings    disable warnings
+  --generate-pyproject-config
+                        Generate pyproject.toml configuration from the provided CLI
+                        arguments and exit
   --no-color            disable colorized output
   --version             show version
   -h, --help            show this help message and exit

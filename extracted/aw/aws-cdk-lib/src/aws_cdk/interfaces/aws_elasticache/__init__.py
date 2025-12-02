@@ -787,12 +787,21 @@ class SecurityGroupReference:
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_elasticache.ServerlessCacheReference",
     jsii_struct_bases=[],
-    name_mapping={"serverless_cache_name": "serverlessCacheName"},
+    name_mapping={
+        "serverless_cache_arn": "serverlessCacheArn",
+        "serverless_cache_name": "serverlessCacheName",
+    },
 )
 class ServerlessCacheReference:
-    def __init__(self, *, serverless_cache_name: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        serverless_cache_arn: builtins.str,
+        serverless_cache_name: builtins.str,
+    ) -> None:
         '''A reference to a ServerlessCache resource.
 
+        :param serverless_cache_arn: The ARN of the ServerlessCache resource.
         :param serverless_cache_name: The ServerlessCacheName of the ServerlessCache resource.
 
         :exampleMetadata: fixture=_generated
@@ -804,15 +813,25 @@ class ServerlessCacheReference:
             from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
             
             serverless_cache_reference = interfaces_aws_elasticache.ServerlessCacheReference(
+                serverless_cache_arn="serverlessCacheArn",
                 serverless_cache_name="serverlessCacheName"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__c94aa82c079bf8158b72805daa60250c874d40f90102e5ebc270b618e66f0c26)
+            check_type(argname="argument serverless_cache_arn", value=serverless_cache_arn, expected_type=type_hints["serverless_cache_arn"])
             check_type(argname="argument serverless_cache_name", value=serverless_cache_name, expected_type=type_hints["serverless_cache_name"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "serverless_cache_arn": serverless_cache_arn,
             "serverless_cache_name": serverless_cache_name,
         }
+
+    @builtins.property
+    def serverless_cache_arn(self) -> builtins.str:
+        '''The ARN of the ServerlessCache resource.'''
+        result = self._values.get("serverless_cache_arn")
+        assert result is not None, "Required property 'serverless_cache_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def serverless_cache_name(self) -> builtins.str:
@@ -1076,6 +1095,7 @@ def _typecheckingstub__edbac7e81bc0d56bfe5455ec2ba3a35ffb9f7106e31e26eeeb3cc5e36
 
 def _typecheckingstub__c94aa82c079bf8158b72805daa60250c874d40f90102e5ebc270b618e66f0c26(
     *,
+    serverless_cache_arn: builtins.str,
     serverless_cache_name: builtins.str,
 ) -> None:
     """Type checking stubs"""

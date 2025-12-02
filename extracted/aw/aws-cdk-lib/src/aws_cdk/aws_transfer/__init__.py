@@ -203,6 +203,18 @@ class CfnAgreement(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAgreement", [resource]))
 
+    @jsii.member(jsii_name="isCfnAgreement")
+    @builtins.classmethod
+    def is_cfn_agreement(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAgreement.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2af7ac9ce94658edfcc096d5b1035fd592225262ba9917c73d53c4b5e97a3b38)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAgreement", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -947,6 +959,18 @@ class CfnCertificate(
             check_type(argname="argument certificate_id", value=certificate_id, expected_type=type_hints["certificate_id"])
         return typing.cast(_ICertificateRef_0de2a67f, jsii.sinvoke(cls, "fromCertificateId", [scope, id, certificate_id]))
 
+    @jsii.member(jsii_name="isCfnCertificate")
+    @builtins.classmethod
+    def is_cfn_certificate(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCertificate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4ded7281d2ca9d71186fa7093a07ea766cf77db5a70c21da39fb66d8d5f7eb25)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCertificate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1508,6 +1532,18 @@ class CfnConnector(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument connector_id", value=connector_id, expected_type=type_hints["connector_id"])
         return typing.cast(_IConnectorRef_b3a29b7e, jsii.sinvoke(cls, "fromConnectorId", [scope, id, connector_id]))
+
+    @jsii.member(jsii_name="isCfnConnector")
+    @builtins.classmethod
+    def is_cfn_connector(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnector.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__48ffa1fc5dd29ce4725104021b8039c9dab8b64401c995f5257d6a05e2749c0d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnector", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -2584,6 +2620,18 @@ class CfnProfile(
             check_type(argname="argument profile_id", value=profile_id, expected_type=type_hints["profile_id"])
         return typing.cast(_IProfileRef_fed8deac, jsii.sinvoke(cls, "fromProfileId", [scope, id, profile_id]))
 
+    @jsii.member(jsii_name="isCfnProfile")
+    @builtins.classmethod
+    def is_cfn_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__483174754bd414cd0d3cf15a5dcc2e03913d267873301e2340db4096cc2d40e9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnProfile", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2974,6 +3022,18 @@ class CfnServer(
             type_hints = typing.get_type_hints(_typecheckingstub__b9b18f64f1bbd4712439d46c420c0fb0d48eb524acbbb57b282c8fb064395674)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServer", [resource]))
+
+    @jsii.member(jsii_name="isCfnServer")
+    @builtins.classmethod
+    def is_cfn_server(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServer.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5261ffc5fc713ba5dc24907c87c895eba22827f09d74214a09549fcaa03bb899)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServer", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4564,6 +4624,18 @@ class CfnUser(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForUser", [resource]))
 
+    @jsii.member(jsii_name="isCfnUser")
+    @builtins.classmethod
+    def is_cfn_user(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnUser.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6b685a9590866609249c7331ca3da4629051e819c9e517c37813e684b035ffd3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnUser", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5252,6 +5324,10 @@ class CfnWebApp(
 ):
     '''Creates a web app based on specified parameters, and returns the ID for the new web app.
 
+    You can configure the web app to be publicly accessible or hosted within a VPC.
+
+    For more information about using VPC endpoints with AWS Transfer Family , see `Create a Transfer Family web app in a VPC <https://docs.aws.amazon.com/transfer/latest/userguide/create-webapp-in-vpc.html>`_ .
+
     :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-transfer-webapp.html
     :cloudformationResource: AWS::Transfer::WebApp
     :exampleMetadata: fixture=_generated
@@ -5335,6 +5411,18 @@ class CfnWebApp(
             type_hints = typing.get_type_hints(_typecheckingstub__0c1a1cb058c3eb309d12e4a1a64dce9ce86dde7378c46fc27700b0f53c56425e)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForWebApp", [resource]))
+
+    @jsii.member(jsii_name="isCfnWebApp")
+    @builtins.classmethod
+    def is_cfn_web_app(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWebApp.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__322422719211cb65839b30475f64fd47055aee05f9eed0ed80c838113cae11e9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWebApp", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6083,6 +6171,18 @@ class CfnWorkflow(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument workflow_id", value=workflow_id, expected_type=type_hints["workflow_id"])
         return typing.cast(_IWorkflowRef_1a79a531, jsii.sinvoke(cls, "fromWorkflowId", [scope, id, workflow_id]))
+
+    @jsii.member(jsii_name="isCfnWorkflow")
+    @builtins.classmethod
+    def is_cfn_workflow(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWorkflow.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7ecb16f2661ecc1ea53aa7d7dee6bb299543f5cca098f39ad51b64966deac5cd)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWorkflow", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -7544,6 +7644,12 @@ def _typecheckingstub__e5938580e053a61faa671300cae5eece7649d1bbb26a697b5595d7879
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__2af7ac9ce94658edfcc096d5b1035fd592225262ba9917c73d53c4b5e97a3b38(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__228db9cea00437d476e4860ef1214693d948e861477e0b0435205c3df9bf79f1(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7688,6 +7794,12 @@ def _typecheckingstub__5ac0c4753dbb35aa2c4992fbcf97129e0a6a0be0b5fee455f1416d86e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4ded7281d2ca9d71186fa7093a07ea766cf77db5a70c21da39fb66d8d5f7eb25(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__f1474a816abc465fbde815216c7dd03f20d910c99fb002aee78d0f01c8d4f55c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7797,6 +7909,12 @@ def _typecheckingstub__38a8932f140563c5eae5ee417477d8ef0fb37d560d4497ce233ca03fc
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     connector_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__48ffa1fc5dd29ce4725104021b8039c9dab8b64401c995f5257d6a05e2749c0d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7956,6 +8074,12 @@ def _typecheckingstub__feb8675e38aa0953f2ede297f189ff49cd5a30c0b0176aac11fd742a2
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__483174754bd414cd0d3cf15a5dcc2e03913d267873301e2340db4096cc2d40e9(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__56325834528256f6c2bd12b40bde80e132a645d3bffd84876d0f808ee64a8d81(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8029,6 +8153,12 @@ def _typecheckingstub__bf4192baa4fd5a52c9092a6bab5b78398f0e5f14bdad138f58e799069
 
 def _typecheckingstub__b9b18f64f1bbd4712439d46c420c0fb0d48eb524acbbb57b282c8fb064395674(
     resource: _IServerRef_6fa6fa22,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5261ffc5fc713ba5dc24907c87c895eba22827f09d74214a09549fcaa03bb899(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -8249,6 +8379,12 @@ def _typecheckingstub__05d731c26a4639493ae92bbc8a81b0db762201ee139240fef8be2192e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6b685a9590866609249c7331ca3da4629051e819c9e517c37813e684b035ffd3(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c366b551ea828539c0b8832360f574b612c272eb72c45ba57186d6f9f88ece4c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8375,6 +8511,12 @@ def _typecheckingstub__0c1a1cb058c3eb309d12e4a1a64dce9ce86dde7378c46fc27700b0f53
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__322422719211cb65839b30475f64fd47055aee05f9eed0ed80c838113cae11e9(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__08aaa0faf06441ae9c1523d4ebf9fdfeccaf68e85c8fdc160642ec400dfa1faa(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -8490,6 +8632,12 @@ def _typecheckingstub__42c6ff2311d814991108aadd101319b04b1b334b1daf50bcd421d633d
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     workflow_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7ecb16f2661ecc1ea53aa7d7dee6bb299543f5cca098f39ad51b64966deac5cd(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

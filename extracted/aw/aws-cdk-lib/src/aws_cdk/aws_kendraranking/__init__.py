@@ -156,6 +156,18 @@ class CfnExecutionPlan(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForExecutionPlan", [resource]))
 
+    @jsii.member(jsii_name="isCfnExecutionPlan")
+    @builtins.classmethod
+    def is_cfn_execution_plan(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnExecutionPlan.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a9edba0134a0d8ae44ce109e8792eac8c60011257b8dc35c7632b9153f60aa09)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnExecutionPlan", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -476,6 +488,12 @@ def _typecheckingstub__10ad8ffee997e60c547397dcad2b6175d967468b936a768fcba477203
 
 def _typecheckingstub__d1d3694917f2f1c5dd6121450a7b561982dfaee5950565f0bf13b77ad7bf833a(
     resource: _IExecutionPlanRef_0496b464,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a9edba0134a0d8ae44ce109e8792eac8c60011257b8dc35c7632b9153f60aa09(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

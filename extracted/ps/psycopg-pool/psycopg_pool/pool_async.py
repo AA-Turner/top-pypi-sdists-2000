@@ -11,20 +11,23 @@ import warnings
 from abc import ABC, abstractmethod
 from time import monotonic
 from types import TracebackType
-from typing import Any, AsyncIterator, Generic, cast
+from typing import Any, Generic, cast
 from weakref import ref
 from contextlib import asynccontextmanager
+from collections import deque
+from collections.abc import AsyncIterator
 
 from psycopg import AsyncConnection
 from psycopg import errors as e
 from psycopg.pq import TransactionStatus
 
-from .abc import ACT, AsyncConnectFailedCB, AsyncConnectionCB
+from .abc import ACT, AsyncConnectFailedCB, AsyncConnectionCB, AsyncConninfoParam
+from .abc import AsyncKwargsParam
 from .base import AttemptWithBackoff, BasePool
 from .errors import PoolClosed, PoolTimeout, TooManyRequests
-from ._compat import Deque, Self
+from ._compat import PSYCOPG_VERSION, AsyncPoolConnection, Self
 from ._acompat import ACondition, AEvent, ALock, AQueue, AWorker, agather, asleep
-from ._acompat import aspawn, current_task_name
+from ._acompat import aspawn, current_task_name, ensure_async
 from .sched_async import AsyncScheduler
 
 if True:  # ASYNC
@@ -41,14 +44,14 @@ logger = logging.getLogger("psycopg.pool")
 
 
 class AsyncConnectionPool(Generic[ACT], BasePool):
-    _pool: Deque[ACT]
+    _pool: deque[ACT]
 
     def __init__(
         self,
-        conninfo: str = "",
+        conninfo: AsyncConninfoParam = "",
         *,
-        connection_class: type[ACT] = cast("type[ACT]", AsyncConnection),
-        kwargs: dict[str, Any] | None = None,
+        connection_class: type[ACT] = cast(type[ACT], AsyncConnection),
+        kwargs: AsyncKwargsParam | None = None,
         min_size: int = 4,
         max_size: int | None = None,
         open: bool | None = None,
@@ -56,6 +59,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         check: AsyncConnectionCB[ACT] | None = None,
         reset: AsyncConnectionCB[ACT] | None = None,
         name: str | None = None,
+        close_returns: bool = False,
         timeout: float = 30.0,
         max_waiting: int = 0,
         max_lifetime: float = 60 * 60.0,
@@ -64,6 +68,18 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         reconnect_failed: AsyncConnectFailedCB | None = None,
         num_workers: int = 3,
     ):
+        if close_returns and PSYCOPG_VERSION < (3, 3):
+            if connection_class is AsyncConnection:
+                connection_class = cast(type[ACT], AsyncPoolConnection)
+            else:
+                raise TypeError(
+                    "Using 'close_returns=True' and a non-standard 'connection_class'"
+                    " requires psycopg 3.3 or newer. Please check the docs at"
+                    " https://www.psycopg.org/psycopg3/docs/advanced/pool.html"
+                    "#pool-sqlalchemy for a workaround."
+                )
+        self.conninfo = conninfo
+        self.kwargs = kwargs
         self.connection_class = connection_class
         self._check = check
         self._configure = configure
@@ -77,7 +93,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         self._sched: AsyncScheduler
         self._tasks: AQueue[MaintenanceTask]
 
-        self._waiting = Deque[WaitingClient[ACT]]()
+        self._waiting = deque[WaitingClient[ACT]]()
 
         # to notify that the pool is full
         self._pool_full_event: AEvent | None = None
@@ -86,11 +102,10 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         self._workers: list[AWorker] = []
 
         super().__init__(
-            conninfo,
-            kwargs=kwargs,
             min_size=min_size,
             max_size=max_size,
             name=name,
+            close_returns=close_returns,
             timeout=timeout,
             max_waiting=max_waiting,
             max_lifetime=max_lifetime,
@@ -348,6 +363,26 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
 
         await self._putconn(conn, from_getconn=False)
 
+    async def drain(self) -> None:
+        """
+        Remove all the connections from the pool and create new ones.
+
+        If a connection is currently out of the pool it will be closed when
+        returned to the pool and replaced with a new one.
+
+        This method is useful to force a connection re-configuration, for
+        example when the adapters map changes after the pool was created.
+        """
+        async with self._lock:
+            conns = list(self._pool)
+            self._pool.clear()
+            self._drained_at = monotonic()
+
+        # Close the connection already in the pool, open new ones.
+        for conn in conns:
+            await self._close_connection(conn)
+            self.run_task(AddConnection(self))
+
     async def _putconn(self, conn: ACT, from_getconn: bool) -> None:
         # Use a worker to perform eventual maintenance work in a separate task
         if self._reset:
@@ -602,15 +637,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         if not self._reconnect_failed:
             return
 
-        if True:  # ASYNC
-            import inspect
-
-            if inspect.iscoroutinefunction(self._reconnect_failed):
-                await self._reconnect_failed(self)
-            else:
-                self._reconnect_failed(self)
-        else:
-            self._reconnect_failed(self)
+        await ensure_async(self._reconnect_failed, self)
 
     def run_task(self, task: MaintenanceTask) -> None:
         """Run a maintenance task in a worker."""
@@ -645,13 +672,14 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
     async def _connect(self, timeout: float | None = None) -> ACT:
         """Return a new connection configured for the pool."""
         self._stats[self._CONNECTIONS_NUM] += 1
-        kwargs = self.kwargs
+        conninfo = await self._resolve_conninfo()
+        kwargs = await self._resolve_kwargs()
         if timeout:
             kwargs = kwargs.copy()
             kwargs["connect_timeout"] = max(round(timeout), 1)
         t0 = monotonic()
         try:
-            conn = await self.connection_class.connect(self.conninfo, **kwargs)
+            conn = await self.connection_class.connect(conninfo, **kwargs)
         except CLIENT_EXCEPTIONS:
             self._stats[self._CONNECTIONS_ERRORS] += 1
             raise
@@ -673,6 +701,23 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
         # Set an expiry date, with some randomness to avoid mass reconnection
         self._set_connection_expiry_date(conn)
         return conn
+
+    async def _resolve_conninfo(self) -> str:
+        """Resolve conninfo (static string, sync callable, or async callable)."""
+        if callable(self.conninfo):
+            return await ensure_async(self.conninfo)
+
+        return self.conninfo or ""
+
+    async def _resolve_kwargs(self) -> dict[str, Any]:
+        """Resolve kwargs (static dict, sync callable, or async callable)."""
+        if not self.kwargs:
+            return {}
+
+        if callable(self.kwargs):
+            return await ensure_async(self.kwargs)
+
+        return self.kwargs
 
     async def _add_connection(
         self, attempt: AttemptWithBackoff | None, growing: bool = False
@@ -748,7 +793,7 @@ class AsyncConnectionPool(Generic[ACT], BasePool):
                 return
 
         # Check if the connection is past its best before date
-        if conn._expire_at <= monotonic():
+        if conn._created_at <= self._drained_at or conn._expire_at <= monotonic():
             logger.info("discarding expired connection")
             await self._close_connection(conn)
             self.run_task(AddConnection(self))

@@ -1932,6 +1932,18 @@ class CfnCustomActionType(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnCustomActionType")
+    @builtins.classmethod
+    def is_cfn_custom_action_type(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnCustomActionType.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__962f5bd2e0959135d0f78df0a16e95f4856fe3eb19bccba7b1f9611f6444bfe5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnCustomActionType", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2980,6 +2992,18 @@ class CfnPipeline(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument pipeline_name", value=pipeline_name, expected_type=type_hints["pipeline_name"])
         return typing.cast(_IPipelineRef_fb1b56f9, jsii.sinvoke(cls, "fromPipelineName", [scope, id, pipeline_name]))
+
+    @jsii.member(jsii_name="isCfnPipeline")
+    @builtins.classmethod
+    def is_cfn_pipeline(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPipeline.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11ac99ea3d226c54c839862f55fe17a0581e5be73c7e0668371da54ae07800e2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPipeline", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6557,6 +6581,18 @@ class CfnWebhook(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnWebhook")
+    @builtins.classmethod
+    def is_cfn_webhook(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnWebhook.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb28ffcaeb105a337c95c239efe93696bd64240329f3fb9a2e7197af2ae8012a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnWebhook", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -12128,6 +12164,12 @@ def _typecheckingstub__1222433d0c00f2bd3c869fd7ac02200368b464dad55538571e0b4945e
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__962f5bd2e0959135d0f78df0a16e95f4856fe3eb19bccba7b1f9611f6444bfe5(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__69e9069011e8a6cedea17da3c45b9615a5a7a928187a2291c73982d0a584e4cc(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -12263,6 +12305,12 @@ def _typecheckingstub__8b7e4f900fbf2e97e88978589afa9a0082e5bf79ff031c9c02abbf943
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     pipeline_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__11ac99ea3d226c54c839862f55fe17a0581e5be73c7e0668371da54ae07800e2(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -12616,6 +12664,12 @@ def _typecheckingstub__bf02f564438140d92570cd41d3abeeb991e242929571b6de0035b8a8b
     name: typing.Optional[builtins.str] = None,
     register_with_third_party: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
     target_pipeline_version: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__fb28ffcaeb105a337c95c239efe93696bd64240329f3fb9a2e7197af2ae8012a(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

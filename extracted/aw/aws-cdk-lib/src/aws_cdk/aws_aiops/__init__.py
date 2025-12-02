@@ -209,6 +209,18 @@ class CfnInvestigationGroup(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForInvestigationGroup", [resource]))
 
+    @jsii.member(jsii_name="isCfnInvestigationGroup")
+    @builtins.classmethod
+    def is_cfn_investigation_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnInvestigationGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__07afa3889573ab3dfdc544fa068bca378d0c5a6fb40479ada37ccbe0ed0f3096)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnInvestigationGroup", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -923,6 +935,12 @@ def _typecheckingstub__f390e65acdf4efe0289b1b8e5f17c031f7a88a13963effed34b7d4944
 
 def _typecheckingstub__ade5fcbfafccd785c8a0f241106950fd30c55bf04674a7c23fa210cfbc9e86ce(
     resource: _IInvestigationGroupRef_717b970b,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07afa3889573ab3dfdc544fa068bca378d0c5a6fb40479ada37ccbe0ed0f3096(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

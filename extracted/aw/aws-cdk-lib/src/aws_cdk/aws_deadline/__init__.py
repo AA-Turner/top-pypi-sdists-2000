@@ -179,6 +179,18 @@ class CfnFarm(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFarm", [resource]))
 
+    @jsii.member(jsii_name="isCfnFarm")
+    @builtins.classmethod
+    def is_cfn_farm(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFarm.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ee256500801970980c207be2e20d31e327cf613ba506f32de6f737d5cfb8532)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFarm", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -635,6 +647,18 @@ class CfnFleet(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForFleet", [resource]))
 
+    @jsii.member(jsii_name="isCfnFleet")
+    @builtins.classmethod
+    def is_cfn_fleet(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFleet.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7806a60a45b754051274341f8ce662f62919548a5f56d5143f5e47ba5f4a2606)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFleet", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -876,7 +900,7 @@ class CfnFleet(
         ) -> None:
             '''Provides information about the GPU accelerators used for jobs processed by a fleet.
 
-            :param selections: A list of accelerator capabilities requested for this fleet. Only Amazon Elastic Compute Cloud instances that provide these capabilities will be used. For example, if you specify both L4 and T4 chips, Deadline Cloud will use Amazon EC2 instances that have either the L4 or the T4 chip installed.
+            :param selections: A list of accelerator capabilities requested for this fleet. Only Amazon Elastic Compute Cloud instances that provide these capabilities will be used. For example, if you specify both L4 and T4 chips, AWS Deadline Cloud will use Amazon EC2 instances that have either the L4 or the T4 chip installed.
             :param count: The number of GPU accelerators specified for worker hosts in this fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-acceleratorcapabilities.html
@@ -921,7 +945,7 @@ class CfnFleet(
         ) -> typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnFleet.AcceleratorSelectionProperty"]]]:
             '''A list of accelerator capabilities requested for this fleet.
 
-            Only Amazon Elastic Compute Cloud instances that provide these capabilities will be used. For example, if you specify both L4 and T4 chips, Deadline Cloud will use Amazon EC2 instances that have either the L4 or the T4 chip installed.
+            Only Amazon Elastic Compute Cloud instances that provide these capabilities will be used. For example, if you specify both L4 and T4 chips, AWS Deadline Cloud will use Amazon EC2 instances that have either the L4 or the T4 chip installed.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-acceleratorcapabilities.html#cfn-deadline-fleet-acceleratorcapabilities-selections
             '''
@@ -1039,7 +1063,7 @@ class CfnFleet(
             '''Describes a specific GPU accelerator required for an Amazon Elastic Compute Cloud worker host.
 
             :param name: The name of the chip used by the GPU accelerator. If you specify ``l4`` as the name of the accelerator, you must specify ``latest`` or ``grid:r570`` as the runtime. The available GPU accelerators are: - ``t4`` - NVIDIA T4 Tensor Core GPU - ``a10g`` - NVIDIA A10G Tensor Core GPU - ``l4`` - NVIDIA L4 Tensor Core GPU - ``l40s`` - NVIDIA L40S Tensor Core GPU
-            :param runtime: Specifies the runtime driver to use for the GPU accelerator. You must use the same runtime for all GPUs. You can choose from the following runtimes: - ``latest`` - Use the latest runtime available for the chip. If you specify ``latest`` and a new version of the runtime is released, the new version of the runtime is used. - ``grid:r570`` - `NVIDIA vGPU software 18 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/18.0/index.html>`_ - ``grid:r535`` - `NVIDIA vGPU software 16 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/16.0/index.html>`_ If you don't specify a runtime, Deadline Cloud uses ``latest`` as the default. However, if you have multiple accelerators and specify ``latest`` for some and leave others blank, Deadline Cloud raises an exception.
+            :param runtime: Specifies the runtime driver to use for the GPU accelerator. You must use the same runtime for all GPUs. You can choose from the following runtimes: - ``latest`` - Use the latest runtime available for the chip. If you specify ``latest`` and a new version of the runtime is released, the new version of the runtime is used. - ``grid:r570`` - `NVIDIA vGPU software 18 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/18.0/index.html>`_ - ``grid:r535`` - `NVIDIA vGPU software 16 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/16.0/index.html>`_ If you don't specify a runtime, AWS Deadline Cloud uses ``latest`` as the default. However, if you have multiple accelerators and specify ``latest`` for some and leave others blank, AWS Deadline Cloud raises an exception.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-acceleratorselection.html
             :exampleMetadata: fixture=_generated
@@ -1096,7 +1120,7 @@ class CfnFleet(
             - ``grid:r570`` - `NVIDIA vGPU software 18 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/18.0/index.html>`_
             - ``grid:r535`` - `NVIDIA vGPU software 16 <https://docs.aws.amazon.com/https://docs.nvidia.com/vgpu/16.0/index.html>`_
 
-            If you don't specify a runtime, Deadline Cloud uses ``latest`` as the default. However, if you have multiple accelerators and specify ``latest`` for some and leave others blank, Deadline Cloud raises an exception.
+            If you don't specify a runtime, AWS Deadline Cloud uses ``latest`` as the default. However, if you have multiple accelerators and specify ``latest`` for some and leave others blank, AWS Deadline Cloud raises an exception.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-acceleratorselection.html#cfn-deadline-fleet-acceleratorselection-runtime
             '''
@@ -1206,12 +1230,12 @@ class CfnFleet(
             storage_profile_id: typing.Optional[builtins.str] = None,
             tag_propagation_mode: typing.Optional[builtins.str] = None,
         ) -> None:
-            '''The details of a customer managed fleet configuration.
+            '''The configuration details for a customer managed fleet.
 
-            :param mode: The AWS Auto Scaling mode for the customer managed fleet configuration.
-            :param worker_capabilities: The worker capabilities for a customer managed fleet configuration.
-            :param storage_profile_id: The storage profile ID.
-            :param tag_propagation_mode: Specifies whether tags associated with a fleet are attached to workers when the worker is launched. When the ``tagPropagationMode`` is set to ``PROPAGATE_TAGS_TO_WORKERS_AT_LAUNCH`` any tag associated with a fleet is attached to workers when they launch. If the tags for a fleet change, the tags associated with running workers *do not* change. If you don't specify ``tagPropagationMode`` , the default is ``NO_PROPAGATION`` .
+            :param mode: The Auto Scaling mode for the customer managed fleet.
+            :param worker_capabilities: The worker capabilities for the customer managed fleet.
+            :param storage_profile_id: The storage profile ID for the customer managed fleet.
+            :param tag_propagation_mode: The tag propagation mode for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -1289,7 +1313,7 @@ class CfnFleet(
 
         @builtins.property
         def mode(self) -> builtins.str:
-            '''The AWS Auto Scaling mode for the customer managed fleet configuration.
+            '''The Auto Scaling mode for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-mode
             '''
@@ -1301,7 +1325,7 @@ class CfnFleet(
         def worker_capabilities(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.CustomerManagedWorkerCapabilitiesProperty"]:
-            '''The worker capabilities for a customer managed fleet configuration.
+            '''The worker capabilities for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-workercapabilities
             '''
@@ -1311,7 +1335,7 @@ class CfnFleet(
 
         @builtins.property
         def storage_profile_id(self) -> typing.Optional[builtins.str]:
-            '''The storage profile ID.
+            '''The storage profile ID for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-storageprofileid
             '''
@@ -1320,11 +1344,7 @@ class CfnFleet(
 
         @builtins.property
         def tag_propagation_mode(self) -> typing.Optional[builtins.str]:
-            '''Specifies whether tags associated with a fleet are attached to workers when the worker is launched.
-
-            When the ``tagPropagationMode`` is set to ``PROPAGATE_TAGS_TO_WORKERS_AT_LAUNCH`` any tag associated with a fleet is attached to workers when they launch. If the tags for a fleet change, the tags associated with running workers *do not* change.
-
-            If you don't specify ``tagPropagationMode`` , the default is ``NO_PROPAGATION`` .
+            '''The tag propagation mode for the customer managed fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-customermanagedfleetconfiguration.html#cfn-deadline-fleet-customermanagedfleetconfiguration-tagpropagationmode
             '''
@@ -2281,12 +2301,12 @@ class CfnFleet(
             storage_profile_id: typing.Optional[builtins.str] = None,
             vpc_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFleet.VpcConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
-            '''The configuration details for a service managed Amazon EC2 fleet.
+            '''The configuration details for a service managed EC2 fleet.
 
-            :param instance_capabilities: The Amazon EC2 instance capabilities.
-            :param instance_market_options: The Amazon EC2 market type.
-            :param storage_profile_id: The storage profile ID.
-            :param vpc_configuration: The VPC configuration details for a service managed Amazon EC2 fleet.
+            :param instance_capabilities: The instance capabilities for the service managed EC2 fleet.
+            :param instance_market_options: The instance market options for the service managed EC2 fleet.
+            :param storage_profile_id: The storage profile ID for the service managed EC2 fleet.
+            :param vpc_configuration: The VPC configuration for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -2380,7 +2400,7 @@ class CfnFleet(
         def instance_capabilities(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceCapabilitiesProperty"]:
-            '''The Amazon EC2 instance capabilities.
+            '''The instance capabilities for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-instancecapabilities
             '''
@@ -2392,7 +2412,7 @@ class CfnFleet(
         def instance_market_options(
             self,
         ) -> typing.Union[_IResolvable_da3f097b, "CfnFleet.ServiceManagedEc2InstanceMarketOptionsProperty"]:
-            '''The Amazon EC2 market type.
+            '''The instance market options for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-instancemarketoptions
             '''
@@ -2402,7 +2422,7 @@ class CfnFleet(
 
         @builtins.property
         def storage_profile_id(self) -> typing.Optional[builtins.str]:
-            '''The storage profile ID.
+            '''The storage profile ID for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-storageprofileid
             '''
@@ -2413,7 +2433,7 @@ class CfnFleet(
         def vpc_configuration(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFleet.VpcConfigurationProperty"]]:
-            '''The VPC configuration details for a service managed Amazon EC2 fleet.
+            '''The VPC configuration for the service managed EC2 fleet.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-deadline-fleet-servicemanagedec2fleetconfiguration.html#cfn-deadline-fleet-servicemanagedec2fleetconfiguration-vpcconfiguration
             '''
@@ -3275,6 +3295,18 @@ class CfnLicenseEndpoint(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLicenseEndpoint", [resource]))
 
+    @jsii.member(jsii_name="isCfnLicenseEndpoint")
+    @builtins.classmethod
+    def is_cfn_license_endpoint(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLicenseEndpoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__4c55303a9745d5fc973745f82b67995797a056a975584226995a614fd007099f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLicenseEndpoint", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3601,6 +3633,18 @@ class CfnLimit(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnLimit")
+    @builtins.classmethod
+    def is_cfn_limit(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLimit.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3c15238b3803d51330c75247e2d6b1d1aa1bc6fedfa044ed9617e7cbf0204a89)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLimit", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -3934,6 +3978,18 @@ class CfnMeteredProduct(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMeteredProduct", [resource]))
 
+    @jsii.member(jsii_name="isCfnMeteredProduct")
+    @builtins.classmethod
+    def is_cfn_metered_product(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMeteredProduct.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dbefe8d8ad8880b6ed1a04494b18aba021e9485a4c70331a054aa0fc43f41cd4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMeteredProduct", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4162,8 +4218,8 @@ class CfnMonitor(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param display_name: The name of the monitor that displays on the Deadline Cloud console. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field.
-        :param identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance responsible for authenticating monitor users.
-        :param role_arn: The Amazon Resource Name (ARN) of the IAM role for the monitor. Users of the monitor use this role to access Deadline Cloud resources.
+        :param identity_center_instance_arn: The Amazon Resource Name of the IAM Identity Center instance responsible for authenticating monitor users.
+        :param role_arn: The Amazon Resource Name of the IAM role for the monitor. Users of the monitor use this role to access Deadline Cloud resources.
         :param subdomain: The subdomain used for the monitor URL. The full URL of the monitor is subdomain.Region.deadlinecloud.amazonaws.com.
         :param tags: An array of key-value pairs to apply to this resource.
         '''
@@ -4191,6 +4247,18 @@ class CfnMonitor(
             type_hints = typing.get_type_hints(_typecheckingstub__c0b91e4233624bd76c06fc42cd34136003830b63504b54c6b997d0308082766d)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForMonitor", [resource]))
+
+    @jsii.member(jsii_name="isCfnMonitor")
+    @builtins.classmethod
+    def is_cfn_monitor(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMonitor.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__07a7b8fc562a560ba9840b8cc08fc45052dafb751c0ba81b2fc317475ce10ba8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMonitor", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4234,7 +4302,7 @@ class CfnMonitor(
     @builtins.property
     @jsii.member(jsii_name="attrIdentityCenterApplicationArn")
     def attr_identity_center_application_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) that the IAM Identity Center assigned to the monitor when it was created.
+        '''The Amazon Resource Name that the IAM Identity Center assigned to the monitor when it was created.
 
         :cloudformationAttribute: IdentityCenterApplicationArn
         '''
@@ -4293,7 +4361,7 @@ class CfnMonitor(
     @builtins.property
     @jsii.member(jsii_name="identityCenterInstanceArn")
     def identity_center_instance_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM Identity Center instance responsible for authenticating monitor users.'''
+        '''The Amazon Resource Name of the IAM Identity Center instance responsible for authenticating monitor users.'''
         return typing.cast(builtins.str, jsii.get(self, "identityCenterInstanceArn"))
 
     @identity_center_instance_arn.setter
@@ -4306,7 +4374,7 @@ class CfnMonitor(
     @builtins.property
     @jsii.member(jsii_name="roleArn")
     def role_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM role for the monitor.'''
+        '''The Amazon Resource Name of the IAM role for the monitor.'''
         return typing.cast(builtins.str, jsii.get(self, "roleArn"))
 
     @role_arn.setter
@@ -4367,8 +4435,8 @@ class CfnMonitorProps:
         '''Properties for defining a ``CfnMonitor``.
 
         :param display_name: The name of the monitor that displays on the Deadline Cloud console. .. epigraph:: This field can store any content. Escape or encode this content before displaying it on a webpage or any other system that might interpret the content of this field.
-        :param identity_center_instance_arn: The Amazon Resource Name (ARN) of the IAM Identity Center instance responsible for authenticating monitor users.
-        :param role_arn: The Amazon Resource Name (ARN) of the IAM role for the monitor. Users of the monitor use this role to access Deadline Cloud resources.
+        :param identity_center_instance_arn: The Amazon Resource Name of the IAM Identity Center instance responsible for authenticating monitor users.
+        :param role_arn: The Amazon Resource Name of the IAM role for the monitor. Users of the monitor use this role to access Deadline Cloud resources.
         :param subdomain: The subdomain used for the monitor URL. The full URL of the monitor is subdomain.Region.deadlinecloud.amazonaws.com.
         :param tags: An array of key-value pairs to apply to this resource.
 
@@ -4426,7 +4494,7 @@ class CfnMonitorProps:
 
     @builtins.property
     def identity_center_instance_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM Identity Center instance responsible for authenticating monitor users.
+        '''The Amazon Resource Name of the IAM Identity Center instance responsible for authenticating monitor users.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-deadline-monitor.html#cfn-deadline-monitor-identitycenterinstancearn
         '''
@@ -4436,7 +4504,7 @@ class CfnMonitorProps:
 
     @builtins.property
     def role_arn(self) -> builtins.str:
-        '''The Amazon Resource Name (ARN) of the IAM role for the monitor.
+        '''The Amazon Resource Name of the IAM role for the monitor.
 
         Users of the monitor use this role to access Deadline Cloud resources.
 
@@ -4593,6 +4661,18 @@ class CfnQueue(
             type_hints = typing.get_type_hints(_typecheckingstub__abf15d986f33e840db48386d4d767c7de5401c3c6bbdb0a4c2b754aa21135149)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForQueue", [resource]))
+
+    @jsii.member(jsii_name="isCfnQueue")
+    @builtins.classmethod
+    def is_cfn_queue(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueue.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__96a060d1452f2401d1cc8e049bf0f5bde7deecb1b862116037fb259cbb64c6ca)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueue", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5173,6 +5253,18 @@ class CfnQueueEnvironment(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnQueueEnvironment")
+    @builtins.classmethod
+    def is_cfn_queue_environment(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueueEnvironment.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b4798902479c142ac8e06142e419aa44a9ffee3d5f0d81e8531adf463ed21203)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueEnvironment", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5473,6 +5565,18 @@ class CfnQueueFleetAssociation(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnQueueFleetAssociation")
+    @builtins.classmethod
+    def is_cfn_queue_fleet_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueueFleetAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3212aaaf13a6b26e583d25ffd85c280e12f043cdb18fb8505d78a14ff03bd1b3)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueFleetAssociation", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5694,6 +5798,18 @@ class CfnQueueLimitAssociation(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnQueueLimitAssociation")
+    @builtins.classmethod
+    def is_cfn_queue_limit_association(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnQueueLimitAssociation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__eb79204add58d5e517af034a032bf3b9fb2280891c30d00866c36db6925b3174)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnQueueLimitAssociation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -6172,6 +6288,18 @@ class CfnStorageProfile(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnStorageProfile")
+    @builtins.classmethod
+    def is_cfn_storage_profile(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStorageProfile.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__7348a3698df1e026d8e4f446f2476393065cf71a7bd6c392d1ff86eaf1bf2303)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageProfile", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -6530,6 +6658,12 @@ def _typecheckingstub__6798bafbe4fbee09c44c9bd3ad9e001cecc3ae9d5006b942f13bf08cd
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__6ee256500801970980c207be2e20d31e327cf613ba506f32de6f737d5cfb8532(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4f6b1d970d70d840fd22a69886b9553ac48f2e83d63e421ea979261b3bddf1d0(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6595,6 +6729,12 @@ def _typecheckingstub__b982dfa2ac88548efd13c63c65f7144bf79a74dd670eebe5a13537f1f
 
 def _typecheckingstub__0e5a869a388623237c964a690fcf41f8f17f05f4fb03b112a17f4dee1feff8a7(
     resource: _IFleetRef_7c29970e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7806a60a45b754051274341f8ce662f62919548a5f56d5143f5e47ba5f4a2606(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6861,6 +7001,12 @@ def _typecheckingstub__86f495f121c989ce633484634ae5e5893aac8b00980fdf684f9d142fe
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__4c55303a9745d5fc973745f82b67995797a056a975584226995a614fd007099f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b9aa87cad0472c90e08c8aa1a9c72cc53c01e0cf980555f0f3b357ef4148f041(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -6916,6 +7062,12 @@ def _typecheckingstub__95a2d36b6bd2c6b4526ddd666cdb501efdf5ffcc5bb8ceefea12e0b2b
     farm_id: builtins.str,
     max_count: jsii.Number,
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3c15238b3803d51330c75247e2d6b1d1aa1bc6fedfa044ed9617e7cbf0204a89(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -6989,6 +7141,12 @@ def _typecheckingstub__63eeb510633682c1bc212666148ac6f177b35f8f2fc4704f704b7d597
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__dbefe8d8ad8880b6ed1a04494b18aba021e9485a4c70331a054aa0fc43f41cd4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__e5d2d01a238f229eb758201d336be8ca9e707d08020ad2910986c804ac3c7809(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7036,6 +7194,12 @@ def _typecheckingstub__4edf45db3ae8781366a254b5ea792b290cf7822e23073f5b7f959959e
 
 def _typecheckingstub__c0b91e4233624bd76c06fc42cd34136003830b63504b54c6b997d0308082766d(
     resource: _IMonitorRef_af35d2ec,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__07a7b8fc562a560ba9840b8cc08fc45052dafb751c0ba81b2fc317475ce10ba8(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7113,6 +7277,12 @@ def _typecheckingstub__7c8ed104ef6a730c7b90ba82ab4ab0b37d213e5444e12df63d7d60b1e
 
 def _typecheckingstub__abf15d986f33e840db48386d4d767c7de5401c3c6bbdb0a4c2b754aa21135149(
     resource: _IQueueRef_00ca677f,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__96a060d1452f2401d1cc8e049bf0f5bde7deecb1b862116037fb259cbb64c6ca(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7235,6 +7405,12 @@ def _typecheckingstub__0cf2ef79ee46780c7590cdcaf16949904d0291a2627b57555ffa860cb
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__b4798902479c142ac8e06142e419aa44a9ffee3d5f0d81e8531adf463ed21203(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__4a6465894d7e168ae6fe30f0f0519094a5d10b4a0db099eaf9e05619574ec819(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7299,6 +7475,12 @@ def _typecheckingstub__3bf5f16a9974daab9dba069dab2d83de0ff5b4a6e417026bc9f4c775d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__3212aaaf13a6b26e583d25ffd85c280e12f043cdb18fb8505d78a14ff03bd1b3(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__2ff12ea5f9a70d8e7142807e0c6f13883ba906fa01e1e7887b8de68261b1db16(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -7345,6 +7527,12 @@ def _typecheckingstub__33bb0126f21fd4cda69453821444b10474f3d0aa1fb2e74c53855f1ba
     farm_id: builtins.str,
     limit_id: builtins.str,
     queue_id: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__eb79204add58d5e517af034a032bf3b9fb2280891c30d00866c36db6925b3174(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -7412,6 +7600,12 @@ def _typecheckingstub__d3bb4938fbe160a975ec7626f79799d48d7603f2cc166cf513bf1920d
     farm_id: builtins.str,
     os_family: builtins.str,
     file_system_locations: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageProfile.FileSystemLocationProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7348a3698df1e026d8e4f446f2476393065cf71a7bd6c392d1ff86eaf1bf2303(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

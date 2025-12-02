@@ -176,6 +176,18 @@ class CfnOrganizationCentralizationRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnOrganizationCentralizationRule")
+    @builtins.classmethod
+    def is_cfn_organization_centralization_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOrganizationCentralizationRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ecabb5646d522a7c00aa40f3e19c4d2e5dccb6109cb58329723f9f47be7267d6)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationCentralizationRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1129,6 +1141,18 @@ class CfnOrganizationTelemetryRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnOrganizationTelemetryRule")
+    @builtins.classmethod
+    def is_cfn_organization_telemetry_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnOrganizationTelemetryRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c7ca13b7cccda36c5b43cead9ffee16b45fa649b63750b67cfc542107deb6702)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnOrganizationTelemetryRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1751,6 +1775,18 @@ class CfnTelemetryRule(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnTelemetryRule")
+    @builtins.classmethod
+    def is_cfn_telemetry_rule(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTelemetryRule.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__15d46db6be93b2acc11cf6216144d83efa879d1fceb7052f192fd6a434af63b9)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTelemetryRule", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -2303,6 +2339,12 @@ def _typecheckingstub__18acbc8917f3c4cbc8bb06f5fae76010e41ab5f0e9b157f4c324c214a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ecabb5646d522a7c00aa40f3e19c4d2e5dccb6109cb58329723f9f47be7267d6(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__02b2ea8ec552fc96b3662b368fa64eea5f82839c3bd0f1aa52bd64bc495f5341(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2412,6 +2454,12 @@ def _typecheckingstub__a67d6a9dd82924a413b7d3435faeb8efa735048df0244b926e672def8
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c7ca13b7cccda36c5b43cead9ffee16b45fa649b63750b67cfc542107deb6702(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__0cb893813673a29ee1f384593916d34bdcc440b816dfc54ad27097692c5a64e9(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -2488,6 +2536,12 @@ def _typecheckingstub__1cb28d06ef60815f8488b771b64aca8e3671a315a3f6676ad80a414dc
     rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
     rule_name: builtins.str,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__15d46db6be93b2acc11cf6216144d83efa879d1fceb7052f192fd6a434af63b9(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

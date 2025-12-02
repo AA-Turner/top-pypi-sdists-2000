@@ -3054,6 +3054,18 @@ class CfnAccessGrant(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrant", [resource]))
 
+    @jsii.member(jsii_name="isCfnAccessGrant")
+    @builtins.classmethod
+    def is_cfn_access_grant(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessGrant.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__91839c7eb058520ef7a1b42c38b118fcd8e44a5d7a012059a80e3f20a4f7a034)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessGrant", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3629,6 +3641,18 @@ class CfnAccessGrantsInstance(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrantsInstance", [resource]))
 
+    @jsii.member(jsii_name="isCfnAccessGrantsInstance")
+    @builtins.classmethod
+    def is_cfn_access_grants_instance(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessGrantsInstance.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__afc85461c7d2bd7e84c1ce9ee53c5d0b6fe665f907fb583f58e747261129c56a)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessGrantsInstance", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -3882,6 +3906,18 @@ class CfnAccessGrantsLocation(
             type_hints = typing.get_type_hints(_typecheckingstub__628705b0b711bedb05117fcf88733d4f17a2ce0f677d182bb909ea1aa6f2bf28)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForAccessGrantsLocation", [resource]))
+
+    @jsii.member(jsii_name="isCfnAccessGrantsLocation")
+    @builtins.classmethod
+    def is_cfn_access_grants_location(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessGrantsLocation.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c55195f00890626e1e777bcf351ddc0701fa21904046a4231d0e710eb52bf5bc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessGrantsLocation", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -4229,6 +4265,18 @@ class CfnAccessPoint(
             check_type(argname="argument access_point_name", value=access_point_name, expected_type=type_hints["access_point_name"])
         return typing.cast(_IAccessPointRef_02282fed, jsii.sinvoke(cls, "fromAccessPointName", [scope, id, access_point_name]))
 
+    @jsii.member(jsii_name="isCfnAccessPoint")
+    @builtins.classmethod
+    def is_cfn_access_point(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnAccessPoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f160d868fe3c4be026506c568dfe885af0e94d0c9bd05420a8fdc6ba3d3670d5)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnAccessPoint", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -4438,7 +4486,7 @@ class CfnAccessPoint(
         ) -> None:
             '''The PublicAccessBlock configuration that you want to apply to this Amazon S3 bucket.
 
-            You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see `The Meaning of "Public" <https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status>`_ in the *Amazon S3 User Guide* .
+            You can enable the configuration options in any combination. Bucket-level settings work alongside account-level settings (which may inherit from organization-level policies). For more information about when Amazon S3 considers a bucket or object public, see `The Meaning of "Public" <https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status>`_ in the *Amazon S3 User Guide* .
 
             :param block_public_acls: Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to ``TRUE`` causes the following behavior: - PUT Bucket ACL and PUT Object ACL calls fail if the specified ACL is public. - PUT Object calls fail if the request includes a public ACL. - PUT Bucket calls fail if the request includes a public ACL. Enabling this setting doesn't affect existing policies or ACLs.
             :param block_public_policy: Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. Enabling this setting doesn't affect existing bucket policies.
@@ -4848,7 +4896,7 @@ class CfnBucket(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param abac_status: 
+        :param abac_status: The ABAC status of the general purpose bucket. When ABAC is enabled for the general purpose bucket, you can use tags to manage access to the general purpose buckets as well as for cost tracking purposes. When ABAC is disabled for the general purpose buckets, you can only use tags for cost tracking purposes. For more information, see `Using tags with S3 general purpose buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging.html>`_ .
         :param accelerate_configuration: Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see `Amazon S3 Transfer Acceleration <https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html>`_ in the *Amazon S3 User Guide* .
         :param access_control: .. epigraph:: This is a legacy property, and it is not recommended for most use cases. A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and we recommend that you keep ACLs disabled. For more information, see `Controlling object ownership <https://docs.aws.amazon.com//AmazonS3/latest/userguide/about-object-ownership.html>`_ in the *Amazon S3 User Guide* . A canned access control list (ACL) that grants predefined permissions to the bucket. For more information about canned ACLs, see `Canned ACL <https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`_ in the *Amazon S3 User Guide* . S3 buckets are created with ACLs disabled by default. Therefore, unless you explicitly set the `AWS::S3::OwnershipControls <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-ownershipcontrols.html>`_ property to enable ACLs, your resource will fail to deploy with any value other than Private. Use cases requiring ACLs are uncommon. The majority of access control configurations can be successfully and more easily achieved with bucket policies. For more information, see `AWS::S3::BucketPolicy <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html>`_ . For examples of common policy configurations, including S3 Server Access Logs buckets and more, see `Bucket policy examples <https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html>`_ in the *Amazon S3 User Guide* .
         :param analytics_configurations: Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.
@@ -4956,6 +5004,18 @@ class CfnBucket(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument bucket_name", value=bucket_name, expected_type=type_hints["bucket_name"])
         return typing.cast(_IBucketRef_3debe44e, jsii.sinvoke(cls, "fromBucketName", [scope, id, bucket_name]))
+
+    @jsii.member(jsii_name="isCfnBucket")
+    @builtins.classmethod
+    def is_cfn_bucket(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnBucket.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__27c14017769fbf0e4efc2b6a67397efed343cf39201ac978e765da6969e8a761)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucket", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -5145,6 +5205,7 @@ class CfnBucket(
     @builtins.property
     @jsii.member(jsii_name="abacStatus")
     def abac_status(self) -> typing.Optional[builtins.str]:
+        '''The ABAC status of the general purpose bucket.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "abacStatus"))
 
     @abac_status.setter
@@ -5843,8 +5904,20 @@ class CfnBucket(
             *,
             encryption_type: typing.Optional[typing.Sequence[builtins.str]] = None,
         ) -> None:
-            '''
-            :param encryption_type: List of encryption types.
+            '''A bucket-level setting for Amazon S3 general purpose buckets used to prevent the upload of new objects encrypted with the specified server-side encryption type.
+
+            For example, blocking an encryption type will block ``PutObject`` , ``CopyObject`` , ``PostObject`` , multipart upload, and replication requests to the bucket for objects with the specified encryption type. However, you can continue to read and list any pre-existing objects already encrypted with the specified encryption type. For more information, see `Blocking or unblocking SSE-C for a general purpose bucket <https://docs.aws.amazon.com/AmazonS3/latest/userguide/blocking-unblocking-s3-c-encryption-gpb.html>`_ .
+
+            This data type is used with the following actions:
+
+            - `PutBucketEncryption <https://docs.aws.amazon.com/AmazonS3/latest/API/API_PutBucketEncryption.html>`_
+            - `GetBucketEncryption <https://docs.aws.amazon.com/AmazonS3/latest/API/API_GetBucketEncryption.html>`_
+            - `DeleteBucketEncryption <https://docs.aws.amazon.com/AmazonS3/latest/API/API_DeleteBucketEncryption.html>`_
+            - **Permissions** - You must have the ``s3:PutEncryptionConfiguration`` permission to block or unblock an encryption type for a bucket.
+
+            You must have the ``s3:GetEncryptionConfiguration`` permission to view a bucket's encryption type.
+
+            :param encryption_type: The object encryption type that you want to block or unblock for an Amazon S3 general purpose bucket. .. epigraph:: Currently, this parameter only supports blocking or unblocking server side encryption with customer-provided keys (SSE-C). For more information about SSE-C, see `Using server-side encryption with customer-provided keys (SSE-C) <https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-blockedencryptiontypes.html
             :exampleMetadata: fixture=_generated
@@ -5868,7 +5941,11 @@ class CfnBucket(
 
         @builtins.property
         def encryption_type(self) -> typing.Optional[typing.List[builtins.str]]:
-            '''List of encryption types.
+            '''The object encryption type that you want to block or unblock for an Amazon S3 general purpose bucket.
+
+            .. epigraph::
+
+               Currently, this parameter only supports blocking or unblocking server side encryption with customer-provided keys (SSE-C). For more information about SSE-C, see `Using server-side encryption with customer-provided keys (SSE-C) <https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html>`_ .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-blockedencryptiontypes.html#cfn-s3-bucket-blockedencryptiontypes-encryptiontype
             '''
@@ -8959,7 +9036,7 @@ class CfnBucket(
         ) -> None:
             '''The PublicAccessBlock configuration that you want to apply to this Amazon S3 bucket.
 
-            You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see `The Meaning of "Public" <https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status>`_ in the *Amazon S3 User Guide* .
+            You can enable the configuration options in any combination. Bucket-level settings work alongside account-level settings (which may inherit from organization-level policies). For more information about when Amazon S3 considers a bucket or object public, see `The Meaning of "Public" <https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status>`_ in the *Amazon S3 User Guide* .
 
             :param block_public_acls: Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to ``TRUE`` causes the following behavior: - PUT Bucket ACL and PUT Object ACL calls fail if the specified ACL is public. - PUT Object calls fail if the request includes a public ACL. - PUT Bucket calls fail if the request includes a public ACL. Enabling this setting doesn't affect existing policies or ACLs.
             :param block_public_policy: Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this element to ``TRUE`` causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. Enabling this setting doesn't affect existing bucket policies.
@@ -11296,7 +11373,7 @@ class CfnBucket(
                - *General purpose buckets* - If you're specifying a customer managed KMS key, we recommend using a fully qualified KMS key ARN. If you use a KMS key alias instead, then AWS  resolves the key within the requester’s account. This behavior can result in data that's encrypted with a KMS key that belongs to the requester, and not the bucket owner.
                - *Directory buckets* - When you specify an `AWS  customer managed key <https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#customer-cmk>`_ for encryption in your directory bucket, only use the key ID or key ARN. The key alias format of the KMS key isn't supported.
 
-            :param blocked_encryption_types: 
+            :param blocked_encryption_types: A bucket-level setting for Amazon S3 general purpose buckets used to prevent the upload of new objects encrypted with the specified server-side encryption type. For example, blocking an encryption type will block ``PutObject`` , ``CopyObject`` , ``PostObject`` , multipart upload, and replication requests to the bucket for objects with the specified encryption type. However, you can continue to read and list any pre-existing objects already encrypted with the specified encryption type. For more information, see `Blocking or unblocking SSE-C for a general purpose bucket <https://docs.aws.amazon.com/AmazonS3/latest/userguide/blocking-unblocking-s3-c-encryption-gpb.html>`_ . .. epigraph:: Currently, this parameter only supports blocking or unblocking server-side encryption with customer-provided keys (SSE-C). For more information about SSE-C, see `Using server-side encryption with customer-provided keys (SSE-C) <https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html>`_ .
             :param bucket_key_enabled: Specifies whether Amazon S3 should use an S3 Bucket Key with server-side encryption using KMS (SSE-KMS) for new objects in the bucket. Existing objects are not affected. Setting the ``BucketKeyEnabled`` element to ``true`` causes Amazon S3 to use an S3 Bucket Key. By default, S3 Bucket Key is not enabled. For more information, see `Amazon S3 Bucket Keys <https://docs.aws.amazon.com/AmazonS3/latest/dev/bucket-key.html>`_ in the *Amazon S3 User Guide* .
             :param server_side_encryption_by_default: Specifies the default server-side encryption to apply to new objects in the bucket. If a PUT Object request doesn't specify any server-side encryption, this default encryption will be applied.
 
@@ -11339,7 +11416,13 @@ class CfnBucket(
         def blocked_encryption_types(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnBucket.BlockedEncryptionTypesProperty"]]:
-            '''
+            '''A bucket-level setting for Amazon S3 general purpose buckets used to prevent the upload of new objects encrypted with the specified server-side encryption type.
+
+            For example, blocking an encryption type will block ``PutObject`` , ``CopyObject`` , ``PostObject`` , multipart upload, and replication requests to the bucket for objects with the specified encryption type. However, you can continue to read and list any pre-existing objects already encrypted with the specified encryption type. For more information, see `Blocking or unblocking SSE-C for a general purpose bucket <https://docs.aws.amazon.com/AmazonS3/latest/userguide/blocking-unblocking-s3-c-encryption-gpb.html>`_ .
+            .. epigraph::
+
+               Currently, this parameter only supports blocking or unblocking server-side encryption with customer-provided keys (SSE-C). For more information about SSE-C, see `Using server-side encryption with customer-provided keys (SSE-C) <https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerSideEncryptionCustomerKeys.html>`_ .
+
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-serversideencryptionrule.html#cfn-s3-bucket-serversideencryptionrule-blockedencryptiontypes
             '''
             result = self._values.get("blocked_encryption_types")
@@ -12293,6 +12376,18 @@ class CfnBucketPolicy(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnBucketPolicy")
+    @builtins.classmethod
+    def is_cfn_bucket_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnBucketPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c3ef41d9ab0394f5395f88eead1b93f15e6bba096dd33a6c1d58af22c2eb83cf)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnBucketPolicy", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -12516,7 +12611,7 @@ class CfnBucketProps:
     ) -> None:
         '''Properties for defining a ``CfnBucket``.
 
-        :param abac_status: 
+        :param abac_status: The ABAC status of the general purpose bucket. When ABAC is enabled for the general purpose bucket, you can use tags to manage access to the general purpose buckets as well as for cost tracking purposes. When ABAC is disabled for the general purpose buckets, you can only use tags for cost tracking purposes. For more information, see `Using tags with S3 general purpose buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging.html>`_ .
         :param accelerate_configuration: Configures the transfer acceleration state for an Amazon S3 bucket. For more information, see `Amazon S3 Transfer Acceleration <https://docs.aws.amazon.com/AmazonS3/latest/dev/transfer-acceleration.html>`_ in the *Amazon S3 User Guide* .
         :param access_control: .. epigraph:: This is a legacy property, and it is not recommended for most use cases. A majority of modern use cases in Amazon S3 no longer require the use of ACLs, and we recommend that you keep ACLs disabled. For more information, see `Controlling object ownership <https://docs.aws.amazon.com//AmazonS3/latest/userguide/about-object-ownership.html>`_ in the *Amazon S3 User Guide* . A canned access control list (ACL) that grants predefined permissions to the bucket. For more information about canned ACLs, see `Canned ACL <https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl>`_ in the *Amazon S3 User Guide* . S3 buckets are created with ACLs disabled by default. Therefore, unless you explicitly set the `AWS::S3::OwnershipControls <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-ownershipcontrols.html>`_ property to enable ACLs, your resource will fail to deploy with any value other than Private. Use cases requiring ACLs are uncommon. The majority of access control configurations can be successfully and more easily achieved with bucket policies. For more information, see `AWS::S3::BucketPolicy <https://docs.aws.amazon.com//AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html>`_ . For examples of common policy configurations, including S3 Server Access Logs buckets and more, see `Bucket policy examples <https://docs.aws.amazon.com/AmazonS3/latest/userguide/example-bucket-policies.html>`_ in the *Amazon S3 User Guide* .
         :param analytics_configurations: Specifies the configuration and any analyses for the analytics filter of an Amazon S3 bucket.
@@ -12630,7 +12725,10 @@ class CfnBucketProps:
 
     @builtins.property
     def abac_status(self) -> typing.Optional[builtins.str]:
-        '''
+        '''The ABAC status of the general purpose bucket.
+
+        When ABAC is enabled for the general purpose bucket, you can use tags to manage access to the general purpose buckets as well as for cost tracking purposes. When ABAC is disabled for the general purpose buckets, you can only use tags for cost tracking purposes. For more information, see `Using tags with S3 general purpose buckets <https://docs.aws.amazon.com/AmazonS3/latest/userguide/buckets-tagging.html>`_ .
+
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3-bucket.html#cfn-s3-bucket-abacstatus
         '''
         result = self._values.get("abac_status")
@@ -13000,6 +13098,18 @@ class CfnMultiRegionAccessPoint(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnMultiRegionAccessPoint")
+    @builtins.classmethod
+    def is_cfn_multi_region_access_point(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMultiRegionAccessPoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a8a59c2499f92656077c9ac3e6e4fffb3e3130a3c7c144d1a4cef0eef07b38b4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMultiRegionAccessPoint", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13374,6 +13484,18 @@ class CfnMultiRegionAccessPointPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnMultiRegionAccessPointPolicy")
+    @builtins.classmethod
+    def is_cfn_multi_region_access_point_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnMultiRegionAccessPointPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bfa5476131de040d01b8d17c85d705995e67e038128f452f724dd0be254c8666)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnMultiRegionAccessPointPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -13833,6 +13955,18 @@ class CfnStorageLens(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnStorageLens")
+    @builtins.classmethod
+    def is_cfn_storage_lens(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStorageLens.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c3467c76488274200a9a93213fc4316e07bda56137029b70bc75c430a57a1ec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageLens", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -15810,6 +15944,18 @@ class CfnStorageLensGroup(
             type_hints = typing.get_type_hints(_typecheckingstub__f6e64d684374bbfc08b1d982d0696a6a6ba9f142027c9cdda0119b949034ce1b)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForStorageLensGroup", [resource]))
+
+    @jsii.member(jsii_name="isCfnStorageLensGroup")
+    @builtins.classmethod
+    def is_cfn_storage_lens_group(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnStorageLensGroup.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__56985dd90b29ea02c135ddf0b931764e4ddcc793be361f1f2c1bbeca659f279d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnStorageLensGroup", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -23228,6 +23374,12 @@ def _typecheckingstub__204b41ae80249c465266434f62d45e9bd8affac47fcd91e498603e976
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__91839c7eb058520ef7a1b42c38b118fcd8e44a5d7a012059a80e3f20a4f7a034(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__9d47a991c259c8d2afd0c0c0ef78e8304661612ca2130b52828a158e13fcfd9d(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23326,6 +23478,12 @@ def _typecheckingstub__d48ab47020c4b3aeaa4bb9ba048e6a5c71c99843bfad32e5b38c62ade
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__afc85461c7d2bd7e84c1ce9ee53c5d0b6fe665f907fb583f58e747261129c56a(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__db93fe2056b72f84bb647319bf62aedb8c01b722b768420b7e005427cc4a733b(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -23371,6 +23529,12 @@ def _typecheckingstub__f63f8766c3f622205e3ea04592d9dbd1cdfdf34d2e6b1aca405f1b211
 
 def _typecheckingstub__628705b0b711bedb05117fcf88733d4f17a2ce0f677d182bb909ea1aa6f2bf28(
     resource: _IAccessGrantsLocationRef_5ae01054,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c55195f00890626e1e777bcf351ddc0701fa21904046a4231d0e710eb52bf5bc(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23447,6 +23611,12 @@ def _typecheckingstub__9af2790fec8caeab2621c276234587e70ab62b4d6d6f7a82947b3b732
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     access_point_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f160d868fe3c4be026506c568dfe885af0e94d0c9bd05420a8fdc6ba3d3670d5(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -23584,6 +23754,12 @@ def _typecheckingstub__08ccc75711c8ec0fedd9747e674f732b2653120a392c01413875cc0df
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     bucket_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__27c14017769fbf0e4efc2b6a67397efed343cf39201ac978e765da6969e8a761(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24332,6 +24508,12 @@ def _typecheckingstub__4d7a647b76d681d6945040112939ad2fc3521b6706dc0d728ccbce234
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__c3ef41d9ab0394f5395f88eead1b93f15e6bba096dd33a6c1d58af22c2eb83cf(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bcacacbbcc09b05f15201f94963036ae08a214c062586b00f13a7da5ef01823a(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24404,6 +24586,12 @@ def _typecheckingstub__5210a0982e35577fee7ff2694f121006d0a51d21a02dc73b3de6fb3b3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__a8a59c2499f92656077c9ac3e6e4fffb3e3130a3c7c144d1a4cef0eef07b38b4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__a577cef5fff2d7aac9d818010c2488eb180469ddf571f9d4de7cda0d5d08647e(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24462,6 +24650,12 @@ def _typecheckingstub__47c6c009e1eb3a9c2149c8d1cb135c5417789a215c03bf6f6fd81c73d
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bfa5476131de040d01b8d17c85d705995e67e038128f452f724dd0be254c8666(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3bd10a6eb75c8e8cb46d0c70da33ce265a16c2c3d1eeae0a94422f86dfc980e8(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -24516,6 +24710,12 @@ def _typecheckingstub__e1c2b6273e2667bd533b81c4f8b7bb15a87af69ff2abec16c07e4667c
     *,
     storage_lens_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.StorageLensConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c3467c76488274200a9a93213fc4316e07bda56137029b70bc75c430a57a1ec(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24718,6 +24918,12 @@ def _typecheckingstub__d64075e64ca7d5441379005c284a2dbeaa875c1179c381f83dfaf9176
 
 def _typecheckingstub__f6e64d684374bbfc08b1d982d0696a6a6ba9f142027c9cdda0119b949034ce1b(
     resource: _IStorageLensGroupRef_aa787427,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__56985dd90b29ea02c135ddf0b931764e4ddcc793be361f1f2c1bbeca659f279d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

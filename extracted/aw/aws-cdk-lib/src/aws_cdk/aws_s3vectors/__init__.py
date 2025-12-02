@@ -187,6 +187,18 @@ class CfnIndex(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForIndex", [resource]))
 
+    @jsii.member(jsii_name="isCfnIndex")
+    @builtins.classmethod
+    def is_cfn_index(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnIndex.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__dcff37fdf03ad5adbbed6ad76ecd89562dab8f009aea7435b74d00f4dbfe01a4)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnIndex", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -680,6 +692,18 @@ class CfnVectorBucket(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForVectorBucket", [resource]))
 
+    @jsii.member(jsii_name="isCfnVectorBucket")
+    @builtins.classmethod
+    def is_cfn_vector_bucket(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVectorBucket.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9895d4c963c7fd96f4be56b99de4dab5b35aa0baafc908ffa5866a1330fe3a18)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVectorBucket", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -937,6 +961,18 @@ class CfnVectorBucketPolicy(
         )
 
         jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnVectorBucketPolicy")
+    @builtins.classmethod
+    def is_cfn_vector_bucket_policy(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnVectorBucketPolicy.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3726d6c463352d1ebd48e9e765a1a947a0c681b16f3cd62fcca774644436b8bb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnVectorBucketPolicy", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -1234,6 +1270,12 @@ def _typecheckingstub__32e62c574691f1e6a9b9acb81be5224bf6aefeb13ff8a3279c0857320
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__dcff37fdf03ad5adbbed6ad76ecd89562dab8f009aea7435b74d00f4dbfe01a4(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__abf75f37384ae6010cf34366284fd709b9bf09472bc476d814cde62f1244e1f5(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1324,6 +1366,12 @@ def _typecheckingstub__89411d490809081b29a45d8c02fcb4cc145b0df3aed499145104f0657
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__9895d4c963c7fd96f4be56b99de4dab5b35aa0baafc908ffa5866a1330fe3a18(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__640db6894c3240a3b378c5237337953d313c22d856cd2fb21a91ac21e141613c(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1363,6 +1411,12 @@ def _typecheckingstub__aee2d22aedfbf922cb325dc74e1f86dfd5fddeabc946e682b7e7daff4
     policy: typing.Any,
     vector_bucket_arn: typing.Optional[builtins.str] = None,
     vector_bucket_name: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3726d6c463352d1ebd48e9e765a1a947a0c681b16f3cd62fcca774644436b8bb(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

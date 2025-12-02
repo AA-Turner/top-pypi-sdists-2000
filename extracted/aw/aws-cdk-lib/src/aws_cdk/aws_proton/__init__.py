@@ -173,6 +173,18 @@ class CfnEnvironmentAccountConnection(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironmentAccountConnection", [resource]))
 
+    @jsii.member(jsii_name="isCfnEnvironmentAccountConnection")
+    @builtins.classmethod
+    def is_cfn_environment_account_connection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEnvironmentAccountConnection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11b3005577bf5809ebc225de13aaaac30b8ffae0f3cf6e712ee66c716b68567f)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironmentAccountConnection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -600,6 +612,18 @@ class CfnEnvironmentTemplate(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForEnvironmentTemplate", [resource]))
 
+    @jsii.member(jsii_name="isCfnEnvironmentTemplate")
+    @builtins.classmethod
+    def is_cfn_environment_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnEnvironmentTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__fb9497953a6423a39c5ee7de0329ea2c11cf0fb0b5815cc5002c2e83043183fe)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnEnvironmentTemplate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -965,6 +989,18 @@ class CfnServiceTemplate(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForServiceTemplate", [resource]))
 
+    @jsii.member(jsii_name="isCfnServiceTemplate")
+    @builtins.classmethod
+    def is_cfn_service_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnServiceTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5aa113b9bc00006e707a3c68d039567c95279dd1e6ad44a9b8c8f2bb689b313d)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnServiceTemplate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1275,6 +1311,12 @@ def _typecheckingstub__6959a031237a5c4d4caf1c07e90f5ceb4f0da374ddca166f6fabcefd7
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__11b3005577bf5809ebc225de13aaaac30b8ffae0f3cf6e712ee66c716b68567f(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__b30ec85df499b3f87a92d53ab1648560e2495ee044a1fb86faf3008181494293(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1362,6 +1404,12 @@ def _typecheckingstub__ba8c0153f80943cb092bd938b4577c4018d4acd96251816e6d3af7e42
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__fb9497953a6423a39c5ee7de0329ea2c11cf0fb0b5815cc5002c2e83043183fe(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__c118627efd9b4abeb2a81482dbdd168c0ed3de3481e90e77b6982f37546b8212(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1438,6 +1486,12 @@ def _typecheckingstub__b9d6f7fcd45fb9a242859806053d250bd07d7040cbeda48256287882f
 
 def _typecheckingstub__4eb53713489123adbaca6a4ef11b8867405a48cd760bf934756d79380cd340de(
     resource: _IServiceTemplateRef_74ef1fef,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5aa113b9bc00006e707a3c68d039567c95279dd1e6ad44a9b8c8f2bb689b313d(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

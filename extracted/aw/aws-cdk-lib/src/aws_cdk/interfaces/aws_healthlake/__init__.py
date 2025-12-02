@@ -37,12 +37,18 @@ from .. import IEnvironmentAware as _IEnvironmentAware_f39049ee
 @jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_healthlake.FHIRDatastoreReference",
     jsii_struct_bases=[],
-    name_mapping={"datastore_id": "datastoreId"},
+    name_mapping={"datastore_arn": "datastoreArn", "datastore_id": "datastoreId"},
 )
 class FHIRDatastoreReference:
-    def __init__(self, *, datastore_id: builtins.str) -> None:
+    def __init__(
+        self,
+        *,
+        datastore_arn: builtins.str,
+        datastore_id: builtins.str,
+    ) -> None:
         '''A reference to a FHIRDatastore resource.
 
+        :param datastore_arn: The ARN of the FHIRDatastore resource.
         :param datastore_id: The DatastoreId of the FHIRDatastore resource.
 
         :exampleMetadata: fixture=_generated
@@ -54,15 +60,25 @@ class FHIRDatastoreReference:
             from aws_cdk.interfaces import aws_healthlake as interfaces_aws_healthlake
             
             f_hIRDatastore_reference = interfaces_aws_healthlake.FHIRDatastoreReference(
+                datastore_arn="datastoreArn",
                 datastore_id="datastoreId"
             )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__e093434b57404ddeaf19d5c2ba8655e6c19975de0e9c28bc95ddf450dd413528)
+            check_type(argname="argument datastore_arn", value=datastore_arn, expected_type=type_hints["datastore_arn"])
             check_type(argname="argument datastore_id", value=datastore_id, expected_type=type_hints["datastore_id"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
+            "datastore_arn": datastore_arn,
             "datastore_id": datastore_id,
         }
+
+    @builtins.property
+    def datastore_arn(self) -> builtins.str:
+        '''The ARN of the FHIRDatastore resource.'''
+        result = self._values.get("datastore_arn")
+        assert result is not None, "Required property 'datastore_arn' is missing"
+        return typing.cast(builtins.str, result)
 
     @builtins.property
     def datastore_id(self) -> builtins.str:
@@ -137,6 +153,7 @@ publication.publish()
 
 def _typecheckingstub__e093434b57404ddeaf19d5c2ba8655e6c19975de0e9c28bc95ddf450dd413528(
     *,
+    datastore_arn: builtins.str,
     datastore_id: builtins.str,
 ) -> None:
     """Type checking stubs"""

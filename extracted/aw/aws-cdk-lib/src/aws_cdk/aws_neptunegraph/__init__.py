@@ -177,6 +177,18 @@ class CfnGraph(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGraph", [resource]))
 
+    @jsii.member(jsii_name="isCfnGraph")
+    @builtins.classmethod
+    def is_cfn_graph(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGraph.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__662fdced53feab93a21bfab8705f4ece37d75547b77b86412aa52a5e0ffea475)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGraph", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -676,6 +688,18 @@ class CfnPrivateGraphEndpoint(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnPrivateGraphEndpoint")
+    @builtins.classmethod
+    def is_cfn_private_graph_endpoint(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnPrivateGraphEndpoint.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cfd209f3d87c37a5a51e5ade8b2de4174a1ca2ccc4a29860df749049641c96cb)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnPrivateGraphEndpoint", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -934,6 +958,12 @@ def _typecheckingstub__7c6900d1428655c3b11dde92fc61e291887db2224b4c48e95c0043478
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__662fdced53feab93a21bfab8705f4ece37d75547b77b86412aa52a5e0ffea475(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__bf52fbc1feb3cff366f97eb4e18219365009dc4166140b56dc094f0ff30060e4(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1016,6 +1046,12 @@ def _typecheckingstub__01fbeae7e1567a93f602c30b996e949980cb85f4a6668a45a57e1fc68
     vpc_id: builtins.str,
     security_group_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
     subnet_ids: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__cfd209f3d87c37a5a51e5ade8b2de4174a1ca2ccc4a29860df749049641c96cb(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

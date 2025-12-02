@@ -9,11 +9,11 @@ from __future__ import annotations
 from time import monotonic
 from random import random
 from typing import TYPE_CHECKING, Any
+from collections import Counter, deque
 
 from psycopg import errors as e
 
 from .errors import PoolClosed
-from ._compat import Counter, Deque
 
 if TYPE_CHECKING:
     from psycopg._connection_base import BaseConnection
@@ -40,16 +40,15 @@ class BasePool:
     _CONNECTIONS_ERRORS = "connections_errors"
     _CONNECTIONS_LOST = "connections_lost"
 
-    _pool: Deque[Any]
+    _pool: deque[Any]
 
     def __init__(
         self,
-        conninfo: str = "",
         *,
-        kwargs: dict[str, Any] | None,
         min_size: int,
         max_size: int | None,
         name: str | None,
+        close_returns: bool,
         timeout: float,
         max_waiting: int,
         max_lifetime: float,
@@ -66,9 +65,8 @@ class BasePool:
         if num_workers < 1:
             raise ValueError("num_workers must be at least 1")
 
-        self.conninfo = conninfo
-        self.kwargs: dict[str, Any] = kwargs or {}
         self.name = name
+        self.close_returns = close_returns
         self._min_size = min_size
         self._max_size = max_size
         self.timeout = timeout
@@ -79,8 +77,9 @@ class BasePool:
         self.num_workers = num_workers
 
         self._nconns = min_size  # currently in the pool, out, being prepared
-        self._pool = Deque()
+        self._pool = deque()
         self._stats = Counter[str]()
+        self._drained_at = 0.0
 
         # Min number of connections in the pool in a max_idle unit of time.
         # It is reset periodically by the ShrinkPool scheduled task.
@@ -198,7 +197,8 @@ class BasePool:
 
         Add some randomness to avoid mass reconnection.
         """
-        conn._expire_at = monotonic() + self._jitter(self.max_lifetime, -0.05, 0.0)
+        conn._created_at = t = monotonic()
+        conn._expire_at = t + self._jitter(self.max_lifetime, -0.05, 0.0)
 
 
 class AttemptWithBackoff:

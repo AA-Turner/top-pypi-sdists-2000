@@ -158,6 +158,18 @@ class CfnConnection(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForConnection", [resource]))
 
+    @jsii.member(jsii_name="isCfnConnection")
+    @builtins.classmethod
+    def is_cfn_connection(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnection.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9da098eb0ec1eadf1e6c8e2874d960931a10c48234cfa2f71152fac89bc28721)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnection", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -427,6 +439,12 @@ def _typecheckingstub__da00c1ce515c51afa7843809dadd2cb48a76e0e91dd2a8096cc430768
 
 def _typecheckingstub__f0ebbeeb1a7e2051887bff67db79721fdc6e69076719f3a98c63ec4924102c1b(
     resource: _IConnectionRef_31f0710d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9da098eb0ec1eadf1e6c8e2874d960931a10c48234cfa2f71152fac89bc28721(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

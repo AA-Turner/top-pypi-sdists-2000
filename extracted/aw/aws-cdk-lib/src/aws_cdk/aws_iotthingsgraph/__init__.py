@@ -125,6 +125,18 @@ class CfnFlowTemplate(
 
         jsii.create(self.__class__, self, [scope, id, props])
 
+    @jsii.member(jsii_name="isCfnFlowTemplate")
+    @builtins.classmethod
+    def is_cfn_flow_template(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnFlowTemplate.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__26e7684918c5eefa2f2d710dc0f4a2fc56eafefc603b6434e3bc338bc8ad9fec)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnFlowTemplate", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -360,6 +372,12 @@ def _typecheckingstub__b541277b5609d65e98dee832ff404ee87f323e7fecf77a098f69eb4d3
     *,
     definition: typing.Union[_IResolvable_da3f097b, typing.Union[CfnFlowTemplate.DefinitionDocumentProperty, typing.Dict[builtins.str, typing.Any]]],
     compatible_namespace_version: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__26e7684918c5eefa2f2d710dc0f4a2fc56eafefc603b6434e3bc338bc8ad9fec(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

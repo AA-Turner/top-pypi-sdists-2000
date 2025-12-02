@@ -22,7 +22,9 @@ from pandas._typing import (
     AxesData,
     Dtype,
     Frequency,
-    np_1darray,
+    np_1darray_intp,
+    np_1darray_object,
+    np_ndarray_bool,
 )
 
 class PeriodIndex(DatetimeIndexOpsMixin[pd.Period, np.object_], PeriodIndexFieldOps):
@@ -35,8 +37,15 @@ class PeriodIndex(DatetimeIndexOpsMixin[pd.Period, np.object_], PeriodIndexField
         name: Hashable | None = None,
     ) -> Self: ...
     @property
-    def values(self) -> np_1darray[np.object_]: ...
+    def values(self) -> np_1darray_object: ...
+    def __add__(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: datetime.timedelta
+    ) -> Self: ...
+    def __radd__(  # type: ignore[override] # pyright: ignore[reportIncompatibleMethodOverride]
+        self, other: datetime.timedelta
+    ) -> Self: ...
     @overload  # type: ignore[override]
+    # pyrefly: ignore  # bad-override
     def __sub__(self, other: Period) -> Index: ...
     @overload
     def __sub__(self, other: Self) -> Index: ...
@@ -45,22 +54,21 @@ class PeriodIndex(DatetimeIndexOpsMixin[pd.Period, np.object_], PeriodIndexField
     @overload
     def __sub__(self, other: NaTType) -> NaTType: ...
     @overload
-    def __sub__(  # pyright: ignore[reportIncompatibleMethodOverride]
+    def __sub__(  # pyright: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         self, other: TimedeltaIndex | pd.Timedelta
     ) -> Self: ...
     @overload  # type: ignore[override]
+    # pyrefly: ignore  # bad-override
     def __rsub__(self, other: Period) -> Index: ...
     @overload
     def __rsub__(self, other: Self) -> Index: ...
     @overload
-    def __rsub__(  # pyright: ignore[reportIncompatibleMethodOverride]
+    def __rsub__(  # pyright: ignore[reportIncompatibleMethodOverride]  # ty: ignore[invalid-method-override]
         self, other: NaTType
     ) -> NaTType: ...
     def asof_locs(
-        self,
-        where: pd.DatetimeIndex | PeriodIndex,
-        mask: np_1darray[np.bool_],
-    ) -> np_1darray[np.intp]: ...
+        self, where: pd.DatetimeIndex | Self, mask: np_ndarray_bool
+    ) -> np_1darray_intp: ...
     @property
     def is_full(self) -> bool: ...
     @property

@@ -158,6 +158,18 @@ class CfnLoggingConfiguration(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForLoggingConfiguration", [resource]))
 
+    @jsii.member(jsii_name="isCfnLoggingConfiguration")
+    @builtins.classmethod
+    def is_cfn_logging_configuration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnLoggingConfiguration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__cc1a51adc281df3eadda9dbc8f2a03c6f3cb7f1de4b5bc6e379c26d27e6f45a8)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnLoggingConfiguration", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -739,6 +751,18 @@ class CfnRoom(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForRoom", [resource]))
 
+    @jsii.member(jsii_name="isCfnRoom")
+    @builtins.classmethod
+    def is_cfn_room(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnRoom.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__17b6f660c7d76f3ebffe0597d9da98e6a9608d3bf8cbfa89bd2cb49438394641)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnRoom", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -1162,6 +1186,12 @@ def _typecheckingstub__3098f82ef72b00cf08ebe6070a684c703dd13dc8b6a8d0c67c9cd57a3
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__cc1a51adc281df3eadda9dbc8f2a03c6f3cb7f1de4b5bc6e379c26d27e6f45a8(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__27c1d1ba5ffc0c9e4e4e7ece89f8cc2e8faaf83bbca86ce90359f6b2f8ce3bcd(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -1247,6 +1277,12 @@ def _typecheckingstub__3b4e5ca285f18f1e8f75ce6f44ea1cf5cd39a13086ac408f0f6de6c51
 
 def _typecheckingstub__d19754b4903595adf8c1d2f8bc17536ce27cdba4153a02a5dc3d932cc9ce4339(
     resource: _IRoomRef_54a258f7,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__17b6f660c7d76f3ebffe0597d9da98e6a9608d3bf8cbfa89bd2cb49438394641(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass

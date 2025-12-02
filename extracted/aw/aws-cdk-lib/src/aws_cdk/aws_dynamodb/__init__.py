@@ -1994,6 +1994,18 @@ class CfnGlobalTable(
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForGlobalTable", [resource]))
 
+    @jsii.member(jsii_name="isCfnGlobalTable")
+    @builtins.classmethod
+    def is_cfn_global_table(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnGlobalTable.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__242c88ea6396ecc439054919a2071a4162ed281aa273e1f45e29ace8b92da9f2)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnGlobalTable", [x]))
+
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
         '''Examines the CloudFormation resource and discloses attributes.
@@ -5513,6 +5525,18 @@ class CfnTable(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
             check_type(argname="argument table_name", value=table_name, expected_type=type_hints["table_name"])
         return typing.cast(_ITableRef_4478f0ad, jsii.sinvoke(cls, "fromTableName", [scope, id, table_name]))
+
+    @jsii.member(jsii_name="isCfnTable")
+    @builtins.classmethod
+    def is_cfn_table(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTable.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ca7c5896457e2c19b2123909b3ed2ecabbce8729c4880f9f407f2e410c7b207)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTable", [x]))
 
     @jsii.member(jsii_name="inspect")
     def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
@@ -18246,6 +18270,12 @@ def _typecheckingstub__5341f33362e1892a20f08e2750095e7cb8141f740353b59e8d2bc807a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__242c88ea6396ecc439054919a2071a4162ed281aa273e1f45e29ace8b92da9f2(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__8d6d6d953afce9a6c78e724d40aed1ff47a96ec42f6abd85c9d802b6d17044b3(
     inspector: _TreeInspector_488e0dd5,
 ) -> None:
@@ -18621,6 +18651,12 @@ def _typecheckingstub__5a4e5ce4c2cecabd4a9a87760152bab9b4254f48ff1e2f8e89e68131d
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
     table_name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ca7c5896457e2c19b2123909b3ed2ecabbce8729c4880f9f407f2e410c7b207(
+    x: typing.Any,
 ) -> None:
     """Type checking stubs"""
     pass
