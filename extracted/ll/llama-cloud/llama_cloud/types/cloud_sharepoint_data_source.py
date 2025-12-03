@@ -19,9 +19,11 @@ class CloudSharepointDataSource(pydantic.BaseModel):
     client_id: str = pydantic.Field(description="The client ID to use for authentication.")
     client_secret: str = pydantic.Field(description="The client secret to use for authentication.")
     drive_name: typing.Optional[str]
+    exclude_path_patterns: typing.Optional[typing.List[str]]
     folder_id: typing.Optional[str]
     folder_path: typing.Optional[str]
     get_permissions: typing.Optional[bool]
+    include_path_patterns: typing.Optional[typing.List[str]]
     required_exts: typing.Optional[typing.List[str]]
     site_id: typing.Optional[str]
     site_name: typing.Optional[str]

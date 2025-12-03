@@ -7,6 +7,10 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ExtractModels(str, enum.Enum):
+    """
+    Extract model options.
+    """
+
     OPENAI_GPT_41 = "openai-gpt-4-1"
     OPENAI_GPT_41_MINI = "openai-gpt-4-1-mini"
     OPENAI_GPT_41_NANO = "openai-gpt-4-1-nano"

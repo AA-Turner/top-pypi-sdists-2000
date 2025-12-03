@@ -13,6 +13,7 @@ class BatchJobStatus(str, enum.Enum):
 
     PENDING = "pending"
     RUNNING = "running"
+    DISPATCHED = "dispatched"
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
@@ -21,6 +22,7 @@ class BatchJobStatus(str, enum.Enum):
         self,
         pending: typing.Callable[[], T_Result],
         running: typing.Callable[[], T_Result],
+        dispatched: typing.Callable[[], T_Result],
         completed: typing.Callable[[], T_Result],
         failed: typing.Callable[[], T_Result],
         cancelled: typing.Callable[[], T_Result],
@@ -29,6 +31,8 @@ class BatchJobStatus(str, enum.Enum):
             return pending()
         if self is BatchJobStatus.RUNNING:
             return running()
+        if self is BatchJobStatus.DISPATCHED:
+            return dispatched()
         if self is BatchJobStatus.COMPLETED:
             return completed()
         if self is BatchJobStatus.FAILED:

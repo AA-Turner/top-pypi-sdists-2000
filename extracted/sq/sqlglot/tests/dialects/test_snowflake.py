@@ -19,8 +19,12 @@ class TestSnowflake(Validator):
         self.assertEqual(ast.sql("snowflake"), "DATEADD(MONTH, n, d)")
 
         self.validate_identity("SELECT GET(a, b)")
+        self.validate_identity("SELECT HASH_AGG(a, b, c, d)")
         self.validate_identity("SELECT GREATEST_IGNORE_NULLS(1, 2, 3, NULL)")
         self.validate_identity("SELECT LEAST_IGNORE_NULLS(5, NULL, 7, 3)")
+        self.validate_identity("SELECT MAX(x)")
+        self.validate_identity("SELECT COUNT(x)")
+        self.validate_identity("SELECT MIN(amount)")
         self.validate_identity("SELECT TAN(x)")
         self.validate_identity("SELECT COS(x)")
         self.validate_identity("SELECT SINH(1.5)")
@@ -42,7 +46,20 @@ class TestSnowflake(Validator):
         expr.selects[0].assert_is(exp.AggFunc)
         self.assertEqual(expr.sql(dialect="snowflake"), "SELECT APPROX_TOP_K(C4, 3, 5) FROM t")
 
+        self.validate_identity("SELECT MINHASH(5, col)")
+        self.validate_identity("SELECT MINHASH(5, col1, col2)")
+        self.validate_identity("SELECT MINHASH(5, *)")
+        self.validate_identity("SELECT MINHASH_COMBINE(minhash_col)")
+        self.validate_identity("SELECT APPROXIMATE_SIMILARITY(minhash_col)")
+        self.validate_identity(
+            "SELECT APPROXIMATE_JACCARD_INDEX(minhash_col)",
+            "SELECT APPROXIMATE_SIMILARITY(minhash_col)",
+        )
         self.validate_identity("SELECT APPROX_TOP_K_ACCUMULATE(col, 10)")
+        self.validate_identity("SELECT APPROX_TOP_K_COMBINE(state, 2)")
+        self.validate_identity("SELECT APPROX_TOP_K_COMBINE(state)")
+        self.validate_identity("SELECT APPROX_TOP_K_ESTIMATE(state_column, 4)")
+        self.validate_identity("SELECT APPROX_TOP_K_ESTIMATE(state_column)")
         self.validate_identity("SELECT EQUAL_NULL(1, 2)")
         self.validate_identity("SELECT EXP(1)")
         self.validate_identity("SELECT FACTORIAL(5)")
@@ -71,6 +88,13 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT NVL2(col1, col2, col3)")
         self.validate_identity("SELECT NVL(col1, col2)", "SELECT COALESCE(col1, col2)")
         self.validate_identity("SELECT CHR(8364)")
+        self.validate_identity('SELECT CHECK_JSON(\'{"key": "value"}\')')
+        self.validate_identity(
+            "SELECT CHECK_XML('<root><key attribute=\"attr\">value</key></root>')"
+        )
+        self.validate_identity(
+            "SELECT CHECK_XML('<root><key attribute=\"attr\">value</key></root>', TRUE)"
+        )
         self.validate_identity("SELECT COMPRESS('Hello World', 'ZLIB')")
         self.validate_identity("SELECT DECOMPRESS_BINARY('compressed_data', 'SNAPPY')")
         self.validate_identity("SELECT DECOMPRESS_STRING('compressed_data', 'ZSTD')")
@@ -106,6 +130,7 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT REGR_VALY(y, x)")
         self.validate_identity("SELECT REGR_AVGX(y, x)")
         self.validate_identity("SELECT REGR_AVGY(y, x)")
+        self.validate_identity("SELECT REGR_SLOPE(y, x)")
         self.validate_all(
             "SELECT SKEW(a)",
             write={
@@ -122,6 +147,9 @@ class TestSnowflake(Validator):
         )
         self.validate_identity("SELECT RANDOM()")
         self.validate_identity("SELECT RANDOM(123)")
+        self.validate_identity("SELECT RANDSTR(123, 456)")
+        self.validate_identity("SELECT RANDSTR(123, RANDOM())")
+        self.validate_identity("SELECT NORMAL(0, 1, RANDOM())")
         self.validate_identity("SELECT GROUPING_ID(a, b) AS g_id FROM x GROUP BY ROLLUP (a, b)")
         self.validate_identity("PARSE_URL('https://example.com/path')")
         self.validate_identity("PARSE_URL('https://example.com/path', 1)")
@@ -154,6 +182,10 @@ class TestSnowflake(Validator):
         self.validate_identity("SELECT TO_TIMESTAMP_LTZ(x) FROM t")
         self.validate_identity("SELECT TO_TIMESTAMP_TZ(x) FROM t")
         self.validate_identity("TO_DECIMAL(expr, fmt, precision, scale)")
+        self.validate_identity("TO_DECFLOAT('123.456')")
+        self.validate_identity("TO_DECFLOAT('1,234.56', '999,999.99')")
+        self.validate_identity("TRY_TO_DECFLOAT('123.456')")
+        self.validate_identity("TRY_TO_DECFLOAT('1,234.56', '999,999.99')")
         self.validate_identity("ALTER TABLE authors ADD CONSTRAINT c1 UNIQUE (id, email)")
         self.validate_identity("RM @parquet_stage", check_command_warning=True)
         self.validate_identity("REMOVE @parquet_stage", check_command_warning=True)
@@ -2684,8 +2716,8 @@ FROM persons AS p, LATERAL FLATTEN(input => p.c, path => 'contact') AS _flattene
         )
 
         self.validate_identity(
-            "REGEXP_SUBSTR_ALL(subject, pattern)",
-            "REGEXP_EXTRACT_ALL(subject, pattern)",
+            "REGEXP_SUBSTR_ALL(subject, pattern, pos, occ, param, group)",
+            "REGEXP_EXTRACT_ALL(subject, pattern, pos, occ, param, group)",
         )
 
         self.validate_identity("SELECT SEARCH((play, line), 'dream')")
@@ -2723,6 +2755,10 @@ FROM persons AS p, LATERAL FLATTEN(input => p.c, path => 'contact') AS _flattene
         self.assertIsNotNone(analyzer)
         search_mode = search_ast.args.get("search_mode")
         self.assertIsNotNone(search_mode)
+
+        self.validate_identity("SELECT SEARCH_IP(col, '192.168.0.0')").selects[0].assert_is(
+            exp.SearchIp
+        )
 
         self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l ')")
         self.validate_identity("SELECT REGEXP_COUNT('hello world', 'l', 1)")
@@ -3112,6 +3148,10 @@ STORAGE_ALLOWED_LOCATIONS=('s3://mybucket1/path1/', 's3://mybucket2/path2/')""",
                 self.assertEqual(
                     expression.sql(dialect="snowflake"), f"SELECT {func}(t.x AS VARCHAR) FROM t"
                 )
+
+    def test_decfloat(self):
+        self.validate_identity("SELECT CAST(1.5 AS DECFLOAT)")
+        self.validate_identity("CREATE TABLE t (x DECFLOAT)")
 
     def test_copy(self):
         self.validate_identity("COPY INTO test (c1) FROM (SELECT $1.c1 FROM @mystage)")
@@ -3588,3 +3628,36 @@ FROM SEMANTIC_VIEW(
         set_item = expr.find(exp.SetItem)
         self.assertIsNotNone(set_item)
         self.assertEqual(set_item.args.get("kind"), "VARIABLE")
+
+    def test_round(self):
+        self.validate_all(
+            "SELECT ROUND(2.25) AS value",
+            write={
+                "snowflake": "SELECT ROUND(2.25) AS value",
+                "duckdb": "SELECT ROUND(2.25) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(2.25, 1) AS value",
+            write={
+                "snowflake": "SELECT ROUND(2.25, 1) AS value",
+                "duckdb": "SELECT ROUND(2.25, 1) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(2.25, 1, 'HALF_AWAY_FROM_ZERO') AS value",
+            write={
+                "snowflake": """SELECT ROUND(2.25, 1, 'HALF_AWAY_FROM_ZERO') AS value""",
+                "duckdb": "SELECT ROUND(2.25, 1) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(2.25, 1, 'HALF_TO_EVEN') AS value",
+            write={
+                "snowflake": """SELECT ROUND(2.25, 1, 'HALF_TO_EVEN') AS value""",
+                "duckdb": "SELECT ROUND_EVEN(2.25, 1) AS value",
+            },
+        )

@@ -18,9 +18,14 @@ except ImportError:
 
 
 class ExtractJob(pydantic.BaseModel):
+    """
+    Schema for an extraction job.
+    """
+
     error: typing.Optional[str]
     extraction_agent: ExtractAgent = pydantic.Field(description="The agent that the job was run on.")
-    file: File = pydantic.Field(description="The file that the extract was extracted from")
+    file: typing.Optional[File]
+    file_id: typing.Optional[str]
     id: str = pydantic.Field(description="The id of the extraction job")
     status: StatusEnum = pydantic.Field(description="The status of the extraction job")
 

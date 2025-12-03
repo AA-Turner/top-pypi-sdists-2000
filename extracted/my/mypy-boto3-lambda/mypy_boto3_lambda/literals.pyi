@@ -24,10 +24,15 @@ else:
 __all__ = (
     "ApplicationLogLevelType",
     "ArchitectureType",
+    "CapacityProviderPredefinedMetricTypeType",
+    "CapacityProviderScalingModeType",
+    "CapacityProviderStateType",
     "CodeSigningPolicyType",
     "EndPointTypeType",
     "EventSourceMappingMetricType",
     "EventSourcePositionType",
+    "EventTypeType",
+    "ExecutionStatusType",
     "FullDocumentType",
     "FunctionActiveV2WaiterName",
     "FunctionActiveWaiterName",
@@ -36,7 +41,10 @@ __all__ = (
     "FunctionUpdatedV2WaiterName",
     "FunctionUpdatedWaiterName",
     "FunctionUrlAuthTypeType",
+    "FunctionVersionLatestPublishedType",
     "FunctionVersionType",
+    "GetDurableExecutionHistoryPaginatorName",
+    "GetDurableExecutionStatePaginatorName",
     "InvocationTypeType",
     "InvokeModeType",
     "KafkaSchemaRegistryAuthTypeType",
@@ -45,10 +53,13 @@ __all__ = (
     "LastUpdateStatusReasonCodeType",
     "LastUpdateStatusType",
     "ListAliasesPaginatorName",
+    "ListCapacityProvidersPaginatorName",
     "ListCodeSigningConfigsPaginatorName",
+    "ListDurableExecutionsByFunctionPaginatorName",
     "ListEventSourceMappingsPaginatorName",
     "ListFunctionEventInvokeConfigsPaginatorName",
     "ListFunctionUrlConfigsPaginatorName",
+    "ListFunctionVersionsByCapacityProviderPaginatorName",
     "ListFunctionsByCodeSigningConfigPaginatorName",
     "ListFunctionsPaginatorName",
     "ListLayerVersionsPaginatorName",
@@ -57,6 +68,9 @@ __all__ = (
     "ListVersionsByFunctionPaginatorName",
     "LogFormatType",
     "LogTypeType",
+    "OperationActionType",
+    "OperationStatusType",
+    "OperationTypeType",
     "PackageTypeType",
     "PaginatorName",
     "ProvisionedConcurrencyStatusEnumType",
@@ -82,10 +96,40 @@ __all__ = (
 
 ApplicationLogLevelType = Literal["DEBUG", "ERROR", "FATAL", "INFO", "TRACE", "WARN"]
 ArchitectureType = Literal["arm64", "x86_64"]
+CapacityProviderPredefinedMetricTypeType = Literal["LambdaCapacityProviderAverageCPUUtilization"]
+CapacityProviderScalingModeType = Literal["Auto", "Manual"]
+CapacityProviderStateType = Literal["Active", "Deleting", "Failed", "Pending"]
 CodeSigningPolicyType = Literal["Enforce", "Warn"]
 EndPointTypeType = Literal["KAFKA_BOOTSTRAP_SERVERS"]
 EventSourceMappingMetricType = Literal["EventCount"]
 EventSourcePositionType = Literal["AT_TIMESTAMP", "LATEST", "TRIM_HORIZON"]
+EventTypeType = Literal[
+    "CallbackFailed",
+    "CallbackStarted",
+    "CallbackSucceeded",
+    "CallbackTimedOut",
+    "ChainedInvokeFailed",
+    "ChainedInvokeStarted",
+    "ChainedInvokeStopped",
+    "ChainedInvokeSucceeded",
+    "ChainedInvokeTimedOut",
+    "ContextFailed",
+    "ContextStarted",
+    "ContextSucceeded",
+    "ExecutionFailed",
+    "ExecutionStarted",
+    "ExecutionStopped",
+    "ExecutionSucceeded",
+    "ExecutionTimedOut",
+    "InvocationCompleted",
+    "StepFailed",
+    "StepStarted",
+    "StepSucceeded",
+    "WaitCancelled",
+    "WaitStarted",
+    "WaitSucceeded",
+]
+ExecutionStatusType = Literal["FAILED", "RUNNING", "STOPPED", "SUCCEEDED", "TIMED_OUT"]
 FullDocumentType = Literal["Default", "UpdateLookup"]
 FunctionActiveV2WaiterName = Literal["function_active_v2"]
 FunctionActiveWaiterName = Literal["function_active"]
@@ -94,7 +138,10 @@ FunctionResponseTypeType = Literal["ReportBatchItemFailures"]
 FunctionUpdatedV2WaiterName = Literal["function_updated_v2"]
 FunctionUpdatedWaiterName = Literal["function_updated"]
 FunctionUrlAuthTypeType = Literal["AWS_IAM", "NONE"]
+FunctionVersionLatestPublishedType = Literal["LATEST_PUBLISHED"]
 FunctionVersionType = Literal["ALL"]
+GetDurableExecutionHistoryPaginatorName = Literal["get_durable_execution_history"]
+GetDurableExecutionStatePaginatorName = Literal["get_durable_execution_state"]
 InvocationTypeType = Literal["DryRun", "Event", "RequestResponse"]
 InvokeModeType = Literal["BUFFERED", "RESPONSE_STREAM"]
 KafkaSchemaRegistryAuthTypeType = Literal[
@@ -102,15 +149,26 @@ KafkaSchemaRegistryAuthTypeType = Literal[
 ]
 KafkaSchemaValidationAttributeType = Literal["KEY", "VALUE"]
 LastUpdateStatusReasonCodeType = Literal[
+    "CapacityProviderScalingLimitExceeded",
     "DisabledKMSKey",
+    "EC2RequestLimitExceeded",
     "EFSIOError",
     "EFSMountConnectivityError",
     "EFSMountFailure",
     "EFSMountTimeout",
     "EniLimitExceeded",
     "FunctionError",
+    "FunctionError.ExtensionInitError",
+    "FunctionError.InitResourceExhausted",
+    "FunctionError.InitTimeout",
+    "FunctionError.InvalidEntryPoint",
+    "FunctionError.InvalidWorkingDirectory",
+    "FunctionError.PermissionDenied",
+    "FunctionError.RuntimeInitError",
+    "FunctionError.TooManyExtensions",
     "ImageAccessDenied",
     "ImageDeleted",
+    "InsufficientCapacity",
     "InsufficientRolePermissions",
     "InternalError",
     "InvalidConfiguration",
@@ -123,13 +181,19 @@ LastUpdateStatusReasonCodeType = Literal[
     "KMSKeyAccessDenied",
     "KMSKeyNotFound",
     "SubnetOutOfIPAddresses",
+    "VcpuLimitExceeded",
 ]
 LastUpdateStatusType = Literal["Failed", "InProgress", "Successful"]
 ListAliasesPaginatorName = Literal["list_aliases"]
+ListCapacityProvidersPaginatorName = Literal["list_capacity_providers"]
 ListCodeSigningConfigsPaginatorName = Literal["list_code_signing_configs"]
+ListDurableExecutionsByFunctionPaginatorName = Literal["list_durable_executions_by_function"]
 ListEventSourceMappingsPaginatorName = Literal["list_event_source_mappings"]
 ListFunctionEventInvokeConfigsPaginatorName = Literal["list_function_event_invoke_configs"]
 ListFunctionUrlConfigsPaginatorName = Literal["list_function_url_configs"]
+ListFunctionVersionsByCapacityProviderPaginatorName = Literal[
+    "list_function_versions_by_capacity_provider"
+]
 ListFunctionsByCodeSigningConfigPaginatorName = Literal["list_functions_by_code_signing_config"]
 ListFunctionsPaginatorName = Literal["list_functions"]
 ListLayerVersionsPaginatorName = Literal["list_layer_versions"]
@@ -138,6 +202,11 @@ ListProvisionedConcurrencyConfigsPaginatorName = Literal["list_provisioned_concu
 ListVersionsByFunctionPaginatorName = Literal["list_versions_by_function"]
 LogFormatType = Literal["JSON", "Text"]
 LogTypeType = Literal["None", "Tail"]
+OperationActionType = Literal["CANCEL", "FAIL", "RETRY", "START", "SUCCEED"]
+OperationStatusType = Literal[
+    "CANCELLED", "FAILED", "PENDING", "READY", "STARTED", "STOPPED", "SUCCEEDED", "TIMED_OUT"
+]
+OperationTypeType = Literal["CALLBACK", "CHAINED_INVOKE", "CONTEXT", "EXECUTION", "STEP", "WAIT"]
 PackageTypeType = Literal["Image", "Zip"]
 ProvisionedConcurrencyStatusEnumType = Literal["FAILED", "IN_PROGRESS", "READY"]
 PublishedVersionActiveWaiterName = Literal["published_version_active"]
@@ -203,17 +272,29 @@ SourceAccessTypeType = Literal[
     "VPC_SUBNET",
 ]
 StateReasonCodeType = Literal[
+    "CapacityProviderScalingLimitExceeded",
     "Creating",
     "DisabledKMSKey",
+    "DrainingDurableExecutions",
+    "EC2RequestLimitExceeded",
     "EFSIOError",
     "EFSMountConnectivityError",
     "EFSMountFailure",
     "EFSMountTimeout",
     "EniLimitExceeded",
     "FunctionError",
+    "FunctionError.ExtensionInitError",
+    "FunctionError.InitResourceExhausted",
+    "FunctionError.InitTimeout",
+    "FunctionError.InvalidEntryPoint",
+    "FunctionError.InvalidWorkingDirectory",
+    "FunctionError.PermissionDenied",
+    "FunctionError.RuntimeInitError",
+    "FunctionError.TooManyExtensions",
     "Idle",
     "ImageAccessDenied",
     "ImageDeleted",
+    "InsufficientCapacity",
     "InsufficientRolePermissions",
     "InternalError",
     "InvalidConfiguration",
@@ -227,8 +308,18 @@ StateReasonCodeType = Literal[
     "KMSKeyNotFound",
     "Restoring",
     "SubnetOutOfIPAddresses",
+    "VcpuLimitExceeded",
 ]
-StateType = Literal["Active", "Failed", "Inactive", "Pending"]
+StateType = Literal[
+    "Active",
+    "ActiveNonInvocable",
+    "Deactivated",
+    "Deactivating",
+    "Deleting",
+    "Failed",
+    "Inactive",
+    "Pending",
+]
 SystemLogLevelType = Literal["DEBUG", "INFO", "WARN"]
 TenantIsolationModeType = Literal["PER_TENANT"]
 TracingModeType = Literal["Active", "PassThrough"]
@@ -510,6 +601,7 @@ ServiceName = Literal[
     "networkmonitor",
     "notifications",
     "notificationscontacts",
+    "nova-act",
     "oam",
     "observabilityadmin",
     "odb",
@@ -520,6 +612,8 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-account",
+    "partnercentral-benefits",
     "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
@@ -562,6 +656,7 @@ ServiceName = Literal[
     "route53-recovery-control-config",
     "route53-recovery-readiness",
     "route53domains",
+    "route53globalresolver",
     "route53profiles",
     "route53resolver",
     "rtbfabric",
@@ -650,11 +745,16 @@ ResourceServiceName = Literal[
     "cloudformation", "cloudwatch", "dynamodb", "ec2", "glacier", "iam", "s3", "sns", "sqs"
 ]
 PaginatorName = Literal[
+    "get_durable_execution_history",
+    "get_durable_execution_state",
     "list_aliases",
+    "list_capacity_providers",
     "list_code_signing_configs",
+    "list_durable_executions_by_function",
     "list_event_source_mappings",
     "list_function_event_invoke_configs",
     "list_function_url_configs",
+    "list_function_versions_by_capacity_provider",
     "list_functions",
     "list_functions_by_code_signing_config",
     "list_layer_versions",

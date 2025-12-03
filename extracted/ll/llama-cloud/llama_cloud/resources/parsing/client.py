@@ -819,6 +819,7 @@ class ParsingClient:
         do_not_unroll_columns: bool,
         extract_charts: bool,
         extract_layout: bool,
+        extract_printed_page_number: bool,
         fast_mode: bool,
         file: typing.Optional[str] = OMIT,
         formatting_instruction: str,
@@ -844,6 +845,7 @@ class ParsingClient:
         keep_page_separator_when_merging_tables: bool,
         language: typing.List[ParserLanguages],
         layout_aware: bool,
+        line_level_bounding_box: bool,
         markdown_table_multiline_header_separator: str,
         max_pages: typing.Optional[int] = OMIT,
         merge_tables_across_pages_in_markdown: bool,
@@ -892,10 +894,12 @@ class ParsingClient:
         system_prompt_append: str,
         take_screenshot: bool,
         target_pages: str,
+        tier: str,
         use_vendor_multimodal_model: bool,
         user_prompt: str,
         vendor_multimodal_api_key: str,
         vendor_multimodal_model_name: str,
+        version: str,
         webhook_configurations: str,
         webhook_url: str,
     ) -> ParsingJob:
@@ -963,6 +967,8 @@ class ParsingClient:
 
             - extract_layout: bool.
 
+            - extract_printed_page_number: bool.
+
             - fast_mode: bool.
 
             - file: typing.Optional[str].
@@ -1012,6 +1018,8 @@ class ParsingClient:
             - language: typing.List[ParserLanguages].
 
             - layout_aware: bool.
+
+            - line_level_bounding_box: bool.
 
             - markdown_table_multiline_header_separator: str.
 
@@ -1109,6 +1117,8 @@ class ParsingClient:
 
             - target_pages: str.
 
+            - tier: str.
+
             - use_vendor_multimodal_model: bool.
 
             - user_prompt: str.
@@ -1116,6 +1126,8 @@ class ParsingClient:
             - vendor_multimodal_api_key: str.
 
             - vendor_multimodal_model_name: str.
+
+            - version: str.
 
             - webhook_configurations: str.
 
@@ -1151,6 +1163,7 @@ class ParsingClient:
             "do_not_unroll_columns": do_not_unroll_columns,
             "extract_charts": extract_charts,
             "extract_layout": extract_layout,
+            "extract_printed_page_number": extract_printed_page_number,
             "fast_mode": fast_mode,
             "formatting_instruction": formatting_instruction,
             "gpt4o_api_key": gpt_4_o_api_key,
@@ -1175,6 +1188,7 @@ class ParsingClient:
             "keep_page_separator_when_merging_tables": keep_page_separator_when_merging_tables,
             "language": language,
             "layout_aware": layout_aware,
+            "line_level_bounding_box": line_level_bounding_box,
             "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
             "merge_tables_across_pages_in_markdown": merge_tables_across_pages_in_markdown,
             "model": model,
@@ -1220,10 +1234,12 @@ class ParsingClient:
             "system_prompt_append": system_prompt_append,
             "take_screenshot": take_screenshot,
             "target_pages": target_pages,
+            "tier": tier,
             "use_vendor_multimodal_model": use_vendor_multimodal_model,
             "user_prompt": user_prompt,
             "vendor_multimodal_api_key": vendor_multimodal_api_key,
             "vendor_multimodal_model_name": vendor_multimodal_model_name,
+            "version": version,
             "webhook_configurations": webhook_configurations,
             "webhook_url": webhook_url,
         }
@@ -2045,6 +2061,7 @@ class AsyncParsingClient:
         do_not_unroll_columns: bool,
         extract_charts: bool,
         extract_layout: bool,
+        extract_printed_page_number: bool,
         fast_mode: bool,
         file: typing.Optional[str] = OMIT,
         formatting_instruction: str,
@@ -2070,6 +2087,7 @@ class AsyncParsingClient:
         keep_page_separator_when_merging_tables: bool,
         language: typing.List[ParserLanguages],
         layout_aware: bool,
+        line_level_bounding_box: bool,
         markdown_table_multiline_header_separator: str,
         max_pages: typing.Optional[int] = OMIT,
         merge_tables_across_pages_in_markdown: bool,
@@ -2118,10 +2136,12 @@ class AsyncParsingClient:
         system_prompt_append: str,
         take_screenshot: bool,
         target_pages: str,
+        tier: str,
         use_vendor_multimodal_model: bool,
         user_prompt: str,
         vendor_multimodal_api_key: str,
         vendor_multimodal_model_name: str,
+        version: str,
         webhook_configurations: str,
         webhook_url: str,
     ) -> ParsingJob:
@@ -2189,6 +2209,8 @@ class AsyncParsingClient:
 
             - extract_layout: bool.
 
+            - extract_printed_page_number: bool.
+
             - fast_mode: bool.
 
             - file: typing.Optional[str].
@@ -2238,6 +2260,8 @@ class AsyncParsingClient:
             - language: typing.List[ParserLanguages].
 
             - layout_aware: bool.
+
+            - line_level_bounding_box: bool.
 
             - markdown_table_multiline_header_separator: str.
 
@@ -2335,6 +2359,8 @@ class AsyncParsingClient:
 
             - target_pages: str.
 
+            - tier: str.
+
             - use_vendor_multimodal_model: bool.
 
             - user_prompt: str.
@@ -2342,6 +2368,8 @@ class AsyncParsingClient:
             - vendor_multimodal_api_key: str.
 
             - vendor_multimodal_model_name: str.
+
+            - version: str.
 
             - webhook_configurations: str.
 
@@ -2377,6 +2405,7 @@ class AsyncParsingClient:
             "do_not_unroll_columns": do_not_unroll_columns,
             "extract_charts": extract_charts,
             "extract_layout": extract_layout,
+            "extract_printed_page_number": extract_printed_page_number,
             "fast_mode": fast_mode,
             "formatting_instruction": formatting_instruction,
             "gpt4o_api_key": gpt_4_o_api_key,
@@ -2401,6 +2430,7 @@ class AsyncParsingClient:
             "keep_page_separator_when_merging_tables": keep_page_separator_when_merging_tables,
             "language": language,
             "layout_aware": layout_aware,
+            "line_level_bounding_box": line_level_bounding_box,
             "markdown_table_multiline_header_separator": markdown_table_multiline_header_separator,
             "merge_tables_across_pages_in_markdown": merge_tables_across_pages_in_markdown,
             "model": model,
@@ -2446,10 +2476,12 @@ class AsyncParsingClient:
             "system_prompt_append": system_prompt_append,
             "take_screenshot": take_screenshot,
             "target_pages": target_pages,
+            "tier": tier,
             "use_vendor_multimodal_model": use_vendor_multimodal_model,
             "user_prompt": user_prompt,
             "vendor_multimodal_api_key": vendor_multimodal_api_key,
             "vendor_multimodal_model_name": vendor_multimodal_model_name,
+            "version": version,
             "webhook_configurations": webhook_configurations,
             "webhook_url": webhook_url,
         }

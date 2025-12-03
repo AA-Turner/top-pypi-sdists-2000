@@ -576,8 +576,7 @@ class Bucket(ServiceResource):
         self, **kwargs: Unpack[CreateBucketRequestBucketCreateTypeDef]
     ) -> CreateBucketOutputTypeDef:
         """
-        End of support notice: As of October 1, 2025, Amazon S3 has discontinued
-        support for Email Grantee Access Control Lists (ACLs).
+        This action creates an Amazon S3 bucket.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/bucket/create.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#bucketcreate-method)
@@ -2150,8 +2149,7 @@ class S3ServiceResource(ServiceResource):
         self, **kwargs: Unpack[CreateBucketRequestServiceResourceCreateBucketTypeDef]
     ) -> _Bucket:
         """
-        End of support notice: As of October 1, 2025, Amazon S3 has discontinued
-        support for Email Grantee Access Control Lists (ACLs).
+        This action creates an Amazon S3 bucket.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/service-resource/create_bucket.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/service_resource/#s3serviceresourcecreate_bucket-method)

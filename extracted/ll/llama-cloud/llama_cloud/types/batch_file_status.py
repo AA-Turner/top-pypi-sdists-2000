@@ -16,6 +16,7 @@ class BatchFileStatus(str, enum.Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     SKIPPED = "skipped"
+    CANCELLED = "cancelled"
 
     def visit(
         self,
@@ -24,6 +25,7 @@ class BatchFileStatus(str, enum.Enum):
         completed: typing.Callable[[], T_Result],
         failed: typing.Callable[[], T_Result],
         skipped: typing.Callable[[], T_Result],
+        cancelled: typing.Callable[[], T_Result],
     ) -> T_Result:
         if self is BatchFileStatus.PENDING:
             return pending()
@@ -35,3 +37,5 @@ class BatchFileStatus(str, enum.Enum):
             return failed()
         if self is BatchFileStatus.SKIPPED:
             return skipped()
+        if self is BatchFileStatus.CANCELLED:
+            return cancelled()

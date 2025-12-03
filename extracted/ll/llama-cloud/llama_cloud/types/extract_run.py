@@ -34,7 +34,8 @@ class ExtractRun(pydantic.BaseModel):
     error: typing.Optional[str]
     extraction_agent_id: str = pydantic.Field(description="The id of the extraction agent")
     extraction_metadata: typing.Optional[typing.Dict[str, typing.Optional[ExtractRunExtractionMetadataValue]]]
-    file: File = pydantic.Field(description="The file that the extract was extracted from")
+    file: typing.Optional[File]
+    file_id: typing.Optional[str]
     from_ui: bool = pydantic.Field(description="Whether this extraction run was triggered from the UI")
     id: str = pydantic.Field(description="The id of the extraction run")
     job_id: typing.Optional[str]

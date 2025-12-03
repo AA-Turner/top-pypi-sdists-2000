@@ -1034,10 +1034,10 @@ class _CreateEvaluationRunParameters(_common.BaseModel):
         default=None, description=""""""
     )
     labels: Optional[dict[str, str]] = Field(default=None, description="""""")
-    config: Optional[CreateEvaluationRunConfig] = Field(
+    inference_configs: Optional[dict[str, "EvaluationRunInferenceConfig"]] = Field(
         default=None, description=""""""
     )
-    inference_configs: Optional[dict[str, "EvaluationRunInferenceConfig"]] = Field(
+    config: Optional[CreateEvaluationRunConfig] = Field(
         default=None, description=""""""
     )
 
@@ -1060,10 +1060,10 @@ class _CreateEvaluationRunParametersDict(TypedDict, total=False):
     labels: Optional[dict[str, str]]
     """"""
 
-    config: Optional[CreateEvaluationRunConfigDict]
+    inference_configs: Optional[dict[str, "EvaluationRunInferenceConfigDict"]]
     """"""
 
-    inference_configs: Optional[dict[str, "EvaluationRunInferenceConfigDict"]]
+    config: Optional[CreateEvaluationRunConfigDict]
     """"""
 
 
@@ -2622,6 +2622,10 @@ class Metric(_common.BaseModel):
     judge_model: Optional[str] = Field(
         default=None, description="""The judge model for the metric."""
     )
+    judge_model_generation_config: Optional[genai_types.GenerationConfig] = Field(
+        default=None,
+        description="""The generation config for the judge LLM (temperature, top_k, top_p, etc).""",
+    )
     judge_model_sampling_count: Optional[int] = Field(
         default=None, description="""The sampling count for the judge model."""
     )
@@ -2824,6 +2828,9 @@ class MetricDict(TypedDict, total=False):
 
     judge_model: Optional[str]
     """The judge model for the metric."""
+
+    judge_model_generation_config: Optional[genai_types.GenerationConfigDict]
+    """The generation config for the judge LLM (temperature, top_k, top_p, etc)."""
 
     judge_model_sampling_count: Optional[int]
     """The sampling count for the judge model."""
@@ -8778,6 +8785,10 @@ class CreateAgentEngineSessionConfig(_common.BaseModel):
         default=None,
         description="""Optional. Timestamp of when this resource is considered expired. This is *always* provided on output, regardless of what `expiration` was sent on input.""",
     )
+    labels: Optional[dict[str, str]] = Field(
+        default=None,
+        description="""Optional. The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels.""",
+    )
 
 
 class CreateAgentEngineSessionConfigDict(TypedDict, total=False):
@@ -8802,6 +8813,9 @@ class CreateAgentEngineSessionConfigDict(TypedDict, total=False):
 
     expire_time: Optional[datetime.datetime]
     """Optional. Timestamp of when this resource is considered expired. This is *always* provided on output, regardless of what `expiration` was sent on input."""
+
+    labels: Optional[dict[str, str]]
+    """Optional. The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels."""
 
 
 CreateAgentEngineSessionConfigOrDict = Union[
@@ -8846,31 +8860,35 @@ _CreateAgentEngineSessionRequestParametersOrDict = Union[
 class Session(_common.BaseModel):
     """A session."""
 
-    create_time: Optional[datetime.datetime] = Field(
-        default=None,
-        description="""Output only. Timestamp when the session was created.""",
-    )
-    display_name: Optional[str] = Field(
-        default=None, description="""Optional. The display name of the session."""
-    )
     expire_time: Optional[datetime.datetime] = Field(
         default=None,
         description="""Optional. Timestamp of when this session is considered expired. This is *always* provided on output, regardless of what was sent on input.""",
+    )
+    ttl: Optional[str] = Field(
+        default=None, description="""Optional. Input only. The TTL for this session."""
     )
     name: Optional[str] = Field(
         default=None,
         description="""Identifier. The resource name of the session. Format: 'projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}'.""",
     )
-    session_state: Optional[dict[str, Any]] = Field(
+    create_time: Optional[datetime.datetime] = Field(
         default=None,
-        description="""Optional. Session specific memory which stores key conversation points.""",
-    )
-    ttl: Optional[str] = Field(
-        default=None, description="""Optional. Input only. The TTL for this session."""
+        description="""Output only. Timestamp when the session was created.""",
     )
     update_time: Optional[datetime.datetime] = Field(
         default=None,
         description="""Output only. Timestamp when the session was updated.""",
+    )
+    display_name: Optional[str] = Field(
+        default=None, description="""Optional. The display name of the session."""
+    )
+    labels: Optional[dict[str, str]] = Field(
+        default=None,
+        description="""The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels.""",
+    )
+    session_state: Optional[dict[str, Any]] = Field(
+        default=None,
+        description="""Optional. Session specific memory which stores key conversation points.""",
     )
     user_id: Optional[str] = Field(
         default=None,
@@ -8881,26 +8899,29 @@ class Session(_common.BaseModel):
 class SessionDict(TypedDict, total=False):
     """A session."""
 
-    create_time: Optional[datetime.datetime]
-    """Output only. Timestamp when the session was created."""
-
-    display_name: Optional[str]
-    """Optional. The display name of the session."""
-
     expire_time: Optional[datetime.datetime]
     """Optional. Timestamp of when this session is considered expired. This is *always* provided on output, regardless of what was sent on input."""
-
-    name: Optional[str]
-    """Identifier. The resource name of the session. Format: 'projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}'."""
-
-    session_state: Optional[dict[str, Any]]
-    """Optional. Session specific memory which stores key conversation points."""
 
     ttl: Optional[str]
     """Optional. Input only. The TTL for this session."""
 
+    name: Optional[str]
+    """Identifier. The resource name of the session. Format: 'projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}'."""
+
+    create_time: Optional[datetime.datetime]
+    """Output only. Timestamp when the session was created."""
+
     update_time: Optional[datetime.datetime]
     """Output only. Timestamp when the session was updated."""
+
+    display_name: Optional[str]
+    """Optional. The display name of the session."""
+
+    labels: Optional[dict[str, str]]
+    """The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels."""
+
+    session_state: Optional[dict[str, Any]]
+    """Optional. Session specific memory which stores key conversation points."""
 
     user_id: Optional[str]
     """Required. Immutable. String id provided by the user"""
@@ -9240,6 +9261,10 @@ class UpdateAgentEngineSessionConfig(_common.BaseModel):
         default=None,
         description="""Optional. Timestamp of when this resource is considered expired. This is *always* provided on output, regardless of what `expiration` was sent on input.""",
     )
+    labels: Optional[dict[str, str]] = Field(
+        default=None,
+        description="""Optional. The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels.""",
+    )
     update_mask: Optional[str] = Field(
         default=None,
         description="""The update mask to apply. For the `FieldMask` definition, see
@@ -9272,6 +9297,9 @@ class UpdateAgentEngineSessionConfigDict(TypedDict, total=False):
 
     expire_time: Optional[datetime.datetime]
     """Optional. Timestamp of when this resource is considered expired. This is *always* provided on output, regardless of what `expiration` was sent on input."""
+
+    labels: Optional[dict[str, str]]
+    """Optional. The labels with user-defined metadata to organize your Sessions. Label keys and values can be no longer than 64 characters (Unicode codepoints), can only contain lowercase letters, numeric characters, underscores and dashes. International characters are allowed. See https://goo.gl/xmQnxf for more information and examples of labels."""
 
     update_mask: Optional[str]
     """The update mask to apply. For the `FieldMask` definition, see
@@ -9929,32 +9957,166 @@ MultimodalDatasetOperationOrDict = Union[
 ]
 
 
-class CreateMultimodalDatasetConfig(_common.BaseModel):
-    """Config for creating a dataset resource to store multimodal dataset."""
+class AssessDatasetConfig(_common.BaseModel):
+    """Config for assessing a multimodal dataset resource."""
 
     http_options: Optional[genai_types.HttpOptions] = Field(
         default=None, description="""Used to override HTTP request options."""
     )
     timeout: Optional[int] = Field(
         default=90,
-        description="""The timeout for the create dataset request in seconds. If not set,
+        description="""The timeout for the assess dataset request in seconds. If not set,
       the default timeout is 90 seconds.""",
     )
 
 
-class CreateMultimodalDatasetConfigDict(TypedDict, total=False):
-    """Config for creating a dataset resource to store multimodal dataset."""
+class AssessDatasetConfigDict(TypedDict, total=False):
+    """Config for assessing a multimodal dataset resource."""
 
     http_options: Optional[genai_types.HttpOptionsDict]
     """Used to override HTTP request options."""
 
     timeout: Optional[int]
-    """The timeout for the create dataset request in seconds. If not set,
+    """The timeout for the assess dataset request in seconds. If not set,
       the default timeout is 90 seconds."""
 
 
-CreateMultimodalDatasetConfigOrDict = Union[
-    CreateMultimodalDatasetConfig, CreateMultimodalDatasetConfigDict
+AssessDatasetConfigOrDict = Union[AssessDatasetConfig, AssessDatasetConfigDict]
+
+
+class TuningResourceUsageAssessmentConfig(_common.BaseModel):
+    """Config for tuning resource usage assessment."""
+
+    model_name: Optional[str] = Field(default=None, description="""""")
+
+
+class TuningResourceUsageAssessmentConfigDict(TypedDict, total=False):
+    """Config for tuning resource usage assessment."""
+
+    model_name: Optional[str]
+    """"""
+
+
+TuningResourceUsageAssessmentConfigOrDict = Union[
+    TuningResourceUsageAssessmentConfig, TuningResourceUsageAssessmentConfigDict
+]
+
+
+class TuningValidationAssessmentConfig(_common.BaseModel):
+    """Config for tuning validation assessment."""
+
+    model_name: Optional[str] = Field(default=None, description="""""")
+    dataset_usage: Optional[str] = Field(default=None, description="""""")
+
+
+class TuningValidationAssessmentConfigDict(TypedDict, total=False):
+    """Config for tuning validation assessment."""
+
+    model_name: Optional[str]
+    """"""
+
+    dataset_usage: Optional[str]
+    """"""
+
+
+TuningValidationAssessmentConfigOrDict = Union[
+    TuningValidationAssessmentConfig, TuningValidationAssessmentConfigDict
+]
+
+
+class BatchPredictionResourceUsageAssessmentConfig(_common.BaseModel):
+    """Config for batch prediction resource usage assessment."""
+
+    model_name: Optional[str] = Field(default=None, description="""""")
+
+
+class BatchPredictionResourceUsageAssessmentConfigDict(TypedDict, total=False):
+    """Config for batch prediction resource usage assessment."""
+
+    model_name: Optional[str]
+    """"""
+
+
+BatchPredictionResourceUsageAssessmentConfigOrDict = Union[
+    BatchPredictionResourceUsageAssessmentConfig,
+    BatchPredictionResourceUsageAssessmentConfigDict,
+]
+
+
+class BatchPredictionValidationAssessmentConfig(_common.BaseModel):
+    """Config for batch prediction validation assessment."""
+
+    model_name: Optional[str] = Field(default=None, description="""""")
+
+
+class BatchPredictionValidationAssessmentConfigDict(TypedDict, total=False):
+    """Config for batch prediction validation assessment."""
+
+    model_name: Optional[str]
+    """"""
+
+
+BatchPredictionValidationAssessmentConfigOrDict = Union[
+    BatchPredictionValidationAssessmentConfig,
+    BatchPredictionValidationAssessmentConfigDict,
+]
+
+
+class _AssessDatasetParameters(_common.BaseModel):
+    """Parameters for assessing a multimodal dataset resource."""
+
+    config: Optional[AssessDatasetConfig] = Field(default=None, description="""""")
+    name: Optional[str] = Field(default=None, description="""""")
+    gemini_request_read_config: Optional[GeminiRequestReadConfig] = Field(
+        default=None, description=""""""
+    )
+    tuning_resource_usage_assessment_config: Optional[
+        TuningResourceUsageAssessmentConfig
+    ] = Field(default=None, description="""""")
+    tuning_validation_assessment_config: Optional[TuningValidationAssessmentConfig] = (
+        Field(default=None, description="""""")
+    )
+    batch_prediction_resource_usage_assessment_config: Optional[
+        BatchPredictionResourceUsageAssessmentConfig
+    ] = Field(default=None, description="""""")
+    batch_prediction_validation_assessment_config: Optional[
+        BatchPredictionValidationAssessmentConfig
+    ] = Field(default=None, description="""""")
+
+
+class _AssessDatasetParametersDict(TypedDict, total=False):
+    """Parameters for assessing a multimodal dataset resource."""
+
+    config: Optional[AssessDatasetConfigDict]
+    """"""
+
+    name: Optional[str]
+    """"""
+
+    gemini_request_read_config: Optional[GeminiRequestReadConfigDict]
+    """"""
+
+    tuning_resource_usage_assessment_config: Optional[
+        TuningResourceUsageAssessmentConfigDict
+    ]
+    """"""
+
+    tuning_validation_assessment_config: Optional[TuningValidationAssessmentConfigDict]
+    """"""
+
+    batch_prediction_resource_usage_assessment_config: Optional[
+        BatchPredictionResourceUsageAssessmentConfigDict
+    ]
+    """"""
+
+    batch_prediction_validation_assessment_config: Optional[
+        BatchPredictionValidationAssessmentConfigDict
+    ]
+    """"""
+
+
+_AssessDatasetParametersOrDict = Union[
+    _AssessDatasetParameters, _AssessDatasetParametersDict
 ]
 
 
@@ -10022,12 +10184,38 @@ SchemaTablesDatasetMetadataOrDict = Union[
 ]
 
 
+class CreateMultimodalDatasetConfig(_common.BaseModel):
+    """Config for creating a dataset resource to store multimodal dataset."""
+
+    http_options: Optional[genai_types.HttpOptions] = Field(
+        default=None, description="""Used to override HTTP request options."""
+    )
+    timeout: Optional[int] = Field(
+        default=90,
+        description="""The timeout for the create dataset request in seconds. If not set,
+      the default timeout is 90 seconds.""",
+    )
+
+
+class CreateMultimodalDatasetConfigDict(TypedDict, total=False):
+    """Config for creating a dataset resource to store multimodal dataset."""
+
+    http_options: Optional[genai_types.HttpOptionsDict]
+    """Used to override HTTP request options."""
+
+    timeout: Optional[int]
+    """The timeout for the create dataset request in seconds. If not set,
+      the default timeout is 90 seconds."""
+
+
+CreateMultimodalDatasetConfigOrDict = Union[
+    CreateMultimodalDatasetConfig, CreateMultimodalDatasetConfigDict
+]
+
+
 class _CreateMultimodalDatasetParameters(_common.BaseModel):
     """Parameters for creating a dataset resource to store multimodal dataset."""
 
-    config: Optional[CreateMultimodalDatasetConfig] = Field(
-        default=None, description=""""""
-    )
     name: Optional[str] = Field(default=None, description="""""")
     display_name: Optional[str] = Field(default=None, description="""""")
     metadata_schema_uri: Optional[str] = Field(default=None, description="""""")
@@ -10038,13 +10226,13 @@ class _CreateMultimodalDatasetParameters(_common.BaseModel):
     encryption_spec: Optional[genai_types.EncryptionSpec] = Field(
         default=None, description=""""""
     )
+    config: Optional[CreateMultimodalDatasetConfig] = Field(
+        default=None, description=""""""
+    )
 
 
 class _CreateMultimodalDatasetParametersDict(TypedDict, total=False):
     """Parameters for creating a dataset resource to store multimodal dataset."""
-
-    config: Optional[CreateMultimodalDatasetConfigDict]
-    """"""
 
     name: Optional[str]
     """"""
@@ -10064,6 +10252,9 @@ class _CreateMultimodalDatasetParametersDict(TypedDict, total=False):
     encryption_spec: Optional[genai_types.EncryptionSpecDict]
     """"""
 
+    config: Optional[CreateMultimodalDatasetConfigDict]
+    """"""
+
 
 _CreateMultimodalDatasetParametersOrDict = Union[
     _CreateMultimodalDatasetParameters, _CreateMultimodalDatasetParametersDict
@@ -10073,20 +10264,20 @@ _CreateMultimodalDatasetParametersOrDict = Union[
 class _DeleteMultimodalDatasetRequestParameters(_common.BaseModel):
     """Parameters for deleting a multimodal dataset."""
 
-    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(
         default=None, description="""ID of the dataset to be deleted."""
     )
+    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
 
 
 class _DeleteMultimodalDatasetRequestParametersDict(TypedDict, total=False):
     """Parameters for deleting a multimodal dataset."""
 
-    config: Optional[VertexBaseConfigDict]
-    """"""
-
     name: Optional[str]
     """ID of the dataset to be deleted."""
+
+    config: Optional[VertexBaseConfigDict]
+    """"""
 
 
 _DeleteMultimodalDatasetRequestParametersOrDict = Union[
@@ -10098,17 +10289,17 @@ _DeleteMultimodalDatasetRequestParametersOrDict = Union[
 class _GetMultimodalDatasetParameters(_common.BaseModel):
     """Parameters for getting a multimodal dataset resource."""
 
-    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
+    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
 
 
 class _GetMultimodalDatasetParametersDict(TypedDict, total=False):
     """Parameters for getting a multimodal dataset resource."""
 
-    config: Optional[VertexBaseConfigDict]
+    name: Optional[str]
     """"""
 
-    name: Optional[str]
+    config: Optional[VertexBaseConfigDict]
     """"""
 
 
@@ -10176,23 +10367,23 @@ GetMultimodalDatasetOperationConfigOrDict = Union[
 class _GetMultimodalDatasetOperationParameters(_common.BaseModel):
     """Parameters for getting a dataset operation."""
 
+    dataset_id: Optional[str] = Field(default=None, description="""""")
+    operation_id: Optional[str] = Field(default=None, description="""""")
     config: Optional[GetMultimodalDatasetOperationConfig] = Field(
         default=None, description=""""""
     )
-    dataset_id: Optional[str] = Field(default=None, description="""""")
-    operation_id: Optional[str] = Field(default=None, description="""""")
 
 
 class _GetMultimodalDatasetOperationParametersDict(TypedDict, total=False):
     """Parameters for getting a dataset operation."""
 
-    config: Optional[GetMultimodalDatasetOperationConfigDict]
-    """"""
-
     dataset_id: Optional[str]
     """"""
 
     operation_id: Optional[str]
+    """"""
+
+    config: Optional[GetMultimodalDatasetOperationConfigDict]
     """"""
 
 
@@ -10334,9 +10525,6 @@ UpdateMultimodalDatasetConfigOrDict = Union[
 class _UpdateMultimodalDatasetParameters(_common.BaseModel):
     """Parameters for updating a multimodal dataset resource."""
 
-    config: Optional[UpdateMultimodalDatasetConfig] = Field(
-        default=None, description=""""""
-    )
     name: Optional[str] = Field(default=None, description="""""")
     display_name: Optional[str] = Field(default=None, description="""""")
     metadata: Optional[SchemaTablesDatasetMetadata] = Field(
@@ -10346,13 +10534,13 @@ class _UpdateMultimodalDatasetParameters(_common.BaseModel):
     encryption_spec: Optional[genai_types.EncryptionSpec] = Field(
         default=None, description=""""""
     )
+    config: Optional[UpdateMultimodalDatasetConfig] = Field(
+        default=None, description=""""""
+    )
 
 
 class _UpdateMultimodalDatasetParametersDict(TypedDict, total=False):
     """Parameters for updating a multimodal dataset resource."""
-
-    config: Optional[UpdateMultimodalDatasetConfigDict]
-    """"""
 
     name: Optional[str]
     """"""
@@ -10369,28 +10557,13 @@ class _UpdateMultimodalDatasetParametersDict(TypedDict, total=False):
     encryption_spec: Optional[genai_types.EncryptionSpecDict]
     """"""
 
+    config: Optional[UpdateMultimodalDatasetConfigDict]
+    """"""
+
 
 _UpdateMultimodalDatasetParametersOrDict = Union[
     _UpdateMultimodalDatasetParameters, _UpdateMultimodalDatasetParametersDict
 ]
-
-
-class CreateDatasetConfig(_common.BaseModel):
-    """Config for creating a dataset resource to store prompts."""
-
-    http_options: Optional[genai_types.HttpOptions] = Field(
-        default=None, description="""Used to override HTTP request options."""
-    )
-
-
-class CreateDatasetConfigDict(TypedDict, total=False):
-    """Config for creating a dataset resource to store prompts."""
-
-    http_options: Optional[genai_types.HttpOptionsDict]
-    """Used to override HTTP request options."""
-
-
-CreateDatasetConfigOrDict = Union[CreateDatasetConfig, CreateDatasetConfigDict]
 
 
 class SchemaPredictParamsGroundingConfigSourceEntry(_common.BaseModel):
@@ -11052,10 +11225,27 @@ SchemaTextPromptDatasetMetadataOrDict = Union[
 ]
 
 
+class CreateDatasetConfig(_common.BaseModel):
+    """Config for creating a dataset resource to store prompts."""
+
+    http_options: Optional[genai_types.HttpOptions] = Field(
+        default=None, description="""Used to override HTTP request options."""
+    )
+
+
+class CreateDatasetConfigDict(TypedDict, total=False):
+    """Config for creating a dataset resource to store prompts."""
+
+    http_options: Optional[genai_types.HttpOptionsDict]
+    """Used to override HTTP request options."""
+
+
+CreateDatasetConfigOrDict = Union[CreateDatasetConfig, CreateDatasetConfigDict]
+
+
 class _CreateDatasetParameters(_common.BaseModel):
     """Parameters for creating a dataset resource to store prompts."""
 
-    config: Optional[CreateDatasetConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
     display_name: Optional[str] = Field(default=None, description="""""")
     metadata_schema_uri: Optional[str] = Field(default=None, description="""""")
@@ -11067,13 +11257,11 @@ class _CreateDatasetParameters(_common.BaseModel):
         default=None, description=""""""
     )
     model_reference: Optional[str] = Field(default=None, description="""""")
+    config: Optional[CreateDatasetConfig] = Field(default=None, description="""""")
 
 
 class _CreateDatasetParametersDict(TypedDict, total=False):
     """Parameters for creating a dataset resource to store prompts."""
-
-    config: Optional[CreateDatasetConfigDict]
-    """"""
 
     name: Optional[str]
     """"""
@@ -11094,6 +11282,9 @@ class _CreateDatasetParametersDict(TypedDict, total=False):
     """"""
 
     model_reference: Optional[str]
+    """"""
+
+    config: Optional[CreateDatasetConfigDict]
     """"""
 
 
@@ -11171,9 +11362,6 @@ CreateDatasetVersionConfigOrDict = Union[
 class _CreateDatasetVersionParameters(_common.BaseModel):
     """Represents the create dataset version parameters."""
 
-    config: Optional[CreateDatasetVersionConfig] = Field(
-        default=None, description=""""""
-    )
     dataset_name: Optional[str] = Field(default=None, description="""""")
     metadata: Optional[SchemaTextPromptDatasetMetadata] = Field(
         default=None, description=""""""
@@ -11181,13 +11369,13 @@ class _CreateDatasetVersionParameters(_common.BaseModel):
     model_reference: Optional[str] = Field(default=None, description="""""")
     parent: Optional[str] = Field(default=None, description="""""")
     display_name: Optional[str] = Field(default=None, description="""""")
+    config: Optional[CreateDatasetVersionConfig] = Field(
+        default=None, description=""""""
+    )
 
 
 class _CreateDatasetVersionParametersDict(TypedDict, total=False):
     """Represents the create dataset version parameters."""
-
-    config: Optional[CreateDatasetVersionConfigDict]
-    """"""
 
     dataset_name: Optional[str]
     """"""
@@ -11204,6 +11392,9 @@ class _CreateDatasetVersionParametersDict(TypedDict, total=False):
     display_name: Optional[str]
     """"""
 
+    config: Optional[CreateDatasetVersionConfigDict]
+    """"""
+
 
 _CreateDatasetVersionParametersOrDict = Union[
     _CreateDatasetVersionParameters, _CreateDatasetVersionParametersDict
@@ -11213,17 +11404,17 @@ _CreateDatasetVersionParametersOrDict = Union[
 class _GetDatasetParameters(_common.BaseModel):
     """Parameters for getting a dataset resource to store prompts."""
 
-    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
+    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
 
 
 class _GetDatasetParametersDict(TypedDict, total=False):
     """Parameters for getting a dataset resource to store prompts."""
 
-    config: Optional[VertexBaseConfigDict]
+    name: Optional[str]
     """"""
 
-    name: Optional[str]
+    config: Optional[VertexBaseConfigDict]
     """"""
 
 
@@ -11450,21 +11641,21 @@ DatasetOrDict = Union[Dataset, DatasetDict]
 class _GetDatasetVersionParameters(_common.BaseModel):
     """Parameters for getting a dataset resource to store prompts."""
 
-    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
     dataset_id: Optional[str] = Field(default=None, description="""""")
     dataset_version_id: Optional[str] = Field(default=None, description="""""")
+    config: Optional[VertexBaseConfig] = Field(default=None, description="""""")
 
 
 class _GetDatasetVersionParametersDict(TypedDict, total=False):
     """Parameters for getting a dataset resource to store prompts."""
 
-    config: Optional[VertexBaseConfigDict]
-    """"""
-
     dataset_id: Optional[str]
     """"""
 
     dataset_version_id: Optional[str]
+    """"""
+
+    config: Optional[VertexBaseConfigDict]
     """"""
 
 
@@ -11591,23 +11782,23 @@ GetDatasetOperationConfigOrDict = Union[
 class _GetDatasetOperationParameters(_common.BaseModel):
     """Parameters for getting a dataset operation."""
 
+    dataset_id: Optional[str] = Field(default=None, description="""""")
+    operation_id: Optional[str] = Field(default=None, description="""""")
     config: Optional[GetDatasetOperationConfig] = Field(
         default=None, description=""""""
     )
-    dataset_id: Optional[str] = Field(default=None, description="""""")
-    operation_id: Optional[str] = Field(default=None, description="""""")
 
 
 class _GetDatasetOperationParametersDict(TypedDict, total=False):
     """Parameters for getting a dataset operation."""
 
-    config: Optional[GetDatasetOperationConfigDict]
-    """"""
-
     dataset_id: Optional[str]
     """"""
 
     operation_id: Optional[str]
+    """"""
+
+    config: Optional[GetDatasetOperationConfigDict]
     """"""
 
 
@@ -11718,21 +11909,21 @@ ListDatasetsResponseOrDict = Union[ListDatasetsResponse, ListDatasetsResponseDic
 class _ListDatasetVersionsRequestParameters(_common.BaseModel):
     """Parameters for listing dataset versions."""
 
-    config: Optional[ListPromptsConfig] = Field(default=None, description="""""")
     read_mask: Optional[str] = Field(default=None, description="""""")
     dataset_id: Optional[str] = Field(default=None, description="""""")
+    config: Optional[ListPromptsConfig] = Field(default=None, description="""""")
 
 
 class _ListDatasetVersionsRequestParametersDict(TypedDict, total=False):
     """Parameters for listing dataset versions."""
 
-    config: Optional[ListPromptsConfigDict]
-    """"""
-
     read_mask: Optional[str]
     """"""
 
     dataset_id: Optional[str]
+    """"""
+
+    config: Optional[ListPromptsConfigDict]
     """"""
 
 
@@ -11972,26 +12163,26 @@ RestoreVersionConfigOrDict = Union[RestoreVersionConfig, RestoreVersionConfigDic
 class _RestoreVersionRequestParameters(_common.BaseModel):
     """Parameters for restoring a prompt version."""
 
-    config: Optional[RestoreVersionConfig] = Field(default=None, description="""""")
     dataset_id: Optional[str] = Field(
         default=None, description="""ID of the prompt dataset to be restored."""
     )
     version_id: Optional[str] = Field(
         default=None, description="""ID of the prompt dataset version to be restored."""
     )
+    config: Optional[RestoreVersionConfig] = Field(default=None, description="""""")
 
 
 class _RestoreVersionRequestParametersDict(TypedDict, total=False):
     """Parameters for restoring a prompt version."""
-
-    config: Optional[RestoreVersionConfigDict]
-    """"""
 
     dataset_id: Optional[str]
     """ID of the prompt dataset to be restored."""
 
     version_id: Optional[str]
     """ID of the prompt dataset version to be restored."""
+
+    config: Optional[RestoreVersionConfigDict]
+    """"""
 
 
 _RestoreVersionRequestParametersOrDict = Union[
@@ -12062,7 +12253,6 @@ UpdateDatasetConfigOrDict = Union[UpdateDatasetConfig, UpdateDatasetConfigDict]
 class _UpdateDatasetParameters(_common.BaseModel):
     """Parameters for creating a dataset resource to store prompts."""
 
-    config: Optional[UpdateDatasetConfig] = Field(default=None, description="""""")
     name: Optional[str] = Field(default=None, description="""""")
     dataset_id: Optional[str] = Field(default=None, description="""""")
     display_name: Optional[str] = Field(default=None, description="""""")
@@ -12074,13 +12264,11 @@ class _UpdateDatasetParameters(_common.BaseModel):
         default=None, description=""""""
     )
     model_reference: Optional[str] = Field(default=None, description="""""")
+    config: Optional[UpdateDatasetConfig] = Field(default=None, description="""""")
 
 
 class _UpdateDatasetParametersDict(TypedDict, total=False):
     """Parameters for creating a dataset resource to store prompts."""
-
-    config: Optional[UpdateDatasetConfigDict]
-    """"""
 
     name: Optional[str]
     """"""
@@ -12101,6 +12289,9 @@ class _UpdateDatasetParametersDict(TypedDict, total=False):
     """"""
 
     model_reference: Optional[str]
+    """"""
+
+    config: Optional[UpdateDatasetConfigDict]
     """"""
 
 
@@ -13483,6 +13674,80 @@ class AssembleDatasetDict(TypedDict, total=False):
 
 
 AssembleDatasetOrDict = Union[AssembleDataset, AssembleDatasetDict]
+
+
+class BatchPredictionResourceUsageAssessmentResult(_common.BaseModel):
+    """Result of batch prediction resource usage assessment."""
+
+    token_count: Optional[int] = Field(
+        default=None, description="""Number of tokens in the dataset."""
+    )
+    audio_token_count: Optional[int] = Field(
+        default=None, description="""Number of audio tokens in the dataset."""
+    )
+
+
+class BatchPredictionResourceUsageAssessmentResultDict(TypedDict, total=False):
+    """Result of batch prediction resource usage assessment."""
+
+    token_count: Optional[int]
+    """Number of tokens in the dataset."""
+
+    audio_token_count: Optional[int]
+    """Number of audio tokens in the dataset."""
+
+
+BatchPredictionResourceUsageAssessmentResultOrDict = Union[
+    BatchPredictionResourceUsageAssessmentResult,
+    BatchPredictionResourceUsageAssessmentResultDict,
+]
+
+
+class TuningResourceUsageAssessmentResult(_common.BaseModel):
+    """Result of tuning resource usage assessment."""
+
+    token_count: Optional[int] = Field(
+        default=None, description="""The number of tokens in the dataset."""
+    )
+    billable_character_count: Optional[int] = Field(
+        default=None,
+        description="""The number of billable characters in the dataset.""",
+    )
+
+
+class TuningResourceUsageAssessmentResultDict(TypedDict, total=False):
+    """Result of tuning resource usage assessment."""
+
+    token_count: Optional[int]
+    """The number of tokens in the dataset."""
+
+    billable_character_count: Optional[int]
+    """The number of billable characters in the dataset."""
+
+
+TuningResourceUsageAssessmentResultOrDict = Union[
+    TuningResourceUsageAssessmentResult, TuningResourceUsageAssessmentResultDict
+]
+
+
+class TuningValidationAssessmentResult(_common.BaseModel):
+    """The result of a tuning validation assessment."""
+
+    errors: Optional[list[str]] = Field(
+        default=None, description="""The list of errors found in the dataset."""
+    )
+
+
+class TuningValidationAssessmentResultDict(TypedDict, total=False):
+    """The result of a tuning validation assessment."""
+
+    errors: Optional[list[str]]
+    """The list of errors found in the dataset."""
+
+
+TuningValidationAssessmentResultOrDict = Union[
+    TuningValidationAssessmentResult, TuningValidationAssessmentResultDict
+]
 
 
 class Prompt(_common.BaseModel):

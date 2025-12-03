@@ -7,6 +7,10 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ExtractMode(str, enum.Enum):
+    """
+    Extraction mode options.
+    """
+
     FAST = "FAST"
     BALANCED = "BALANCED"
     PREMIUM = "PREMIUM"

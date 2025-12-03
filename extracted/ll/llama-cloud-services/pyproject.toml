@@ -7,6 +7,7 @@ dev = [
   "pytest>=8.0.0,<9",
   "pytest-xdist>=3.6.1,<4",
   "pytest-asyncio",
+  "pytest-timeout>=2.3.1",
   "ipykernel>=6.29.0,<7",
   "pre-commit==3.2.0",
   "autoevals>=0.0.114,<0.0.115",
@@ -22,7 +23,7 @@ dev = [
 
 [project]
 name = "llama-cloud-services"
-version = "0.6.83"
+version = "0.6.85"
 description = "Tailored SDK clients for LlamaCloud services."
 authors = [{name = "Logan Markewich", email = "logan@runllama.ai"}]
 requires-python = ">=3.9,<4.0"

@@ -36,7 +36,7 @@ class JobRecord(pydantic.BaseModel):
     partitions: typing.Dict[str, str] = pydantic.Field(
         description="The partitions for this execution. Used for determining where to save job output."
     )
-    project_id: typing.Optional[str]
+    project_id: str = pydantic.Field(description="The ID of the project this job belongs to.")
     session_id: typing.Optional[str]
     started_at: typing.Optional[dt.datetime]
     status: StatusEnum

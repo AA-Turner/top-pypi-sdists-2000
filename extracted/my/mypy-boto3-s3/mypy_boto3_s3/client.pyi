@@ -315,8 +315,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[CreateBucketRequestTypeDef]
     ) -> CreateBucketOutputTypeDef:
         """
-        End of support notice: As of October 1, 2025, Amazon S3 has discontinued
-        support for Email Grantee Access Control Lists (ACLs).
+        This action creates an Amazon S3 bucket.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/create_bucket.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#create_bucket)
@@ -586,8 +585,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[GetBucketAclRequestTypeDef]
     ) -> GetBucketAclOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_acl.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#get_bucket_acl)
@@ -678,8 +676,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[GetBucketLoggingRequestTypeDef]
     ) -> GetBucketLoggingOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_bucket_logging.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#get_bucket_logging)
@@ -830,8 +827,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[GetObjectAclRequestTypeDef]
     ) -> GetObjectAclOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/get_object_acl.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#get_object_acl)
@@ -968,8 +964,7 @@ class S3Client(BaseClient):
 
     def list_buckets(self, **kwargs: Unpack[ListBucketsRequestTypeDef]) -> ListBucketsOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_buckets.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_buckets)
@@ -990,8 +985,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[ListMultipartUploadsRequestTypeDef]
     ) -> ListMultipartUploadsOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation lists in-progress multipart uploads in a bucket.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_multipart_uploads.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_multipart_uploads)
@@ -1001,8 +995,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[ListObjectVersionsRequestTypeDef]
     ) -> ListObjectVersionsOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_object_versions.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_object_versions)
@@ -1010,8 +1003,7 @@ class S3Client(BaseClient):
 
     def list_objects(self, **kwargs: Unpack[ListObjectsRequestTypeDef]) -> ListObjectsOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        This operation is not supported for directory buckets.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_objects.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_objects)
@@ -1021,8 +1013,7 @@ class S3Client(BaseClient):
         self, **kwargs: Unpack[ListObjectsV2RequestTypeDef]
     ) -> ListObjectsV2OutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        Returns some or all (up to 1,000) of the objects in a bucket with each request.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_objects_v2.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_objects_v2)
@@ -1030,8 +1021,7 @@ class S3Client(BaseClient):
 
     def list_parts(self, **kwargs: Unpack[ListPartsRequestTypeDef]) -> ListPartsOutputTypeDef:
         """
-        End of support notice: Beginning November 21, 2025, Amazon S3 will stop
-        returning <code>DisplayName</code>.
+        Lists the parts that have been uploaded for a specific multipart upload.
 
         [Show boto3 documentation](https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3/client/list_parts.html)
         [Show boto3-stubs documentation](https://youtype.github.io/boto3_stubs_docs/mypy_boto3_s3/client/#list_parts)

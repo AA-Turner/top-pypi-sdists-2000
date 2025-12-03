@@ -71,11 +71,14 @@ __all__ = (
     "AddSourceIdentifierToSubscriptionMessageTypeDef",
     "AddSourceIdentifierToSubscriptionResultTypeDef",
     "AddTagsToResourceMessageTypeDef",
+    "AdditionalStorageVolumeOutputTypeDef",
+    "AdditionalStorageVolumeTypeDef",
     "ApplyPendingMaintenanceActionMessageTypeDef",
     "ApplyPendingMaintenanceActionResultTypeDef",
     "AuthorizeDBSecurityGroupIngressMessageTypeDef",
     "AuthorizeDBSecurityGroupIngressResultTypeDef",
     "AvailabilityZoneTypeDef",
+    "AvailableAdditionalStorageVolumesOptionTypeDef",
     "AvailableProcessorFeatureTypeDef",
     "BacktrackDBClusterMessageTypeDef",
     "BlueGreenDeploymentTaskTypeDef",
@@ -388,6 +391,7 @@ __all__ = (
     "MinimumEngineVersionPerAllowedValueTypeDef",
     "ModifyActivityStreamRequestTypeDef",
     "ModifyActivityStreamResponseTypeDef",
+    "ModifyAdditionalStorageVolumeTypeDef",
     "ModifyCertificatesMessageTypeDef",
     "ModifyCertificatesResultTypeDef",
     "ModifyCurrentDBClusterCapacityMessageTypeDef",
@@ -544,8 +548,10 @@ __all__ = (
     "UpgradeTargetTypeDef",
     "UserAuthConfigInfoTypeDef",
     "UserAuthConfigTypeDef",
+    "ValidAdditionalStorageOptionsTypeDef",
     "ValidDBInstanceModificationsMessageTypeDef",
     "ValidStorageOptionsTypeDef",
+    "ValidVolumeOptionsTypeDef",
     "VpcSecurityGroupMembershipTypeDef",
     "WaiterConfigTypeDef",
 )
@@ -592,6 +598,23 @@ class TagTypeDef(TypedDict):
     Key: NotRequired[str]
     Value: NotRequired[str]
 
+class AdditionalStorageVolumeOutputTypeDef(TypedDict):
+    VolumeName: NotRequired[str]
+    StorageVolumeStatus: NotRequired[str]
+    AllocatedStorage: NotRequired[int]
+    IOPS: NotRequired[int]
+    MaxAllocatedStorage: NotRequired[int]
+    StorageThroughput: NotRequired[int]
+    StorageType: NotRequired[str]
+
+class AdditionalStorageVolumeTypeDef(TypedDict):
+    VolumeName: str
+    AllocatedStorage: NotRequired[int]
+    IOPS: NotRequired[int]
+    MaxAllocatedStorage: NotRequired[int]
+    StorageThroughput: NotRequired[int]
+    StorageType: NotRequired[str]
+
 class ApplyPendingMaintenanceActionMessageTypeDef(TypedDict):
     ResourceIdentifier: str
     ApplyAction: str
@@ -606,6 +629,20 @@ class AuthorizeDBSecurityGroupIngressMessageTypeDef(TypedDict):
 
 class AvailabilityZoneTypeDef(TypedDict):
     Name: NotRequired[str]
+
+class AvailableAdditionalStorageVolumesOptionTypeDef(TypedDict):
+    SupportsStorageAutoscaling: NotRequired[bool]
+    SupportsStorageThroughput: NotRequired[bool]
+    SupportsIops: NotRequired[bool]
+    StorageType: NotRequired[str]
+    MinStorageSize: NotRequired[int]
+    MaxStorageSize: NotRequired[int]
+    MinIops: NotRequired[int]
+    MaxIops: NotRequired[int]
+    MinIopsPerGib: NotRequired[float]
+    MaxIopsPerGib: NotRequired[float]
+    MinStorageThroughput: NotRequired[int]
+    MaxStorageThroughput: NotRequired[int]
 
 class AvailableProcessorFeatureTypeDef(TypedDict):
     Name: NotRequired[str]
@@ -1120,6 +1157,15 @@ class ModifyActivityStreamRequestTypeDef(TypedDict):
     ResourceArn: NotRequired[str]
     AuditPolicyState: NotRequired[AuditPolicyStateType]
 
+class ModifyAdditionalStorageVolumeTypeDef(TypedDict):
+    VolumeName: str
+    AllocatedStorage: NotRequired[int]
+    IOPS: NotRequired[int]
+    MaxAllocatedStorage: NotRequired[int]
+    StorageThroughput: NotRequired[int]
+    StorageType: NotRequired[str]
+    SetForDelete: NotRequired[bool]
+
 class ModifyCertificatesMessageTypeDef(TypedDict):
     CertificateIdentifier: NotRequired[str]
     RemoveCustomerOverride: NotRequired[bool]
@@ -1589,6 +1635,7 @@ class CreateCustomDBEngineVersionMessageTypeDef(TypedDict):
     Description: NotRequired[str]
     Manifest: NotRequired[str]
     Tags: NotRequired[Sequence[TagTypeDef]]
+    DatabaseInstallationFiles: NotRequired[Sequence[str]]
 
 class CreateDBClusterEndpointMessageTypeDef(TypedDict):
     DBClusterIdentifier: str
@@ -1815,6 +1862,10 @@ class OrderableDBInstanceOptionTypeDef(TypedDict):
     SupportsClusters: NotRequired[bool]
     SupportsDedicatedLogVolume: NotRequired[bool]
     SupportsHttpEndpoint: NotRequired[bool]
+    SupportsAdditionalStorageVolumes: NotRequired[bool]
+    AvailableAdditionalStorageVolumesOptions: NotRequired[
+        list[AvailableAdditionalStorageVolumesOptionTypeDef]
+    ]
 
 class BacktrackDBClusterMessageTypeDef(TypedDict):
     DBClusterIdentifier: str
@@ -2188,6 +2239,7 @@ class CreateDBInstanceMessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     EngineLifecycleSupport: NotRequired[str]
     MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
     DBInstanceIdentifier: str
@@ -2237,6 +2289,7 @@ class CreateDBInstanceReadReplicaMessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     UpgradeStorageConfig: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
     SourceRegion: NotRequired[str]
 
 class DBSnapshotTypeDef(TypedDict):
@@ -2277,70 +2330,7 @@ class DBSnapshotTypeDef(TypedDict):
     MultiTenant: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
     SnapshotAvailabilityZone: NotRequired[str]
-
-class ModifyDBInstanceMessageTypeDef(TypedDict):
-    DBInstanceIdentifier: str
-    AllocatedStorage: NotRequired[int]
-    DBInstanceClass: NotRequired[str]
-    DBSubnetGroupName: NotRequired[str]
-    DBSecurityGroups: NotRequired[Sequence[str]]
-    VpcSecurityGroupIds: NotRequired[Sequence[str]]
-    ApplyImmediately: NotRequired[bool]
-    MasterUserPassword: NotRequired[str]
-    DBParameterGroupName: NotRequired[str]
-    BackupRetentionPeriod: NotRequired[int]
-    PreferredBackupWindow: NotRequired[str]
-    PreferredMaintenanceWindow: NotRequired[str]
-    MultiAZ: NotRequired[bool]
-    EngineVersion: NotRequired[str]
-    AllowMajorVersionUpgrade: NotRequired[bool]
-    AutoMinorVersionUpgrade: NotRequired[bool]
-    LicenseModel: NotRequired[str]
-    Iops: NotRequired[int]
-    StorageThroughput: NotRequired[int]
-    OptionGroupName: NotRequired[str]
-    NewDBInstanceIdentifier: NotRequired[str]
-    StorageType: NotRequired[str]
-    TdeCredentialArn: NotRequired[str]
-    TdeCredentialPassword: NotRequired[str]
-    CACertificateIdentifier: NotRequired[str]
-    Domain: NotRequired[str]
-    DomainFqdn: NotRequired[str]
-    DomainOu: NotRequired[str]
-    DomainAuthSecretArn: NotRequired[str]
-    DomainDnsIps: NotRequired[Sequence[str]]
-    DisableDomain: NotRequired[bool]
-    CopyTagsToSnapshot: NotRequired[bool]
-    MonitoringInterval: NotRequired[int]
-    DBPortNumber: NotRequired[int]
-    PubliclyAccessible: NotRequired[bool]
-    MonitoringRoleArn: NotRequired[str]
-    DomainIAMRoleName: NotRequired[str]
-    PromotionTier: NotRequired[int]
-    EnableIAMDatabaseAuthentication: NotRequired[bool]
-    DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
-    EnablePerformanceInsights: NotRequired[bool]
-    PerformanceInsightsKMSKeyId: NotRequired[str]
-    PerformanceInsightsRetentionPeriod: NotRequired[int]
-    CloudwatchLogsExportConfiguration: NotRequired[CloudwatchLogsExportConfigurationTypeDef]
-    ProcessorFeatures: NotRequired[Sequence[ProcessorFeatureTypeDef]]
-    UseDefaultProcessorFeatures: NotRequired[bool]
-    DeletionProtection: NotRequired[bool]
-    MaxAllocatedStorage: NotRequired[int]
-    CertificateRotationRestart: NotRequired[bool]
-    ReplicaMode: NotRequired[ReplicaModeType]
-    AutomationMode: NotRequired[AutomationModeType]
-    ResumeFullAutomationModeMinutes: NotRequired[int]
-    EnableCustomerOwnedIp: NotRequired[bool]
-    NetworkType: NotRequired[str]
-    AwsBackupRecoveryPointArn: NotRequired[str]
-    ManageMasterUserPassword: NotRequired[bool]
-    RotateMasterUserPassword: NotRequired[bool]
-    MasterUserSecretKmsKeyId: NotRequired[str]
-    MultiTenant: NotRequired[bool]
-    DedicatedLogVolume: NotRequired[bool]
-    Engine: NotRequired[str]
-    MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
+    AdditionalStorageVolumes: NotRequired[list[AdditionalStorageVolumeTypeDef]]
 
 class PendingModifiedValuesTypeDef(TypedDict):
     DBInstanceClass: NotRequired[str]
@@ -2365,6 +2355,7 @@ class PendingModifiedValuesTypeDef(TypedDict):
     IAMDatabaseAuthenticationEnabled: NotRequired[bool]
     DedicatedLogVolume: NotRequired[bool]
     Engine: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[list[AdditionalStorageVolumeTypeDef]]
 
 class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     DBInstanceIdentifier: str
@@ -2411,6 +2402,7 @@ class RestoreDBInstanceFromDBSnapshotMessageTypeDef(TypedDict):
     EngineLifecycleSupport: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
     DBInstanceIdentifier: str
@@ -2465,6 +2457,7 @@ class RestoreDBInstanceFromS3MessageTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     CACertificateIdentifier: NotRequired[str]
     EngineLifecycleSupport: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
     TargetDBInstanceIdentifier: str
@@ -2515,6 +2508,7 @@ class RestoreDBInstanceToPointInTimeMessageTypeDef(TypedDict):
     EngineLifecycleSupport: NotRequired[str]
     ManageMasterUserPassword: NotRequired[bool]
     MasterUserSecretKmsKeyId: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[Sequence[AdditionalStorageVolumeTypeDef]]
 
 class CreateDBProxyEndpointResponseTypeDef(TypedDict):
     DBProxyEndpoint: DBProxyEndpointTypeDef
@@ -2651,6 +2645,8 @@ class DBEngineVersionResponseTypeDef(TypedDict):
     SupportsLocalWriteForwarding: bool
     SupportsIntegrations: bool
     ServerlessV2FeaturesSupport: ServerlessV2FeaturesSupportTypeDef
+    DatabaseInstallationFiles: list[str]
+    FailureReason: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 class DBEngineVersionTypeDef(TypedDict):
@@ -2689,6 +2685,8 @@ class DBEngineVersionTypeDef(TypedDict):
     SupportsLocalWriteForwarding: NotRequired[bool]
     SupportsIntegrations: NotRequired[bool]
     ServerlessV2FeaturesSupport: NotRequired[ServerlessV2FeaturesSupportTypeDef]
+    DatabaseInstallationFiles: NotRequired[list[str]]
+    FailureReason: NotRequired[str]
 
 class DBInstanceAutomatedBackupTypeDef(TypedDict):
     DBInstanceArn: NotRequired[str]
@@ -2724,6 +2722,7 @@ class DBInstanceAutomatedBackupTypeDef(TypedDict):
     MultiTenant: NotRequired[bool]
     AwsBackupRecoveryPointArn: NotRequired[str]
     DedicatedLogVolume: NotRequired[bool]
+    AdditionalStorageVolumes: NotRequired[list[AdditionalStorageVolumeTypeDef]]
 
 class DBMajorEngineVersionTypeDef(TypedDict):
     Engine: NotRequired[str]
@@ -3546,6 +3545,71 @@ class OptionGroupOptionSettingTypeDef(TypedDict):
         list[MinimumEngineVersionPerAllowedValueTypeDef]
     ]
 
+class ModifyDBInstanceMessageTypeDef(TypedDict):
+    DBInstanceIdentifier: str
+    AllocatedStorage: NotRequired[int]
+    DBInstanceClass: NotRequired[str]
+    DBSubnetGroupName: NotRequired[str]
+    DBSecurityGroups: NotRequired[Sequence[str]]
+    VpcSecurityGroupIds: NotRequired[Sequence[str]]
+    ApplyImmediately: NotRequired[bool]
+    MasterUserPassword: NotRequired[str]
+    DBParameterGroupName: NotRequired[str]
+    BackupRetentionPeriod: NotRequired[int]
+    PreferredBackupWindow: NotRequired[str]
+    PreferredMaintenanceWindow: NotRequired[str]
+    MultiAZ: NotRequired[bool]
+    EngineVersion: NotRequired[str]
+    AllowMajorVersionUpgrade: NotRequired[bool]
+    AutoMinorVersionUpgrade: NotRequired[bool]
+    LicenseModel: NotRequired[str]
+    Iops: NotRequired[int]
+    StorageThroughput: NotRequired[int]
+    OptionGroupName: NotRequired[str]
+    NewDBInstanceIdentifier: NotRequired[str]
+    StorageType: NotRequired[str]
+    TdeCredentialArn: NotRequired[str]
+    TdeCredentialPassword: NotRequired[str]
+    CACertificateIdentifier: NotRequired[str]
+    Domain: NotRequired[str]
+    DomainFqdn: NotRequired[str]
+    DomainOu: NotRequired[str]
+    DomainAuthSecretArn: NotRequired[str]
+    DomainDnsIps: NotRequired[Sequence[str]]
+    DisableDomain: NotRequired[bool]
+    CopyTagsToSnapshot: NotRequired[bool]
+    MonitoringInterval: NotRequired[int]
+    DBPortNumber: NotRequired[int]
+    PubliclyAccessible: NotRequired[bool]
+    MonitoringRoleArn: NotRequired[str]
+    DomainIAMRoleName: NotRequired[str]
+    PromotionTier: NotRequired[int]
+    EnableIAMDatabaseAuthentication: NotRequired[bool]
+    DatabaseInsightsMode: NotRequired[DatabaseInsightsModeType]
+    EnablePerformanceInsights: NotRequired[bool]
+    PerformanceInsightsKMSKeyId: NotRequired[str]
+    PerformanceInsightsRetentionPeriod: NotRequired[int]
+    CloudwatchLogsExportConfiguration: NotRequired[CloudwatchLogsExportConfigurationTypeDef]
+    ProcessorFeatures: NotRequired[Sequence[ProcessorFeatureTypeDef]]
+    UseDefaultProcessorFeatures: NotRequired[bool]
+    DeletionProtection: NotRequired[bool]
+    MaxAllocatedStorage: NotRequired[int]
+    CertificateRotationRestart: NotRequired[bool]
+    ReplicaMode: NotRequired[ReplicaModeType]
+    AutomationMode: NotRequired[AutomationModeType]
+    ResumeFullAutomationModeMinutes: NotRequired[int]
+    EnableCustomerOwnedIp: NotRequired[bool]
+    NetworkType: NotRequired[str]
+    AwsBackupRecoveryPointArn: NotRequired[str]
+    ManageMasterUserPassword: NotRequired[bool]
+    RotateMasterUserPassword: NotRequired[bool]
+    MasterUserSecretKmsKeyId: NotRequired[str]
+    MultiTenant: NotRequired[bool]
+    DedicatedLogVolume: NotRequired[bool]
+    Engine: NotRequired[str]
+    MasterUserAuthenticationType: NotRequired[MasterUserAuthenticationTypeType]
+    AdditionalStorageVolumes: NotRequired[Sequence[ModifyAdditionalStorageVolumeTypeDef]]
+
 class ModifyDBRecommendationMessageTypeDef(TypedDict):
     RecommendationId: str
     Locale: NotRequired[str]
@@ -4030,10 +4094,9 @@ class PendingMaintenanceActionsMessageTypeDef(TypedDict):
 class MetricQueryTypeDef(TypedDict):
     PerformanceInsightsMetricQuery: NotRequired[PerformanceInsightsMetricQueryTypeDef]
 
-class ValidDBInstanceModificationsMessageTypeDef(TypedDict):
+class ValidVolumeOptionsTypeDef(TypedDict):
+    VolumeName: NotRequired[str]
     Storage: NotRequired[list[ValidStorageOptionsTypeDef]]
-    ValidProcessorFeatures: NotRequired[list[AvailableProcessorFeatureTypeDef]]
-    SupportsDedicatedLogVolume: NotRequired[bool]
 
 class PurchaseReservedDBInstancesOfferingResultTypeDef(TypedDict):
     ReservedDBInstance: ReservedDBInstanceTypeDef
@@ -4236,6 +4299,8 @@ class DBInstanceTypeDef(TypedDict):
     DedicatedLogVolume: NotRequired[bool]
     IsStorageConfigUpgradeAvailable: NotRequired[bool]
     EngineLifecycleSupport: NotRequired[str]
+    AdditionalStorageVolumes: NotRequired[list[AdditionalStorageVolumeOutputTypeDef]]
+    StorageVolumeStatus: NotRequired[str]
 
 class DBSubnetGroupMessageTypeDef(TypedDict):
     Marker: str
@@ -4246,9 +4311,9 @@ class ModifyDBSubnetGroupResultTypeDef(TypedDict):
     DBSubnetGroup: DBSubnetGroupTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
-class DescribeValidDBInstanceModificationsResultTypeDef(TypedDict):
-    ValidDBInstanceModificationsMessage: ValidDBInstanceModificationsMessageTypeDef
-    ResponseMetadata: ResponseMetadataTypeDef
+class ValidAdditionalStorageOptionsTypeDef(TypedDict):
+    SupportsAdditionalStorageVolumes: NotRequired[bool]
+    Volumes: NotRequired[list[ValidVolumeOptionsTypeDef]]
 
 class MetricTypeDef(TypedDict):
     Name: NotRequired[str]
@@ -4309,11 +4374,21 @@ class SwitchoverReadReplicaResultTypeDef(TypedDict):
     DBInstance: DBInstanceTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
+class ValidDBInstanceModificationsMessageTypeDef(TypedDict):
+    Storage: NotRequired[list[ValidStorageOptionsTypeDef]]
+    ValidProcessorFeatures: NotRequired[list[AvailableProcessorFeatureTypeDef]]
+    SupportsDedicatedLogVolume: NotRequired[bool]
+    AdditionalStorage: NotRequired[ValidAdditionalStorageOptionsTypeDef]
+
 class PerformanceIssueDetailsTypeDef(TypedDict):
     StartTime: NotRequired[datetime]
     EndTime: NotRequired[datetime]
     Metrics: NotRequired[list[MetricTypeDef]]
     Analysis: NotRequired[str]
+
+class DescribeValidDBInstanceModificationsResultTypeDef(TypedDict):
+    ValidDBInstanceModificationsMessage: ValidDBInstanceModificationsMessageTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 class IssueDetailsTypeDef(TypedDict):
     PerformanceIssueDetails: NotRequired[PerformanceIssueDetailsTypeDef]

@@ -1,9 +1,9 @@
 Metadata-Version: 2.4
 Name: universal_pathlib
-Version: 0.3.6
+Version: 0.3.7
 Summary: pathlib api extended to use fsspec backends
 Author-email: Andrew Fulton <andrewfulton9@gmail.com>
-Maintainer: Norman Rzepka
+Maintainer: Andreas Poehlmann, Norman Rzepka
 Maintainer-email: Andreas Poehlmann <andreas@poehlmann.io>
 License-Expression: MIT
 Project-URL: Homepage, https://github.com/fsspec/universal_pathlib
@@ -45,6 +45,7 @@ Requires-Dist: webdav4[fsspec]; extra == "dev"
 Requires-Dist: moto[s3,server]; extra == "dev"
 Requires-Dist: wsgidav; extra == "dev"
 Requires-Dist: cheroot; extra == "dev"
+Requires-Dist: pyftpdlib; extra == "dev"
 Requires-Dist: typing_extensions; python_version < "3.11" and extra == "dev"
 Provides-Extra: dev-third-party
 Requires-Dist: pydantic; extra == "dev-third-party"
@@ -103,7 +104,7 @@ project as a dependency if you want to use it with `s3` and `http` filesystems:
 name = "myproject"
 requires-python = ">=3.9"
 dependencies = [
-    "universal_pathlib>=0.3.6",
+    "universal_pathlib>=0.3.7",
     "fsspec[s3,http]",
 ]
 ```
@@ -144,6 +145,7 @@ For more examples, see the [example notebook here][example-notebook].
 - `memory:` Ephemeral filesystem in RAM
 - `az:`, `adl:`, `abfs:` and `abfss:` Azure Storage _(requires `adlfs`)_
 - `data:` RFC 2397 style data URLs _(requires `fsspec>=2023.12.2`)_
+- `ftp:` FTP filesystem
 - `github:` GitHub repository filesystem
 - `hf:` Hugging Face filesystem _(requires `huggingface_hub`)_
 - `http:` and `https:` HTTP(S)-based filesystem
@@ -744,14 +746,14 @@ For code that needs to work with different path types, use the type hints from
 `upath.types` to properly specify your requirements:
 
 ```python
+import os
 from upath import UPath
 from upath.types import (
-    JoinablePathLike,
     ReadablePathLike,
     WritablePathLike,
 )
 
-def read_only_local_file(path: os.PathLike) -> None:
+def read_only_local_file(path: os.PathLike) -> str:
     """Read a file on the local filesystem."""
     with open(path) as f:
         return f.read_text()
@@ -761,11 +763,11 @@ def write_only_local_file(path: os.PathLike) -> None:
     with open(path) as f:
         f.write_text("hello world")
 
-def read_any_file(path: WritablePathLike) -> None:
-    """Write a file on any filesystem."""
+def read_any_file(path: ReadablePathLike) -> str:
+    """Read a file on any filesystem."""
     return UPath(path).read_text()
 
-def read_any_file(path: WritablePathLike) -> None:
+def write_any_file(path: WritablePathLike) -> None:
     """Write a file on any filesystem."""
     UPath(path).write_text("hello world")
 ```

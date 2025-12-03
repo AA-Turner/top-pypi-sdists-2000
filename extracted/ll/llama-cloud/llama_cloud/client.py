@@ -8,6 +8,10 @@ from .core.client_wrapper import AsyncClientWrapper, SyncClientWrapper
 from .environment import LlamaCloudEnvironment
 from .resources.admin.client import AdminClient, AsyncAdminClient
 from .resources.agent_deployments.client import AgentDeploymentsClient, AsyncAgentDeploymentsClient
+from .resources.agents_deployments_control_plane.client import (
+    AgentsDeploymentsControlPlaneClient,
+    AsyncAgentsDeploymentsControlPlaneClient,
+)
 from .resources.alpha.client import AlphaClient, AsyncAlphaClient
 from .resources.beta.client import AsyncBetaClient, BetaClient
 from .resources.classifier.client import AsyncClassifierClient, ClassifierClient
@@ -28,7 +32,6 @@ from .resources.pipeline_files.client import AsyncPipelineFilesClient, PipelineF
 from .resources.pipelines.client import AsyncPipelinesClient, PipelinesClient
 from .resources.projects.client import AsyncProjectsClient, ProjectsClient
 from .resources.retrievers.client import AsyncRetrieversClient, RetrieversClient
-from .resources.testing.client import AsyncTestingClient, TestingClient
 from .resources.users.client import AsyncUsersClient, UsersClient
 
 
@@ -48,6 +51,7 @@ class LlamaCloud:
             httpx_client=httpx.Client(timeout=timeout) if httpx_client is None else httpx_client,
         )
         self.admin = AdminClient(client_wrapper=self._client_wrapper)
+        self.agent_deployments = AgentDeploymentsClient(client_wrapper=self._client_wrapper)
         self.beta = BetaClient(client_wrapper=self._client_wrapper)
         self.classifier = ClassifierClient(client_wrapper=self._client_wrapper)
         self.data_sinks = DataSinksClient(client_wrapper=self._client_wrapper)
@@ -66,10 +70,9 @@ class LlamaCloud:
         self.pipeline_data_sources = PipelineDataSourcesClient(client_wrapper=self._client_wrapper)
         self.pipeline_files = PipelineFilesClient(client_wrapper=self._client_wrapper)
         self.projects = ProjectsClient(client_wrapper=self._client_wrapper)
-        self.agent_deployments = AgentDeploymentsClient(client_wrapper=self._client_wrapper)
         self.retrievers = RetrieversClient(client_wrapper=self._client_wrapper)
-        self.testing = TestingClient(client_wrapper=self._client_wrapper)
         self.users = UsersClient(client_wrapper=self._client_wrapper)
+        self.agents_deployments_control_plane = AgentsDeploymentsControlPlaneClient(client_wrapper=self._client_wrapper)
         self.alpha = AlphaClient(client_wrapper=self._client_wrapper)
 
 
@@ -89,6 +92,7 @@ class AsyncLlamaCloud:
             httpx_client=httpx.AsyncClient(timeout=timeout) if httpx_client is None else httpx_client,
         )
         self.admin = AsyncAdminClient(client_wrapper=self._client_wrapper)
+        self.agent_deployments = AsyncAgentDeploymentsClient(client_wrapper=self._client_wrapper)
         self.beta = AsyncBetaClient(client_wrapper=self._client_wrapper)
         self.classifier = AsyncClassifierClient(client_wrapper=self._client_wrapper)
         self.data_sinks = AsyncDataSinksClient(client_wrapper=self._client_wrapper)
@@ -107,10 +111,11 @@ class AsyncLlamaCloud:
         self.pipeline_data_sources = AsyncPipelineDataSourcesClient(client_wrapper=self._client_wrapper)
         self.pipeline_files = AsyncPipelineFilesClient(client_wrapper=self._client_wrapper)
         self.projects = AsyncProjectsClient(client_wrapper=self._client_wrapper)
-        self.agent_deployments = AsyncAgentDeploymentsClient(client_wrapper=self._client_wrapper)
         self.retrievers = AsyncRetrieversClient(client_wrapper=self._client_wrapper)
-        self.testing = AsyncTestingClient(client_wrapper=self._client_wrapper)
         self.users = AsyncUsersClient(client_wrapper=self._client_wrapper)
+        self.agents_deployments_control_plane = AsyncAgentsDeploymentsControlPlaneClient(
+            client_wrapper=self._client_wrapper
+        )
         self.alpha = AsyncAlphaClient(client_wrapper=self._client_wrapper)
 
 

@@ -30,7 +30,6 @@ class BatchJobResponse(pydantic.BaseModel):
     id: str = pydantic.Field(description="Unique identifier for the batch job")
     job_record_id: typing.Optional[str]
     job_type: BatchJobType = pydantic.Field(description="Type of processing operation")
-    organization_id: str = pydantic.Field(description="Organization that owns this job")
     processed_items: typing.Optional[int] = pydantic.Field(description="Number of items processed so far")
     project_id: str = pydantic.Field(description="Project this job belongs to")
     skipped_items: typing.Optional[int] = pydantic.Field(

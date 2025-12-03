@@ -553,14 +553,13 @@ LANGUAGE js AS
             read={
                 "bigquery": "SELECT SUM(x IGNORE NULLS) AS x",
                 "duckdb": "SELECT SUM(x IGNORE NULLS) AS x",
-                "postgres": "SELECT SUM(x) IGNORE NULLS AS x",
                 "spark": "SELECT SUM(x) IGNORE NULLS AS x",
                 "snowflake": "SELECT SUM(x) IGNORE NULLS AS x",
             },
             write={
                 "bigquery": "SELECT SUM(x IGNORE NULLS) AS x",
                 "duckdb": "SELECT SUM(x) AS x",
-                "postgres": "SELECT SUM(x) IGNORE NULLS AS x",
+                "postgres": UnsupportedError,
                 "spark": "SELECT SUM(x) IGNORE NULLS AS x",
                 "snowflake": "SELECT SUM(x) IGNORE NULLS AS x",
             },
@@ -569,14 +568,13 @@ LANGUAGE js AS
             "SELECT SUM(x RESPECT NULLS) AS x",
             read={
                 "bigquery": "SELECT SUM(x RESPECT NULLS) AS x",
-                "postgres": "SELECT SUM(x) RESPECT NULLS AS x",
                 "spark": "SELECT SUM(x) RESPECT NULLS AS x",
                 "snowflake": "SELECT SUM(x) RESPECT NULLS AS x",
             },
             write={
                 "bigquery": "SELECT SUM(x RESPECT NULLS) AS x",
                 "duckdb": "SELECT SUM(x) AS x",
-                "postgres": "SELECT SUM(x) RESPECT NULLS AS x",
+                "postgres": UnsupportedError,
                 "spark": "SELECT SUM(x) RESPECT NULLS AS x",
                 "snowflake": "SELECT SUM(x) RESPECT NULLS AS x",
             },
@@ -778,6 +776,17 @@ LANGUAGE js AS
                 "spark": "TRIM('*' FROM item)",
             },
         )
+        expr = self.parse_one(
+            "SELECT TRIM(CAST('***apple***' AS BYTES), CAST('*' AS BYTES)) AS result"
+        )
+        annotated = annotate_types(expr, dialect="bigquery")
+        self.assertEqual(
+            annotated.sql("duckdb"),
+            "SELECT CAST(TRIM(CAST(CAST('***apple***' AS BLOB) AS TEXT), CAST(CAST('*' AS BLOB) AS TEXT)) AS BLOB) AS result",
+        )
+        expr = self.parse_one("SELECT TRIM('***apple***', '*') AS result")
+        annotated = annotate_types(expr, dialect="bigquery")
+        self.assertEqual(annotated.sql("duckdb"), "SELECT TRIM('***apple***', '*') AS result")
         self.validate_all(
             "CREATE OR REPLACE TABLE `a.b.c` COPY `a.b.d`",
             write={
@@ -1002,6 +1011,7 @@ LANGUAGE js AS
         self.validate_all(
             "SHA1(x)",
             read={
+                "bigquery": "SHA1(x)",
                 "clickhouse": "SHA1(x)",
                 "presto": "SHA1(x)",
                 "trino": "SHA1(x)",
@@ -1009,16 +1019,9 @@ LANGUAGE js AS
             write={
                 "clickhouse": "SHA1(x)",
                 "bigquery": "SHA1(x)",
-                "": "SHA(x)",
                 "presto": "SHA1(x)",
                 "trino": "SHA1(x)",
-            },
-        )
-        self.validate_all(
-            "SHA1(x)",
-            write={
-                "bigquery": "SHA1(x)",
-                "": "SHA(x)",
+                "duckdb": "UNHEX(SHA1(x))",
             },
         )
         self.validate_all(
@@ -1038,8 +1041,8 @@ LANGUAGE js AS
                 "presto": "SHA256(x)",
                 "redshift": "SHA2(x, 256)",
                 "trino": "SHA256(x)",
-                "duckdb": "SHA256(x)",
-                "snowflake": "SHA2(x, 256)",
+                "duckdb": "UNHEX(SHA256(x))",
+                "snowflake": "SHA2_BINARY(x, 256)",
             },
         )
         self.validate_all(
@@ -2039,6 +2042,22 @@ WHERE
             },
         )
 
+        self.validate_all(
+            "SELECT GREATEST(1, NULL, 3)",
+            write={
+                "duckdb": "SELECT CASE WHEN 1 IS NULL OR NULL IS NULL OR 3 IS NULL THEN NULL ELSE GREATEST(1, NULL, 3) END",
+                "bigquery": "SELECT GREATEST(1, NULL, 3)",
+            },
+        )
+
+        self.validate_all(
+            "SELECT LEAST(1, NULL, 3)",
+            write={
+                "duckdb": "SELECT CASE WHEN 1 IS NULL OR NULL IS NULL OR 3 IS NULL THEN NULL ELSE LEAST(1, NULL, 3) END",
+                "bigquery": "SELECT LEAST(1, NULL, 3)",
+            },
+        )
+
     def test_errors(self):
         with self.assertRaises(ParseError):
             self.parse_one("SELECT * FROM a - b.c.d2")
@@ -2671,7 +2690,7 @@ OPTIONS (
                     f"SELECT {func}('5')",
                     write={
                         "bigquery": f"SELECT {func}('5', '$')",
-                        "duckdb": """SELECT '5' ->> '$'""",
+                        "duckdb": """SELECT JSON_VALUE('5', '$') ->> '$'""",
                     },
                 )
 
@@ -2680,14 +2699,12 @@ OPTIONS (
                     sql,
                     write={
                         "bigquery": sql,
-                        "duckdb": """SELECT '{"name": "Jakob", "age": "6"}' ->> '$.age'""",
+                        "duckdb": """SELECT JSON_VALUE('{"name": "Jakob", "age": "6"}', '$.age') ->> '$'""",
                         "snowflake": """SELECT JSON_EXTRACT_PATH_TEXT('{"name": "Jakob", "age": "6"}', 'age')""",
                     },
                 )
 
-                self.assertEqual(
-                    self.parse_one(sql).sql("bigquery", normalize_functions="upper"), sql
-                )
+        self.assertEqual(self.parse_one(sql).sql("bigquery", normalize_functions="upper"), sql)
 
         # Test double quote escaping
         for func in ("JSON_VALUE", "JSON_QUERY", "JSON_QUERY_ARRAY"):
@@ -2880,8 +2897,8 @@ OPTIONS (
         self.validate_all(
             "SELECT FORMAT_DATETIME('%x', '2023-12-25 15:30:00')",
             write={
-                "bigquery": "SELECT FORMAT_DATETIME('%x', '2023-12-25 15:30:00')",
-                "duckdb": "SELECT STRFTIME(CAST('2023-12-25 15:30:00' AS TIMESTAMP), '%x')",
+                "bigquery": "SELECT FORMAT_DATETIME('%D', '2023-12-25 15:30:00')",
+                "duckdb": "SELECT STRFTIME(CAST('2023-12-25 15:30:00' AS TIMESTAMP), '%m/%d/%y')",
             },
         )
         self.validate_all(
@@ -2898,15 +2915,12 @@ OPTIONS (
         self.validate_identity("STRING_AGG(DISTINCT a, ' & ')")
         self.validate_identity("STRING_AGG(a, ' & ' ORDER BY LENGTH(a))")
         self.validate_identity("STRING_AGG(foo, b'|' ORDER BY bar)")
-        self.validate_identity("STRING_AGG(a)", "STRING_AGG(a, ',')")
+        self.validate_identity("STRING_AGG(a)")
         self.validate_identity("STRING_AGG(DISTINCT v, sep LIMIT 3)")
-        self.validate_identity(
-            "STRING_AGG(DISTINCT a ORDER BY b DESC, c DESC LIMIT 10)",
-            "STRING_AGG(DISTINCT a, ',' ORDER BY b DESC, c DESC LIMIT 10)",
-        )
+        self.validate_identity("STRING_AGG(DISTINCT a ORDER BY b DESC, c DESC LIMIT 10)")
         self.validate_identity(
             "SELECT a, GROUP_CONCAT(b) FROM table GROUP BY a",
-            "SELECT a, STRING_AGG(b, ',') FROM table GROUP BY a",
+            "SELECT a, STRING_AGG(b) FROM table GROUP BY a",
         )
 
     def test_annotate_timestamps(self):
@@ -3352,7 +3366,7 @@ OPTIONS (
             "SELECT TO_HEX(SHA1('abc'))",
             write={
                 "bigquery": "SELECT TO_HEX(SHA1('abc'))",
-                "snowflake": "SELECT TO_CHAR(SHA1('abc'))",
+                "snowflake": "SELECT TO_CHAR(SHA1_BINARY('abc'))",
             },
         )
 
@@ -3401,3 +3415,146 @@ OPTIONS (
             qualified.sql(dialect="bigquery"),
             "SELECT `t`.`col` AS `col` FROM `t` AS `t` WHERE `_partitiontime` BETWEEN `t`.`a` AND `t`.`b`",
         )
+
+    def test_round(self):
+        self.validate_all(
+            "SELECT ROUND(2.25) AS value",
+            write={
+                "bigquery": "SELECT ROUND(2.25) AS value",
+                "duckdb": "SELECT ROUND(2.25) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(2.25, 1) AS value",
+            write={
+                "bigquery": "SELECT ROUND(2.25, 1) AS value",
+                "duckdb": "SELECT ROUND(2.25, 1) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(NUMERIC '2.25', 1, 'ROUND_HALF_AWAY_FROM_ZERO') AS value",
+            write={
+                "bigquery": """SELECT ROUND(CAST('2.25' AS NUMERIC), 1, 'ROUND_HALF_AWAY_FROM_ZERO') AS value""",
+                "duckdb": "SELECT ROUND(CAST('2.25' AS DECIMAL), 1) AS value",
+            },
+        )
+
+        self.validate_all(
+            "SELECT ROUND(NUMERIC '2.25', 1, 'ROUND_HALF_EVEN') AS value",
+            write={
+                "bigquery": """SELECT ROUND(CAST('2.25' AS NUMERIC), 1, 'ROUND_HALF_EVEN') AS value""",
+                "duckdb": "SELECT ROUND_EVEN(CAST('2.25' AS DECIMAL), 1) AS value",
+            },
+        )
+
+    def test_approx_quantiles(self):
+        self.validate_identity("APPROX_QUANTILES(x, 2)")
+        self.validate_identity("APPROX_QUANTILES(FALSE OR TRUE, 2)")
+        self.validate_identity("APPROX_QUANTILES((SELECT 1 AS val), CAST(2.1 AS INT64))")
+        self.validate_identity("APPROX_QUANTILES(DISTINCT x, 2)")
+        self.validate_identity("APPROX_QUANTILES(x, 2 RESPECT NULLS)")
+        self.validate_identity("APPROX_QUANTILES(x, 2 IGNORE NULLS)")
+        self.validate_identity("APPROX_QUANTILES(DISTINCT x, 2 RESPECT NULLS)")
+
+    def test_approx_quantiles_to_duckdb(self):
+        self.validate_all(
+            "APPROX_QUANTILES(x, 1)",
+            write={"duckdb": "APPROX_QUANTILE(x, [0, 1])"},
+        )
+        self.validate_all(
+            "APPROX_QUANTILES(x, 2)",
+            write={"duckdb": "APPROX_QUANTILE(x, [0, 0.5, 1])"},
+        )
+        self.validate_all(
+            "APPROX_QUANTILES(x, 4)",
+            write={"duckdb": "APPROX_QUANTILE(x, [0, 0.25, 0.5, 0.75, 1])"},
+        )
+        self.validate_all(
+            "APPROX_QUANTILES(DISTINCT x, 2)",
+            write={"duckdb": "APPROX_QUANTILE(DISTINCT x, [0, 0.5, 1])"},
+        )
+
+        with self.subTest("APPROX_QUANTILES 100 buckets"):
+            result = self.parse_one("APPROX_QUANTILES(x, 100)").sql("duckdb")
+            self.assertEqual(result.count("APPROX_QUANTILE("), 1)
+            self.assertIn("0.01", result)
+            self.assertIn("0.99", result)
+            self.assertRegex(result, r"APPROX_QUANTILE\(x, \[.*\]\)")
+
+        for expr in ("x + y", "CASE WHEN x > 0 THEN x ELSE 0 END", "ABS(x)"):
+            with self.subTest(expr=expr):
+                self.validate_all(
+                    f"APPROX_QUANTILES({expr}, 2)",
+                    write={"duckdb": f"APPROX_QUANTILE({expr}, [0, 0.5, 1])"},
+                )
+
+        with self.subTest("non-literal bucket count"):
+            with self.assertRaises(UnsupportedError):
+                self.parse_one("APPROX_QUANTILES(x, bucket_count)").sql(
+                    "duckdb", unsupported_level=ErrorLevel.RAISE
+                )
+
+        with self.subTest("non-integer bucket count"):
+            for value in ("0", "-1", "2.5"):
+                with self.subTest(value=value):
+                    with self.assertRaises(UnsupportedError):
+                        self.parse_one(f"APPROX_QUANTILES(x, {value})").sql(
+                            "duckdb", unsupported_level=ErrorLevel.RAISE
+                        )
+
+        with self.subTest("NULL bucket count"):
+            with self.assertRaises(UnsupportedError):
+                self.parse_one("APPROX_QUANTILES(x, NULL)").sql(
+                    "duckdb", unsupported_level=ErrorLevel.RAISE
+                )
+
+        with self.subTest("missing bucket count"):
+            with self.assertRaises(UnsupportedError):
+                self.parse_one("APPROX_QUANTILES(x)").sql(
+                    "duckdb", unsupported_level=ErrorLevel.RAISE
+                )
+
+        with self.subTest("missing bucket count with DISTINCT"):
+            with self.assertRaises(UnsupportedError):
+                self.parse_one("APPROX_QUANTILES(DISTINCT x)").sql(
+                    "duckdb", unsupported_level=ErrorLevel.RAISE
+                )
+
+        with self.subTest("APPROX_QUANTILES IGNORE NULLS"):
+            # No warning: IGNORE NULLS is the default behavior in DuckDB
+            from sqlglot.generator import logger as generator_logger
+
+            with mock.patch.object(generator_logger, "warning") as mock_warning:
+                self.validate_all(
+                    "APPROX_QUANTILES(x, 2 IGNORE NULLS)",
+                    write={"duckdb": "APPROX_QUANTILE(x, [0, 0.5, 1])"},
+                )
+                mock_warning.assert_not_called()
+
+        with self.subTest("APPROX_QUANTILES RESPECT NULLS"):
+            with self.assertRaises(UnsupportedError):
+                self.parse_one("APPROX_QUANTILES(x, 2 RESPECT NULLS)").sql(
+                    "duckdb", unsupported_level=ErrorLevel.RAISE
+                )
+
+    def test_bignumeric(self):
+        # BIGDECIMAL is an alias of BIGNUMERIC
+        for type_ in ("BIGNUMERIC", "BIGDECIMAL"):
+            with self.subTest(f"Testing BigQuery's {type_}"):
+                self.validate_all(
+                    f"SELECT {type_} '1'",
+                    write={
+                        "bigquery": "SELECT CAST('1' AS BIGNUMERIC)",
+                        "duckdb": "SELECT CAST('1' AS DECIMAL(38, 5))",
+                    },
+                )
+
+                self.validate_all(
+                    f"SELECT CAST(1 AS {type_})",
+                    write={
+                        "bigquery": "SELECT CAST(1 AS BIGNUMERIC)",
+                        "duckdb": "SELECT CAST(1 AS DECIMAL(38, 5))",
+                    },
+                )

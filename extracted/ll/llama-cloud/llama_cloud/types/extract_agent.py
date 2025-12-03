@@ -20,7 +20,7 @@ except ImportError:
 
 class ExtractAgent(pydantic.BaseModel):
     """
-    Schema and configuration for creating an extraction agent.
+    Schema and configuration for an extraction agent.
     """
 
     config: ExtractConfig = pydantic.Field(description="The configuration parameters for the extraction agent.")

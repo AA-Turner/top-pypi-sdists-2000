@@ -8,10 +8,18 @@ T_Result = typing.TypeVar("T_Result")
 
 class SpreadsheetResultType(str, enum.Enum):
     TABLE = "table"
+    EXTRA = "extra"
     CELL_METADATA = "cell_metadata"
 
-    def visit(self, table: typing.Callable[[], T_Result], cell_metadata: typing.Callable[[], T_Result]) -> T_Result:
+    def visit(
+        self,
+        table: typing.Callable[[], T_Result],
+        extra: typing.Callable[[], T_Result],
+        cell_metadata: typing.Callable[[], T_Result],
+    ) -> T_Result:
         if self is SpreadsheetResultType.TABLE:
             return table()
+        if self is SpreadsheetResultType.EXTRA:
+            return extra()
         if self is SpreadsheetResultType.CELL_METADATA:
             return cell_metadata()

@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: Flask-Limiter
-Version: 4.0.0
+Version: 4.1.0
 Summary: Rate limiting for flask applications
 Project-URL: Homepage, https://flask-limiter.readthedocs.org
 Project-URL: Source, https://github.com/alisaifee/flask-limiter
@@ -20,13 +20,15 @@ Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Requires-Python: >=3.10
 Requires-Dist: flask>=2
 Requires-Dist: limits>=3.13
 Requires-Dist: ordered-set<5,>4
-Requires-Dist: rich<15,>=12
 Requires-Dist: typing-extensions>=4.3
+Provides-Extra: cli
+Requires-Dist: rich<15,>=12; extra == 'cli'
 Provides-Extra: memcached
 Requires-Dist: limits[memcached]; extra == 'memcached'
 Provides-Extra: mongodb
@@ -129,6 +131,11 @@ Add the rate limiter to your flask app
 
 Inspect the limits using the command line interface
 ---------------------------------------------------
+
+.. code-block:: bash
+
+   pip install Flask-Limiter[cli]
+
 .. code-block:: bash
 
    $ FLASK_APP=app:app flask limiter limits

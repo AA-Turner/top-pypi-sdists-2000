@@ -137,8 +137,13 @@ def is_version_sufficient(version_to_check: str) -> bool:
 
 class _ArtifactVersion:
     def __init__(self, **kwargs):
+        from google.genai import types
+
         self.version: Optional[str] = kwargs.get("version")
-        self.data = kwargs.get("data")
+        data = kwargs.get("data")
+        self.data: Optional[types.Part] = (
+            types.Part.model_validate(data) if isinstance(data, dict) else data
+        )
 
     def dump(self) -> Dict[str, Any]:
         result = {}
@@ -279,12 +284,18 @@ async def _force_flush_otel(tracing_enabled: bool, logging_enabled: bool):
 
 
 def _default_instrumentor_builder(
-    project_id: str,
+    project_id: Optional[str],
     *,
     enable_tracing: bool = False,
     enable_logging: bool = False,
 ):
     if not enable_tracing and not enable_logging:
+        return None
+
+    if project_id is None:
+        _warn(
+            "telemetry is only supported when project is specified, proceeding with no telemetry"
+        )
         return None
 
     import os
@@ -345,6 +356,7 @@ def _default_instrumentor_builder(
         attributes={
             "gcp.project_id": project_id,
             "cloud.account.id": project_id,
+            "cloud.provider": "gcp",
             "cloud.platform": "gcp.agent_engine",
             "service.name": os.getenv("GOOGLE_CLOUD_AGENT_ENGINE_ID", ""),
             "service.instance.id": f"{uuid.uuid4().hex}-{os.getpid()}",
@@ -706,7 +718,7 @@ class AdkApp:
         enable_logging = bool(self._telemetry_enabled())
 
         self._tmpl_attrs["instrumentor"] = _default_instrumentor_builder(
-            project,
+            self.project_id(),
             enable_tracing=self._tracing_enabled(),
             enable_logging=enable_logging,
         )
@@ -1534,3 +1546,11 @@ class AdkApp:
         r = session.post("https://telemetry.googleapis.com/v1/traces", data=None)
         if "Telemetry API has not been used in project" in r.text:
             _warn(_TELEMETRY_API_DISABLED_WARNING % (project, project))
+
+    def project_id(self) -> Optional[str]:
+        if project := self._tmpl_attrs.get("project"):
+            from google.cloud.aiplatform.utils import resource_manager_utils
+
+            return resource_manager_utils.get_project_id(project)
+
+        return None

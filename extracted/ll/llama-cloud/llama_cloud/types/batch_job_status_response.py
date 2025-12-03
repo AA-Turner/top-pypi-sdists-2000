@@ -20,7 +20,6 @@ class BatchJobStatusResponse(pydantic.BaseModel):
     Detailed status response for a batch processing job.
     """
 
-    estimated_completion: typing.Optional[dt.datetime]
     job: BatchJobResponse
     progress_percentage: float = pydantic.Field(description="Percentage of items processed (0-100)")
 

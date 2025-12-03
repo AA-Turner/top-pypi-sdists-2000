@@ -11,9 +11,9 @@ from .document_ingestion_job_params import DocumentIngestionJobParams
 from .l_lama_parse_transform_config import LLamaParseTransformConfig
 from .legacy_parse_job_config import LegacyParseJobConfig
 from .load_files_job_config import LoadFilesJobConfig
-from .parse_job_config import ParseJobConfig
 from .pipeline_file_updater_config import PipelineFileUpdaterConfig
 from .pipeline_managed_ingestion_job_params import PipelineManagedIngestionJobParams
+from .src_app_schema_etl_execution_parse_job_config import SrcAppSchemaEtlExecutionParseJobConfig
 
 
 class JobRecordParameters_DataSourceUpdateDispatcher(DataSourceUpdateDispatcherConfig):
@@ -61,7 +61,7 @@ class JobRecordParameters_LoadFiles(LoadFilesJobConfig):
         allow_population_by_field_name = True
 
 
-class JobRecordParameters_Parse(ParseJobConfig):
+class JobRecordParameters_Parse(SrcAppSchemaEtlExecutionParseJobConfig):
     type: typing_extensions.Literal["parse"]
 
     class Config:

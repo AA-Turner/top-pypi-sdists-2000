@@ -22,11 +22,14 @@ except ImportError:
 
 class ExtractConfig(pydantic.BaseModel):
     """
-    Additional parameters for the extraction agent.
+    Configuration parameters for the extraction agent.
     """
 
     chunk_mode: typing.Optional[DocumentChunkMode] = pydantic.Field(
         description="The mode to use for chunking the document."
+    )
+    citation_bbox: typing.Optional[bool] = pydantic.Field(
+        description="Whether to fetch citation bounding boxes for the extraction. Only available in PREMIUM mode."
     )
     cite_sources: typing.Optional[bool] = pydantic.Field(description="Whether to cite sources for the extraction.")
     confidence_scores: typing.Optional[bool] = pydantic.Field(

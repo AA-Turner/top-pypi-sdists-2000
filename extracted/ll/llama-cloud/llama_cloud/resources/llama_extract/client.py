@@ -25,6 +25,7 @@ from .types.extract_agent_update_data_schema import ExtractAgentUpdateDataSchema
 from .types.extract_job_create_batch_data_schema_override import ExtractJobCreateBatchDataSchemaOverride
 from .types.extract_job_create_data_schema_override import ExtractJobCreateDataSchemaOverride
 from .types.extract_job_create_priority import ExtractJobCreatePriority
+from .types.extract_schema_generate_request_data_schema import ExtractSchemaGenerateRequestDataSchema
 from .types.extract_schema_validate_request_data_schema import ExtractSchemaValidateRequestDataSchema
 from .types.extract_stateless_request_data_schema import ExtractStatelessRequestDataSchema
 
@@ -232,16 +233,20 @@ class LlamaExtractClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
+        data_schema: typing.Optional[ExtractSchemaGenerateRequestDataSchema] = OMIT,
         file_id: typing.Optional[str] = OMIT,
         prompt: typing.Optional[str] = OMIT,
     ) -> ExtractSchemaGenerateResponse:
         """
-        Generates an extraction agent's schema definition from a file and/or natural language prompt.
+        Generates or refines an extraction agent's schema definition from a file, natural language prompt,
+        or existing schema.
 
         Parameters:
             - project_id: typing.Optional[str].
 
             - organization_id: typing.Optional[str].
+
+            - data_schema: typing.Optional[ExtractSchemaGenerateRequestDataSchema]. Optional schema to validate, refine, or extend during generation
 
             - file_id: typing.Optional[str].
 
@@ -255,6 +260,8 @@ class LlamaExtractClient:
         client.llama_extract.generate_extraction_schema()
         """
         _request: typing.Dict[str, typing.Any] = {}
+        if data_schema is not OMIT:
+            _request["data_schema"] = data_schema
         if file_id is not OMIT:
             _request["file_id"] = file_id
         if prompt is not OMIT:
@@ -1200,16 +1207,20 @@ class AsyncLlamaExtractClient:
         *,
         project_id: typing.Optional[str] = None,
         organization_id: typing.Optional[str] = None,
+        data_schema: typing.Optional[ExtractSchemaGenerateRequestDataSchema] = OMIT,
         file_id: typing.Optional[str] = OMIT,
         prompt: typing.Optional[str] = OMIT,
     ) -> ExtractSchemaGenerateResponse:
         """
-        Generates an extraction agent's schema definition from a file and/or natural language prompt.
+        Generates or refines an extraction agent's schema definition from a file, natural language prompt,
+        or existing schema.
 
         Parameters:
             - project_id: typing.Optional[str].
 
             - organization_id: typing.Optional[str].
+
+            - data_schema: typing.Optional[ExtractSchemaGenerateRequestDataSchema]. Optional schema to validate, refine, or extend during generation
 
             - file_id: typing.Optional[str].
 
@@ -1223,6 +1234,8 @@ class AsyncLlamaExtractClient:
         await client.llama_extract.generate_extraction_schema()
         """
         _request: typing.Dict[str, typing.Any] = {}
+        if data_schema is not OMIT:
+            _request["data_schema"] = data_schema
         if file_id is not OMIT:
             _request["file_id"] = file_id
         if prompt is not OMIT:

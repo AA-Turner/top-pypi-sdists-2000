@@ -16,6 +16,8 @@ from typing import TYPE_CHECKING, cast
 
 from datamodel_code_generator import (
     DEFAULT_SHARED_MODULE_NAME,
+    AllExportsCollisionStrategy,
+    AllExportsScope,
     DataclassArguments,
     DataModelType,
     InputFileType,
@@ -291,6 +293,23 @@ model_options.add_argument(
     "--parent-scoped-naming",
     help="Set name of models defined inline from the parent model",
     action="store_true",
+    default=None,
+)
+model_options.add_argument(
+    "--all-exports-scope",
+    help="Generate __all__ in __init__.py with re-exports. "
+    "'children': export from direct child modules only. "
+    "'recursive': export from all descendant modules.",
+    choices=[s.value for s in AllExportsScope],
+    default=None,
+)
+model_options.add_argument(
+    "--all-exports-collision-strategy",
+    help="Strategy for name collisions when using --all-exports-scope=recursive. "
+    "'error': raise an error (default). "
+    "'minimal-prefix': add module prefix only to colliding names. "
+    "'full-prefix': add full module path prefix to colliding names.",
+    choices=[s.value for s in AllExportsCollisionStrategy],
     default=None,
 )
 
@@ -634,6 +653,14 @@ openapi_options.add_argument(
 # General options
 # ======================================================================================
 general_options.add_argument(
+    "--check",
+    action="store_true",
+    default=None,
+    help="Verify generated files are up-to-date without modifying them. "
+    "Exits with code 1 if differences found, 0 if up-to-date. "
+    "Useful for CI to ensure generated code is committed.",
+)
+general_options.add_argument(
     "--debug",
     help="show debug message (require \"debug\". `$ pip install 'datamodel-code-generator[debug]'`)",
     action="store_true",
@@ -663,6 +690,12 @@ general_options.add_argument(
     action="store_true",
     default=None,
     help="Generate pyproject.toml configuration from the provided CLI arguments and exit",
+)
+general_options.add_argument(
+    "--generate-cli-command",
+    action="store_true",
+    default=None,
+    help="Generate CLI command from pyproject.toml configuration and exit",
 )
 general_options.add_argument(
     "--version",

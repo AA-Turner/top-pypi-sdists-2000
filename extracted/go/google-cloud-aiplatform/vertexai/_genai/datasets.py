@@ -56,7 +56,7 @@ def _AssembleDatasetParameters_to_vertex(
     return to_object
 
 
-def _CreateMultimodalDatasetParameters_to_vertex(
+def _AssessDatasetParameters_to_vertex(
     from_object: Union[dict[str, Any], object],
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
@@ -64,6 +64,55 @@ def _CreateMultimodalDatasetParameters_to_vertex(
     if getv(from_object, ["config"]) is not None:
         setv(to_object, ["config"], getv(from_object, ["config"]))
 
+    if getv(from_object, ["name"]) is not None:
+        setv(to_object, ["_url", "name"], getv(from_object, ["name"]))
+
+    if getv(from_object, ["gemini_request_read_config"]) is not None:
+        setv(
+            to_object,
+            ["geminiRequestReadConfig"],
+            getv(from_object, ["gemini_request_read_config"]),
+        )
+
+    if getv(from_object, ["tuning_resource_usage_assessment_config"]) is not None:
+        setv(
+            to_object,
+            ["tuningResourceUsageAssessmentConfig"],
+            getv(from_object, ["tuning_resource_usage_assessment_config"]),
+        )
+
+    if getv(from_object, ["tuning_validation_assessment_config"]) is not None:
+        setv(
+            to_object,
+            ["tuningValidationAssessmentConfig"],
+            getv(from_object, ["tuning_validation_assessment_config"]),
+        )
+
+    if (
+        getv(from_object, ["batch_prediction_resource_usage_assessment_config"])
+        is not None
+    ):
+        setv(
+            to_object,
+            ["batchPredictionResourceUsageAssessmentConfig"],
+            getv(from_object, ["batch_prediction_resource_usage_assessment_config"]),
+        )
+
+    if getv(from_object, ["batch_prediction_validation_assessment_config"]) is not None:
+        setv(
+            to_object,
+            ["batchPredictionValidationAssessmentConfig"],
+            getv(from_object, ["batch_prediction_validation_assessment_config"]),
+        )
+
+    return to_object
+
+
+def _CreateMultimodalDatasetParameters_to_vertex(
+    from_object: Union[dict[str, Any], object],
+    parent_object: Optional[dict[str, Any]] = None,
+) -> dict[str, Any]:
+    to_object: dict[str, Any] = {}
     if getv(from_object, ["name"]) is not None:
         setv(to_object, ["name"], getv(from_object, ["name"]))
 
@@ -84,6 +133,9 @@ def _CreateMultimodalDatasetParameters_to_vertex(
     if getv(from_object, ["encryption_spec"]) is not None:
         setv(to_object, ["encryptionSpec"], getv(from_object, ["encryption_spec"]))
 
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
+
     return to_object
 
 
@@ -92,11 +144,11 @@ def _DeleteMultimodalDatasetRequestParameters_to_vertex(
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
-    if getv(from_object, ["config"]) is not None:
-        setv(to_object, ["config"], getv(from_object, ["config"]))
-
     if getv(from_object, ["name"]) is not None:
         setv(to_object, ["_url", "name"], getv(from_object, ["name"]))
+
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
 
     return to_object
 
@@ -106,14 +158,14 @@ def _GetMultimodalDatasetOperationParameters_to_vertex(
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
-    if getv(from_object, ["config"]) is not None:
-        setv(to_object, ["config"], getv(from_object, ["config"]))
-
     if getv(from_object, ["dataset_id"]) is not None:
         setv(to_object, ["_url", "dataset_id"], getv(from_object, ["dataset_id"]))
 
     if getv(from_object, ["operation_id"]) is not None:
         setv(to_object, ["_url", "operation_id"], getv(from_object, ["operation_id"]))
+
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
 
     return to_object
 
@@ -123,11 +175,11 @@ def _GetMultimodalDatasetParameters_to_vertex(
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
-    if getv(from_object, ["config"]) is not None:
-        setv(to_object, ["config"], getv(from_object, ["config"]))
-
     if getv(from_object, ["name"]) is not None:
         setv(to_object, ["_url", "name"], getv(from_object, ["name"]))
+
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
 
     return to_object
 
@@ -172,9 +224,6 @@ def _UpdateMultimodalDatasetParameters_to_vertex(
     parent_object: Optional[dict[str, Any]] = None,
 ) -> dict[str, Any]:
     to_object: dict[str, Any] = {}
-    if getv(from_object, ["config"]) is not None:
-        setv(to_object, ["config"], getv(from_object, ["config"]))
-
     if getv(from_object, ["name"]) is not None:
         setv(to_object, ["_url", "name"], getv(from_object, ["name"]))
 
@@ -189,6 +238,9 @@ def _UpdateMultimodalDatasetParameters_to_vertex(
 
     if getv(from_object, ["encryption_spec"]) is not None:
         setv(to_object, ["encryptionSpec"], getv(from_object, ["encryption_spec"]))
+
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
 
     return to_object
 
@@ -252,29 +304,102 @@ class Datasets(_api_module.BaseModule):
         self._api_client._verify_response(return_value)
         return return_value
 
+    def _assess_multimodal_dataset(
+        self,
+        *,
+        config: Optional[types.AssessDatasetConfigOrDict] = None,
+        name: str,
+        gemini_request_read_config: Optional[
+            types.GeminiRequestReadConfigOrDict
+        ] = None,
+        tuning_resource_usage_assessment_config: Optional[
+            types.TuningResourceUsageAssessmentConfigOrDict
+        ] = None,
+        tuning_validation_assessment_config: Optional[
+            types.TuningValidationAssessmentConfigOrDict
+        ] = None,
+        batch_prediction_resource_usage_assessment_config: Optional[
+            types.BatchPredictionResourceUsageAssessmentConfigOrDict
+        ] = None,
+        batch_prediction_validation_assessment_config: Optional[
+            types.BatchPredictionValidationAssessmentConfigOrDict
+        ] = None,
+    ) -> types.MultimodalDatasetOperation:
+        """
+        Assesses a multimodal dataset resource.
+        """
+
+        parameter_model = types._AssessDatasetParameters(
+            config=config,
+            name=name,
+            gemini_request_read_config=gemini_request_read_config,
+            tuning_resource_usage_assessment_config=tuning_resource_usage_assessment_config,
+            tuning_validation_assessment_config=tuning_validation_assessment_config,
+            batch_prediction_resource_usage_assessment_config=batch_prediction_resource_usage_assessment_config,
+            batch_prediction_validation_assessment_config=batch_prediction_validation_assessment_config,
+        )
+
+        request_url_dict: Optional[dict[str, str]]
+        if not self._api_client.vertexai:
+            raise ValueError("This method is only supported in the Vertex AI client.")
+        else:
+            request_dict = _AssessDatasetParameters_to_vertex(parameter_model)
+            request_url_dict = request_dict.get("_url")
+            if request_url_dict:
+                path = "datasets/{name}:assess".format_map(request_url_dict)
+            else:
+                path = "datasets/{name}:assess"
+
+        query_params = request_dict.get("_query")
+        if query_params:
+            path = f"{path}?{urlencode(query_params)}"
+        # TODO: remove the hack that pops config.
+        request_dict.pop("config", None)
+
+        http_options: Optional[types.HttpOptions] = None
+        if (
+            parameter_model.config is not None
+            and parameter_model.config.http_options is not None
+        ):
+            http_options = parameter_model.config.http_options
+
+        request_dict = _common.convert_to_dict(request_dict)
+        request_dict = _common.encode_unserializable_types(request_dict)
+
+        response = self._api_client.request("post", path, request_dict, http_options)
+
+        response_dict = {} if not response.body else json.loads(response.body)
+
+        return_value = types.MultimodalDatasetOperation._from_response(
+            response=response_dict, kwargs=parameter_model.model_dump()
+        )
+
+        self._api_client._verify_response(return_value)
+        return return_value
+
     def _create_multimodal_dataset(
         self,
         *,
-        config: Optional[types.CreateMultimodalDatasetConfigOrDict] = None,
         name: Optional[str] = None,
         display_name: Optional[str] = None,
         metadata_schema_uri: Optional[str] = None,
         metadata: Optional[types.SchemaTablesDatasetMetadataOrDict] = None,
         description: Optional[str] = None,
         encryption_spec: Optional[genai_types.EncryptionSpecOrDict] = None,
+        config: Optional[types.CreateMultimodalDatasetConfigOrDict] = None,
     ) -> types.MultimodalDatasetOperation:
         """
         Creates a dataset resource to store multimodal datasets.
         """
 
         parameter_model = types._CreateMultimodalDatasetParameters(
-            config=config,
             name=name,
             display_name=display_name,
             metadata_schema_uri=metadata_schema_uri,
             metadata=metadata,
             description=description,
             encryption_spec=encryption_spec,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -316,15 +441,15 @@ class Datasets(_api_module.BaseModule):
         return return_value
 
     def _delete_multimodal_dataset(
-        self, *, config: Optional[types.VertexBaseConfigOrDict] = None, name: str
+        self, *, name: str, config: Optional[types.VertexBaseConfigOrDict] = None
     ) -> types.MultimodalDatasetOperation:
         """
         Deletes a multimodal dataset resource.
         """
 
         parameter_model = types._DeleteMultimodalDatasetRequestParameters(
-            config=config,
             name=name,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -370,16 +495,16 @@ class Datasets(_api_module.BaseModule):
     def _get_multimodal_dataset(
         self,
         *,
-        config: Optional[types.VertexBaseConfigOrDict] = None,
         name: Optional[str] = None,
+        config: Optional[types.VertexBaseConfigOrDict] = None,
     ) -> types.MultimodalDataset:
         """
         Gets a multimodal dataset resource.
         """
 
         parameter_model = types._GetMultimodalDatasetParameters(
-            config=config,
             name=name,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -423,18 +548,18 @@ class Datasets(_api_module.BaseModule):
     def _get_multimodal_dataset_operation(
         self,
         *,
-        config: Optional[types.GetMultimodalDatasetOperationConfigOrDict] = None,
         dataset_id: Optional[str] = None,
         operation_id: Optional[str] = None,
+        config: Optional[types.GetMultimodalDatasetOperationConfigOrDict] = None,
     ) -> types.MultimodalDatasetOperation:
         """
         Gets the operation from creating a multimodal dataset.
         """
 
         parameter_model = types._GetMultimodalDatasetOperationParameters(
-            config=config,
             dataset_id=dataset_id,
             operation_id=operation_id,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -533,24 +658,24 @@ class Datasets(_api_module.BaseModule):
     def _update_multimodal_dataset(
         self,
         *,
-        config: Optional[types.UpdateMultimodalDatasetConfigOrDict] = None,
         name: Optional[str] = None,
         display_name: Optional[str] = None,
         metadata: Optional[types.SchemaTablesDatasetMetadataOrDict] = None,
         description: Optional[str] = None,
         encryption_spec: Optional[genai_types.EncryptionSpecOrDict] = None,
+        config: Optional[types.UpdateMultimodalDatasetConfigOrDict] = None,
     ) -> types.MultimodalDataset:
         """
         Updates a multimodal dataset resource.
         """
 
         parameter_model = types._UpdateMultimodalDatasetParameters(
-            config=config,
             name=name,
             display_name=display_name,
             metadata=metadata,
             description=description,
             encryption_spec=encryption_spec,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -875,6 +1000,60 @@ class Datasets(_api_module.BaseModule):
         )
         return response["bigqueryDestination"]
 
+    def assess_tuning_resources(
+        self,
+        *,
+        dataset_name: str,
+        model_name: str,
+        template_config: Optional[types.GeminiTemplateConfigOrDict] = None,
+        config: Optional[types.AssessDatasetConfigOrDict] = None,
+    ) -> types.TuningResourceUsageAssessmentResult:
+        """Assess the tuning resources required for a given model.
+
+        Args:
+          dataset_name:
+            Required. The name of the dataset to assess the tuning resources
+            for.
+          model_name:
+            Required. The name of the model to assess the tuning resources
+            for.
+          template_config:
+            Optional. The template config used to assemble the dataset
+            before assessing the tuning resources. If not provided, the
+            template config attached to the dataset will be used. Required
+            if no template config is attached to the dataset.
+          config:
+            Optional. A configuration for assessing the tuning resources. If not
+            provided, the default configuration will be used.
+
+        Returns:
+          A types.TuningResourceUsageAssessmentResult object representing the
+          tuning resource usage assessment result.
+        """
+        if isinstance(config, dict):
+            config = types.AssessDatasetConfig(**config)
+        elif not config:
+            config = types.AssessDatasetConfig()
+
+        operation = self._assess_multimodal_dataset(
+            name=dataset_name,
+            tuning_resource_usage_assessment_config=types.TuningResourceUsageAssessmentConfig(
+                model_name=model_name
+            ),
+            gemini_request_read_config=types.GeminiRequestReadConfig(
+                template_config=template_config,
+            ),
+            config=config,
+        )
+        response = self._wait_for_operation(
+            operation=operation,
+            timeout_seconds=config.timeout,
+        )
+        return _datasets_utils.create_from_response(
+            types.TuningResourceUsageAssessmentResult,
+            response["tuningResourceUsageAssessmentResult"],
+        )
+
 
 class AsyncDatasets(_api_module.BaseModule):
 
@@ -937,29 +1116,104 @@ class AsyncDatasets(_api_module.BaseModule):
         self._api_client._verify_response(return_value)
         return return_value
 
+    async def _assess_multimodal_dataset(
+        self,
+        *,
+        config: Optional[types.AssessDatasetConfigOrDict] = None,
+        name: str,
+        gemini_request_read_config: Optional[
+            types.GeminiRequestReadConfigOrDict
+        ] = None,
+        tuning_resource_usage_assessment_config: Optional[
+            types.TuningResourceUsageAssessmentConfigOrDict
+        ] = None,
+        tuning_validation_assessment_config: Optional[
+            types.TuningValidationAssessmentConfigOrDict
+        ] = None,
+        batch_prediction_resource_usage_assessment_config: Optional[
+            types.BatchPredictionResourceUsageAssessmentConfigOrDict
+        ] = None,
+        batch_prediction_validation_assessment_config: Optional[
+            types.BatchPredictionValidationAssessmentConfigOrDict
+        ] = None,
+    ) -> types.MultimodalDatasetOperation:
+        """
+        Assesses a multimodal dataset resource.
+        """
+
+        parameter_model = types._AssessDatasetParameters(
+            config=config,
+            name=name,
+            gemini_request_read_config=gemini_request_read_config,
+            tuning_resource_usage_assessment_config=tuning_resource_usage_assessment_config,
+            tuning_validation_assessment_config=tuning_validation_assessment_config,
+            batch_prediction_resource_usage_assessment_config=batch_prediction_resource_usage_assessment_config,
+            batch_prediction_validation_assessment_config=batch_prediction_validation_assessment_config,
+        )
+
+        request_url_dict: Optional[dict[str, str]]
+        if not self._api_client.vertexai:
+            raise ValueError("This method is only supported in the Vertex AI client.")
+        else:
+            request_dict = _AssessDatasetParameters_to_vertex(parameter_model)
+            request_url_dict = request_dict.get("_url")
+            if request_url_dict:
+                path = "datasets/{name}:assess".format_map(request_url_dict)
+            else:
+                path = "datasets/{name}:assess"
+
+        query_params = request_dict.get("_query")
+        if query_params:
+            path = f"{path}?{urlencode(query_params)}"
+        # TODO: remove the hack that pops config.
+        request_dict.pop("config", None)
+
+        http_options: Optional[types.HttpOptions] = None
+        if (
+            parameter_model.config is not None
+            and parameter_model.config.http_options is not None
+        ):
+            http_options = parameter_model.config.http_options
+
+        request_dict = _common.convert_to_dict(request_dict)
+        request_dict = _common.encode_unserializable_types(request_dict)
+
+        response = await self._api_client.async_request(
+            "post", path, request_dict, http_options
+        )
+
+        response_dict = {} if not response.body else json.loads(response.body)
+
+        return_value = types.MultimodalDatasetOperation._from_response(
+            response=response_dict, kwargs=parameter_model.model_dump()
+        )
+
+        self._api_client._verify_response(return_value)
+        return return_value
+
     async def _create_multimodal_dataset(
         self,
         *,
-        config: Optional[types.CreateMultimodalDatasetConfigOrDict] = None,
         name: Optional[str] = None,
         display_name: Optional[str] = None,
         metadata_schema_uri: Optional[str] = None,
         metadata: Optional[types.SchemaTablesDatasetMetadataOrDict] = None,
         description: Optional[str] = None,
         encryption_spec: Optional[genai_types.EncryptionSpecOrDict] = None,
+        config: Optional[types.CreateMultimodalDatasetConfigOrDict] = None,
     ) -> types.MultimodalDatasetOperation:
         """
         Creates a dataset resource to store multimodal datasets.
         """
 
         parameter_model = types._CreateMultimodalDatasetParameters(
-            config=config,
             name=name,
             display_name=display_name,
             metadata_schema_uri=metadata_schema_uri,
             metadata=metadata,
             description=description,
             encryption_spec=encryption_spec,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -1003,15 +1257,15 @@ class AsyncDatasets(_api_module.BaseModule):
         return return_value
 
     async def _delete_multimodal_dataset(
-        self, *, config: Optional[types.VertexBaseConfigOrDict] = None, name: str
+        self, *, name: str, config: Optional[types.VertexBaseConfigOrDict] = None
     ) -> types.MultimodalDatasetOperation:
         """
         Deletes a multimodal dataset resource.
         """
 
         parameter_model = types._DeleteMultimodalDatasetRequestParameters(
-            config=config,
             name=name,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -1059,16 +1313,16 @@ class AsyncDatasets(_api_module.BaseModule):
     async def _get_multimodal_dataset(
         self,
         *,
-        config: Optional[types.VertexBaseConfigOrDict] = None,
         name: Optional[str] = None,
+        config: Optional[types.VertexBaseConfigOrDict] = None,
     ) -> types.MultimodalDataset:
         """
         Gets a multimodal dataset resource.
         """
 
         parameter_model = types._GetMultimodalDatasetParameters(
-            config=config,
             name=name,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -1114,18 +1368,18 @@ class AsyncDatasets(_api_module.BaseModule):
     async def _get_multimodal_dataset_operation(
         self,
         *,
-        config: Optional[types.GetMultimodalDatasetOperationConfigOrDict] = None,
         dataset_id: Optional[str] = None,
         operation_id: Optional[str] = None,
+        config: Optional[types.GetMultimodalDatasetOperationConfigOrDict] = None,
     ) -> types.MultimodalDatasetOperation:
         """
         Gets the operation from creating a multimodal dataset.
         """
 
         parameter_model = types._GetMultimodalDatasetOperationParameters(
-            config=config,
             dataset_id=dataset_id,
             operation_id=operation_id,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -1228,24 +1482,24 @@ class AsyncDatasets(_api_module.BaseModule):
     async def _update_multimodal_dataset(
         self,
         *,
-        config: Optional[types.UpdateMultimodalDatasetConfigOrDict] = None,
         name: Optional[str] = None,
         display_name: Optional[str] = None,
         metadata: Optional[types.SchemaTablesDatasetMetadataOrDict] = None,
         description: Optional[str] = None,
         encryption_spec: Optional[genai_types.EncryptionSpecOrDict] = None,
+        config: Optional[types.UpdateMultimodalDatasetConfigOrDict] = None,
     ) -> types.MultimodalDataset:
         """
         Updates a multimodal dataset resource.
         """
 
         parameter_model = types._UpdateMultimodalDatasetParameters(
-            config=config,
             name=name,
             display_name=display_name,
             metadata=metadata,
             description=description,
             encryption_spec=encryption_spec,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -1567,3 +1821,57 @@ class AsyncDatasets(_api_module.BaseModule):
             timeout_seconds=config.timeout,
         )
         return response["bigqueryDestination"]
+
+    async def assess_tuning_resources(
+        self,
+        *,
+        dataset_name: str,
+        model_name: str,
+        template_config: Optional[types.GeminiTemplateConfigOrDict] = None,
+        config: Optional[types.AssessDatasetConfigOrDict] = None,
+    ) -> types.TuningResourceUsageAssessmentResult:
+        """Assess the tuning resources required for a given model.
+
+        Args:
+          dataset_name:
+            Required. The name of the dataset to assess the tuning resources
+            for.
+          model_name:
+            Required. The name of the model to assess the tuning resources
+            for.
+          template_config:
+            Optional. The template config used to assemble the dataset
+            before assessing the tuning resources. If not provided, the
+            template config attached to the dataset will be used. Required
+            if no template config is attached to the dataset.
+          config:
+            Optional. A configuration for assessing the tuning resources. If not
+            provided, the default configuration will be used.
+
+        Returns:
+          A types.TuningResourceUsageAssessmentResult object representing the
+          tuning resource usage assessment result.
+        """
+        if isinstance(config, dict):
+            config = types.AssessDatasetConfig(**config)
+        elif not config:
+            config = types.AssessDatasetConfig()
+
+        operation = await self._assess_multimodal_dataset(
+            name=dataset_name,
+            tuning_resource_usage_assessment_config=types.TuningResourceUsageAssessmentConfig(
+                model_name=model_name
+            ),
+            gemini_request_read_config=types.GeminiRequestReadConfig(
+                template_config=template_config,
+            ),
+            config=config,
+        )
+        response = await self._wait_for_operation(
+            operation=operation,
+            timeout_seconds=config.timeout,
+        )
+        return _datasets_utils.create_from_response(
+            types.TuningResourceUsageAssessmentResult,
+            response["tuningResourceUsageAssessmentResult"],
+        )

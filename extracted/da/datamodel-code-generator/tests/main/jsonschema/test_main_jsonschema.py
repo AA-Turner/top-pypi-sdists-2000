@@ -561,6 +561,18 @@ def test_main_jsonschema_id_as_stdin(monkeypatch: pytest.MonkeyPatch, output_fil
     )
 
 
+def test_main_jsonschema_stdin_oneof_ref(monkeypatch: pytest.MonkeyPatch, output_file: Path) -> None:
+    """Test JSON Schema with oneOf $ref from stdin."""
+    run_main_and_assert(
+        stdin_path=JSON_SCHEMA_DATA_PATH / "stdin_oneof_ref.json",
+        output_path=output_file,
+        monkeypatch=monkeypatch,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
+        expected_file="stdin_oneof_ref.py",
+    )
+
+
 def test_main_jsonschema_ids(output_dir: Path) -> None:
     """Test JSON Schema with multiple IDs."""
     with freeze_time(TIMESTAMP):
@@ -893,6 +905,32 @@ def test_main_all_of_with_object(output_file: Path) -> None:
             output_path=output_file,
             input_file_type="jsonschema",
             assert_func=assert_file_content,
+        )
+
+
+def test_main_all_of_merge_same_property(output_file: Path) -> None:
+    """Test allOf merging when duplicate property names exist across refs."""
+    with chdir(JSON_SCHEMA_DATA_PATH):
+        run_main_and_assert(
+            input_path=Path("all_of_merge_same_property.json"),
+            output_path=output_file,
+            input_file_type="jsonschema",
+            assert_func=assert_file_content,
+            expected_file="all_of_merge_same_property.py",
+            extra_args=["--class-name", "Model"],
+        )
+
+
+def test_main_all_of_merge_boolean_property(output_file: Path) -> None:
+    """Test allOf merging when a property has a boolean schema (false)."""
+    with chdir(JSON_SCHEMA_DATA_PATH):
+        run_main_and_assert(
+            input_path=Path("all_of_merge_boolean_property.json"),
+            output_path=output_file,
+            input_file_type="jsonschema",
+            assert_func=assert_file_content,
+            expected_file="all_of_merge_boolean_property.py",
+            extra_args=["--class-name", "Model"],
         )
 
 
@@ -2926,4 +2964,14 @@ def test_main_jsonschema_reuse_scope_tree_typeddict(output_dir: Path) -> None:
         expected_directory=EXPECTED_JSON_SCHEMA_PATH / "reuse_scope_tree_typeddict",
         input_file_type="jsonschema",
         extra_args=["--reuse-model", "--reuse-scope", "tree", "--output-model-type", "typing.TypedDict"],
+    )
+
+
+def test_main_jsonschema_empty_items_array(output_file: Path) -> None:
+    """Test that arrays with empty items ({}) generate List[Any] instead of bare List."""
+    run_main_and_assert(
+        input_path=JSON_SCHEMA_DATA_PATH / "empty_items_array.json",
+        output_path=output_file,
+        input_file_type="jsonschema",
+        assert_func=assert_file_content,
     )

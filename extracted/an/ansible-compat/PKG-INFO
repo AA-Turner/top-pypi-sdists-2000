@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: ansible-compat
-Version: 25.11.0
+Version: 25.12.0
 Summary: Ansible compatibility goodies
 Author-email: Sorin Sbarnea <ssbarnea@redhat.com>
 Maintainer-email: Sorin Sbarnea <ssbarnea@redhat.com>
@@ -33,8 +33,8 @@ Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: ansible-core>=2.16
 Requires-Dist: jsonschema>=4.6.0
-Requires-Dist: packaging>=25.0
-Requires-Dist: pyyaml>=6.0.2
+Requires-Dist: packaging>=22.0
+Requires-Dist: pyyaml>=6.0.1
 Requires-Dist: subprocess-tee>=0.4.1
 Dynamic: license-file
 

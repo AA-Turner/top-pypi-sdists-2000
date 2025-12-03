@@ -53,6 +53,7 @@ class LlamaParseParameters(pydantic.BaseModel):
     do_not_unroll_columns: typing.Optional[bool]
     extract_charts: typing.Optional[bool]
     extract_layout: typing.Optional[bool]
+    extract_printed_page_number: typing.Optional[bool]
     fast_mode: typing.Optional[bool]
     formatting_instruction: typing.Optional[str]
     gpt_4_o_api_key: typing.Optional[str] = pydantic.Field(alias="gpt4o_api_key")
@@ -78,6 +79,7 @@ class LlamaParseParameters(pydantic.BaseModel):
     keep_page_separator_when_merging_tables: typing.Optional[bool]
     languages: typing.Optional[typing.List[ParserLanguages]]
     layout_aware: typing.Optional[bool]
+    line_level_bounding_box: typing.Optional[bool]
     markdown_table_multiline_header_separator: typing.Optional[str]
     max_pages: typing.Optional[int]
     max_pages_enforced: typing.Optional[int]
@@ -129,10 +131,12 @@ class LlamaParseParameters(pydantic.BaseModel):
     system_prompt_append: typing.Optional[str]
     take_screenshot: typing.Optional[bool]
     target_pages: typing.Optional[str]
+    tier: typing.Optional[str]
     use_vendor_multimodal_model: typing.Optional[bool]
     user_prompt: typing.Optional[str]
     vendor_multimodal_api_key: typing.Optional[str]
     vendor_multimodal_model_name: typing.Optional[str]
+    version: typing.Optional[str]
     webhook_configurations: typing.Optional[typing.List[WebhookConfiguration]]
     webhook_url: typing.Optional[str]
 

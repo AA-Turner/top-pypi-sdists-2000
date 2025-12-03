@@ -19,9 +19,8 @@ from .agent_data import AgentData
 from .agent_deployment_list import AgentDeploymentList
 from .agent_deployment_summary import AgentDeploymentSummary
 from .aggregate_group import AggregateGroup
-from .api_key import ApiKey
-from .api_key_query_response import ApiKeyQueryResponse
-from .api_key_type import ApiKeyType
+from .apply_status_details import ApplyStatusDetails
+from .apply_status_details_status import ApplyStatusDetailsStatus
 from .auto_transform_config import AutoTransformConfig
 from .azure_open_ai_embedding import AzureOpenAiEmbedding
 from .azure_open_ai_embedding_config import AzureOpenAiEmbeddingConfig
@@ -33,6 +32,7 @@ from .batch_file_status import BatchFileStatus
 from .batch_item_detail import BatchItemDetail
 from .batch_item_list_response import BatchItemListResponse
 from .batch_job_cancel_response import BatchJobCancelResponse
+from .batch_job_query_response import BatchJobQueryResponse
 from .batch_job_response import BatchJobResponse
 from .batch_job_status import BatchJobStatus
 from .batch_job_status_response import BatchJobStatusResponse
@@ -72,6 +72,7 @@ from .cloud_qdrant_vector_store import CloudQdrantVectorStore
 from .cloud_s_3_data_source import CloudS3DataSource
 from .cloud_sharepoint_data_source import CloudSharepointDataSource
 from .cloud_slack_data_source import CloudSlackDataSource
+from .code_item import CodeItem
 from .cohere_embedding import CohereEmbedding
 from .cohere_embedding_config import CohereEmbeddingConfig
 from .composite_retrieval_mode import CompositeRetrievalMode
@@ -97,10 +98,18 @@ from .data_source_sync_request import DataSourceSyncRequest
 from .data_source_update_dispatcher_config import DataSourceUpdateDispatcherConfig
 from .delete_params import DeleteParams
 from .delete_response import DeleteResponse
+from .deployment_event import DeploymentEvent
+from .deployment_history_response import DeploymentHistoryResponse
+from .deployment_response import DeploymentResponse
+from .deployment_response_status import DeploymentResponseStatus
+from .deployments_list_response import DeploymentsListResponse
+from .diffing_status_details import DiffingStatusDetails
+from .diffing_status_details_status import DiffingStatusDetailsStatus
 from .directory_file_query_response import DirectoryFileQueryResponse
 from .directory_file_response import DirectoryFileResponse
 from .directory_query_response import DirectoryQueryResponse
 from .directory_response import DirectoryResponse
+from .directory_sync_job_response import DirectorySyncJobResponse
 from .document_chunk_mode import DocumentChunkMode
 from .document_ingestion_job_params import DocumentIngestionJobParams
 from .element_segmentation_config import ElementSegmentationConfig
@@ -150,8 +159,10 @@ from .extract_schema_validate_response import ExtractSchemaValidateResponse
 from .extract_schema_validate_response_data_schema_value import ExtractSchemaValidateResponseDataSchemaValue
 from .extract_state import ExtractState
 from .extract_target import ExtractTarget
-from .extracted_table_summary import ExtractedTableSummary
+from .extracted_region_summary import ExtractedRegionSummary
 from .fail_page_mode import FailPageMode
+from .failed_markdown_page import FailedMarkdownPage
+from .failed_structured_page import FailedStructuredPage
 from .failure_handling_config import FailureHandlingConfig
 from .file import File
 from .file_classification import FileClassification
@@ -179,10 +190,12 @@ from .filter_operator import FilterOperator
 from .free_credits_usage import FreeCreditsUsage
 from .gemini_embedding import GeminiEmbedding
 from .gemini_embedding_config import GeminiEmbeddingConfig
+from .heading_item import HeadingItem
 from .http_validation_error import HttpValidationError
 from .hugging_face_inference_api_embedding import HuggingFaceInferenceApiEmbedding
 from .hugging_face_inference_api_embedding_config import HuggingFaceInferenceApiEmbeddingConfig
 from .hugging_face_inference_api_embedding_token import HuggingFaceInferenceApiEmbeddingToken
+from .image_item import ImageItem
 from .ingestion_error_response import IngestionErrorResponse
 from .input_message import InputMessage
 from .item_processing_results_response import ItemProcessingResultsResponse
@@ -204,12 +217,42 @@ from .job_record_with_usage_metrics import JobRecordWithUsageMetrics
 from .l_lama_parse_transform_config import LLamaParseTransformConfig
 from .legacy_parse_job_config import LegacyParseJobConfig
 from .license_info_response import LicenseInfoResponse
+from .list_item import ListItem
+from .list_item_items_item import ListItemItemsItem, ListItemItemsItem_List, ListItemItemsItem_Text
+from .listing_status_details import ListingStatusDetails
+from .listing_status_details_status import ListingStatusDetailsStatus
 from .llama_extract_feature_availability import LlamaExtractFeatureAvailability
 from .llama_extract_mode_availability import LlamaExtractModeAvailability
 from .llama_extract_mode_availability_status import LlamaExtractModeAvailabilityStatus
+from .llama_parse_agentic_options import LlamaParseAgenticOptions
+from .llama_parse_crop_box import LlamaParseCropBox
+from .llama_parse_embedded_images_options import LlamaParseEmbeddedImagesOptions
+from .llama_parse_export_pdf_options import LlamaParseExportPdfOptions
+from .llama_parse_fast_options import LlamaParseFastOptions
+from .llama_parse_html_options import LlamaParseHtmlOptions
+from .llama_parse_ignore_options import LlamaParseIgnoreOptions
+from .llama_parse_input_options import LlamaParseInputOptions
+from .llama_parse_job_failure_conditions import LlamaParseJobFailureConditions
+from .llama_parse_markdown_options import LlamaParseMarkdownOptions
+from .llama_parse_ocr_parameters import LlamaParseOcrParameters
+from .llama_parse_output_options import LlamaParseOutputOptions
+from .llama_parse_page_ranges import LlamaParsePageRanges
+from .llama_parse_pages import LlamaParsePages
 from .llama_parse_parameters import LlamaParseParameters
 from .llama_parse_parameters_priority import LlamaParseParametersPriority
+from .llama_parse_pdf_options import LlamaParsePdfOptions
+from .llama_parse_presentation_options import LlamaParsePresentationOptions
+from .llama_parse_processing_control import LlamaParseProcessingControl
+from .llama_parse_screenshots_options import LlamaParseScreenshotsOptions
+from .llama_parse_spatial_text_options import LlamaParseSpatialTextOptions
+from .llama_parse_spreadsheet_options import LlamaParseSpreadsheetOptions
 from .llama_parse_supported_file_extensions import LlamaParseSupportedFileExtensions
+from .llama_parse_tables import LlamaParseTables
+from .llama_parse_tables_as_spreadsheet_options import LlamaParseTablesAsSpreadsheetOptions
+from .llama_parse_tier_options import LlamaParseTierOptions
+from .llama_parse_tier_options_version import LlamaParseTierOptionsVersion
+from .llama_parse_timeouts import LlamaParseTimeouts
+from .llama_parse_webhook_configuration import LlamaParseWebhookConfiguration
 from .llm_model_data import LlmModelData
 from .llm_parameters import LlmParameters
 from .load_files_job_config import LoadFilesJobConfig
@@ -217,6 +260,9 @@ from .managed_ingestion_status import ManagedIngestionStatus
 from .managed_ingestion_status_response import ManagedIngestionStatusResponse
 from .managed_open_ai_embedding import ManagedOpenAiEmbedding
 from .managed_open_ai_embedding_config import ManagedOpenAiEmbeddingConfig
+from .markdown_result import MarkdownResult
+from .markdown_result_page import MarkdownResultPage
+from .markdown_result_pages_item import MarkdownResultPagesItem
 from .message_annotation import MessageAnnotation
 from .message_role import MessageRole
 from .metadata_filter import MetadataFilter
@@ -246,11 +292,10 @@ from .paginated_response_classify_job import PaginatedResponseClassifyJob
 from .paginated_response_quota_configuration import PaginatedResponseQuotaConfiguration
 from .paginated_response_spreadsheet_job import PaginatedResponseSpreadsheetJob
 from .parse_configuration import ParseConfiguration
-from .parse_configuration_create import ParseConfigurationCreate
-from .parse_configuration_filter import ParseConfigurationFilter
 from .parse_configuration_query_response import ParseConfigurationQueryResponse
-from .parse_job_config import ParseJobConfig
-from .parse_job_config_priority import ParseJobConfigPriority
+from .parse_job_query_response import ParseJobQueryResponse
+from .parse_job_response import ParseJobResponse
+from .parse_job_result_response import ParseJobResultResponse
 from .parse_plan_level import ParsePlanLevel
 from .parser_languages import ParserLanguages
 from .parsing_history_item import ParsingHistoryItem
@@ -326,6 +371,8 @@ from .processing_result_job_config import ProcessingResultJobConfig
 from .processing_result_metadata import ProcessingResultMetadata
 from .project import Project
 from .project_create import ProjectCreate
+from .project_summary import ProjectSummary
+from .projects_list_response import ProjectsListResponse
 from .public_model_name import PublicModelName
 from .quota_configuration import QuotaConfiguration
 from .quota_configuration_configuration_type import QuotaConfigurationConfigurationType
@@ -337,6 +384,8 @@ from .re_ranker_type import ReRankerType
 from .recurring_credit_grant import RecurringCreditGrant
 from .related_node_info import RelatedNodeInfo
 from .related_node_info_node_type import RelatedNodeInfoNodeType
+from .release_history_item import ReleaseHistoryItem
+from .repository_validation_response import RepositoryValidationResponse
 from .retrieval_mode import RetrievalMode
 from .retrieve_results import RetrieveResults
 from .retriever import Retriever
@@ -349,18 +398,49 @@ from .semantic_chunking_config import SemanticChunkingConfig
 from .sentence_chunking_config import SentenceChunkingConfig
 from .sparse_model_config import SparseModelConfig
 from .sparse_model_type import SparseModelType
+from .split_category import SplitCategory
+from .split_document_input import SplitDocumentInput
+from .split_job_query_response import SplitJobQueryResponse
+from .split_job_response import SplitJobResponse
+from .split_result_response import SplitResultResponse
+from .split_segment_response import SplitSegmentResponse
+from .split_strategy import SplitStrategy
 from .spreadsheet_job import SpreadsheetJob
 from .spreadsheet_parsing_config import SpreadsheetParsingConfig
 from .spreadsheet_result_type import SpreadsheetResultType
+from .src_app_schema_etl_execution_parse_job_config import SrcAppSchemaEtlExecutionParseJobConfig
+from .src_app_schema_etl_execution_parse_job_config_priority import SrcAppSchemaEtlExecutionParseJobConfigPriority
+from .src_parse_schemas_workflow_parse_job_config import SrcParseSchemasWorkflowParseJobConfig
+from .src_parse_schemas_workflow_parse_job_config_priority import SrcParseSchemasWorkflowParseJobConfigPriority
 from .status_enum import StatusEnum
+from .structured_result import StructuredResult
+from .structured_result_page import StructuredResultPage
+from .structured_result_page_items_item import (
+    StructuredResultPageItemsItem,
+    StructuredResultPageItemsItem_Code,
+    StructuredResultPageItemsItem_Heading,
+    StructuredResultPageItemsItem_Image,
+    StructuredResultPageItemsItem_List,
+    StructuredResultPageItemsItem_Table,
+    StructuredResultPageItemsItem_Text,
+)
+from .structured_result_pages_item import StructuredResultPagesItem
 from .supported_llm_model import SupportedLlmModel
 from .supported_llm_model_names import SupportedLlmModelNames
+from .table_item import TableItem
+from .text_item import TextItem
 from .text_node import TextNode
 from .text_node_relationships_value import TextNodeRelationshipsValue
 from .text_node_with_score import TextNodeWithScore
+from .text_result import TextResult
+from .text_result_page import TextResultPage
+from .tier_name import TierName
 from .token_chunking_config import TokenChunkingConfig
 from .update_user_response import UpdateUserResponse
 from .usage_and_plan import UsageAndPlan
+from .usage_metric import UsageMetric
+from .usage_metric_event_type import UsageMetricEventType
+from .usage_metric_query_response import UsageMetricQueryResponse
 from .usage_metric_response import UsageMetricResponse
 from .usage_response import UsageResponse
 from .usage_response_active_alerts_item import UsageResponseActiveAlertsItem
@@ -371,6 +451,7 @@ from .user_organization_role import UserOrganizationRole
 from .user_summary import UserSummary
 from .validation_error import ValidationError
 from .validation_error_loc_item import ValidationErrorLocItem
+from .version_response import VersionResponse
 from .vertex_ai_embedding_config import VertexAiEmbeddingConfig
 from .vertex_embedding_mode import VertexEmbeddingMode
 from .vertex_text_embedding import VertexTextEmbedding
@@ -394,9 +475,8 @@ __all__ = [
     "AgentDeploymentList",
     "AgentDeploymentSummary",
     "AggregateGroup",
-    "ApiKey",
-    "ApiKeyQueryResponse",
-    "ApiKeyType",
+    "ApplyStatusDetails",
+    "ApplyStatusDetailsStatus",
     "AutoTransformConfig",
     "AzureOpenAiEmbedding",
     "AzureOpenAiEmbeddingConfig",
@@ -408,6 +488,7 @@ __all__ = [
     "BatchItemDetail",
     "BatchItemListResponse",
     "BatchJobCancelResponse",
+    "BatchJobQueryResponse",
     "BatchJobResponse",
     "BatchJobStatus",
     "BatchJobStatusResponse",
@@ -447,6 +528,7 @@ __all__ = [
     "CloudS3DataSource",
     "CloudSharepointDataSource",
     "CloudSlackDataSource",
+    "CodeItem",
     "CohereEmbedding",
     "CohereEmbeddingConfig",
     "CompositeRetrievalMode",
@@ -472,10 +554,18 @@ __all__ = [
     "DataSourceUpdateDispatcherConfig",
     "DeleteParams",
     "DeleteResponse",
+    "DeploymentEvent",
+    "DeploymentHistoryResponse",
+    "DeploymentResponse",
+    "DeploymentResponseStatus",
+    "DeploymentsListResponse",
+    "DiffingStatusDetails",
+    "DiffingStatusDetailsStatus",
     "DirectoryFileQueryResponse",
     "DirectoryFileResponse",
     "DirectoryQueryResponse",
     "DirectoryResponse",
+    "DirectorySyncJobResponse",
     "DocumentChunkMode",
     "DocumentIngestionJobParams",
     "ElementSegmentationConfig",
@@ -521,8 +611,10 @@ __all__ = [
     "ExtractSchemaValidateResponseDataSchemaValue",
     "ExtractState",
     "ExtractTarget",
-    "ExtractedTableSummary",
+    "ExtractedRegionSummary",
     "FailPageMode",
+    "FailedMarkdownPage",
+    "FailedStructuredPage",
     "FailureHandlingConfig",
     "File",
     "FileClassification",
@@ -550,10 +642,12 @@ __all__ = [
     "FreeCreditsUsage",
     "GeminiEmbedding",
     "GeminiEmbeddingConfig",
+    "HeadingItem",
     "HttpValidationError",
     "HuggingFaceInferenceApiEmbedding",
     "HuggingFaceInferenceApiEmbeddingConfig",
     "HuggingFaceInferenceApiEmbeddingToken",
+    "ImageItem",
     "IngestionErrorResponse",
     "InputMessage",
     "ItemProcessingResultsResponse",
@@ -573,12 +667,44 @@ __all__ = [
     "LLamaParseTransformConfig",
     "LegacyParseJobConfig",
     "LicenseInfoResponse",
+    "ListItem",
+    "ListItemItemsItem",
+    "ListItemItemsItem_List",
+    "ListItemItemsItem_Text",
+    "ListingStatusDetails",
+    "ListingStatusDetailsStatus",
     "LlamaExtractFeatureAvailability",
     "LlamaExtractModeAvailability",
     "LlamaExtractModeAvailabilityStatus",
+    "LlamaParseAgenticOptions",
+    "LlamaParseCropBox",
+    "LlamaParseEmbeddedImagesOptions",
+    "LlamaParseExportPdfOptions",
+    "LlamaParseFastOptions",
+    "LlamaParseHtmlOptions",
+    "LlamaParseIgnoreOptions",
+    "LlamaParseInputOptions",
+    "LlamaParseJobFailureConditions",
+    "LlamaParseMarkdownOptions",
+    "LlamaParseOcrParameters",
+    "LlamaParseOutputOptions",
+    "LlamaParsePageRanges",
+    "LlamaParsePages",
     "LlamaParseParameters",
     "LlamaParseParametersPriority",
+    "LlamaParsePdfOptions",
+    "LlamaParsePresentationOptions",
+    "LlamaParseProcessingControl",
+    "LlamaParseScreenshotsOptions",
+    "LlamaParseSpatialTextOptions",
+    "LlamaParseSpreadsheetOptions",
     "LlamaParseSupportedFileExtensions",
+    "LlamaParseTables",
+    "LlamaParseTablesAsSpreadsheetOptions",
+    "LlamaParseTierOptions",
+    "LlamaParseTierOptionsVersion",
+    "LlamaParseTimeouts",
+    "LlamaParseWebhookConfiguration",
     "LlmModelData",
     "LlmParameters",
     "LoadFilesJobConfig",
@@ -586,6 +712,9 @@ __all__ = [
     "ManagedIngestionStatusResponse",
     "ManagedOpenAiEmbedding",
     "ManagedOpenAiEmbeddingConfig",
+    "MarkdownResult",
+    "MarkdownResultPage",
+    "MarkdownResultPagesItem",
     "MessageAnnotation",
     "MessageRole",
     "MetadataFilter",
@@ -615,11 +744,10 @@ __all__ = [
     "PaginatedResponseQuotaConfiguration",
     "PaginatedResponseSpreadsheetJob",
     "ParseConfiguration",
-    "ParseConfigurationCreate",
-    "ParseConfigurationFilter",
     "ParseConfigurationQueryResponse",
-    "ParseJobConfig",
-    "ParseJobConfigPriority",
+    "ParseJobQueryResponse",
+    "ParseJobResponse",
+    "ParseJobResultResponse",
     "ParsePlanLevel",
     "ParserLanguages",
     "ParsingHistoryItem",
@@ -687,6 +815,8 @@ __all__ = [
     "ProcessingResultMetadata",
     "Project",
     "ProjectCreate",
+    "ProjectSummary",
+    "ProjectsListResponse",
     "PublicModelName",
     "QuotaConfiguration",
     "QuotaConfigurationConfigurationType",
@@ -698,6 +828,8 @@ __all__ = [
     "RecurringCreditGrant",
     "RelatedNodeInfo",
     "RelatedNodeInfoNodeType",
+    "ReleaseHistoryItem",
+    "RepositoryValidationResponse",
     "RetrievalMode",
     "RetrieveResults",
     "Retriever",
@@ -710,18 +842,47 @@ __all__ = [
     "SentenceChunkingConfig",
     "SparseModelConfig",
     "SparseModelType",
+    "SplitCategory",
+    "SplitDocumentInput",
+    "SplitJobQueryResponse",
+    "SplitJobResponse",
+    "SplitResultResponse",
+    "SplitSegmentResponse",
+    "SplitStrategy",
     "SpreadsheetJob",
     "SpreadsheetParsingConfig",
     "SpreadsheetResultType",
+    "SrcAppSchemaEtlExecutionParseJobConfig",
+    "SrcAppSchemaEtlExecutionParseJobConfigPriority",
+    "SrcParseSchemasWorkflowParseJobConfig",
+    "SrcParseSchemasWorkflowParseJobConfigPriority",
     "StatusEnum",
+    "StructuredResult",
+    "StructuredResultPage",
+    "StructuredResultPageItemsItem",
+    "StructuredResultPageItemsItem_Code",
+    "StructuredResultPageItemsItem_Heading",
+    "StructuredResultPageItemsItem_Image",
+    "StructuredResultPageItemsItem_List",
+    "StructuredResultPageItemsItem_Table",
+    "StructuredResultPageItemsItem_Text",
+    "StructuredResultPagesItem",
     "SupportedLlmModel",
     "SupportedLlmModelNames",
+    "TableItem",
+    "TextItem",
     "TextNode",
     "TextNodeRelationshipsValue",
     "TextNodeWithScore",
+    "TextResult",
+    "TextResultPage",
+    "TierName",
     "TokenChunkingConfig",
     "UpdateUserResponse",
     "UsageAndPlan",
+    "UsageMetric",
+    "UsageMetricEventType",
+    "UsageMetricQueryResponse",
     "UsageMetricResponse",
     "UsageResponse",
     "UsageResponseActiveAlertsItem",
@@ -732,6 +893,7 @@ __all__ = [
     "UserSummary",
     "ValidationError",
     "ValidationErrorLocItem",
+    "VersionResponse",
     "VertexAiEmbeddingConfig",
     "VertexEmbeddingMode",
     "VertexTextEmbedding",

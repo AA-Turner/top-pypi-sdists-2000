@@ -4,7 +4,8 @@ import datetime as dt
 import typing
 
 from ..core.datetime_utils import serialize_datetime
-from .extracted_table_summary import ExtractedTableSummary
+from .extracted_region_summary import ExtractedRegionSummary
+from .file import File
 from .spreadsheet_parsing_config import SpreadsheetParsingConfig
 from .status_enum import StatusEnum
 from .worksheet_metadata import WorksheetMetadata
@@ -26,14 +27,15 @@ class SpreadsheetJob(pydantic.BaseModel):
     config: SpreadsheetParsingConfig = pydantic.Field(description="Configuration for the parsing job")
     created_at: str = pydantic.Field(description="When the job was created")
     errors: typing.Optional[typing.List[str]] = pydantic.Field(description="Any errors encountered")
-    file_id: str = pydantic.Field(description="The ID of the file to parse")
+    file: typing.Optional[File]
+    file_id: typing.Optional[str]
     id: str = pydantic.Field(description="The ID of the job")
     project_id: str = pydantic.Field(description="The ID of the project")
+    regions: typing.Optional[typing.List[ExtractedRegionSummary]] = pydantic.Field(
+        description="All extracted regions (populated when job is complete)"
+    )
     status: StatusEnum = pydantic.Field(description="The status of the parsing job")
     success: typing.Optional[bool]
-    tables: typing.Optional[typing.List[ExtractedTableSummary]] = pydantic.Field(
-        description="All extracted tables (populated when job is complete)"
-    )
     updated_at: str = pydantic.Field(description="When the job was last updated")
     user_id: str = pydantic.Field(description="The ID of the user")
     worksheet_metadata: typing.Optional[typing.List[WorksheetMetadata]] = pydantic.Field(

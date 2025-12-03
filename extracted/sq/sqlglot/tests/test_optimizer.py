@@ -8,7 +8,7 @@ from pandas.testing import assert_frame_equal
 
 import sqlglot
 from sqlglot import exp, optimizer, parse_one
-from sqlglot.errors import OptimizeError, SchemaError
+from sqlglot.errors import ANSI_RESET, ANSI_UNDERLINE, OptimizeError, SchemaError
 from sqlglot.optimizer.annotate_types import annotate_types
 from sqlglot.optimizer.normalize import normalization_distance
 from sqlglot.optimizer.scope import build_scope, traverse_scope, walk_in_scope
@@ -163,11 +163,14 @@ class TestOptimizer(unittest.TestCase):
                 title = meta.get("title") or f"{i}, {sql}"
                 if only and title != only:
                     continue
+
                 dialect = meta.get("dialect")
                 leave_tables_isolated = meta.get("leave_tables_isolated")
                 validate_qualify_columns = meta.get("validate_qualify_columns")
+                canonicalize_table_aliases = meta.get("canonicalize_table_aliases")
 
-                func_kwargs = {**kwargs}
+                func_kwargs = kwargs.copy()
+
                 if leave_tables_isolated is not None:
                     func_kwargs["leave_tables_isolated"] = string_to_bool(leave_tables_isolated)
 
@@ -175,9 +178,10 @@ class TestOptimizer(unittest.TestCase):
                     func_kwargs["validate_qualify_columns"] = string_to_bool(
                         validate_qualify_columns
                     )
-
                 if dialect:
                     func_kwargs["dialect"] = dialect
+                if canonicalize_table_aliases:
+                    func_kwargs["canonicalize_table_aliases"] = canonicalize_table_aliases
 
                 future = pool.submit(parse_and_optimize, func, sql, dialect, **func_kwargs)
                 results[future] = (
@@ -259,7 +263,7 @@ class TestOptimizer(unittest.TestCase):
                 db="db",
                 catalog="catalog",
             ).sql(),
-            "WITH cte AS (SELECT * FROM catalog.db.t AS t) SELECT * FROM cte AS cte PIVOT(SUM(c) FOR v IN ('x', 'y')) AS _q_0",
+            "WITH cte AS (SELECT * FROM catalog.db.t AS t) SELECT * FROM cte AS cte PIVOT(SUM(c) FOR v IN ('x', 'y')) AS \"_0\"",
         )
 
         self.assertEqual(
@@ -434,7 +438,7 @@ class TestOptimizer(unittest.TestCase):
         self.assertEqual(
             optimizer.qualify_columns.qualify_columns(
                 parse_one(
-                    "SELECT id, dt, v FROM (SELECT t1.id, t1.dt, sum(coalesce(t2.v, 0)) AS v FROM t1 AS t1 LEFT JOIN lkp AS lkp USING (id) LEFT JOIN t2 AS t2 USING (other_id, dt, common) WHERE t1.id > 10 GROUP BY 1, 2) AS _q_0",
+                    "SELECT id, dt, v FROM (SELECT t1.id, t1.dt, sum(coalesce(t2.v, 0)) AS v FROM t1 AS t1 LEFT JOIN lkp AS lkp USING (id) LEFT JOIN t2 AS t2 USING (other_id, dt, common) WHERE t1.id > 10 GROUP BY 1, 2) AS `_0`",
                     dialect="bigquery",
                 ),
                 schema=MappingSchema(
@@ -446,7 +450,7 @@ class TestOptimizer(unittest.TestCase):
                     dialect="bigquery",
                 ),
             ).sql(dialect="bigquery"),
-            "SELECT _q_0.id AS id, _q_0.dt AS dt, _q_0.v AS v FROM (SELECT t1.id AS id, t1.dt AS dt, sum(coalesce(t2.v, 0)) AS v FROM t1 AS t1 LEFT JOIN lkp AS lkp ON t1.id = lkp.id LEFT JOIN t2 AS t2 ON lkp.other_id = t2.other_id AND t1.dt = t2.dt AND COALESCE(t1.common, lkp.common) = t2.common WHERE t1.id > 10 GROUP BY t1.id, t1.dt) AS _q_0",
+            "SELECT `_0`.id AS id, `_0`.dt AS dt, `_0`.v AS v FROM (SELECT t1.id AS id, t1.dt AS dt, sum(coalesce(t2.v, 0)) AS v FROM t1 AS t1 LEFT JOIN lkp AS lkp ON t1.id = lkp.id LEFT JOIN t2 AS t2 ON lkp.other_id = t2.other_id AND t1.dt = t2.dt AND COALESCE(t1.common, lkp.common) = t2.common WHERE t1.id > 10 GROUP BY t1.id, t1.dt) AS `_0`",
         )
 
         # Detection of correlation where columns are referenced in derived tables nested within subqueries
@@ -520,6 +524,25 @@ class TestOptimizer(unittest.TestCase):
         )
         self.check_file("qualify_columns_ddl", qualify_columns, schema=self.schema)
 
+    def test_validate_columns(self):
+        with self.assertRaisesRegex(
+            OptimizeError, "Column 'foo' could not be resolved. Line: 1, Col: 10"
+        ):
+            optimizer.qualify.qualify(
+                parse_one("select foo from x"),
+                schema={"foo": {"y": "int"}},
+            )
+
+        # Test ambiguous columns error with PIVOT (which skips "could not be resolved" check)
+        with self.assertRaisesRegex(OptimizeError, "Ambiguous column 'a'"):
+            expression = parse_one(
+                "SELECT * FROM (SELECT a, b, c FROM x) PIVOT (SUM(b) FOR c IN ('x', 'y'))"
+            )
+            qualified = optimizer.qualify_columns.qualify_columns(
+                expression, schema={"x": {"a": "int", "b": "int", "c": "str"}}
+            )
+            optimizer.qualify_columns.validate_qualify_columns(qualified)
+
     def test_qualify_columns__with_invisible(self):
         schema = MappingSchema(self.schema, {"x": {"a"}, "y": {"b"}, "z": {"b"}})
         self.check_file("qualify_columns__with_invisible", qualify_columns, schema=schema)
@@ -538,6 +561,27 @@ class TestOptimizer(unittest.TestCase):
                         parse_one(sql), schema=self.schema
                     )
                     optimizer.qualify_columns.validate_qualify_columns(expression)
+
+    def test_optimize_error_highlighting(self):
+        # highlighting works with sql parameter
+        sql = "SELECT nonexistent FROM x"
+
+        with self.assertRaises(OptimizeError) as ctx:
+            optimizer.optimize(sql, schema=self.schema, sql=sql)
+
+        error_msg = str(ctx.exception)
+        self.assertIn("Column 'nonexistent' could not be resolved", error_msg)
+        self.assertIn(f"{ANSI_UNDERLINE}nonexistent{ANSI_RESET}", error_msg)
+
+        # no highlighting when sql is None
+        sql = "SELECT nonexistent FROM x"
+
+        with self.assertRaises(OptimizeError) as ctx:
+            optimizer.optimize(sql, schema=self.schema, sql=None)
+
+        error_msg = str(ctx.exception)
+        self.assertIn("Column 'nonexistent' could not be resolved", error_msg)
+        self.assertNotIn(f"{ANSI_UNDERLINE}nonexistent{ANSI_RESET}", error_msg)
 
     def test_normalize_identifiers(self):
         self.check_file(
@@ -637,6 +681,26 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
         self.assertEqual(
             optimizer.simplify.gen(parse_one("select item_id /* description */"), comments=True),
             "SELECT :expressions,item_id /* description */",
+        )
+
+    def test_simplify_nested(self):
+        sql = """
+        SELECT x, 1 + 1
+        FROM foo
+        WHERE x > (((select x + 1 + 1, sum(y + 1 + 1) FROM bar GROUP BY x + 1 + 1)))
+        """
+
+        self.assertEqual(
+            parse_one("""
+            SELECT x, 2
+            FROM foo
+            WHERE x > (((
+                select x + 1 + 1, sum(y + 2)
+                FROM bar
+                GROUP BY x + 1 + 1
+            )))
+            """).sql(pretty=True),
+            optimizer.simplify.simplify(parse_one(sql)).sql(pretty=True),
         )
 
     def test_unnest_subqueries(self):
@@ -1823,3 +1887,14 @@ SELECT :with_,WITH :expressions,CTE :this,UNION :this,SELECT :expressions,1,:exp
             sql
             == '''SELECT GET_PATH("T"."COL", 'A.a') AS "a", GET_PATH("T"."COL", 'a.A') AS "A" FROM "T" AS "T"'''
         )
+
+    def test_deep_ast_type_annotation(self):
+        union_sql = "SELECT 1 UNION ALL " * 2000 + "SELECT 1"
+        annotated = annotate_types(parse_one(union_sql))
+        self.assertEqual(annotated.sql(), union_sql)
+        self.assertEqual(annotated.selects[0].type.this, exp.DataType.Type.INT)
+
+        binary_sql = "SELECT " + "t.a + " * 2000 + "t.a FROM t"
+        annotated = annotate_types(parse_one(binary_sql), schema={"t": {"a": "INT"}})
+        self.assertEqual(annotated.sql(), binary_sql)
+        self.assertEqual(annotated.selects[0].type.this, exp.DataType.Type.INT)

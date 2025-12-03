@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-google-vertexai
-Version: 3.1.0
+Version: 3.1.1
 Summary: An integration package connecting Google VertexAI and LangChain
 Project-URL: Homepage, https://docs.langchain.com/oss/python/integrations/providers/google
 Project-URL: Documentation, https://reference.langchain.com/python/integrations/langchain_google_vertexai/

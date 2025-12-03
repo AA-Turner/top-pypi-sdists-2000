@@ -7,6 +7,10 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class PublicModelName(str, enum.Enum):
+    """
+    Public model names.
+    """
+
     OPENAI_GPT_4_O = "openai-gpt-4o"
     OPENAI_GPT_4_O_MINI = "openai-gpt-4o-mini"
     OPENAI_GPT_41 = "openai-gpt-4-1"
@@ -15,16 +19,18 @@ class PublicModelName(str, enum.Enum):
     OPENAI_GPT_5 = "openai-gpt-5"
     OPENAI_GPT_5_MINI = "openai-gpt-5-mini"
     OPENAI_GPT_5_NANO = "openai-gpt-5-nano"
-    OPENAI_TEXT_EMBEDDING_3_SMALL = "openai-text-embedding-3-small"
     OPENAI_TEXT_EMBEDDING_3_LARGE = "openai-text-embedding-3-large"
+    OPENAI_TEXT_EMBEDDING_3_SMALL = "openai-text-embedding-3-small"
     OPENAI_WHISPER_1 = "openai-whisper-1"
     ANTHROPIC_SONNET_35 = "anthropic-sonnet-3.5"
     ANTHROPIC_SONNET_35_V_2 = "anthropic-sonnet-3.5-v2"
     ANTHROPIC_SONNET_37 = "anthropic-sonnet-3.7"
     ANTHROPIC_SONNET_40 = "anthropic-sonnet-4.0"
     ANTHROPIC_SONNET_45 = "anthropic-sonnet-4.5"
+    ANTHROPIC_HAIKU_35 = "anthropic-haiku-3.5"
     ANTHROPIC_HAIKU_45 = "anthropic-haiku-4.5"
     GEMINI_25_FLASH = "gemini-2.5-flash"
+    GEMINI_30_PRO = "gemini-3.0-pro"
     GEMINI_25_PRO = "gemini-2.5-pro"
     GEMINI_20_FLASH = "gemini-2.0-flash"
     GEMINI_20_FLASH_LITE = "gemini-2.0-flash-lite"
@@ -42,16 +48,18 @@ class PublicModelName(str, enum.Enum):
         openai_gpt_5: typing.Callable[[], T_Result],
         openai_gpt_5_mini: typing.Callable[[], T_Result],
         openai_gpt_5_nano: typing.Callable[[], T_Result],
-        openai_text_embedding_3_small: typing.Callable[[], T_Result],
         openai_text_embedding_3_large: typing.Callable[[], T_Result],
+        openai_text_embedding_3_small: typing.Callable[[], T_Result],
         openai_whisper_1: typing.Callable[[], T_Result],
         anthropic_sonnet_35: typing.Callable[[], T_Result],
         anthropic_sonnet_35_v_2: typing.Callable[[], T_Result],
         anthropic_sonnet_37: typing.Callable[[], T_Result],
         anthropic_sonnet_40: typing.Callable[[], T_Result],
         anthropic_sonnet_45: typing.Callable[[], T_Result],
+        anthropic_haiku_35: typing.Callable[[], T_Result],
         anthropic_haiku_45: typing.Callable[[], T_Result],
         gemini_25_flash: typing.Callable[[], T_Result],
+        gemini_30_pro: typing.Callable[[], T_Result],
         gemini_25_pro: typing.Callable[[], T_Result],
         gemini_20_flash: typing.Callable[[], T_Result],
         gemini_20_flash_lite: typing.Callable[[], T_Result],
@@ -75,10 +83,10 @@ class PublicModelName(str, enum.Enum):
             return openai_gpt_5_mini()
         if self is PublicModelName.OPENAI_GPT_5_NANO:
             return openai_gpt_5_nano()
-        if self is PublicModelName.OPENAI_TEXT_EMBEDDING_3_SMALL:
-            return openai_text_embedding_3_small()
         if self is PublicModelName.OPENAI_TEXT_EMBEDDING_3_LARGE:
             return openai_text_embedding_3_large()
+        if self is PublicModelName.OPENAI_TEXT_EMBEDDING_3_SMALL:
+            return openai_text_embedding_3_small()
         if self is PublicModelName.OPENAI_WHISPER_1:
             return openai_whisper_1()
         if self is PublicModelName.ANTHROPIC_SONNET_35:
@@ -91,10 +99,14 @@ class PublicModelName(str, enum.Enum):
             return anthropic_sonnet_40()
         if self is PublicModelName.ANTHROPIC_SONNET_45:
             return anthropic_sonnet_45()
+        if self is PublicModelName.ANTHROPIC_HAIKU_35:
+            return anthropic_haiku_35()
         if self is PublicModelName.ANTHROPIC_HAIKU_45:
             return anthropic_haiku_45()
         if self is PublicModelName.GEMINI_25_FLASH:
             return gemini_25_flash()
+        if self is PublicModelName.GEMINI_30_PRO:
+            return gemini_30_pro()
         if self is PublicModelName.GEMINI_25_PRO:
             return gemini_25_pro()
         if self is PublicModelName.GEMINI_20_FLASH:

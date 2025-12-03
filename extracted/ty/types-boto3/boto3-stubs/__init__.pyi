@@ -303,6 +303,7 @@ from types_boto3_networkmanager.client import NetworkManagerClient
 from types_boto3_networkmonitor.client import CloudWatchNetworkMonitorClient
 from types_boto3_notifications.client import UserNotificationsClient
 from types_boto3_notificationscontacts.client import UserNotificationsContactsClient
+from types_boto3_nova_act.client import NovaActServiceClient
 from types_boto3_oam.client import CloudWatchObservabilityAccessManagerClient
 from types_boto3_observabilityadmin.client import CloudWatchObservabilityAdminServiceClient
 from types_boto3_odb.client import OdbClient
@@ -313,6 +314,8 @@ from types_boto3_organizations.client import OrganizationsClient
 from types_boto3_osis.client import OpenSearchIngestionClient
 from types_boto3_outposts.client import OutpostsClient
 from types_boto3_panorama.client import PanoramaClient
+from types_boto3_partnercentral_account.client import PartnerCentralAccountAPIClient
+from types_boto3_partnercentral_benefits.client import PartnerCentralBenefitsClient
 from types_boto3_partnercentral_channel.client import PartnerCentralChannelAPIClient
 from types_boto3_partnercentral_selling.client import PartnerCentralSellingAPIClient
 from types_boto3_payment_cryptography.client import PaymentCryptographyControlPlaneClient
@@ -355,6 +358,7 @@ from types_boto3_route53_recovery_cluster.client import Route53RecoveryClusterCl
 from types_boto3_route53_recovery_control_config.client import Route53RecoveryControlConfigClient
 from types_boto3_route53_recovery_readiness.client import Route53RecoveryReadinessClient
 from types_boto3_route53domains.client import Route53DomainsClient
+from types_boto3_route53globalresolver.client import Route53GlobalResolverClient
 from types_boto3_route53profiles.client import Route53ProfilesClient
 from types_boto3_route53resolver.client import Route53ResolverClient
 from types_boto3_rtbfabric.client import RTBFabricClient
@@ -5421,6 +5425,24 @@ def client(
 
 @overload
 def client(
+    service_name: Literal["nova-act"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> NovaActServiceClient:
+    """
+    Create client for NovaActService service.
+    """
+
+@overload
+def client(
     service_name: Literal["oam"],
     region_name: str | None = ...,
     api_version: str | None = ...,
@@ -5597,6 +5619,42 @@ def client(
 ) -> PanoramaClient:
     """
     Create client for Panorama service.
+    """
+
+@overload
+def client(
+    service_name: Literal["partnercentral-account"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> PartnerCentralAccountAPIClient:
+    """
+    Create client for PartnerCentralAccountAPI service.
+    """
+
+@overload
+def client(
+    service_name: Literal["partnercentral-benefits"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> PartnerCentralBenefitsClient:
+    """
+    Create client for PartnerCentralBenefits service.
     """
 
 @overload
@@ -6353,6 +6411,24 @@ def client(
 ) -> Route53DomainsClient:
     """
     Create client for Route53Domains service.
+    """
+
+@overload
+def client(
+    service_name: Literal["route53globalresolver"],
+    region_name: str | None = ...,
+    api_version: str | None = ...,
+    use_ssl: bool | None = ...,
+    verify: bool | str | None = ...,
+    endpoint_url: str | None = ...,
+    aws_access_key_id: str | None = ...,
+    aws_secret_access_key: str | None = ...,
+    aws_session_token: str | None = ...,
+    config: Config | None = ...,
+    aws_account_id: str | None = ...,
+) -> Route53GlobalResolverClient:
+    """
+    Create client for Route53GlobalResolver service.
     """
 
 @overload

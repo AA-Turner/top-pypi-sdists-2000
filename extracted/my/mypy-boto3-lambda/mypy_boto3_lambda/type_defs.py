@@ -27,8 +27,12 @@ from botocore.response import StreamingBody
 from .literals import (
     ApplicationLogLevelType,
     ArchitectureType,
+    CapacityProviderScalingModeType,
+    CapacityProviderStateType,
     CodeSigningPolicyType,
     EventSourcePositionType,
+    EventTypeType,
+    ExecutionStatusType,
     FullDocumentType,
     FunctionUrlAuthTypeType,
     InvocationTypeType,
@@ -39,6 +43,9 @@ from .literals import (
     LastUpdateStatusType,
     LogFormatType,
     LogTypeType,
+    OperationActionType,
+    OperationStatusType,
+    OperationTypeType,
     PackageTypeType,
     ProvisionedConcurrencyStatusEnumType,
     RecursiveLoopType,
@@ -80,14 +87,45 @@ __all__ = (
     "AmazonManagedKafkaEventSourceConfigTypeDef",
     "AmazonManagedKafkaEventSourceConfigUnionTypeDef",
     "BlobTypeDef",
+    "CallbackDetailsTypeDef",
+    "CallbackFailedDetailsTypeDef",
+    "CallbackOptionsTypeDef",
+    "CallbackStartedDetailsTypeDef",
+    "CallbackSucceededDetailsTypeDef",
+    "CallbackTimedOutDetailsTypeDef",
+    "CapacityProviderConfigTypeDef",
+    "CapacityProviderPermissionsConfigTypeDef",
+    "CapacityProviderScalingConfigOutputTypeDef",
+    "CapacityProviderScalingConfigTypeDef",
+    "CapacityProviderScalingConfigUnionTypeDef",
+    "CapacityProviderTypeDef",
+    "CapacityProviderVpcConfigOutputTypeDef",
+    "CapacityProviderVpcConfigTypeDef",
+    "CapacityProviderVpcConfigUnionTypeDef",
+    "ChainedInvokeDetailsTypeDef",
+    "ChainedInvokeFailedDetailsTypeDef",
+    "ChainedInvokeOptionsTypeDef",
+    "ChainedInvokeStartedDetailsTypeDef",
+    "ChainedInvokeStoppedDetailsTypeDef",
+    "ChainedInvokeSucceededDetailsTypeDef",
+    "ChainedInvokeTimedOutDetailsTypeDef",
+    "CheckpointDurableExecutionRequestTypeDef",
+    "CheckpointDurableExecutionResponseTypeDef",
+    "CheckpointUpdatedExecutionStateTypeDef",
     "CodeSigningConfigTypeDef",
     "CodeSigningPoliciesTypeDef",
     "ConcurrencyResponseTypeDef",
     "ConcurrencyTypeDef",
+    "ContextDetailsTypeDef",
+    "ContextFailedDetailsTypeDef",
+    "ContextOptionsTypeDef",
+    "ContextSucceededDetailsTypeDef",
     "CorsOutputTypeDef",
     "CorsTypeDef",
     "CorsUnionTypeDef",
     "CreateAliasRequestTypeDef",
+    "CreateCapacityProviderRequestTypeDef",
+    "CreateCapacityProviderResponseTypeDef",
     "CreateCodeSigningConfigRequestTypeDef",
     "CreateCodeSigningConfigResponseTypeDef",
     "CreateEventSourceMappingRequestTypeDef",
@@ -96,27 +134,45 @@ __all__ = (
     "CreateFunctionUrlConfigResponseTypeDef",
     "DeadLetterConfigTypeDef",
     "DeleteAliasRequestTypeDef",
+    "DeleteCapacityProviderRequestTypeDef",
+    "DeleteCapacityProviderResponseTypeDef",
     "DeleteCodeSigningConfigRequestTypeDef",
     "DeleteEventSourceMappingRequestTypeDef",
     "DeleteFunctionCodeSigningConfigRequestTypeDef",
     "DeleteFunctionConcurrencyRequestTypeDef",
     "DeleteFunctionEventInvokeConfigRequestTypeDef",
     "DeleteFunctionRequestTypeDef",
+    "DeleteFunctionResponseTypeDef",
     "DeleteFunctionUrlConfigRequestTypeDef",
     "DeleteLayerVersionRequestTypeDef",
     "DeleteProvisionedConcurrencyConfigRequestTypeDef",
     "DestinationConfigTypeDef",
     "DocumentDBEventSourceConfigTypeDef",
+    "DurableConfigTypeDef",
     "EmptyResponseMetadataTypeDef",
     "EnvironmentErrorTypeDef",
     "EnvironmentResponseTypeDef",
     "EnvironmentTypeDef",
     "EphemeralStorageTypeDef",
+    "ErrorObjectOutputTypeDef",
+    "ErrorObjectTypeDef",
+    "ErrorObjectUnionTypeDef",
+    "EventErrorTypeDef",
+    "EventInputTypeDef",
+    "EventResultTypeDef",
     "EventSourceMappingConfigurationResponseTypeDef",
     "EventSourceMappingConfigurationTypeDef",
     "EventSourceMappingMetricsConfigOutputTypeDef",
     "EventSourceMappingMetricsConfigTypeDef",
     "EventSourceMappingMetricsConfigUnionTypeDef",
+    "EventTypeDef",
+    "ExecutionDetailsTypeDef",
+    "ExecutionFailedDetailsTypeDef",
+    "ExecutionStartedDetailsTypeDef",
+    "ExecutionStoppedDetailsTypeDef",
+    "ExecutionSucceededDetailsTypeDef",
+    "ExecutionTimedOutDetailsTypeDef",
+    "ExecutionTypeDef",
     "FileSystemConfigTypeDef",
     "FilterCriteriaErrorTypeDef",
     "FilterCriteriaOutputTypeDef",
@@ -129,11 +185,23 @@ __all__ = (
     "FunctionConfigurationTypeDef",
     "FunctionEventInvokeConfigResponseTypeDef",
     "FunctionEventInvokeConfigTypeDef",
+    "FunctionScalingConfigTypeDef",
     "FunctionUrlConfigTypeDef",
+    "FunctionVersionsByCapacityProviderListItemTypeDef",
     "GetAccountSettingsResponseTypeDef",
     "GetAliasRequestTypeDef",
+    "GetCapacityProviderRequestTypeDef",
+    "GetCapacityProviderResponseTypeDef",
     "GetCodeSigningConfigRequestTypeDef",
     "GetCodeSigningConfigResponseTypeDef",
+    "GetDurableExecutionHistoryRequestPaginateTypeDef",
+    "GetDurableExecutionHistoryRequestTypeDef",
+    "GetDurableExecutionHistoryResponseTypeDef",
+    "GetDurableExecutionRequestTypeDef",
+    "GetDurableExecutionResponseTypeDef",
+    "GetDurableExecutionStateRequestPaginateTypeDef",
+    "GetDurableExecutionStateRequestTypeDef",
+    "GetDurableExecutionStateResponseTypeDef",
     "GetEventSourceMappingRequestTypeDef",
     "GetFunctionCodeSigningConfigRequestTypeDef",
     "GetFunctionCodeSigningConfigResponseTypeDef",
@@ -151,6 +219,8 @@ __all__ = (
     "GetFunctionRequestWaitExtraTypeDef",
     "GetFunctionRequestWaitTypeDef",
     "GetFunctionResponseTypeDef",
+    "GetFunctionScalingConfigRequestTypeDef",
+    "GetFunctionScalingConfigResponseTypeDef",
     "GetFunctionUrlConfigRequestTypeDef",
     "GetFunctionUrlConfigResponseTypeDef",
     "GetLayerVersionByArnRequestTypeDef",
@@ -169,6 +239,10 @@ __all__ = (
     "ImageConfigResponseTypeDef",
     "ImageConfigTypeDef",
     "ImageConfigUnionTypeDef",
+    "InstanceRequirementsOutputTypeDef",
+    "InstanceRequirementsTypeDef",
+    "InstanceRequirementsUnionTypeDef",
+    "InvocationCompletedDetailsTypeDef",
     "InvocationRequestTypeDef",
     "InvocationResponseTypeDef",
     "InvokeAsyncRequestTypeDef",
@@ -182,6 +256,7 @@ __all__ = (
     "KafkaSchemaRegistryConfigOutputTypeDef",
     "KafkaSchemaRegistryConfigTypeDef",
     "KafkaSchemaValidationConfigTypeDef",
+    "LambdaManagedInstancesCapacityProviderConfigTypeDef",
     "LayerTypeDef",
     "LayerVersionContentInputTypeDef",
     "LayerVersionContentOutputTypeDef",
@@ -190,9 +265,15 @@ __all__ = (
     "ListAliasesRequestPaginateTypeDef",
     "ListAliasesRequestTypeDef",
     "ListAliasesResponseTypeDef",
+    "ListCapacityProvidersRequestPaginateTypeDef",
+    "ListCapacityProvidersRequestTypeDef",
+    "ListCapacityProvidersResponseTypeDef",
     "ListCodeSigningConfigsRequestPaginateTypeDef",
     "ListCodeSigningConfigsRequestTypeDef",
     "ListCodeSigningConfigsResponseTypeDef",
+    "ListDurableExecutionsByFunctionRequestPaginateTypeDef",
+    "ListDurableExecutionsByFunctionRequestTypeDef",
+    "ListDurableExecutionsByFunctionResponseTypeDef",
     "ListEventSourceMappingsRequestPaginateTypeDef",
     "ListEventSourceMappingsRequestTypeDef",
     "ListEventSourceMappingsResponseTypeDef",
@@ -202,6 +283,9 @@ __all__ = (
     "ListFunctionUrlConfigsRequestPaginateTypeDef",
     "ListFunctionUrlConfigsRequestTypeDef",
     "ListFunctionUrlConfigsResponseTypeDef",
+    "ListFunctionVersionsByCapacityProviderRequestPaginateTypeDef",
+    "ListFunctionVersionsByCapacityProviderRequestTypeDef",
+    "ListFunctionVersionsByCapacityProviderResponseTypeDef",
     "ListFunctionsByCodeSigningConfigRequestPaginateTypeDef",
     "ListFunctionsByCodeSigningConfigRequestTypeDef",
     "ListFunctionsByCodeSigningConfigResponseTypeDef",
@@ -225,6 +309,8 @@ __all__ = (
     "LoggingConfigTypeDef",
     "OnFailureTypeDef",
     "OnSuccessTypeDef",
+    "OperationTypeDef",
+    "OperationUpdateTypeDef",
     "PaginatorConfigTypeDef",
     "ProvisionedConcurrencyConfigListItemTypeDef",
     "ProvisionedPollerConfigTypeDef",
@@ -237,6 +323,8 @@ __all__ = (
     "PutFunctionEventInvokeConfigRequestTypeDef",
     "PutFunctionRecursionConfigRequestTypeDef",
     "PutFunctionRecursionConfigResponseTypeDef",
+    "PutFunctionScalingConfigRequestTypeDef",
+    "PutFunctionScalingConfigResponseTypeDef",
     "PutProvisionedConcurrencyConfigRequestTypeDef",
     "PutProvisionedConcurrencyConfigResponseTypeDef",
     "PutRuntimeManagementConfigRequestTypeDef",
@@ -244,6 +332,7 @@ __all__ = (
     "RemoveLayerVersionPermissionRequestTypeDef",
     "RemovePermissionRequestTypeDef",
     "ResponseMetadataTypeDef",
+    "RetryDetailsTypeDef",
     "RuntimeVersionConfigTypeDef",
     "RuntimeVersionErrorTypeDef",
     "ScalingConfigTypeDef",
@@ -253,17 +342,30 @@ __all__ = (
     "SelfManagedKafkaEventSourceConfigOutputTypeDef",
     "SelfManagedKafkaEventSourceConfigTypeDef",
     "SelfManagedKafkaEventSourceConfigUnionTypeDef",
+    "SendDurableExecutionCallbackFailureRequestTypeDef",
+    "SendDurableExecutionCallbackHeartbeatRequestTypeDef",
+    "SendDurableExecutionCallbackSuccessRequestTypeDef",
     "SnapStartResponseTypeDef",
     "SnapStartTypeDef",
     "SourceAccessConfigurationTypeDef",
+    "StepDetailsTypeDef",
+    "StepFailedDetailsTypeDef",
+    "StepOptionsTypeDef",
+    "StepSucceededDetailsTypeDef",
+    "StopDurableExecutionRequestTypeDef",
+    "StopDurableExecutionResponseTypeDef",
     "TagResourceRequestTypeDef",
     "TagsErrorTypeDef",
+    "TargetTrackingScalingPolicyTypeDef",
     "TenancyConfigTypeDef",
     "TimestampTypeDef",
+    "TraceHeaderTypeDef",
     "TracingConfigResponseTypeDef",
     "TracingConfigTypeDef",
     "UntagResourceRequestTypeDef",
     "UpdateAliasRequestTypeDef",
+    "UpdateCapacityProviderRequestTypeDef",
+    "UpdateCapacityProviderResponseTypeDef",
     "UpdateCodeSigningConfigRequestTypeDef",
     "UpdateCodeSigningConfigResponseTypeDef",
     "UpdateEventSourceMappingRequestTypeDef",
@@ -274,6 +376,11 @@ __all__ = (
     "UpdateFunctionUrlConfigResponseTypeDef",
     "VpcConfigResponseTypeDef",
     "VpcConfigTypeDef",
+    "WaitCancelledDetailsTypeDef",
+    "WaitDetailsTypeDef",
+    "WaitOptionsTypeDef",
+    "WaitStartedDetailsTypeDef",
+    "WaitSucceededDetailsTypeDef",
     "WaiterConfigTypeDef",
 )
 
@@ -343,12 +450,80 @@ class AllowedPublishersTypeDef(TypedDict):
 BlobTypeDef = Union[str, bytes, IO[Any], StreamingBody]
 
 
+class ErrorObjectOutputTypeDef(TypedDict):
+    ErrorMessage: NotRequired[str]
+    ErrorType: NotRequired[str]
+    ErrorData: NotRequired[str]
+    StackTrace: NotRequired[list[str]]
+
+
+class CallbackOptionsTypeDef(TypedDict):
+    TimeoutSeconds: NotRequired[int]
+    HeartbeatTimeoutSeconds: NotRequired[int]
+
+
+class CallbackStartedDetailsTypeDef(TypedDict):
+    CallbackId: str
+    HeartbeatTimeout: NotRequired[int]
+    Timeout: NotRequired[int]
+
+
+class EventResultTypeDef(TypedDict):
+    Payload: NotRequired[str]
+    Truncated: NotRequired[bool]
+
+
+class LambdaManagedInstancesCapacityProviderConfigTypeDef(TypedDict):
+    CapacityProviderArn: str
+    PerExecutionEnvironmentMaxConcurrency: NotRequired[int]
+    ExecutionEnvironmentMemoryGiBPerVCpu: NotRequired[float]
+
+
+class CapacityProviderPermissionsConfigTypeDef(TypedDict):
+    CapacityProviderOperatorRoleArn: str
+
+
+class TargetTrackingScalingPolicyTypeDef(TypedDict):
+    PredefinedMetricType: Literal["LambdaCapacityProviderAverageCPUUtilization"]
+    TargetValue: float
+
+
+class CapacityProviderVpcConfigOutputTypeDef(TypedDict):
+    SubnetIds: list[str]
+    SecurityGroupIds: list[str]
+
+
+class InstanceRequirementsOutputTypeDef(TypedDict):
+    Architectures: NotRequired[list[ArchitectureType]]
+    AllowedInstanceTypes: NotRequired[list[str]]
+    ExcludedInstanceTypes: NotRequired[list[str]]
+
+
+class CapacityProviderVpcConfigTypeDef(TypedDict):
+    SubnetIds: Sequence[str]
+    SecurityGroupIds: Sequence[str]
+
+
+class ChainedInvokeOptionsTypeDef(TypedDict):
+    FunctionName: str
+    TenantId: NotRequired[str]
+
+
+class EventInputTypeDef(TypedDict):
+    Payload: NotRequired[str]
+    Truncated: NotRequired[bool]
+
+
 class CodeSigningPoliciesTypeDef(TypedDict):
     UntrustedArtifactOnDeployment: NotRequired[CodeSigningPolicyType]
 
 
 class ConcurrencyTypeDef(TypedDict):
     ReservedConcurrentExecutions: NotRequired[int]
+
+
+class ContextOptionsTypeDef(TypedDict):
+    ReplayChildren: NotRequired[bool]
 
 
 class CorsOutputTypeDef(TypedDict):
@@ -399,6 +574,11 @@ class DeadLetterConfigTypeDef(TypedDict):
     TargetArn: NotRequired[str]
 
 
+class DurableConfigTypeDef(TypedDict):
+    RetentionPeriodInDays: NotRequired[int]
+    ExecutionTimeout: NotRequired[int]
+
+
 class EnvironmentTypeDef(TypedDict):
     Variables: NotRequired[Mapping[str, str]]
 
@@ -440,6 +620,10 @@ class VpcConfigTypeDef(TypedDict):
 class DeleteAliasRequestTypeDef(TypedDict):
     FunctionName: str
     Name: str
+
+
+class DeleteCapacityProviderRequestTypeDef(TypedDict):
+    CapacityProviderName: str
 
 
 class DeleteCodeSigningConfigRequestTypeDef(TypedDict):
@@ -496,6 +680,13 @@ class EnvironmentErrorTypeDef(TypedDict):
     Message: NotRequired[str]
 
 
+class ErrorObjectTypeDef(TypedDict):
+    ErrorMessage: NotRequired[str]
+    ErrorType: NotRequired[str]
+    ErrorData: NotRequired[str]
+    StackTrace: NotRequired[Sequence[str]]
+
+
 class EventSourceMappingMetricsConfigOutputTypeDef(TypedDict):
     Metrics: NotRequired[list[Literal["EventCount"]]]
 
@@ -511,6 +702,28 @@ class SelfManagedEventSourceOutputTypeDef(TypedDict):
 
 class EventSourceMappingMetricsConfigTypeDef(TypedDict):
     Metrics: NotRequired[Sequence[Literal["EventCount"]]]
+
+
+class WaitStartedDetailsTypeDef(TypedDict):
+    Duration: int
+    ScheduledEndTimestamp: datetime
+
+
+class WaitSucceededDetailsTypeDef(TypedDict):
+    Duration: NotRequired[int]
+
+
+class ExecutionDetailsTypeDef(TypedDict):
+    InputPayload: NotRequired[str]
+
+
+class ExecutionTypeDef(TypedDict):
+    DurableExecutionArn: str
+    DurableExecutionName: str
+    FunctionArn: str
+    Status: ExecutionStatusType
+    StartTimestamp: datetime
+    EndTimestamp: NotRequired[datetime]
 
 
 FilterTypeDef = TypedDict(
@@ -552,13 +765,56 @@ class VpcConfigResponseTypeDef(TypedDict):
     Ipv6AllowedForDualStack: NotRequired[bool]
 
 
+class FunctionScalingConfigTypeDef(TypedDict):
+    MinExecutionEnvironments: NotRequired[int]
+    MaxExecutionEnvironments: NotRequired[int]
+
+
+class FunctionVersionsByCapacityProviderListItemTypeDef(TypedDict):
+    FunctionArn: str
+    State: StateType
+
+
 class GetAliasRequestTypeDef(TypedDict):
     FunctionName: str
     Name: str
 
 
+class GetCapacityProviderRequestTypeDef(TypedDict):
+    CapacityProviderName: str
+
+
 class GetCodeSigningConfigRequestTypeDef(TypedDict):
     CodeSigningConfigArn: str
+
+
+class PaginatorConfigTypeDef(TypedDict):
+    MaxItems: NotRequired[int]
+    PageSize: NotRequired[int]
+    StartingToken: NotRequired[str]
+
+
+class GetDurableExecutionHistoryRequestTypeDef(TypedDict):
+    DurableExecutionArn: str
+    IncludeExecutionData: NotRequired[bool]
+    MaxItems: NotRequired[int]
+    Marker: NotRequired[str]
+    ReverseOrder: NotRequired[bool]
+
+
+class GetDurableExecutionRequestTypeDef(TypedDict):
+    DurableExecutionArn: str
+
+
+class TraceHeaderTypeDef(TypedDict):
+    XAmznTraceId: NotRequired[str]
+
+
+class GetDurableExecutionStateRequestTypeDef(TypedDict):
+    DurableExecutionArn: str
+    CheckpointToken: str
+    Marker: NotRequired[str]
+    MaxItems: NotRequired[int]
 
 
 class GetEventSourceMappingRequestTypeDef(TypedDict):
@@ -600,6 +856,11 @@ class GetFunctionRequestTypeDef(TypedDict):
 class TagsErrorTypeDef(TypedDict):
     ErrorCode: str
     Message: str
+
+
+class GetFunctionScalingConfigRequestTypeDef(TypedDict):
+    FunctionName: str
+    Qualifier: str
 
 
 class GetFunctionUrlConfigRequestTypeDef(TypedDict):
@@ -661,6 +922,12 @@ class ImageConfigTypeDef(TypedDict):
     WorkingDirectory: NotRequired[str]
 
 
+class InstanceRequirementsTypeDef(TypedDict):
+    Architectures: NotRequired[Sequence[ArchitectureType]]
+    AllowedInstanceTypes: NotRequired[Sequence[str]]
+    ExcludedInstanceTypes: NotRequired[Sequence[str]]
+
+
 class InvokeResponseStreamUpdateTypeDef(TypedDict):
     Payload: NotRequired[bytes]
 
@@ -694,15 +961,15 @@ class LayerVersionsListItemTypeDef(TypedDict):
     CompatibleArchitectures: NotRequired[list[ArchitectureType]]
 
 
-class PaginatorConfigTypeDef(TypedDict):
-    MaxItems: NotRequired[int]
-    PageSize: NotRequired[int]
-    StartingToken: NotRequired[str]
-
-
 class ListAliasesRequestTypeDef(TypedDict):
     FunctionName: str
     FunctionVersion: NotRequired[str]
+    Marker: NotRequired[str]
+    MaxItems: NotRequired[int]
+
+
+class ListCapacityProvidersRequestTypeDef(TypedDict):
+    State: NotRequired[CapacityProviderStateType]
     Marker: NotRequired[str]
     MaxItems: NotRequired[int]
 
@@ -727,6 +994,12 @@ class ListFunctionEventInvokeConfigsRequestTypeDef(TypedDict):
 
 class ListFunctionUrlConfigsRequestTypeDef(TypedDict):
     FunctionName: str
+    Marker: NotRequired[str]
+    MaxItems: NotRequired[int]
+
+
+class ListFunctionVersionsByCapacityProviderRequestTypeDef(TypedDict):
+    CapacityProviderName: str
     Marker: NotRequired[str]
     MaxItems: NotRequired[int]
 
@@ -785,11 +1058,24 @@ class ListVersionsByFunctionRequestTypeDef(TypedDict):
     MaxItems: NotRequired[int]
 
 
+class WaitDetailsTypeDef(TypedDict):
+    ScheduledEndTimestamp: NotRequired[datetime]
+
+
+class StepOptionsTypeDef(TypedDict):
+    NextAttemptDelaySeconds: NotRequired[int]
+
+
+class WaitOptionsTypeDef(TypedDict):
+    WaitSeconds: NotRequired[int]
+
+
 class PublishVersionRequestTypeDef(TypedDict):
     FunctionName: str
     CodeSha256: NotRequired[str]
     Description: NotRequired[str]
     RevisionId: NotRequired[str]
+    PublishTo: NotRequired[Literal["LATEST_PUBLISHED"]]
 
 
 class PutFunctionCodeSigningConfigRequestTypeDef(TypedDict):
@@ -834,6 +1120,11 @@ class RemovePermissionRequestTypeDef(TypedDict):
     RevisionId: NotRequired[str]
 
 
+class RetryDetailsTypeDef(TypedDict):
+    CurrentAttempt: NotRequired[int]
+    NextAttemptDelaySeconds: NotRequired[int]
+
+
 class RuntimeVersionErrorTypeDef(TypedDict):
     ErrorCode: NotRequired[str]
     Message: NotRequired[str]
@@ -841,6 +1132,10 @@ class RuntimeVersionErrorTypeDef(TypedDict):
 
 class SelfManagedEventSourceTypeDef(TypedDict):
     Endpoints: NotRequired[Mapping[Literal["KAFKA_BOOTSTRAP_SERVERS"], Sequence[str]]]
+
+
+class SendDurableExecutionCallbackHeartbeatRequestTypeDef(TypedDict):
+    CallbackId: str
 
 
 class TagResourceRequestTypeDef(TypedDict):
@@ -866,6 +1161,11 @@ class AddPermissionResponseTypeDef(TypedDict):
 
 class ConcurrencyResponseTypeDef(TypedDict):
     ReservedConcurrentExecutions: int
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteFunctionResponseTypeDef(TypedDict):
+    StatusCode: int
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -930,6 +1230,7 @@ class InvocationResponseTypeDef(TypedDict):
     LogResult: str
     Payload: StreamingBody
     ExecutedVersion: str
+    DurableExecutionArn: str
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -960,6 +1261,11 @@ class PutFunctionRecursionConfigResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
+class PutFunctionScalingConfigResponseTypeDef(TypedDict):
+    FunctionState: StateType
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
 class PutProvisionedConcurrencyConfigResponseTypeDef(TypedDict):
     RequestedProvisionedConcurrentExecutions: int
     AvailableProvisionedConcurrentExecutions: int
@@ -974,6 +1280,11 @@ class PutRuntimeManagementConfigResponseTypeDef(TypedDict):
     UpdateRuntimeOn: UpdateRuntimeOnType
     FunctionArn: str
     RuntimeVersionArn: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class StopDurableExecutionResponseTypeDef(TypedDict):
+    StopTimestamp: datetime
     ResponseMetadata: ResponseMetadataTypeDef
 
 
@@ -1016,6 +1327,7 @@ class InvocationRequestTypeDef(TypedDict):
     InvocationType: NotRequired[InvocationTypeType]
     LogType: NotRequired[LogTypeType]
     ClientContext: NotRequired[str]
+    DurableExecutionName: NotRequired[str]
     Payload: NotRequired[BlobTypeDef]
     Qualifier: NotRequired[str]
     TenantId: NotRequired[str]
@@ -1043,6 +1355,11 @@ class LayerVersionContentInputTypeDef(TypedDict):
     ZipFile: NotRequired[BlobTypeDef]
 
 
+class SendDurableExecutionCallbackSuccessRequestTypeDef(TypedDict):
+    CallbackId: str
+    Result: NotRequired[BlobTypeDef]
+
+
 class UpdateFunctionCodeRequestTypeDef(TypedDict):
     FunctionName: str
     ZipFile: NotRequired[BlobTypeDef]
@@ -1055,6 +1372,88 @@ class UpdateFunctionCodeRequestTypeDef(TypedDict):
     RevisionId: NotRequired[str]
     Architectures: NotRequired[Sequence[ArchitectureType]]
     SourceKMSKeyArn: NotRequired[str]
+    PublishTo: NotRequired[Literal["LATEST_PUBLISHED"]]
+
+
+class CallbackDetailsTypeDef(TypedDict):
+    CallbackId: NotRequired[str]
+    Result: NotRequired[str]
+    Error: NotRequired[ErrorObjectOutputTypeDef]
+
+
+class ChainedInvokeDetailsTypeDef(TypedDict):
+    Result: NotRequired[str]
+    Error: NotRequired[ErrorObjectOutputTypeDef]
+
+
+class ContextDetailsTypeDef(TypedDict):
+    ReplayChildren: NotRequired[bool]
+    Result: NotRequired[str]
+    Error: NotRequired[ErrorObjectOutputTypeDef]
+
+
+class EventErrorTypeDef(TypedDict):
+    Payload: NotRequired[ErrorObjectOutputTypeDef]
+    Truncated: NotRequired[bool]
+
+
+class StepDetailsTypeDef(TypedDict):
+    Attempt: NotRequired[int]
+    NextAttemptTimestamp: NotRequired[datetime]
+    Result: NotRequired[str]
+    Error: NotRequired[ErrorObjectOutputTypeDef]
+
+
+class CallbackSucceededDetailsTypeDef(TypedDict):
+    Result: EventResultTypeDef
+
+
+class ChainedInvokeSucceededDetailsTypeDef(TypedDict):
+    Result: EventResultTypeDef
+
+
+class ContextSucceededDetailsTypeDef(TypedDict):
+    Result: EventResultTypeDef
+
+
+class ExecutionSucceededDetailsTypeDef(TypedDict):
+    Result: EventResultTypeDef
+
+
+class CapacityProviderConfigTypeDef(TypedDict):
+    LambdaManagedInstancesCapacityProviderConfig: (
+        LambdaManagedInstancesCapacityProviderConfigTypeDef
+    )
+
+
+class CapacityProviderScalingConfigOutputTypeDef(TypedDict):
+    MaxVCpuCount: NotRequired[int]
+    ScalingMode: NotRequired[CapacityProviderScalingModeType]
+    ScalingPolicies: NotRequired[list[TargetTrackingScalingPolicyTypeDef]]
+
+
+class CapacityProviderScalingConfigTypeDef(TypedDict):
+    MaxVCpuCount: NotRequired[int]
+    ScalingMode: NotRequired[CapacityProviderScalingModeType]
+    ScalingPolicies: NotRequired[Sequence[TargetTrackingScalingPolicyTypeDef]]
+
+
+CapacityProviderVpcConfigUnionTypeDef = Union[
+    CapacityProviderVpcConfigTypeDef, CapacityProviderVpcConfigOutputTypeDef
+]
+
+
+class ChainedInvokeStartedDetailsTypeDef(TypedDict):
+    FunctionName: str
+    TenantId: NotRequired[str]
+    Input: NotRequired[EventInputTypeDef]
+    ExecutedVersion: NotRequired[str]
+    DurableExecutionArn: NotRequired[str]
+
+
+class ExecutionStartedDetailsTypeDef(TypedDict):
+    Input: EventInputTypeDef
+    ExecutionTimeout: int
 
 
 class CodeSigningConfigTypeDef(TypedDict):
@@ -1111,6 +1510,18 @@ class UpdateFunctionUrlConfigResponseTypeDef(TypedDict):
 CorsUnionTypeDef = Union[CorsTypeDef, CorsOutputTypeDef]
 
 
+class ListDurableExecutionsByFunctionRequestTypeDef(TypedDict):
+    FunctionName: str
+    Qualifier: NotRequired[str]
+    DurableExecutionName: NotRequired[str]
+    Statuses: NotRequired[Sequence[ExecutionStatusType]]
+    StartedAfter: NotRequired[TimestampTypeDef]
+    StartedBefore: NotRequired[TimestampTypeDef]
+    ReverseOrder: NotRequired[bool]
+    Marker: NotRequired[str]
+    MaxItems: NotRequired[int]
+
+
 class DestinationConfigTypeDef(TypedDict):
     OnSuccess: NotRequired[OnSuccessTypeDef]
     OnFailure: NotRequired[OnFailureTypeDef]
@@ -1121,9 +1532,16 @@ class EnvironmentResponseTypeDef(TypedDict):
     Error: NotRequired[EnvironmentErrorTypeDef]
 
 
+ErrorObjectUnionTypeDef = Union[ErrorObjectTypeDef, ErrorObjectOutputTypeDef]
 EventSourceMappingMetricsConfigUnionTypeDef = Union[
     EventSourceMappingMetricsConfigTypeDef, EventSourceMappingMetricsConfigOutputTypeDef
 ]
+
+
+class ListDurableExecutionsByFunctionResponseTypeDef(TypedDict):
+    DurableExecutions: list[ExecutionTypeDef]
+    NextMarker: str
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class FilterCriteriaOutputTypeDef(TypedDict):
@@ -1132,6 +1550,135 @@ class FilterCriteriaOutputTypeDef(TypedDict):
 
 class FilterCriteriaTypeDef(TypedDict):
     Filters: NotRequired[Sequence[FilterTypeDef]]
+
+
+class GetFunctionScalingConfigResponseTypeDef(TypedDict):
+    FunctionArn: str
+    AppliedFunctionScalingConfig: FunctionScalingConfigTypeDef
+    RequestedFunctionScalingConfig: FunctionScalingConfigTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class PutFunctionScalingConfigRequestTypeDef(TypedDict):
+    FunctionName: str
+    Qualifier: str
+    FunctionScalingConfig: NotRequired[FunctionScalingConfigTypeDef]
+
+
+class ListFunctionVersionsByCapacityProviderResponseTypeDef(TypedDict):
+    CapacityProviderArn: str
+    FunctionVersions: list[FunctionVersionsByCapacityProviderListItemTypeDef]
+    NextMarker: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetDurableExecutionHistoryRequestPaginateTypeDef(TypedDict):
+    DurableExecutionArn: str
+    IncludeExecutionData: NotRequired[bool]
+    ReverseOrder: NotRequired[bool]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class GetDurableExecutionStateRequestPaginateTypeDef(TypedDict):
+    DurableExecutionArn: str
+    CheckpointToken: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListAliasesRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    FunctionVersion: NotRequired[str]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListCapacityProvidersRequestPaginateTypeDef(TypedDict):
+    State: NotRequired[CapacityProviderStateType]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListCodeSigningConfigsRequestPaginateTypeDef(TypedDict):
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListDurableExecutionsByFunctionRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    Qualifier: NotRequired[str]
+    DurableExecutionName: NotRequired[str]
+    Statuses: NotRequired[Sequence[ExecutionStatusType]]
+    StartedAfter: NotRequired[TimestampTypeDef]
+    StartedBefore: NotRequired[TimestampTypeDef]
+    ReverseOrder: NotRequired[bool]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListEventSourceMappingsRequestPaginateTypeDef(TypedDict):
+    EventSourceArn: NotRequired[str]
+    FunctionName: NotRequired[str]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListFunctionEventInvokeConfigsRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListFunctionUrlConfigsRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListFunctionVersionsByCapacityProviderRequestPaginateTypeDef(TypedDict):
+    CapacityProviderName: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListFunctionsByCodeSigningConfigRequestPaginateTypeDef(TypedDict):
+    CodeSigningConfigArn: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListFunctionsRequestPaginateTypeDef(TypedDict):
+    MasterRegion: NotRequired[str]
+    FunctionVersion: NotRequired[Literal["ALL"]]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListLayerVersionsRequestPaginateTypeDef(TypedDict):
+    LayerName: str
+    CompatibleRuntime: NotRequired[RuntimeType]
+    CompatibleArchitecture: NotRequired[ArchitectureType]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListLayersRequestPaginateTypeDef(TypedDict):
+    CompatibleRuntime: NotRequired[RuntimeType]
+    CompatibleArchitecture: NotRequired[ArchitectureType]
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListProvisionedConcurrencyConfigsRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class ListVersionsByFunctionRequestPaginateTypeDef(TypedDict):
+    FunctionName: str
+    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
+
+
+class GetDurableExecutionResponseTypeDef(TypedDict):
+    DurableExecutionArn: str
+    DurableExecutionName: str
+    FunctionArn: str
+    InputPayload: str
+    Result: str
+    Error: ErrorObjectOutputTypeDef
+    StartTimestamp: datetime
+    Status: ExecutionStatusType
+    EndTimestamp: datetime
+    Version: str
+    TraceHeader: TraceHeaderTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
 
 
 class GetFunctionConfigurationRequestWaitExtraExtraTypeDef(TypedDict):
@@ -1202,6 +1749,9 @@ class ImageConfigResponseTypeDef(TypedDict):
 
 
 ImageConfigUnionTypeDef = Union[ImageConfigTypeDef, ImageConfigOutputTypeDef]
+InstanceRequirementsUnionTypeDef = Union[
+    InstanceRequirementsTypeDef, InstanceRequirementsOutputTypeDef
+]
 
 
 class InvokeWithResponseStreamResponseEventTypeDef(TypedDict):
@@ -1235,70 +1785,15 @@ class ListLayerVersionsResponseTypeDef(TypedDict):
     ResponseMetadata: ResponseMetadataTypeDef
 
 
-class ListAliasesRequestPaginateTypeDef(TypedDict):
-    FunctionName: str
-    FunctionVersion: NotRequired[str]
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListCodeSigningConfigsRequestPaginateTypeDef(TypedDict):
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListEventSourceMappingsRequestPaginateTypeDef(TypedDict):
-    EventSourceArn: NotRequired[str]
-    FunctionName: NotRequired[str]
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListFunctionEventInvokeConfigsRequestPaginateTypeDef(TypedDict):
-    FunctionName: str
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListFunctionUrlConfigsRequestPaginateTypeDef(TypedDict):
-    FunctionName: str
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListFunctionsByCodeSigningConfigRequestPaginateTypeDef(TypedDict):
-    CodeSigningConfigArn: str
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListFunctionsRequestPaginateTypeDef(TypedDict):
-    MasterRegion: NotRequired[str]
-    FunctionVersion: NotRequired[Literal["ALL"]]
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListLayerVersionsRequestPaginateTypeDef(TypedDict):
-    LayerName: str
-    CompatibleRuntime: NotRequired[RuntimeType]
-    CompatibleArchitecture: NotRequired[ArchitectureType]
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListLayersRequestPaginateTypeDef(TypedDict):
-    CompatibleRuntime: NotRequired[RuntimeType]
-    CompatibleArchitecture: NotRequired[ArchitectureType]
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListProvisionedConcurrencyConfigsRequestPaginateTypeDef(TypedDict):
-    FunctionName: str
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
-class ListVersionsByFunctionRequestPaginateTypeDef(TypedDict):
-    FunctionName: str
-    PaginationConfig: NotRequired[PaginatorConfigTypeDef]
-
-
 class ListProvisionedConcurrencyConfigsResponseTypeDef(TypedDict):
     ProvisionedConcurrencyConfigs: list[ProvisionedConcurrencyConfigListItemTypeDef]
     NextMarker: str
     ResponseMetadata: ResponseMetadataTypeDef
+
+
+class StepSucceededDetailsTypeDef(TypedDict):
+    Result: EventResultTypeDef
+    RetryDetails: RetryDetailsTypeDef
 
 
 class RuntimeVersionConfigTypeDef(TypedDict):
@@ -1355,6 +1850,95 @@ class PublishLayerVersionRequestTypeDef(TypedDict):
     CompatibleRuntimes: NotRequired[Sequence[RuntimeType]]
     LicenseInfo: NotRequired[str]
     CompatibleArchitectures: NotRequired[Sequence[ArchitectureType]]
+
+
+class CallbackFailedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class CallbackTimedOutDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ChainedInvokeFailedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ChainedInvokeStoppedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ChainedInvokeTimedOutDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ContextFailedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ExecutionFailedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ExecutionStoppedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+
+
+class ExecutionTimedOutDetailsTypeDef(TypedDict):
+    Error: NotRequired[EventErrorTypeDef]
+
+
+class InvocationCompletedDetailsTypeDef(TypedDict):
+    StartTimestamp: datetime
+    EndTimestamp: datetime
+    RequestId: str
+    Error: NotRequired[EventErrorTypeDef]
+
+
+class StepFailedDetailsTypeDef(TypedDict):
+    Error: EventErrorTypeDef
+    RetryDetails: RetryDetailsTypeDef
+
+
+class WaitCancelledDetailsTypeDef(TypedDict):
+    Error: NotRequired[EventErrorTypeDef]
+
+
+OperationTypeDef = TypedDict(
+    "OperationTypeDef",
+    {
+        "Id": str,
+        "Type": OperationTypeType,
+        "StartTimestamp": datetime,
+        "Status": OperationStatusType,
+        "ParentId": NotRequired[str],
+        "Name": NotRequired[str],
+        "SubType": NotRequired[str],
+        "EndTimestamp": NotRequired[datetime],
+        "ExecutionDetails": NotRequired[ExecutionDetailsTypeDef],
+        "ContextDetails": NotRequired[ContextDetailsTypeDef],
+        "StepDetails": NotRequired[StepDetailsTypeDef],
+        "WaitDetails": NotRequired[WaitDetailsTypeDef],
+        "CallbackDetails": NotRequired[CallbackDetailsTypeDef],
+        "ChainedInvokeDetails": NotRequired[ChainedInvokeDetailsTypeDef],
+    },
+)
+
+
+class CapacityProviderTypeDef(TypedDict):
+    CapacityProviderArn: str
+    State: CapacityProviderStateType
+    VpcConfig: CapacityProviderVpcConfigOutputTypeDef
+    PermissionsConfig: CapacityProviderPermissionsConfigTypeDef
+    InstanceRequirements: NotRequired[InstanceRequirementsOutputTypeDef]
+    CapacityProviderScalingConfig: NotRequired[CapacityProviderScalingConfigOutputTypeDef]
+    KmsKeyArn: NotRequired[str]
+    LastModified: NotRequired[str]
+
+
+CapacityProviderScalingConfigUnionTypeDef = Union[
+    CapacityProviderScalingConfigTypeDef, CapacityProviderScalingConfigOutputTypeDef
+]
 
 
 class CreateCodeSigningConfigResponseTypeDef(TypedDict):
@@ -1433,6 +2017,36 @@ class UpdateFunctionEventInvokeConfigRequestTypeDef(TypedDict):
     DestinationConfig: NotRequired[DestinationConfigTypeDef]
 
 
+OperationUpdateTypeDef = TypedDict(
+    "OperationUpdateTypeDef",
+    {
+        "Id": str,
+        "Type": OperationTypeType,
+        "Action": OperationActionType,
+        "ParentId": NotRequired[str],
+        "Name": NotRequired[str],
+        "SubType": NotRequired[str],
+        "Payload": NotRequired[str],
+        "Error": NotRequired[ErrorObjectUnionTypeDef],
+        "ContextOptions": NotRequired[ContextOptionsTypeDef],
+        "StepOptions": NotRequired[StepOptionsTypeDef],
+        "WaitOptions": NotRequired[WaitOptionsTypeDef],
+        "CallbackOptions": NotRequired[CallbackOptionsTypeDef],
+        "ChainedInvokeOptions": NotRequired[ChainedInvokeOptionsTypeDef],
+    },
+)
+
+
+class SendDurableExecutionCallbackFailureRequestTypeDef(TypedDict):
+    CallbackId: str
+    Error: NotRequired[ErrorObjectUnionTypeDef]
+
+
+class StopDurableExecutionRequestTypeDef(TypedDict):
+    DurableExecutionArn: str
+    Error: NotRequired[ErrorObjectUnionTypeDef]
+
+
 FilterCriteriaUnionTypeDef = Union[FilterCriteriaTypeDef, FilterCriteriaOutputTypeDef]
 
 
@@ -1461,6 +2075,9 @@ class CreateFunctionRequestTypeDef(TypedDict):
     EphemeralStorage: NotRequired[EphemeralStorageTypeDef]
     SnapStart: NotRequired[SnapStartTypeDef]
     LoggingConfig: NotRequired[LoggingConfigTypeDef]
+    CapacityProviderConfig: NotRequired[CapacityProviderConfigTypeDef]
+    PublishTo: NotRequired[Literal["LATEST_PUBLISHED"]]
+    DurableConfig: NotRequired[DurableConfigTypeDef]
     TenancyConfig: NotRequired[TenancyConfigTypeDef]
 
 
@@ -1484,6 +2101,8 @@ class UpdateFunctionConfigurationRequestTypeDef(TypedDict):
     EphemeralStorage: NotRequired[EphemeralStorageTypeDef]
     SnapStart: NotRequired[SnapStartTypeDef]
     LoggingConfig: NotRequired[LoggingConfigTypeDef]
+    CapacityProviderConfig: NotRequired[CapacityProviderConfigTypeDef]
+    DurableConfig: NotRequired[DurableConfigTypeDef]
 
 
 class InvokeWithResponseStreamResponseTypeDef(TypedDict):
@@ -1557,6 +2176,9 @@ class FunctionConfigurationResponseTypeDef(TypedDict):
     SnapStart: SnapStartResponseTypeDef
     RuntimeVersionConfig: RuntimeVersionConfigTypeDef
     LoggingConfig: LoggingConfigTypeDef
+    CapacityProviderConfig: CapacityProviderConfigTypeDef
+    ConfigSha256: str
+    DurableConfig: DurableConfigTypeDef
     TenancyConfig: TenancyConfigTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
@@ -1598,13 +2220,109 @@ class FunctionConfigurationTypeDef(TypedDict):
     SnapStart: NotRequired[SnapStartResponseTypeDef]
     RuntimeVersionConfig: NotRequired[RuntimeVersionConfigTypeDef]
     LoggingConfig: NotRequired[LoggingConfigTypeDef]
+    CapacityProviderConfig: NotRequired[CapacityProviderConfigTypeDef]
+    ConfigSha256: NotRequired[str]
+    DurableConfig: NotRequired[DurableConfigTypeDef]
     TenancyConfig: NotRequired[TenancyConfigTypeDef]
+
+
+class EventTypeDef(TypedDict):
+    EventType: NotRequired[EventTypeType]
+    SubType: NotRequired[str]
+    EventId: NotRequired[int]
+    Id: NotRequired[str]
+    Name: NotRequired[str]
+    EventTimestamp: NotRequired[datetime]
+    ParentId: NotRequired[str]
+    ExecutionStartedDetails: NotRequired[ExecutionStartedDetailsTypeDef]
+    ExecutionSucceededDetails: NotRequired[ExecutionSucceededDetailsTypeDef]
+    ExecutionFailedDetails: NotRequired[ExecutionFailedDetailsTypeDef]
+    ExecutionTimedOutDetails: NotRequired[ExecutionTimedOutDetailsTypeDef]
+    ExecutionStoppedDetails: NotRequired[ExecutionStoppedDetailsTypeDef]
+    ContextStartedDetails: NotRequired[dict[str, Any]]
+    ContextSucceededDetails: NotRequired[ContextSucceededDetailsTypeDef]
+    ContextFailedDetails: NotRequired[ContextFailedDetailsTypeDef]
+    WaitStartedDetails: NotRequired[WaitStartedDetailsTypeDef]
+    WaitSucceededDetails: NotRequired[WaitSucceededDetailsTypeDef]
+    WaitCancelledDetails: NotRequired[WaitCancelledDetailsTypeDef]
+    StepStartedDetails: NotRequired[dict[str, Any]]
+    StepSucceededDetails: NotRequired[StepSucceededDetailsTypeDef]
+    StepFailedDetails: NotRequired[StepFailedDetailsTypeDef]
+    ChainedInvokeStartedDetails: NotRequired[ChainedInvokeStartedDetailsTypeDef]
+    ChainedInvokeSucceededDetails: NotRequired[ChainedInvokeSucceededDetailsTypeDef]
+    ChainedInvokeFailedDetails: NotRequired[ChainedInvokeFailedDetailsTypeDef]
+    ChainedInvokeTimedOutDetails: NotRequired[ChainedInvokeTimedOutDetailsTypeDef]
+    ChainedInvokeStoppedDetails: NotRequired[ChainedInvokeStoppedDetailsTypeDef]
+    CallbackStartedDetails: NotRequired[CallbackStartedDetailsTypeDef]
+    CallbackSucceededDetails: NotRequired[CallbackSucceededDetailsTypeDef]
+    CallbackFailedDetails: NotRequired[CallbackFailedDetailsTypeDef]
+    CallbackTimedOutDetails: NotRequired[CallbackTimedOutDetailsTypeDef]
+    InvocationCompletedDetails: NotRequired[InvocationCompletedDetailsTypeDef]
+
+
+class CheckpointUpdatedExecutionStateTypeDef(TypedDict):
+    Operations: NotRequired[list[OperationTypeDef]]
+    NextMarker: NotRequired[str]
+
+
+class GetDurableExecutionStateResponseTypeDef(TypedDict):
+    Operations: list[OperationTypeDef]
+    NextMarker: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class CreateCapacityProviderResponseTypeDef(TypedDict):
+    CapacityProvider: CapacityProviderTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class DeleteCapacityProviderResponseTypeDef(TypedDict):
+    CapacityProvider: CapacityProviderTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetCapacityProviderResponseTypeDef(TypedDict):
+    CapacityProvider: CapacityProviderTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class ListCapacityProvidersResponseTypeDef(TypedDict):
+    CapacityProviders: list[CapacityProviderTypeDef]
+    NextMarker: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class UpdateCapacityProviderResponseTypeDef(TypedDict):
+    CapacityProvider: CapacityProviderTypeDef
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class CreateCapacityProviderRequestTypeDef(TypedDict):
+    CapacityProviderName: str
+    VpcConfig: CapacityProviderVpcConfigUnionTypeDef
+    PermissionsConfig: CapacityProviderPermissionsConfigTypeDef
+    InstanceRequirements: NotRequired[InstanceRequirementsUnionTypeDef]
+    CapacityProviderScalingConfig: NotRequired[CapacityProviderScalingConfigUnionTypeDef]
+    KmsKeyArn: NotRequired[str]
+    Tags: NotRequired[Mapping[str, str]]
+
+
+class UpdateCapacityProviderRequestTypeDef(TypedDict):
+    CapacityProviderName: str
+    CapacityProviderScalingConfig: NotRequired[CapacityProviderScalingConfigUnionTypeDef]
 
 
 class ListFunctionEventInvokeConfigsResponseTypeDef(TypedDict):
     FunctionEventInvokeConfigs: list[FunctionEventInvokeConfigTypeDef]
     NextMarker: str
     ResponseMetadata: ResponseMetadataTypeDef
+
+
+class CheckpointDurableExecutionRequestTypeDef(TypedDict):
+    DurableExecutionArn: str
+    CheckpointToken: str
+    Updates: NotRequired[Sequence[OperationUpdateTypeDef]]
+    ClientToken: NotRequired[str]
 
 
 class EventSourceMappingConfigurationResponseTypeDef(TypedDict):
@@ -1706,6 +2424,18 @@ class ListFunctionsResponseTypeDef(TypedDict):
 class ListVersionsByFunctionResponseTypeDef(TypedDict):
     NextMarker: str
     Versions: list[FunctionConfigurationTypeDef]
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class GetDurableExecutionHistoryResponseTypeDef(TypedDict):
+    Events: list[EventTypeDef]
+    NextMarker: str
+    ResponseMetadata: ResponseMetadataTypeDef
+
+
+class CheckpointDurableExecutionResponseTypeDef(TypedDict):
+    CheckpointToken: str
+    NewExecutionState: CheckpointUpdatedExecutionStateTypeDef
     ResponseMetadata: ResponseMetadataTypeDef
 
 

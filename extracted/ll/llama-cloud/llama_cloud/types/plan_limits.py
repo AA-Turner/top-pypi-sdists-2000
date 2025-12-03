@@ -16,6 +16,7 @@ except ImportError:
 
 class PlanLimits(pydantic.BaseModel):
     allow_pay_as_you_go: bool = pydantic.Field(description="Whether usage is allowed after credit grants are exhausted")
+    max_agent_deployments: typing.Optional[int]
     max_concurrent_index_jobs: typing.Optional[int]
     max_concurrent_parse_jobs_other: typing.Optional[int]
     max_concurrent_parse_jobs_premium: typing.Optional[int]

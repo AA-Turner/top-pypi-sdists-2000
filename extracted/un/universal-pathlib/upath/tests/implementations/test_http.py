@@ -17,7 +17,19 @@ except ImportError:
     pytestmark = pytest.mark.skip
 
 
-def test_httppath():
+@pytest.fixture
+def internet_connection():
+    import requests
+
+    try:
+        requests.get("http://example.com")
+    except requests.exceptions.ConnectionError:
+        pytest.xfail(reason="No internet connection")
+    else:
+        yield
+
+
+def test_httppath(internet_connection):
     path = UPath("http://example.com")
     assert isinstance(path, HTTPPath)
     assert path.exists()
@@ -160,6 +172,10 @@ class TestUPathHttp(BaseTests):
     @pytest.mark.skip(reason="HttpPath does not support unlink")
     def test_move_into_memory(self, clear_fsspec_memory_cache):
         pass
+
+    @pytest.mark.skip(reason="Only testing read on HttpPath")
+    def test_rename_with_target_absolute(self, target_factory):
+        return super().test_rename_with_target_absolute(target_factory)
 
 
 @pytest.mark.parametrize(

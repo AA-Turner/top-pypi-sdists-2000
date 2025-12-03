@@ -26,13 +26,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
   "limits>=3.13",
   "Flask>=2",
   "ordered-set>4,<5",
   "typing_extensions>=4.3",
-  "rich>=12,<15",
 ]
 dynamic = ["version"]
 
@@ -45,6 +45,9 @@ Source =  "https://github.com/alisaifee/flask-limiter"
 Documentation = "https://flask-limiter.readthedocs.org"
 
 [project.optional-dependencies]
+cli = [
+  "rich>=12,<15"
+]
 redis = [
   "limits[redis]",
 ]

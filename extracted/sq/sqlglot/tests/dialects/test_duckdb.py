@@ -9,6 +9,15 @@ class TestDuckDB(Validator):
     dialect = "duckdb"
 
     def test_duckdb(self):
+        self.validate_identity("SELECT ([1,2,3])[:-:-1]", "SELECT ([1, 2, 3])[:-1:-1]")
+        self.validate_identity(
+            "SELECT INTERVAL '1 hour'::VARCHAR", "SELECT CAST(INTERVAL '1' HOUR AS TEXT)"
+        )
+        self.validate_identity(
+            "PIVOT duckdb_functions() ON schema_name USING AVG(LENGTH(function_name))::INTEGER GROUP BY schema_name",
+            "PIVOT DUCKDB_FUNCTIONS() ON schema_name USING CAST(AVG(LENGTH(function_name)) AS INT) GROUP BY schema_name",
+        )
+        self.validate_identity("SELECT str[0:1]")
         self.validate_identity("SELECT COSH(1.5)")
         with self.assertRaises(ParseError):
             parse_one("1 //", read="duckdb")
@@ -39,6 +48,8 @@ class TestDuckDB(Validator):
             write={
                 "duckdb": "SELECT FIRST_VALUE(c IGNORE NULLS) OVER (PARTITION BY gb ORDER BY ob) FROM t",
                 "sqlite": UnsupportedError,
+                "mysql": UnsupportedError,
+                "postgres": UnsupportedError,
             },
         )
         self.validate_all(
@@ -46,6 +57,8 @@ class TestDuckDB(Validator):
             write={
                 "duckdb": "SELECT FIRST_VALUE(c RESPECT NULLS) OVER (PARTITION BY gb ORDER BY ob) FROM t",
                 "sqlite": "SELECT FIRST_VALUE(c) OVER (PARTITION BY gb ORDER BY ob NULLS LAST) FROM t",
+                "mysql": "SELECT FIRST_VALUE(c) RESPECT NULLS OVER (PARTITION BY gb ORDER BY CASE WHEN ob IS NULL THEN 1 ELSE 0 END, ob) FROM t",
+                "postgres": UnsupportedError,
             },
         )
         self.validate_all(
@@ -410,6 +423,9 @@ class TestDuckDB(Validator):
             "MERGE INTO people USING (SELECT 1 AS id, 98000.0 AS salary) AS salary_updates USING (id) WHEN MATCHED THEN UPDATE SET salary = salary_updates.salary"
         )
         self.validate_identity(
+            "MERGE INTO people USING (SELECT 1 AS id, 98000.0 AS salary) AS salary_updates USING (id) WHEN MATCHED THEN UPDATE"
+        )
+        self.validate_identity(
             "SELECT species, island, COUNT(*) FROM t GROUP BY GROUPING SETS (species), GROUPING SETS (island)"
         )
         self.validate_identity(
@@ -450,10 +466,6 @@ class TestDuckDB(Validator):
             "SELECT * FROM t PIVOT(FIRST(t) AS t FOR quarter IN ('Q1', 'Q2'))",
         )
         self.validate_identity(
-            "SELECT 20_000 AS literal",
-            "SELECT 20000 AS literal",
-        )
-        self.validate_identity(
             """SELECT JSON_EXTRACT_STRING('{ "family": "anatidae", "species": [ "duck", "goose", "swan", null ] }', ['$.family', '$.species'])""",
             """SELECT '{ "family": "anatidae", "species": [ "duck", "goose", "swan", null ] }' ->> ['$.family', '$.species']""",
         )
@@ -475,11 +487,11 @@ class TestDuckDB(Validator):
         )
         self.validate_identity(
             "SELECT JSON_EXTRACT(c, '$[*].id')[0:2]",
-            "SELECT (c -> '$[*].id')[0 : 2]",
+            "SELECT (c -> '$[*].id')[0:2]",
         )
         self.validate_identity(
             "SELECT JSON_EXTRACT_STRING(c, '$[*].id')[0:2]",
-            "SELECT (c ->> '$[*].id')[0 : 2]",
+            "SELECT (c ->> '$[*].id')[0:2]",
         )
         self.validate_identity(
             """SELECT '{"foo": [1, 2, 3]}' -> 'foo' -> 0""",
@@ -540,6 +552,7 @@ class TestDuckDB(Validator):
         )
         self.validate_identity("DATE_SUB('YEAR', col, '2020-01-01')").assert_is(exp.Anonymous)
         self.validate_identity("DATESUB('YEAR', col, '2020-01-01')").assert_is(exp.Anonymous)
+        self.validate_identity("SELECT SHA256('abc')")
 
         self.validate_all("0b1010", write={"": "0 AS b1010"})
         self.validate_all("0x1010", write={"": "0 AS x1010"})
@@ -1221,6 +1234,25 @@ class TestDuckDB(Validator):
         self.validate_identity(
             "SELECT REPLACE(CAST(CAST('apple pie' AS BLOB) AS TEXT), CAST(CAST('pie' AS BLOB) AS TEXT), CAST(CAST('cobbler' AS BLOB) AS TEXT)) AS result"
         )
+        self.assertEqual(
+            annotate_types(self.parse_one("SELECT TRIM('***apple***', '*') AS result")).sql(
+                "duckdb"
+            ),
+            "SELECT TRIM('***apple***', '*') AS result",
+        )
+        self.validate_identity("SELECT TRIM('***apple***', '*') AS result")
+        self.validate_identity(
+            "SELECT CAST(TRIM(CAST(CAST('***apple***' AS BLOB) AS TEXT), CAST(CAST('*' AS BLOB) AS TEXT)) AS BLOB) AS result"
+        )
+        self.validate_identity("SELECT GREATEST(1.0, 2.5, NULL, 3.7)")
+        self.validate_identity("FROM t1, t2 SELECT *", "SELECT * FROM t1, t2")
+
+        # TODO: This is incorrect AST, DATE_PART creates a STRUCT of values but it's stored in 'year' arg
+        self.validate_identity("SELECT MAKE_DATE(DATE_PART(['year', 'month', 'day'], TODAY()))")
+
+        self.validate_identity("SELECT * FROM t PIVOT(SUM(y) FOR foo IN y_enum)")
+        self.validate_identity("SELECT 20_000 AS literal")
+        self.validate_identity("SELECT 1_2E+1_0::FLOAT", "SELECT CAST(1_2E+1_0 AS REAL)")
 
     def test_array_index(self):
         with self.assertLogs(helper_logger) as cm:
@@ -1800,6 +1832,9 @@ class TestDuckDB(Validator):
         )
         self.validate_identity(
             "SELECT * FROM (UNPIVOT monthly_sales ON COLUMNS(* EXCLUDE (empid, dept)) INTO NAME month VALUE sales) AS unpivot_alias"
+        )
+        self.validate_identity(
+            "WITH cities(country, name, year, population) AS (SELECT 'NL', 'Amsterdam', 2000, 1005 UNION ALL SELECT 'US', 'Seattle', 2020, 738) PIVOT cities ON year USING SUM(population)"
         )
 
     def test_from_first_with_parentheses(self):

@@ -25,7 +25,7 @@ class Organization(pydantic.BaseModel):
     id: str = pydantic.Field(description="Unique identifier")
     name: str = pydantic.Field(description="A name for the organization.")
     parse_plan_level: typing.Optional[ParsePlanLevel] = pydantic.Field(
-        description="Whether the organization is a Parse Premium customer."
+        description="[Deprecated] Whether the organization is a Parse Premium customer."
     )
     stripe_customer_id: typing.Optional[str]
     updated_at: typing.Optional[dt.datetime]

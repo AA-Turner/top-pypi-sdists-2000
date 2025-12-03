@@ -7,6 +7,10 @@ T_Result = typing.TypeVar("T_Result")
 
 
 class ExtractTarget(str, enum.Enum):
+    """
+    Defines the extraction target scope.
+    """
+
     PER_DOC = "PER_DOC"
     PER_PAGE = "PER_PAGE"
     PER_TABLE_ROW = "PER_TABLE_ROW"

@@ -426,6 +426,7 @@ class Client:
         "_api_key",
         "_workspace_id",
         "_headers",
+        "_custom_headers",
         "retry_config",
         "timeout_ms",
         "_timeout",
@@ -462,6 +463,7 @@ class Client:
 
     _api_key: Optional[str]
     _headers: dict[str, str]
+    _custom_headers: dict[str, str]
     _timeout: tuple[float, float]
     _manual_cleanup: bool
 
@@ -491,6 +493,7 @@ class Client:
         tracing_sampling_rate: Optional[float] = None,
         workspace_id: Optional[str] = None,
         max_batch_size_bytes: Optional[int] = None,
+        headers: Optional[dict[str, str]] = None,
     ) -> None:
         """Initialize a `Client` instance.
 
@@ -569,6 +572,9 @@ class Client:
             max_batch_size_bytes (Optional[int]): The maximum size of a batch of runs in bytes.
 
                 If not provided, the default is set by the server.
+            headers (Optional[Dict[str, str]]): Additional HTTP headers to include in all requests.
+                These headers will be merged with the default headers (User-Agent, Accept, x-api-key, etc.).
+                Custom headers will not override the default required headers.
 
         Raises:
             LangSmithUserError: If the API key is not provided when using the hosted service.
@@ -594,6 +600,8 @@ class Client:
         )
         # Initialize workspace attribute first
         self._workspace_id = ls_utils.get_workspace_id(workspace_id)
+        # Store custom headers
+        self._custom_headers = headers or {}
 
         if self._write_api_urls:
             self.api_url = next(iter(self._write_api_urls))
@@ -802,6 +810,9 @@ class Client:
             "User-Agent": f"langsmith-py/{langsmith.__version__}",
             "Accept": "application/json",
         }
+        # Merge custom headers first so they don't override required headers
+        headers.update(self._custom_headers)
+        # Required headers that should not be overridden
         if self.api_key:
             headers[X_API_KEY] = self.api_key
         if self._workspace_id:
@@ -6900,6 +6911,179 @@ class Client:
             yield ls_schemas.FeedbackIngestToken(**token)
             if limit is not None and i + 1 >= limit:
                 break
+
+    def list_feedback_formulas(
+        self,
+        *,
+        dataset_id: Optional[ID_TYPE] = None,
+        session_id: Optional[ID_TYPE] = None,
+        limit: Optional[int] = None,
+        offset: int = 0,
+    ) -> Iterator[ls_schemas.FeedbackFormula]:
+        """List feedback formulas.
+
+        Args:
+            dataset_id (Optional[Union[UUID, str]]):
+                The ID of the dataset to filter by.
+            session_id (Optional[Union[UUID, str]]):
+                The ID of the session to filter by.
+            limit (Optional[int]):
+                The maximum number of feedback formulas to return.
+            offset (int):
+                The starting offset for pagination.
+
+        Yields:
+            The feedback formulas.
+        """
+        params: dict[str, Any] = {
+            "dataset_id": (
+                _as_uuid(dataset_id, "dataset_id") if dataset_id is not None else None
+            ),
+            "session_id": (
+                _as_uuid(session_id, "session_id") if session_id is not None else None
+            ),
+            "limit": min(limit, 100) if limit is not None else 100,
+            "offset": offset,
+        }
+        for i, feedback_formula in enumerate(
+            self._get_paginated_list("/feedback/formulas", params=params)
+        ):
+            yield ls_schemas.FeedbackFormula(**feedback_formula)
+            if limit is not None and i + 1 >= limit:
+                break
+
+    def get_feedback_formula_by_id(
+        self, feedback_formula_id: ID_TYPE
+    ) -> ls_schemas.FeedbackFormula:
+        """Get a feedback formula by ID.
+
+        Args:
+            feedback_formula_id (Union[UUID, str]):
+                The ID of the feedback formula to retrieve.
+
+        Returns:
+            The requested feedback formula.
+        """
+        response = self.request_with_retries(
+            "GET",
+            f"/feedback/formulas/{_as_uuid(feedback_formula_id, 'feedback_formula_id')}",
+        )
+        ls_utils.raise_for_status_with_text(response)
+        return ls_schemas.FeedbackFormula(**response.json())
+
+    def create_feedback_formula(
+        self,
+        *,
+        feedback_key: str,
+        aggregation_type: Literal["sum", "avg"],
+        formula_parts: Sequence[
+            Union[ls_schemas.FeedbackFormulaWeightedVariable, dict]
+        ],
+        dataset_id: Optional[ID_TYPE] = None,
+        session_id: Optional[ID_TYPE] = None,
+    ) -> ls_schemas.FeedbackFormula:
+        """Create a feedback formula.
+
+        Args:
+            feedback_key (str):
+                The feedback key for the formula.
+            aggregation_type (Literal["sum", "avg"]):
+                The aggregation type to use when combining parts.
+            formula_parts (Sequence[FeedbackFormulaWeightedVariable | dict]):
+                The weighted feedback keys included in the formula.
+            dataset_id (Optional[Union[UUID, str]]):
+                The dataset to scope the formula to.
+            session_id (Optional[Union[UUID, str]]):
+                The session to scope the formula to.
+
+        Returns:
+            The created feedback formula.
+        """
+        typed_parts: list[ls_schemas.FeedbackFormulaWeightedVariable] = [
+            part
+            if isinstance(part, ls_schemas.FeedbackFormulaWeightedVariable)
+            else ls_schemas.FeedbackFormulaWeightedVariable(**part)
+            for part in formula_parts
+        ]
+        payload = ls_schemas.FeedbackFormulaCreate(
+            feedback_key=feedback_key,
+            aggregation_type=aggregation_type,
+            formula_parts=typed_parts,
+            dataset_id=(
+                _as_uuid(dataset_id, "dataset_id") if dataset_id is not None else None
+            ),
+            session_id=(
+                _as_uuid(session_id, "session_id") if session_id is not None else None
+            ),
+        )
+        response = self.request_with_retries(
+            "POST",
+            "/feedback/formulas",
+            request_kwargs={
+                "data": _dumps_json(payload.dict(exclude_none=True)),
+            },
+        )
+        ls_utils.raise_for_status_with_text(response)
+        return ls_schemas.FeedbackFormula(**response.json())
+
+    def update_feedback_formula(
+        self,
+        feedback_formula_id: ID_TYPE,
+        *,
+        feedback_key: str,
+        aggregation_type: Literal["sum", "avg"],
+        formula_parts: Sequence[
+            Union[ls_schemas.FeedbackFormulaWeightedVariable, dict]
+        ],
+    ) -> ls_schemas.FeedbackFormula:
+        """Update a feedback formula.
+
+        Args:
+            feedback_formula_id (Union[UUID, str]):
+                The ID of the feedback formula to update.
+            feedback_key (str):
+                The feedback key for the formula.
+            aggregation_type (Literal["sum", "avg"]):
+                The aggregation type to use when combining parts.
+            formula_parts (Sequence[FeedbackFormulaWeightedVariable | dict]):
+                The weighted feedback keys included in the formula.
+
+        Returns:
+            The updated feedback formula.
+        """
+        typed_parts: list[ls_schemas.FeedbackFormulaWeightedVariable] = [
+            part
+            if isinstance(part, ls_schemas.FeedbackFormulaWeightedVariable)
+            else ls_schemas.FeedbackFormulaWeightedVariable(**part)
+            for part in formula_parts
+        ]
+        payload = ls_schemas.FeedbackFormulaUpdate(
+            feedback_key=feedback_key,
+            aggregation_type=aggregation_type,
+            formula_parts=typed_parts,
+        )
+        response = self.request_with_retries(
+            "PUT",
+            f"/feedback/formulas/{_as_uuid(feedback_formula_id, 'feedback_formula_id')}",
+            request_kwargs={
+                "data": _dumps_json(payload.dict(exclude_none=True)),
+            },
+        )
+        ls_utils.raise_for_status_with_text(response)
+        return ls_schemas.FeedbackFormula(**response.json())
+
+    def delete_feedback_formula(self, feedback_formula_id: ID_TYPE) -> None:
+        """Delete a feedback formula by ID.
+
+        Args:
+            feedback_formula_id (Union[UUID, str]):
+                The ID of the feedback formula to delete.
+        """
+        response = self.request_with_retries(
+            "DELETE",
+            f"/feedback/formulas/{_as_uuid(feedback_formula_id, 'feedback_formula_id')}",
+        )
+        ls_utils.raise_for_status_with_text(response)
 
     # Annotation Queue API
 

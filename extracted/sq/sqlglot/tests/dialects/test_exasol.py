@@ -218,6 +218,15 @@ class TestExasol(Validator):
             },
         )
 
+        self.validate_all(
+            "SELECT a, b, rank(b) OVER (ORDER BY b) FROM (VALUES ('A1', 2), ('A1', 1), ('A2', 3), ('A1', 1)) AS tab(a, b)",
+            write={
+                "exasol": "SELECT a, b, RANK() OVER (ORDER BY b) FROM (VALUES ('A1', 2), ('A1', 1), ('A2', 3), ('A1', 1)) AS tab(a, b)",
+                "databricks": "SELECT a, b, RANK(b) OVER (ORDER BY b NULLS LAST) FROM VALUES ('A1', 2), ('A1', 1), ('A2', 3), ('A1', 1) AS tab(a, b)",
+                "spark": "SELECT a, b, RANK(b) OVER (ORDER BY b NULLS LAST) FROM VALUES ('A1', 2), ('A1', 1), ('A2', 3), ('A1', 1) AS tab(a, b)",
+            },
+        )
+
     def test_stringFunctions(self):
         self.validate_identity(
             "TO_CHAR(CAST(TO_DATE(date, 'YYYYMMDD') AS TIMESTAMP), 'DY') AS day_of_week"
@@ -318,6 +327,31 @@ class TestExasol(Validator):
                 "presto": r"SELECT REGEXP_EXTRACT('My mail address is my_mail@yahoo.com', '(?i)[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}') AS EMAIL",
             },
         )
+        self.validate_all(
+            "SELECT SUBSTR('www.apache.org', 1, NVL(NULLIF(INSTR('www.apache.org', '.', 1, 2), 0) - 1, LENGTH('www.apache.org')))",
+            read={
+                "databricks": "SELECT substring_index('www.apache.org', '.', 2)",
+            },
+        )
+
+        self.validate_all(
+            "SELECT SUBSTR('555A66A777', 1, NVL(NULLIF(INSTR('555A66A777', 'a', 1, 2), 0) - 1, LENGTH('555A66A777')))",
+            read={
+                "databricks": "SELECT substring_index('555A66A777' COLLATE UTF8_BINARY, 'a', 2)",
+            },
+        )
+        self.validate_all(
+            "SELECT SUBSTR('555A66A777', 1, NVL(NULLIF(INSTR(LOWER('555A66A777'), 'a', 1, 2), 0) - 1, LENGTH('555A66A777')))",
+            read={
+                "databricks": "SELECT substring_index('555A66A777' COLLATE UTF8_LCASE, 'a', 2)",
+            },
+        )
+        self.validate_all(
+            "SELECT SUBSTR('A|a|A', 1, NVL(NULLIF(INSTR(LOWER('A|a|A'), LOWER('A'), 1, 2), 0) - 1, LENGTH('A|a|A')))",
+            read={
+                "databricks": "SELECT substring_index('A|a|A' COLLATE UTF8_LCASE, 'A' COLLATE UTF8_LCASE, 2)",
+            },
+        )
 
     def test_datetime_functions(self):
         formats = {
@@ -407,26 +441,34 @@ class TestExasol(Validator):
             "SELECT CAST(CAST(CURRENT_TIMESTAMP() AS TIMESTAMP) AT TIME ZONE 'CET' AS DATE) - 1",
             "SELECT CAST(CONVERT_TZ(CAST(CURRENT_TIMESTAMP() AS TIMESTAMP), 'UTC', 'CET') AS DATE) - 1",
         )
+        units = ["MM", "QUARTER", "WEEK", "MINUTE", "YEAR"]
+        for unit in units:
+            with self.subTest(f"Testing TO_CHAR with format '{unit}'"):
+                self.validate_all(
+                    f"SELECT TRUNC(CAST('2006-12-31' AS DATE), '{unit}') AS TRUNC",
+                    write={
+                        "exasol": f"SELECT DATE_TRUNC('{unit}', DATE '2006-12-31') AS TRUNC",
+                        "presto": f"SELECT DATE_TRUNC('{unit}', CAST('2006-12-31' AS DATE)) AS TRUNC",
+                        "databricks": f"SELECT TRUNC(CAST('2006-12-31' AS DATE), '{unit}') AS TRUNC",
+                    },
+                )
 
-        self.validate_all(
-            "SELECT TRUNC(CAST('2006-12-31' AS DATE), 'MM') AS TRUNC",
-            write={
-                "exasol": "SELECT TRUNC(CAST('2006-12-31' AS DATE), 'MM') AS TRUNC",
-                "presto": "SELECT DATE_TRUNC('MM', CAST('2006-12-31' AS DATE)) AS TRUNC",
-                "databricks": "SELECT TRUNC(CAST('2006-12-31' AS DATE), 'MM') AS TRUNC",
-            },
-        )
-        self.validate_all(
-            "SELECT DATE_TRUNC('minute', TIMESTAMP '2006-12-31 23:59:59') DATE_TRUNC",
-            write={
-                "exasol": "SELECT DATE_TRUNC('MINUTE', CAST('2006-12-31 23:59:59' AS TIMESTAMP)) AS DATE_TRUNC",
-                "presto": "SELECT DATE_TRUNC('MINUTE', CAST('2006-12-31 23:59:59' AS TIMESTAMP)) AS DATE_TRUNC",
-                "databricks": "SELECT DATE_TRUNC('MINUTE', CAST('2006-12-31 23:59:59' AS TIMESTAMP)) AS DATE_TRUNC",
-            },
-        )
-        self.validate_identity(
-            "SELECT DAY_OF_WEEK('2023-01-01')", "SELECT CAST(TO_CHAR('2023-01-01', 'D') AS INTEGER)"
-        )
+                self.validate_all(
+                    f"SELECT DATE_TRUNC('{unit}', TIMESTAMP '2006-12-31T23:59:59') DATE_TRUNC",
+                    write={
+                        "exasol": f"SELECT DATE_TRUNC('{unit}', TIMESTAMP '2006-12-31 23:59:59') AS DATE_TRUNC",
+                        "presto": f"SELECT DATE_TRUNC('{unit}', CAST('2006-12-31T23:59:59' AS TIMESTAMP)) AS DATE_TRUNC",
+                        "databricks": f"SELECT DATE_TRUNC('{unit}', CAST('2006-12-31T23:59:59' AS TIMESTAMP)) AS DATE_TRUNC",
+                    },
+                )
+                self.validate_all(
+                    f"SELECT DATE_TRUNC('{unit}', CURRENT_TIMESTAMP) DATE_TRUNC",
+                    write={
+                        "exasol": f"SELECT DATE_TRUNC('{unit}', CURRENT_TIMESTAMP()) AS DATE_TRUNC",
+                        "presto": f"SELECT DATE_TRUNC('{unit}', CURRENT_TIMESTAMP) AS DATE_TRUNC",
+                        "databricks": f"SELECT DATE_TRUNC('{unit}', CURRENT_TIMESTAMP()) AS DATE_TRUNC",
+                    },
+                )
 
         from sqlglot.dialects.exasol import DATE_UNITS
 
@@ -458,6 +500,13 @@ class TestExasol(Validator):
                         "tsql": f"SELECT DATEDIFF({unit}, GETDATE(), CAST('2000-02-28 00:00:00' AS DATETIME2))",
                     },
                 )
+        self.validate_all(
+            "SELECT quarter('2016-08-31')",
+            write={
+                "exasol": "SELECT CEIL(MONTH(TO_DATE('2016-08-31'))/3)",
+                "databricks": "SELECT QUARTER('2016-08-31')",
+            },
+        )
 
     def test_number_functions(self):
         self.validate_identity("SELECT TRUNC(123.456, 2) AS TRUNC")
@@ -599,7 +648,8 @@ class TestExasol(Validator):
     def test_odbc_date_literals(self):
         self.validate_identity("SELECT {d'2024-01-01'}", "SELECT TO_DATE('2024-01-01')")
         self.validate_identity(
-            "SELECT {ts'2024-01-01 12:00:00'}", "SELECT TO_TIMESTAMP('2024-01-01 12:00:00')"
+            "SELECT {ts'2024-01-01 12:00:00'}",
+            "SELECT TO_TIMESTAMP('2024-01-01 12:00:00')",
         )
 
     def test_local_prefix_for_alias(self):

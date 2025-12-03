@@ -1,3 +1,4 @@
+import typing as t
 import unittest
 
 from sqlglot import (
@@ -10,8 +11,9 @@ from sqlglot import (
     exp,
     parse_one,
 )
-from sqlglot.dialects import BigQuery, Hive, Snowflake
-from sqlglot.dialects.dialect import Version
+from sqlglot.dialects import BigQuery, Hive, Snowflake, Spark2
+from sqlglot.dialects.duckdb import WS_CONTROL_CHARS_TO_DUCK
+from sqlglot.generator import logger as generator_logger
 from sqlglot.parser import logger as parser_logger
 
 
@@ -20,6 +22,27 @@ class Validator(unittest.TestCase):
 
     def parse_one(self, sql, **kwargs):
         return parse_one(sql, read=self.dialect, **kwargs)
+
+    def assert_duckdb_sql(
+        self,
+        expression: exp.Expression,
+        *,
+        includes: t.Optional[t.Iterable[str]] = None,
+        excludes: t.Optional[t.Iterable[str]] = None,
+        chr_chars: t.Optional[t.Iterable[str]] = None,
+    ) -> str:
+        duckdb_sql = expression.sql("duckdb")
+
+        for fragment in includes or ():
+            self.assertIn(fragment, duckdb_sql)
+        for fragment in excludes or ():
+            self.assertNotIn(fragment, duckdb_sql)
+        for char in chr_chars or ():
+            code = WS_CONTROL_CHARS_TO_DUCK.get(char)
+            self.assertIsNotNone(code, f"missing DuckDB code for {repr(char)}")
+            self.assertIn(f"CHR({code})", duckdb_sql)
+
+        return duckdb_sql
 
     def validate_identity(
         self, sql, write_sql=None, pretty=False, check_command_warning=False, identify=False
@@ -135,7 +158,7 @@ class TestDialect(Validator):
             "oracle, normalization_strategy = lowercase, version = 19.5"
         )
         self.assertEqual(oracle_with_settings.normalization_strategy.value, "LOWERCASE")
-        self.assertEqual(oracle_with_settings.version, Version("19.5"))
+        self.assertEqual(oracle_with_settings.version, (19, 5, 0))
 
         class MyDialect(Dialect):
             SUPPORTED_SETTINGS = {"s1", "s2", "s3", "s4", "s5"}
@@ -3884,6 +3907,37 @@ FROM subquery2""",
             },
         )
 
+    def test_regr_slope(self):
+        self.validate_all(
+            "REGR_SLOPE(x, y)",
+            read={
+                "": "REGR_SLOPE(x, y)",
+                "databricks": "REGR_SLOPE(x, y)",
+                "duckdb": "REGR_SLOPE(x, y)",
+                "exasol": "REGR_SLOPE(x, y)",
+                "oracle": "REGR_SLOPE(x, y)",
+                "postgres": "REGR_SLOPE(x, y)",
+                "presto": "REGR_SLOPE(x, y)",
+                "snowflake": "REGR_SLOPE(x, y)",
+                "spark": "REGR_SLOPE(x, y)",
+                "teradata": "REGR_SLOPE(x, y)",
+                "trino": "REGR_SLOPE(x, y)",
+            },
+            write={
+                "": "REGR_SLOPE(x, y)",
+                "databricks": "REGR_SLOPE(x, y)",
+                "duckdb": "REGR_SLOPE(x, y)",
+                "exasol": "REGR_SLOPE(x, y)",
+                "oracle": "REGR_SLOPE(x, y)",
+                "postgres": "REGR_SLOPE(x, y)",
+                "presto": "REGR_SLOPE(x, y)",
+                "snowflake": "REGR_SLOPE(x, y)",
+                "spark": "REGR_SLOPE(x, y)",
+                "teradata": "REGR_SLOPE(x, y)",
+                "trino": "REGR_SLOPE(x, y)",
+            },
+        )
+
     def test_translate(self):
         self.validate_all(
             "TRANSLATE(x, y, z)",
@@ -4303,3 +4357,187 @@ FROM subquery2""",
             "WITH sub_query AS (SELECT a FROM table) ((((SELECT a FROM sub_query))))",
             "WITH sub_query AS (SELECT a FROM table) SELECT a FROM sub_query",
         )
+
+    def test_initcap(self):
+        delimiter_chars = {
+            "": Dialect.INITCAP_DEFAULT_DELIMITER_CHARS,
+            "bigquery": BigQuery.INITCAP_DEFAULT_DELIMITER_CHARS,
+            "snowflake": Snowflake.INITCAP_DEFAULT_DELIMITER_CHARS,
+            "spark": Spark2.INITCAP_DEFAULT_DELIMITER_CHARS,
+        }
+
+        with self.subTest("INITCAP without explicit delimiters"):
+            self.assertEqual(exp.Initcap(this=exp.Literal.string("col")).sql(), "INITCAP('col')")
+            self.assertEqual(exp.Initcap(this=exp.column("col")).sql(), "INITCAP(col)")
+
+        for dialect in delimiter_chars:
+            with self.subTest(f"Round-tripping default delimiters for {dialect or 'default'}"):
+                self.assertEqual(
+                    parse_one("INITCAP(col)", read=dialect).sql(dialect), "INITCAP(col)"
+                )
+
+        for read_dialect in ("", "spark"):
+            for write_dialect in ("bigquery", "snowflake"):
+                with self.subTest(
+                    f"Default delimiters emitted from {read_dialect or 'default'} to {write_dialect}"
+                ):
+                    escaped_delimiters = exp.Literal.string(delimiter_chars[read_dialect]).sql(
+                        write_dialect
+                    )
+                    self.assertEqual(
+                        parse_one("INITCAP(col)", read=read_dialect).sql(write_dialect),
+                        f"INITCAP(col, {escaped_delimiters})",
+                    )
+
+        def assert_default_duckdb_sql(read_dialect: str, default_chars: str) -> None:
+            chr_chars = [char for char in WS_CONTROL_CHARS_TO_DUCK if char in default_chars]
+            expression = parse_one("INITCAP(col)", read=read_dialect)
+            self.assert_duckdb_sql(
+                expression,
+                includes=("ARRAY_TO_STRING(", "REGEXP_MATCHES(", "LIST_TRANSFORM("),
+                chr_chars=chr_chars,
+            )
+
+        for dialect, default_chars in delimiter_chars.items():
+            with self.subTest(f"DuckDB rewrite for {dialect or 'default'} default delimiters"):
+                assert_default_duckdb_sql(dialect, default_chars)
+
+        def assert_custom_duckdb_sql(
+            query: str,
+            *,
+            includes: t.Optional[t.Iterable[str]] = None,
+            excludes: t.Optional[t.Iterable[str]] = None,
+            chr_chars: t.Optional[t.Iterable[str]] = None,
+        ) -> None:
+            for dialect in ("bigquery", "snowflake"):
+                with self.subTest(f"DuckDB generation for {query} from {dialect}"):
+                    expression = parse_one(query, read=dialect)
+                    self.assert_duckdb_sql(
+                        expression, includes=includes, excludes=excludes, chr_chars=chr_chars
+                    )
+
+        assert_custom_duckdb_sql(
+            "INITCAP(col, '')", includes=("UPPER(LEFT(",), excludes=("REGEXP_MATCHES(",)
+        )
+        assert_custom_duckdb_sql("INITCAP(col, NULL)", includes=("REGEXP_MATCHES(", "REPLACE("))
+        assert_custom_duckdb_sql("INITCAP(col, ' ')", includes=("' '",))
+        assert_custom_duckdb_sql("INITCAP(col, '@')", includes=("'@'",), excludes=("CHR(",))
+        assert_custom_duckdb_sql("INITCAP(col, '_@')", includes=("'_@'",))
+        assert_custom_duckdb_sql(r"INITCAP(col, '\\\\')", includes=("\\\\",))
+        assert_custom_duckdb_sql(
+            "INITCAP(col, '\u000b')",
+            chr_chars=("\u000b",),
+        )
+        assert_custom_duckdb_sql(
+            "INITCAP(col, (SELECT delimiter FROM settings LIMIT 1))",
+            includes=("SELECT delimiter FROM settings", "REPLACE("),
+        )
+
+    def test_initcap_custom_delimiter_warning(self):
+        expression = parse_one("INITCAP(col, '_')", read="bigquery")
+        for dialect in ("postgres", "presto"):
+            with self.subTest(f"INITCAP unsupported custom delimiters warning for {dialect}"):
+                with self.assertLogs(generator_logger, level="WARNING") as cm:
+                    expression.sql(dialect)
+                self.assertIn("INITCAP does not support custom delimiters", cm.output[0])
+
+    def test_parse_at_time_zone(self):
+        parsed_expr = self.validate_identity(
+            "SELECT CAST('2001-02-17 08:38:40' AS TIMESTAMP) AT TIME ZONE 'UTC' AT TIME ZONE 'Asia/Tokyo'"
+        ).expressions[0]
+        self.assertEqual(parsed_expr.args.get("zone").sql(), "'Asia/Tokyo'")
+        self.assertEqual(parsed_expr.this.args.get("zone").sql(), "'UTC'")
+
+        parsed_expr = self.validate_identity(
+            "SELECT CAST('2001-02-17 08:38:40' AS TIMESTAMP) AT TIME ZONE INTERVAL '3' HOURS AT TIME ZONE 'Asia/Tokyo'"
+        ).expressions[0]
+        self.assertEqual(parsed_expr.args.get("zone").sql("postgres"), "'Asia/Tokyo'")
+        self.assertEqual(parsed_expr.this.args.get("zone").sql("postgres"), "INTERVAL '3 HOURS'")
+
+    def test_underscore_scientific_notation(self):
+        for dialect in ("duckdb", "clickhouse"):
+            for notation in ("e", "E"):
+                for sign in ("", "-", "+"):
+                    with self.subTest(f"Testing notation: {notation}, sign: {sign} for {dialect}"):
+                        number = f"1_2{notation}{sign}1_0"
+                        self.assertEqual(parse_one(number, read=dialect).sql(dialect), number)
+
+                        number = f"12.3_4{notation}{sign}5_6_7"
+                        self.assertEqual(parse_one(number, read=dialect).sql(dialect), number)
+
+            with self.subTest(f"Testing underscore separated numbers for {dialect}"):
+                ast = parse_one("1_2_3_4_5", read=dialect)
+                self.assertTrue(ast.is_int)
+                self.assertEqual(ast.to_py(), 12345)
+                self.assertEqual(ast.sql(dialect), "1_2_3_4_5")
+
+    def test_localtime_and_localtimestamp(self):
+        for func in ("LOCALTIME", "LOCALTIMESTAMP"):
+            with self.subTest(f"Testing {func}"):
+                dialects = {
+                    "postgres": f"SELECT {func}",
+                    "duckdb": f"SELECT {func}",
+                    "redshift": f"SELECT {func}",
+                    "snowflake": f"SELECT {func}",
+                    "presto": f"SELECT {func}",
+                    "trino": f"SELECT {func}",
+                    "mysql": f"SELECT {func}",
+                    "singlestore": f"SELECT {func}",
+                }
+
+                if func == "LOCALTIMESTAMP":
+                    dialects["oracle"] = f"SELECT {func}"
+
+                self.validate_all(
+                    f"SELECT {func}",
+                    read=dialects,
+                    write=dialects,
+                )
+
+            with self.subTest(f"Testing {func} with precision"):
+                dialects = {
+                    "postgres": f"SELECT {func}(2)",
+                    "duckdb": f"SELECT {func}(2)",
+                    "redshift": f"SELECT {func}(2)",
+                    "snowflake": f"SELECT {func}(2)",
+                    "presto": f"SELECT {func}(2)",
+                    "trino": f"SELECT {func}(2)",
+                    "mysql": f"SELECT {func}(2)",
+                    "singlestore": f"SELECT {func}(2)",
+                }
+
+                if func == "LOCALTIMESTAMP":
+                    dialects["oracle"] = f"SELECT {func}(2)"
+
+                self.validate_all(
+                    f"SELECT {func}(2)",
+                    read=dialects,
+                    write=dialects,
+                )
+
+            exp_type = exp.Localtime if func == "LOCALTIME" else exp.Localtimestamp
+
+            for func_variant in (func, f"{func}(2)"):
+                with self.subTest(f"Testing {func_variant} function node"):
+                    self.validate_identity(f"SELECT {func_variant}").selects[0].assert_is(exp_type)
+
+        for dialect in (
+            "tsql",
+            "oracle",
+            "sqlite",
+            "hive",
+            "spark2",
+            "spark",
+            "databricks",
+            "bigquery",
+        ):
+            for func in ("localtime", "localtimestamp"):
+                # oracle supports localtimestamp but not localtime
+                if func == "localtimestamp" and dialect == "oracle":
+                    continue
+
+                with self.subTest(f"Testing {func} identifier in {dialect}"):
+                    sql = f"SELECT {func}"
+                    select = parse_one(sql, dialect=dialect)
+                    select.selects[0].assert_is(exp.Column)
+                    self.assertEqual(select.sql(dialect), sql)

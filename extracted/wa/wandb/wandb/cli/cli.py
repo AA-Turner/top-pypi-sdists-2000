@@ -21,15 +21,15 @@ import yaml
 from click.exceptions import ClickException
 
 import wandb
-import wandb.env
 import wandb.errors
 import wandb.sdk.verify.verify as wandb_verify
-from wandb import Config, Error, env, util, wandb_agent, wandb_sdk
+from wandb import Config, Error, env, util, wandb_agent
 from wandb.analytics import get_sentry
 from wandb.apis import InternalApi, PublicApi
 from wandb.apis.public import RunQueue
 from wandb.errors.links import url_registry
-from wandb.sdk import wandb_setup
+from wandb.old import core as old_core
+from wandb.sdk import wandb_login, wandb_setup, wandb_sweep
 from wandb.sdk.artifacts._validators import is_artifact_registry_project
 from wandb.sdk.artifacts.artifact_file_cache import get_artifact_file_cache
 from wandb.sdk.internal.internal_api import Api as SDKInternalApi
@@ -44,7 +44,7 @@ from wandb.sync import SyncManager, get_run_from_path, get_runs
 from .beta import beta
 
 # Send cli logs to wandb/debug-cli.<username>.log by default and fallback to a temp dir.
-_wandb_dir = wandb.old.core.wandb_dir(env.get_dir())
+_wandb_dir = old_core.wandb_dir(env.get_dir())
 if not os.path.exists(_wandb_dir):
     _wandb_dir = tempfile.gettempdir()
 
@@ -254,7 +254,13 @@ def projects(entity, display=True):
 @click.option(
     "--relogin", default=None, is_flag=True, help="Force relogin if already logged in."
 )
-@click.option("--anonymously", default=False, is_flag=True, help="Log in anonymously")
+@click.option(
+    "--anonymously",
+    default=False,
+    hidden=True,
+    is_flag=True,
+    help="Log in anonymously",
+)
 @click.option(
     "--verify/--no-verify",
     default=False,
@@ -274,9 +280,14 @@ def login(key, host, cloud, relogin, anonymously, verify, no_offline=False):
     the `login` command with host parameters.
     """
     # TODO: handle no_offline
-    anon_mode = "must" if anonymously else "never"
+    if anonymously:
+        wandb.termwarn(
+            "The --anonymously parameter has no effect and will be removed"
+            + " in a future version.",
+            repeat=False,
+        )
 
-    wandb_sdk.wandb_login._handle_host_wandb_setting(host, cloud)
+    wandb_login._handle_host_wandb_setting(host, cloud)
     # A change in click or the test harness means key can be none...
     key = key[0] if key is not None and len(key) > 0 else None
     relogin = True if key or relogin else False
@@ -286,7 +297,6 @@ def login(key, host, cloud, relogin, anonymously, verify, no_offline=False):
     global_settings.x_disable_viewer = relogin and not verify
 
     wandb.login(
-        anonymous=anon_mode,
         force=True,
         host=host,
         key=key,
@@ -949,7 +959,7 @@ def sweep(
     styled_id = click.style(sweep_id, fg="yellow")
     wandb.termlog(f"{action} sweep with ID: {styled_id}")
 
-    sweep_url = wandb_sdk.wandb_sweep._get_sweep_url(api, sweep_id)
+    sweep_url = wandb_sweep._get_sweep_url(api, sweep_id)
     if sweep_url:
         styled_url = click.style(sweep_url, underline=True, fg="blue")
         wandb.termlog(f"View sweep at: {styled_url}")
@@ -1218,7 +1228,7 @@ def launch_sweep(
     # Log nicely formatted sweep information
     styled_id = click.style(sweep_id, fg="yellow")
     wandb.termlog(f"{'Resumed' if resume_id else 'Created'} sweep with ID: {styled_id}")
-    sweep_url = wandb_sdk.wandb_sweep._get_sweep_url(api, sweep_id)
+    sweep_url = wandb_sweep._get_sweep_url(api, sweep_id)
     if sweep_url:
         styled_url = click.style(sweep_url, underline=True, fg="blue")
         wandb.termlog(f"View sweep at: {styled_url}")

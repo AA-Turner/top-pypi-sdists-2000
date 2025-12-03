@@ -81,11 +81,11 @@ def _CreateEvaluationRunParameters_to_vertex(
     if getv(from_object, ["labels"]) is not None:
         setv(to_object, ["labels"], getv(from_object, ["labels"]))
 
-    if getv(from_object, ["config"]) is not None:
-        setv(to_object, ["config"], getv(from_object, ["config"]))
-
     if getv(from_object, ["inference_configs"]) is not None:
         setv(to_object, ["inferenceConfigs"], getv(from_object, ["inference_configs"]))
+
+    if getv(from_object, ["config"]) is not None:
+        setv(to_object, ["config"], getv(from_object, ["config"]))
 
     return to_object
 
@@ -472,10 +472,10 @@ class Evals(_api_module.BaseModule):
         data_source: types.EvaluationRunDataSourceOrDict,
         evaluation_config: types.EvaluationRunConfigOrDict,
         labels: Optional[dict[str, str]] = None,
-        config: Optional[types.CreateEvaluationRunConfigOrDict] = None,
         inference_configs: Optional[
             dict[str, types.EvaluationRunInferenceConfigOrDict]
         ] = None,
+        config: Optional[types.CreateEvaluationRunConfigOrDict] = None,
     ) -> types.EvaluationRun:
         """
         Creates an EvaluationRun.
@@ -487,8 +487,8 @@ class Evals(_api_module.BaseModule):
             data_source=data_source,
             evaluation_config=evaluation_config,
             labels=labels,
-            config=config,
             inference_configs=inference_configs,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]
@@ -882,13 +882,6 @@ class Evals(_api_module.BaseModule):
         self._api_client._verify_response(return_value)
         return return_value
 
-    def run(self) -> types.EvaluateInstancesResponse:
-        """Evaluates an instance of a model.
-
-        This should eventually call _evaluate_instances()
-        """
-        raise NotImplementedError()
-
     def evaluate_instances(
         self,
         *,
@@ -911,6 +904,7 @@ class Evals(_api_module.BaseModule):
         src: Union[str, pd.DataFrame, types.EvaluationDataset],
         model: Optional[Union[str, Callable[[Any], Any]]] = None,
         agent: Optional[Union[str, types.AgentEngine]] = None,
+        location: Optional[str] = None,
         config: Optional[types.EvalRunInferenceConfigOrDict] = None,
     ) -> types.EvaluationDataset:
         """Runs inference on a dataset for evaluation.
@@ -935,6 +929,10 @@ class Evals(_api_module.BaseModule):
                 `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine_id}`,
                 run_inference will fetch the agent engine from the resource name.
               - Or `types.AgentEngine` object.
+          location: The location to use for the inference. If not specified, the
+                location configured in the client will be used. If specified,
+                this will override the location set in `vertexai.Client` only
+                for this API call.
           config: The optional configuration for the inference run. Must be a dict or
               `types.EvalRunInferenceConfig` type.
                 - dest: The destination path for storage of the inference results.
@@ -962,8 +960,9 @@ class Evals(_api_module.BaseModule):
             agent_engine=agent,
             src=src,
             dest=config.dest,
-            config=config.generate_content_config,
             prompt_template=config.prompt_template,
+            location=location,
+            config=config.generate_content_config,
         )
 
     def evaluate(
@@ -975,6 +974,7 @@ class Evals(_api_module.BaseModule):
             list[types.EvaluationDatasetOrDict],
         ],
         metrics: list[types.MetricOrDict] = None,
+        location: Optional[str] = None,
         config: Optional[types.EvaluateMethodConfigOrDict] = None,
         **kwargs,
     ) -> types.EvaluationResult:
@@ -984,6 +984,10 @@ class Evals(_api_module.BaseModule):
           dataset: The dataset(s) to evaluate. Can be a pandas DataFrame, a single
             `types.EvaluationDataset` or a list of `types.EvaluationDataset`.
           metrics: The list of metrics to use for evaluation.
+          location: The location to use for the evaluation service. If not specified,
+             the location configured in the client will be used. If specified,
+             this will override the location set in `vertexai.Client` only for
+             this API call.
           config: Optional configuration for the evaluation. Can be a dictionary or a
             `types.EvaluateMethodConfig` object.
             - dataset_schema: Schema to use for the dataset. If not specified, the
@@ -1029,6 +1033,7 @@ class Evals(_api_module.BaseModule):
             metrics=metrics,
             dataset_schema=config.dataset_schema,
             dest=config.dest,
+            location=location,
             **kwargs,
         )
 
@@ -1627,10 +1632,10 @@ class AsyncEvals(_api_module.BaseModule):
         data_source: types.EvaluationRunDataSourceOrDict,
         evaluation_config: types.EvaluationRunConfigOrDict,
         labels: Optional[dict[str, str]] = None,
-        config: Optional[types.CreateEvaluationRunConfigOrDict] = None,
         inference_configs: Optional[
             dict[str, types.EvaluationRunInferenceConfigOrDict]
         ] = None,
+        config: Optional[types.CreateEvaluationRunConfigOrDict] = None,
     ) -> types.EvaluationRun:
         """
         Creates an EvaluationRun.
@@ -1642,8 +1647,8 @@ class AsyncEvals(_api_module.BaseModule):
             data_source=data_source,
             evaluation_config=evaluation_config,
             labels=labels,
-            config=config,
             inference_configs=inference_configs,
+            config=config,
         )
 
         request_url_dict: Optional[dict[str, str]]

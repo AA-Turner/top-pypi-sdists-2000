@@ -44,6 +44,7 @@ async def test_decor_pep525_async_generator_check() -> None:
     )
     from inspect import isasyncgenfunction
     from typing import (
+        Any,
         Union,
         AsyncGenerator as Pep484AsyncGenerator,
         AsyncIterable as Pep484AsyncIterable,
@@ -60,6 +61,10 @@ async def test_decor_pep525_async_generator_check() -> None:
         Pep585AsyncGenerator,
 
         # ....................{ PEP 484                    }....................
+        # Ignorable object preventing code generation from type-checking the
+        # asynchronous generator created and returned by that factory.
+        Any,
+
         Pep484AsyncGenerator[Union[str, float], None],
         Pep484AsyncIterable[Union[str, float]],
         Pep484AsyncIterator[Union[str, float]],
@@ -133,7 +138,7 @@ async def test_decor_pep525_async_generator_check() -> None:
                 'involving radical acceptance and enlightenment and such.'
             )
 
-        # Assert that passing this function invalid parameters raises the
+        # Assert that passing this factory invalid parameters raises the
         # expected violation.
         with raises_uncached(BeartypeCallHintParamViolation):
             await anext(some_kind_of_spiritual_thing(
@@ -183,8 +188,22 @@ async def test_decor_pep525_async_generator_api() -> None:
     from beartype import beartype
     from collections.abc import AsyncGenerator
     from pytest import raises
+    from typing import Any
 
-    # ....................{ EXCEPTIONS                     }....................
+    # ....................{ LOCALS                         }....................
+    # Tuple of all return hints with which to repeatedly annotate the non-empty
+    # asynchronous generator factory declared below, each validating a unique
+    # edge case in code generation for that factory.
+    HINTS_RETURN = (
+        # Ignorable object preventing code generation from type-checking the
+        # asynchronous generator created and returned by that factory.
+        Any,
+
+        # PEP 525-compliant return hint instructing code generation to
+        # type-check both the yields *AND* sends of that generator.
+        AsyncGenerator[int, str],
+    )
+
     # Arbitrary list to be appended to by the "finally:" block of the non-empty
     # asynchronous generator why_do_i_know_ye() defined below, enabling logic
     # below to validate that that block was run as expected *AFTER* the caller
@@ -230,174 +249,181 @@ async def test_decor_pep525_async_generator_api() -> None:
         # This asynchronous generator is guaranteed to thus be empty.
         yield
 
+    # ....................{ LOOP                           }....................
+    # For each return hint with which to repeatedly annotate the non-empty
+    # asynchronous generator factory declared below...
+    for hint_return in HINTS_RETURN:
+        @beartype
+        async def why_do_i_know_ye(yield_int_max: int) -> hint_return:
+            '''
+            :func:`beartype.beartype`-decorated non-empty asynchronous generator
+            yielding:
 
-    @beartype
-    async def why_do_i_know_ye(yield_int_max: int) -> AsyncGenerator[int, str]:
-        '''
-        :func:`beartype.beartype`-decorated non-empty asynchronous generator
-        yielding:
+            * When sent an arbitrary string, the length of that string.
+            * Else, non-negative integers in the inclusive range
+              ``[0, yield_int_max]``.
 
-        * When sent an arbitrary string, the length of that string.
-        * Else, non-negative integers in the inclusive range
-          ``[0, yield_int_max]``.
+            Parameters
+            ----------
+            yield_int_max : int
+                Maximum non-negative integer to be yielded.
+            '''
+            assert yield_int_max >= 0
 
-        Parameters
-        ----------
-        yield_int_max : int
-            Maximum non-negative integer to be yielded.
-        '''
-        assert yield_int_max >= 0
+            # Silently reduce to an asynchronous noop. See above for details.
+            await sleep(0)
 
-        # Silently reduce to an asynchronous noop. See above for details.
-        await sleep(0)
+            # Attempt to...
+            try:
+                # For each integer in this range to be yielded...
+                for yield_int in range(yield_int_max + 1):
+                    # Attempt to...
+                    try:
+                        # Yield this integer to the caller *AND* possibly
+                        # capture a string sent by the caller into this
+                        # generator.
+                        sent_str = yield yield_int
 
-        # Attempt to...
-        try:
-            # For each integer in this range to be yielded...
-            for yield_int in range(yield_int_max + 1):
-                # Attempt to...
-                try:
-                    # Yield this integer to the caller *AND* possibly capture a
-                    # string sent by the caller into this generator.
-                    sent_str = yield yield_int
+                        # While the caller continues sending strings into this
+                        # generator, yield the length of each such string as
+                        # confirmation of receipt to the caller.
+                        while sent_str is not None:
+                            sent_str = yield len(sent_str)
+                        # Else, the caller sent *NO* values into this generator.
+                    # If the caller explicitly threw an exception into this
+                    # generator by calling this generator's athrow() method,
+                    # yield the negation of the length of this exception's
+                    # message as confirmation of receipt.
+                    except _BeartypeAsyncGeneratorThrowException as exception:
+                        yield -len(str(exception))  # <-- wat lol
+            # Append an arbitrary object to the list defined above, enabling
+            # logic below to validate this finalizer was run as expected after
+            # the caller prematurely closes this generator with aclose().
+            finally:
+                to_see_and_to_behold.append(HORRORS_NEW)
 
-                    # While the caller continues sending strings into this
-                    # generator, yield the length of each such string as
-                    # confirmation of receipt to the caller.
-                    while sent_str is not None:
-                        sent_str = yield len(sent_str)
-                    # Else, the caller sent *NO* strings into this generator.
-                # If the caller explicitly threw an exception into this
-                # generator by calling this generator's athrow() method, yield
-                # the negation of the length of this exception's message as
-                # confirmation of receipt.
-                except _BeartypeAsyncGeneratorThrowException as exception:
-                    yield -len(str(exception))  # <-- wat lol
-        # Append an arbitrary object to the list defined above, enabling
-        # logic below to validate this finalizer was run as expected after
-        # the caller prematurely closes this generator with aclose().
-        finally:
-            to_see_and_to_behold.append(HORRORS_NEW)
+        # ....................{ ASSERTS ~ empty : yield    }....................
+        # Validate that a @beartype-decorated empty asynchronous generator
+        # factory preserves PEP 580-compliant "yield" semantics.
 
-    # ....................{ ASSERTS ~ empty : yield        }....................
-    # Validate that a @beartype-decorated empty asynchronous generator factory
-    # preserves PEP 580-compliant "yield" semantics.
+        # True only if this generator truly is empty.
+        is_my_eternal_essence_empty = True
 
-    # True only if this generator truly is empty.
-    is_my_eternal_essence_empty = True
+        # If this generator yields *ANY* values, note this generator to be
+        # non-empty.
+        async for yielded_value in is_my_eternal_essence():
+            is_my_eternal_essence_empty = False
 
-    # If this generator yields *ANY* value, note this generator to be non-empty.
-    async for yielded_value in is_my_eternal_essence():
-        is_my_eternal_essence_empty = False
+        # Assert that this generator truly is empty.
+        assert is_my_eternal_essence_empty is True
 
-    # Assert that this generator truly is empty.
-    assert is_my_eternal_essence_empty is True
+        # ....................{ ASSERTS ~ non-empty : yield ....................
+        # Validate that a @beartype-decorated non-empty asynchronous generator
+        # factory preserves PEP 580-compliant "yield" semantics.
 
-    # ....................{ ASSERTS ~ non-empty : yield    }....................
-    # Validate that a @beartype-decorated non-empty asynchronous generator
-    # factory preserves PEP 580-compliant "yield" semantics.
+        # List of all values subsequently yielded by iterating over this
+        # generator.
+        yielded_values = []
 
-    # List of all values subsequently yielded by iterating over this generator.
-    yielded_values = []
+        # Iteratively append each value yielded by this generator when passed a
+        # small (but still non-zero) maximum value to be yielded.
+        async for yielded_value in why_do_i_know_ye(3):
+            yielded_values.append(yielded_value)
 
-    # Iteratively append each value yielded by this generator when passed a
-    # small (but still non-zero) maximum value to be yielded.
-    async for yielded_value in why_do_i_know_ye(3):
-        yielded_values.append(yielded_value)
+        # Assert that this generator yielded the expected values.
+        assert yielded_values == [0, 1, 2, 3]
 
-    # Assert that this generator yielded the expected values.
-    assert yielded_values == [0, 1, 2, 3]
+        # Assert that this generator's "finally:" block finalized this generator
+        # by appending the expected string to this closure list.
+        assert to_see_and_to_behold == [HORRORS_NEW]
 
-    # Assert that this generator's "finally:" block finalized this generator by
-    # appending the expected string to this closure list.
-    assert to_see_and_to_behold == [HORRORS_NEW]
+        # Clear this list for sanity.
+        to_see_and_to_behold.clear()
 
-    # Clear this list for sanity.
-    to_see_and_to_behold.clear()
+        # ....................{ ASSERTS ~ non-empty : send }....................
+        # Validate that a @beartype-decorated non-empty asynchronous generator
+        # factory preserves PEP 580-compliant asend() semantics.
 
-    # ....................{ ASSERTS ~ non-empty : send     }....................
-    # Validate that a @beartype-decorated non-empty asynchronous generator
-    # factory preserves PEP 580-compliant asend() semantics.
+        # Asynchronous generator produced by priming this factory as above.
+        why_have_i_seen_ye = why_do_i_know_ye(3)
+        # print(f'why_have_i_seen_ye: {dir(why_have_i_seen_ye)}')
 
-    # Asynchronous generator produced by priming this factory as above.
-    why_have_i_seen_ye = why_do_i_know_ye(3)
-    # print(f'why_have_i_seen_ye: {dir(why_have_i_seen_ye)}')
+        # Assert that the first value yielded by this generator is the expected.
+        # Rather than iterate this generator manually via the standard idiom,
+        # validate that sending the "None" singleton into this generator is
+        # semantically equivalent to manually iterating this generator.
+        #
+        # Note that:
+        # * This obtuse alternative to explicit iteration is equivalent to this
+        #   standard idiom for manually iterating an asynchronous generator:
+        #     assert await anext(why_have_i_seen_ye) == 0
+        # * One *CANNOT* send a non-"None" value into an asynchronous generator
+        #   before that generator yields its first value after being iterated at
+        #   least once. Violating that maxim raises this exception:
+        #     TypeError: can't send non-None value to a just-started async
+        #     generator
+        assert await why_have_i_seen_ye.asend(None) == 0
 
-    # Assert that the first value yielded by this generator is the expected.
-    # Rather than iterate this generator manually via the standard idiom,
-    # validate that sending the "None" singleton into this generator is
-    # semantically equivalent to manually iterating this generator.
-    #
-    # Note that:
-    # * This obtuse alternative to explicit iteration is equivalent to this
-    #   standard idiom for manually iterating an asynchronous generator:
-    #     assert await anext(why_have_i_seen_ye) == 0
-    # * One *CANNOT* send a non-"None" value into an asynchronous generator
-    #   before that generator yields its first value after being iterated at
-    #   least once. Violating that maxim raises this exception:
-    #     TypeError: can't send non-None value to a just-started async generator
-    assert await why_have_i_seen_ye.asend(None) == 0
+        # Assert that the next value yielded by this generator is the expected.
+        assert await anext(why_have_i_seen_ye) == 1
 
-    # Assert that the next value yielded by this generator is the expected.
-    assert await anext(why_have_i_seen_ye) == 1
+        # Assert that the value yielded by this generator after sending a string
+        # into this generator is the length of this string.
+        assert await why_have_i_seen_ye.asend(
+            'Why do I know ye? why have I seen ye? why') == 41
 
-    # Assert that the value yielded by this generator after sending a string
-    # into this generator is the length of this string.
-    assert await why_have_i_seen_ye.asend(
-        'Why do I know ye? why have I seen ye? why') == 41
+        # Assert that the value yielded by this generator after sending another
+        # string into this generator is the length of this string.
+        assert await why_have_i_seen_ye.asend(
+            'Is my eternal essence thus distraught') == 37
 
-    # Assert that the value yielded by this generator after sending another
-    # string into this generator is the length of this string.
-    assert await why_have_i_seen_ye.asend(
-        'Is my eternal essence thus distraught') == 37
+        # Assert that the next value yielded by this generator is the expected.
+        assert await anext(why_have_i_seen_ye) == 2
 
-    # Assert that the next value yielded by this generator is the expected.
-    assert await anext(why_have_i_seen_ye) == 2
+        # ....................{ ASSERTS ~ non-empty : throw}....................
+        # Assert that the value yielded by this generator after throwing an
+        # exception into this generator is the negation of the length of this
+        # exception's message. Just accept it.
+        assert await why_have_i_seen_ye.athrow(
+            _BeartypeAsyncGeneratorThrowException(
+                'To see and to behold these horrors new?')) == -39
 
-    # ....................{ ASSERTS ~ non-empty : throw    }....................
-    # Assert that the value yielded by this generator after throwing an
-    # exception into this generator is the negation of the length of this
-    # exception's message. Just accept it.
-    assert await why_have_i_seen_ye.athrow(
-        _BeartypeAsyncGeneratorThrowException(
-            'To see and to behold these horrors new?')) == -39
+        # ....................{ ASSERTS ~ non-empty : send }....................
+        # Assert that the final value yielded by this generator is the expected.
+        assert await anext(why_have_i_seen_ye) == 3
 
-    # ....................{ ASSERTS ~ non-empty : send END }....................
-    # Assert that the final value yielded by this generator is the expected.
-    assert await anext(why_have_i_seen_ye) == 3
+        # Assert that iterating this generator one final time raises the
+        # expected PEP 525-compliant exception -- implying this generator has
+        # nothing further to yield and has thus been exhausted (finalized).
+        with raises(StopAsyncIteration):
+            await anext(why_have_i_seen_ye)
 
-    # Assert that iterating this generator one final time raises the expected
-    # PEP 525-compliant exception -- implying this generator has nothing further
-    # to yield and has thus been exhausted (i.e., finalized, closed).
-    with raises(StopAsyncIteration):
-        await anext(why_have_i_seen_ye)
+        # Assert that this generator's "finally:" block finalized this generator
+        # by appending the expected string to this closure list.
+        assert to_see_and_to_behold == [HORRORS_NEW]
 
-    # Assert that this generator's "finally:" block finalized this generator by
-    # appending the expected string to this closure list.
-    assert to_see_and_to_behold == [HORRORS_NEW]
+        # Clear this list for sanity.
+        to_see_and_to_behold.clear()
 
-    # Clear this list for sanity.
-    to_see_and_to_behold.clear()
+        # ....................{ ASSERTS ~ non-empty : close}....................
+        # Asynchronous generator produced by priming this factory as above.
+        thus_distraught = why_do_i_know_ye(3)
 
-    # ....................{ ASSERTS ~ non-empty : close    }....................
-    # Asynchronous generator produced by priming this factory as above.
-    thus_distraught = why_do_i_know_ye(3)
+        # Assert that the first value yielded by this generator is the expected.
+        assert await anext(thus_distraught) == 0
 
-    # Assert that the first value yielded by this generator is the expected.
-    assert await anext(thus_distraught) == 0
+        # Prematurely close this generator.
+        await thus_distraught.aclose()
 
-    # Prematurely close this generator.
-    await thus_distraught.aclose()
+        # Assert that this generator's "finally:" block finalized this generator
+        # by appending the expected string to this closure list.
+        assert to_see_and_to_behold == [HORRORS_NEW]
 
-    # Assert that this generator's "finally:" block finalized this generator by
-    # appending the expected string to this closure list.
-    assert to_see_and_to_behold == [HORRORS_NEW]
+        # Clear this list for sanity.
+        to_see_and_to_behold.clear()
 
-    # Clear this list for sanity.
-    to_see_and_to_behold.clear()
-
-    # Assert that iterating this generator one final time raises the expected
-    # PEP 525-compliant exception -- implying this generator has nothing further
-    # to yield and has thus been exhausted (i.e., finalized, closed).
-    with raises(StopAsyncIteration):
-        await anext(thus_distraught)
+        # Assert that iterating this generator one final time raises the
+        # expected PEP 525-compliant exception -- implying this generator has
+        # nothing further to yield and has thus been exhausted (finalized).
+        with raises(StopAsyncIteration):
+            await anext(thus_distraught)

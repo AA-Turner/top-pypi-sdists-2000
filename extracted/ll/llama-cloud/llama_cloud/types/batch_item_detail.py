@@ -25,6 +25,7 @@ class BatchItemDetail(pydantic.BaseModel):
     error_message: typing.Optional[str]
     item_id: str = pydantic.Field(description="ID of the item")
     item_name: str = pydantic.Field(description="Name of the item")
+    job_id: typing.Optional[str]
     job_record_id: typing.Optional[str]
     skip_reason: typing.Optional[str]
     started_at: typing.Optional[dt.datetime]

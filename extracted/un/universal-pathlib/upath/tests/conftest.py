@@ -49,6 +49,22 @@ def clear_registry():
 
 
 @pytest.fixture(scope="function")
+def windows_working_directory_drive_sync(monkeypatch, tmp_path, tmp_path_factory):
+    cwd_old = os.getcwd()
+    drive_cwd = os.path.splitdrive(cwd_old)[0]
+    drive_tmp = os.path.splitdrive(tmp_path)[0]
+    if drive_tmp != drive_cwd:
+        cwd_new = tmp_path_factory.mktemp("cwd_on_tmp_drive")
+        os.chdir(cwd_new)
+        try:
+            yield
+        finally:
+            os.chdir(cwd_old)
+    else:
+        yield
+
+
+@pytest.fixture(scope="function")
 def clear_fsspec_memory_cache():
     fs_cls = get_filesystem_class("memory")
     pseudo_dirs = fs_cls.pseudo_dirs.copy()
@@ -649,3 +665,61 @@ def hf_fixture_with_readonly_mocked_hf_api(
     hf_test_repo, mock_hf_api, mock_hf_filesystem_open
 ):
     return "hf://" + hf_test_repo
+
+
+@pytest.fixture(scope="module")
+def ftp_server_process(tmp_path_factory):
+    """Fixture providing a writable FTP filesystem."""
+    pytest.importorskip("pyftpdlib")
+
+    tmp_path = tmp_path_factory.mktemp("ftp-server")
+
+    P = subprocess.Popen(
+        [
+            sys.executable,
+            "-m",
+            "pyftpdlib",
+            "-d",
+            str(tmp_path),
+            "-u",
+            "user",
+            "-P",
+            "pass",
+            "-w",
+        ]
+    )
+    try:
+        time.sleep(1)
+        yield str(tmp_path), {
+            "host": "localhost",
+            "port": 2121,
+            "username": "user",
+            "password": "pass",
+        }
+    finally:
+        P.terminate()
+        P.wait()
+        try:
+            shutil.rmtree(tmp_path)
+        except Exception:
+            pass
+
+
+@pytest.fixture(scope="function")
+def ftp_server(ftp_server_process):
+    """Fixture providing a writable FTP filesystem."""
+    tmp_path, storage_options = ftp_server_process
+
+    try:
+        yield storage_options
+    finally:
+        for filename in os.listdir(tmp_path):
+            file_path = os.path.join(tmp_path, filename)
+            if os.path.isdir(file_path):
+                del_func = shutil.rmtree
+            else:
+                del_func = os.unlink
+            try:
+                del_func(file_path)
+            except Exception:
+                pass

@@ -3,6 +3,7 @@
 from . import (
     admin,
     agent_deployments,
+    agents_deployments_control_plane,
     alpha,
     beta,
     classifier,
@@ -23,7 +24,6 @@ from . import (
     pipelines,
     projects,
     retrievers,
-    testing,
     users,
 )
 from .beta import BatchJobCreateRequestJobConfig
@@ -50,6 +50,8 @@ from .llama_extract import (
     ExtractJobCreateDataSchemaOverride,
     ExtractJobCreateDataSchemaOverrideZeroValue,
     ExtractJobCreatePriority,
+    ExtractSchemaGenerateRequestDataSchema,
+    ExtractSchemaGenerateRequestDataSchemaZeroValue,
     ExtractSchemaValidateRequestDataSchema,
     ExtractSchemaValidateRequestDataSchemaZeroValue,
     ExtractStatelessRequestDataSchema,
@@ -93,6 +95,8 @@ __all__ = [
     "ExtractJobCreateDataSchemaOverride",
     "ExtractJobCreateDataSchemaOverrideZeroValue",
     "ExtractJobCreatePriority",
+    "ExtractSchemaGenerateRequestDataSchema",
+    "ExtractSchemaGenerateRequestDataSchemaZeroValue",
     "ExtractSchemaValidateRequestDataSchema",
     "ExtractSchemaValidateRequestDataSchemaZeroValue",
     "ExtractStatelessRequestDataSchema",
@@ -113,6 +117,7 @@ __all__ = [
     "RetrievalParamsSearchFiltersInferenceSchemaValue",
     "admin",
     "agent_deployments",
+    "agents_deployments_control_plane",
     "alpha",
     "beta",
     "classifier",
@@ -133,6 +138,5 @@ __all__ = [
     "pipelines",
     "projects",
     "retrievers",
-    "testing",
     "users",
 ]

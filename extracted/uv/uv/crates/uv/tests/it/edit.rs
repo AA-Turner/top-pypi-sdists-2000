@@ -15,9 +15,10 @@ use indoc::{formatdoc, indoc};
 use insta::assert_snapshot;
 use std::path::Path;
 use url::Url;
-use uv_fs::Simplified;
-use wiremock::{Mock, MockServer, ResponseTemplate, matchers::method};
+use wiremock::{Mock, MockServer, ResponseTemplate, matchers::method, matchers::path};
 
+use uv_cache_key::{RepositoryUrl, cache_digest};
+use uv_fs::Simplified;
 use uv_static::EnvVars;
 
 use crate::common::{TestContext, packse_index_url, uv_snapshot, venv_bin_path};
@@ -630,6 +631,16 @@ fn add_git_error() -> Result<()> {
     error: `flask` did not resolve to a Git repository, but a Git reference (`--branch 0.0.1`) was provided.
     "###);
 
+    // Request lfs without a Git source.
+    uv_snapshot!(context.filters(), context.add().arg("flask").arg("--lfs"), @r###"
+    success: false
+    exit_code: 2
+    ----- stdout -----
+
+    ----- stderr -----
+    error: `flask` did not resolve to a Git repository, but a Git extension (`--lfs`) was provided.
+    "###);
+
     Ok(())
 }
 
@@ -657,6 +668,236 @@ fn add_git_branch() -> Result<()> {
     Prepared 1 package in [TIME]
     Installed 1 package in [TIME]
      + uv-public-pypackage==0.1.0 (from git+https://github.com/astral-test/uv-public-pypackage@0dacfd662c64cb4ceb16e6cf65a157a8b715b979)
+    ");
+
+    Ok(())
+}
+
+#[test]
+#[cfg(feature = "git-lfs")]
+fn add_git_lfs() -> Result<()> {
+    let context = TestContext::new("3.13").with_git_lfs_config();
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(indoc! {r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.13"
+        dependencies = []
+    "#})?;
+
+    // Gather cache locations
+    let git_cache = context.cache_dir.child("git-v0");
+    let git_checkouts = git_cache.child("checkouts");
+    let git_db = git_cache.child("db");
+    let repo_url = RepositoryUrl::parse("https://github.com/astral-sh/test-lfs-repo")?;
+    let lfs_db_bucket_objects = git_db
+        .child(cache_digest(&repo_url))
+        .child(".git")
+        .child("lfs");
+    let ok_checkout_file = git_checkouts
+        .child(cache_digest(&repo_url.with_lfs(Some(true))))
+        .child("657500f")
+        .child(".ok");
+
+    uv_snapshot!(context.filters(), context.add()
+        .arg("--no-cache")
+        .arg("test-lfs-repo @ git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("657500f0703dc173ac5d68dfa1d7e8c985c84424")
+        .arg("--lfs"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 2 packages in [TIME]
+    Prepared 1 package in [TIME]
+    Installed 1 package in [TIME]
+     + test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@657500f0703dc173ac5d68dfa1d7e8c985c84424#lfs=true)
+    ");
+
+    let pyproject_toml = context.read("pyproject.toml");
+
+    insta::with_settings!({
+        filters => context.filters(),
+    }, {
+        assert_snapshot!(
+            pyproject_toml, @r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.13"
+        dependencies = [
+            "test-lfs-repo",
+        ]
+
+        [tool.uv.sources]
+        test-lfs-repo = { git = "https://github.com/astral-sh/test-lfs-repo", rev = "657500f0703dc173ac5d68dfa1d7e8c985c84424", lfs = true }
+        "#
+        );
+    });
+
+    let lock = context.read("uv.lock");
+
+    insta::with_settings!({
+        filters => context.filters(),
+    }, {
+        assert_snapshot!(
+            lock, @r#"
+        version = 1
+        revision = 3
+        requires-python = ">=3.13"
+
+        [options]
+        exclude-newer = "2024-03-25T00:00:00Z"
+
+        [[package]]
+        name = "project"
+        version = "0.1.0"
+        source = { virtual = "." }
+        dependencies = [
+            { name = "test-lfs-repo" },
+        ]
+
+        [package.metadata]
+        requires-dist = [{ name = "test-lfs-repo", git = "https://github.com/astral-sh/test-lfs-repo?lfs=true&rev=657500f0703dc173ac5d68dfa1d7e8c985c84424" }]
+
+        [[package]]
+        name = "test-lfs-repo"
+        version = "0.1.0"
+        source = { git = "https://github.com/astral-sh/test-lfs-repo?lfs=true&rev=657500f0703dc173ac5d68dfa1d7e8c985c84424#657500f0703dc173ac5d68dfa1d7e8c985c84424" }
+        "#
+        );
+    });
+
+    // Change revision as an unnamed requirement
+    uv_snapshot!(context.filters(), context.add()
+        .arg("--no-cache")
+        .arg("git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("4e82e85f6a8b8825d614ea23c550af55b2b7738c")
+        .arg("--lfs"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 2 packages in [TIME]
+    Prepared 1 package in [TIME]
+    Uninstalled 1 package in [TIME]
+    Installed 1 package in [TIME]
+     - test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@657500f0703dc173ac5d68dfa1d7e8c985c84424#lfs=true)
+     + test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@4e82e85f6a8b8825d614ea23c550af55b2b7738c#lfs=true)
+    ");
+
+    // Test LFS not found scenario resulting in an incomplete fetch cache
+
+    // The filters below will remove any boilerplate before what we actually want to match.
+    // They help handle slightly different output in uv-distribution/src/source/mod.rs between
+    // calls to `git` and `git_metadata` functions which don't have guaranteed execution order.
+    // In addition, we can get different error codes depending on where the failure occurs,
+    // although we know the error code cannot be 0.
+    let mut filters = context.filters();
+    filters.push((r"exit_code: -?[1-9]\d*", "exit_code: [ERROR_CODE]"));
+    filters.push((
+        "(?s)(----- stderr -----).*?The source distribution `[^`]+` is missing Git LFS artifacts.*",
+        "$1\n[PREFIX]The source distribution `[DISTRIBUTION]` is missing Git LFS artifacts",
+    ));
+
+    uv_snapshot!(filters, context.add()
+        .env(EnvVars::UV_INTERNAL__TEST_LFS_DISABLED, "1")
+        .arg("git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("657500f0703dc173ac5d68dfa1d7e8c985c84424")
+        .arg("--lfs"), @r"
+    success: false
+    exit_code: [ERROR_CODE]
+    ----- stdout -----
+
+    ----- stderr -----
+    [PREFIX]The source distribution `[DISTRIBUTION]` is missing Git LFS artifacts
+    ");
+
+    // There should be no .ok entry as LFS operations failed
+    assert!(!ok_checkout_file.exists(), "Found unexpected .ok file.");
+
+    // Test LFS recovery from an incomplete fetch cache
+    uv_snapshot!(context.filters(), context.add()
+        .arg("git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("657500f0703dc173ac5d68dfa1d7e8c985c84424")
+        .arg("--lfs"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 2 packages in [TIME]
+    Prepared 1 package in [TIME]
+    Uninstalled 1 package in [TIME]
+    Installed 1 package in [TIME]
+     - test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@4e82e85f6a8b8825d614ea23c550af55b2b7738c#lfs=true)
+     + test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@657500f0703dc173ac5d68dfa1d7e8c985c84424#lfs=true)
+    ");
+
+    // Verify that we can import the module and access LFS content
+    uv_snapshot!(context.filters(), context.python_command()
+        .arg("-c")
+        .arg("import test_lfs_repo.lfs_module"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    "#);
+
+    // Now let's delete some of the LFS entries from our db...
+    fs_err::remove_file(&ok_checkout_file)?;
+    fs_err::remove_dir_all(&lfs_db_bucket_objects)?;
+
+    // Test LFS recovery from an incomplete db and non-fresh checkout
+    uv_snapshot!(context.filters(), context.add()
+        .arg("git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("657500f0703dc173ac5d68dfa1d7e8c985c84424")
+        .arg("--reinstall")
+        .arg("--lfs"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 2 packages in [TIME]
+    Prepared 1 package in [TIME]
+    Uninstalled 1 package in [TIME]
+    Installed 1 package in [TIME]
+     ~ test-lfs-repo==0.1.0 (from git+https://github.com/astral-sh/test-lfs-repo@657500f0703dc173ac5d68dfa1d7e8c985c84424#lfs=true)
+    ");
+
+    // Verify that we can import the module and access LFS content
+    uv_snapshot!(context.filters(), context.python_command()
+        .arg("-c")
+        .arg("import test_lfs_repo.lfs_module"), @r#"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    "#);
+
+    // Verify our db and checkout recovered
+    assert!(ok_checkout_file.exists());
+    assert!(lfs_db_bucket_objects.exists());
+
+    // Exercise the sdist cache
+    uv_snapshot!(context.filters(), context.add()
+        .arg("git+https://github.com/astral-sh/test-lfs-repo")
+        .arg("--rev").arg("657500f0703dc173ac5d68dfa1d7e8c985c84424")
+        .arg("--lfs"), @r"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 2 packages in [TIME]
+    Audited 1 package in [TIME]
     ");
 
     Ok(())
@@ -7093,6 +7334,139 @@ fn add_script_without_metadata_table_with_docstring() -> Result<()> {
         "###
         );
     });
+    Ok(())
+}
+
+/// Add to a script without a `.py` extension.
+#[test]
+fn add_extensionless_script() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let script = context.temp_dir.child("script");
+    script.write_str(indoc! {r#"
+        #!/usr/bin/env python3
+        # /// script
+        # requires-python = ">=3.12"
+        # dependencies = []
+        # ///
+        import requests
+        from rich.pretty import pprint
+
+        resp = requests.get("https://peps.python.org/api/peps.json")
+        data = resp.json()
+        pprint([(k, v["title"]) for k, v in data.items()][:10])
+    "#})?;
+
+    uv_snapshot!(context.filters(), context.add().args(["rich", "requests<3"]).arg("--script").arg("script"), @r###"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Updated `script`
+    "###);
+
+    let script_content = context.read("script");
+
+    insta::with_settings!({
+        filters => context.filters(),
+    }, {
+        assert_snapshot!(
+            script_content, @r###"
+        #!/usr/bin/env python3
+        # /// script
+        # requires-python = ">=3.12"
+        # dependencies = [
+        #     "requests<3",
+        #     "rich",
+        # ]
+        # ///
+        import requests
+        from rich.pretty import pprint
+
+        resp = requests.get("https://peps.python.org/api/peps.json")
+        data = resp.json()
+        pprint([(k, v["title"]) for k, v in data.items()][:10])
+        "###
+        );
+    });
+    Ok(())
+}
+
+/// Add from a remote PEP 723 script via `-r`.
+#[tokio::test]
+async fn add_requirements_from_remote_script() -> Result<()> {
+    let context = TestContext::new("3.12");
+
+    let pyproject_toml = context.temp_dir.child("pyproject.toml");
+    pyproject_toml.write_str(indoc! {r#"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = []
+    "#})?;
+
+    // Create a mock server that serves a PEP 723 script.
+    let server = MockServer::start().await;
+    let script_content = indoc! {r#"
+        # /// script
+        # requires-python = ">=3.12"
+        # dependencies = [
+        #     "anyio>=4",
+        #     "rich",
+        # ]
+        # ///
+        import anyio
+        from rich.pretty import pprint
+        pprint("Hello, world!")
+    "#};
+
+    Mock::given(method("GET"))
+        .and(path("/script"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(script_content))
+        .mount(&server)
+        .await;
+
+    let script_url = format!("{}/script", server.uri());
+
+    uv_snapshot!(context.filters(), context.add().arg("-r").arg(&script_url), @r###"
+    success: true
+    exit_code: 0
+    ----- stdout -----
+
+    ----- stderr -----
+    Resolved 8 packages in [TIME]
+    Prepared 7 packages in [TIME]
+    Installed 7 packages in [TIME]
+     + anyio==4.3.0
+     + idna==3.6
+     + markdown-it-py==3.0.0
+     + mdurl==0.1.2
+     + pygments==2.17.2
+     + rich==13.7.1
+     + sniffio==1.3.1
+    "###);
+
+    let pyproject_toml_content = context.read("pyproject.toml");
+
+    insta::with_settings!({
+        filters => context.filters(),
+    }, {
+        assert_snapshot!(
+            pyproject_toml_content, @r###"
+        [project]
+        name = "project"
+        version = "0.1.0"
+        requires-python = ">=3.12"
+        dependencies = [
+            "anyio>=4",
+            "rich>=13.7.1",
+        ]
+        "###
+        );
+    });
+
     Ok(())
 }
 

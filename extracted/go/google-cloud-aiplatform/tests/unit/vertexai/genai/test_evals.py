@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# pylint: disable=protected-access,bad-continuation,
 import importlib
 import json
 import os
@@ -69,6 +70,7 @@ def mock_api_client_fixture():
     )
     mock_client._credentials.universe_domain = "googleapis.com"
     mock_client._evals_client = mock.Mock(spec=evals.Evals)
+    mock_client._http_options = None
     return mock_client
 
 
@@ -139,6 +141,46 @@ def mock_eval_dependencies(mock_api_client_fixture):
         }
 
 
+class TestGetApiClientWithLocation:
+    @mock.patch("vertexai._genai._evals_common.vertexai.Client")
+    def test_get_api_client_with_location_override(
+        self, mock_vertexai_client, mock_api_client_fixture
+    ):
+        mock_api_client_fixture.location = "us-central1"
+        new_location = "europe-west1"
+        _evals_common._get_api_client_with_location(
+            mock_api_client_fixture, new_location
+        )
+        mock_vertexai_client.assert_called_once_with(
+            project=mock_api_client_fixture.project,
+            location=new_location,
+            credentials=mock_api_client_fixture._credentials,
+            http_options=mock_api_client_fixture._http_options,
+        )
+
+    @mock.patch("vertexai._genai._evals_common.vertexai.Client")
+    def test_get_api_client_with_same_location(
+        self, mock_vertexai_client, mock_api_client_fixture
+    ):
+        mock_api_client_fixture.location = "us-central1"
+        new_location = "us-central1"
+        _evals_common._get_api_client_with_location(
+            mock_api_client_fixture, new_location
+        )
+        mock_vertexai_client.assert_not_called()
+
+    @mock.patch("vertexai._genai._evals_common.vertexai.Client")
+    def test_get_api_client_with_none_location(
+        self, mock_vertexai_client, mock_api_client_fixture
+    ):
+        mock_api_client_fixture.location = "us-central1"
+        new_location = None
+        _evals_common._get_api_client_with_location(
+            mock_api_client_fixture, new_location
+        )
+        mock_vertexai_client.assert_not_called()
+
+
 class TestEvals:
     """Unit tests for the GenAI client."""
 
@@ -151,12 +193,6 @@ class TestEvals:
             location=_TEST_LOCATION,
         )
         self.client = vertexai.Client(project=_TEST_PROJECT, location=_TEST_LOCATION)
-
-    @pytest.mark.usefixtures("google_auth_mock")
-    def test_eval_run(self):
-        test_client = vertexai.Client(project=_TEST_PROJECT, location=_TEST_LOCATION)
-        with pytest.raises(NotImplementedError):
-            test_client.evals.run()
 
     @pytest.mark.usefixtures("google_auth_mock")
     @mock.patch.object(client.Client, "_get_api_client")
@@ -4990,7 +5026,7 @@ class TestEvalsRunEvaluation:
         frozenset(["summarization_quality"]),
     )
     @mock.patch("time.sleep", return_value=None)
-    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")
+    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")  # fmt: skip
     def test_predefined_metric_retry_on_resource_exhausted(
         self,
         mock_private_evaluate_instances,
@@ -5043,7 +5079,7 @@ class TestEvalsRunEvaluation:
         frozenset(["summarization_quality"]),
     )
     @mock.patch("time.sleep", return_value=None)
-    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")
+    @mock.patch("vertexai._genai.evals.Evals._evaluate_instances")  # fmt: skip
     def test_predefined_metric_retry_fail_on_resource_exhausted(
         self,
         mock_private_evaluate_instances,

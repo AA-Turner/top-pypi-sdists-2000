@@ -307,6 +307,7 @@ from mypy_boto3_networkmanager.client import NetworkManagerClient
 from mypy_boto3_networkmonitor.client import CloudWatchNetworkMonitorClient
 from mypy_boto3_notifications.client import UserNotificationsClient
 from mypy_boto3_notificationscontacts.client import UserNotificationsContactsClient
+from mypy_boto3_nova_act.client import NovaActServiceClient
 from mypy_boto3_oam.client import CloudWatchObservabilityAccessManagerClient
 from mypy_boto3_observabilityadmin.client import CloudWatchObservabilityAdminServiceClient
 from mypy_boto3_odb.client import OdbClient
@@ -317,6 +318,8 @@ from mypy_boto3_organizations.client import OrganizationsClient
 from mypy_boto3_osis.client import OpenSearchIngestionClient
 from mypy_boto3_outposts.client import OutpostsClient
 from mypy_boto3_panorama.client import PanoramaClient
+from mypy_boto3_partnercentral_account.client import PartnerCentralAccountAPIClient
+from mypy_boto3_partnercentral_benefits.client import PartnerCentralBenefitsClient
 from mypy_boto3_partnercentral_channel.client import PartnerCentralChannelAPIClient
 from mypy_boto3_partnercentral_selling.client import PartnerCentralSellingAPIClient
 from mypy_boto3_payment_cryptography.client import PaymentCryptographyControlPlaneClient
@@ -359,6 +362,7 @@ from mypy_boto3_route53_recovery_cluster.client import Route53RecoveryClusterCli
 from mypy_boto3_route53_recovery_control_config.client import Route53RecoveryControlConfigClient
 from mypy_boto3_route53_recovery_readiness.client import Route53RecoveryReadinessClient
 from mypy_boto3_route53domains.client import Route53DomainsClient
+from mypy_boto3_route53globalresolver.client import Route53GlobalResolverClient
 from mypy_boto3_route53profiles.client import Route53ProfilesClient
 from mypy_boto3_route53resolver.client import Route53ResolverClient
 from mypy_boto3_rtbfabric.client import RTBFabricClient
@@ -5715,6 +5719,25 @@ class Session:
     @overload
     def client(
         self,
+        service_name: Literal["nova-act"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> NovaActServiceClient:
+        """
+        Create client for NovaActService service.
+        """
+
+    @overload
+    def client(
+        self,
         service_name: Literal["oam"],
         region_name: str | None = ...,
         api_version: str | None = ...,
@@ -5900,6 +5923,44 @@ class Session:
     ) -> PanoramaClient:
         """
         Create client for Panorama service.
+        """
+
+    @overload
+    def client(
+        self,
+        service_name: Literal["partnercentral-account"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> PartnerCentralAccountAPIClient:
+        """
+        Create client for PartnerCentralAccountAPI service.
+        """
+
+    @overload
+    def client(
+        self,
+        service_name: Literal["partnercentral-benefits"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> PartnerCentralBenefitsClient:
+        """
+        Create client for PartnerCentralBenefits service.
         """
 
     @overload
@@ -6698,6 +6759,25 @@ class Session:
     ) -> Route53DomainsClient:
         """
         Create client for Route53Domains service.
+        """
+
+    @overload
+    def client(
+        self,
+        service_name: Literal["route53globalresolver"],
+        region_name: str | None = ...,
+        api_version: str | None = ...,
+        use_ssl: bool | None = ...,
+        verify: bool | str | None = ...,
+        endpoint_url: str | None = ...,
+        aws_access_key_id: str | None = ...,
+        aws_secret_access_key: str | None = ...,
+        aws_session_token: str | None = ...,
+        config: Config | None = ...,
+        aws_account_id: str | None = ...,
+    ) -> Route53GlobalResolverClient:
+        """
+        Create client for Route53GlobalResolver service.
         """
 
     @overload

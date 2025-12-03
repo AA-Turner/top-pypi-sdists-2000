@@ -740,10 +740,8 @@ class TestExpressions(unittest.TestCase):
         self.assertIsInstance(parse_one("TIME_TO_TIME_STR(a)"), exp.Cast)
         self.assertIsInstance(parse_one("TIME_TO_UNIX(a)"), exp.TimeToUnix)
         self.assertIsInstance(parse_one("TIME_STR_TO_DATE(a)"), exp.TimeStrToDate)
-        (self.assertIsInstance(parse_one("TIME_STR_TO_TIME(a)"), exp.TimeStrToTime),)
-        self.assertIsInstance(
-            parse_one("TIME_STR_TO_TIME(a, 'America/Los_Angeles')"), exp.TimeStrToTime
-        )
+        self.assertIsInstance(parse_one("TIME_STR_TO_TIME(a)"), exp.TimeStrToTime)
+        self.assertIsInstance(parse_one("TIME_STR_TO_TIME(a, 'some_zone')"), exp.TimeStrToTime)
         self.assertIsInstance(parse_one("TIME_STR_TO_UNIX(a)"), exp.TimeStrToUnix)
         self.assertIsInstance(parse_one("TRIM(LEADING 'b' FROM 'bla')"), exp.Trim)
         self.assertIsInstance(parse_one("TS_OR_DS_ADD(a, 1, 'day')"), exp.TsOrDsAdd)
@@ -766,6 +764,10 @@ class TestExpressions(unittest.TestCase):
         self.assertIsInstance(parse_one("TO_HEX(MD5(foo))", read="bigquery"), exp.MD5)
         self.assertIsInstance(parse_one("TRANSFORM(a, b)", read="spark"), exp.Transform)
         self.assertIsInstance(parse_one("ADD_MONTHS(a, b)"), exp.AddMonths)
+
+        ast = parse_one("GREATEST(a, b, c)")
+        self.assertIsInstance(ast.expressions, list)
+        self.assertEqual(len(ast.expressions), 2)
 
     def test_column(self):
         column = exp.column(exp.Star(), table="t")
@@ -1113,6 +1115,8 @@ FROM foo""",
         self.assertEqual(exp.DataType.build("varchar(100) collate 'en-ci'").sql(), "VARCHAR(100)")
         self.assertEqual(exp.DataType.build("int[3]").sql(dialect="duckdb"), "INT[3]")
         self.assertEqual(exp.DataType.build("int[3][3]").sql(dialect="duckdb"), "INT[3][3]")
+        self.assertEqual(exp.DataType.build("time_ns", "duckdb").sql(), "TIME_NS")
+        self.assertEqual(exp.DataType.build("bignum", "duckdb").sql(), "BIGNUM")
         self.assertEqual(
             exp.DataType.build("struct<x int>", dialect="spark").sql(), "STRUCT<x INT>"
         )

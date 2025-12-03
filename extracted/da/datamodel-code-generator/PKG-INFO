@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.37.0
+Version: 0.39.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -494,6 +494,15 @@ Field customization:
                         docstring
 
 Model customization:
+  --all-exports-collision-strategy {error,minimal-prefix,full-prefix}
+                        Strategy for name collisions when using --all-exports-
+                        scope=recursive. ''error'': raise an error (default). ''minimal-
+                        prefix'': add module prefix only to colliding names. ''full-prefix'':
+                        add full module path prefix to colliding names.
+  --all-exports-scope {children,recursive}
+                        Generate __all__ in __init__.py with re-exports. ''children'': export
+                        from direct child modules only. ''recursive'': export from all
+                        descendant modules.
   --allow-extra-fields  Deprecated: Allow passing extra fields. This flag is deprecated. Use
                         `--extra-fields=allow` instead.
   --allow-population-by-field-name
@@ -586,9 +595,14 @@ OpenAPI-only options:
                         deprecated. it will be removed in future releases
 
 General options:
+  --check               Verify generated files are up-to-date without modifying them. Exits
+                        with code 1 if differences found, 0 if up-to-date. Useful for CI to
+                        ensure generated code is committed.
   --debug               show debug message (require "debug". `$ pip install ''datamodel-code-
                         generator[debug]''`)
   --disable-warnings    disable warnings
+  --generate-cli-command
+                        Generate CLI command from pyproject.toml configuration and exit
   --generate-pyproject-config
                         Generate pyproject.toml configuration from the provided CLI
                         arguments and exit
