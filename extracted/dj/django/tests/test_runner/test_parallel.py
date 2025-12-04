@@ -7,7 +7,8 @@ from unittest.suite import TestSuite, _ErrorHolder
 
 from django.test import SimpleTestCase
 from django.test.runner import ParallelTestSuite, RemoteTestResult
-from django.utils.version import PY311, PY312
+
+from . import models
 
 try:
     import tblib.pickling_support
@@ -54,6 +55,9 @@ class ParallelTestRunnerTest(SimpleTestCase):
         for i in range(2):
             with self.subTest(index=i):
                 self.assertEqual(i, i)
+
+    def test_system_checks(self):
+        self.assertEqual(models.Person.system_check_run_count, 1)
 
 
 class SampleFailingSubtest(SimpleTestCase):
@@ -201,27 +205,21 @@ class RemoteTestResultTest(SimpleTestCase):
         subtest_test.run(result=result)
 
         events = result.events
-        # addDurations added in Python 3.12.
-        if PY312:
-            self.assertEqual(len(events), 5)
-        else:
-            self.assertEqual(len(events), 4)
+        self.assertEqual(len(events), 5)
         self.assertIs(result.wasSuccessful(), False)
 
         event = events[1]
         self.assertEqual(event[0], "addSubTest")
         self.assertEqual(
             str(event[2]),
-            "dummy_test (test_runner.test_parallel.SampleFailingSubtest%s) (index=0)"
-            # Python 3.11 uses fully qualified test name in the output.
-            % (".dummy_test" if PY311 else ""),
+            "dummy_test (test_runner.test_parallel.SampleFailingSubtest.dummy_test) "
+            "(index=0)",
         )
         self.assertEqual(repr(event[3][1]), "AssertionError('0 != 1')")
 
         event = events[2]
         self.assertEqual(repr(event[3][1]), "AssertionError('2 != 1')")
 
-    @unittest.skipUnless(PY312, "unittest --durations option requires Python 3.12")
     def test_add_duration(self):
         result = RemoteTestResult()
         result.addDuration(None, 2.3)
@@ -292,3 +290,28 @@ class ParallelTestSuiteTest(SimpleTestCase):
 
         self.assertEqual(len(result.errors), 0)
         self.assertEqual(len(result.failures), 0)
+
+    @unittest.skipUnless(tblib is not None, "requires tblib to be installed")
+    def test_buffer_mode_reports_setupclass_failure(self):
+        test = SampleErrorTest("dummy_test")
+        remote_result = RemoteTestResult()
+        suite = TestSuite([test])
+        suite.run(remote_result)
+
+        pts = ParallelTestSuite([suite], processes=2, buffer=True)
+        pts.serialized_aliases = set()
+        test_result = TestResult()
+        test_result.buffer = True
+
+        with unittest.mock.patch("multiprocessing.Pool") as mock_pool:
+
+            def fake_next(*args, **kwargs):
+                test_result.shouldStop = True
+                return (0, remote_result.events)
+
+            mock_pool.return_value.imap_unordered.return_value = unittest.mock.Mock(
+                next=fake_next
+            )
+            pts.run(test_result)
+
+        self.assertIn("ValueError: woops", test_result.errors[0][1])

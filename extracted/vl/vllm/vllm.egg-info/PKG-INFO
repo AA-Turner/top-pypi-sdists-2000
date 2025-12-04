@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: vllm
-Version: 0.11.2
+Version: 0.12.0
 Summary: A high-throughput and memory-efficient inference and serving engine for LLMs
 Author: vLLM Team
 License-Expression: Apache-2.0
@@ -40,17 +40,17 @@ Requires-Dist: pillow
 Requires-Dist: prometheus-fastapi-instrumentator>=7.0.0
 Requires-Dist: tiktoken>=0.6.0
 Requires-Dist: lm-format-enforcer==0.11.3
-Requires-Dist: llguidance<1.4.0,>=1.3.0; platform_machine == "x86_64" or platform_machine == "arm64" or platform_machine == "aarch64" or platform_machine == "s390x"
+Requires-Dist: llguidance<1.4.0,>=1.3.0; platform_machine == "x86_64" or platform_machine == "arm64" or platform_machine == "aarch64" or platform_machine == "s390x" or platform_machine == "ppc64le"
 Requires-Dist: outlines_core==0.2.11
 Requires-Dist: diskcache==5.6.3
 Requires-Dist: lark==1.2.2
-Requires-Dist: xgrammar==0.1.25; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64" or platform_machine == "s390x"
+Requires-Dist: xgrammar==0.1.27; platform_machine == "x86_64" or platform_machine == "aarch64" or platform_machine == "arm64" or platform_machine == "s390x" or platform_machine == "ppc64le"
 Requires-Dist: typing_extensions>=4.10
 Requires-Dist: filelock>=3.16.1
 Requires-Dist: partial-json-parser
 Requires-Dist: pyzmq>=25.0.0
 Requires-Dist: msgspec
-Requires-Dist: gguf>=0.13.0
+Requires-Dist: gguf>=0.17.0
 Requires-Dist: mistral_common[image]>=1.8.5
 Requires-Dist: opencv-python-headless>=4.11.0
 Requires-Dist: pyyaml
@@ -69,14 +69,13 @@ Requires-Dist: cbor2
 Requires-Dist: setproctitle
 Requires-Dist: openai-harmony>=0.0.3
 Requires-Dist: anthropic==0.71.0
-Requires-Dist: model-hosting-container-standards<1.0.0
+Requires-Dist: model-hosting-container-standards<1.0.0,>=0.1.9
 Requires-Dist: numba==0.61.2
 Requires-Dist: ray[cgraph]>=2.48.0
 Requires-Dist: torch==2.9.0
 Requires-Dist: torchaudio==2.9.0
 Requires-Dist: torchvision==0.24.0
-Requires-Dist: xformers==0.0.33.post1; platform_system == "Linux" and platform_machine == "x86_64"
-Requires-Dist: flashinfer-python==0.5.2
+Requires-Dist: flashinfer-python==0.5.3
 Provides-Extra: bench
 Requires-Dist: pandas; extra == "bench"
 Requires-Dist: matplotlib; extra == "bench"
@@ -123,6 +122,7 @@ Join us at the [PyTorch Conference, October 22-23](https://events.linuxfoundatio
 
 *Latest News* 🔥
 
+- [2025/11] We hosted [vLLM Bangkok Meetup](https://luma.com/v0f647nv). We explored vLLM and LMCache inference and low-resource language adaptation with speakers from Embedded LLM, AMD, and Red Hat. Please find the meetup slides [here](https://drive.google.com/drive/folders/1H0DS57F8HQ5q3kSOSoRmucPJWL3E0A_X?usp=sharing).
 - [2025/11] We hosted [the first vLLM Europe Meetup in Zurich](https://luma.com/0gls27kb) focused on quantization, distributed inference, and reinforcement learning at scale with speakers from Mistral, IBM, and Red Hat. Please find the meetup slides [here](https://docs.google.com/presentation/d/1UC9PTLCHYXQpOmJDSFg6Sljra3iVXzc09DeEI7dnxMc/edit?usp=sharing) and recording [here](https://www.youtube.com/watch?v=6m6ZE6yVEDI)
 - [2025/11] We hosted [vLLM Beijing Meetup](https://mp.weixin.qq.com/s/xSrYXjNgr1HbCP4ExYNG1w) focusing on distributed inference and diverse accelerator support with vLLM! Please find the meetup slides [here](https://drive.google.com/drive/folders/1nQJ8ZkLSjKxvu36sSHaceVXtttbLvvu-?usp=drive_link).
 - [2025/10] We hosted [vLLM Shanghai Meetup](https://mp.weixin.qq.com/s/__xb4OyOsImz-9eAVrdlcg) focused on hands-on vLLM inference optimization! Please find the meetup slides [here](https://drive.google.com/drive/folders/1KqwjsFJLfEsC8wlDugnrR61zsWHt94Q6).

@@ -91,6 +91,10 @@ class FileClient:
                 organization_id=self.organization_id,
             )
         else:
+            # Set buffer.name if not already set, so the upload uses external_file_id
+            # for file type detection
+            if not getattr(buffer, "name", None):
+                setattr(buffer, "name", external_file_id)
             return await self.client.files.upload_file(
                 upload_file=buffer,
                 external_file_id=external_file_id,

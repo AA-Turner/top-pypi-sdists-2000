@@ -193,9 +193,11 @@ def test_params_same_url_distinct_params(tmpdir, httpbin):
         assert cassette.play_count == 1
 
     other_params = {"other": "params"}
-    with vcr.use_cassette(str(tmpdir.join("get.yaml"))) as cassette:
-        with pytest.raises(vcr.errors.CannotOverwriteExistingCassetteException):
-            get(url, output="text", params=other_params)
+    with (
+        vcr.use_cassette(str(tmpdir.join("get.yaml"))) as cassette,
+        pytest.raises(vcr.errors.CannotOverwriteExistingCassetteException),
+    ):
+        get(url, output="text", params=other_params)
 
 
 @pytest.mark.online
@@ -262,12 +264,6 @@ def test_aiohttp_test_client_json(aiohttp_client, tmpdir):
     response_json = loop.run_until_complete(response.json())
     assert response_json is None
     assert cassette.play_count == 1
-
-
-def test_cleanup_from_pytest_asyncio():
-    # work around https://github.com/pytest-dev/pytest-asyncio/issues/724
-    asyncio.get_event_loop().close()
-    asyncio.set_event_loop(None)
 
 
 @pytest.mark.online

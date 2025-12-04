@@ -29,12 +29,12 @@ else:
     from django.test.selenium import SeleniumTestCase, SeleniumTestCaseBase
     from django.test.utils import NullTimeKeeper, TimeKeeper, get_runner
     from django.utils.deprecation import (
-        RemovedInDjango60Warning,
         RemovedInDjango61Warning,
+        RemovedInDjango70Warning,
     )
     from django.utils.functional import classproperty
     from django.utils.log import DEFAULT_LOGGING
-    from django.utils.version import PY312, PYPY
+    from django.utils.version import PYPY
 
 
 try:
@@ -46,7 +46,7 @@ else:
     warnings.filterwarnings("ignore", r"\(1003, *", category=MySQLdb.Warning)
 
 # Make deprecation warnings errors to ensure no usage of deprecated features.
-warnings.simplefilter("error", RemovedInDjango60Warning)
+warnings.simplefilter("error", RemovedInDjango70Warning)
 warnings.simplefilter("error", RemovedInDjango61Warning)
 # Make resource and runtime warning errors to ensure no usage of error prone
 # patterns.
@@ -247,6 +247,7 @@ def setup_collect_tests(start_at, start_after, test_labels=None):
     settings.LOGGING = log_config
     settings.SILENCED_SYSTEM_CHECKS = [
         "fields.W342",  # ForeignKey(unique=True) -> OneToOneField
+        "postgres.E005",  # django.contrib.postgres must be installed to use feature.
     ]
 
     # Load all the ALWAYS_INSTALLED_APPS.
@@ -691,15 +692,14 @@ if __name__ == "__main__":
             "Same as unittest -k option. Can be used multiple times."
         ),
     )
-    if PY312:
-        parser.add_argument(
-            "--durations",
-            dest="durations",
-            type=int,
-            default=None,
-            metavar="N",
-            help="Show the N slowest test cases (N=0 for all).",
-        )
+    parser.add_argument(
+        "--durations",
+        dest="durations",
+        type=int,
+        default=None,
+        metavar="N",
+        help="Show the N slowest test cases (N=0 for all).",
+    )
 
     options = parser.parse_args()
 
@@ -715,7 +715,8 @@ if __name__ == "__main__":
     if options.screenshots and options.tags:
         parser.error("--screenshots and --tag are mutually exclusive.")
 
-    # Allow including a trailing slash on app_labels for tab completion convenience
+    # Allow including a trailing slash on app_labels for tab completion
+    # convenience
     options.modules = [os.path.normpath(labels) for labels in options.modules]
 
     mutually_exclusive_options = [

@@ -1,5 +1,6 @@
 import logging
 import warnings
+from contextlib import suppress
 from io import BytesIO
 from urllib.parse import parse_qsl, urlparse
 
@@ -26,6 +27,15 @@ class Request:
             self.body = body
         self.headers = headers
         log.debug("Invoking Request %s", self.uri)
+
+    @property
+    def uri(self):
+        return self._uri
+
+    @uri.setter
+    def uri(self, uri):
+        self._uri = uri
+        self.parsed_uri = urlparse(uri)
 
     @property
     def headers(self):
@@ -61,30 +71,28 @@ class Request:
 
     @property
     def scheme(self):
-        return urlparse(self.uri).scheme
+        return self.parsed_uri.scheme
 
     @property
     def host(self):
-        return urlparse(self.uri).hostname
+        return self.parsed_uri.hostname
 
     @property
     def port(self):
-        parse_uri = urlparse(self.uri)
-        port = parse_uri.port
+        port = self.parsed_uri.port
         if port is None:
-            try:
-                port = {"https": 443, "http": 80}[parse_uri.scheme]
-            except KeyError:
-                pass
+            with suppress(KeyError):
+                port = {"https": 443, "http": 80}[self.parsed_uri.scheme]
+
         return port
 
     @property
     def path(self):
-        return urlparse(self.uri).path
+        return self.parsed_uri.path
 
     @property
     def query(self):
-        q = urlparse(self.uri).query
+        q = self.parsed_uri.query
         return sorted(parse_qsl(q))
 
     # alias for backwards compatibility

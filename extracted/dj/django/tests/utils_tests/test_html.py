@@ -5,7 +5,8 @@ from datetime import datetime
 from django.core.exceptions import SuspiciousOperation
 from django.core.serializers.json import DjangoJSONEncoder
 from django.test import SimpleTestCase
-from django.utils.deprecation import RemovedInDjango60Warning
+from django.test.utils import override_settings
+from django.utils.deprecation import RemovedInDjango70Warning
 from django.utils.functional import lazystr
 from django.utils.html import (
     conditional_escape,
@@ -24,6 +25,7 @@ from django.utils.html import (
 from django.utils.safestring import mark_safe
 
 
+@override_settings(URLIZE_ASSUME_HTTPS=True)
 class TestUtilsHtml(SimpleTestCase):
     def check_output(self, function, value, output=None):
         """
@@ -70,14 +72,10 @@ class TestUtilsHtml(SimpleTestCase):
         )
 
     def test_format_html_no_params(self):
-        msg = "Calling format_html() without passing args or kwargs is deprecated."
-        # RemovedInDjango60Warning: when the deprecation ends, replace with:
-        # msg = "args or kwargs must be provided."
-        # with self.assertRaisesMessage(TypeError, msg):
-        with self.assertWarnsMessage(RemovedInDjango60Warning, msg) as ctx:
+        msg = "args or kwargs must be provided."
+        with self.assertRaisesMessage(TypeError, msg):
             name = "Adam"
             self.assertEqual(format_html(f"<i>{name}</i>"), "<i>Adam</i>")
-        self.assertEqual(ctx.filename, __file__)
 
     def test_format_html_join_with_positional_arguments(self):
         self.assertEqual(
@@ -194,7 +192,8 @@ class TestUtilsHtml(SimpleTestCase):
                     strip_tags(value)
 
     def test_strip_tags_files(self):
-        # Test with more lengthy content (also catching performance regressions)
+        # Test with more lengthy content (also catching performance
+        # regressions)
         for filename in ("strip_tags1.html", "strip_tags2.txt"):
             with self.subTest(filename=filename):
                 path = os.path.join(os.path.dirname(__file__), "files", filename)
@@ -409,17 +408,17 @@ class TestUtilsHtml(SimpleTestCase):
         tests = (
             (
                 "Search for google.com/?q=! and see.",
-                'Search for <a href="http://google.com/?q=">google.com/?q=</a>! and '
+                'Search for <a href="https://google.com/?q=">google.com/?q=</a>! and '
                 "see.",
             ),
             (
                 "Search for google.com/?q=1&lt! and see.",
-                'Search for <a href="http://google.com/?q=1%3C">google.com/?q=1&lt'
+                'Search for <a href="https://google.com/?q=1%3C">google.com/?q=1&lt'
                 "</a>! and see.",
             ),
             (
                 lazystr("Search for google.com/?q=!"),
-                'Search for <a href="http://google.com/?q=">google.com/?q=</a>!',
+                'Search for <a href="https://google.com/?q=">google.com/?q=</a>!',
             ),
             (
                 "http://www.foo.bar/",
@@ -428,7 +427,7 @@ class TestUtilsHtml(SimpleTestCase):
             (
                 "Look on www.نامه‌ای.com.",
                 "Look on <a "
-                'href="http://www.%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D8%A7%DB%8C.com"'
+                'href="https://www.%D9%86%D8%A7%D9%85%D9%87%E2%80%8C%D8%A7%DB%8C.com"'
                 ">www.نامه‌ای.com</a>.",
             ),
             ("foo@example.com", '<a href="mailto:foo@example.com">foo@example.com</a>'),
@@ -457,10 +456,27 @@ class TestUtilsHtml(SimpleTestCase):
                 '<a href="mailto:idna-2008@%DE%89%DE%A8%DE%80%DE%A7%DE%83%DE%AA.ex'
                 'ample.mv">idna-2008@މިހާރު.example.mv</a>',
             ),
+            (
+                "host.djangoproject.com",
+                '<a href="https://host.djangoproject.com">host.djangoproject.com</a>',
+            ),
         )
         for value, output in tests:
             with self.subTest(value=value):
                 self.assertEqual(urlize(value), output)
+
+    @override_settings(URLIZE_ASSUME_HTTPS=False)
+    def test_urlize_http_default_warning(self):
+        msg = (
+            "The default protocol will be changed from HTTP to HTTPS in Django 7.0. "
+            "Set the URLIZE_ASSUME_HTTPS transitional setting to True to opt into "
+            "using HTTPS as the new default protocol."
+        )
+        with self.assertWarnsMessage(RemovedInDjango70Warning, msg):
+            self.assertEqual(
+                urlize("Visit example.com"),
+                'Visit <a href="http://example.com">example.com</a>',
+            )
 
     def test_urlize_unchanged_inputs(self):
         tests = (
@@ -477,6 +493,7 @@ class TestUtilsHtml(SimpleTestCase):
             "foo@localhost.",
             "test@example?;+!.com",
             "email me@example.com,then I'll respond",
+            "[a link](https://www.djangoproject.com/)",
             # trim_punctuation catastrophic tests
             "(" * 100_000 + ":" + ")" * 100_000,
             "(" * 100_000 + "&:" + ")" * 100_000,

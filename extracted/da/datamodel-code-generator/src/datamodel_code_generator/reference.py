@@ -283,11 +283,33 @@ class FieldNameResolver:
         return new_name
 
     def get_valid_field_name_and_alias(
-        self, field_name: str, excludes: set[str] | None = None
+        self,
+        field_name: str,
+        excludes: set[str] | None = None,
+        path: list[str] | None = None,
+        class_name: str | None = None,
     ) -> tuple[str, str | None]:
-        """Get valid field name and original alias if different."""
+        """Get valid field name and original alias if different.
+
+        Supports hierarchical alias resolution with the following priority:
+        1. Scoped aliases (ClassName.field_name) - class-level specificity
+        2. Flat aliases (field_name) - applies to all occurrences
+
+        Args:
+            field_name: The original field name from the schema.
+            excludes: Set of names to avoid when generating valid names.
+            path: Unused, kept for backward compatibility.
+            class_name: Optional class name for scoped alias resolution.
+        """
+        del path
+        if class_name:
+            scoped_key = f"{class_name}.{field_name}"
+            if scoped_key in self.aliases:
+                return self.aliases[scoped_key], field_name
+
         if field_name in self.aliases:
             return self.aliases[field_name], field_name
+
         valid_name = self.get_valid_name(field_name, excludes=excludes)
         return (
             valid_name,
@@ -390,6 +412,7 @@ class ModelResolver:  # noqa: PLR0904
         no_alias: bool = False,  # noqa: FBT001, FBT002
         remove_suffix_number: bool = False,  # noqa: FBT001, FBT002
         parent_scoped_naming: bool = False,  # noqa: FBT001, FBT002
+        treat_dot_as_module: bool = False,  # noqa: FBT001, FBT002
     ) -> None:
         """Initialize model resolver with naming and resolution options."""
         self.references: dict[str, Reference] = {}
@@ -425,6 +448,7 @@ class ModelResolver:  # noqa: PLR0904
         self._current_base_path: Path | None = self._base_path
         self.remove_suffix_number: bool = remove_suffix_number
         self.parent_scoped_naming = parent_scoped_naming
+        self.treat_dot_as_module = treat_dot_as_module
 
     @property
     def current_base_path(self) -> Path | None:
@@ -767,9 +791,25 @@ class ModelResolver:  # noqa: PLR0904
         field_name: str,
         excludes: set[str] | None = None,
         model_type: ModelType = ModelType.PYDANTIC,
+        path: list[str] | None = None,
+        class_name: str | None = None,
     ) -> tuple[str, str | None]:
-        """Get a valid field name and alias for the specified model type."""
-        return self.field_name_resolvers[model_type].get_valid_field_name_and_alias(field_name, excludes)
+        """Get a valid field name and alias for the specified model type.
+
+        Args:
+            field_name: The original field name from the schema.
+            excludes: Set of names to avoid when generating valid names.
+            model_type: The type of model (PYDANTIC, ENUM, or CLASS).
+            path: Unused, kept for backward compatibility.
+            class_name: Optional class name for scoped alias resolution.
+
+        Returns:
+            A tuple of (valid_field_name, alias_or_none).
+        """
+        del path
+        return self.field_name_resolvers[model_type].get_valid_field_name_and_alias(
+            field_name, excludes, class_name=class_name
+        )
 
 
 def _get_inflect_engine() -> inflect.engine:

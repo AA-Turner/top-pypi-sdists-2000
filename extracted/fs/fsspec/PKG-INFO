@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: fsspec
-Version: 2025.10.0
+Version: 2025.12.0
 Summary: File-system specification
 Project-URL: Changelog, https://filesystem-spec.readthedocs.io/en/latest/changelog.html
 Project-URL: Documentation, https://filesystem-spec.readthedocs.io/en/latest/
@@ -12,12 +12,12 @@ Keywords: file
 Classifier: Development Status :: 4 - Beta
 Classifier: Intended Audience :: Developers
 Classifier: Operating System :: OS Independent
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
 Classifier: Programming Language :: Python :: 3.13
-Requires-Python: >=3.9
+Classifier: Programming Language :: Python :: 3.14
+Requires-Python: >=3.10
 Provides-Extra: abfs
 Requires-Dist: adlfs; extra == 'abfs'
 Provides-Extra: adl
@@ -197,7 +197,7 @@ CI runtime. For local use, pick a version suitable for you.
 
 ```bash
 # For a new environment (mamba / conda).
-mamba create -n fsspec -c conda-forge  python=3.9 -y
+mamba create -n fsspec -c conda-forge  python=3.10 -y
 conda activate fsspec
 
 # Standard dev install with docs and tests.

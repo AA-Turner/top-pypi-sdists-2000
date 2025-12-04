@@ -1656,4 +1656,218 @@ func<CURSOR>_alias()
           |
         ");
     }
+
+    #[test]
+    fn stub_target() {
+        let test = CursorTest::builder()
+            .source(
+                "path.pyi",
+                r#"
+                class Path:
+                    def __init__(self, path: str): ...
+            "#,
+            )
+            .source(
+                "path.py",
+                r#"
+                class Path:
+                    def __init__(self, path: str):
+                        self.path = path
+            "#,
+            )
+            .source(
+                "importer.py",
+                r#"
+                from path import Path<CURSOR>
+
+                a: Path = Path("test")
+                "#,
+            )
+            .build();
+
+        assert_snapshot!(test.references(), @r###"
+        info[references]: Reference 1
+         --> path.pyi:2:7
+          |
+        2 | class Path:
+          |       ^^^^
+        3 |     def __init__(self, path: str): ...
+          |
+
+        info[references]: Reference 2
+         --> importer.py:2:18
+          |
+        2 | from path import Path
+          |                  ^^^^
+        3 |
+        4 | a: Path = Path("test")
+          |
+
+        info[references]: Reference 3
+         --> importer.py:4:4
+          |
+        2 | from path import Path
+        3 |
+        4 | a: Path = Path("test")
+          |    ^^^^
+          |
+
+        info[references]: Reference 4
+         --> importer.py:4:11
+          |
+        2 | from path import Path
+        3 |
+        4 | a: Path = Path("test")
+          |           ^^^^
+          |
+        "###);
+    }
+
+    #[test]
+    fn import_alias() {
+        let test = CursorTest::builder()
+            .source(
+                "main.py",
+                r#"
+                import warnings
+                import warnings as <CURSOR>abc
+
+                x = abc
+                y = warnings
+            "#,
+            )
+            .build();
+
+        assert_snapshot!(test.references(), @r"
+        info[references]: Reference 1
+         --> main.py:3:20
+          |
+        2 | import warnings
+        3 | import warnings as abc
+          |                    ^^^
+        4 |
+        5 | x = abc
+          |
+
+        info[references]: Reference 2
+         --> main.py:5:5
+          |
+        3 | import warnings as abc
+        4 |
+        5 | x = abc
+          |     ^^^
+        6 | y = warnings
+          |
+        ");
+    }
+
+    #[test]
+    fn import_alias_use() {
+        let test = CursorTest::builder()
+            .source(
+                "main.py",
+                r#"
+                import warnings
+                import warnings as abc
+
+                x = abc<CURSOR>
+                y = warnings
+            "#,
+            )
+            .build();
+
+        assert_snapshot!(test.references(), @r"
+        info[references]: Reference 1
+         --> main.py:3:20
+          |
+        2 | import warnings
+        3 | import warnings as abc
+          |                    ^^^
+        4 |
+        5 | x = abc
+          |
+
+        info[references]: Reference 2
+         --> main.py:5:5
+          |
+        3 | import warnings as abc
+        4 |
+        5 | x = abc
+          |     ^^^
+        6 | y = warnings
+          |
+        ");
+    }
+
+    #[test]
+    fn import_from_alias() {
+        let test = CursorTest::builder()
+            .source(
+                "main.py",
+                r#"
+                from warnings import deprecated as xyz<CURSOR>
+                from warnings import deprecated
+
+                y = xyz
+                z = deprecated
+            "#,
+            )
+            .build();
+
+        assert_snapshot!(test.references(), @r"
+        info[references]: Reference 1
+         --> main.py:2:36
+          |
+        2 | from warnings import deprecated as xyz
+          |                                    ^^^
+        3 | from warnings import deprecated
+          |
+
+        info[references]: Reference 2
+         --> main.py:5:5
+          |
+        3 | from warnings import deprecated
+        4 |
+        5 | y = xyz
+          |     ^^^
+        6 | z = deprecated
+          |
+        ");
+    }
+
+    #[test]
+    fn import_from_alias_use() {
+        let test = CursorTest::builder()
+            .source(
+                "main.py",
+                r#"
+                from warnings import deprecated as xyz
+                from warnings import deprecated
+
+                y = xyz<CURSOR>
+                z = deprecated
+            "#,
+            )
+            .build();
+
+        assert_snapshot!(test.references(), @r"
+        info[references]: Reference 1
+         --> main.py:2:36
+          |
+        2 | from warnings import deprecated as xyz
+          |                                    ^^^
+        3 | from warnings import deprecated
+          |
+
+        info[references]: Reference 2
+         --> main.py:5:5
+          |
+        3 | from warnings import deprecated
+        4 |
+        5 | y = xyz
+          |     ^^^
+        6 | z = deprecated
+          |
+        ");
+    }
 }
