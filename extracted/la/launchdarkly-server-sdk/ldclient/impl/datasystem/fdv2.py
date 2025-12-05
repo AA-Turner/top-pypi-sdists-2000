@@ -295,12 +295,6 @@ class FDv2(DataSystem):
                 wrapper, writable, self._data_store_status_provider
             )
 
-        # Flag tracker (evaluation function set later by client)
-        self._flag_tracker = FlagTrackerImpl(
-            self._flag_change_listeners,
-            lambda key, context: None  # Placeholder, replaced by client
-        )
-
         # Threading
         self._stop_event = Event()
         self._lock = ReadWriteLock()
@@ -409,9 +403,10 @@ class FDv2(DataSystem):
                 # Apply the basis to the store
                 self._store.apply(basis.change_set, basis.persist)
 
-                # Set ready event
-                if not set_on_ready.is_set():
+                # Set ready event if an only if a selector is defined for the changeset
+                if basis.change_set.selector is not None and basis.change_set.selector.is_defined():
                     set_on_ready.set()
+                    return
             except Exception as e:
                 log.error("Initializer failed with exception: %s", e)
 
@@ -658,14 +653,6 @@ class FDv2(DataSystem):
         """Get the underlying store for flag evaluation."""
         return self._store.get_active_store()
 
-    def set_flag_value_eval_fn(self, eval_fn):
-        """
-        Set the flag value evaluation function for the flag tracker.
-
-        :param eval_fn: Function with signature (key: str, context: Context) -> Any
-        """
-        self._flag_tracker = FlagTrackerImpl(self._flag_change_listeners, eval_fn)
-
     @property
     def data_source_status_provider(self) -> DataSourceStatusProvider:
         """Get the data source status provider."""
@@ -677,9 +664,9 @@ class FDv2(DataSystem):
         return self._data_store_status_provider
 
     @property
-    def flag_tracker(self) -> FlagTracker:
-        """Get the flag tracker for monitoring flag changes."""
-        return self._flag_tracker
+    def flag_change_listeners(self) -> Listeners:
+        """Get the collection of listeners for flag change events."""
+        return self._flag_change_listeners
 
     @property
     def data_availability(self) -> DataAvailability:

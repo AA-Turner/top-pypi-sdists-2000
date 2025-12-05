@@ -34,7 +34,7 @@ setup(
     include_package_data=True,
     python_requires=">=3.10,<3.14",
     install_requires=[
-        "dagster==1.12.3",
+        "dagster==1.12.4",
         "graphene>=3,<4",
         "gql[requests]>=3,<4",
         "requests",

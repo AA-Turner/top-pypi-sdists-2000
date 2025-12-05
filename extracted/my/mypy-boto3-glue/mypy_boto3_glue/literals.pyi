@@ -99,6 +99,7 @@ __all__ = (
     "IcebergSortDirectionType",
     "IcebergStructTypeEnumType",
     "IcebergTargetCompressionTypeType",
+    "IcebergUpdateActionType",
     "InclusionAnnotationValueType",
     "IntegrationStatusType",
     "JDBCConnectionTypeType",
@@ -110,6 +111,7 @@ __all__ = (
     "JoinTypeType",
     "LanguageType",
     "LastCrawlStatusType",
+    "LastRefreshTypeType",
     "ListBlueprintsPaginatorName",
     "ListConnectionTypesPaginatorName",
     "ListEntitiesPaginatorName",
@@ -462,6 +464,19 @@ IcebergNullOrderType = Literal["nulls-first", "nulls-last"]
 IcebergSortDirectionType = Literal["asc", "desc"]
 IcebergStructTypeEnumType = Literal["struct"]
 IcebergTargetCompressionTypeType = Literal["gzip", "lzo", "snappy", "uncompressed"]
+IcebergUpdateActionType = Literal[
+    "add-encryption-key",
+    "add-schema",
+    "add-sort-order",
+    "add-spec",
+    "remove-encryption-key",
+    "remove-properties",
+    "set-current-schema",
+    "set-default-sort-order",
+    "set-default-spec",
+    "set-location",
+    "set-properties",
+]
 InclusionAnnotationValueType = Literal["EXCLUDE", "INCLUDE"]
 IntegrationStatusType = Literal[
     "ACTIVE", "CREATING", "DELETING", "FAILED", "MODIFYING", "NEEDS_ATTENTION", "SYNCING"
@@ -526,6 +541,7 @@ JobRunStateType = Literal[
 JoinTypeType = Literal["equijoin", "left", "leftanti", "leftsemi", "outer", "right"]
 LanguageType = Literal["PYTHON", "SCALA"]
 LastCrawlStatusType = Literal["CANCELLED", "FAILED", "SUCCEEDED"]
+LastRefreshTypeType = Literal["FULL", "INCREMENTAL"]
 ListBlueprintsPaginatorName = Literal["list_blueprints"]
 ListConnectionTypesPaginatorName = Literal["list_connection_types"]
 ListEntitiesPaginatorName = Literal["list_entities"]
@@ -729,6 +745,7 @@ ServiceName = Literal[
     "comprehend",
     "comprehendmedical",
     "compute-optimizer",
+    "compute-optimizer-automation",
     "config",
     "connect",
     "connect-contact-lens",
@@ -909,6 +926,7 @@ ServiceName = Literal[
     "networkmonitor",
     "notifications",
     "notificationscontacts",
+    "nova-act",
     "oam",
     "observabilityadmin",
     "odb",
@@ -919,6 +937,8 @@ ServiceName = Literal[
     "osis",
     "outposts",
     "panorama",
+    "partnercentral-account",
+    "partnercentral-benefits",
     "partnercentral-channel",
     "partnercentral-selling",
     "payment-cryptography",
@@ -961,6 +981,7 @@ ServiceName = Literal[
     "route53-recovery-control-config",
     "route53-recovery-readiness",
     "route53domains",
+    "route53globalresolver",
     "route53profiles",
     "route53resolver",
     "rtbfabric",

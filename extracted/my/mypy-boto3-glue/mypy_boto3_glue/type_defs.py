@@ -80,6 +80,7 @@ from .literals import (
     IcebergNullOrderType,
     IcebergSortDirectionType,
     IcebergTargetCompressionTypeType,
+    IcebergUpdateActionType,
     InclusionAnnotationValueType,
     IntegrationStatusType,
     JDBCConnectionTypeType,
@@ -91,6 +92,7 @@ from .literals import (
     JoinTypeType,
     LanguageType,
     LastCrawlStatusType,
+    LastRefreshTypeType,
     LogicalType,
     MLUserDataEncryptionModeStringType,
     NodeTypeType,
@@ -753,6 +755,7 @@ __all__ = (
     "HudiTargetTypeDef",
     "IcebergCompactionConfigurationTypeDef",
     "IcebergCompactionMetricsTypeDef",
+    "IcebergEncryptedKeyTypeDef",
     "IcebergInputTypeDef",
     "IcebergOptimizationPropertiesOutputTypeDef",
     "IcebergOptimizationPropertiesTypeDef",
@@ -3324,6 +3327,13 @@ class S3SourceAdditionalOptionsTypeDef(TypedDict):
     BoundedFiles: NotRequired[int]
 
 
+class IcebergEncryptedKeyTypeDef(TypedDict):
+    KeyId: str
+    EncryptedKeyMetadata: str
+    EncryptedById: NotRequired[str]
+    Properties: NotRequired[Mapping[str, str]]
+
+
 class IcebergOrphanFileDeletionConfigurationTypeDef(TypedDict):
     orphanFileRetentionPeriodInDays: NotRequired[int]
     location: NotRequired[str]
@@ -3368,6 +3378,8 @@ IcebergStructFieldTypeDef = TypedDict(
         "Type": Mapping[str, Any],
         "Required": bool,
         "Doc": NotRequired[str],
+        "InitialDefault": NotRequired[Mapping[str, Any]],
+        "WriteDefault": NotRequired[Mapping[str, Any]],
     },
 )
 
@@ -6416,13 +6428,23 @@ class ViewDefinitionInputTypeDef(TypedDict):
     IsProtected: NotRequired[bool]
     Definer: NotRequired[str]
     Representations: NotRequired[Sequence[ViewRepresentationInputTypeDef]]
+    ViewVersionId: NotRequired[int]
+    ViewVersionToken: NotRequired[str]
+    RefreshSeconds: NotRequired[int]
+    LastRefreshType: NotRequired[LastRefreshTypeType]
     SubObjects: NotRequired[Sequence[str]]
+    SubObjectVersionIds: NotRequired[Sequence[int]]
 
 
 class ViewDefinitionTypeDef(TypedDict):
     IsProtected: NotRequired[bool]
     Definer: NotRequired[str]
+    ViewVersionId: NotRequired[int]
+    ViewVersionToken: NotRequired[str]
+    RefreshSeconds: NotRequired[int]
+    LastRefreshType: NotRequired[LastRefreshTypeType]
     SubObjects: NotRequired[list[str]]
+    SubObjectVersionIds: NotRequired[list[int]]
     Representations: NotRequired[list[ViewRepresentationTypeDef]]
 
 
@@ -7656,6 +7678,9 @@ class IcebergTableUpdateTypeDef(TypedDict):
     PartitionSpec: NotRequired[IcebergPartitionSpecTypeDef]
     SortOrder: NotRequired[IcebergSortOrderTypeDef]
     Properties: NotRequired[Mapping[str, str]]
+    Action: NotRequired[IcebergUpdateActionType]
+    EncryptionKey: NotRequired[IcebergEncryptedKeyTypeDef]
+    KeyId: NotRequired[str]
 
 
 class CreateIntegrationRequestTypeDef(TypedDict):
@@ -8575,6 +8600,7 @@ class TablePaginatorTypeDef(TypedDict):
     FederatedTable: NotRequired[FederatedTableTypeDef]
     ViewDefinition: NotRequired[ViewDefinitionTypeDef]
     IsMultiDialectView: NotRequired[bool]
+    IsMaterializedView: NotRequired[bool]
     Status: NotRequired[TableStatusPaginatorTypeDef]
 
 
@@ -8602,6 +8628,7 @@ class TableTypeDef(TypedDict):
     FederatedTable: NotRequired[FederatedTableTypeDef]
     ViewDefinition: NotRequired[ViewDefinitionTypeDef]
     IsMultiDialectView: NotRequired[bool]
+    IsMaterializedView: NotRequired[bool]
     Status: NotRequired[TableStatusTypeDef]
 
 
@@ -9065,6 +9092,7 @@ class GetUnfilteredTableMetadataResponseTypeDef(TypedDict):
     CellFilters: list[ColumnRowFilterTypeDef]
     QueryAuthorizationId: str
     IsMultiDialectView: bool
+    IsMaterializedView: bool
     ResourceArn: str
     IsProtected: bool
     Permissions: list[PermissionType]

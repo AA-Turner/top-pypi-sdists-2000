@@ -15,7 +15,7 @@ import httpx
 import orjson
 import structlog
 import uvicorn
-from langchain_core.runnables.config import RunnableConfig
+from langchain_core.runnables.config import RunnableConfig, merge_configs
 from langchain_core.runnables.graph import Edge, Node
 from langchain_core.runnables.graph import Graph as DrawableGraph
 from langchain_core.runnables.schema import (
@@ -49,6 +49,7 @@ from langgraph_api.js.sse import SSEDecoder, aiter_lines_raw
 from langgraph_api.route import ApiResponse
 from langgraph_api.schema import Config
 from langgraph_api.serde import json_dumpb
+from langgraph_api.utils import get_auth_ctx, get_user_id
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -170,9 +171,9 @@ class RemotePregel(BaseRemotePregel):
             "getGraph",
             {
                 "graph_id": self.graph_id,
-                "graph_config": self.config,
+                "graph_config": self._inject_auth_to_config(self.config),
                 "graph_name": self.name,
-                "config": config,
+                "config": self._inject_auth_to_config(config),
                 "xray": xray,
             },
         )
@@ -211,11 +212,11 @@ class RemotePregel(BaseRemotePregel):
             "getSubgraphs",
             {
                 "graph_id": self.graph_id,
-                "graph_config": self.config,
+                "graph_config": self._inject_auth_to_config(self.config),
                 "graph_name": self.name,
                 "namespace": namespace,
                 "recurse": recurse,
-                "config": config,
+                "config": self._inject_auth_to_config(config),
             },
         )
 
@@ -266,9 +267,9 @@ class RemotePregel(BaseRemotePregel):
                 "getState",
                 {
                     "graph_id": self.graph_id,
-                    "graph_config": self.config,
+                    "graph_config": self._inject_auth_to_config(self.config),
                     "graph_name": self.name,
-                    "config": config,
+                    "config": self._inject_auth_to_config(config),
                     "subgraphs": subgraphs,
                 },
             )
@@ -284,9 +285,9 @@ class RemotePregel(BaseRemotePregel):
             "updateState",
             {
                 "graph_id": self.graph_id,
-                "graph_config": self.config,
+                "graph_config": self._inject_auth_to_config(self.config),
                 "graph_name": self.name,
-                "config": config,
+                "config": self._inject_auth_to_config(config),
                 "values": values,
                 "as_node": as_node,
             },
@@ -305,9 +306,9 @@ class RemotePregel(BaseRemotePregel):
             "getStateHistory",
             {
                 "graph_id": self.graph_id,
-                "graph_config": self.config,
+                "graph_config": self._inject_auth_to_config(self.config),
                 "graph_name": self.name,
-                "config": config,
+                "config": self._inject_auth_to_config(config),
                 "limit": limit,
                 "filter": filter,
                 "before": before,
@@ -352,6 +353,27 @@ class RemotePregel(BaseRemotePregel):
             graph_id=self.graph_id,
         )
         return result["nodesExecuted"]
+
+    def _inject_auth_to_config(self, config: RunnableConfig | Config):
+        if ctx := get_auth_ctx():
+            user_id = get_user_id(cast("BaseUser | None", ctx.user))
+
+            # Skip if cannot serialize the user to JSON
+            if not hasattr(ctx.user, "model_dump"):
+                return config
+
+            return merge_configs(
+                config,
+                {
+                    "configurable": {
+                        "langgraph_auth_user": ctx.user,
+                        "langgraph_auth_user_id": user_id,
+                        "langgraph_auth_permissions": list(ctx.permissions),
+                    }
+                },
+            )
+
+        return config
 
 
 async def run_js_process(paths_str: str | None, watch: bool = False):

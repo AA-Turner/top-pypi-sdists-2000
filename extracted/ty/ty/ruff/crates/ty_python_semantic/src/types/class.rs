@@ -340,9 +340,18 @@ impl<'db> From<GenericAlias<'db>> for Type<'db> {
     }
 }
 
+fn variance_of_cycle_initial<'db>(
+    _db: &'db dyn Db,
+    _id: salsa::Id,
+    _self: GenericAlias<'db>,
+    _typevar: BoundTypeVarInstance<'db>,
+) -> TypeVarVariance {
+    TypeVarVariance::Bivariant
+}
+
 #[salsa::tracked]
 impl<'db> VarianceInferable<'db> for GenericAlias<'db> {
-    #[salsa::tracked(heap_size=ruff_memory_usage::heap_size)]
+    #[salsa::tracked(heap_size=ruff_memory_usage::heap_size, cycle_initial=variance_of_cycle_initial)]
     fn variance_of(self, db: &'db dyn Db, typevar: BoundTypeVarInstance<'db>) -> TypeVarVariance {
         let origin = self.origin(db);
 
@@ -5841,7 +5850,7 @@ impl SlotsKind {
 mod tests {
     use super::*;
     use crate::db::tests::setup_db;
-    use crate::module_resolver::resolve_module;
+    use crate::module_resolver::resolve_module_confident;
     use crate::{PythonVersionSource, PythonVersionWithSource};
     use salsa::Setter;
     use strum::IntoEnumIterator;
@@ -5857,7 +5866,8 @@ mod tests {
             });
         for class in KnownClass::iter() {
             let class_name = class.name(&db);
-            let class_module = resolve_module(&db, &class.canonical_module(&db).name()).unwrap();
+            let class_module =
+                resolve_module_confident(&db, &class.canonical_module(&db).name()).unwrap();
 
             assert_eq!(
                 KnownClass::try_from_file_and_name(

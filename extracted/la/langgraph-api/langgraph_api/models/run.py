@@ -3,11 +3,10 @@ import contextlib
 import time
 import uuid
 from collections.abc import Mapping, Sequence
-from typing import Any, NamedTuple, cast
+from typing import TYPE_CHECKING, Any, NamedTuple, cast
 from uuid import UUID
 
 import structlog
-from starlette.authentication import BaseUser
 from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
@@ -24,10 +23,13 @@ from langgraph_api.schema import (
     RunCommand,
     StreamMode,
 )
-from langgraph_api.utils import AsyncConnectionProto, get_auth_ctx
+from langgraph_api.utils import AsyncConnectionProto, get_auth_ctx, get_user_id
 from langgraph_api.utils.headers import get_configurable_headers
 from langgraph_api.utils.uuids import uuid7
 from langgraph_runtime.ops import Runs
+
+if TYPE_CHECKING:
+    from starlette.authentication import BaseUser
 
 logger = structlog.stdlib.get_logger(__name__)
 
@@ -164,18 +166,6 @@ def assign_defaults(
     multitask_strategy = payload.get("multitask_strategy") or "enqueue"
     prevent_insert_if_inflight = multitask_strategy == "reject"
     return stream_mode, multitask_strategy, prevent_insert_if_inflight
-
-
-def get_user_id(user: BaseUser | None) -> str | None:
-    if user is None:
-        return None
-    try:
-        return user.identity
-    except NotImplementedError:
-        try:
-            return user.display_name
-        except NotImplementedError:
-            pass
 
 
 async def create_valid_run(

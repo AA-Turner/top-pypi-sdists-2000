@@ -25,21 +25,70 @@ class InvocationMetrics(google.protobuf.message.Message):
 
     DESCRIPTOR: google.protobuf.descriptor.Descriptor
 
+    @typing.final
+    class NodeTypeCountsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.int
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.int = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
+
+    @typing.final
+    class StatusCountsEntry(google.protobuf.message.Message):
+        DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+        KEY_FIELD_NUMBER: builtins.int
+        VALUE_FIELD_NUMBER: builtins.int
+        key: builtins.str
+        value: builtins.int
+        def __init__(
+            self,
+            *,
+            key: builtins.str = ...,
+            value: builtins.int = ...,
+        ) -> None: ...
+        def ClearField(self, field_name: typing.Literal["key", b"key", "value", b"value"]) -> None: ...
+
     TOTAL_ERRORS_FIELD_NUMBER: builtins.int
     TOTAL_WARNINGS_FIELD_NUMBER: builtins.int
     AUTOFIX_SUGGESTIONS_FIELD_NUMBER: builtins.int
+    NODE_TYPE_COUNTS_FIELD_NUMBER: builtins.int
+    STATUS_COUNTS_FIELD_NUMBER: builtins.int
     total_errors: builtins.int
     total_warnings: builtins.int
     autofix_suggestions: builtins.int
+    @property
+    def node_type_counts(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.int]:
+        """Counts of nodes processed by node type (e.g., "model", "test", "seed").
+        Key is the lowercase node type name.
+        """
+
+    @property
+    def status_counts(self) -> google.protobuf.internal.containers.ScalarMap[builtins.str, builtins.int]:
+        """Counts of node outcomes by status category.
+        Keys are: "success", "warn", "error", "reused", "skipped", "canceled", "no_op".
+        Only non-zero counts are included.
+        """
+
     def __init__(
         self,
         *,
         total_errors: builtins.int | None = ...,
         total_warnings: builtins.int | None = ...,
         autofix_suggestions: builtins.int | None = ...,
+        node_type_counts: collections.abc.Mapping[builtins.str, builtins.int] | None = ...,
+        status_counts: collections.abc.Mapping[builtins.str, builtins.int] | None = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["_autofix_suggestions", b"_autofix_suggestions", "_total_errors", b"_total_errors", "_total_warnings", b"_total_warnings", "autofix_suggestions", b"autofix_suggestions", "total_errors", b"total_errors", "total_warnings", b"total_warnings"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["_autofix_suggestions", b"_autofix_suggestions", "_total_errors", b"_total_errors", "_total_warnings", b"_total_warnings", "autofix_suggestions", b"autofix_suggestions", "total_errors", b"total_errors", "total_warnings", b"total_warnings"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["_autofix_suggestions", b"_autofix_suggestions", "_total_errors", b"_total_errors", "_total_warnings", b"_total_warnings", "autofix_suggestions", b"autofix_suggestions", "node_type_counts", b"node_type_counts", "status_counts", b"status_counts", "total_errors", b"total_errors", "total_warnings", b"total_warnings"]) -> None: ...
     @typing.overload
     def WhichOneof(self, oneof_group: typing.Literal["_autofix_suggestions", b"_autofix_suggestions"]) -> typing.Literal["autofix_suggestions"] | None: ...
     @typing.overload
@@ -218,6 +267,7 @@ class Invocation(google.protobuf.message.Message):
     EVAL_ARGS_FIELD_NUMBER: builtins.int
     PROCESS_INFO_FIELD_NUMBER: builtins.int
     METRICS_FIELD_NUMBER: builtins.int
+    PARENT_SPAN_ID_FIELD_NUMBER: builtins.int
     invocation_id: builtins.str
     """UUID string for the invocation id, either as passed in via args or generated (UUIDv7 in that case).
     Note, that `trace_id` is the same value stored as bytes and generally preferred
@@ -225,6 +275,10 @@ class Invocation(google.protobuf.message.Message):
     """
     raw_command: builtins.str
     """Raw command string as executed."""
+    parent_span_id: builtins.int
+    """Optional parent span ID for trace correlation.
+    This allows linking this invocation to an external trace.
+    """
     @property
     def eval_args(self) -> Global___InvocationEvalArgs:
         """Structured evaluation arguments."""
@@ -245,8 +299,10 @@ class Invocation(google.protobuf.message.Message):
         eval_args: Global___InvocationEvalArgs | None = ...,
         process_info: dbtlabs.proto.public.v1.events.fusion.process.process_pb2.Process | None = ...,
         metrics: Global___InvocationMetrics | None = ...,
+        parent_span_id: builtins.int | None = ...,
     ) -> None: ...
-    def HasField(self, field_name: typing.Literal["eval_args", b"eval_args", "metrics", b"metrics", "process_info", b"process_info"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["eval_args", b"eval_args", "invocation_id", b"invocation_id", "metrics", b"metrics", "process_info", b"process_info", "raw_command", b"raw_command"]) -> None: ...
+    def HasField(self, field_name: typing.Literal["_parent_span_id", b"_parent_span_id", "eval_args", b"eval_args", "metrics", b"metrics", "parent_span_id", b"parent_span_id", "process_info", b"process_info"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["_parent_span_id", b"_parent_span_id", "eval_args", b"eval_args", "invocation_id", b"invocation_id", "metrics", b"metrics", "parent_span_id", b"parent_span_id", "process_info", b"process_info", "raw_command", b"raw_command"]) -> None: ...
+    def WhichOneof(self, oneof_group: typing.Literal["_parent_span_id", b"_parent_span_id"]) -> typing.Literal["parent_span_id"] | None: ...
 
 Global___Invocation: typing_extensions.TypeAlias = Invocation

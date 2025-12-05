@@ -239,9 +239,6 @@ if user_router:
             app.exception_handlers[k] = v
         else:
             logger.debug(f"Overriding exception handler for {k}")
-    # If the user creates a loopback client with `get_client() (no url)
-    # this will update the http transport to connect to the right app
-    configure_loopback_transports(app)
 else:
     # It's a regular starlette app
     app = Starlette(
@@ -257,6 +254,9 @@ else:
         exception_handlers=exception_handlers,
     )
 
+# If the user creates a loopback client with `get_client() (no url)
+# this will update the http transport to connect to the right app
+configure_loopback_transports(app)
 
 if config.MOUNT_PREFIX:
     prefix = config.MOUNT_PREFIX

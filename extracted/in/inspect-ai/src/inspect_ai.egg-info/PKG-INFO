@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: inspect_ai
-Version: 0.3.151
+Version: 0.3.152
 Summary: Framework for large language model evaluations
 Author: UK AI Security Institute
 License: MIT License
@@ -129,6 +129,8 @@ Welcome to Inspect, a framework for large language model evaluations created by 
 Inspect provides many built-in components, including facilities for prompt engineering, tool usage, multi-turn dialog, and model graded evaluations. Extensions to Inspect (e.g. to support new elicitation and scoring techniques) can be provided by other Python packages.
 
 To get started with Inspect, please see the documentation at <https://inspect.aisi.org.uk/>.
+
+Inspect also includes a collection of over 100 pre-built evaluations ready to run on any model (learn more at [Inspect Evals](https://ukgovernmentbeis.github.io/inspect_evals/))
 
 ***
 

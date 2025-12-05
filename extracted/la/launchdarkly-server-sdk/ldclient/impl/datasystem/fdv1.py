@@ -22,8 +22,6 @@ from ldclient.impl.flag_tracker import FlagTrackerImpl
 from ldclient.impl.listeners import Listeners
 from ldclient.impl.stubs import NullUpdateProcessor
 from ldclient.interfaces import (
-    DataSourceState,
-    DataSourceStatus,
     DataSourceStatusProvider,
     DataStoreStatusProvider,
     FeatureStore,
@@ -62,10 +60,6 @@ class FDv1(DataSystem):
         # Set up data source plumbing
         self._data_source_listeners = Listeners()
         self._flag_change_listeners = Listeners()
-        self._flag_tracker_impl = FlagTrackerImpl(
-            self._flag_change_listeners,
-            lambda key, context: None,  # Replaced by client to use its evaluation method
-        )
         self._data_source_update_sink = DataSourceUpdateSinkImpl(
             self._store_wrapper,
             self._data_source_listeners,
@@ -83,20 +77,6 @@ class FDv1(DataSystem):
 
         # Diagnostic accumulator provided by client for streaming metrics
         self._diagnostic_accumulator: Optional[DiagnosticAccumulator] = None
-
-        # Track current data availability
-        self._data_availability: DataAvailability = (
-            DataAvailability.CACHED
-            if getattr(self._store_wrapper, "initialized", False)
-            else DataAvailability.DEFAULTS
-        )
-
-        # React to data source status updates to adjust availability
-        def _on_status_change(status: DataSourceStatus):
-            if status.state == DataSourceState.VALID:
-                self._data_availability = DataAvailability.REFRESHED
-
-        self._data_source_status_provider_impl.add_listener(_on_status_change)
 
     def start(self, set_on_ready: Event):
         """
@@ -118,14 +98,6 @@ class FDv1(DataSystem):
     def store(self) -> ReadOnlyStore:
         return self._store_wrapper
 
-    def set_flag_value_eval_fn(self, eval_fn):
-        """
-        Injects the flag value evaluation function used by the flag tracker to
-        compute FlagValueChange events. The function signature should be
-        (key: str, context: Context) -> Any.
-        """
-        self._flag_tracker_impl = FlagTrackerImpl(self._flag_change_listeners, eval_fn)
-
     def set_diagnostic_accumulator(self, diagnostic_accumulator: DiagnosticAccumulator):
         """
         Sets the diagnostic accumulator for streaming initialization metrics.
@@ -142,8 +114,8 @@ class FDv1(DataSystem):
         return self._data_store_status_provider_impl
 
     @property
-    def flag_tracker(self) -> FlagTracker:
-        return self._flag_tracker_impl
+    def flag_change_listeners(self) -> Listeners:
+        return self._flag_change_listeners
 
     @property
     def data_availability(self) -> DataAvailability:

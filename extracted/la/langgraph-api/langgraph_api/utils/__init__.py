@@ -60,6 +60,18 @@ def get_auth_ctx() -> Auth.types.BaseAuthContext | None:
     return AuthContext.get()
 
 
+def get_user_id(user: BaseUser | None) -> str | None:
+    if user is None:
+        return None
+    try:
+        return user.identity
+    except NotImplementedError:
+        try:
+            return user.display_name
+        except NotImplementedError:
+            pass
+
+
 class AsyncCursorProto(Protocol):
     async def fetchone(self) -> Row: ...
 

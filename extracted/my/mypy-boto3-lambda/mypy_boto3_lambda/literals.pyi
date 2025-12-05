@@ -151,6 +151,7 @@ KafkaSchemaValidationAttributeType = Literal["KEY", "VALUE"]
 LastUpdateStatusReasonCodeType = Literal[
     "CapacityProviderScalingLimitExceeded",
     "DisabledKMSKey",
+    "DisallowedByVpcEncryptionControl",
     "EC2RequestLimitExceeded",
     "EFSIOError",
     "EFSMountConnectivityError",
@@ -275,6 +276,7 @@ StateReasonCodeType = Literal[
     "CapacityProviderScalingLimitExceeded",
     "Creating",
     "DisabledKMSKey",
+    "DisallowedByVpcEncryptionControl",
     "DrainingDurableExecutions",
     "EC2RequestLimitExceeded",
     "EFSIOError",
