@@ -51,9 +51,9 @@ class DatasetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_forecast as interfaces_aws_forecast
+            from aws_cdk.interfaces import aws_forecast as interfaces_forecast
             
-            dataset_group_reference = interfaces_aws_forecast.DatasetGroupReference(
+            dataset_group_reference = interfaces_forecast.DatasetGroupReference(
                 dataset_group_arn="datasetGroupArn"
             )
         '''
@@ -100,9 +100,9 @@ class DatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_forecast as interfaces_aws_forecast
+            from aws_cdk.interfaces import aws_forecast as interfaces_forecast
             
-            dataset_reference = interfaces_aws_forecast.DatasetReference(
+            dataset_reference = interfaces_forecast.DatasetReference(
                 dataset_arn="datasetArn"
             )
         '''

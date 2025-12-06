@@ -57,9 +57,9 @@ class CapabilityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_b2bi as interfaces_aws_b2bi
+            from aws_cdk.interfaces import aws_b2bi as interfaces_b2bi
             
-            capability_reference = interfaces_aws_b2bi.CapabilityReference(
+            capability_reference = interfaces_b2bi.CapabilityReference(
                 capability_arn="capabilityArn",
                 capability_id="capabilityId"
             )
@@ -305,9 +305,9 @@ class PartnershipReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_b2bi as interfaces_aws_b2bi
+            from aws_cdk.interfaces import aws_b2bi as interfaces_b2bi
             
-            partnership_reference = interfaces_aws_b2bi.PartnershipReference(
+            partnership_reference = interfaces_b2bi.PartnershipReference(
                 partnership_arn="partnershipArn",
                 partnership_id="partnershipId"
             )
@@ -365,9 +365,9 @@ class ProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_b2bi as interfaces_aws_b2bi
+            from aws_cdk.interfaces import aws_b2bi as interfaces_b2bi
             
-            profile_reference = interfaces_aws_b2bi.ProfileReference(
+            profile_reference = interfaces_b2bi.ProfileReference(
                 profile_arn="profileArn",
                 profile_id="profileId"
             )
@@ -433,9 +433,9 @@ class TransformerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_b2bi as interfaces_aws_b2bi
+            from aws_cdk.interfaces import aws_b2bi as interfaces_b2bi
             
-            transformer_reference = interfaces_aws_b2bi.TransformerReference(
+            transformer_reference = interfaces_b2bi.TransformerReference(
                 transformer_arn="transformerArn",
                 transformer_id="transformerId"
             )

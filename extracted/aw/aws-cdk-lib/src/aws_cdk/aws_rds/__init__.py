@@ -20258,10 +20258,10 @@ class ClusterEngineBindOptions:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rds as rds
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
             # parameter_group: rds.ParameterGroup
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             
             cluster_engine_bind_options = rds.ClusterEngineBindOptions(
                 parameter_group=parameter_group,
@@ -20546,9 +20546,9 @@ class ClusterInstanceBindOptions:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_rds as rds
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             # subnet_group: rds.SubnetGroup
             
             cluster_instance_bind_options = rds.ClusterInstanceBindOptions(
@@ -25380,16 +25380,16 @@ class DatabaseInstanceNewProps:
             from aws_cdk import aws_logs as logs
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_s3 as s3
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # bucket: s3.Bucket
             # ca_certificate: rds.CaCertificate
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # option_group: rds.OptionGroup
             # parameter_group: rds.ParameterGroup
             # role: iam.Role
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
@@ -27195,18 +27195,18 @@ class DatabaseInstanceSourceProps(DatabaseInstanceNewProps):
             from aws_cdk import aws_logs as logs
             from aws_cdk import aws_rds as rds
             from aws_cdk import aws_s3 as s3
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # bucket: s3.Bucket
             # ca_certificate: rds.CaCertificate
             # instance_engine: rds.IInstanceEngine
             # instance_type: ec2.InstanceType
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # option_group: rds.OptionGroup
             # parameter_group: rds.ParameterGroup
             # role: iam.Role
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet
             # subnet_filter: ec2.SubnetFilter
@@ -33210,10 +33210,10 @@ class InstanceEngineBindOptions:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_rds as rds
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
             # option_group: rds.OptionGroup
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             
             instance_engine_bind_options = rds.InstanceEngineBindOptions(
                 domain="domain",
@@ -34864,6 +34864,12 @@ class MariaDbEngineVersion(
     def VER_11_8_3(cls) -> "MariaDbEngineVersion":
         '''Version "11.8.3".'''
         return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_11_8_3"))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="VER_11_8_5")
+    def VER_11_8_5(cls) -> "MariaDbEngineVersion":
+        '''Version "11.8.5".'''
+        return typing.cast("MariaDbEngineVersion", jsii.sget(cls, "VER_11_8_5"))
 
     @builtins.property
     @jsii.member(jsii_name="mariaDbFullVersion")

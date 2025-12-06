@@ -152,9 +152,9 @@ class SignalingChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisvideo as interfaces_aws_kinesisvideo
+            from aws_cdk.interfaces import aws_kinesisvideo as interfaces_kinesisvideo
             
-            signaling_channel_reference = interfaces_aws_kinesisvideo.SignalingChannelReference(
+            signaling_channel_reference = interfaces_kinesisvideo.SignalingChannelReference(
                 signaling_channel_arn="signalingChannelArn",
                 signaling_channel_name="signalingChannelName"
             )
@@ -212,9 +212,9 @@ class StreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisvideo as interfaces_aws_kinesisvideo
+            from aws_cdk.interfaces import aws_kinesisvideo as interfaces_kinesisvideo
             
-            stream_reference = interfaces_aws_kinesisvideo.StreamReference(
+            stream_reference = interfaces_kinesisvideo.StreamReference(
                 stream_arn="streamArn",
                 stream_name="streamName"
             )

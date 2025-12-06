@@ -51,9 +51,9 @@ class DeploymentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_launchwizard as interfaces_aws_launchwizard
+            from aws_cdk.interfaces import aws_launchwizard as interfaces_launchwizard
             
-            deployment_reference = interfaces_aws_launchwizard.DeploymentReference(
+            deployment_reference = interfaces_launchwizard.DeploymentReference(
                 deployment_arn="deploymentArn"
             )
         '''

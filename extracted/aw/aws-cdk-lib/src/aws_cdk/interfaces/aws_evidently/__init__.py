@@ -51,9 +51,9 @@ class ExperimentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evidently as interfaces_aws_evidently
+            from aws_cdk.interfaces import aws_evidently as interfaces_evidently
             
-            experiment_reference = interfaces_aws_evidently.ExperimentReference(
+            experiment_reference = interfaces_evidently.ExperimentReference(
                 experiment_arn="experimentArn"
             )
         '''
@@ -100,9 +100,9 @@ class FeatureReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evidently as interfaces_aws_evidently
+            from aws_cdk.interfaces import aws_evidently as interfaces_evidently
             
-            feature_reference = interfaces_aws_evidently.FeatureReference(
+            feature_reference = interfaces_evidently.FeatureReference(
                 feature_arn="featureArn"
             )
         '''
@@ -374,9 +374,9 @@ class LaunchReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evidently as interfaces_aws_evidently
+            from aws_cdk.interfaces import aws_evidently as interfaces_evidently
             
-            launch_reference = interfaces_aws_evidently.LaunchReference(
+            launch_reference = interfaces_evidently.LaunchReference(
                 launch_arn="launchArn"
             )
         '''
@@ -423,9 +423,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evidently as interfaces_aws_evidently
+            from aws_cdk.interfaces import aws_evidently as interfaces_evidently
             
-            project_reference = interfaces_aws_evidently.ProjectReference(
+            project_reference = interfaces_evidently.ProjectReference(
                 project_arn="projectArn"
             )
         '''
@@ -472,9 +472,9 @@ class SegmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evidently as interfaces_aws_evidently
+            from aws_cdk.interfaces import aws_evidently as interfaces_evidently
             
-            segment_reference = interfaces_aws_evidently.SegmentReference(
+            segment_reference = interfaces_evidently.SegmentReference(
                 segment_arn="segmentArn"
             )
         '''

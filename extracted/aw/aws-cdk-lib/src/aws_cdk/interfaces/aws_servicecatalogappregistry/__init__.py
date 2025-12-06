@@ -60,9 +60,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_aws_servicecatalogappregistry
+            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_servicecatalogappregistry
             
-            application_reference = interfaces_aws_servicecatalogappregistry.ApplicationReference(
+            application_reference = interfaces_servicecatalogappregistry.ApplicationReference(
                 application_arn="applicationArn",
                 application_id="applicationId"
             )
@@ -128,9 +128,9 @@ class AttributeGroupAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_aws_servicecatalogappregistry
+            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_servicecatalogappregistry
             
-            attribute_group_association_reference = interfaces_aws_servicecatalogappregistry.AttributeGroupAssociationReference(
+            attribute_group_association_reference = interfaces_servicecatalogappregistry.AttributeGroupAssociationReference(
                 application_arn="applicationArn",
                 attribute_group_arn="attributeGroupArn"
             )
@@ -196,9 +196,9 @@ class AttributeGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_aws_servicecatalogappregistry
+            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_servicecatalogappregistry
             
-            attribute_group_reference = interfaces_aws_servicecatalogappregistry.AttributeGroupReference(
+            attribute_group_reference = interfaces_servicecatalogappregistry.AttributeGroupReference(
                 attribute_group_arn="attributeGroupArn",
                 attribute_group_id="attributeGroupId"
             )
@@ -455,9 +455,9 @@ class ResourceAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_aws_servicecatalogappregistry
+            from aws_cdk.interfaces import aws_servicecatalogappregistry as interfaces_servicecatalogappregistry
             
-            resource_association_reference = interfaces_aws_servicecatalogappregistry.ResourceAssociationReference(
+            resource_association_reference = interfaces_servicecatalogappregistry.ResourceAssociationReference(
                 application_arn="applicationArn",
                 resource_arn="resourceArn",
                 resource_type="resourceType"

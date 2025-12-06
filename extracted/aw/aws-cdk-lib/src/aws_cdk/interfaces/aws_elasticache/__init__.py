@@ -51,9 +51,9 @@ class CacheClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            cache_cluster_reference = interfaces_aws_elasticache.CacheClusterReference(
+            cache_cluster_reference = interfaces_elasticache.CacheClusterReference(
                 cache_cluster_id="cacheClusterId"
             )
         '''
@@ -100,9 +100,9 @@ class GlobalReplicationGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            global_replication_group_reference = interfaces_aws_elasticache.GlobalReplicationGroupReference(
+            global_replication_group_reference = interfaces_elasticache.GlobalReplicationGroupReference(
                 global_replication_group_id="globalReplicationGroupId"
             )
         '''
@@ -605,9 +605,9 @@ class ParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            parameter_group_reference = interfaces_aws_elasticache.ParameterGroupReference(
+            parameter_group_reference = interfaces_elasticache.ParameterGroupReference(
                 cache_parameter_group_name="cacheParameterGroupName"
             )
         '''
@@ -654,9 +654,9 @@ class ReplicationGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            replication_group_reference = interfaces_aws_elasticache.ReplicationGroupReference(
+            replication_group_reference = interfaces_elasticache.ReplicationGroupReference(
                 replication_group_id="replicationGroupId"
             )
         '''
@@ -703,9 +703,9 @@ class SecurityGroupIngressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            security_group_ingress_reference = interfaces_aws_elasticache.SecurityGroupIngressReference(
+            security_group_ingress_reference = interfaces_elasticache.SecurityGroupIngressReference(
                 security_group_ingress_id="securityGroupIngressId"
             )
         '''
@@ -752,9 +752,9 @@ class SecurityGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            security_group_reference = interfaces_aws_elasticache.SecurityGroupReference(
+            security_group_reference = interfaces_elasticache.SecurityGroupReference(
                 security_group_id="securityGroupId"
             )
         '''
@@ -810,9 +810,9 @@ class ServerlessCacheReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            serverless_cache_reference = interfaces_aws_elasticache.ServerlessCacheReference(
+            serverless_cache_reference = interfaces_elasticache.ServerlessCacheReference(
                 serverless_cache_arn="serverlessCacheArn",
                 serverless_cache_name="serverlessCacheName"
             )
@@ -869,9 +869,9 @@ class SubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            subnet_group_reference = interfaces_aws_elasticache.SubnetGroupReference(
+            subnet_group_reference = interfaces_elasticache.SubnetGroupReference(
                 cache_subnet_group_name="cacheSubnetGroupName"
             )
         '''
@@ -924,9 +924,9 @@ class UserGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            user_group_reference = interfaces_aws_elasticache.UserGroupReference(
+            user_group_reference = interfaces_elasticache.UserGroupReference(
                 user_group_arn="userGroupArn",
                 user_group_id="userGroupId"
             )
@@ -984,9 +984,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticache as interfaces_aws_elasticache
+            from aws_cdk.interfaces import aws_elasticache as interfaces_elasticache
             
-            user_reference = interfaces_aws_elasticache.UserReference(
+            user_reference = interfaces_elasticache.UserReference(
                 user_arn="userArn",
                 user_id="userId"
             )

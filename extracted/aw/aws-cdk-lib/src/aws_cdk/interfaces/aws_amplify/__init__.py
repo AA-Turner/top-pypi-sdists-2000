@@ -51,9 +51,9 @@ class AppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplify as interfaces_aws_amplify
+            from aws_cdk.interfaces import aws_amplify as interfaces_amplify
             
-            app_reference = interfaces_aws_amplify.AppReference(
+            app_reference = interfaces_amplify.AppReference(
                 app_arn="appArn"
             )
         '''
@@ -100,9 +100,9 @@ class BranchReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplify as interfaces_aws_amplify
+            from aws_cdk.interfaces import aws_amplify as interfaces_amplify
             
-            branch_reference = interfaces_aws_amplify.BranchReference(
+            branch_reference = interfaces_amplify.BranchReference(
                 branch_arn="branchArn"
             )
         '''
@@ -149,9 +149,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplify as interfaces_aws_amplify
+            from aws_cdk.interfaces import aws_amplify as interfaces_amplify
             
-            domain_reference = interfaces_aws_amplify.DomainReference(
+            domain_reference = interfaces_amplify.DomainReference(
                 domain_arn="domainArn"
             )
         '''

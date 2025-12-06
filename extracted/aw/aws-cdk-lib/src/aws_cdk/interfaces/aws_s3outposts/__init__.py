@@ -51,9 +51,9 @@ class AccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3outposts as interfaces_aws_s3outposts
+            from aws_cdk.interfaces import aws_s3outposts as interfaces_s3outposts
             
-            access_point_reference = interfaces_aws_s3outposts.AccessPointReference(
+            access_point_reference = interfaces_s3outposts.AccessPointReference(
                 access_point_arn="accessPointArn"
             )
         '''
@@ -100,9 +100,9 @@ class BucketPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3outposts as interfaces_aws_s3outposts
+            from aws_cdk.interfaces import aws_s3outposts as interfaces_s3outposts
             
-            bucket_policy_reference = interfaces_aws_s3outposts.BucketPolicyReference(
+            bucket_policy_reference = interfaces_s3outposts.BucketPolicyReference(
                 bucket="bucket"
             )
         '''
@@ -149,9 +149,9 @@ class BucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3outposts as interfaces_aws_s3outposts
+            from aws_cdk.interfaces import aws_s3outposts as interfaces_s3outposts
             
-            bucket_reference = interfaces_aws_s3outposts.BucketReference(
+            bucket_reference = interfaces_s3outposts.BucketReference(
                 bucket_arn="bucketArn"
             )
         '''
@@ -198,9 +198,9 @@ class EndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3outposts as interfaces_aws_s3outposts
+            from aws_cdk.interfaces import aws_s3outposts as interfaces_s3outposts
             
-            endpoint_reference = interfaces_aws_s3outposts.EndpointReference(
+            endpoint_reference = interfaces_s3outposts.EndpointReference(
                 endpoint_arn="endpointArn"
             )
         '''

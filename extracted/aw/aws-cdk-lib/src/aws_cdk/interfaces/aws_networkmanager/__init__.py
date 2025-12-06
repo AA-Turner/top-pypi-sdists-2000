@@ -51,9 +51,9 @@ class ConnectAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            connect_attachment_reference = interfaces_aws_networkmanager.ConnectAttachmentReference(
+            connect_attachment_reference = interfaces_networkmanager.ConnectAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''
@@ -100,9 +100,9 @@ class ConnectPeerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            connect_peer_reference = interfaces_aws_networkmanager.ConnectPeerReference(
+            connect_peer_reference = interfaces_networkmanager.ConnectPeerReference(
                 connect_peer_id="connectPeerId"
             )
         '''
@@ -158,9 +158,9 @@ class CoreNetworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            core_network_reference = interfaces_aws_networkmanager.CoreNetworkReference(
+            core_network_reference = interfaces_networkmanager.CoreNetworkReference(
                 core_network_arn="coreNetworkArn",
                 core_network_id="coreNetworkId"
             )
@@ -226,9 +226,9 @@ class CustomerGatewayAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            customer_gateway_association_reference = interfaces_aws_networkmanager.CustomerGatewayAssociationReference(
+            customer_gateway_association_reference = interfaces_networkmanager.CustomerGatewayAssociationReference(
                 customer_gateway_arn="customerGatewayArn",
                 global_network_id="globalNetworkId"
             )
@@ -297,9 +297,9 @@ class DeviceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            device_reference = interfaces_aws_networkmanager.DeviceReference(
+            device_reference = interfaces_networkmanager.DeviceReference(
                 device_arn="deviceArn",
                 device_id="deviceId",
                 global_network_id="globalNetworkId"
@@ -366,9 +366,9 @@ class DirectConnectGatewayAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            direct_connect_gateway_attachment_reference = interfaces_aws_networkmanager.DirectConnectGatewayAttachmentReference(
+            direct_connect_gateway_attachment_reference = interfaces_networkmanager.DirectConnectGatewayAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''
@@ -424,9 +424,9 @@ class GlobalNetworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            global_network_reference = interfaces_aws_networkmanager.GlobalNetworkReference(
+            global_network_reference = interfaces_networkmanager.GlobalNetworkReference(
                 global_network_arn="globalNetworkArn",
                 global_network_id="globalNetworkId"
             )
@@ -1198,9 +1198,9 @@ class LinkAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            link_association_reference = interfaces_aws_networkmanager.LinkAssociationReference(
+            link_association_reference = interfaces_networkmanager.LinkAssociationReference(
                 device_id="deviceId",
                 global_network_id="globalNetworkId",
                 link_id="linkId"
@@ -1279,9 +1279,9 @@ class LinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            link_reference = interfaces_aws_networkmanager.LinkReference(
+            link_reference = interfaces_networkmanager.LinkReference(
                 global_network_id="globalNetworkId",
                 link_arn="linkArn",
                 link_id="linkId"
@@ -1360,9 +1360,9 @@ class SiteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            site_reference = interfaces_aws_networkmanager.SiteReference(
+            site_reference = interfaces_networkmanager.SiteReference(
                 global_network_id="globalNetworkId",
                 site_arn="siteArn",
                 site_id="siteId"
@@ -1429,9 +1429,9 @@ class SiteToSiteVpnAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            site_to_site_vpn_attachment_reference = interfaces_aws_networkmanager.SiteToSiteVpnAttachmentReference(
+            site_to_site_vpn_attachment_reference = interfaces_networkmanager.SiteToSiteVpnAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''
@@ -1478,9 +1478,9 @@ class TransitGatewayPeeringReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            transit_gateway_peering_reference = interfaces_aws_networkmanager.TransitGatewayPeeringReference(
+            transit_gateway_peering_reference = interfaces_networkmanager.TransitGatewayPeeringReference(
                 peering_id="peeringId"
             )
         '''
@@ -1536,9 +1536,9 @@ class TransitGatewayRegistrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            transit_gateway_registration_reference = interfaces_aws_networkmanager.TransitGatewayRegistrationReference(
+            transit_gateway_registration_reference = interfaces_networkmanager.TransitGatewayRegistrationReference(
                 global_network_id="globalNetworkId",
                 transit_gateway_arn="transitGatewayArn"
             )
@@ -1595,9 +1595,9 @@ class TransitGatewayRouteTableAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            transit_gateway_route_table_attachment_reference = interfaces_aws_networkmanager.TransitGatewayRouteTableAttachmentReference(
+            transit_gateway_route_table_attachment_reference = interfaces_networkmanager.TransitGatewayRouteTableAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''
@@ -1644,9 +1644,9 @@ class VpcAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkmanager as interfaces_aws_networkmanager
+            from aws_cdk.interfaces import aws_networkmanager as interfaces_networkmanager
             
-            vpc_attachment_reference = interfaces_aws_networkmanager.VpcAttachmentReference(
+            vpc_attachment_reference = interfaces_networkmanager.VpcAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''

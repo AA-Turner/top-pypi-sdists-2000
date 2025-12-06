@@ -52,9 +52,9 @@ class AssetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackage as interfaces_aws_mediapackage
+            from aws_cdk.interfaces import aws_mediapackage as interfaces_mediapackage
             
-            asset_reference = interfaces_aws_mediapackage.AssetReference(
+            asset_reference = interfaces_mediapackage.AssetReference(
                 asset_arn="assetArn",
                 asset_id="assetId"
             )
@@ -112,9 +112,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackage as interfaces_aws_mediapackage
+            from aws_cdk.interfaces import aws_mediapackage as interfaces_mediapackage
             
-            channel_reference = interfaces_aws_mediapackage.ChannelReference(
+            channel_reference = interfaces_mediapackage.ChannelReference(
                 channel_arn="channelArn",
                 channel_id="channelId"
             )
@@ -407,9 +407,9 @@ class OriginEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackage as interfaces_aws_mediapackage
+            from aws_cdk.interfaces import aws_mediapackage as interfaces_mediapackage
             
-            origin_endpoint_reference = interfaces_aws_mediapackage.OriginEndpointReference(
+            origin_endpoint_reference = interfaces_mediapackage.OriginEndpointReference(
                 origin_endpoint_arn="originEndpointArn",
                 origin_endpoint_id="originEndpointId"
             )
@@ -475,9 +475,9 @@ class PackagingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackage as interfaces_aws_mediapackage
+            from aws_cdk.interfaces import aws_mediapackage as interfaces_mediapackage
             
-            packaging_configuration_reference = interfaces_aws_mediapackage.PackagingConfigurationReference(
+            packaging_configuration_reference = interfaces_mediapackage.PackagingConfigurationReference(
                 packaging_configuration_arn="packagingConfigurationArn",
                 packaging_configuration_id="packagingConfigurationId"
             )
@@ -543,9 +543,9 @@ class PackagingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackage as interfaces_aws_mediapackage
+            from aws_cdk.interfaces import aws_mediapackage as interfaces_mediapackage
             
-            packaging_group_reference = interfaces_aws_mediapackage.PackagingGroupReference(
+            packaging_group_reference = interfaces_mediapackage.PackagingGroupReference(
                 packaging_group_arn="packagingGroupArn",
                 packaging_group_id="packagingGroupId"
             )

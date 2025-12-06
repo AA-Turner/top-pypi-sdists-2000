@@ -60,9 +60,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchservice as interfaces_aws_opensearchservice
+            from aws_cdk.interfaces import aws_opensearchservice as interfaces_opensearchservice
             
-            application_reference = interfaces_aws_opensearchservice.ApplicationReference(
+            application_reference = interfaces_opensearchservice.ApplicationReference(
                 application_arn="applicationArn",
                 application_name="applicationName"
             )
@@ -120,9 +120,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchservice as interfaces_aws_opensearchservice
+            from aws_cdk.interfaces import aws_opensearchservice as interfaces_opensearchservice
             
-            domain_reference = interfaces_aws_opensearchservice.DomainReference(
+            domain_reference = interfaces_opensearchservice.DomainReference(
                 domain_arn="domainArn",
                 domain_name="domainName"
             )

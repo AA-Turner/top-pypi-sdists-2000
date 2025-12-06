@@ -51,9 +51,9 @@ class AssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            association_reference = interfaces_aws_ssm.AssociationReference(
+            association_reference = interfaces_ssm.AssociationReference(
                 association_id="associationId"
             )
         '''
@@ -100,9 +100,9 @@ class DocumentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            document_reference = interfaces_aws_ssm.DocumentReference(
+            document_reference = interfaces_ssm.DocumentReference(
                 document_name="documentName"
             )
         '''
@@ -554,9 +554,9 @@ class MaintenanceWindowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            maintenance_window_reference = interfaces_aws_ssm.MaintenanceWindowReference(
+            maintenance_window_reference = interfaces_ssm.MaintenanceWindowReference(
                 maintenance_window_id="maintenanceWindowId"
             )
         '''
@@ -603,9 +603,9 @@ class MaintenanceWindowTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            maintenance_window_target_reference = interfaces_aws_ssm.MaintenanceWindowTargetReference(
+            maintenance_window_target_reference = interfaces_ssm.MaintenanceWindowTargetReference(
                 maintenance_window_target_id="maintenanceWindowTargetId"
             )
         '''
@@ -652,9 +652,9 @@ class MaintenanceWindowTaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            maintenance_window_task_reference = interfaces_aws_ssm.MaintenanceWindowTaskReference(
+            maintenance_window_task_reference = interfaces_ssm.MaintenanceWindowTaskReference(
                 maintenance_window_task_id="maintenanceWindowTaskId"
             )
         '''
@@ -701,9 +701,9 @@ class ParameterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            parameter_reference = interfaces_aws_ssm.ParameterReference(
+            parameter_reference = interfaces_ssm.ParameterReference(
                 parameter_name="parameterName"
             )
         '''
@@ -750,9 +750,9 @@ class PatchBaselineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            patch_baseline_reference = interfaces_aws_ssm.PatchBaselineReference(
+            patch_baseline_reference = interfaces_ssm.PatchBaselineReference(
                 patch_baseline_id="patchBaselineId"
             )
         '''
@@ -799,9 +799,9 @@ class ResourceDataSyncReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            resource_data_sync_reference = interfaces_aws_ssm.ResourceDataSyncReference(
+            resource_data_sync_reference = interfaces_ssm.ResourceDataSyncReference(
                 sync_name="syncName"
             )
         '''
@@ -849,9 +849,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssm as interfaces_aws_ssm
+            from aws_cdk.interfaces import aws_ssm as interfaces_ssm
             
-            resource_policy_reference = interfaces_aws_ssm.ResourcePolicyReference(
+            resource_policy_reference = interfaces_ssm.ResourcePolicyReference(
                 policy_id="policyId",
                 resource_arn="resourceArn"
             )

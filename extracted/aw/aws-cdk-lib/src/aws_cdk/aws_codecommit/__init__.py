@@ -3406,9 +3406,9 @@ class RepositoryGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codecommit as codecommit
-        from aws_cdk.interfaces import aws_codecommit as interfaces_aws_codecommit
+        from aws_cdk.interfaces import aws_codecommit as interfaces_codecommit
         
-        # repository_ref: interfaces_aws_codecommit.IRepositoryRef
+        # repository_ref: interfaces_codecommit.IRepositoryRef
         
         repository_grants = codecommit.RepositoryGrants.from_repository(repository_ref)
     '''

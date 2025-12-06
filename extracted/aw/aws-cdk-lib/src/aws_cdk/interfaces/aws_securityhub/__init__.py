@@ -51,9 +51,9 @@ class AggregatorV2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            aggregator_v2_reference = interfaces_aws_securityhub.AggregatorV2Reference(
+            aggregator_v2_reference = interfaces_securityhub.AggregatorV2Reference(
                 aggregator_v2_arn="aggregatorV2Arn"
             )
         '''
@@ -100,9 +100,9 @@ class AutomationRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            automation_rule_reference = interfaces_aws_securityhub.AutomationRuleReference(
+            automation_rule_reference = interfaces_securityhub.AutomationRuleReference(
                 rule_arn="ruleArn"
             )
         '''
@@ -149,9 +149,9 @@ class AutomationRuleV2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            automation_rule_v2_reference = interfaces_aws_securityhub.AutomationRuleV2Reference(
+            automation_rule_v2_reference = interfaces_securityhub.AutomationRuleV2Reference(
                 rule_arn="ruleArn"
             )
         '''
@@ -198,9 +198,9 @@ class ConfigurationPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            configuration_policy_reference = interfaces_aws_securityhub.ConfigurationPolicyReference(
+            configuration_policy_reference = interfaces_securityhub.ConfigurationPolicyReference(
                 configuration_policy_arn="configurationPolicyArn"
             )
         '''
@@ -231,6 +231,55 @@ class ConfigurationPolicyReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_securityhub.ConnectorV2Reference",
+    jsii_struct_bases=[],
+    name_mapping={"connector_arn": "connectorArn"},
+)
+class ConnectorV2Reference:
+    def __init__(self, *, connector_arn: builtins.str) -> None:
+        '''A reference to a ConnectorV2 resource.
+
+        :param connector_arn: The ConnectorArn of the ConnectorV2 resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
+            
+            connector_v2_reference = interfaces_securityhub.ConnectorV2Reference(
+                connector_arn="connectorArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__87f9de0b840b9c41998aae229688e8a483801310a2dadbbcf7777f01d538ebb1)
+            check_type(argname="argument connector_arn", value=connector_arn, expected_type=type_hints["connector_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "connector_arn": connector_arn,
+        }
+
+    @builtins.property
+    def connector_arn(self) -> builtins.str:
+        '''The ConnectorArn of the ConnectorV2 resource.'''
+        result = self._values.get("connector_arn")
+        assert result is not None, "Required property 'connector_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "ConnectorV2Reference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_securityhub.DelegatedAdminReference",
     jsii_struct_bases=[],
     name_mapping={"delegated_admin_identifier": "delegatedAdminIdentifier"},
@@ -247,9 +296,9 @@ class DelegatedAdminReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            delegated_admin_reference = interfaces_aws_securityhub.DelegatedAdminReference(
+            delegated_admin_reference = interfaces_securityhub.DelegatedAdminReference(
                 delegated_admin_identifier="delegatedAdminIdentifier"
             )
         '''
@@ -296,9 +345,9 @@ class FindingAggregatorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            finding_aggregator_reference = interfaces_aws_securityhub.FindingAggregatorReference(
+            finding_aggregator_reference = interfaces_securityhub.FindingAggregatorReference(
                 finding_aggregator_arn="findingAggregatorArn"
             )
         '''
@@ -345,9 +394,9 @@ class HubReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            hub_reference = interfaces_aws_securityhub.HubReference(
+            hub_reference = interfaces_securityhub.HubReference(
                 hub_arn="hubArn"
             )
         '''
@@ -394,9 +443,9 @@ class HubV2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            hub_v2_reference = interfaces_aws_securityhub.HubV2Reference(
+            hub_v2_reference = interfaces_securityhub.HubV2Reference(
                 hub_v2_arn="hubV2Arn"
             )
         '''
@@ -608,6 +657,51 @@ class _IConfigurationPolicyRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IConfigurationPolicyRef).__jsii_proxy_class__ = lambda : _IConfigurationPolicyRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_securityhub.IConnectorV2Ref")
+class IConnectorV2Ref(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a ConnectorV2.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="connectorV2Ref")
+    def connector_v2_ref(self) -> ConnectorV2Reference:
+        '''(experimental) A reference to a ConnectorV2 resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IConnectorV2RefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a ConnectorV2.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_securityhub.IConnectorV2Ref"
+
+    @builtins.property
+    @jsii.member(jsii_name="connectorV2Ref")
+    def connector_v2_ref(self) -> ConnectorV2Reference:
+        '''(experimental) A reference to a ConnectorV2 resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(ConnectorV2Reference, jsii.get(self, "connectorV2Ref"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IConnectorV2Ref).__jsii_proxy_class__ = lambda : _IConnectorV2RefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_securityhub.IDelegatedAdminRef")
@@ -1085,9 +1179,9 @@ class InsightReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            insight_reference = interfaces_aws_securityhub.InsightReference(
+            insight_reference = interfaces_securityhub.InsightReference(
                 insight_arn="insightArn"
             )
         '''
@@ -1136,9 +1230,9 @@ class OrganizationConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            organization_configuration_reference = interfaces_aws_securityhub.OrganizationConfigurationReference(
+            organization_configuration_reference = interfaces_securityhub.OrganizationConfigurationReference(
                 organization_configuration_identifier="organizationConfigurationIdentifier"
             )
         '''
@@ -1185,9 +1279,9 @@ class PolicyAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            policy_association_reference = interfaces_aws_securityhub.PolicyAssociationReference(
+            policy_association_reference = interfaces_securityhub.PolicyAssociationReference(
                 association_identifier="associationIdentifier"
             )
         '''
@@ -1234,9 +1328,9 @@ class ProductSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            product_subscription_reference = interfaces_aws_securityhub.ProductSubscriptionReference(
+            product_subscription_reference = interfaces_securityhub.ProductSubscriptionReference(
                 product_subscription_arn="productSubscriptionArn"
             )
         '''
@@ -1283,9 +1377,9 @@ class SecurityControlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            security_control_reference = interfaces_aws_securityhub.SecurityControlReference(
+            security_control_reference = interfaces_securityhub.SecurityControlReference(
                 security_control_id="securityControlId"
             )
         '''
@@ -1332,9 +1426,9 @@ class StandardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securityhub as interfaces_aws_securityhub
+            from aws_cdk.interfaces import aws_securityhub as interfaces_securityhub
             
-            standard_reference = interfaces_aws_securityhub.StandardReference(
+            standard_reference = interfaces_securityhub.StandardReference(
                 standards_subscription_arn="standardsSubscriptionArn"
             )
         '''
@@ -1369,6 +1463,7 @@ __all__ = [
     "AutomationRuleReference",
     "AutomationRuleV2Reference",
     "ConfigurationPolicyReference",
+    "ConnectorV2Reference",
     "DelegatedAdminReference",
     "FindingAggregatorReference",
     "HubReference",
@@ -1377,6 +1472,7 @@ __all__ = [
     "IAutomationRuleRef",
     "IAutomationRuleV2Ref",
     "IConfigurationPolicyRef",
+    "IConnectorV2Ref",
     "IDelegatedAdminRef",
     "IFindingAggregatorRef",
     "IHubRef",
@@ -1421,6 +1517,13 @@ def _typecheckingstub__aef4997ae46bca6cfa7dd6194511cb0c8e4c744827ab27202ec5bf762
 def _typecheckingstub__7f4bf6c068777f6837cd16457e25121201ab0e5a04344d176fc401dc42df6811(
     *,
     configuration_policy_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__87f9de0b840b9c41998aae229688e8a483801310a2dadbbcf7777f01d538ebb1(
+    *,
+    connector_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -1495,5 +1598,5 @@ def _typecheckingstub__7db55b49984acf12a9808e2ad6d880d3718370198d6511f8d5a94f898
     """Type checking stubs"""
     pass
 
-for cls in [IAggregatorV2Ref, IAutomationRuleRef, IAutomationRuleV2Ref, IConfigurationPolicyRef, IDelegatedAdminRef, IFindingAggregatorRef, IHubRef, IHubV2Ref, IInsightRef, IOrganizationConfigurationRef, IPolicyAssociationRef, IProductSubscriptionRef, ISecurityControlRef, IStandardRef]:
+for cls in [IAggregatorV2Ref, IAutomationRuleRef, IAutomationRuleV2Ref, IConfigurationPolicyRef, IConnectorV2Ref, IDelegatedAdminRef, IFindingAggregatorRef, IHubRef, IHubV2Ref, IInsightRef, IOrganizationConfigurationRef, IPolicyAssociationRef, IProductSubscriptionRef, ISecurityControlRef, IStandardRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

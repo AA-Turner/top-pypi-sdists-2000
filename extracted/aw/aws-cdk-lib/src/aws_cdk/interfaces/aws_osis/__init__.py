@@ -96,9 +96,9 @@ class PipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_osis as interfaces_aws_osis
+            from aws_cdk.interfaces import aws_osis as interfaces_osis
             
-            pipeline_reference = interfaces_aws_osis.PipelineReference(
+            pipeline_reference = interfaces_osis.PipelineReference(
                 pipeline_arn="pipelineArn"
             )
         '''

@@ -60,9 +60,9 @@ class DestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            destination_reference = interfaces_aws_iotwireless.DestinationReference(
+            destination_reference = interfaces_iotwireless.DestinationReference(
                 destination_arn="destinationArn",
                 destination_name="destinationName"
             )
@@ -128,9 +128,9 @@ class DeviceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            device_profile_reference = interfaces_aws_iotwireless.DeviceProfileReference(
+            device_profile_reference = interfaces_iotwireless.DeviceProfileReference(
                 device_profile_arn="deviceProfileArn",
                 device_profile_id="deviceProfileId"
             )
@@ -193,9 +193,9 @@ class FuotaTaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            fuota_task_reference = interfaces_aws_iotwireless.FuotaTaskReference(
+            fuota_task_reference = interfaces_iotwireless.FuotaTaskReference(
                 fuota_task_arn="fuotaTaskArn",
                 fuota_task_id="fuotaTaskId"
             )
@@ -764,9 +764,9 @@ class MulticastGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            multicast_group_reference = interfaces_aws_iotwireless.MulticastGroupReference(
+            multicast_group_reference = interfaces_iotwireless.MulticastGroupReference(
                 multicast_group_arn="multicastGroupArn",
                 multicast_group_id="multicastGroupId"
             )
@@ -832,9 +832,9 @@ class NetworkAnalyzerConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            network_analyzer_configuration_reference = interfaces_aws_iotwireless.NetworkAnalyzerConfigurationReference(
+            network_analyzer_configuration_reference = interfaces_iotwireless.NetworkAnalyzerConfigurationReference(
                 network_analyzer_configuration_arn="networkAnalyzerConfigurationArn",
                 network_analyzer_configuration_name="networkAnalyzerConfigurationName"
             )
@@ -900,9 +900,9 @@ class PartnerAccountReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            partner_account_reference = interfaces_aws_iotwireless.PartnerAccountReference(
+            partner_account_reference = interfaces_iotwireless.PartnerAccountReference(
                 partner_account_arn="partnerAccountArn",
                 partner_account_id="partnerAccountId"
             )
@@ -968,9 +968,9 @@ class ServiceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            service_profile_reference = interfaces_aws_iotwireless.ServiceProfileReference(
+            service_profile_reference = interfaces_iotwireless.ServiceProfileReference(
                 service_profile_arn="serviceProfileArn",
                 service_profile_id="serviceProfileId"
             )
@@ -1036,9 +1036,9 @@ class TaskDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            task_definition_reference = interfaces_aws_iotwireless.TaskDefinitionReference(
+            task_definition_reference = interfaces_iotwireless.TaskDefinitionReference(
                 task_definition_arn="taskDefinitionArn",
                 task_definition_id="taskDefinitionId"
             )
@@ -1104,9 +1104,9 @@ class WirelessDeviceImportTaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            wireless_device_import_task_reference = interfaces_aws_iotwireless.WirelessDeviceImportTaskReference(
+            wireless_device_import_task_reference = interfaces_iotwireless.WirelessDeviceImportTaskReference(
                 wireless_device_import_task_arn="wirelessDeviceImportTaskArn",
                 wireless_device_import_task_id="wirelessDeviceImportTaskId"
             )
@@ -1172,9 +1172,9 @@ class WirelessDeviceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            wireless_device_reference = interfaces_aws_iotwireless.WirelessDeviceReference(
+            wireless_device_reference = interfaces_iotwireless.WirelessDeviceReference(
                 wireless_device_arn="wirelessDeviceArn",
                 wireless_device_id="wirelessDeviceId"
             )
@@ -1240,9 +1240,9 @@ class WirelessGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotwireless as interfaces_aws_iotwireless
+            from aws_cdk.interfaces import aws_iotwireless as interfaces_iotwireless
             
-            wireless_gateway_reference = interfaces_aws_iotwireless.WirelessGatewayReference(
+            wireless_gateway_reference = interfaces_iotwireless.WirelessGatewayReference(
                 wireless_gateway_arn="wirelessGatewayArn",
                 wireless_gateway_id="wirelessGatewayId"
             )

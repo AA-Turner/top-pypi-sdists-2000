@@ -52,9 +52,9 @@ class AutoshiftObserverNotificationStatusReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_arczonalshift as interfaces_aws_arczonalshift
+            from aws_cdk.interfaces import aws_arczonalshift as interfaces_arczonalshift
             
-            autoshift_observer_notification_status_reference = interfaces_aws_arczonalshift.AutoshiftObserverNotificationStatusReference(
+            autoshift_observer_notification_status_reference = interfaces_arczonalshift.AutoshiftObserverNotificationStatusReference(
                 account_id="accountId",
                 region="region"
             )
@@ -213,9 +213,9 @@ class ZonalAutoshiftConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_arczonalshift as interfaces_aws_arczonalshift
+            from aws_cdk.interfaces import aws_arczonalshift as interfaces_arczonalshift
             
-            zonal_autoshift_configuration_reference = interfaces_aws_arczonalshift.ZonalAutoshiftConfigurationReference(
+            zonal_autoshift_configuration_reference = interfaces_arczonalshift.ZonalAutoshiftConfigurationReference(
                 resource_identifier="resourceIdentifier"
             )
         '''

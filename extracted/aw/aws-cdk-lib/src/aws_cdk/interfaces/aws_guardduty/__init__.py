@@ -51,9 +51,9 @@ class DetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            detector_reference = interfaces_aws_guardduty.DetectorReference(
+            detector_reference = interfaces_guardduty.DetectorReference(
                 detector_id="detectorId"
             )
         '''
@@ -101,9 +101,9 @@ class FilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            filter_reference = interfaces_aws_guardduty.FilterReference(
+            filter_reference = interfaces_guardduty.FilterReference(
                 detector_id="detectorId",
                 filter_name="filterName"
             )
@@ -433,7 +433,7 @@ class IPSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
             i_pSet_reference = {
                 "detector_id": "detectorId",
@@ -683,9 +683,9 @@ class MalwareProtectionPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            malware_protection_plan_reference = interfaces_aws_guardduty.MalwareProtectionPlanReference(
+            malware_protection_plan_reference = interfaces_guardduty.MalwareProtectionPlanReference(
                 malware_protection_plan_arn="malwareProtectionPlanArn",
                 malware_protection_plan_id="malwareProtectionPlanId"
             )
@@ -743,9 +743,9 @@ class MasterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            master_reference = interfaces_aws_guardduty.MasterReference(
+            master_reference = interfaces_guardduty.MasterReference(
                 detector_id="detectorId",
                 master_id="masterId"
             )
@@ -803,9 +803,9 @@ class MemberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            member_reference = interfaces_aws_guardduty.MemberReference(
+            member_reference = interfaces_guardduty.MemberReference(
                 detector_id="detectorId",
                 member_id="memberId"
             )
@@ -871,9 +871,9 @@ class PublishingDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            publishing_destination_reference = interfaces_aws_guardduty.PublishingDestinationReference(
+            publishing_destination_reference = interfaces_guardduty.PublishingDestinationReference(
                 detector_id="detectorId",
                 publishing_destination_id="publishingDestinationId"
             )
@@ -939,9 +939,9 @@ class ThreatEntitySetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            threat_entity_set_reference = interfaces_aws_guardduty.ThreatEntitySetReference(
+            threat_entity_set_reference = interfaces_guardduty.ThreatEntitySetReference(
                 detector_id="detectorId",
                 threat_entity_set_id="threatEntitySetId"
             )
@@ -1007,9 +1007,9 @@ class ThreatIntelSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            threat_intel_set_reference = interfaces_aws_guardduty.ThreatIntelSetReference(
+            threat_intel_set_reference = interfaces_guardduty.ThreatIntelSetReference(
                 detector_id="detectorId",
                 threat_intel_set_id="threatIntelSetId"
             )
@@ -1075,9 +1075,9 @@ class TrustedEntitySetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_guardduty as interfaces_aws_guardduty
+            from aws_cdk.interfaces import aws_guardduty as interfaces_guardduty
             
-            trusted_entity_set_reference = interfaces_aws_guardduty.TrustedEntitySetReference(
+            trusted_entity_set_reference = interfaces_guardduty.TrustedEntitySetReference(
                 detector_id="detectorId",
                 trusted_entity_set_id="trustedEntitySetId"
             )

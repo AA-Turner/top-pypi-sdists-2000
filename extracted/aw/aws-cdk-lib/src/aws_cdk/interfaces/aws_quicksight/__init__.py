@@ -63,9 +63,9 @@ class AnalysisReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            analysis_reference = interfaces_aws_quicksight.AnalysisReference(
+            analysis_reference = interfaces_quicksight.AnalysisReference(
                 analysis_arn="analysisArn",
                 analysis_id="analysisId",
                 aws_account_id="awsAccountId"
@@ -144,9 +144,9 @@ class CustomPermissionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            custom_permissions_reference = interfaces_aws_quicksight.CustomPermissionsReference(
+            custom_permissions_reference = interfaces_quicksight.CustomPermissionsReference(
                 aws_account_id="awsAccountId",
                 custom_permissions_arn="customPermissionsArn",
                 custom_permissions_name="customPermissionsName"
@@ -225,9 +225,9 @@ class DashboardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            dashboard_reference = interfaces_aws_quicksight.DashboardReference(
+            dashboard_reference = interfaces_quicksight.DashboardReference(
                 aws_account_id="awsAccountId",
                 dashboard_arn="dashboardArn",
                 dashboard_id="dashboardId"
@@ -306,9 +306,9 @@ class DataSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            data_set_reference = interfaces_aws_quicksight.DataSetReference(
+            data_set_reference = interfaces_quicksight.DataSetReference(
                 aws_account_id="awsAccountId",
                 data_set_arn="dataSetArn",
                 data_set_id="dataSetId"
@@ -387,9 +387,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            data_source_reference = interfaces_aws_quicksight.DataSourceReference(
+            data_source_reference = interfaces_quicksight.DataSourceReference(
                 aws_account_id="awsAccountId",
                 data_source_arn="dataSourceArn",
                 data_source_id="dataSourceId"
@@ -468,9 +468,9 @@ class FolderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            folder_reference = interfaces_aws_quicksight.FolderReference(
+            folder_reference = interfaces_quicksight.FolderReference(
                 aws_account_id="awsAccountId",
                 folder_arn="folderArn",
                 folder_id="folderId"
@@ -1049,9 +1049,9 @@ class RefreshScheduleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            refresh_schedule_reference = interfaces_aws_quicksight.RefreshScheduleReference(
+            refresh_schedule_reference = interfaces_quicksight.RefreshScheduleReference(
                 aws_account_id="awsAccountId",
                 data_set_id="dataSetId",
                 refresh_schedule_arn="refreshScheduleArn",
@@ -1140,9 +1140,9 @@ class TemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            template_reference = interfaces_aws_quicksight.TemplateReference(
+            template_reference = interfaces_quicksight.TemplateReference(
                 aws_account_id="awsAccountId",
                 template_arn="templateArn",
                 template_id="templateId"
@@ -1221,9 +1221,9 @@ class ThemeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            theme_reference = interfaces_aws_quicksight.ThemeReference(
+            theme_reference = interfaces_quicksight.ThemeReference(
                 aws_account_id="awsAccountId",
                 theme_arn="themeArn",
                 theme_id="themeId"
@@ -1302,9 +1302,9 @@ class TopicReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            topic_reference = interfaces_aws_quicksight.TopicReference(
+            topic_reference = interfaces_quicksight.TopicReference(
                 aws_account_id="awsAccountId",
                 topic_arn="topicArn",
                 topic_id="topicId"
@@ -1383,9 +1383,9 @@ class VPCConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_quicksight as interfaces_aws_quicksight
+            from aws_cdk.interfaces import aws_quicksight as interfaces_quicksight
             
-            v_pCConnection_reference = interfaces_aws_quicksight.VPCConnectionReference(
+            v_pCConnection_reference = interfaces_quicksight.VPCConnectionReference(
                 aws_account_id="awsAccountId",
                 vpc_connection_arn="vpcConnectionArn",
                 vpc_connection_id="vpcConnectionId"

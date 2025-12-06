@@ -73,6 +73,51 @@ def test_main_openapi_discriminator_enum(output_file: Path) -> None:
     black.__version__.split(".")[0] == "19",
     reason="Installed black doesn't support the old style",
 )
+def test_main_openapi_discriminator_enum_use_enum_values(output_file: Path) -> None:
+    """Test OpenAPI generation with discriminator enum using enum values in literal."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "discriminator_enum.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="discriminator/enum_use_enum_values.py",
+        extra_args=[
+            "--target-python-version",
+            "3.10",
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--use-enum-values-in-discriminator",
+        ],
+    )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
+def test_main_openapi_discriminator_enum_use_enum_values_sanitized(output_file: Path) -> None:
+    """Enum values requiring sanitization are rendered as enum members in discriminator."""
+    with freeze_time(TIMESTAMP):
+        run_main_and_assert(
+            input_path=OPEN_API_DATA_PATH / "discriminator_enum_sanitized.yaml",
+            output_path=output_file,
+            input_file_type="openapi",
+            assert_func=assert_file_content,
+            expected_file="discriminator/enum_use_enum_values_sanitized.py",
+            extra_args=[
+                "--target-python-version",
+                "3.10",
+                "--output-model-type",
+                "pydantic_v2.BaseModel",
+                "--use-enum-values-in-discriminator",
+            ],
+        )
+
+
+@pytest.mark.skipif(
+    black.__version__.split(".")[0] == "19",
+    reason="Installed black doesn't support the old style",
+)
 def test_main_openapi_discriminator_enum_duplicate(output_file: Path) -> None:
     """Test OpenAPI generation with duplicate discriminator enum."""
     run_main_and_assert(
@@ -128,6 +173,44 @@ def test_main_openapi_discriminator_allof_no_subtypes(output_file: Path) -> None
         input_file_type="openapi",
         assert_func=assert_file_content,
         expected_file=EXPECTED_OPENAPI_PATH / "discriminator" / "allof_no_subtypes.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_openapi_allof_with_oneof_ref(output_file: Path) -> None:
+    """Test OpenAPI generation with allOf referencing a oneOf schema.
+
+    This tests the case where allOf combines a $ref to a schema with oneOf/discriminator
+    and additional properties. Regression test for issue #1763.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "allof_with_oneof_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "allof_with_oneof_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+        ],
+    )
+
+
+def test_main_openapi_allof_with_anyof_ref(output_file: Path) -> None:
+    """Test OpenAPI generation with allOf referencing an anyOf schema.
+
+    This tests the case where allOf combines a $ref to a schema with anyOf
+    and additional properties.
+    """
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "allof_with_anyof_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file=EXPECTED_OPENAPI_PATH / "allof_with_anyof_ref.py",
         extra_args=[
             "--output-model-type",
             "pydantic_v2.BaseModel",
@@ -1324,6 +1407,18 @@ def test_paths_external_ref(output_file: Path) -> None:
     )
 
 
+def test_paths_ref_with_external_schema(output_file: Path) -> None:
+    """Test OpenAPI generation with $ref to external path file containing relative schema refs."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "paths_ref_with_external_schema" / "openapi.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="paths_ref_with_external_schema.py",
+        extra_args=["--openapi-scopes", "schemas", "paths"],
+    )
+
+
 @pytest.mark.benchmark
 def test_main_collapse_root_models(output_file: Path) -> None:
     """Test OpenAPI generation with collapsed root models."""
@@ -2511,6 +2606,18 @@ def test_main_openapi_webhooks_with_parameters(output_file: Path) -> None:
     )
 
 
+def test_webhooks_ref_with_external_schema(output_file: Path) -> None:
+    """Test OpenAPI generation with $ref to external webhook file containing relative schema refs."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "webhooks_ref_with_external_schema" / "openapi.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="webhooks_ref_with_external_schema.py",
+        extra_args=["--openapi-scopes", "schemas", "webhooks"],
+    )
+
+
 def test_main_openapi_external_ref_with_transitive_local_ref(output_file: Path) -> None:
     """Test OpenAPI generation with external ref that has transitive local refs."""
     run_main_and_assert(
@@ -2537,3 +2644,387 @@ def test_main_openapi_namespace_subns_ref(output_dir: Path) -> None:
             output_path=output_dir,
             expected_directory=EXPECTED_OPENAPI_PATH / "namespace_subns_ref",
         )
+
+
+def test_main_openapi_read_only_write_only_default(output_file: Path) -> None:
+    """Test readOnly/writeOnly default: base model only."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_default.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel"],
+    )
+
+
+def test_main_openapi_read_only_write_only_request_response(output_file: Path) -> None:
+    """Test readOnly/writeOnly request-response: Request/Response only, no base."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_request_response.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "request-response",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_all(output_file: Path) -> None:
+    """Test readOnly/writeOnly all: Base + Request + Response models."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_all.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_allof(output_file: Path) -> None:
+    """Test readOnly/writeOnly with allOf inheritance."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_allof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_allof.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_allof_request_response(output_file: Path) -> None:
+    """Test readOnly/writeOnly with allOf using request-response mode (no base model)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_allof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_allof_request_response.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "request-response",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_collision(output_file: Path) -> None:
+    """Test readOnly/writeOnly with name collision (UserRequest already exists)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_collision.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_collision.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_ref(output_file: Path) -> None:
+    """Test readOnly/writeOnly on $ref target schema."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_double_collision(output_file: Path) -> None:
+    """Test readOnly/writeOnly with double collision (UserRequest and UserRequestModel exist)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_double_collision.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_double_collision.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_nested_allof(output_file: Path) -> None:
+    """Test readOnly/writeOnly with nested allOf inheritance."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_nested_allof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_nested_allof.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_union(output_file: Path) -> None:
+    """Test readOnly/writeOnly with Union type field."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_union.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_union.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_url_ref(mocker: MockerFixture, output_file: Path) -> None:
+    """Test readOnly/writeOnly with URL $ref to external schema."""
+    remote_schema = (OPEN_API_DATA_PATH / "read_only_write_only_url_ref_remote.yaml").read_text()
+    mock_response = mocker.Mock()
+    mock_response.text = remote_schema
+
+    mocker.patch("httpx.get", return_value=mock_response)
+
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_url_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_url_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_allof_url_ref(mocker: MockerFixture, output_file: Path) -> None:
+    """Test readOnly/writeOnly with allOf that references external URL schema."""
+    remote_schema = (OPEN_API_DATA_PATH / "read_only_write_only_allof_url_ref_remote.yaml").read_text()
+    mock_response = mocker.Mock()
+    mock_response.text = remote_schema
+
+    mocker.patch("httpx.get", return_value=mock_response)
+
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_allof_url_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_allof_url_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_allof_order(output_file: Path) -> None:
+    """Test readOnly/writeOnly with allOf where child is listed before parent in schema."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_allof_order.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_allof_order.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_nested_allof_order(output_file: Path) -> None:
+    """Test readOnly/writeOnly with nested allOf where models are listed in reverse order."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_nested_allof_order.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_nested_allof_order.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_allof_required_only(output_file: Path) -> None:
+    """Test readOnly/writeOnly with allOf containing item with only 'required' (no ref, no properties)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_allof_required_only.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_allof_required_only.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_mixed(output_file: Path) -> None:
+    """Test request-response mode generates base models for schemas without readOnly/writeOnly."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_mixed.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_mixed.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "request-response",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_anyof(output_file: Path) -> None:
+    """Test readOnly/writeOnly detection in anyOf and oneOf compositions."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_anyof.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_anyof.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_duplicate_allof_ref(output_file: Path) -> None:
+    """Test readOnly/writeOnly with duplicate $ref in allOf."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_duplicate_allof_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_duplicate_allof_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_ref_with_desc(output_file: Path) -> None:
+    """Test readOnly/writeOnly on $ref with description (JsonSchemaObject with ref)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_ref_with_desc.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_ref_with_desc.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_shared_base_ref(output_file: Path) -> None:
+    """Test readOnly/writeOnly with diamond inheritance (shared base via multiple paths)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_shared_base_ref.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_shared_base_ref.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_read_only_write_only_empty_base(output_file: Path) -> None:
+    """Test readOnly/writeOnly with empty base class (no fields)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "read_only_write_only_empty_base.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="read_only_write_only_empty_base.py",
+        extra_args=[
+            "--output-model-type",
+            "pydantic_v2.BaseModel",
+            "--read-only-write-only-model-type",
+            "all",
+        ],
+    )
+
+
+def test_main_openapi_dot_notation_inheritance(output_dir: Path) -> None:
+    """Test dot notation in schema names with inheritance."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "dot_notation_inheritance.yaml",
+        output_path=output_dir,
+        expected_directory=EXPECTED_OPENAPI_PATH / "dot_notation_inheritance",
+        input_file_type="openapi",
+    )
+
+
+def test_main_openapi_dot_notation_deep_inheritance(output_dir: Path) -> None:
+    """Test dot notation with deep inheritance from ancestor packages (issue #2039)."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "dot_notation_deep_inheritance.yaml",
+        output_path=output_dir,
+        expected_directory=EXPECTED_OPENAPI_PATH / "dot_notation_deep_inheritance",
+        input_file_type="openapi",
+    )

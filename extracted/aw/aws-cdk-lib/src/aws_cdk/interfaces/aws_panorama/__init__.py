@@ -60,9 +60,9 @@ class ApplicationInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_panorama as interfaces_aws_panorama
+            from aws_cdk.interfaces import aws_panorama as interfaces_panorama
             
-            application_instance_reference = interfaces_aws_panorama.ApplicationInstanceReference(
+            application_instance_reference = interfaces_panorama.ApplicationInstanceReference(
                 application_instance_arn="applicationInstanceArn",
                 application_instance_id="applicationInstanceId"
             )
@@ -257,9 +257,9 @@ class PackageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_panorama as interfaces_aws_panorama
+            from aws_cdk.interfaces import aws_panorama as interfaces_panorama
             
-            package_reference = interfaces_aws_panorama.PackageReference(
+            package_reference = interfaces_panorama.PackageReference(
                 package_arn="packageArn",
                 package_id="packageId"
             )
@@ -328,9 +328,9 @@ class PackageVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_panorama as interfaces_aws_panorama
+            from aws_cdk.interfaces import aws_panorama as interfaces_panorama
             
-            package_version_reference = interfaces_aws_panorama.PackageVersionReference(
+            package_version_reference = interfaces_panorama.PackageVersionReference(
                 package_id="packageId",
                 package_version="packageVersion",
                 patch_version="patchVersion"

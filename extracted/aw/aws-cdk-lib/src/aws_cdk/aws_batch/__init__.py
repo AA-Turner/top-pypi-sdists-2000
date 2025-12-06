@@ -20634,13 +20634,13 @@ class ManagedEc2EksComputeEnvironment(
         from aws_cdk import aws_ec2 as ec2
         from aws_cdk import aws_eks as eks
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+        from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
         
         # cluster: eks.Cluster
         # instance_type: ec2.InstanceType
         # launch_template: ec2.LaunchTemplate
         # machine_image: ec2.IMachineImage
-        # placement_group_ref: interfaces_aws_ec2.IPlacementGroupRef
+        # placement_group_ref: interfaces_ec2.IPlacementGroupRef
         # role: iam.Role
         # security_group: ec2.SecurityGroup
         # subnet: ec2.Subnet
@@ -21144,13 +21144,13 @@ class ManagedEc2EksComputeEnvironmentProps(ManagedComputeEnvironmentProps):
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_eks as eks
             from aws_cdk import aws_iam as iam
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             # cluster: eks.Cluster
             # instance_type: ec2.InstanceType
             # launch_template: ec2.LaunchTemplate
             # machine_image: ec2.IMachineImage
-            # placement_group_ref: interfaces_aws_ec2.IPlacementGroupRef
+            # placement_group_ref: interfaces_ec2.IPlacementGroupRef
             # role: iam.Role
             # security_group: ec2.SecurityGroup
             # subnet: ec2.Subnet

@@ -141,9 +141,9 @@ class LedgerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qldb as interfaces_aws_qldb
+            from aws_cdk.interfaces import aws_qldb as interfaces_qldb
             
-            ledger_reference = interfaces_aws_qldb.LedgerReference(
+            ledger_reference = interfaces_qldb.LedgerReference(
                 ledger_id="ledgerId"
             )
         '''
@@ -202,9 +202,9 @@ class StreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qldb as interfaces_aws_qldb
+            from aws_cdk.interfaces import aws_qldb as interfaces_qldb
             
-            stream_reference = interfaces_aws_qldb.StreamReference(
+            stream_reference = interfaces_qldb.StreamReference(
                 ledger_name="ledgerName",
                 stream_arn="streamArn",
                 stream_id="streamId"

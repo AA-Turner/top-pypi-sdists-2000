@@ -107,9 +107,9 @@ class VirtualClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emrcontainers as interfaces_aws_emrcontainers
+            from aws_cdk.interfaces import aws_emrcontainers as interfaces_emrcontainers
             
-            virtual_cluster_reference = interfaces_aws_emrcontainers.VirtualClusterReference(
+            virtual_cluster_reference = interfaces_emrcontainers.VirtualClusterReference(
                 virtual_cluster_arn="virtualClusterArn",
                 virtual_cluster_id="virtualClusterId"
             )

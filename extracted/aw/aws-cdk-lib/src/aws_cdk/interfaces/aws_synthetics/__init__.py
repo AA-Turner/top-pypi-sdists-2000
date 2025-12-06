@@ -51,9 +51,9 @@ class CanaryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_synthetics as interfaces_aws_synthetics
+            from aws_cdk.interfaces import aws_synthetics as interfaces_synthetics
             
-            canary_reference = interfaces_aws_synthetics.CanaryReference(
+            canary_reference = interfaces_synthetics.CanaryReference(
                 canary_name="canaryName"
             )
         '''
@@ -100,9 +100,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_synthetics as interfaces_aws_synthetics
+            from aws_cdk.interfaces import aws_synthetics as interfaces_synthetics
             
-            group_reference = interfaces_aws_synthetics.GroupReference(
+            group_reference = interfaces_synthetics.GroupReference(
                 group_name="groupName"
             )
         '''

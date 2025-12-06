@@ -202,9 +202,9 @@ class VolumeAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_aws_workspacesinstances
+            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_workspacesinstances
             
-            volume_association_reference = interfaces_aws_workspacesinstances.VolumeAssociationReference(
+            volume_association_reference = interfaces_workspacesinstances.VolumeAssociationReference(
                 device="device",
                 volume_id="volumeId",
                 workspace_instance_id="workspaceInstanceId"
@@ -271,9 +271,9 @@ class VolumeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_aws_workspacesinstances
+            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_workspacesinstances
             
-            volume_reference = interfaces_aws_workspacesinstances.VolumeReference(
+            volume_reference = interfaces_workspacesinstances.VolumeReference(
                 volume_id="volumeId"
             )
         '''
@@ -320,9 +320,9 @@ class WorkspaceInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_aws_workspacesinstances
+            from aws_cdk.interfaces import aws_workspacesinstances as interfaces_workspacesinstances
             
-            workspace_instance_reference = interfaces_aws_workspacesinstances.WorkspaceInstanceReference(
+            workspace_instance_reference = interfaces_workspacesinstances.WorkspaceInstanceReference(
                 workspace_instance_id="workspaceInstanceId"
             )
         '''

@@ -63,9 +63,9 @@ class ApplicationAssignmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            application_assignment_reference = interfaces_aws_sso.ApplicationAssignmentReference(
+            application_assignment_reference = interfaces_sso.ApplicationAssignmentReference(
                 application_arn="applicationArn",
                 principal_id="principalId",
                 principal_type="principalType"
@@ -132,9 +132,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            application_reference = interfaces_aws_sso.ApplicationReference(
+            application_reference = interfaces_sso.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''
@@ -202,9 +202,9 @@ class AssignmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            assignment_reference = interfaces_aws_sso.AssignmentReference(
+            assignment_reference = interfaces_sso.AssignmentReference(
                 instance_arn="instanceArn",
                 permission_set_arn="permissionSetArn",
                 principal_id="principalId",
@@ -577,9 +577,9 @@ class InstanceAccessControlAttributeConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            instance_access_control_attribute_configuration_reference = interfaces_aws_sso.InstanceAccessControlAttributeConfigurationReference(
+            instance_access_control_attribute_configuration_reference = interfaces_sso.InstanceAccessControlAttributeConfigurationReference(
                 instance_arn="instanceArn"
             )
         '''
@@ -626,9 +626,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            instance_reference = interfaces_aws_sso.InstanceReference(
+            instance_reference = interfaces_sso.InstanceReference(
                 instance_arn="instanceArn"
             )
         '''
@@ -684,9 +684,9 @@ class PermissionSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sso as interfaces_aws_sso
+            from aws_cdk.interfaces import aws_sso as interfaces_sso
             
-            permission_set_reference = interfaces_aws_sso.PermissionSetReference(
+            permission_set_reference = interfaces_sso.PermissionSetReference(
                 instance_arn="instanceArn",
                 permission_set_arn="permissionSetArn"
             )

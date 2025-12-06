@@ -258,6 +258,16 @@ TRACING = (
     or env("LANGSMITH_TRACING", cast=bool, default=None)
 )
 
+# OpenTelemetry
+# Centralized enablement flag so app code does not read raw env vars.
+# If OTEL_ENABLED is unset, auto-enable when a standard OTLP endpoint var is present.
+OTEL_ENABLED = env("OTEL_ENABLED", cast=bool, default=None)
+if OTEL_ENABLED is None:
+    OTEL_ENABLED = bool(
+        getenv("OTEL_EXPORTER_OTLP_TRACES_ENDPOINT")
+        or getenv("OTEL_EXPORTER_OTLP_ENDPOINT")
+    )
+
 # if variant is "licensed", update to "local" if using LANGSMITH_CONTROL_PLANE_API_KEY instead
 
 if (
@@ -291,6 +301,19 @@ LANGGRAPH_METRICS_EXPORT_INTERVAL_MS = env(
 LANGGRAPH_LOGS_ENDPOINT = env("LANGGRAPH_LOGS_ENDPOINT", cast=str, default=None)
 LANGGRAPH_LOGS_ENABLED = env("LANGGRAPH_LOGS_ENABLED", cast=bool, default=False)
 
+FF_PYSPY_PROFILING_ENABLED = env("FF_PYSPY_PROFILING_ENABLED", cast=bool, default=False)
+if FF_PYSPY_PROFILING_ENABLED:
+    import shutil
+
+    pyspy = shutil.which("py-spy")
+    if not pyspy:
+        raise ValueError(
+            "py-spy not found on PATH. Please re-deploy with py-spy installed."
+        )
+FF_PYSPY_PROFILING_MAX_DURATION_SECS = env(
+    "FF_PYSPY_PROFILING_MAX_DURATION_SECS", cast=int, default=240
+)
+
 SELF_HOSTED_OBSERVABILITY_SERVICE_NAME = "LGP_Self_Hosted"
 
 IS_QUEUE_ENTRYPOINT = False
@@ -321,6 +344,8 @@ __all__ = [
     "FF_CRONS_ENABLED",
     "FF_LOG_DROPPED_EVENTS",
     "FF_LOG_QUERY_AND_PARAMS",
+    "FF_PYSPY_PROFILING_ENABLED",
+    "FF_PYSPY_PROFILING_MAX_DURATION_SECS",
     "GRPC_CLIENT_MAX_RECV_MSG_BYTES",
     "GRPC_CLIENT_MAX_SEND_MSG_BYTES",
     "GRPC_CLIENT_POOL_SIZE",
@@ -349,6 +374,7 @@ __all__ = [
     "MIGRATIONS_PATH",
     "MOUNT_PREFIX",
     "N_JOBS_PER_WORKER",
+    "OTEL_ENABLED",
     "POSTGRES_POOL_MAX_SIZE",
     "REDIS_CLUSTER",
     "REDIS_CONNECT_TIMEOUT",

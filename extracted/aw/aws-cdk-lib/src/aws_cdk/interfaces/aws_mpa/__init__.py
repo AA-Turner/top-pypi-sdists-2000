@@ -51,9 +51,9 @@ class ApprovalTeamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mpa as interfaces_aws_mpa
+            from aws_cdk.interfaces import aws_mpa as interfaces_mpa
             
-            approval_team_reference = interfaces_aws_mpa.ApprovalTeamReference(
+            approval_team_reference = interfaces_mpa.ApprovalTeamReference(
                 approval_team_arn="approvalTeamArn"
             )
         '''
@@ -190,9 +190,9 @@ class IdentitySourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mpa as interfaces_aws_mpa
+            from aws_cdk.interfaces import aws_mpa as interfaces_mpa
             
-            identity_source_reference = interfaces_aws_mpa.IdentitySourceReference(
+            identity_source_reference = interfaces_mpa.IdentitySourceReference(
                 identity_source_arn="identitySourceArn"
             )
         '''

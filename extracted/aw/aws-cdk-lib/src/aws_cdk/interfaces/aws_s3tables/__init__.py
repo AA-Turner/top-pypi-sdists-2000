@@ -282,9 +282,9 @@ class NamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3tables as interfaces_aws_s3tables
+            from aws_cdk.interfaces import aws_s3tables as interfaces_s3tables
             
-            namespace_reference = interfaces_aws_s3tables.NamespaceReference(
+            namespace_reference = interfaces_s3tables.NamespaceReference(
                 namespace="namespace",
                 table_bucket_arn="tableBucketArn"
             )
@@ -341,9 +341,9 @@ class TableBucketPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3tables as interfaces_aws_s3tables
+            from aws_cdk.interfaces import aws_s3tables as interfaces_s3tables
             
-            table_bucket_policy_reference = interfaces_aws_s3tables.TableBucketPolicyReference(
+            table_bucket_policy_reference = interfaces_s3tables.TableBucketPolicyReference(
                 table_bucket_arn="tableBucketArn"
             )
         '''
@@ -390,9 +390,9 @@ class TableBucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3tables as interfaces_aws_s3tables
+            from aws_cdk.interfaces import aws_s3tables as interfaces_s3tables
             
-            table_bucket_reference = interfaces_aws_s3tables.TableBucketReference(
+            table_bucket_reference = interfaces_s3tables.TableBucketReference(
                 table_bucket_arn="tableBucketArn"
             )
         '''
@@ -439,9 +439,9 @@ class TablePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3tables as interfaces_aws_s3tables
+            from aws_cdk.interfaces import aws_s3tables as interfaces_s3tables
             
-            table_policy_reference = interfaces_aws_s3tables.TablePolicyReference(
+            table_policy_reference = interfaces_s3tables.TablePolicyReference(
                 table_arn="tableArn"
             )
         '''
@@ -488,9 +488,9 @@ class TableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3tables as interfaces_aws_s3tables
+            from aws_cdk.interfaces import aws_s3tables as interfaces_s3tables
             
-            table_reference = interfaces_aws_s3tables.TableReference(
+            table_reference = interfaces_s3tables.TableReference(
                 table_arn="tableArn"
             )
         '''

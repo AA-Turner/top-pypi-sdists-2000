@@ -60,9 +60,9 @@ class ExecutionPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kendraranking as interfaces_aws_kendraranking
+            from aws_cdk.interfaces import aws_kendraranking as interfaces_kendraranking
             
-            execution_plan_reference = interfaces_aws_kendraranking.ExecutionPlanReference(
+            execution_plan_reference = interfaces_kendraranking.ExecutionPlanReference(
                 execution_plan_arn="executionPlanArn",
                 execution_plan_id="executionPlanId"
             )

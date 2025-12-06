@@ -96,9 +96,9 @@ class InvestigationGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aiops as interfaces_aws_aiops
+            from aws_cdk.interfaces import aws_aiops as interfaces_aiops
             
-            investigation_group_reference = interfaces_aws_aiops.InvestigationGroupReference(
+            investigation_group_reference = interfaces_aiops.InvestigationGroupReference(
                 investigation_group_arn="investigationGroupArn"
             )
         '''

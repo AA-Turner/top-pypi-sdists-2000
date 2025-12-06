@@ -98,9 +98,9 @@ class LoadBalancerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancing as interfaces_aws_elasticloadbalancing
+            from aws_cdk.interfaces import aws_elasticloadbalancing as interfaces_elasticloadbalancing
             
-            load_balancer_reference = interfaces_aws_elasticloadbalancing.LoadBalancerReference(
+            load_balancer_reference = interfaces_elasticloadbalancing.LoadBalancerReference(
                 load_balancer_id="loadBalancerId"
             )
         '''

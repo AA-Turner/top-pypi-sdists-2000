@@ -51,9 +51,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sdb as interfaces_aws_sdb
+            from aws_cdk.interfaces import aws_sdb as interfaces_sdb
             
-            domain_reference = interfaces_aws_sdb.DomainReference(
+            domain_reference = interfaces_sdb.DomainReference(
                 domain_id="domainId"
             )
         '''

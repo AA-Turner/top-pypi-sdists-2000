@@ -51,9 +51,9 @@ class AliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
-            alias_reference = interfaces_aws_kms.AliasReference(
+            alias_reference = interfaces_kms.AliasReference(
                 alias_name="aliasName"
             )
         '''
@@ -236,9 +236,9 @@ class KeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
-            key_reference = interfaces_aws_kms.KeyReference(
+            key_reference = interfaces_kms.KeyReference(
                 key_arn="keyArn",
                 key_id="keyId"
             )
@@ -296,9 +296,9 @@ class ReplicaKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
-            replica_key_reference = interfaces_aws_kms.ReplicaKeyReference(
+            replica_key_reference = interfaces_kms.ReplicaKeyReference(
                 key_id="keyId",
                 replica_key_arn="replicaKeyArn"
             )

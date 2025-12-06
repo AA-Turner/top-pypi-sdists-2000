@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: mlflow
-Version: 3.6.0
+Version: 3.7.0
 Summary: MLflow is an open source platform for the complete machine learning lifecycle
 Maintainer-email: Databricks <mlflow-oss-maintainers@googlegroups.com>
 License: Copyright 2018 Databricks, Inc.  All rights reserved.
@@ -224,8 +224,8 @@ Classifier: Programming Language :: Python :: 3.10
 Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE.txt
-Requires-Dist: mlflow-skinny==3.6.0
-Requires-Dist: mlflow-tracing==3.6.0
+Requires-Dist: mlflow-skinny==3.7.0
+Requires-Dist: mlflow-tracing==3.7.0
 Requires-Dist: Flask-CORS<7
 Requires-Dist: Flask<4
 Requires-Dist: alembic!=1.10.0,<2
@@ -280,6 +280,7 @@ Requires-Dist: uvicorn[standard]<1; extra == "genai"
 Requires-Dist: watchfiles<2; extra == "genai"
 Provides-Extra: mcp
 Requires-Dist: fastmcp<3,>=2.0.0; extra == "mcp"
+Requires-Dist: click!=8.3.0; extra == "mcp"
 Provides-Extra: sqlserver
 Requires-Dist: mlflow-dbstore; extra == "sqlserver"
 Provides-Extra: aliyun-oss
@@ -287,7 +288,7 @@ Requires-Dist: aliyunstoreplugin; extra == "aliyun-oss"
 Provides-Extra: jfrog
 Requires-Dist: mlflow-jfrog-plugin; extra == "jfrog"
 Provides-Extra: langchain
-Requires-Dist: langchain<=0.3.27,>=0.3.7; extra == "langchain"
+Requires-Dist: langchain<=1.1.0,>=0.3.9; extra == "langchain"
 Provides-Extra: auth
 Requires-Dist: Flask-WTF<2; extra == "auth"
 Dynamic: license-file
@@ -565,7 +566,7 @@ rf.fit(X_train, y_train)
 Once the above code finishes, run the following command in a separate terminal and access the MLflow UI via the printed URL. An MLflow **Run** should be automatically created, which tracks the training dataset, hyper parameters, performance metrics, the trained model, dependencies, and even more.
 
 ```
-mlflow ui
+mlflow server
 ```
 
 ## 💭 Support
@@ -610,6 +611,7 @@ MLflow is currently maintained by the following core members with significant co
 - [Daniel Lok](https://github.com/daniellok-db)
 - [Gabriel Fu](https://github.com/gabrielfu)
 - [Harutaka Kawamura](https://github.com/harupy)
+- [Joel Robin P](https://github.com/joelrobin18)
 - [Serena Ruan](https://github.com/serena-ruan)
 - [Tomu Hirata](https://github.com/TomeHirata)
 - [Weichen Xu](https://github.com/WeichenXu123)

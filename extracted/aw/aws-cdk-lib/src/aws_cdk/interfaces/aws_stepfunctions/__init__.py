@@ -51,9 +51,9 @@ class ActivityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_stepfunctions as interfaces_aws_stepfunctions
+            from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
             
-            activity_reference = interfaces_aws_stepfunctions.ActivityReference(
+            activity_reference = interfaces_stepfunctions.ActivityReference(
                 activity_arn="activityArn"
             )
         '''
@@ -284,9 +284,9 @@ class StateMachineAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_stepfunctions as interfaces_aws_stepfunctions
+            from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
             
-            state_machine_alias_reference = interfaces_aws_stepfunctions.StateMachineAliasReference(
+            state_machine_alias_reference = interfaces_stepfunctions.StateMachineAliasReference(
                 state_machine_alias_arn="stateMachineAliasArn"
             )
         '''
@@ -333,9 +333,9 @@ class StateMachineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_stepfunctions as interfaces_aws_stepfunctions
+            from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
             
-            state_machine_reference = interfaces_aws_stepfunctions.StateMachineReference(
+            state_machine_reference = interfaces_stepfunctions.StateMachineReference(
                 state_machine_arn="stateMachineArn"
             )
         '''
@@ -382,9 +382,9 @@ class StateMachineVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_stepfunctions as interfaces_aws_stepfunctions
+            from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
             
-            state_machine_version_reference = interfaces_aws_stepfunctions.StateMachineVersionReference(
+            state_machine_version_reference = interfaces_stepfunctions.StateMachineVersionReference(
                 state_machine_version_arn="stateMachineVersionArn"
             )
         '''

@@ -96,9 +96,9 @@ class PlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_arcregionswitch as interfaces_aws_arcregionswitch
+            from aws_cdk.interfaces import aws_arcregionswitch as interfaces_arcregionswitch
             
-            plan_reference = interfaces_aws_arcregionswitch.PlanReference(
+            plan_reference = interfaces_arcregionswitch.PlanReference(
                 plan_arn="planArn"
             )
         '''

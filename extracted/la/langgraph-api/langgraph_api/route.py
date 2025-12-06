@@ -4,6 +4,7 @@ import typing
 
 import jsonschema_rs
 import orjson
+import structlog
 from starlette._exception_handler import wrap_app_handling_exceptions
 from starlette._utils import is_async_callable
 from starlette.concurrency import run_in_threadpool
@@ -18,6 +19,7 @@ from langgraph_api import config
 from langgraph_api.serde import json_dumpb
 from langgraph_api.utils import get_auth_ctx, with_user
 
+logger = structlog.getLogger(__name__)
 SchemaType = (
     jsonschema_rs.Draft4Validator
     | jsonschema_rs.Draft6Validator
@@ -145,6 +147,8 @@ class ApiRoute(Route):
 
         scope["route"] = self.path
         set_logging_context({"path": self.path, "method": scope.get("method")})
+        route_pattern = f"{scope.get('root_path', '')}{self.path}"
+        _name_otel_span(scope, route_pattern)
         ctx = get_auth_ctx()
         if ctx:
             user, auth = ctx.user, ctx.permissions
@@ -152,3 +156,31 @@ class ApiRoute(Route):
             user, auth = scope.get("user"), scope.get("auth")
         async with with_user(user, auth):
             return await super().handle(scope, receive, send)
+
+
+def _name_otel_span(scope: Scope, route_pattern: str):
+    """Best-effort rename of the active OTEL server span to include the route.
+
+    - No-ops if OTEL is disabled or OTEL libs are unavailable.
+    - Sets span name to "METHOD /templated/path" and attaches http.route.
+    - Never raises; safe for hot path usage.
+    """
+    if not config.OTEL_ENABLED:
+        return
+    try:
+        from opentelemetry.trace import get_current_span
+
+        span = get_current_span()
+        if span.is_recording():
+            method = scope.get("method", "") or ""
+            try:
+                span.update_name(f"{method} {route_pattern}")
+            except Exception:
+                logger.error("Failed to update OTEL span name", exc_info=True)
+                pass
+            try:
+                span.set_attribute("http.route", route_pattern)
+            except Exception:
+                logger.error("Failed to update OTEL span attributes", exc_info=True)
+    except Exception:
+        logger.error("Failed to update OTEL span", exc_info=True)

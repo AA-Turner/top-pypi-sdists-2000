@@ -51,9 +51,9 @@ class AccountReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            account_reference = interfaces_aws_apigateway.AccountReference(
+            account_reference = interfaces_apigateway.AccountReference(
                 account_id="accountId"
             )
         '''
@@ -100,9 +100,9 @@ class ApiKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            api_key_reference = interfaces_aws_apigateway.ApiKeyReference(
+            api_key_reference = interfaces_apigateway.ApiKeyReference(
                 api_key_id="apiKeyId"
             )
         '''
@@ -155,9 +155,9 @@ class AuthorizerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            authorizer_reference = interfaces_aws_apigateway.AuthorizerReference(
+            authorizer_reference = interfaces_apigateway.AuthorizerReference(
                 authorizer_id="authorizerId",
                 rest_api_id="restApiId"
             )
@@ -215,9 +215,9 @@ class BasePathMappingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            base_path_mapping_reference = interfaces_aws_apigateway.BasePathMappingReference(
+            base_path_mapping_reference = interfaces_apigateway.BasePathMappingReference(
                 base_path="basePath",
                 domain_name="domainName"
             )
@@ -274,9 +274,9 @@ class BasePathMappingV2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            base_path_mapping_v2_reference = interfaces_aws_apigateway.BasePathMappingV2Reference(
+            base_path_mapping_v2_reference = interfaces_apigateway.BasePathMappingV2Reference(
                 base_path_mapping_arn="basePathMappingArn"
             )
         '''
@@ -323,9 +323,9 @@ class ClientCertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            client_certificate_reference = interfaces_aws_apigateway.ClientCertificateReference(
+            client_certificate_reference = interfaces_apigateway.ClientCertificateReference(
                 client_certificate_id="clientCertificateId"
             )
         '''
@@ -378,9 +378,9 @@ class DeploymentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            deployment_reference = interfaces_aws_apigateway.DeploymentReference(
+            deployment_reference = interfaces_apigateway.DeploymentReference(
                 deployment_id="deploymentId",
                 rest_api_id="restApiId"
             )
@@ -446,9 +446,9 @@ class DocumentationPartReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            documentation_part_reference = interfaces_aws_apigateway.DocumentationPartReference(
+            documentation_part_reference = interfaces_apigateway.DocumentationPartReference(
                 documentation_part_id="documentationPartId",
                 rest_api_id="restApiId"
             )
@@ -514,9 +514,9 @@ class DocumentationVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            documentation_version_reference = interfaces_aws_apigateway.DocumentationVersionReference(
+            documentation_version_reference = interfaces_apigateway.DocumentationVersionReference(
                 documentation_version="documentationVersion",
                 rest_api_id="restApiId"
             )
@@ -575,9 +575,9 @@ class DomainNameAccessAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            domain_name_access_association_reference = interfaces_aws_apigateway.DomainNameAccessAssociationReference(
+            domain_name_access_association_reference = interfaces_apigateway.DomainNameAccessAssociationReference(
                 domain_name_access_association_arn="domainNameAccessAssociationArn"
             )
         '''
@@ -630,9 +630,9 @@ class DomainNameReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            domain_name_reference = interfaces_aws_apigateway.DomainNameReference(
+            domain_name_reference = interfaces_apigateway.DomainNameReference(
                 domain_name="domainName",
                 domain_name_arn="domainNameArn"
             )
@@ -689,9 +689,9 @@ class DomainNameV2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            domain_name_v2_reference = interfaces_aws_apigateway.DomainNameV2Reference(
+            domain_name_v2_reference = interfaces_apigateway.DomainNameV2Reference(
                 domain_name_arn="domainNameArn"
             )
         '''
@@ -738,9 +738,9 @@ class GatewayResponseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            gateway_response_reference = interfaces_aws_apigateway.GatewayResponseReference(
+            gateway_response_reference = interfaces_apigateway.GatewayResponseReference(
                 gateway_response_id="gatewayResponseId"
             )
         '''
@@ -1803,9 +1803,9 @@ class MethodReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            method_reference = interfaces_aws_apigateway.MethodReference(
+            method_reference = interfaces_apigateway.MethodReference(
                 http_method="httpMethod",
                 resource_id="resourceId",
                 rest_api_id="restApiId"
@@ -1872,9 +1872,9 @@ class ModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            model_reference = interfaces_aws_apigateway.ModelReference(
+            model_reference = interfaces_apigateway.ModelReference(
                 model_name="modelName"
             )
         '''
@@ -1921,9 +1921,9 @@ class RequestValidatorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            request_validator_reference = interfaces_aws_apigateway.RequestValidatorReference(
+            request_validator_reference = interfaces_apigateway.RequestValidatorReference(
                 request_validator_id="requestValidatorId"
             )
         '''
@@ -1971,9 +1971,9 @@ class ResourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            resource_reference = interfaces_aws_apigateway.ResourceReference(
+            resource_reference = interfaces_apigateway.ResourceReference(
                 resource_id="resourceId",
                 rest_api_id="restApiId"
             )
@@ -2030,9 +2030,9 @@ class RestApiReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            rest_api_reference = interfaces_aws_apigateway.RestApiReference(
+            rest_api_reference = interfaces_apigateway.RestApiReference(
                 rest_api_id="restApiId"
             )
         '''
@@ -2080,9 +2080,9 @@ class StageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            stage_reference = interfaces_aws_apigateway.StageReference(
+            stage_reference = interfaces_apigateway.StageReference(
                 rest_api_id="restApiId",
                 stage_name="stageName"
             )
@@ -2139,9 +2139,9 @@ class UsagePlanKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            usage_plan_key_reference = interfaces_aws_apigateway.UsagePlanKeyReference(
+            usage_plan_key_reference = interfaces_apigateway.UsagePlanKeyReference(
                 usage_plan_key_id="usagePlanKeyId"
             )
         '''
@@ -2188,9 +2188,9 @@ class UsagePlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            usage_plan_reference = interfaces_aws_apigateway.UsagePlanReference(
+            usage_plan_reference = interfaces_apigateway.UsagePlanReference(
                 usage_plan_id="usagePlanId"
             )
         '''
@@ -2237,9 +2237,9 @@ class VpcLinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+            from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
             
-            vpc_link_reference = interfaces_aws_apigateway.VpcLinkReference(
+            vpc_link_reference = interfaces_apigateway.VpcLinkReference(
                 vpc_link_id="vpcLinkId"
             )
         '''

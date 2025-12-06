@@ -51,9 +51,9 @@ class DiscoveryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationsignals as interfaces_aws_applicationsignals
+            from aws_cdk.interfaces import aws_applicationsignals as interfaces_applicationsignals
             
-            discovery_reference = interfaces_aws_applicationsignals.DiscoveryReference(
+            discovery_reference = interfaces_applicationsignals.DiscoveryReference(
                 account_id="accountId"
             )
         '''
@@ -100,9 +100,9 @@ class GroupingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationsignals as interfaces_aws_applicationsignals
+            from aws_cdk.interfaces import aws_applicationsignals as interfaces_applicationsignals
             
-            grouping_configuration_reference = interfaces_aws_applicationsignals.GroupingConfigurationReference(
+            grouping_configuration_reference = interfaces_applicationsignals.GroupingConfigurationReference(
                 account_id="accountId"
             )
         '''
@@ -290,9 +290,9 @@ class ServiceLevelObjectiveReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationsignals as interfaces_aws_applicationsignals
+            from aws_cdk.interfaces import aws_applicationsignals as interfaces_applicationsignals
             
-            service_level_objective_reference = interfaces_aws_applicationsignals.ServiceLevelObjectiveReference(
+            service_level_objective_reference = interfaces_applicationsignals.ServiceLevelObjectiveReference(
                 service_level_objective_arn="serviceLevelObjectiveArn"
             )
         '''

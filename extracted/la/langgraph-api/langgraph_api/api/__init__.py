@@ -15,12 +15,18 @@ from langgraph_api.api.assistants import assistants_routes
 from langgraph_api.api.mcp import mcp_routes
 from langgraph_api.api.meta import meta_info, meta_metrics
 from langgraph_api.api.openapi import get_openapi_spec
+from langgraph_api.api.profile import profile_routes
 from langgraph_api.api.runs import runs_routes
 from langgraph_api.api.store import store_routes
 from langgraph_api.api.threads import threads_routes
 from langgraph_api.api.ui import ui_routes
 from langgraph_api.auth.middleware import auth_middleware
-from langgraph_api.config import HTTP_CONFIG, MIGRATIONS_PATH, MOUNT_PREFIX
+from langgraph_api.config import (
+    FF_PYSPY_PROFILING_ENABLED,
+    HTTP_CONFIG,
+    MIGRATIONS_PATH,
+    MOUNT_PREFIX,
+)
 from langgraph_api.graph import js_bg_tasks
 from langgraph_api.js.base import is_js_path
 from langgraph_api.validation import DOCS_HTML
@@ -75,6 +81,8 @@ if HTTP_CONFIG:
         protected_routes.extend(threads_routes)
     if not HTTP_CONFIG.get("disable_store"):
         protected_routes.extend(store_routes)
+    if FF_PYSPY_PROFILING_ENABLED:
+        protected_routes.extend(profile_routes)
     if not HTTP_CONFIG.get("disable_ui"):
         protected_routes.extend(ui_routes)
     if not HTTP_CONFIG.get("disable_mcp"):
@@ -86,6 +94,8 @@ else:
     protected_routes.extend(runs_routes)
     protected_routes.extend(threads_routes)
     protected_routes.extend(store_routes)
+    if FF_PYSPY_PROFILING_ENABLED:
+        protected_routes.extend(profile_routes)
     protected_routes.extend(ui_routes)
     protected_routes.extend(mcp_routes)
     protected_routes.extend(a2a_routes)

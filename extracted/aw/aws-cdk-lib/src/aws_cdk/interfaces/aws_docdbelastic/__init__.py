@@ -51,9 +51,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdbelastic as interfaces_aws_docdbelastic
+            from aws_cdk.interfaces import aws_docdbelastic as interfaces_docdbelastic
             
-            cluster_reference = interfaces_aws_docdbelastic.ClusterReference(
+            cluster_reference = interfaces_docdbelastic.ClusterReference(
                 cluster_arn="clusterArn"
             )
         '''

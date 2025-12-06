@@ -80,9 +80,13 @@ from .. import (
 from ..interfaces.aws_observabilityadmin import (
     IOrganizationCentralizationRuleRef as _IOrganizationCentralizationRuleRef_c0e786ce,
     IOrganizationTelemetryRuleRef as _IOrganizationTelemetryRuleRef_c536ab68,
+    IS3TableIntegrationRef as _IS3TableIntegrationRef_0d27be71,
+    ITelemetryPipelinesRef as _ITelemetryPipelinesRef_a5d8576e,
     ITelemetryRuleRef as _ITelemetryRuleRef_9918195f,
     OrganizationCentralizationRuleReference as _OrganizationCentralizationRuleReference_e0f14dd2,
     OrganizationTelemetryRuleReference as _OrganizationTelemetryRuleReference_447c11d2,
+    S3TableIntegrationReference as _S3TableIntegrationReference_5391966c,
+    TelemetryPipelinesReference as _TelemetryPipelinesReference_c5feae72,
     TelemetryRuleReference as _TelemetryRuleReference_35b2b664,
 )
 
@@ -1702,6 +1706,1097 @@ class CfnOrganizationTelemetryRuleProps:
         )
 
 
+@jsii.implements(_IInspectable_c2943556, _IS3TableIntegrationRef_0d27be71, _ITaggableV2_4e6798f8)
+class CfnS3TableIntegration(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnS3TableIntegration",
+):
+    '''Resource Type definition for a CloudWatch Observability Admin S3 Table Integration.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html
+    :cloudformationResource: AWS::ObservabilityAdmin::S3TableIntegration
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_observabilityadmin as observabilityadmin
+        
+        cfn_s3_table_integration = observabilityadmin.CfnS3TableIntegration(self, "MyCfnS3TableIntegration",
+            encryption=observabilityadmin.CfnS3TableIntegration.EncryptionConfigProperty(
+                sse_algorithm="sseAlgorithm",
+        
+                # the properties below are optional
+                kms_key_arn="kmsKeyArn"
+            ),
+            role_arn="roleArn",
+        
+            # the properties below are optional
+            log_sources=[observabilityadmin.CfnS3TableIntegration.LogSourceProperty(
+                name="name",
+                type="type",
+        
+                # the properties below are optional
+                identifier="identifier"
+            )],
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        encryption: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3TableIntegration.EncryptionConfigProperty", typing.Dict[builtins.str, typing.Any]]],
+        role_arn: builtins.str,
+        log_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3TableIntegration.LogSourceProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::ObservabilityAdmin::S3TableIntegration``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param encryption: Encryption configuration for the S3 Table Integration.
+        :param role_arn: The ARN of the role used to access the S3 Table Integration.
+        :param log_sources: The CloudWatch Logs data sources to associate with the S3 Table Integration.
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e613f2b4c0bd0fe05183ae10e1072f669e68ecf8da1370aa25246cc8572b5e2f)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnS3TableIntegrationProps(
+            encryption=encryption,
+            role_arn=role_arn,
+            log_sources=log_sources,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForS3TableIntegration")
+    @builtins.classmethod
+    def arn_for_s3_table_integration(
+        cls,
+        resource: _IS3TableIntegrationRef_0d27be71,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__de0e786e830272a9cd43196ab4d988d850d39e09ac6deece3f6f3fc217267fc9)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForS3TableIntegration", [resource]))
+
+    @jsii.member(jsii_name="isCfnS3TableIntegration")
+    @builtins.classmethod
+    def is_cfn_s3_table_integration(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnS3TableIntegration.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3f060eb6521743a2fee36ac86bf0a3ec88f3659183452e5bc1ed20405e82d070)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnS3TableIntegration", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__db8d8b6fa8e1af24ec5902bc335bccad34c4c808d7ce93702198c675306c9490)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b1915c865e4c74d8cf78a70268ef686e156945564d8c734eae1c805be7b1dcca)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The ARN of the S3 Table Integration.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="s3TableIntegrationRef")
+    def s3_table_integration_ref(self) -> _S3TableIntegrationReference_5391966c:
+        '''A reference to a S3TableIntegration resource.'''
+        return typing.cast(_S3TableIntegrationReference_5391966c, jsii.get(self, "s3TableIntegrationRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="encryption")
+    def encryption(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.EncryptionConfigProperty"]:
+        '''Encryption configuration for the S3 Table Integration.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.EncryptionConfigProperty"], jsii.get(self, "encryption"))
+
+    @encryption.setter
+    def encryption(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.EncryptionConfigProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__bf60cf475e52ec2455d6bb2610fe113c13df025036010f81e85a0d6a8a9568df)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "encryption", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="roleArn")
+    def role_arn(self) -> builtins.str:
+        '''The ARN of the role used to access the S3 Table Integration.'''
+        return typing.cast(builtins.str, jsii.get(self, "roleArn"))
+
+    @role_arn.setter
+    def role_arn(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e9563b76b32841a10a2062025b5dc3f2c3e65ffaf4e26519dd2e2939d724590b)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "roleArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="logSources")
+    def log_sources(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.LogSourceProperty"]]]]:
+        '''The CloudWatch Logs data sources to associate with the S3 Table Integration.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.LogSourceProperty"]]]], jsii.get(self, "logSources"))
+
+    @log_sources.setter
+    def log_sources(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, "CfnS3TableIntegration.LogSourceProperty"]]]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ca350dbe6386e8726b94ecfb8ecdcec3eadaea66fddf8e9ace5f7364958e217a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "logSources", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8d9af1b518d9d7c5df43afc2d1661b0c7f8c2f6e31ea999f0f18044da32c60a)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnS3TableIntegration.EncryptionConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={"sse_algorithm": "sseAlgorithm", "kms_key_arn": "kmsKeyArn"},
+    )
+    class EncryptionConfigProperty:
+        def __init__(
+            self,
+            *,
+            sse_algorithm: builtins.str,
+            kms_key_arn: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Encryption configuration for the S3 Table Integration.
+
+            :param sse_algorithm: The server-side encryption algorithm used to encrypt the S3 Table(s) data.
+            :param kms_key_arn: The ARN of the KMS key used to encrypt the S3 Table Integration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_observabilityadmin as observabilityadmin
+                
+                encryption_config_property = observabilityadmin.CfnS3TableIntegration.EncryptionConfigProperty(
+                    sse_algorithm="sseAlgorithm",
+                
+                    # the properties below are optional
+                    kms_key_arn="kmsKeyArn"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__08cffef92f415425c011859c528aa6887003c25fca6427c36632c3e7f6effd76)
+                check_type(argname="argument sse_algorithm", value=sse_algorithm, expected_type=type_hints["sse_algorithm"])
+                check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "sse_algorithm": sse_algorithm,
+            }
+            if kms_key_arn is not None:
+                self._values["kms_key_arn"] = kms_key_arn
+
+        @builtins.property
+        def sse_algorithm(self) -> builtins.str:
+            '''The server-side encryption algorithm used to encrypt the S3 Table(s) data.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html#cfn-observabilityadmin-s3tableintegration-encryptionconfig-ssealgorithm
+            '''
+            result = self._values.get("sse_algorithm")
+            assert result is not None, "Required property 'sse_algorithm' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def kms_key_arn(self) -> typing.Optional[builtins.str]:
+            '''The ARN of the KMS key used to encrypt the S3 Table Integration.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-encryptionconfig.html#cfn-observabilityadmin-s3tableintegration-encryptionconfig-kmskeyarn
+            '''
+            result = self._values.get("kms_key_arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EncryptionConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnS3TableIntegration.LogSourceProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name", "type": "type", "identifier": "identifier"},
+    )
+    class LogSourceProperty:
+        def __init__(
+            self,
+            *,
+            name: builtins.str,
+            type: builtins.str,
+            identifier: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''CloudWatch Logs data source to associate with the S3 Table Integration.
+
+            :param name: The name of the CloudWatch Logs data source.
+            :param type: The type of the CloudWatch Logs data source.
+            :param identifier: The ID of the CloudWatch Logs data source association.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_observabilityadmin as observabilityadmin
+                
+                log_source_property = observabilityadmin.CfnS3TableIntegration.LogSourceProperty(
+                    name="name",
+                    type="type",
+                
+                    # the properties below are optional
+                    identifier="identifier"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__b66342dc0f7b0ba6d95ddc850e30226765bf042a0bf8a8471a04ad534920ea96)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument identifier", value=identifier, expected_type=type_hints["identifier"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+                "type": type,
+            }
+            if identifier is not None:
+                self._values["identifier"] = identifier
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''The name of the CloudWatch Logs data source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''The type of the CloudWatch Logs data source.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def identifier(self) -> typing.Optional[builtins.str]:
+            '''The ID of the CloudWatch Logs data source association.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-s3tableintegration-logsource.html#cfn-observabilityadmin-s3tableintegration-logsource-identifier
+            '''
+            result = self._values.get("identifier")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LogSourceProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnS3TableIntegrationProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "encryption": "encryption",
+        "role_arn": "roleArn",
+        "log_sources": "logSources",
+        "tags": "tags",
+    },
+)
+class CfnS3TableIntegrationProps:
+    def __init__(
+        self,
+        *,
+        encryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+        role_arn: builtins.str,
+        log_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.LogSourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnS3TableIntegration``.
+
+        :param encryption: Encryption configuration for the S3 Table Integration.
+        :param role_arn: The ARN of the role used to access the S3 Table Integration.
+        :param log_sources: The CloudWatch Logs data sources to associate with the S3 Table Integration.
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_observabilityadmin as observabilityadmin
+            
+            cfn_s3_table_integration_props = observabilityadmin.CfnS3TableIntegrationProps(
+                encryption=observabilityadmin.CfnS3TableIntegration.EncryptionConfigProperty(
+                    sse_algorithm="sseAlgorithm",
+            
+                    # the properties below are optional
+                    kms_key_arn="kmsKeyArn"
+                ),
+                role_arn="roleArn",
+            
+                # the properties below are optional
+                log_sources=[observabilityadmin.CfnS3TableIntegration.LogSourceProperty(
+                    name="name",
+                    type="type",
+            
+                    # the properties below are optional
+                    identifier="identifier"
+                )],
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__595e24a51b54bcce8c75e459e7e3581741d212973d102f13a7b1f8c21e64c7c6)
+            check_type(argname="argument encryption", value=encryption, expected_type=type_hints["encryption"])
+            check_type(argname="argument role_arn", value=role_arn, expected_type=type_hints["role_arn"])
+            check_type(argname="argument log_sources", value=log_sources, expected_type=type_hints["log_sources"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "encryption": encryption,
+            "role_arn": role_arn,
+        }
+        if log_sources is not None:
+            self._values["log_sources"] = log_sources
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def encryption(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.EncryptionConfigProperty]:
+        '''Encryption configuration for the S3 Table Integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-encryption
+        '''
+        result = self._values.get("encryption")
+        assert result is not None, "Required property 'encryption' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.EncryptionConfigProperty], result)
+
+    @builtins.property
+    def role_arn(self) -> builtins.str:
+        '''The ARN of the role used to access the S3 Table Integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-rolearn
+        '''
+        result = self._values.get("role_arn")
+        assert result is not None, "Required property 'role_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def log_sources(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.LogSourceProperty]]]]:
+        '''The CloudWatch Logs data sources to associate with the S3 Table Integration.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-logsources
+        '''
+        result = self._values.get("log_sources")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.LogSourceProperty]]]], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-s3tableintegration.html#cfn-observabilityadmin-s3tableintegration-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnS3TableIntegrationProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _ITelemetryPipelinesRef_a5d8576e, _ITaggableV2_4e6798f8)
+class CfnTelemetryPipelines(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelines",
+):
+    '''Resource Type definition for AWS::ObservabilityAdmin::TelemetryPipelines.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html
+    :cloudformationResource: AWS::ObservabilityAdmin::TelemetryPipelines
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_observabilityadmin as observabilityadmin
+        
+        cfn_telemetry_pipelines = observabilityadmin.CfnTelemetryPipelines(self, "MyCfnTelemetryPipelines",
+            configuration=observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty(
+                body="body"
+            ),
+        
+            # the properties below are optional
+            name="name",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )]
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Create a new ``AWS::ObservabilityAdmin::TelemetryPipelines``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param configuration: 
+        :param name: 
+        :param tags: An array of key-value pairs to apply to this resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f612352088aa915560d9c73b4fc630a10a3f3706939f1998202a1ad9dcaa9b2e)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnTelemetryPipelinesProps(
+            configuration=configuration, name=name, tags=tags
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForTelemetryPipelines")
+    @builtins.classmethod
+    def arn_for_telemetry_pipelines(
+        cls,
+        resource: _ITelemetryPipelinesRef_a5d8576e,
+    ) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__2734bd526aa4a19a2468ecd3f94c2f174bcdef0f646010e77d960f2aee980e1c)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForTelemetryPipelines", [resource]))
+
+    @jsii.member(jsii_name="isCfnTelemetryPipelines")
+    @builtins.classmethod
+    def is_cfn_telemetry_pipelines(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnTelemetryPipelines.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__13e724affcae9c67447d564bf1f406f85952620e01688ec9374c2e240d21ce00)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnTelemetryPipelines", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b7b0d3ae71540f27e1eef685497e34fb8fa229fd184e2f79e2601bd982007f4)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8ef1a0ed45cdf50ec0b96e10e26fffd4fa055a06795675917f6bf670790ac26d)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrPipeline")
+    def attr_pipeline(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: Pipeline
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrPipeline"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrPipelineIdentifier")
+    def attr_pipeline_identifier(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: PipelineIdentifier
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrPipelineIdentifier"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatus")
+    def attr_status(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Status
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrStatusReason")
+    def attr_status_reason(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: StatusReason
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrStatusReason"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="telemetryPipelinesRef")
+    def telemetry_pipelines_ref(self) -> _TelemetryPipelinesReference_c5feae72:
+        '''A reference to a TelemetryPipelines resource.'''
+        return typing.cast(_TelemetryPipelinesReference_c5feae72, jsii.get(self, "telemetryPipelinesRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="configuration")
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]:
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"], jsii.get(self, "configuration"))
+
+    @configuration.setter
+    def configuration(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__c0ea345d0670a42e8cd1fa5ccce024ab9a78b08ece4b335f587f586aa3446f66)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "configuration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__05b27d7721bf16162cc6c8d3ddffb2e5ab5b3582d0e2acfae8e22f54d86e7f56)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__481c302f9e6ff7c9111f4e3c3983ac44f104411494a50dcd0e8fbb96b18d733d)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"body": "body"},
+    )
+    class TelemetryPipelineConfigurationProperty:
+        def __init__(self, *, body: builtins.str) -> None:
+            '''
+            :param body: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipelineconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_observabilityadmin as observabilityadmin
+                
+                telemetry_pipeline_configuration_property = observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty(
+                    body="body"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__9bb4b947dbc757a669388b15cdcb2ebb178c00d3708260a46724a325f1525920)
+                check_type(argname="argument body", value=body, expected_type=type_hints["body"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "body": body,
+            }
+
+        @builtins.property
+        def body(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipelineconfiguration.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipelineconfiguration-body
+            '''
+            result = self._values.get("body")
+            assert result is not None, "Required property 'body' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TelemetryPipelineConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "arn": "arn",
+            "configuration": "configuration",
+            "created_time_stamp": "createdTimeStamp",
+            "last_update_time_stamp": "lastUpdateTimeStamp",
+            "name": "name",
+            "status": "status",
+            "status_reason": "statusReason",
+            "tags": "tags",
+        },
+    )
+    class TelemetryPipelineProperty:
+        def __init__(
+            self,
+            *,
+            arn: typing.Optional[builtins.str] = None,
+            configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            created_time_stamp: typing.Optional[jsii.Number] = None,
+            last_update_time_stamp: typing.Optional[jsii.Number] = None,
+            name: typing.Optional[builtins.str] = None,
+            status: typing.Optional[builtins.str] = None,
+            status_reason: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param arn: 
+            :param configuration: 
+            :param created_time_stamp: 
+            :param last_update_time_stamp: 
+            :param name: 
+            :param status: 
+            :param status_reason: 
+            :param tags: An array of key-value pairs to apply to this resource.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_observabilityadmin as observabilityadmin
+                
+                telemetry_pipeline_property = observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineProperty(
+                    arn="arn",
+                    configuration=observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty(
+                        body="body"
+                    ),
+                    created_time_stamp=123,
+                    last_update_time_stamp=123,
+                    name="name",
+                    status="status",
+                    status_reason=observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty(
+                        description="description"
+                    ),
+                    tags=[CfnTag(
+                        key="key",
+                        value="value"
+                    )]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__521e5519bd3500dba951faf81c8c8ad63ae7bedb065325d66cf2300ff66789f8)
+                check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+                check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+                check_type(argname="argument created_time_stamp", value=created_time_stamp, expected_type=type_hints["created_time_stamp"])
+                check_type(argname="argument last_update_time_stamp", value=last_update_time_stamp, expected_type=type_hints["last_update_time_stamp"])
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+                check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+                check_type(argname="argument status_reason", value=status_reason, expected_type=type_hints["status_reason"])
+                check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if arn is not None:
+                self._values["arn"] = arn
+            if configuration is not None:
+                self._values["configuration"] = configuration
+            if created_time_stamp is not None:
+                self._values["created_time_stamp"] = created_time_stamp
+            if last_update_time_stamp is not None:
+                self._values["last_update_time_stamp"] = last_update_time_stamp
+            if name is not None:
+                self._values["name"] = name
+            if status is not None:
+                self._values["status"] = status
+            if status_reason is not None:
+                self._values["status_reason"] = status_reason
+            if tags is not None:
+                self._values["tags"] = tags
+
+        @builtins.property
+        def arn(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-arn
+            '''
+            result = self._values.get("arn")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def configuration(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-configuration
+            '''
+            result = self._values.get("configuration")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty"]], result)
+
+        @builtins.property
+        def created_time_stamp(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-createdtimestamp
+            '''
+            result = self._values.get("created_time_stamp")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def last_update_time_stamp(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-lastupdatetimestamp
+            '''
+            result = self._values.get("last_update_time_stamp")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def name(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-name
+            '''
+            result = self._values.get("name")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-status
+            '''
+            result = self._values.get("status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def status_reason(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-statusreason
+            '''
+            result = self._values.get("status_reason")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty"]], result)
+
+        @builtins.property
+        def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+            '''An array of key-value pairs to apply to this resource.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipeline.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipeline-tags
+            '''
+            result = self._values.get("tags")
+            return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TelemetryPipelineProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty",
+        jsii_struct_bases=[],
+        name_mapping={"description": "description"},
+    )
+    class TelemetryPipelineStatusReasonProperty:
+        def __init__(
+            self,
+            *,
+            description: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param description: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipelinestatusreason.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_observabilityadmin as observabilityadmin
+                
+                telemetry_pipeline_status_reason_property = observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty(
+                    description="description"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8ac245ad25f1a31f025f3074cc38689cbc6eb0da13fbd131c2413958c035568e)
+                check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if description is not None:
+                self._values["description"] = description
+
+        @builtins.property
+        def description(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-observabilityadmin-telemetrypipelines-telemetrypipelinestatusreason.html#cfn-observabilityadmin-telemetrypipelines-telemetrypipelinestatusreason-description
+            '''
+            result = self._values.get("description")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "TelemetryPipelineStatusReasonProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_observabilityadmin.CfnTelemetryPipelinesProps",
+    jsii_struct_bases=[],
+    name_mapping={"configuration": "configuration", "name": "name", "tags": "tags"},
+)
+class CfnTelemetryPipelinesProps:
+    def __init__(
+        self,
+        *,
+        configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+        name: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnTelemetryPipelines``.
+
+        :param configuration: 
+        :param name: 
+        :param tags: An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_observabilityadmin as observabilityadmin
+            
+            cfn_telemetry_pipelines_props = observabilityadmin.CfnTelemetryPipelinesProps(
+                configuration=observabilityadmin.CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty(
+                    body="body"
+                ),
+            
+                # the properties below are optional
+                name="name",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )]
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5369e75735c42fa71fba44fea4843e2a7be2cb41f104bf1b5e5c9c21b640b915)
+            check_type(argname="argument configuration", value=configuration, expected_type=type_hints["configuration"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "configuration": configuration,
+        }
+        if name is not None:
+            self._values["name"] = name
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def configuration(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-configuration
+        '''
+        result = self._values.get("configuration")
+        assert result is not None, "Required property 'configuration' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''An array of key-value pairs to apply to this resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-observabilityadmin-telemetrypipelines.html#cfn-observabilityadmin-telemetrypipelines-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnTelemetryPipelinesProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
 @jsii.implements(_IInspectable_c2943556, _ITelemetryRuleRef_9918195f, _ITaggableV2_4e6798f8)
 class CfnTelemetryRule(
     _CfnResource_9df397a6,
@@ -2322,6 +3417,10 @@ __all__ = [
     "CfnOrganizationCentralizationRuleProps",
     "CfnOrganizationTelemetryRule",
     "CfnOrganizationTelemetryRuleProps",
+    "CfnS3TableIntegration",
+    "CfnS3TableIntegrationProps",
+    "CfnTelemetryPipelines",
+    "CfnTelemetryPipelinesProps",
     "CfnTelemetryRule",
     "CfnTelemetryRuleProps",
 ]
@@ -2524,6 +3623,183 @@ def _typecheckingstub__45c94381428dd096d5bd5b31c1a78b0ec6c66b125c46a889f389e957d
     *,
     rule: typing.Union[_IResolvable_da3f097b, typing.Union[CfnOrganizationTelemetryRule.TelemetryRuleProperty, typing.Dict[builtins.str, typing.Any]]],
     rule_name: builtins.str,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e613f2b4c0bd0fe05183ae10e1072f669e68ecf8da1370aa25246cc8572b5e2f(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    encryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    role_arn: builtins.str,
+    log_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.LogSourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__de0e786e830272a9cd43196ab4d988d850d39e09ac6deece3f6f3fc217267fc9(
+    resource: _IS3TableIntegrationRef_0d27be71,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3f060eb6521743a2fee36ac86bf0a3ec88f3659183452e5bc1ed20405e82d070(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__db8d8b6fa8e1af24ec5902bc335bccad34c4c808d7ce93702198c675306c9490(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b1915c865e4c74d8cf78a70268ef686e156945564d8c734eae1c805be7b1dcca(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__bf60cf475e52ec2455d6bb2610fe113c13df025036010f81e85a0d6a8a9568df(
+    value: typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.EncryptionConfigProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e9563b76b32841a10a2062025b5dc3f2c3e65ffaf4e26519dd2e2939d724590b(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ca350dbe6386e8726b94ecfb8ecdcec3eadaea66fddf8e9ace5f7364958e217a(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.List[typing.Union[_IResolvable_da3f097b, CfnS3TableIntegration.LogSourceProperty]]]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8d9af1b518d9d7c5df43afc2d1661b0c7f8c2f6e31ea999f0f18044da32c60a(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__08cffef92f415425c011859c528aa6887003c25fca6427c36632c3e7f6effd76(
+    *,
+    sse_algorithm: builtins.str,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b66342dc0f7b0ba6d95ddc850e30226765bf042a0bf8a8471a04ad534920ea96(
+    *,
+    name: builtins.str,
+    type: builtins.str,
+    identifier: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__595e24a51b54bcce8c75e459e7e3581741d212973d102f13a7b1f8c21e64c7c6(
+    *,
+    encryption: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.EncryptionConfigProperty, typing.Dict[builtins.str, typing.Any]]],
+    role_arn: builtins.str,
+    log_sources: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3TableIntegration.LogSourceProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f612352088aa915560d9c73b4fc630a10a3f3706939f1998202a1ad9dcaa9b2e(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__2734bd526aa4a19a2468ecd3f94c2f174bcdef0f646010e77d960f2aee980e1c(
+    resource: _ITelemetryPipelinesRef_a5d8576e,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__13e724affcae9c67447d564bf1f406f85952620e01688ec9374c2e240d21ce00(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b7b0d3ae71540f27e1eef685497e34fb8fa229fd184e2f79e2601bd982007f4(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ef1a0ed45cdf50ec0b96e10e26fffd4fa055a06795675917f6bf670790ac26d(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c0ea345d0670a42e8cd1fa5ccce024ab9a78b08ece4b335f587f586aa3446f66(
+    value: typing.Union[_IResolvable_da3f097b, CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__05b27d7721bf16162cc6c8d3ddffb2e5ab5b3582d0e2acfae8e22f54d86e7f56(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__481c302f9e6ff7c9111f4e3c3983ac44f104411494a50dcd0e8fbb96b18d733d(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9bb4b947dbc757a669388b15cdcb2ebb178c00d3708260a46724a325f1525920(
+    *,
+    body: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__521e5519bd3500dba951faf81c8c8ad63ae7bedb065325d66cf2300ff66789f8(
+    *,
+    arn: typing.Optional[builtins.str] = None,
+    configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    created_time_stamp: typing.Optional[jsii.Number] = None,
+    last_update_time_stamp: typing.Optional[jsii.Number] = None,
+    name: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+    status_reason: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryPipelines.TelemetryPipelineStatusReasonProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8ac245ad25f1a31f025f3074cc38689cbc6eb0da13fbd131c2413958c035568e(
+    *,
+    description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5369e75735c42fa71fba44fea4843e2a7be2cb41f104bf1b5e5c9c21b640b915(
+    *,
+    configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnTelemetryPipelines.TelemetryPipelineConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
+    name: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

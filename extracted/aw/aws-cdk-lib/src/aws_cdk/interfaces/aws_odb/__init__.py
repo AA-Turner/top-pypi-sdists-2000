@@ -51,9 +51,9 @@ class CloudAutonomousVmClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_odb as interfaces_aws_odb
+            from aws_cdk.interfaces import aws_odb as interfaces_odb
             
-            cloud_autonomous_vm_cluster_reference = interfaces_aws_odb.CloudAutonomousVmClusterReference(
+            cloud_autonomous_vm_cluster_reference = interfaces_odb.CloudAutonomousVmClusterReference(
                 cloud_autonomous_vm_cluster_arn="cloudAutonomousVmClusterArn"
             )
         '''
@@ -100,9 +100,9 @@ class CloudExadataInfrastructureReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_odb as interfaces_aws_odb
+            from aws_cdk.interfaces import aws_odb as interfaces_odb
             
-            cloud_exadata_infrastructure_reference = interfaces_aws_odb.CloudExadataInfrastructureReference(
+            cloud_exadata_infrastructure_reference = interfaces_odb.CloudExadataInfrastructureReference(
                 cloud_exadata_infrastructure_arn="cloudExadataInfrastructureArn"
             )
         '''
@@ -149,9 +149,9 @@ class CloudVmClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_odb as interfaces_aws_odb
+            from aws_cdk.interfaces import aws_odb as interfaces_odb
             
-            cloud_vm_cluster_reference = interfaces_aws_odb.CloudVmClusterReference(
+            cloud_vm_cluster_reference = interfaces_odb.CloudVmClusterReference(
                 cloud_vm_cluster_arn="cloudVmClusterArn"
             )
         '''
@@ -427,9 +427,9 @@ class OdbNetworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_odb as interfaces_aws_odb
+            from aws_cdk.interfaces import aws_odb as interfaces_odb
             
-            odb_network_reference = interfaces_aws_odb.OdbNetworkReference(
+            odb_network_reference = interfaces_odb.OdbNetworkReference(
                 odb_network_arn="odbNetworkArn"
             )
         '''
@@ -476,9 +476,9 @@ class OdbPeeringConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_odb as interfaces_aws_odb
+            from aws_cdk.interfaces import aws_odb as interfaces_odb
             
-            odb_peering_connection_reference = interfaces_aws_odb.OdbPeeringConnectionReference(
+            odb_peering_connection_reference = interfaces_odb.OdbPeeringConnectionReference(
                 odb_peering_connection_arn="odbPeeringConnectionArn"
             )
         '''

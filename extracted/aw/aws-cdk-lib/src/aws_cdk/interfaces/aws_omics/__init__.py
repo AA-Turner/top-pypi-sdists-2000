@@ -51,9 +51,9 @@ class AnnotationStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            annotation_store_reference = interfaces_aws_omics.AnnotationStoreReference(
+            annotation_store_reference = interfaces_omics.AnnotationStoreReference(
                 annotation_store_name="annotationStoreName"
             )
         '''
@@ -424,9 +424,9 @@ class ReferenceStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            reference_store_reference = interfaces_aws_omics.ReferenceStoreReference(
+            reference_store_reference = interfaces_omics.ReferenceStoreReference(
                 reference_store_arn="referenceStoreArn",
                 reference_store_id="referenceStoreId"
             )
@@ -489,9 +489,9 @@ class RunGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            run_group_reference = interfaces_aws_omics.RunGroupReference(
+            run_group_reference = interfaces_omics.RunGroupReference(
                 run_group_arn="runGroupArn",
                 run_group_id="runGroupId"
             )
@@ -557,9 +557,9 @@ class SequenceStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            sequence_store_reference = interfaces_aws_omics.SequenceStoreReference(
+            sequence_store_reference = interfaces_omics.SequenceStoreReference(
                 sequence_store_arn="sequenceStoreArn",
                 sequence_store_id="sequenceStoreId"
             )
@@ -616,9 +616,9 @@ class VariantStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            variant_store_reference = interfaces_aws_omics.VariantStoreReference(
+            variant_store_reference = interfaces_omics.VariantStoreReference(
                 variant_store_name="variantStoreName"
             )
         '''
@@ -671,9 +671,9 @@ class WorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            workflow_reference = interfaces_aws_omics.WorkflowReference(
+            workflow_reference = interfaces_omics.WorkflowReference(
                 workflow_arn="workflowArn",
                 workflow_id="workflowId"
             )
@@ -730,9 +730,9 @@ class WorkflowVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_omics as interfaces_aws_omics
+            from aws_cdk.interfaces import aws_omics as interfaces_omics
             
-            workflow_version_reference = interfaces_aws_omics.WorkflowVersionReference(
+            workflow_version_reference = interfaces_omics.WorkflowVersionReference(
                 workflow_version_arn="workflowVersionArn"
             )
         '''

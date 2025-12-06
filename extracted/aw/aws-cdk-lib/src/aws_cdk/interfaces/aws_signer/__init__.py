@@ -147,9 +147,9 @@ class ProfilePermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_signer as interfaces_aws_signer
+            from aws_cdk.interfaces import aws_signer as interfaces_signer
             
-            profile_permission_reference = interfaces_aws_signer.ProfilePermissionReference(
+            profile_permission_reference = interfaces_signer.ProfilePermissionReference(
                 profile_name="profileName",
                 statement_id="statementId"
             )
@@ -206,9 +206,9 @@ class SigningProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_signer as interfaces_aws_signer
+            from aws_cdk.interfaces import aws_signer as interfaces_signer
             
-            signing_profile_reference = interfaces_aws_signer.SigningProfileReference(
+            signing_profile_reference = interfaces_signer.SigningProfileReference(
                 signing_profile_arn="signingProfileArn"
             )
         '''

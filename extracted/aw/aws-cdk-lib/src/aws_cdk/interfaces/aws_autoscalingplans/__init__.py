@@ -98,9 +98,9 @@ class ScalingPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscalingplans as interfaces_aws_autoscalingplans
+            from aws_cdk.interfaces import aws_autoscalingplans as interfaces_autoscalingplans
             
-            scaling_plan_reference = interfaces_aws_autoscalingplans.ScalingPlanReference(
+            scaling_plan_reference = interfaces_autoscalingplans.ScalingPlanReference(
                 scaling_plan_id="scalingPlanId"
             )
         '''

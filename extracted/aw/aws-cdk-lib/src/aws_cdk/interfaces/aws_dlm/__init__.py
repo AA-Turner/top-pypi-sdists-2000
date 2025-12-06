@@ -105,9 +105,9 @@ class LifecyclePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dlm as interfaces_aws_dlm
+            from aws_cdk.interfaces import aws_dlm as interfaces_dlm
             
-            lifecycle_policy_reference = interfaces_aws_dlm.LifecyclePolicyReference(
+            lifecycle_policy_reference = interfaces_dlm.LifecyclePolicyReference(
                 lifecycle_policy_arn="lifecyclePolicyArn",
                 lifecycle_policy_id="lifecyclePolicyId"
             )

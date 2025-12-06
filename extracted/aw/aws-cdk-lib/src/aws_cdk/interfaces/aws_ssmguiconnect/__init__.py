@@ -96,9 +96,9 @@ class PreferencesReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmguiconnect as interfaces_aws_ssmguiconnect
+            from aws_cdk.interfaces import aws_ssmguiconnect as interfaces_ssmguiconnect
             
-            preferences_reference = interfaces_aws_ssmguiconnect.PreferencesReference(
+            preferences_reference = interfaces_ssmguiconnect.PreferencesReference(
                 account_id="accountId"
             )
         '''

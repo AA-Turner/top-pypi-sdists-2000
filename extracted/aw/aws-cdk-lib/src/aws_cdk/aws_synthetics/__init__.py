@@ -5156,9 +5156,9 @@ class S3Code(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_synthetics as synthetics
-        from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+        from aws_cdk.interfaces import aws_s3 as interfaces_s3
         
-        # bucket_ref: interfaces_aws_s3.IBucketRef
+        # bucket_ref: interfaces_s3.IBucketRef
         
         s3_code = synthetics.S3Code(bucket_ref, "key", "objectVersion")
     '''
@@ -5355,11 +5355,11 @@ class AssetCode(
         import aws_cdk as cdk
         from aws_cdk import aws_iam as iam
         from aws_cdk import aws_synthetics as synthetics
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         asset_code = synthetics.AssetCode("assetPath",

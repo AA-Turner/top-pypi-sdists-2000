@@ -477,9 +477,16 @@ class ModelResolver:  # noqa: PLR0904
             yield
 
     @contextmanager
-    def base_url_context(self, base_url: str) -> Generator[None, None, None]:
-        """Temporarily set the base URL within a context."""
-        if self._base_url:
+    def base_url_context(self, base_url: str | None) -> Generator[None, None, None]:
+        """Temporarily set the base URL within a context.
+
+        Only sets the base_url if:
+        - The new value is actually a URL (http://, https://, or file://)
+        - OR _base_url was already set (switching between URLs)
+        This preserves backward compatibility for local file parsing where
+        this method was previously a no-op.
+        """
+        if self._base_url or (base_url and is_url(base_url)):
             with context_variable(self.set_base_url, self.base_url, base_url):
                 yield
         else:
@@ -523,7 +530,7 @@ class ModelResolver:  # noqa: PLR0904
         """Register an identifier mapping to a resolved reference path."""
         self.ids["/".join(self.current_root)][id_] = self.resolve_ref(path)
 
-    def resolve_ref(self, path: Sequence[str] | str) -> str:  # noqa: PLR0911, PLR0912
+    def resolve_ref(self, path: Sequence[str] | str) -> str:  # noqa: PLR0911, PLR0912, PLR0914
         """Resolve a reference path to its canonical form."""
         joined_path = path if isinstance(path, str) else self.join_path(path)
         if joined_path == "#":
@@ -548,18 +555,35 @@ class ModelResolver:  # noqa: PLR0904
         else:
             if "#" not in joined_path:
                 joined_path += "#"
-            elif joined_path[0] == "#":
+            elif joined_path[0] == "#" and not self.base_url:
                 joined_path = f"{'/'.join(self.current_root)}{joined_path}"
 
             file_path, fragment = joined_path.split("#", 1)
             ref = f"{file_path}#{fragment}"
-            if self.root_id_base_path and not (is_url(joined_path) or Path(self._base_path, file_path).is_file()):
+            if (
+                self.root_id_base_path
+                and not self.base_url
+                and not (is_url(joined_path) or Path(self._base_path, file_path).is_file())
+            ):
                 ref = f"{self.root_id_base_path}/{ref}"
+
+        if is_url(ref):
+            file_part, path_part = ref.split("#", 1)
+            id_scope = "/".join(self.current_root)
+            scoped_ids = self.ids[id_scope]
+            if file_part in scoped_ids:
+                mapped_ref = scoped_ids[file_part]
+                if path_part:
+                    mapped_base, mapped_fragment = mapped_ref.split("#", 1) if "#" in mapped_ref else (mapped_ref, "")
+                    combined_fragment = f"{mapped_fragment.rstrip('/')}/{path_part.lstrip('/')}"
+                    return f"{mapped_base}#{combined_fragment}"
+                return mapped_ref
 
         if self.base_url:
             from .http import join_url  # noqa: PLC0415
 
-            joined_url = join_url(self.base_url, ref)
+            effective_base = self.root_id or self.base_url
+            joined_url = join_url(effective_base, ref)
             if "#" in joined_url:
                 return joined_url
             return f"{joined_url}#"
@@ -605,7 +629,7 @@ class ModelResolver:  # noqa: PLR0904
     @staticmethod
     def is_external_root_ref(ref: str) -> bool:
         """Check if a reference points to an external file root."""
-        return ref[-1] == "#"
+        return bool(ref) and ref[-1] == "#"
 
     @staticmethod
     def join_path(path: Sequence[str]) -> str:
@@ -682,7 +706,7 @@ class ModelResolver:  # noqa: PLR0904
                 name = get_singular_name(name, singular_name_suffix or self.singular_name_suffix)
             elif unique:  # pragma: no cover
                 unique_name = self._get_unique_name(name)
-                if unique_name == name:
+                if unique_name != name:
                     duplicate_name = name
                 name = unique_name
         if reference:
@@ -707,8 +731,9 @@ class ModelResolver:  # noqa: PLR0904
 
     def delete(self, path: Sequence[str] | str) -> None:
         """Delete a reference by path if it exists."""
-        if self.resolve_ref(path) in self.references:
-            del self.references[self.resolve_ref(path)]
+        resolved = self.resolve_ref(path)
+        if resolved in self.references:
+            del self.references[resolved]
 
     def default_class_name_generator(self, name: str) -> str:
         """Generate a valid class name from a string."""
@@ -846,5 +871,5 @@ def snake_to_upper_camel(word: str, delimiter: str = "_") -> str:
 
 
 def is_url(ref: str) -> bool:
-    """Check if a reference string is a URL."""
-    return ref.startswith(("https://", "http://"))
+    """Check if a reference string is a URL (HTTP, HTTPS, or file scheme)."""
+    return ref.startswith(("https://", "http://", "file://"))

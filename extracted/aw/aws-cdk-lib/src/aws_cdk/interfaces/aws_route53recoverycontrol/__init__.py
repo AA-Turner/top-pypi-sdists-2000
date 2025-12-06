@@ -51,9 +51,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_aws_route53recoverycontrol
+            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_route53recoverycontrol
             
-            cluster_reference = interfaces_aws_route53recoverycontrol.ClusterReference(
+            cluster_reference = interfaces_route53recoverycontrol.ClusterReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -100,9 +100,9 @@ class ControlPanelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_aws_route53recoverycontrol
+            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_route53recoverycontrol
             
-            control_panel_reference = interfaces_aws_route53recoverycontrol.ControlPanelReference(
+            control_panel_reference = interfaces_route53recoverycontrol.ControlPanelReference(
                 control_panel_arn="controlPanelArn"
             )
         '''
@@ -337,9 +337,9 @@ class RoutingControlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_aws_route53recoverycontrol
+            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_route53recoverycontrol
             
-            routing_control_reference = interfaces_aws_route53recoverycontrol.RoutingControlReference(
+            routing_control_reference = interfaces_route53recoverycontrol.RoutingControlReference(
                 routing_control_arn="routingControlArn"
             )
         '''
@@ -386,9 +386,9 @@ class SafetyRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_aws_route53recoverycontrol
+            from aws_cdk.interfaces import aws_route53recoverycontrol as interfaces_route53recoverycontrol
             
-            safety_rule_reference = interfaces_aws_route53recoverycontrol.SafetyRuleReference(
+            safety_rule_reference = interfaces_route53recoverycontrol.SafetyRuleReference(
                 safety_rule_arn="safetyRuleArn"
             )
         '''

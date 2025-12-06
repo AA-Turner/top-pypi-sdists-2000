@@ -51,9 +51,9 @@ class CustomResourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            custom_resource_reference = interfaces_aws_cloudformation.CustomResourceReference(
+            custom_resource_reference = interfaces_cloudformation.CustomResourceReference(
                 custom_resource_id="customResourceId"
             )
         '''
@@ -100,9 +100,9 @@ class GuardHookReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            guard_hook_reference = interfaces_aws_cloudformation.GuardHookReference(
+            guard_hook_reference = interfaces_cloudformation.GuardHookReference(
                 hook_arn="hookArn"
             )
         '''
@@ -149,9 +149,9 @@ class HookDefaultVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            hook_default_version_reference = interfaces_aws_cloudformation.HookDefaultVersionReference(
+            hook_default_version_reference = interfaces_cloudformation.HookDefaultVersionReference(
                 hook_default_version_arn="hookDefaultVersionArn"
             )
         '''
@@ -198,9 +198,9 @@ class HookTypeConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            hook_type_config_reference = interfaces_aws_cloudformation.HookTypeConfigReference(
+            hook_type_config_reference = interfaces_cloudformation.HookTypeConfigReference(
                 configuration_arn="configurationArn"
             )
         '''
@@ -247,9 +247,9 @@ class HookVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            hook_version_reference = interfaces_aws_cloudformation.HookVersionReference(
+            hook_version_reference = interfaces_cloudformation.HookVersionReference(
                 hook_version_arn="hookVersionArn"
             )
         '''
@@ -1128,9 +1128,9 @@ class LambdaHookReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            lambda_hook_reference = interfaces_aws_cloudformation.LambdaHookReference(
+            lambda_hook_reference = interfaces_cloudformation.LambdaHookReference(
                 hook_arn="hookArn"
             )
         '''
@@ -1177,9 +1177,9 @@ class MacroReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            macro_reference = interfaces_aws_cloudformation.MacroReference(
+            macro_reference = interfaces_cloudformation.MacroReference(
                 macro_id="macroId"
             )
         '''
@@ -1226,9 +1226,9 @@ class ModuleDefaultVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            module_default_version_reference = interfaces_aws_cloudformation.ModuleDefaultVersionReference(
+            module_default_version_reference = interfaces_cloudformation.ModuleDefaultVersionReference(
                 module_default_version_arn="moduleDefaultVersionArn"
             )
         '''
@@ -1275,9 +1275,9 @@ class ModuleVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            module_version_reference = interfaces_aws_cloudformation.ModuleVersionReference(
+            module_version_reference = interfaces_cloudformation.ModuleVersionReference(
                 module_version_arn="moduleVersionArn"
             )
         '''
@@ -1324,9 +1324,9 @@ class PublicTypeVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            public_type_version_reference = interfaces_aws_cloudformation.PublicTypeVersionReference(
+            public_type_version_reference = interfaces_cloudformation.PublicTypeVersionReference(
                 public_type_arn="publicTypeArn"
             )
         '''
@@ -1373,9 +1373,9 @@ class PublisherReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            publisher_reference = interfaces_aws_cloudformation.PublisherReference(
+            publisher_reference = interfaces_cloudformation.PublisherReference(
                 publisher_id="publisherId"
             )
         '''
@@ -1422,9 +1422,9 @@ class ResourceDefaultVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            resource_default_version_reference = interfaces_aws_cloudformation.ResourceDefaultVersionReference(
+            resource_default_version_reference = interfaces_cloudformation.ResourceDefaultVersionReference(
                 resource_default_version_arn="resourceDefaultVersionArn"
             )
         '''
@@ -1471,9 +1471,9 @@ class ResourceVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            resource_version_reference = interfaces_aws_cloudformation.ResourceVersionReference(
+            resource_version_reference = interfaces_cloudformation.ResourceVersionReference(
                 resource_version_arn="resourceVersionArn"
             )
         '''
@@ -1520,9 +1520,9 @@ class StackReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            stack_reference = interfaces_aws_cloudformation.StackReference(
+            stack_reference = interfaces_cloudformation.StackReference(
                 stack_id="stackId"
             )
         '''
@@ -1569,9 +1569,9 @@ class StackSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            stack_set_reference = interfaces_aws_cloudformation.StackSetReference(
+            stack_set_reference = interfaces_cloudformation.StackSetReference(
                 stack_set_id="stackSetId"
             )
         '''
@@ -1618,9 +1618,9 @@ class TypeActivationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            type_activation_reference = interfaces_aws_cloudformation.TypeActivationReference(
+            type_activation_reference = interfaces_cloudformation.TypeActivationReference(
                 type_activation_arn="typeActivationArn"
             )
         '''
@@ -1667,9 +1667,9 @@ class WaitConditionHandleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            wait_condition_handle_reference = interfaces_aws_cloudformation.WaitConditionHandleReference(
+            wait_condition_handle_reference = interfaces_cloudformation.WaitConditionHandleReference(
                 wait_condition_handle_id="waitConditionHandleId"
             )
         '''
@@ -1716,9 +1716,9 @@ class WaitConditionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudformation as interfaces_aws_cloudformation
+            from aws_cdk.interfaces import aws_cloudformation as interfaces_cloudformation
             
-            wait_condition_reference = interfaces_aws_cloudformation.WaitConditionReference(
+            wait_condition_reference = interfaces_cloudformation.WaitConditionReference(
                 wait_condition_id="waitConditionId"
             )
         '''

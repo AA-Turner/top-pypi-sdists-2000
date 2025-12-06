@@ -51,9 +51,9 @@ class AccountAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_supportapp as interfaces_aws_supportapp
+            from aws_cdk.interfaces import aws_supportapp as interfaces_supportapp
             
-            account_alias_reference = interfaces_aws_supportapp.AccountAliasReference(
+            account_alias_reference = interfaces_supportapp.AccountAliasReference(
                 account_alias_resource_id="accountAliasResourceId"
             )
         '''
@@ -244,9 +244,9 @@ class SlackChannelConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_supportapp as interfaces_aws_supportapp
+            from aws_cdk.interfaces import aws_supportapp as interfaces_supportapp
             
-            slack_channel_configuration_reference = interfaces_aws_supportapp.SlackChannelConfigurationReference(
+            slack_channel_configuration_reference = interfaces_supportapp.SlackChannelConfigurationReference(
                 channel_id="channelId",
                 team_id="teamId"
             )
@@ -303,9 +303,9 @@ class SlackWorkspaceConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_supportapp as interfaces_aws_supportapp
+            from aws_cdk.interfaces import aws_supportapp as interfaces_supportapp
             
-            slack_workspace_configuration_reference = interfaces_aws_supportapp.SlackWorkspaceConfigurationReference(
+            slack_workspace_configuration_reference = interfaces_supportapp.SlackWorkspaceConfigurationReference(
                 team_id="teamId"
             )
         '''

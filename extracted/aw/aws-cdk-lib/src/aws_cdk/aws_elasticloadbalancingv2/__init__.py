@@ -21052,9 +21052,9 @@ class RevocationContent:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_elasticloadbalancingv2 as elbv2
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            # bucket_ref: interfaces_aws_s3.IBucketRef
+            # bucket_ref: interfaces_s3.IBucketRef
             
             revocation_content = elbv2.RevocationContent(
                 bucket=bucket_ref,

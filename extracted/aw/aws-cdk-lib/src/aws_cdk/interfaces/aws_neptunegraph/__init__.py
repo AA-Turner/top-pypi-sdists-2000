@@ -52,9 +52,9 @@ class GraphReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptunegraph as interfaces_aws_neptunegraph
+            from aws_cdk.interfaces import aws_neptunegraph as interfaces_neptunegraph
             
-            graph_reference = interfaces_aws_neptunegraph.GraphReference(
+            graph_reference = interfaces_neptunegraph.GraphReference(
                 graph_arn="graphArn",
                 graph_id="graphId"
             )
@@ -205,9 +205,9 @@ class PrivateGraphEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptunegraph as interfaces_aws_neptunegraph
+            from aws_cdk.interfaces import aws_neptunegraph as interfaces_neptunegraph
             
-            private_graph_endpoint_reference = interfaces_aws_neptunegraph.PrivateGraphEndpointReference(
+            private_graph_endpoint_reference = interfaces_neptunegraph.PrivateGraphEndpointReference(
                 private_graph_endpoint_identifier="privateGraphEndpointIdentifier"
             )
         '''

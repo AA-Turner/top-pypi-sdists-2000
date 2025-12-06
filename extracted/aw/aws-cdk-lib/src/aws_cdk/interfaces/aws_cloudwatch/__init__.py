@@ -52,9 +52,9 @@ class AlarmReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            alarm_reference = interfaces_aws_cloudwatch.AlarmReference(
+            alarm_reference = interfaces_cloudwatch.AlarmReference(
                 alarm_arn="alarmArn",
                 alarm_name="alarmName"
             )
@@ -111,9 +111,9 @@ class AnomalyDetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            anomaly_detector_reference = interfaces_aws_cloudwatch.AnomalyDetectorReference(
+            anomaly_detector_reference = interfaces_cloudwatch.AnomalyDetectorReference(
                 anomaly_detector_id="anomalyDetectorId"
             )
         '''
@@ -169,9 +169,9 @@ class CompositeAlarmReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            composite_alarm_reference = interfaces_aws_cloudwatch.CompositeAlarmReference(
+            composite_alarm_reference = interfaces_cloudwatch.CompositeAlarmReference(
                 alarm_name="alarmName",
                 composite_alarm_arn="compositeAlarmArn"
             )
@@ -228,9 +228,9 @@ class DashboardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            dashboard_reference = interfaces_aws_cloudwatch.DashboardReference(
+            dashboard_reference = interfaces_cloudwatch.DashboardReference(
                 dashboard_name="dashboardName"
             )
         '''
@@ -556,9 +556,9 @@ class InsightRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            insight_rule_reference = interfaces_aws_cloudwatch.InsightRuleReference(
+            insight_rule_reference = interfaces_cloudwatch.InsightRuleReference(
                 insight_rule_arn="insightRuleArn",
                 insight_rule_id="insightRuleId"
             )
@@ -624,9 +624,9 @@ class MetricStreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudwatch as interfaces_aws_cloudwatch
+            from aws_cdk.interfaces import aws_cloudwatch as interfaces_cloudwatch
             
-            metric_stream_reference = interfaces_aws_cloudwatch.MetricStreamReference(
+            metric_stream_reference = interfaces_cloudwatch.MetricStreamReference(
                 metric_stream_arn="metricStreamArn",
                 metric_stream_name="metricStreamName"
             )

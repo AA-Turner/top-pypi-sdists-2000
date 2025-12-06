@@ -51,9 +51,9 @@ class FirewallPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            firewall_policy_reference = interfaces_aws_networkfirewall.FirewallPolicyReference(
+            firewall_policy_reference = interfaces_networkfirewall.FirewallPolicyReference(
                 firewall_policy_arn="firewallPolicyArn"
             )
         '''
@@ -100,9 +100,9 @@ class FirewallReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            firewall_reference = interfaces_aws_networkfirewall.FirewallReference(
+            firewall_reference = interfaces_networkfirewall.FirewallReference(
                 firewall_arn="firewallArn"
             )
         '''
@@ -427,9 +427,9 @@ class LoggingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            logging_configuration_reference = interfaces_aws_networkfirewall.LoggingConfigurationReference(
+            logging_configuration_reference = interfaces_networkfirewall.LoggingConfigurationReference(
                 firewall_arn="firewallArn"
             )
         '''
@@ -476,9 +476,9 @@ class RuleGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            rule_group_reference = interfaces_aws_networkfirewall.RuleGroupReference(
+            rule_group_reference = interfaces_networkfirewall.RuleGroupReference(
                 rule_group_arn="ruleGroupArn"
             )
         '''
@@ -525,9 +525,9 @@ class TLSInspectionConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            t_lSInspection_configuration_reference = interfaces_aws_networkfirewall.TLSInspectionConfigurationReference(
+            t_lSInspection_configuration_reference = interfaces_networkfirewall.TLSInspectionConfigurationReference(
                 tls_inspection_configuration_arn="tlsInspectionConfigurationArn"
             )
         '''
@@ -574,9 +574,9 @@ class VpcEndpointAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_networkfirewall as interfaces_aws_networkfirewall
+            from aws_cdk.interfaces import aws_networkfirewall as interfaces_networkfirewall
             
-            vpc_endpoint_association_reference = interfaces_aws_networkfirewall.VpcEndpointAssociationReference(
+            vpc_endpoint_association_reference = interfaces_networkfirewall.VpcEndpointAssociationReference(
                 vpc_endpoint_association_arn="vpcEndpointAssociationArn"
             )
         '''

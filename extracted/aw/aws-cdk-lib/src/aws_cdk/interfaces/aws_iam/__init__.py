@@ -51,9 +51,9 @@ class AccessKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            access_key_reference = interfaces_aws_iam.AccessKeyReference(
+            access_key_reference = interfaces_iam.AccessKeyReference(
                 access_key_id="accessKeyId"
             )
         '''
@@ -101,9 +101,9 @@ class GroupPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            group_policy_reference = interfaces_aws_iam.GroupPolicyReference(
+            group_policy_reference = interfaces_iam.GroupPolicyReference(
                 group_name="groupName",
                 policy_name="policyName"
             )
@@ -161,9 +161,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            group_reference = interfaces_aws_iam.GroupReference(
+            group_reference = interfaces_iam.GroupReference(
                 group_arn="groupArn",
                 group_name="groupName"
             )
@@ -949,9 +949,9 @@ class InstanceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            instance_profile_reference = interfaces_aws_iam.InstanceProfileReference(
+            instance_profile_reference = interfaces_iam.InstanceProfileReference(
                 instance_profile_arn="instanceProfileArn",
                 instance_profile_name="instanceProfileName"
             )
@@ -1008,9 +1008,9 @@ class ManagedPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            managed_policy_reference = interfaces_aws_iam.ManagedPolicyReference(
+            managed_policy_reference = interfaces_iam.ManagedPolicyReference(
                 policy_arn="policyArn"
             )
         '''
@@ -1057,9 +1057,9 @@ class OIDCProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            o_iDCProvider_reference = interfaces_aws_iam.OIDCProviderReference(
+            o_iDCProvider_reference = interfaces_iam.OIDCProviderReference(
                 oidc_provider_arn="oidcProviderArn"
             )
         '''
@@ -1106,9 +1106,9 @@ class PolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            policy_reference = interfaces_aws_iam.PolicyReference(
+            policy_reference = interfaces_iam.PolicyReference(
                 policy_id="policyId"
             )
         '''
@@ -1156,9 +1156,9 @@ class RolePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            role_policy_reference = interfaces_aws_iam.RolePolicyReference(
+            role_policy_reference = interfaces_iam.RolePolicyReference(
                 policy_name="policyName",
                 role_name="roleName"
             )
@@ -1216,9 +1216,9 @@ class RoleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            role_reference = interfaces_aws_iam.RoleReference(
+            role_reference = interfaces_iam.RoleReference(
                 role_arn="roleArn",
                 role_name="roleName"
             )
@@ -1275,9 +1275,9 @@ class SAMLProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            s_aMLProvider_reference = interfaces_aws_iam.SAMLProviderReference(
+            s_aMLProvider_reference = interfaces_iam.SAMLProviderReference(
                 saml_provider_arn="samlProviderArn"
             )
         '''
@@ -1333,9 +1333,9 @@ class ServerCertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            server_certificate_reference = interfaces_aws_iam.ServerCertificateReference(
+            server_certificate_reference = interfaces_iam.ServerCertificateReference(
                 server_certificate_arn="serverCertificateArn",
                 server_certificate_name="serverCertificateName"
             )
@@ -1392,9 +1392,9 @@ class ServiceLinkedRoleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            service_linked_role_reference = interfaces_aws_iam.ServiceLinkedRoleReference(
+            service_linked_role_reference = interfaces_iam.ServiceLinkedRoleReference(
                 role_name="roleName"
             )
         '''
@@ -1442,9 +1442,9 @@ class UserPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            user_policy_reference = interfaces_aws_iam.UserPolicyReference(
+            user_policy_reference = interfaces_iam.UserPolicyReference(
                 policy_name="policyName",
                 user_name="userName"
             )
@@ -1502,9 +1502,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            user_reference = interfaces_aws_iam.UserReference(
+            user_reference = interfaces_iam.UserReference(
                 user_arn="userArn",
                 user_name="userName"
             )
@@ -1561,9 +1561,9 @@ class UserToGroupAdditionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            user_to_group_addition_reference = interfaces_aws_iam.UserToGroupAdditionReference(
+            user_to_group_addition_reference = interfaces_iam.UserToGroupAdditionReference(
                 user_to_group_addition_id="userToGroupAdditionId"
             )
         '''
@@ -1610,9 +1610,9 @@ class VirtualMFADeviceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            virtual_mFADevice_reference = interfaces_aws_iam.VirtualMFADeviceReference(
+            virtual_mFADevice_reference = interfaces_iam.VirtualMFADeviceReference(
                 serial_number="serialNumber"
             )
         '''

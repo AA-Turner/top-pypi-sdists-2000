@@ -53,9 +53,9 @@ class ConfigurationSetEventDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpointemail as interfaces_aws_pinpointemail
+            from aws_cdk.interfaces import aws_pinpointemail as interfaces_pinpointemail
             
-            configuration_set_event_destination_reference = interfaces_aws_pinpointemail.ConfigurationSetEventDestinationReference(
+            configuration_set_event_destination_reference = interfaces_pinpointemail.ConfigurationSetEventDestinationReference(
                 configuration_set_event_destination_id="configurationSetEventDestinationId"
             )
         '''
@@ -102,9 +102,9 @@ class ConfigurationSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpointemail as interfaces_aws_pinpointemail
+            from aws_cdk.interfaces import aws_pinpointemail as interfaces_pinpointemail
             
-            configuration_set_reference = interfaces_aws_pinpointemail.ConfigurationSetReference(
+            configuration_set_reference = interfaces_pinpointemail.ConfigurationSetReference(
                 configuration_set_id="configurationSetId"
             )
         '''
@@ -151,9 +151,9 @@ class DedicatedIpPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpointemail as interfaces_aws_pinpointemail
+            from aws_cdk.interfaces import aws_pinpointemail as interfaces_pinpointemail
             
-            dedicated_ip_pool_reference = interfaces_aws_pinpointemail.DedicatedIpPoolReference(
+            dedicated_ip_pool_reference = interfaces_pinpointemail.DedicatedIpPoolReference(
                 dedicated_ip_pool_id="dedicatedIpPoolId"
             )
         '''
@@ -390,9 +390,9 @@ class IdentityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpointemail as interfaces_aws_pinpointemail
+            from aws_cdk.interfaces import aws_pinpointemail as interfaces_pinpointemail
             
-            identity_reference = interfaces_aws_pinpointemail.IdentityReference(
+            identity_reference = interfaces_pinpointemail.IdentityReference(
                 identity_id="identityId"
             )
         '''

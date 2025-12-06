@@ -63,9 +63,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_refactorspaces as interfaces_aws_refactorspaces
+            from aws_cdk.interfaces import aws_refactorspaces as interfaces_refactorspaces
             
-            application_reference = interfaces_aws_refactorspaces.ApplicationReference(
+            application_reference = interfaces_refactorspaces.ApplicationReference(
                 application_arn="applicationArn",
                 application_identifier="applicationIdentifier",
                 environment_identifier="environmentIdentifier"
@@ -141,9 +141,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_refactorspaces as interfaces_aws_refactorspaces
+            from aws_cdk.interfaces import aws_refactorspaces as interfaces_refactorspaces
             
-            environment_reference = interfaces_aws_refactorspaces.EnvironmentReference(
+            environment_reference = interfaces_refactorspaces.EnvironmentReference(
                 environment_arn="environmentArn",
                 environment_identifier="environmentIdentifier"
             )
@@ -395,9 +395,9 @@ class RouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_refactorspaces as interfaces_aws_refactorspaces
+            from aws_cdk.interfaces import aws_refactorspaces as interfaces_refactorspaces
             
-            route_reference = interfaces_aws_refactorspaces.RouteReference(
+            route_reference = interfaces_refactorspaces.RouteReference(
                 application_identifier="applicationIdentifier",
                 environment_identifier="environmentIdentifier",
                 route_arn="routeArn",
@@ -489,9 +489,9 @@ class ServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_refactorspaces as interfaces_aws_refactorspaces
+            from aws_cdk.interfaces import aws_refactorspaces as interfaces_refactorspaces
             
-            service_reference = interfaces_aws_refactorspaces.ServiceReference(
+            service_reference = interfaces_refactorspaces.ServiceReference(
                 application_identifier="applicationIdentifier",
                 environment_identifier="environmentIdentifier",
                 service_arn="serviceArn",

@@ -60,9 +60,9 @@ class GroupMembershipReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_identitystore as interfaces_aws_identitystore
+            from aws_cdk.interfaces import aws_identitystore as interfaces_identitystore
             
-            group_membership_reference = interfaces_aws_identitystore.GroupMembershipReference(
+            group_membership_reference = interfaces_identitystore.GroupMembershipReference(
                 identity_store_id="identityStoreId",
                 membership_id="membershipId"
             )
@@ -125,9 +125,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_identitystore as interfaces_aws_identitystore
+            from aws_cdk.interfaces import aws_identitystore as interfaces_identitystore
             
-            group_reference = interfaces_aws_identitystore.GroupReference(
+            group_reference = interfaces_identitystore.GroupReference(
                 group_id="groupId",
                 identity_store_id="identityStoreId"
             )

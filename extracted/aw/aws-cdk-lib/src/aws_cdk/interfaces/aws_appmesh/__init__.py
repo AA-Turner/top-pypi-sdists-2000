@@ -60,9 +60,9 @@ class GatewayRouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            gateway_route_reference = interfaces_aws_appmesh.GatewayRouteReference(
+            gateway_route_reference = interfaces_appmesh.GatewayRouteReference(
                 gateway_route_arn="gatewayRouteArn",
                 gateway_route_id="gatewayRouteId"
             )
@@ -435,9 +435,9 @@ class MeshReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            mesh_reference = interfaces_aws_appmesh.MeshReference(
+            mesh_reference = interfaces_appmesh.MeshReference(
                 mesh_arn="meshArn",
                 mesh_id="meshId"
             )
@@ -495,9 +495,9 @@ class RouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            route_reference = interfaces_aws_appmesh.RouteReference(
+            route_reference = interfaces_appmesh.RouteReference(
                 route_arn="routeArn",
                 route_id="routeId"
             )
@@ -563,9 +563,9 @@ class VirtualGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            virtual_gateway_reference = interfaces_aws_appmesh.VirtualGatewayReference(
+            virtual_gateway_reference = interfaces_appmesh.VirtualGatewayReference(
                 virtual_gateway_arn="virtualGatewayArn",
                 virtual_gateway_id="virtualGatewayId"
             )
@@ -631,9 +631,9 @@ class VirtualNodeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            virtual_node_reference = interfaces_aws_appmesh.VirtualNodeReference(
+            virtual_node_reference = interfaces_appmesh.VirtualNodeReference(
                 virtual_node_arn="virtualNodeArn",
                 virtual_node_id="virtualNodeId"
             )
@@ -699,9 +699,9 @@ class VirtualRouterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            virtual_router_reference = interfaces_aws_appmesh.VirtualRouterReference(
+            virtual_router_reference = interfaces_appmesh.VirtualRouterReference(
                 virtual_router_arn="virtualRouterArn",
                 virtual_router_id="virtualRouterId"
             )
@@ -767,9 +767,9 @@ class VirtualServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+            from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
             
-            virtual_service_reference = interfaces_aws_appmesh.VirtualServiceReference(
+            virtual_service_reference = interfaces_appmesh.VirtualServiceReference(
                 virtual_service_arn="virtualServiceArn",
                 virtual_service_id="virtualServiceId"
             )

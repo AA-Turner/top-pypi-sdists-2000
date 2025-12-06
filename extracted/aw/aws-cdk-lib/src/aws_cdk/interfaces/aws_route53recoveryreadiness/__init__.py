@@ -52,9 +52,9 @@ class CellReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_aws_route53recoveryreadiness
+            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_route53recoveryreadiness
             
-            cell_reference = interfaces_aws_route53recoveryreadiness.CellReference(
+            cell_reference = interfaces_route53recoveryreadiness.CellReference(
                 cell_arn="cellArn",
                 cell_name="cellName"
             )
@@ -308,9 +308,9 @@ class ReadinessCheckReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_aws_route53recoveryreadiness
+            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_route53recoveryreadiness
             
-            readiness_check_reference = interfaces_aws_route53recoveryreadiness.ReadinessCheckReference(
+            readiness_check_reference = interfaces_route53recoveryreadiness.ReadinessCheckReference(
                 readiness_check_arn="readinessCheckArn",
                 readiness_check_name="readinessCheckName"
             )
@@ -376,9 +376,9 @@ class RecoveryGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_aws_route53recoveryreadiness
+            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_route53recoveryreadiness
             
-            recovery_group_reference = interfaces_aws_route53recoveryreadiness.RecoveryGroupReference(
+            recovery_group_reference = interfaces_route53recoveryreadiness.RecoveryGroupReference(
                 recovery_group_arn="recoveryGroupArn",
                 recovery_group_name="recoveryGroupName"
             )
@@ -444,9 +444,9 @@ class ResourceSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_aws_route53recoveryreadiness
+            from aws_cdk.interfaces import aws_route53recoveryreadiness as interfaces_route53recoveryreadiness
             
-            resource_set_reference = interfaces_aws_route53recoveryreadiness.ResourceSetReference(
+            resource_set_reference = interfaces_route53recoveryreadiness.ResourceSetReference(
                 resource_set_arn="resourceSetArn",
                 resource_set_name="resourceSetName"
             )

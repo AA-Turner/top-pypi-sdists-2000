@@ -52,9 +52,9 @@ class AccessPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            access_policy_reference = interfaces_aws_opensearchserverless.AccessPolicyReference(
+            access_policy_reference = interfaces_opensearchserverless.AccessPolicyReference(
                 access_policy_name="accessPolicyName",
                 type="type"
             )
@@ -117,9 +117,9 @@ class CollectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            collection_reference = interfaces_aws_opensearchserverless.CollectionReference(
+            collection_reference = interfaces_opensearchserverless.CollectionReference(
                 collection_arn="collectionArn",
                 collection_id="collectionId"
             )
@@ -512,9 +512,9 @@ class IndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            index_reference = interfaces_aws_opensearchserverless.IndexReference(
+            index_reference = interfaces_opensearchserverless.IndexReference(
                 collection_endpoint="collectionEndpoint",
                 index_name="indexName"
             )
@@ -577,9 +577,9 @@ class LifecyclePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            lifecycle_policy_reference = interfaces_aws_opensearchserverless.LifecyclePolicyReference(
+            lifecycle_policy_reference = interfaces_opensearchserverless.LifecyclePolicyReference(
                 lifecycle_policy_name="lifecyclePolicyName",
                 type="type"
             )
@@ -636,9 +636,9 @@ class SecurityConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            security_config_reference = interfaces_aws_opensearchserverless.SecurityConfigReference(
+            security_config_reference = interfaces_opensearchserverless.SecurityConfigReference(
                 security_config_id="securityConfigId"
             )
         '''
@@ -691,9 +691,9 @@ class SecurityPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            security_policy_reference = interfaces_aws_opensearchserverless.SecurityPolicyReference(
+            security_policy_reference = interfaces_opensearchserverless.SecurityPolicyReference(
                 security_policy_name="securityPolicyName",
                 type="type"
             )
@@ -750,9 +750,9 @@ class VpcEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_aws_opensearchserverless
+            from aws_cdk.interfaces import aws_opensearchserverless as interfaces_opensearchserverless
             
-            vpc_endpoint_reference = interfaces_aws_opensearchserverless.VpcEndpointReference(
+            vpc_endpoint_reference = interfaces_opensearchserverless.VpcEndpointReference(
                 vpc_endpoint_id="vpcEndpointId"
             )
         '''

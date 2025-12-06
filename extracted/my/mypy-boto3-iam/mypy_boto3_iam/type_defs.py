@@ -2697,6 +2697,7 @@ class DelegationRequestTypeDef(TypedDict):
     OwnerId: NotRequired[str]
     ApproverId: NotRequired[str]
     State: NotRequired[StateTypeType]
+    ExpirationTime: NotRequired[datetime]
     RequestorId: NotRequired[str]
     RequestorName: NotRequired[str]
     CreateDate: NotRequired[datetime]

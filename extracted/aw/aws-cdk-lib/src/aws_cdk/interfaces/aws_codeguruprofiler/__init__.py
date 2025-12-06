@@ -107,9 +107,9 @@ class ProfilingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codeguruprofiler as interfaces_aws_codeguruprofiler
+            from aws_cdk.interfaces import aws_codeguruprofiler as interfaces_codeguruprofiler
             
-            profiling_group_reference = interfaces_aws_codeguruprofiler.ProfilingGroupReference(
+            profiling_group_reference = interfaces_codeguruprofiler.ProfilingGroupReference(
                 profiling_group_arn="profilingGroupArn",
                 profiling_group_name="profilingGroupName"
             )

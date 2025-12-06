@@ -11054,9 +11054,9 @@ class DeliveryStreamGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_kinesisfirehose as kinesisfirehose
-        from aws_cdk.interfaces import aws_kinesisfirehose as interfaces_aws_kinesisfirehose
+        from aws_cdk.interfaces import aws_kinesisfirehose as interfaces_kinesisfirehose
         
-        # delivery_stream_ref: interfaces_aws_kinesisfirehose.IDeliveryStreamRef
+        # delivery_stream_ref: interfaces_kinesisfirehose.IDeliveryStreamRef
         
         delivery_stream_grants = kinesisfirehose.DeliveryStreamGrants.from_delivery_stream(delivery_stream_ref)
     '''
@@ -14425,7 +14425,7 @@ class TimestampParser(
         '''Creates a TimestampParser from the given format string.
 
         The format string should be a valid Joda Time pattern string.
-        See `Class DateTimeFormat <https://docs.aws.amazon.com/https://www.joda.org/joda-time/apidocs/org/joda/time/format/DateTimeFormat.html>`_ for more details
+        See `Class DateTimeFormat <https://www.joda.org/joda-time/apidocs/org/joda/time/format/DateTimeFormat.html>`_ for more details
 
         :param format: the Joda Time format string.
         '''

@@ -3348,9 +3348,9 @@ class ApiKeyGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
-        from aws_cdk.interfaces import aws_apigateway as interfaces_aws_apigateway
+        from aws_cdk.interfaces import aws_apigateway as interfaces_apigateway
         
-        # api_key_ref: interfaces_aws_apigateway.IApiKeyRef
+        # api_key_ref: interfaces_apigateway.IApiKeyRef
         
         api_key_grants = apigateway.ApiKeyGrants.from_api_key(api_key_ref)
     '''
@@ -26779,9 +26779,9 @@ class S3ApiDefinition(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigateway as apigateway
-        from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+        from aws_cdk.interfaces import aws_s3 as interfaces_s3
         
-        # bucket_ref: interfaces_aws_s3.IBucketRef
+        # bucket_ref: interfaces_s3.IBucketRef
         
         s3_api_definition = apigateway.S3ApiDefinition(bucket_ref, "key", "objectVersion")
     '''

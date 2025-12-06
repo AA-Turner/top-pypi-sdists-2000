@@ -51,9 +51,9 @@ class AcceleratorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_aws_globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
-            accelerator_reference = interfaces_aws_globalaccelerator.AcceleratorReference(
+            accelerator_reference = interfaces_globalaccelerator.AcceleratorReference(
                 accelerator_arn="acceleratorArn"
             )
         '''
@@ -100,9 +100,9 @@ class CrossAccountAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_aws_globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
-            cross_account_attachment_reference = interfaces_aws_globalaccelerator.CrossAccountAttachmentReference(
+            cross_account_attachment_reference = interfaces_globalaccelerator.CrossAccountAttachmentReference(
                 attachment_arn="attachmentArn"
             )
         '''
@@ -149,9 +149,9 @@ class EndpointGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_aws_globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
-            endpoint_group_reference = interfaces_aws_globalaccelerator.EndpointGroupReference(
+            endpoint_group_reference = interfaces_globalaccelerator.EndpointGroupReference(
                 endpoint_group_arn="endpointGroupArn"
             )
         '''
@@ -384,9 +384,9 @@ class ListenerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_aws_globalaccelerator
+            from aws_cdk.interfaces import aws_globalaccelerator as interfaces_globalaccelerator
             
-            listener_reference = interfaces_aws_globalaccelerator.ListenerReference(
+            listener_reference = interfaces_globalaccelerator.ListenerReference(
                 listener_arn="listenerArn"
             )
         '''

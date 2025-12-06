@@ -51,9 +51,9 @@ class AccessLogSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            access_log_subscription_reference = interfaces_aws_vpclattice.AccessLogSubscriptionReference(
+            access_log_subscription_reference = interfaces_vpclattice.AccessLogSubscriptionReference(
                 access_log_subscription_arn="accessLogSubscriptionArn"
             )
         '''
@@ -100,9 +100,9 @@ class AuthPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            auth_policy_reference = interfaces_aws_vpclattice.AuthPolicyReference(
+            auth_policy_reference = interfaces_vpclattice.AuthPolicyReference(
                 resource_identifier="resourceIdentifier"
             )
         '''
@@ -149,9 +149,9 @@ class DomainVerificationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            domain_verification_reference = interfaces_aws_vpclattice.DomainVerificationReference(
+            domain_verification_reference = interfaces_vpclattice.DomainVerificationReference(
                 domain_verification_arn="domainVerificationArn"
             )
         '''
@@ -852,9 +852,9 @@ class ListenerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            listener_reference = interfaces_aws_vpclattice.ListenerReference(
+            listener_reference = interfaces_vpclattice.ListenerReference(
                 listener_arn="listenerArn"
             )
         '''
@@ -901,9 +901,9 @@ class ResourceConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            resource_configuration_reference = interfaces_aws_vpclattice.ResourceConfigurationReference(
+            resource_configuration_reference = interfaces_vpclattice.ResourceConfigurationReference(
                 resource_configuration_arn="resourceConfigurationArn"
             )
         '''
@@ -950,9 +950,9 @@ class ResourceGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            resource_gateway_reference = interfaces_aws_vpclattice.ResourceGatewayReference(
+            resource_gateway_reference = interfaces_vpclattice.ResourceGatewayReference(
                 resource_gateway_arn="resourceGatewayArn"
             )
         '''
@@ -999,9 +999,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            resource_policy_reference = interfaces_aws_vpclattice.ResourcePolicyReference(
+            resource_policy_reference = interfaces_vpclattice.ResourcePolicyReference(
                 resource_arn="resourceArn"
             )
         '''
@@ -1048,9 +1048,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            rule_reference = interfaces_aws_vpclattice.RuleReference(
+            rule_reference = interfaces_vpclattice.RuleReference(
                 rule_arn="ruleArn"
             )
         '''
@@ -1097,9 +1097,9 @@ class ServiceNetworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            service_network_reference = interfaces_aws_vpclattice.ServiceNetworkReference(
+            service_network_reference = interfaces_vpclattice.ServiceNetworkReference(
                 service_network_arn="serviceNetworkArn"
             )
         '''
@@ -1152,9 +1152,9 @@ class ServiceNetworkResourceAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            service_network_resource_association_reference = interfaces_aws_vpclattice.ServiceNetworkResourceAssociationReference(
+            service_network_resource_association_reference = interfaces_vpclattice.ServiceNetworkResourceAssociationReference(
                 service_network_resource_association_arn="serviceNetworkResourceAssociationArn"
             )
         '''
@@ -1207,9 +1207,9 @@ class ServiceNetworkServiceAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            service_network_service_association_reference = interfaces_aws_vpclattice.ServiceNetworkServiceAssociationReference(
+            service_network_service_association_reference = interfaces_vpclattice.ServiceNetworkServiceAssociationReference(
                 service_network_service_association_arn="serviceNetworkServiceAssociationArn"
             )
         '''
@@ -1258,9 +1258,9 @@ class ServiceNetworkVpcAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            service_network_vpc_association_reference = interfaces_aws_vpclattice.ServiceNetworkVpcAssociationReference(
+            service_network_vpc_association_reference = interfaces_vpclattice.ServiceNetworkVpcAssociationReference(
                 service_network_vpc_association_arn="serviceNetworkVpcAssociationArn"
             )
         '''
@@ -1307,9 +1307,9 @@ class ServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            service_reference = interfaces_aws_vpclattice.ServiceReference(
+            service_reference = interfaces_vpclattice.ServiceReference(
                 service_arn="serviceArn"
             )
         '''
@@ -1356,9 +1356,9 @@ class TargetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_vpclattice as interfaces_aws_vpclattice
+            from aws_cdk.interfaces import aws_vpclattice as interfaces_vpclattice
             
-            target_group_reference = interfaces_aws_vpclattice.TargetGroupReference(
+            target_group_reference = interfaces_vpclattice.TargetGroupReference(
                 target_group_arn="targetGroupArn"
             )
         '''

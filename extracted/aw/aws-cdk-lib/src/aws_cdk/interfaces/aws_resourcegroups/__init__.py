@@ -52,9 +52,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resourcegroups as interfaces_aws_resourcegroups
+            from aws_cdk.interfaces import aws_resourcegroups as interfaces_resourcegroups
             
-            group_reference = interfaces_aws_resourcegroups.GroupReference(
+            group_reference = interfaces_resourcegroups.GroupReference(
                 group_arn="groupArn",
                 group_name="groupName"
             )
@@ -201,9 +201,9 @@ class TagSyncTaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resourcegroups as interfaces_aws_resourcegroups
+            from aws_cdk.interfaces import aws_resourcegroups as interfaces_resourcegroups
             
-            tag_sync_task_reference = interfaces_aws_resourcegroups.TagSyncTaskReference(
+            tag_sync_task_reference = interfaces_resourcegroups.TagSyncTaskReference(
                 task_arn="taskArn"
             )
         '''

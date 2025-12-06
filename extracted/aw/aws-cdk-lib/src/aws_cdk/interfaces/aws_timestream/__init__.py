@@ -57,9 +57,9 @@ class DatabaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_timestream as interfaces_aws_timestream
+            from aws_cdk.interfaces import aws_timestream as interfaces_timestream
             
-            database_reference = interfaces_aws_timestream.DatabaseReference(
+            database_reference = interfaces_timestream.DatabaseReference(
                 database_arn="databaseArn",
                 database_name="databaseName"
             )
@@ -305,9 +305,9 @@ class InfluxDBInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_timestream as interfaces_aws_timestream
+            from aws_cdk.interfaces import aws_timestream as interfaces_timestream
             
-            influx_dBInstance_reference = interfaces_aws_timestream.InfluxDBInstanceReference(
+            influx_dBInstance_reference = interfaces_timestream.InfluxDBInstanceReference(
                 influx_db_instance_arn="influxDbInstanceArn",
                 influx_db_instance_id="influxDbInstanceId"
             )
@@ -364,9 +364,9 @@ class ScheduledQueryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_timestream as interfaces_aws_timestream
+            from aws_cdk.interfaces import aws_timestream as interfaces_timestream
             
-            scheduled_query_reference = interfaces_aws_timestream.ScheduledQueryReference(
+            scheduled_query_reference = interfaces_timestream.ScheduledQueryReference(
                 scheduled_query_arn="scheduledQueryArn"
             )
         '''
@@ -425,9 +425,9 @@ class TableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_timestream as interfaces_aws_timestream
+            from aws_cdk.interfaces import aws_timestream as interfaces_timestream
             
-            table_reference = interfaces_aws_timestream.TableReference(
+            table_reference = interfaces_timestream.TableReference(
                 database_name="databaseName",
                 table_arn="tableArn",
                 table_name="tableName"

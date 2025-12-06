@@ -196,9 +196,9 @@ class LogAnomalyDetectionIntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devopsguru as interfaces_aws_devopsguru
+            from aws_cdk.interfaces import aws_devopsguru as interfaces_devopsguru
             
-            log_anomaly_detection_integration_reference = interfaces_aws_devopsguru.LogAnomalyDetectionIntegrationReference(
+            log_anomaly_detection_integration_reference = interfaces_devopsguru.LogAnomalyDetectionIntegrationReference(
                 account_id="accountId"
             )
         '''
@@ -245,9 +245,9 @@ class NotificationChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devopsguru as interfaces_aws_devopsguru
+            from aws_cdk.interfaces import aws_devopsguru as interfaces_devopsguru
             
-            notification_channel_reference = interfaces_aws_devopsguru.NotificationChannelReference(
+            notification_channel_reference = interfaces_devopsguru.NotificationChannelReference(
                 notification_channel_id="notificationChannelId"
             )
         '''
@@ -294,9 +294,9 @@ class ResourceCollectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devopsguru as interfaces_aws_devopsguru
+            from aws_cdk.interfaces import aws_devopsguru as interfaces_devopsguru
             
-            resource_collection_reference = interfaces_aws_devopsguru.ResourceCollectionReference(
+            resource_collection_reference = interfaces_devopsguru.ResourceCollectionReference(
                 resource_collection_type="resourceCollectionType"
             )
         '''

@@ -107,9 +107,9 @@ class SuiteDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotcoredeviceadvisor as interfaces_aws_iotcoredeviceadvisor
+            from aws_cdk.interfaces import aws_iotcoredeviceadvisor as interfaces_iotcoredeviceadvisor
             
-            suite_definition_reference = interfaces_aws_iotcoredeviceadvisor.SuiteDefinitionReference(
+            suite_definition_reference = interfaces_iotcoredeviceadvisor.SuiteDefinitionReference(
                 suite_definition_arn="suiteDefinitionArn",
                 suite_definition_id="suiteDefinitionId"
             )

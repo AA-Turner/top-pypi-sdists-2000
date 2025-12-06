@@ -51,9 +51,9 @@ class ConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_groundstation as interfaces_aws_groundstation
+            from aws_cdk.interfaces import aws_groundstation as interfaces_groundstation
             
-            config_reference = interfaces_aws_groundstation.ConfigReference(
+            config_reference = interfaces_groundstation.ConfigReference(
                 config_arn="configArn"
             )
         '''
@@ -109,9 +109,9 @@ class DataflowEndpointGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_groundstation as interfaces_aws_groundstation
+            from aws_cdk.interfaces import aws_groundstation as interfaces_groundstation
             
-            dataflow_endpoint_group_reference = interfaces_aws_groundstation.DataflowEndpointGroupReference(
+            dataflow_endpoint_group_reference = interfaces_groundstation.DataflowEndpointGroupReference(
                 dataflow_endpoint_group_arn="dataflowEndpointGroupArn",
                 dataflow_endpoint_group_id="dataflowEndpointGroupId"
             )
@@ -316,9 +316,9 @@ class MissionProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_groundstation as interfaces_aws_groundstation
+            from aws_cdk.interfaces import aws_groundstation as interfaces_groundstation
             
-            mission_profile_reference = interfaces_aws_groundstation.MissionProfileReference(
+            mission_profile_reference = interfaces_groundstation.MissionProfileReference(
                 mission_profile_arn="missionProfileArn",
                 mission_profile_id="missionProfileId"
             )

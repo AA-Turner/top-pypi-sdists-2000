@@ -380,9 +380,9 @@ class ListenerCertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            listener_certificate_reference = interfaces_aws_elasticloadbalancingv2.ListenerCertificateReference(
+            listener_certificate_reference = interfaces_elasticloadbalancingv2.ListenerCertificateReference(
                 listener_certificate_id="listenerCertificateId"
             )
         '''
@@ -429,9 +429,9 @@ class ListenerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            listener_reference = interfaces_aws_elasticloadbalancingv2.ListenerReference(
+            listener_reference = interfaces_elasticloadbalancingv2.ListenerReference(
                 listener_arn="listenerArn"
             )
         '''
@@ -478,9 +478,9 @@ class ListenerRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            listener_rule_reference = interfaces_aws_elasticloadbalancingv2.ListenerRuleReference(
+            listener_rule_reference = interfaces_elasticloadbalancingv2.ListenerRuleReference(
                 rule_arn="ruleArn"
             )
         '''
@@ -527,9 +527,9 @@ class LoadBalancerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            load_balancer_reference = interfaces_aws_elasticloadbalancingv2.LoadBalancerReference(
+            load_balancer_reference = interfaces_elasticloadbalancingv2.LoadBalancerReference(
                 load_balancer_arn="loadBalancerArn"
             )
         '''
@@ -576,9 +576,9 @@ class TargetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            target_group_reference = interfaces_aws_elasticloadbalancingv2.TargetGroupReference(
+            target_group_reference = interfaces_elasticloadbalancingv2.TargetGroupReference(
                 target_group_arn="targetGroupArn"
             )
         '''
@@ -625,9 +625,9 @@ class TrustStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            trust_store_reference = interfaces_aws_elasticloadbalancingv2.TrustStoreReference(
+            trust_store_reference = interfaces_elasticloadbalancingv2.TrustStoreReference(
                 trust_store_arn="trustStoreArn"
             )
         '''
@@ -680,9 +680,9 @@ class TrustStoreRevocationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_aws_elasticloadbalancingv2
+            from aws_cdk.interfaces import aws_elasticloadbalancingv2 as interfaces_elasticloadbalancingv2
             
-            trust_store_revocation_reference = interfaces_aws_elasticloadbalancingv2.TrustStoreRevocationReference(
+            trust_store_revocation_reference = interfaces_elasticloadbalancingv2.TrustStoreRevocationReference(
                 revocation_id="revocationId",
                 trust_store_arn="trustStoreArn"
             )

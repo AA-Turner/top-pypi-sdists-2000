@@ -51,9 +51,9 @@ class BrowserSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            browser_settings_reference = interfaces_aws_workspacesweb.BrowserSettingsReference(
+            browser_settings_reference = interfaces_workspacesweb.BrowserSettingsReference(
                 browser_settings_arn="browserSettingsArn"
             )
         '''
@@ -100,9 +100,9 @@ class DataProtectionSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            data_protection_settings_reference = interfaces_aws_workspacesweb.DataProtectionSettingsReference(
+            data_protection_settings_reference = interfaces_workspacesweb.DataProtectionSettingsReference(
                 data_protection_settings_arn="dataProtectionSettingsArn"
             )
         '''
@@ -611,9 +611,9 @@ class IdentityProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            identity_provider_reference = interfaces_aws_workspacesweb.IdentityProviderReference(
+            identity_provider_reference = interfaces_workspacesweb.IdentityProviderReference(
                 identity_provider_arn="identityProviderArn"
             )
         '''
@@ -660,9 +660,9 @@ class IpAccessSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            ip_access_settings_reference = interfaces_aws_workspacesweb.IpAccessSettingsReference(
+            ip_access_settings_reference = interfaces_workspacesweb.IpAccessSettingsReference(
                 ip_access_settings_arn="ipAccessSettingsArn"
             )
         '''
@@ -709,9 +709,9 @@ class NetworkSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            network_settings_reference = interfaces_aws_workspacesweb.NetworkSettingsReference(
+            network_settings_reference = interfaces_workspacesweb.NetworkSettingsReference(
                 network_settings_arn="networkSettingsArn"
             )
         '''
@@ -758,9 +758,9 @@ class PortalReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            portal_reference = interfaces_aws_workspacesweb.PortalReference(
+            portal_reference = interfaces_workspacesweb.PortalReference(
                 portal_arn="portalArn"
             )
         '''
@@ -807,9 +807,9 @@ class SessionLoggerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            session_logger_reference = interfaces_aws_workspacesweb.SessionLoggerReference(
+            session_logger_reference = interfaces_workspacesweb.SessionLoggerReference(
                 session_logger_arn="sessionLoggerArn"
             )
         '''
@@ -856,9 +856,9 @@ class TrustStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            trust_store_reference = interfaces_aws_workspacesweb.TrustStoreReference(
+            trust_store_reference = interfaces_workspacesweb.TrustStoreReference(
                 trust_store_arn="trustStoreArn"
             )
         '''
@@ -905,9 +905,9 @@ class UserAccessLoggingSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            user_access_logging_settings_reference = interfaces_aws_workspacesweb.UserAccessLoggingSettingsReference(
+            user_access_logging_settings_reference = interfaces_workspacesweb.UserAccessLoggingSettingsReference(
                 user_access_logging_settings_arn="userAccessLoggingSettingsArn"
             )
         '''
@@ -954,9 +954,9 @@ class UserSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesweb as interfaces_aws_workspacesweb
+            from aws_cdk.interfaces import aws_workspacesweb as interfaces_workspacesweb
             
-            user_settings_reference = interfaces_aws_workspacesweb.UserSettingsReference(
+            user_settings_reference = interfaces_workspacesweb.UserSettingsReference(
                 user_settings_arn="userSettingsArn"
             )
         '''

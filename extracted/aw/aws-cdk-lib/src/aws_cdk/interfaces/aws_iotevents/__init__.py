@@ -51,9 +51,9 @@ class AlarmModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotevents as interfaces_aws_iotevents
+            from aws_cdk.interfaces import aws_iotevents as interfaces_iotevents
             
-            alarm_model_reference = interfaces_aws_iotevents.AlarmModelReference(
+            alarm_model_reference = interfaces_iotevents.AlarmModelReference(
                 alarm_model_name="alarmModelName"
             )
         '''
@@ -100,9 +100,9 @@ class DetectorModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotevents as interfaces_aws_iotevents
+            from aws_cdk.interfaces import aws_iotevents as interfaces_iotevents
             
-            detector_model_reference = interfaces_aws_iotevents.DetectorModelReference(
+            detector_model_reference = interfaces_iotevents.DetectorModelReference(
                 detector_model_name="detectorModelName"
             )
         '''
@@ -284,9 +284,9 @@ class InputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotevents as interfaces_aws_iotevents
+            from aws_cdk.interfaces import aws_iotevents as interfaces_iotevents
             
-            input_reference = interfaces_aws_iotevents.InputReference(
+            input_reference = interfaces_iotevents.InputReference(
                 input_name="inputName"
             )
         '''

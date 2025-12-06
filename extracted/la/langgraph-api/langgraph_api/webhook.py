@@ -42,7 +42,7 @@ async def call_webhook(result: "WorkerResult") -> None:
             await logger.ainfo(
                 "Background worker called webhook",
                 webhook=result["webhook"],
-                run_id=result["run"]["run_id"],
+                run_id=str(result["run"]["run_id"]),
             )
         except Exception as exc:
             logger.exception(

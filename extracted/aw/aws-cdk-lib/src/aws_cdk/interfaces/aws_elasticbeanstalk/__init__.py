@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_aws_elasticbeanstalk
+            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_elasticbeanstalk
             
-            application_reference = interfaces_aws_elasticbeanstalk.ApplicationReference(
+            application_reference = interfaces_elasticbeanstalk.ApplicationReference(
                 application_name="applicationName"
             )
         '''
@@ -109,9 +109,9 @@ class ApplicationVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_aws_elasticbeanstalk
+            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_elasticbeanstalk
             
-            application_version_reference = interfaces_aws_elasticbeanstalk.ApplicationVersionReference(
+            application_version_reference = interfaces_elasticbeanstalk.ApplicationVersionReference(
                 application_name="applicationName",
                 application_version_id="applicationVersionId"
             )
@@ -177,9 +177,9 @@ class ConfigurationTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_aws_elasticbeanstalk
+            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_elasticbeanstalk
             
-            configuration_template_reference = interfaces_aws_elasticbeanstalk.ConfigurationTemplateReference(
+            configuration_template_reference = interfaces_elasticbeanstalk.ConfigurationTemplateReference(
                 application_name="applicationName",
                 template_name="templateName"
             )
@@ -236,9 +236,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_aws_elasticbeanstalk
+            from aws_cdk.interfaces import aws_elasticbeanstalk as interfaces_elasticbeanstalk
             
-            environment_reference = interfaces_aws_elasticbeanstalk.EnvironmentReference(
+            environment_reference = interfaces_elasticbeanstalk.EnvironmentReference(
                 environment_name="environmentName"
             )
         '''

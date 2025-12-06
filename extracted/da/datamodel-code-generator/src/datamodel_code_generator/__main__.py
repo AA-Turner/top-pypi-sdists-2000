@@ -30,6 +30,7 @@ from datamodel_code_generator import (
     InputFileType,
     InvalidClassNameError,
     OpenAPIScope,
+    ReadOnlyWriteOnlyModelType,
     ReuseScope,
     enable_debug_message,
     generate,
@@ -165,7 +166,7 @@ class Config(BaseModel):
             return urlparse(value)
         if value is None:  # pragma: no cover
             return None
-        msg = f"This protocol doesn't support only http/https. --input={value}"  # pragma: no cover
+        msg = f"Unsupported URL scheme. Supported: http, https, file. --input={value}"  # pragma: no cover
         raise Error(msg)  # pragma: no cover
 
     # Pydantic 1.5.1 doesn't support each_item=True correctly
@@ -397,6 +398,7 @@ class Config(BaseModel):
     encoding: str = DEFAULT_ENCODING
     enum_field_as_literal: Optional[LiteralType] = None  # noqa: UP045
     use_one_literal_as_default: bool = False
+    use_enum_values_in_discriminator: bool = False
     set_default_enum_member: bool = False
     use_subclass_enum: bool = False
     use_specialized_enum: bool = True
@@ -448,6 +450,7 @@ class Config(BaseModel):
     parent_scoped_naming: bool = False
     disable_future_imports: bool = False
     type_mappings: Optional[list[str]] = None  # noqa: UP045
+    read_only_write_only_model_type: Optional[ReadOnlyWriteOnlyModelType] = None  # noqa: UP045
     all_exports_scope: Optional[AllExportsScope] = None  # noqa: UP045
     all_exports_collision_strategy: Optional[AllExportsCollisionStrategy] = None  # noqa: UP045
 
@@ -801,6 +804,7 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
             encoding=config.encoding,
             enum_field_as_literal=config.enum_field_as_literal,
             use_one_literal_as_default=config.use_one_literal_as_default,
+            use_enum_values_in_discriminator=config.use_enum_values_in_discriminator,
             set_default_enum_member=config.set_default_enum_member,
             use_subclass_enum=config.use_subclass_enum,
             use_specialized_enum=config.use_specialized_enum,
@@ -851,6 +855,7 @@ def main(args: Sequence[str] | None = None) -> Exit:  # noqa: PLR0911, PLR0912, 
             dataclass_arguments=config.dataclass_arguments,
             disable_future_imports=config.disable_future_imports,
             type_mappings=config.type_mappings,
+            read_only_write_only_model_type=config.read_only_write_only_model_type,
             all_exports_scope=config.all_exports_scope,
             all_exports_collision_strategy=config.all_exports_collision_strategy,
         )

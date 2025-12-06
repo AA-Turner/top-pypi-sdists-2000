@@ -51,9 +51,9 @@ class DiscovererReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eventschemas as interfaces_aws_eventschemas
+            from aws_cdk.interfaces import aws_eventschemas as interfaces_eventschemas
             
-            discoverer_reference = interfaces_aws_eventschemas.DiscovererReference(
+            discoverer_reference = interfaces_eventschemas.DiscovererReference(
                 discoverer_arn="discovererArn"
             )
         '''
@@ -280,9 +280,9 @@ class RegistryPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eventschemas as interfaces_aws_eventschemas
+            from aws_cdk.interfaces import aws_eventschemas as interfaces_eventschemas
             
-            registry_policy_reference = interfaces_aws_eventschemas.RegistryPolicyReference(
+            registry_policy_reference = interfaces_eventschemas.RegistryPolicyReference(
                 registry_policy_id="registryPolicyId"
             )
         '''
@@ -329,9 +329,9 @@ class RegistryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eventschemas as interfaces_aws_eventschemas
+            from aws_cdk.interfaces import aws_eventschemas as interfaces_eventschemas
             
-            registry_reference = interfaces_aws_eventschemas.RegistryReference(
+            registry_reference = interfaces_eventschemas.RegistryReference(
                 registry_arn="registryArn"
             )
         '''
@@ -378,9 +378,9 @@ class SchemaReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eventschemas as interfaces_aws_eventschemas
+            from aws_cdk.interfaces import aws_eventschemas as interfaces_eventschemas
             
-            schema_reference = interfaces_aws_eventschemas.SchemaReference(
+            schema_reference = interfaces_eventschemas.SchemaReference(
                 schema_arn="schemaArn"
             )
         '''

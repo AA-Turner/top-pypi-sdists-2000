@@ -51,9 +51,9 @@ class CapacityProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            capacity_provider_reference = interfaces_aws_ecs.CapacityProviderReference(
+            capacity_provider_reference = interfaces_ecs.CapacityProviderReference(
                 capacity_provider_name="capacityProviderName"
             )
         '''
@@ -100,9 +100,9 @@ class ClusterCapacityProviderAssociationsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            cluster_capacity_provider_associations_reference = interfaces_aws_ecs.ClusterCapacityProviderAssociationsReference(
+            cluster_capacity_provider_associations_reference = interfaces_ecs.ClusterCapacityProviderAssociationsReference(
                 cluster="cluster"
             )
         '''
@@ -155,9 +155,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            cluster_reference = interfaces_aws_ecs.ClusterReference(
+            cluster_reference = interfaces_ecs.ClusterReference(
                 cluster_arn="clusterArn",
                 cluster_name="clusterName"
             )
@@ -214,9 +214,9 @@ class ExpressGatewayServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            express_gateway_service_reference = interfaces_aws_ecs.ExpressGatewayServiceReference(
+            express_gateway_service_reference = interfaces_ecs.ExpressGatewayServiceReference(
                 service_arn="serviceArn"
             )
         '''
@@ -630,9 +630,9 @@ class PrimaryTaskSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            primary_task_set_reference = interfaces_aws_ecs.PrimaryTaskSetReference(
+            primary_task_set_reference = interfaces_ecs.PrimaryTaskSetReference(
                 cluster="cluster",
                 service="service"
             )
@@ -690,9 +690,9 @@ class ServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            service_reference = interfaces_aws_ecs.ServiceReference(
+            service_reference = interfaces_ecs.ServiceReference(
                 cluster="cluster",
                 service_arn="serviceArn"
             )
@@ -749,9 +749,9 @@ class TaskDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            task_definition_reference = interfaces_aws_ecs.TaskDefinitionReference(
+            task_definition_reference = interfaces_ecs.TaskDefinitionReference(
                 task_definition_arn="taskDefinitionArn"
             )
         '''
@@ -810,9 +810,9 @@ class TaskSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+            from aws_cdk.interfaces import aws_ecs as interfaces_ecs
             
-            task_set_reference = interfaces_aws_ecs.TaskSetReference(
+            task_set_reference = interfaces_ecs.TaskSetReference(
                 cluster="cluster",
                 service="service",
                 task_set_id="taskSetId"

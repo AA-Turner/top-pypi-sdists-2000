@@ -261,6 +261,7 @@ __all__ = [
     "aws_deadline",
     "aws_detective",
     "aws_devicefarm",
+    "aws_devopsagent",
     "aws_devopsguru",
     "aws_directoryservice",
     "aws_dlm",
@@ -534,6 +535,7 @@ from . import aws_dax
 from . import aws_deadline
 from . import aws_detective
 from . import aws_devicefarm
+from . import aws_devopsagent
 from . import aws_devopsguru
 from . import aws_directoryservice
 from . import aws_dlm

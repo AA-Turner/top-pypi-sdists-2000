@@ -60,9 +60,9 @@ class AutoScalingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            auto_scaling_group_reference = interfaces_aws_autoscaling.AutoScalingGroupReference(
+            auto_scaling_group_reference = interfaces_autoscaling.AutoScalingGroupReference(
                 auto_scaling_group_arn="autoScalingGroupArn",
                 auto_scaling_group_name="autoScalingGroupName"
             )
@@ -393,9 +393,9 @@ class LaunchConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            launch_configuration_reference = interfaces_aws_autoscaling.LaunchConfigurationReference(
+            launch_configuration_reference = interfaces_autoscaling.LaunchConfigurationReference(
                 launch_configuration_name="launchConfigurationName"
             )
         '''
@@ -451,9 +451,9 @@ class LifecycleHookReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            lifecycle_hook_reference = interfaces_aws_autoscaling.LifecycleHookReference(
+            lifecycle_hook_reference = interfaces_autoscaling.LifecycleHookReference(
                 auto_scaling_group_name="autoScalingGroupName",
                 lifecycle_hook_name="lifecycleHookName"
             )
@@ -510,9 +510,9 @@ class ScalingPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            scaling_policy_reference = interfaces_aws_autoscaling.ScalingPolicyReference(
+            scaling_policy_reference = interfaces_autoscaling.ScalingPolicyReference(
                 scaling_policy_arn="scalingPolicyArn"
             )
         '''
@@ -568,9 +568,9 @@ class ScheduledActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            scheduled_action_reference = interfaces_aws_autoscaling.ScheduledActionReference(
+            scheduled_action_reference = interfaces_autoscaling.ScheduledActionReference(
                 auto_scaling_group_name="autoScalingGroupName",
                 scheduled_action_name="scheduledActionName"
             )
@@ -627,9 +627,9 @@ class WarmPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_autoscaling as interfaces_aws_autoscaling
+            from aws_cdk.interfaces import aws_autoscaling as interfaces_autoscaling
             
-            warm_pool_reference = interfaces_aws_autoscaling.WarmPoolReference(
+            warm_pool_reference = interfaces_autoscaling.WarmPoolReference(
                 auto_scaling_group_name="autoScalingGroupName"
             )
         '''

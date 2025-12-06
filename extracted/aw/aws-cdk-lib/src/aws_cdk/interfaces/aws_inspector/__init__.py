@@ -51,9 +51,9 @@ class AssessmentTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspector as interfaces_aws_inspector
+            from aws_cdk.interfaces import aws_inspector as interfaces_inspector
             
-            assessment_target_reference = interfaces_aws_inspector.AssessmentTargetReference(
+            assessment_target_reference = interfaces_inspector.AssessmentTargetReference(
                 assessment_target_arn="assessmentTargetArn"
             )
         '''
@@ -100,9 +100,9 @@ class AssessmentTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspector as interfaces_aws_inspector
+            from aws_cdk.interfaces import aws_inspector as interfaces_inspector
             
-            assessment_template_reference = interfaces_aws_inspector.AssessmentTemplateReference(
+            assessment_template_reference = interfaces_inspector.AssessmentTemplateReference(
                 assessment_template_arn="assessmentTemplateArn"
             )
         '''
@@ -286,9 +286,9 @@ class ResourceGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspector as interfaces_aws_inspector
+            from aws_cdk.interfaces import aws_inspector as interfaces_inspector
             
-            resource_group_reference = interfaces_aws_inspector.ResourceGroupReference(
+            resource_group_reference = interfaces_inspector.ResourceGroupReference(
                 resource_group_arn="resourceGroupArn"
             )
         '''

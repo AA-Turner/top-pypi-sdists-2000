@@ -63,9 +63,9 @@ class AnalysisTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            analysis_template_reference = interfaces_aws_cleanrooms.AnalysisTemplateReference(
+            analysis_template_reference = interfaces_cleanrooms.AnalysisTemplateReference(
                 analysis_template_arn="analysisTemplateArn",
                 analysis_template_identifier="analysisTemplateIdentifier",
                 membership_identifier="membershipIdentifier"
@@ -141,9 +141,9 @@ class CollaborationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            collaboration_reference = interfaces_aws_cleanrooms.CollaborationReference(
+            collaboration_reference = interfaces_cleanrooms.CollaborationReference(
                 collaboration_arn="collaborationArn",
                 collaboration_identifier="collaborationIdentifier"
             )
@@ -212,9 +212,9 @@ class ConfiguredTableAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            configured_table_association_reference = interfaces_aws_cleanrooms.ConfiguredTableAssociationReference(
+            configured_table_association_reference = interfaces_cleanrooms.ConfiguredTableAssociationReference(
                 configured_table_association_arn="configuredTableAssociationArn",
                 configured_table_association_identifier="configuredTableAssociationIdentifier",
                 membership_identifier="membershipIdentifier"
@@ -290,9 +290,9 @@ class ConfiguredTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            configured_table_reference = interfaces_aws_cleanrooms.ConfiguredTableReference(
+            configured_table_reference = interfaces_cleanrooms.ConfiguredTableReference(
                 configured_table_arn="configuredTableArn",
                 configured_table_identifier="configuredTableIdentifier"
             )
@@ -727,9 +727,9 @@ class IdMappingTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            id_mapping_table_reference = interfaces_aws_cleanrooms.IdMappingTableReference(
+            id_mapping_table_reference = interfaces_cleanrooms.IdMappingTableReference(
                 id_mapping_table_arn="idMappingTableArn",
                 id_mapping_table_identifier="idMappingTableIdentifier",
                 membership_identifier="membershipIdentifier"
@@ -808,9 +808,9 @@ class IdNamespaceAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            id_namespace_association_reference = interfaces_aws_cleanrooms.IdNamespaceAssociationReference(
+            id_namespace_association_reference = interfaces_cleanrooms.IdNamespaceAssociationReference(
                 id_namespace_association_arn="idNamespaceAssociationArn",
                 id_namespace_association_identifier="idNamespaceAssociationIdentifier",
                 membership_identifier="membershipIdentifier"
@@ -886,9 +886,9 @@ class MembershipReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            membership_reference = interfaces_aws_cleanrooms.MembershipReference(
+            membership_reference = interfaces_cleanrooms.MembershipReference(
                 membership_arn="membershipArn",
                 membership_identifier="membershipIdentifier"
             )
@@ -957,9 +957,9 @@ class PrivacyBudgetTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanrooms as interfaces_aws_cleanrooms
+            from aws_cdk.interfaces import aws_cleanrooms as interfaces_cleanrooms
             
-            privacy_budget_template_reference = interfaces_aws_cleanrooms.PrivacyBudgetTemplateReference(
+            privacy_budget_template_reference = interfaces_cleanrooms.PrivacyBudgetTemplateReference(
                 membership_identifier="membershipIdentifier",
                 privacy_budget_template_arn="privacyBudgetTemplateArn",
                 privacy_budget_template_identifier="privacyBudgetTemplateIdentifier"

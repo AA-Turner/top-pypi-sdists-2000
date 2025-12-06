@@ -57,9 +57,9 @@ class AssessmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_auditmanager as interfaces_aws_auditmanager
+            from aws_cdk.interfaces import aws_auditmanager as interfaces_auditmanager
             
-            assessment_reference = interfaces_aws_auditmanager.AssessmentReference(
+            assessment_reference = interfaces_auditmanager.AssessmentReference(
                 assessment_arn="assessmentArn",
                 assessment_id="assessmentId"
             )

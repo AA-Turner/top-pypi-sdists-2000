@@ -51,9 +51,9 @@ class CampaignReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connectcampaignsv2 as interfaces_aws_connectcampaignsv2
+            from aws_cdk.interfaces import aws_connectcampaignsv2 as interfaces_connectcampaignsv2
             
-            campaign_reference = interfaces_aws_connectcampaignsv2.CampaignReference(
+            campaign_reference = interfaces_connectcampaignsv2.CampaignReference(
                 campaign_arn="campaignArn"
             )
         '''

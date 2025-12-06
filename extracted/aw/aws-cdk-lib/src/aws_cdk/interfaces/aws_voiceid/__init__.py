@@ -51,9 +51,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_voiceid as interfaces_aws_voiceid
+            from aws_cdk.interfaces import aws_voiceid as interfaces_voiceid
             
-            domain_reference = interfaces_aws_voiceid.DomainReference(
+            domain_reference = interfaces_voiceid.DomainReference(
                 domain_id="domainId"
             )
         '''

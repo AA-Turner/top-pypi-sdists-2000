@@ -98,9 +98,9 @@ class NotificationRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codestarnotifications as interfaces_aws_codestarnotifications
+            from aws_cdk.interfaces import aws_codestarnotifications as interfaces_codestarnotifications
             
-            notification_rule_reference = interfaces_aws_codestarnotifications.NotificationRuleReference(
+            notification_rule_reference = interfaces_codestarnotifications.NotificationRuleReference(
                 notification_rule_arn="notificationRuleArn"
             )
         '''

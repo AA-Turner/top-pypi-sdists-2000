@@ -60,9 +60,9 @@ class ConnectorProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appflow as interfaces_aws_appflow
+            from aws_cdk.interfaces import aws_appflow as interfaces_appflow
             
-            connector_profile_reference = interfaces_aws_appflow.ConnectorProfileReference(
+            connector_profile_reference = interfaces_appflow.ConnectorProfileReference(
                 connector_profile_arn="connectorProfileArn",
                 connector_profile_name="connectorProfileName"
             )
@@ -128,9 +128,9 @@ class ConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appflow as interfaces_aws_appflow
+            from aws_cdk.interfaces import aws_appflow as interfaces_appflow
             
-            connector_reference = interfaces_aws_appflow.ConnectorReference(
+            connector_reference = interfaces_appflow.ConnectorReference(
                 connector_arn="connectorArn",
                 connector_label="connectorLabel"
             )
@@ -188,9 +188,9 @@ class FlowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appflow as interfaces_aws_appflow
+            from aws_cdk.interfaces import aws_appflow as interfaces_appflow
             
-            flow_reference = interfaces_aws_appflow.FlowReference(
+            flow_reference = interfaces_appflow.FlowReference(
                 flow_arn="flowArn",
                 flow_name="flowName"
             )

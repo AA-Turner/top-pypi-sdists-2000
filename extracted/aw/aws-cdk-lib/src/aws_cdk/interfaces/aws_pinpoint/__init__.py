@@ -51,9 +51,9 @@ class ADMChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            a_dMChannel_reference = interfaces_aws_pinpoint.ADMChannelReference(
+            a_dMChannel_reference = interfaces_pinpoint.ADMChannelReference(
                 adm_channel_id="admChannelId"
             )
         '''
@@ -100,9 +100,9 @@ class APNSChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            a_pNSChannel_reference = interfaces_aws_pinpoint.APNSChannelReference(
+            a_pNSChannel_reference = interfaces_pinpoint.APNSChannelReference(
                 apns_channel_id="apnsChannelId"
             )
         '''
@@ -149,9 +149,9 @@ class APNSSandboxChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            a_pNSSandbox_channel_reference = interfaces_aws_pinpoint.APNSSandboxChannelReference(
+            a_pNSSandbox_channel_reference = interfaces_pinpoint.APNSSandboxChannelReference(
                 apns_sandbox_channel_id="apnsSandboxChannelId"
             )
         '''
@@ -198,9 +198,9 @@ class APNSVoipChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            a_pNSVoip_channel_reference = interfaces_aws_pinpoint.APNSVoipChannelReference(
+            a_pNSVoip_channel_reference = interfaces_pinpoint.APNSVoipChannelReference(
                 apns_voip_channel_id="apnsVoipChannelId"
             )
         '''
@@ -247,9 +247,9 @@ class APNSVoipSandboxChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            a_pNSVoip_sandbox_channel_reference = interfaces_aws_pinpoint.APNSVoipSandboxChannelReference(
+            a_pNSVoip_sandbox_channel_reference = interfaces_pinpoint.APNSVoipSandboxChannelReference(
                 apns_voip_sandbox_channel_id="apnsVoipSandboxChannelId"
             )
         '''
@@ -297,9 +297,9 @@ class AppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            app_reference = interfaces_aws_pinpoint.AppReference(
+            app_reference = interfaces_pinpoint.AppReference(
                 app_arn="appArn",
                 app_id="appId"
             )
@@ -356,9 +356,9 @@ class ApplicationSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            application_settings_reference = interfaces_aws_pinpoint.ApplicationSettingsReference(
+            application_settings_reference = interfaces_pinpoint.ApplicationSettingsReference(
                 application_settings_id="applicationSettingsId"
             )
         '''
@@ -405,9 +405,9 @@ class BaiduChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            baidu_channel_reference = interfaces_aws_pinpoint.BaiduChannelReference(
+            baidu_channel_reference = interfaces_pinpoint.BaiduChannelReference(
                 baidu_channel_id="baiduChannelId"
             )
         '''
@@ -460,9 +460,9 @@ class CampaignReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            campaign_reference = interfaces_aws_pinpoint.CampaignReference(
+            campaign_reference = interfaces_pinpoint.CampaignReference(
                 campaign_arn="campaignArn",
                 campaign_id="campaignId"
             )
@@ -519,9 +519,9 @@ class EmailChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            email_channel_reference = interfaces_aws_pinpoint.EmailChannelReference(
+            email_channel_reference = interfaces_pinpoint.EmailChannelReference(
                 email_channel_id="emailChannelId"
             )
         '''
@@ -577,9 +577,9 @@ class EmailTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            email_template_reference = interfaces_aws_pinpoint.EmailTemplateReference(
+            email_template_reference = interfaces_pinpoint.EmailTemplateReference(
                 email_template_arn="emailTemplateArn",
                 email_template_id="emailTemplateId"
             )
@@ -636,9 +636,9 @@ class EventStreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            event_stream_reference = interfaces_aws_pinpoint.EventStreamReference(
+            event_stream_reference = interfaces_pinpoint.EventStreamReference(
                 event_stream_id="eventStreamId"
             )
         '''
@@ -685,9 +685,9 @@ class GCMChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            g_cMChannel_reference = interfaces_aws_pinpoint.GCMChannelReference(
+            g_cMChannel_reference = interfaces_pinpoint.GCMChannelReference(
                 gcm_channel_id="gcmChannelId"
             )
         '''
@@ -1602,9 +1602,9 @@ class InAppTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            in_app_template_reference = interfaces_aws_pinpoint.InAppTemplateReference(
+            in_app_template_reference = interfaces_pinpoint.InAppTemplateReference(
                 in_app_template_arn="inAppTemplateArn",
                 template_name="templateName"
             )
@@ -1670,9 +1670,9 @@ class PushTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            push_template_reference = interfaces_aws_pinpoint.PushTemplateReference(
+            push_template_reference = interfaces_pinpoint.PushTemplateReference(
                 push_template_arn="pushTemplateArn",
                 push_template_id="pushTemplateId"
             )
@@ -1729,9 +1729,9 @@ class SMSChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            s_mSChannel_reference = interfaces_aws_pinpoint.SMSChannelReference(
+            s_mSChannel_reference = interfaces_pinpoint.SMSChannelReference(
                 sms_channel_id="smsChannelId"
             )
         '''
@@ -1779,9 +1779,9 @@ class SegmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            segment_reference = interfaces_aws_pinpoint.SegmentReference(
+            segment_reference = interfaces_pinpoint.SegmentReference(
                 segment_arn="segmentArn",
                 segment_id="segmentId"
             )
@@ -1847,9 +1847,9 @@ class SmsTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            sms_template_reference = interfaces_aws_pinpoint.SmsTemplateReference(
+            sms_template_reference = interfaces_pinpoint.SmsTemplateReference(
                 sms_template_arn="smsTemplateArn",
                 sms_template_id="smsTemplateId"
             )
@@ -1906,9 +1906,9 @@ class VoiceChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pinpoint as interfaces_aws_pinpoint
+            from aws_cdk.interfaces import aws_pinpoint as interfaces_pinpoint
             
-            voice_channel_reference = interfaces_aws_pinpoint.VoiceChannelReference(
+            voice_channel_reference = interfaces_pinpoint.VoiceChannelReference(
                 voice_channel_id="voiceChannelId"
             )
         '''

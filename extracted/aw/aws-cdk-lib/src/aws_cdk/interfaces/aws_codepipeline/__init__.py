@@ -63,9 +63,9 @@ class CustomActionTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codepipeline as interfaces_aws_codepipeline
+            from aws_cdk.interfaces import aws_codepipeline as interfaces_codepipeline
             
-            custom_action_type_reference = interfaces_aws_codepipeline.CustomActionTypeReference(
+            custom_action_type_reference = interfaces_codepipeline.CustomActionTypeReference(
                 category="category",
                 provider="provider",
                 version="version"
@@ -269,9 +269,9 @@ class PipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codepipeline as interfaces_aws_codepipeline
+            from aws_cdk.interfaces import aws_codepipeline as interfaces_codepipeline
             
-            pipeline_reference = interfaces_aws_codepipeline.PipelineReference(
+            pipeline_reference = interfaces_codepipeline.PipelineReference(
                 pipeline_name="pipelineName"
             )
         '''
@@ -318,9 +318,9 @@ class WebhookReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codepipeline as interfaces_aws_codepipeline
+            from aws_cdk.interfaces import aws_codepipeline as interfaces_codepipeline
             
-            webhook_reference = interfaces_aws_codepipeline.WebhookReference(
+            webhook_reference = interfaces_codepipeline.WebhookReference(
                 webhook_id="webhookId"
             )
         '''

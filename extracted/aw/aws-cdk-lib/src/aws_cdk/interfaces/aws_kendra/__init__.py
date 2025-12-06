@@ -63,9 +63,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kendra as interfaces_aws_kendra
+            from aws_cdk.interfaces import aws_kendra as interfaces_kendra
             
-            data_source_reference = interfaces_aws_kendra.DataSourceReference(
+            data_source_reference = interfaces_kendra.DataSourceReference(
                 data_source_arn="dataSourceArn",
                 data_source_id="dataSourceId",
                 index_id="indexId"
@@ -140,9 +140,9 @@ class FaqReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kendra as interfaces_aws_kendra
+            from aws_cdk.interfaces import aws_kendra as interfaces_kendra
             
-            faq_reference = interfaces_aws_kendra.FaqReference(
+            faq_reference = interfaces_kendra.FaqReference(
                 faq_arn="faqArn",
                 faq_id="faqId",
                 index_id="indexId"
@@ -345,9 +345,9 @@ class IndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kendra as interfaces_aws_kendra
+            from aws_cdk.interfaces import aws_kendra as interfaces_kendra
             
-            index_reference = interfaces_aws_kendra.IndexReference(
+            index_reference = interfaces_kendra.IndexReference(
                 index_arn="indexArn",
                 index_id="indexId"
             )

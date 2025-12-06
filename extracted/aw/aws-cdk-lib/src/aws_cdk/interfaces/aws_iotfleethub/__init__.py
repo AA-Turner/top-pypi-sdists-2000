@@ -60,9 +60,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleethub as interfaces_aws_iotfleethub
+            from aws_cdk.interfaces import aws_iotfleethub as interfaces_iotfleethub
             
-            application_reference = interfaces_aws_iotfleethub.ApplicationReference(
+            application_reference = interfaces_iotfleethub.ApplicationReference(
                 application_arn="applicationArn",
                 application_id="applicationId"
             )

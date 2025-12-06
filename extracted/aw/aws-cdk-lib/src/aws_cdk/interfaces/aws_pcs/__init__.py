@@ -51,9 +51,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcs as interfaces_aws_pcs
+            from aws_cdk.interfaces import aws_pcs as interfaces_pcs
             
-            cluster_reference = interfaces_aws_pcs.ClusterReference(
+            cluster_reference = interfaces_pcs.ClusterReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -100,9 +100,9 @@ class ComputeNodeGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcs as interfaces_aws_pcs
+            from aws_cdk.interfaces import aws_pcs as interfaces_pcs
             
-            compute_node_group_reference = interfaces_aws_pcs.ComputeNodeGroupReference(
+            compute_node_group_reference = interfaces_pcs.ComputeNodeGroupReference(
                 compute_node_group_arn="computeNodeGroupArn"
             )
         '''
@@ -284,9 +284,9 @@ class QueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcs as interfaces_aws_pcs
+            from aws_cdk.interfaces import aws_pcs as interfaces_pcs
             
-            queue_reference = interfaces_aws_pcs.QueueReference(
+            queue_reference = interfaces_pcs.QueueReference(
                 queue_arn="queueArn"
             )
         '''

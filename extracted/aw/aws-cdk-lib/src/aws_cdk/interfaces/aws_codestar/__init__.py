@@ -51,9 +51,9 @@ class GitHubRepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codestar as interfaces_aws_codestar
+            from aws_cdk.interfaces import aws_codestar as interfaces_codestar
             
-            git_hub_repository_reference = interfaces_aws_codestar.GitHubRepositoryReference(
+            git_hub_repository_reference = interfaces_codestar.GitHubRepositoryReference(
                 git_hub_repository_id="gitHubRepositoryId"
             )
         '''

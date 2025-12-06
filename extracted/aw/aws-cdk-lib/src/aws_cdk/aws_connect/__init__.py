@@ -74,6 +74,8 @@ from ..interfaces.aws_connect import (
     ContactFlowModuleReference as _ContactFlowModuleReference_4bd789b3,
     ContactFlowReference as _ContactFlowReference_b6f7570e,
     ContactFlowVersionReference as _ContactFlowVersionReference_45d9e9fb,
+    DataTableAttributeReference as _DataTableAttributeReference_3943fce4,
+    DataTableReference as _DataTableReference_0051ffc1,
     EmailAddressReference as _EmailAddressReference_823871e0,
     EvaluationFormReference as _EvaluationFormReference_c12eaac5,
     HoursOfOperationReference as _HoursOfOperationReference_aa60f7ee,
@@ -82,6 +84,8 @@ from ..interfaces.aws_connect import (
     IContactFlowModuleRef as _IContactFlowModuleRef_7a0e807b,
     IContactFlowRef as _IContactFlowRef_747dc709,
     IContactFlowVersionRef as _IContactFlowVersionRef_0646c7f7,
+    IDataTableAttributeRef as _IDataTableAttributeRef_a8e0802d,
+    IDataTableRef as _IDataTableRef_a7812e8d,
     IEmailAddressRef as _IEmailAddressRef_35d49535,
     IEvaluationFormRef as _IEvaluationFormRef_fa83f2b6,
     IHoursOfOperationRef as _IHoursOfOperationRef_5b4f8721,
@@ -1838,6 +1842,1254 @@ class CfnContactFlowVersionProps:
 
     def __repr__(self) -> str:
         return "CfnContactFlowVersionProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDataTableRef_a7812e8d, _ITaggableV2_4e6798f8)
+class CfnDataTable(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_connect.CfnDataTable",
+):
+    '''Resource Type definition for AWS::Connect::DataTable.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html
+    :cloudformationResource: AWS::Connect::DataTable
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_connect as connect
+        
+        cfn_data_table = connect.CfnDataTable(self, "MyCfnDataTable",
+            description="description",
+            instance_arn="instanceArn",
+            name="name",
+            status="status",
+            tags=[CfnTag(
+                key="key",
+                value="value"
+            )],
+            time_zone="timeZone",
+            value_lock_level="valueLockLevel"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        description: typing.Optional[builtins.str] = None,
+        instance_arn: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        status: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_zone: typing.Optional[builtins.str] = None,
+        value_lock_level: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Create a new ``AWS::Connect::DataTable``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param description: The description of the Data Table.
+        :param instance_arn: The identifier of the Amazon Connect instance.
+        :param name: The name of the Data Table.
+        :param status: The status of the Data Table.
+        :param tags: One or more tags.
+        :param time_zone: The time zone of the Data Table.
+        :param value_lock_level: The value lock level of the Data Table.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a6aed0c5623ad6089847176411ac261d6c09c806ff725cea37325c3d5b4ae88a)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnDataTableProps(
+            description=description,
+            instance_arn=instance_arn,
+            name=name,
+            status=status,
+            tags=tags,
+            time_zone=time_zone,
+            value_lock_level=value_lock_level,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="arnForDataTable")
+    @builtins.classmethod
+    def arn_for_data_table(cls, resource: _IDataTableRef_a7812e8d) -> builtins.str:
+        '''
+        :param resource: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d402ee3b37f3a3cbf8520dc6fe3ce5c3281baeffe9dbfd12cd9f2ef2762cf81)
+            check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
+        return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForDataTable", [resource]))
+
+    @jsii.member(jsii_name="isCfnDataTable")
+    @builtins.classmethod
+    def is_cfn_data_table(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataTable.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e2bc47748f4e1c4038a5d345c78a54122ef305de8454b8e88e1acb354c70830)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataTable", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__06ac18c2ec94af97a52b685289faed3619465dd268295bcc01ada890f948b33a)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__a81ce0dee066c8a6dd586690297a597b2efe8422bc0e4157353cfac964ab610c)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrArn")
+    def attr_arn(self) -> builtins.str:
+        '''The arn of the Data Table.
+
+        :cloudformationAttribute: Arn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedTime")
+    def attr_created_time(self) -> _IResolvable_da3f097b:
+        '''A epoch time stamp field used for data table operations.
+
+        :cloudformationAttribute: CreatedTime
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrCreatedTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModifiedRegion")
+    def attr_last_modified_region(self) -> builtins.str:
+        '''Last modified region.
+
+        :cloudformationAttribute: LastModifiedRegion
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastModifiedRegion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModifiedTime")
+    def attr_last_modified_time(self) -> _IResolvable_da3f097b:
+        '''A epoch time stamp field used for data table operations.
+
+        :cloudformationAttribute: LastModifiedTime
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastModifiedTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLockVersion")
+    def attr_lock_version(self) -> _IResolvable_da3f097b:
+        '''The lock version of the Data Table.
+
+        :cloudformationAttribute: LockVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLockVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableRef")
+    def data_table_ref(self) -> _DataTableReference_0051ffc1:
+        '''A reference to a DataTable resource.'''
+        return typing.cast(_DataTableReference_0051ffc1, jsii.get(self, "dataTableRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the Data Table.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__669cdccf2e542f89ed9ef14ea96f94af1625466bd88481d3f925633706557ac1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceArn")
+    def instance_arn(self) -> typing.Optional[builtins.str]:
+        '''The identifier of the Amazon Connect instance.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "instanceArn"))
+
+    @instance_arn.setter
+    def instance_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f8fa88c52677eeea0abd461e81ce2a421105f996b6162aa0e921d94e35088f04)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the Data Table.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5af73d5d03c6d3343b8b1d96e6ab0ed24244ad767e2e42128489400bdaafd5a0)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="status")
+    def status(self) -> typing.Optional[builtins.str]:
+        '''The status of the Data Table.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "status"))
+
+    @status.setter
+    def status(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__9c35fb88afa0bd7600181e002e9cda875ac83bc4d92f46e8378ed5870f06e7aa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "status", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''One or more tags.'''
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(self, value: typing.Optional[typing.List[_CfnTag_f6864754]]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__20c1c533d2eb3b60f29b418ffbf58db9654a55514953b21622afa59f18f67b2e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="timeZone")
+    def time_zone(self) -> typing.Optional[builtins.str]:
+        '''The time zone of the Data Table.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "timeZone"))
+
+    @time_zone.setter
+    def time_zone(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__656c6386fa49cc5f2a042463bceeb771e608c3cf551d766b591bd6a76823f81e)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "timeZone", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="valueLockLevel")
+    def value_lock_level(self) -> typing.Optional[builtins.str]:
+        '''The value lock level of the Data Table.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "valueLockLevel"))
+
+    @value_lock_level.setter
+    def value_lock_level(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b5e9200f2009bd077c3158f86dd6195363524301cfc2480c582f9a32a246f7e5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "valueLockLevel", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnDataTable.LockVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"data_table": "dataTable"},
+    )
+    class LockVersionProperty:
+        def __init__(self, *, data_table: typing.Optional[builtins.str] = None) -> None:
+            '''The lock version of the Data Table.
+
+            :param data_table: The data table for the lock version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatable-lockversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                lock_version_property = connect.CfnDataTable.LockVersionProperty(
+                    data_table="dataTable"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__92b561b1490e7794b5cd5fe1fe75555b30b89320f35b5524135604fbe8b13830)
+                check_type(argname="argument data_table", value=data_table, expected_type=type_hints["data_table"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if data_table is not None:
+                self._values["data_table"] = data_table
+
+        @builtins.property
+        def data_table(self) -> typing.Optional[builtins.str]:
+            '''The data table for the lock version.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatable-lockversion.html#cfn-connect-datatable-lockversion-datatable
+            '''
+            result = self._values.get("data_table")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LockVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.implements(_IInspectable_c2943556, _IDataTableAttributeRef_a8e0802d)
+class CfnDataTableAttribute(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_connect.CfnDataTableAttribute",
+):
+    '''Resource Type definition for AWS::Connect::DataTableAttribute.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html
+    :cloudformationResource: AWS::Connect::DataTableAttribute
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_connect as connect
+        
+        cfn_data_table_attribute = connect.CfnDataTableAttribute(self, "MyCfnDataTableAttribute",
+            data_table_arn="dataTableArn",
+            description="description",
+            instance_arn="instanceArn",
+            name="name",
+            primary=False,
+            validation=connect.CfnDataTableAttribute.ValidationProperty(
+                enum=connect.CfnDataTableAttribute.EnumProperty(
+                    strict=False,
+                    values=["values"]
+                ),
+                exclusive_maximum=123,
+                exclusive_minimum=123,
+                maximum=123,
+                max_length=123,
+                max_values=123,
+                minimum=123,
+                min_length=123,
+                min_values=123,
+                multiple_of=123
+            ),
+            value_type="valueType"
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        data_table_arn: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        instance_arn: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        primary: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataTableAttribute.ValidationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        value_type: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Create a new ``AWS::Connect::DataTableAttribute``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param data_table_arn: 
+        :param description: 
+        :param instance_arn: 
+        :param name: 
+        :param primary: 
+        :param validation: 
+        :param value_type: 
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e00afa8d26c5d683765600c8259f6e63df5b0691ee3b9644c7045eb3aed4988c)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnDataTableAttributeProps(
+            data_table_arn=data_table_arn,
+            description=description,
+            instance_arn=instance_arn,
+            name=name,
+            primary=primary,
+            validation=validation,
+            value_type=value_type,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnDataTableAttribute")
+    @builtins.classmethod
+    def is_cfn_data_table_attribute(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnDataTableAttribute.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d49763aab3e61b668afa2086d98e7aa0311da68da950194dcf0e1f6fd17359fc)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnDataTableAttribute", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__180a0ce774e9465f090be55af61a730de4b1cb3a424a2ece13dca9f18a78f744)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3b606377fce2ffb7eb64c14f4187b1a7ad5d562b0657c0c8974c5a3f3b578e68)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrAttributeId")
+    def attr_attribute_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: AttributeId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrAttributeId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModifiedRegion")
+    def attr_last_modified_region(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: LastModifiedRegion
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastModifiedRegion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastModifiedTime")
+    def attr_last_modified_time(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: LastModifiedTime
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLastModifiedTime"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLockVersion")
+    def attr_lock_version(self) -> _IResolvable_da3f097b:
+        '''
+        :cloudformationAttribute: LockVersion
+        '''
+        return typing.cast(_IResolvable_da3f097b, jsii.get(self, "attrLockVersion"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableAttributeRef")
+    def data_table_attribute_ref(self) -> _DataTableAttributeReference_3943fce4:
+        '''A reference to a DataTableAttribute resource.'''
+        return typing.cast(_DataTableAttributeReference_3943fce4, jsii.get(self, "dataTableAttributeRef"))
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableArn")
+    def data_table_arn(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "dataTableArn"))
+
+    @data_table_arn.setter
+    def data_table_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__3e10d7fa9d5b215160345fa92f48a94548786112484789f538a37ebfd7b7fd38)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "dataTableArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d890f31b8589ff534e04adcc2c1d4497a7deff59d5f8d7c258583438e59cfcdc)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="instanceArn")
+    def instance_arn(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "instanceArn"))
+
+    @instance_arn.setter
+    def instance_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__11ef132fbbfb775fb53dacd5fc7602299290862933617f88a8d68427d8dd1ac1)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "instanceArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ad6b91eddab6819cf54d8266657cae3dc9bd1881b13e9f318a00d0882bf36879)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="primary")
+    def primary(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "primary"))
+
+    @primary.setter
+    def primary(
+        self,
+        value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89eee13065c133b35848c3dcae007d61509810c878813955ac59c410d669a981)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "primary", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="validation")
+    def validation(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataTableAttribute.ValidationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataTableAttribute.ValidationProperty"]], jsii.get(self, "validation"))
+
+    @validation.setter
+    def validation(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataTableAttribute.ValidationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6700063066947b478e87c1774f45101388139bdb9bf306cfc80d0f487e857f98)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "validation", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="valueType")
+    def value_type(self) -> typing.Optional[builtins.str]:
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "valueType"))
+
+    @value_type.setter
+    def value_type(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8bf4b1aa10e6ec3484a047c9237e508d3b3e2866ec0b1234d582aeeac995858c)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "valueType", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnDataTableAttribute.EnumProperty",
+        jsii_struct_bases=[],
+        name_mapping={"strict": "strict", "values": "values"},
+    )
+    class EnumProperty:
+        def __init__(
+            self,
+            *,
+            strict: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+            values: typing.Optional[typing.Sequence[builtins.str]] = None,
+        ) -> None:
+            '''
+            :param strict: 
+            :param values: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-enum.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                enum_property = connect.CfnDataTableAttribute.EnumProperty(
+                    strict=False,
+                    values=["values"]
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__7183d9fdc03337b44f9238434a485894384d2b4d921228c9bb26707eaf6dab48)
+                check_type(argname="argument strict", value=strict, expected_type=type_hints["strict"])
+                check_type(argname="argument values", value=values, expected_type=type_hints["values"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if strict is not None:
+                self._values["strict"] = strict
+            if values is not None:
+                self._values["values"] = values
+
+        @builtins.property
+        def strict(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-enum.html#cfn-connect-datatableattribute-enum-strict
+            '''
+            result = self._values.get("strict")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        @builtins.property
+        def values(self) -> typing.Optional[typing.List[builtins.str]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-enum.html#cfn-connect-datatableattribute-enum-values
+            '''
+            result = self._values.get("values")
+            return typing.cast(typing.Optional[typing.List[builtins.str]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "EnumProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnDataTableAttribute.LockVersionProperty",
+        jsii_struct_bases=[],
+        name_mapping={"attribute": "attribute", "data_table": "dataTable"},
+    )
+    class LockVersionProperty:
+        def __init__(
+            self,
+            *,
+            attribute: typing.Optional[builtins.str] = None,
+            data_table: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param attribute: 
+            :param data_table: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-lockversion.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                lock_version_property = connect.CfnDataTableAttribute.LockVersionProperty(
+                    attribute="attribute",
+                    data_table="dataTable"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6c831ca85857afdc0caada47b87f4f15a9aed085fedbbef323b9dd862adb7432)
+                check_type(argname="argument attribute", value=attribute, expected_type=type_hints["attribute"])
+                check_type(argname="argument data_table", value=data_table, expected_type=type_hints["data_table"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if attribute is not None:
+                self._values["attribute"] = attribute
+            if data_table is not None:
+                self._values["data_table"] = data_table
+
+        @builtins.property
+        def attribute(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-lockversion.html#cfn-connect-datatableattribute-lockversion-attribute
+            '''
+            result = self._values.get("attribute")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def data_table(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-lockversion.html#cfn-connect-datatableattribute-lockversion-datatable
+            '''
+            result = self._values.get("data_table")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "LockVersionProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_connect.CfnDataTableAttribute.ValidationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "enum": "enum",
+            "exclusive_maximum": "exclusiveMaximum",
+            "exclusive_minimum": "exclusiveMinimum",
+            "maximum": "maximum",
+            "max_length": "maxLength",
+            "max_values": "maxValues",
+            "minimum": "minimum",
+            "min_length": "minLength",
+            "min_values": "minValues",
+            "multiple_of": "multipleOf",
+        },
+    )
+    class ValidationProperty:
+        def __init__(
+            self,
+            *,
+            enum: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnDataTableAttribute.EnumProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            exclusive_maximum: typing.Optional[jsii.Number] = None,
+            exclusive_minimum: typing.Optional[jsii.Number] = None,
+            maximum: typing.Optional[jsii.Number] = None,
+            max_length: typing.Optional[jsii.Number] = None,
+            max_values: typing.Optional[jsii.Number] = None,
+            minimum: typing.Optional[jsii.Number] = None,
+            min_length: typing.Optional[jsii.Number] = None,
+            min_values: typing.Optional[jsii.Number] = None,
+            multiple_of: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param enum: 
+            :param exclusive_maximum: 
+            :param exclusive_minimum: 
+            :param maximum: 
+            :param max_length: 
+            :param max_values: 
+            :param minimum: 
+            :param min_length: 
+            :param min_values: 
+            :param multiple_of: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_connect as connect
+                
+                validation_property = connect.CfnDataTableAttribute.ValidationProperty(
+                    enum=connect.CfnDataTableAttribute.EnumProperty(
+                        strict=False,
+                        values=["values"]
+                    ),
+                    exclusive_maximum=123,
+                    exclusive_minimum=123,
+                    maximum=123,
+                    max_length=123,
+                    max_values=123,
+                    minimum=123,
+                    min_length=123,
+                    min_values=123,
+                    multiple_of=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c25f047c9684adfb5b26e0752cd28dbba087652961811c7b98cad304f706cf4d)
+                check_type(argname="argument enum", value=enum, expected_type=type_hints["enum"])
+                check_type(argname="argument exclusive_maximum", value=exclusive_maximum, expected_type=type_hints["exclusive_maximum"])
+                check_type(argname="argument exclusive_minimum", value=exclusive_minimum, expected_type=type_hints["exclusive_minimum"])
+                check_type(argname="argument maximum", value=maximum, expected_type=type_hints["maximum"])
+                check_type(argname="argument max_length", value=max_length, expected_type=type_hints["max_length"])
+                check_type(argname="argument max_values", value=max_values, expected_type=type_hints["max_values"])
+                check_type(argname="argument minimum", value=minimum, expected_type=type_hints["minimum"])
+                check_type(argname="argument min_length", value=min_length, expected_type=type_hints["min_length"])
+                check_type(argname="argument min_values", value=min_values, expected_type=type_hints["min_values"])
+                check_type(argname="argument multiple_of", value=multiple_of, expected_type=type_hints["multiple_of"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if enum is not None:
+                self._values["enum"] = enum
+            if exclusive_maximum is not None:
+                self._values["exclusive_maximum"] = exclusive_maximum
+            if exclusive_minimum is not None:
+                self._values["exclusive_minimum"] = exclusive_minimum
+            if maximum is not None:
+                self._values["maximum"] = maximum
+            if max_length is not None:
+                self._values["max_length"] = max_length
+            if max_values is not None:
+                self._values["max_values"] = max_values
+            if minimum is not None:
+                self._values["minimum"] = minimum
+            if min_length is not None:
+                self._values["min_length"] = min_length
+            if min_values is not None:
+                self._values["min_values"] = min_values
+            if multiple_of is not None:
+                self._values["multiple_of"] = multiple_of
+
+        @builtins.property
+        def enum(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataTableAttribute.EnumProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-enum
+            '''
+            result = self._values.get("enum")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnDataTableAttribute.EnumProperty"]], result)
+
+        @builtins.property
+        def exclusive_maximum(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-exclusivemaximum
+            '''
+            result = self._values.get("exclusive_maximum")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def exclusive_minimum(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-exclusiveminimum
+            '''
+            result = self._values.get("exclusive_minimum")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def maximum(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-maximum
+            '''
+            result = self._values.get("maximum")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_length(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-maxlength
+            '''
+            result = self._values.get("max_length")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def max_values(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-maxvalues
+            '''
+            result = self._values.get("max_values")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def minimum(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-minimum
+            '''
+            result = self._values.get("minimum")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_length(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-minlength
+            '''
+            result = self._values.get("min_length")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def min_values(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-minvalues
+            '''
+            result = self._values.get("min_values")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        @builtins.property
+        def multiple_of(self) -> typing.Optional[jsii.Number]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-connect-datatableattribute-validation.html#cfn-connect-datatableattribute-validation-multipleof
+            '''
+            result = self._values.get("multiple_of")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ValidationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_connect.CfnDataTableAttributeProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "data_table_arn": "dataTableArn",
+        "description": "description",
+        "instance_arn": "instanceArn",
+        "name": "name",
+        "primary": "primary",
+        "validation": "validation",
+        "value_type": "valueType",
+    },
+)
+class CfnDataTableAttributeProps:
+    def __init__(
+        self,
+        *,
+        data_table_arn: typing.Optional[builtins.str] = None,
+        description: typing.Optional[builtins.str] = None,
+        instance_arn: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        primary: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataTableAttribute.ValidationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        value_type: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDataTableAttribute``.
+
+        :param data_table_arn: 
+        :param description: 
+        :param instance_arn: 
+        :param name: 
+        :param primary: 
+        :param validation: 
+        :param value_type: 
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_connect as connect
+            
+            cfn_data_table_attribute_props = connect.CfnDataTableAttributeProps(
+                data_table_arn="dataTableArn",
+                description="description",
+                instance_arn="instanceArn",
+                name="name",
+                primary=False,
+                validation=connect.CfnDataTableAttribute.ValidationProperty(
+                    enum=connect.CfnDataTableAttribute.EnumProperty(
+                        strict=False,
+                        values=["values"]
+                    ),
+                    exclusive_maximum=123,
+                    exclusive_minimum=123,
+                    maximum=123,
+                    max_length=123,
+                    max_values=123,
+                    minimum=123,
+                    min_length=123,
+                    min_values=123,
+                    multiple_of=123
+                ),
+                value_type="valueType"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0fc66d80c3f8d62ef01f542618850d98980d0baf2706a11e2949621dd1709a56)
+            check_type(argname="argument data_table_arn", value=data_table_arn, expected_type=type_hints["data_table_arn"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument primary", value=primary, expected_type=type_hints["primary"])
+            check_type(argname="argument validation", value=validation, expected_type=type_hints["validation"])
+            check_type(argname="argument value_type", value=value_type, expected_type=type_hints["value_type"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if data_table_arn is not None:
+            self._values["data_table_arn"] = data_table_arn
+        if description is not None:
+            self._values["description"] = description
+        if instance_arn is not None:
+            self._values["instance_arn"] = instance_arn
+        if name is not None:
+            self._values["name"] = name
+        if primary is not None:
+            self._values["primary"] = primary
+        if validation is not None:
+            self._values["validation"] = validation
+        if value_type is not None:
+            self._values["value_type"] = value_type
+
+    @builtins.property
+    def data_table_arn(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-datatablearn
+        '''
+        result = self._values.get("data_table_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def instance_arn(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-instancearn
+        '''
+        result = self._values.get("instance_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def primary(
+        self,
+    ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-primary
+        '''
+        result = self._values.get("primary")
+        return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+    @builtins.property
+    def validation(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataTableAttribute.ValidationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-validation
+        '''
+        result = self._values.get("validation")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataTableAttribute.ValidationProperty]], result)
+
+    @builtins.property
+    def value_type(self) -> typing.Optional[builtins.str]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatableattribute.html#cfn-connect-datatableattribute-valuetype
+        '''
+        result = self._values.get("value_type")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDataTableAttributeProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_connect.CfnDataTableProps",
+    jsii_struct_bases=[],
+    name_mapping={
+        "description": "description",
+        "instance_arn": "instanceArn",
+        "name": "name",
+        "status": "status",
+        "tags": "tags",
+        "time_zone": "timeZone",
+        "value_lock_level": "valueLockLevel",
+    },
+)
+class CfnDataTableProps:
+    def __init__(
+        self,
+        *,
+        description: typing.Optional[builtins.str] = None,
+        instance_arn: typing.Optional[builtins.str] = None,
+        name: typing.Optional[builtins.str] = None,
+        status: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+        time_zone: typing.Optional[builtins.str] = None,
+        value_lock_level: typing.Optional[builtins.str] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnDataTable``.
+
+        :param description: The description of the Data Table.
+        :param instance_arn: The identifier of the Amazon Connect instance.
+        :param name: The name of the Data Table.
+        :param status: The status of the Data Table.
+        :param tags: One or more tags.
+        :param time_zone: The time zone of the Data Table.
+        :param value_lock_level: The value lock level of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_connect as connect
+            
+            cfn_data_table_props = connect.CfnDataTableProps(
+                description="description",
+                instance_arn="instanceArn",
+                name="name",
+                status="status",
+                tags=[CfnTag(
+                    key="key",
+                    value="value"
+                )],
+                time_zone="timeZone",
+                value_lock_level="valueLockLevel"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0345e13cdcd7cb47389e51736864614815f4dfa87c5bc412ac18e8a11447a619)
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument status", value=status, expected_type=type_hints["status"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+            check_type(argname="argument time_zone", value=time_zone, expected_type=type_hints["time_zone"])
+            check_type(argname="argument value_lock_level", value=value_lock_level, expected_type=type_hints["value_lock_level"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if description is not None:
+            self._values["description"] = description
+        if instance_arn is not None:
+            self._values["instance_arn"] = instance_arn
+        if name is not None:
+            self._values["name"] = name
+        if status is not None:
+            self._values["status"] = status
+        if tags is not None:
+            self._values["tags"] = tags
+        if time_zone is not None:
+            self._values["time_zone"] = time_zone
+        if value_lock_level is not None:
+            self._values["value_lock_level"] = value_lock_level
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''The description of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def instance_arn(self) -> typing.Optional[builtins.str]:
+        '''The identifier of the Amazon Connect instance.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-instancearn
+        '''
+        result = self._values.get("instance_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def name(self) -> typing.Optional[builtins.str]:
+        '''The name of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-name
+        '''
+        result = self._values.get("name")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def status(self) -> typing.Optional[builtins.str]:
+        '''The status of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-status
+        '''
+        result = self._values.get("status")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
+        '''One or more tags.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], result)
+
+    @builtins.property
+    def time_zone(self) -> typing.Optional[builtins.str]:
+        '''The time zone of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-timezone
+        '''
+        result = self._values.get("time_zone")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def value_lock_level(self) -> typing.Optional[builtins.str]:
+        '''The value lock level of the Data Table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-connect-datatable.html#cfn-connect-datatable-valuelocklevel
+        '''
+        result = self._values.get("value_lock_level")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnDataTableProps(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -20257,6 +21509,10 @@ __all__ = [
     "CfnContactFlowProps",
     "CfnContactFlowVersion",
     "CfnContactFlowVersionProps",
+    "CfnDataTable",
+    "CfnDataTableAttribute",
+    "CfnDataTableAttributeProps",
+    "CfnDataTableProps",
     "CfnEmailAddress",
     "CfnEmailAddressProps",
     "CfnEvaluationForm",
@@ -20685,6 +21941,227 @@ def _typecheckingstub__1bd431a320275e8a984a962d58a7aaded6a06452a72a1bb623aefe401
     *,
     contact_flow_id: builtins.str,
     description: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a6aed0c5623ad6089847176411ac261d6c09c806ff725cea37325c3d5b4ae88a(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    description: typing.Optional[builtins.str] = None,
+    instance_arn: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    time_zone: typing.Optional[builtins.str] = None,
+    value_lock_level: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6d402ee3b37f3a3cbf8520dc6fe3ce5c3281baeffe9dbfd12cd9f2ef2762cf81(
+    resource: _IDataTableRef_a7812e8d,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5e2bc47748f4e1c4038a5d345c78a54122ef305de8454b8e88e1acb354c70830(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__06ac18c2ec94af97a52b685289faed3619465dd268295bcc01ada890f948b33a(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__a81ce0dee066c8a6dd586690297a597b2efe8422bc0e4157353cfac964ab610c(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__669cdccf2e542f89ed9ef14ea96f94af1625466bd88481d3f925633706557ac1(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f8fa88c52677eeea0abd461e81ce2a421105f996b6162aa0e921d94e35088f04(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5af73d5d03c6d3343b8b1d96e6ab0ed24244ad767e2e42128489400bdaafd5a0(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__9c35fb88afa0bd7600181e002e9cda875ac83bc4d92f46e8378ed5870f06e7aa(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__20c1c533d2eb3b60f29b418ffbf58db9654a55514953b21622afa59f18f67b2e(
+    value: typing.Optional[typing.List[_CfnTag_f6864754]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__656c6386fa49cc5f2a042463bceeb771e608c3cf551d766b591bd6a76823f81e(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b5e9200f2009bd077c3158f86dd6195363524301cfc2480c582f9a32a246f7e5(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__92b561b1490e7794b5cd5fe1fe75555b30b89320f35b5524135604fbe8b13830(
+    *,
+    data_table: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__e00afa8d26c5d683765600c8259f6e63df5b0691ee3b9644c7045eb3aed4988c(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    data_table_arn: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    instance_arn: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    primary: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataTableAttribute.ValidationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    value_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d49763aab3e61b668afa2086d98e7aa0311da68da950194dcf0e1f6fd17359fc(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__180a0ce774e9465f090be55af61a730de4b1cb3a424a2ece13dca9f18a78f744(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3b606377fce2ffb7eb64c14f4187b1a7ad5d562b0657c0c8974c5a3f3b578e68(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__3e10d7fa9d5b215160345fa92f48a94548786112484789f538a37ebfd7b7fd38(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d890f31b8589ff534e04adcc2c1d4497a7deff59d5f8d7c258583438e59cfcdc(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__11ef132fbbfb775fb53dacd5fc7602299290862933617f88a8d68427d8dd1ac1(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ad6b91eddab6819cf54d8266657cae3dc9bd1881b13e9f318a00d0882bf36879(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__89eee13065c133b35848c3dcae007d61509810c878813955ac59c410d669a981(
+    value: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6700063066947b478e87c1774f45101388139bdb9bf306cfc80d0f487e857f98(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnDataTableAttribute.ValidationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8bf4b1aa10e6ec3484a047c9237e508d3b3e2866ec0b1234d582aeeac995858c(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__7183d9fdc03337b44f9238434a485894384d2b4d921228c9bb26707eaf6dab48(
+    *,
+    strict: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    values: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6c831ca85857afdc0caada47b87f4f15a9aed085fedbbef323b9dd862adb7432(
+    *,
+    attribute: typing.Optional[builtins.str] = None,
+    data_table: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c25f047c9684adfb5b26e0752cd28dbba087652961811c7b98cad304f706cf4d(
+    *,
+    enum: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataTableAttribute.EnumProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    exclusive_maximum: typing.Optional[jsii.Number] = None,
+    exclusive_minimum: typing.Optional[jsii.Number] = None,
+    maximum: typing.Optional[jsii.Number] = None,
+    max_length: typing.Optional[jsii.Number] = None,
+    max_values: typing.Optional[jsii.Number] = None,
+    minimum: typing.Optional[jsii.Number] = None,
+    min_length: typing.Optional[jsii.Number] = None,
+    min_values: typing.Optional[jsii.Number] = None,
+    multiple_of: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0fc66d80c3f8d62ef01f542618850d98980d0baf2706a11e2949621dd1709a56(
+    *,
+    data_table_arn: typing.Optional[builtins.str] = None,
+    description: typing.Optional[builtins.str] = None,
+    instance_arn: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    primary: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+    validation: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnDataTableAttribute.ValidationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    value_type: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0345e13cdcd7cb47389e51736864614815f4dfa87c5bc412ac18e8a11447a619(
+    *,
+    description: typing.Optional[builtins.str] = None,
+    instance_arn: typing.Optional[builtins.str] = None,
+    name: typing.Optional[builtins.str] = None,
+    status: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
+    time_zone: typing.Optional[builtins.str] = None,
+    value_lock_level: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass

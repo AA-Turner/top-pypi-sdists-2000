@@ -51,9 +51,9 @@ class ApiCacheReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            api_cache_reference = interfaces_aws_appsync.ApiCacheReference(
+            api_cache_reference = interfaces_appsync.ApiCacheReference(
                 api_cache_id="apiCacheId"
             )
         '''
@@ -101,9 +101,9 @@ class ApiKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            api_key_reference = interfaces_aws_appsync.ApiKeyReference(
+            api_key_reference = interfaces_appsync.ApiKeyReference(
                 api_key_arn="apiKeyArn",
                 api_key_id="apiKeyId"
             )
@@ -160,9 +160,9 @@ class ApiReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            api_reference = interfaces_aws_appsync.ApiReference(
+            api_reference = interfaces_appsync.ApiReference(
                 api_arn="apiArn"
             )
         '''
@@ -209,9 +209,9 @@ class ChannelNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            channel_namespace_reference = interfaces_aws_appsync.ChannelNamespaceReference(
+            channel_namespace_reference = interfaces_appsync.ChannelNamespaceReference(
                 channel_namespace_arn="channelNamespaceArn"
             )
         '''
@@ -258,9 +258,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            data_source_reference = interfaces_aws_appsync.DataSourceReference(
+            data_source_reference = interfaces_appsync.DataSourceReference(
                 data_source_arn="dataSourceArn"
             )
         '''
@@ -307,9 +307,9 @@ class DomainNameApiAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            domain_name_api_association_reference = interfaces_aws_appsync.DomainNameApiAssociationReference(
+            domain_name_api_association_reference = interfaces_appsync.DomainNameApiAssociationReference(
                 api_association_identifier="apiAssociationIdentifier"
             )
         '''
@@ -362,9 +362,9 @@ class DomainNameReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            domain_name_reference = interfaces_aws_appsync.DomainNameReference(
+            domain_name_reference = interfaces_appsync.DomainNameReference(
                 domain_name="domainName",
                 domain_name_arn="domainNameArn"
             )
@@ -421,9 +421,9 @@ class FunctionConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            function_configuration_reference = interfaces_aws_appsync.FunctionConfigurationReference(
+            function_configuration_reference = interfaces_appsync.FunctionConfigurationReference(
                 function_arn="functionArn"
             )
         '''
@@ -471,9 +471,9 @@ class GraphQLApiReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            graph_qLApi_reference = interfaces_aws_appsync.GraphQLApiReference(
+            graph_qLApi_reference = interfaces_appsync.GraphQLApiReference(
                 api_id="apiId",
                 graph_ql_api_arn="graphQlApiArn"
             )
@@ -530,9 +530,9 @@ class GraphQLSchemaReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            graph_qLSchema_reference = interfaces_aws_appsync.GraphQLSchemaReference(
+            graph_qLSchema_reference = interfaces_appsync.GraphQLSchemaReference(
                 graph_ql_schema_id="graphQlSchemaId"
             )
         '''
@@ -1125,9 +1125,9 @@ class ResolverReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            resolver_reference = interfaces_aws_appsync.ResolverReference(
+            resolver_reference = interfaces_appsync.ResolverReference(
                 resolver_arn="resolverArn"
             )
         '''
@@ -1174,9 +1174,9 @@ class SourceApiAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appsync as interfaces_aws_appsync
+            from aws_cdk.interfaces import aws_appsync as interfaces_appsync
             
-            source_api_association_reference = interfaces_aws_appsync.SourceApiAssociationReference(
+            source_api_association_reference = interfaces_appsync.SourceApiAssociationReference(
                 association_arn="associationArn"
             )
         '''

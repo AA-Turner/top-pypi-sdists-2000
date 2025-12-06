@@ -63,9 +63,9 @@ class AccessEntryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            access_entry_reference = interfaces_aws_eks.AccessEntryReference(
+            access_entry_reference = interfaces_eks.AccessEntryReference(
                 access_entry_arn="accessEntryArn",
                 cluster_name="clusterName",
                 principal_arn="principalArn"
@@ -144,9 +144,9 @@ class AddonReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            addon_reference = interfaces_aws_eks.AddonReference(
+            addon_reference = interfaces_eks.AddonReference(
                 addon_arn="addonArn",
                 addon_name="addonName",
                 cluster_name="clusterName"
@@ -213,9 +213,9 @@ class CapabilityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            capability_reference = interfaces_aws_eks.CapabilityReference(
+            capability_reference = interfaces_eks.CapabilityReference(
                 capability_arn="capabilityArn"
             )
         '''
@@ -268,9 +268,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            cluster_reference = interfaces_aws_eks.ClusterReference(
+            cluster_reference = interfaces_eks.ClusterReference(
                 cluster_arn="clusterArn",
                 cluster_name="clusterName"
             )
@@ -339,9 +339,9 @@ class FargateProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            fargate_profile_reference = interfaces_aws_eks.FargateProfileReference(
+            fargate_profile_reference = interfaces_eks.FargateProfileReference(
                 cluster_name="clusterName",
                 fargate_profile_arn="fargateProfileArn",
                 fargate_profile_name="fargateProfileName"
@@ -783,9 +783,9 @@ class IdentityProviderConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            identity_provider_config_reference = interfaces_aws_eks.IdentityProviderConfigReference(
+            identity_provider_config_reference = interfaces_eks.IdentityProviderConfigReference(
                 cluster_name="clusterName",
                 identity_provider_config_arn="identityProviderConfigArn",
                 identity_provider_config_name="identityProviderConfigName",
@@ -868,9 +868,9 @@ class NodegroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            nodegroup_reference = interfaces_aws_eks.NodegroupReference(
+            nodegroup_reference = interfaces_eks.NodegroupReference(
                 nodegroup_arn="nodegroupArn",
                 nodegroup_id="nodegroupId"
             )
@@ -927,9 +927,9 @@ class PodIdentityAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_eks as interfaces_aws_eks
+            from aws_cdk.interfaces import aws_eks as interfaces_eks
             
-            pod_identity_association_reference = interfaces_aws_eks.PodIdentityAssociationReference(
+            pod_identity_association_reference = interfaces_eks.PodIdentityAssociationReference(
                 association_arn="associationArn"
             )
         '''

@@ -60,9 +60,9 @@ class ConnectorDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            connector_definition_reference = interfaces_aws_greengrass.ConnectorDefinitionReference(
+            connector_definition_reference = interfaces_greengrass.ConnectorDefinitionReference(
                 connector_definition_arn="connectorDefinitionArn",
                 connector_definition_id="connectorDefinitionId"
             )
@@ -119,9 +119,9 @@ class ConnectorDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            connector_definition_version_reference = interfaces_aws_greengrass.ConnectorDefinitionVersionReference(
+            connector_definition_version_reference = interfaces_greengrass.ConnectorDefinitionVersionReference(
                 connector_definition_version_id="connectorDefinitionVersionId"
             )
         '''
@@ -177,9 +177,9 @@ class CoreDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            core_definition_reference = interfaces_aws_greengrass.CoreDefinitionReference(
+            core_definition_reference = interfaces_greengrass.CoreDefinitionReference(
                 core_definition_arn="coreDefinitionArn",
                 core_definition_id="coreDefinitionId"
             )
@@ -236,9 +236,9 @@ class CoreDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            core_definition_version_reference = interfaces_aws_greengrass.CoreDefinitionVersionReference(
+            core_definition_version_reference = interfaces_greengrass.CoreDefinitionVersionReference(
                 core_definition_version_id="coreDefinitionVersionId"
             )
         '''
@@ -294,9 +294,9 @@ class DeviceDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            device_definition_reference = interfaces_aws_greengrass.DeviceDefinitionReference(
+            device_definition_reference = interfaces_greengrass.DeviceDefinitionReference(
                 device_definition_arn="deviceDefinitionArn",
                 device_definition_id="deviceDefinitionId"
             )
@@ -353,9 +353,9 @@ class DeviceDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            device_definition_version_reference = interfaces_aws_greengrass.DeviceDefinitionVersionReference(
+            device_definition_version_reference = interfaces_greengrass.DeviceDefinitionVersionReference(
                 device_definition_version_id="deviceDefinitionVersionId"
             )
         '''
@@ -411,9 +411,9 @@ class FunctionDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            function_definition_reference = interfaces_aws_greengrass.FunctionDefinitionReference(
+            function_definition_reference = interfaces_greengrass.FunctionDefinitionReference(
                 function_definition_arn="functionDefinitionArn",
                 function_definition_id="functionDefinitionId"
             )
@@ -470,9 +470,9 @@ class FunctionDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            function_definition_version_reference = interfaces_aws_greengrass.FunctionDefinitionVersionReference(
+            function_definition_version_reference = interfaces_greengrass.FunctionDefinitionVersionReference(
                 function_definition_version_id="functionDefinitionVersionId"
             )
         '''
@@ -520,9 +520,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            group_reference = interfaces_aws_greengrass.GroupReference(
+            group_reference = interfaces_greengrass.GroupReference(
                 group_arn="groupArn",
                 group_id="groupId"
             )
@@ -579,9 +579,9 @@ class GroupVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            group_version_reference = interfaces_aws_greengrass.GroupVersionReference(
+            group_version_reference = interfaces_greengrass.GroupVersionReference(
                 group_version_id="groupVersionId"
             )
         '''
@@ -1383,9 +1383,9 @@ class LoggerDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            logger_definition_reference = interfaces_aws_greengrass.LoggerDefinitionReference(
+            logger_definition_reference = interfaces_greengrass.LoggerDefinitionReference(
                 logger_definition_arn="loggerDefinitionArn",
                 logger_definition_id="loggerDefinitionId"
             )
@@ -1442,9 +1442,9 @@ class LoggerDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            logger_definition_version_reference = interfaces_aws_greengrass.LoggerDefinitionVersionReference(
+            logger_definition_version_reference = interfaces_greengrass.LoggerDefinitionVersionReference(
                 logger_definition_version_id="loggerDefinitionVersionId"
             )
         '''
@@ -1500,9 +1500,9 @@ class ResourceDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            resource_definition_reference = interfaces_aws_greengrass.ResourceDefinitionReference(
+            resource_definition_reference = interfaces_greengrass.ResourceDefinitionReference(
                 resource_definition_arn="resourceDefinitionArn",
                 resource_definition_id="resourceDefinitionId"
             )
@@ -1559,9 +1559,9 @@ class ResourceDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            resource_definition_version_reference = interfaces_aws_greengrass.ResourceDefinitionVersionReference(
+            resource_definition_version_reference = interfaces_greengrass.ResourceDefinitionVersionReference(
                 resource_definition_version_id="resourceDefinitionVersionId"
             )
         '''
@@ -1617,9 +1617,9 @@ class SubscriptionDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            subscription_definition_reference = interfaces_aws_greengrass.SubscriptionDefinitionReference(
+            subscription_definition_reference = interfaces_greengrass.SubscriptionDefinitionReference(
                 subscription_definition_arn="subscriptionDefinitionArn",
                 subscription_definition_id="subscriptionDefinitionId"
             )
@@ -1678,9 +1678,9 @@ class SubscriptionDefinitionVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrass as interfaces_aws_greengrass
+            from aws_cdk.interfaces import aws_greengrass as interfaces_greengrass
             
-            subscription_definition_version_reference = interfaces_aws_greengrass.SubscriptionDefinitionVersionReference(
+            subscription_definition_version_reference = interfaces_greengrass.SubscriptionDefinitionVersionReference(
                 subscription_definition_version_id="subscriptionDefinitionVersionId"
             )
         '''

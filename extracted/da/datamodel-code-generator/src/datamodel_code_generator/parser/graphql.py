@@ -21,6 +21,7 @@ from datamodel_code_generator import (
     LiteralType,
     PythonVersion,
     PythonVersionMin,
+    ReadOnlyWriteOnlyModelType,
     ReuseScope,
     snooper_to_methods,
 )
@@ -166,6 +167,7 @@ class GraphQLParser(Parser):
         capitalise_enum_members: bool = False,
         keep_model_order: bool = False,
         use_one_literal_as_default: bool = False,
+        use_enum_values_in_discriminator: bool = False,
         known_third_party: list[str] | None = None,
         custom_formatters: list[str] | None = None,
         custom_formatters_kwargs: dict[str, Any] | None = None,
@@ -182,6 +184,7 @@ class GraphQLParser(Parser):
         parent_scoped_naming: bool = False,
         dataclass_arguments: DataclassArguments | None = None,
         type_mappings: list[str] | None = None,
+        read_only_write_only_model_type: ReadOnlyWriteOnlyModelType | None = None,
     ) -> None:
         """Initialize the GraphQL parser with configuration options."""
         super().__init__(
@@ -220,6 +223,7 @@ class GraphQLParser(Parser):
             encoding=encoding,
             enum_field_as_literal=enum_field_as_literal,
             use_one_literal_as_default=use_one_literal_as_default,
+            use_enum_values_in_discriminator=use_enum_values_in_discriminator,
             set_default_enum_member=set_default_enum_member,
             use_subclass_enum=use_subclass_enum,
             use_specialized_enum=use_specialized_enum,
@@ -269,6 +273,7 @@ class GraphQLParser(Parser):
             parent_scoped_naming=parent_scoped_naming,
             dataclass_arguments=dataclass_arguments,
             type_mappings=type_mappings,
+            read_only_write_only_model_type=read_only_write_only_model_type,
         )
 
         self.data_model_scalar_type = data_model_scalar_type

@@ -52,9 +52,9 @@ class AccountReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_organizations as interfaces_aws_organizations
+            from aws_cdk.interfaces import aws_organizations as interfaces_organizations
             
-            account_reference = interfaces_aws_organizations.AccountReference(
+            account_reference = interfaces_organizations.AccountReference(
                 account_arn="accountArn",
                 account_id="accountId"
             )
@@ -349,9 +349,9 @@ class OrganizationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_organizations as interfaces_aws_organizations
+            from aws_cdk.interfaces import aws_organizations as interfaces_organizations
             
-            organization_reference = interfaces_aws_organizations.OrganizationReference(
+            organization_reference = interfaces_organizations.OrganizationReference(
                 organization_arn="organizationArn",
                 organization_id="organizationId"
             )
@@ -417,9 +417,9 @@ class OrganizationalUnitReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_organizations as interfaces_aws_organizations
+            from aws_cdk.interfaces import aws_organizations as interfaces_organizations
             
-            organizational_unit_reference = interfaces_aws_organizations.OrganizationalUnitReference(
+            organizational_unit_reference = interfaces_organizations.OrganizationalUnitReference(
                 organizational_unit_arn="organizationalUnitArn",
                 organizational_unit_id="organizationalUnitId"
             )
@@ -477,9 +477,9 @@ class PolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_organizations as interfaces_aws_organizations
+            from aws_cdk.interfaces import aws_organizations as interfaces_organizations
             
-            policy_reference = interfaces_aws_organizations.PolicyReference(
+            policy_reference = interfaces_organizations.PolicyReference(
                 policy_arn="policyArn",
                 policy_id="policyId"
             )
@@ -545,9 +545,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_organizations as interfaces_aws_organizations
+            from aws_cdk.interfaces import aws_organizations as interfaces_organizations
             
-            resource_policy_reference = interfaces_aws_organizations.ResourcePolicyReference(
+            resource_policy_reference = interfaces_organizations.ResourcePolicyReference(
                 resource_policy_arn="resourcePolicyArn",
                 resource_policy_id="resourcePolicyId"
             )

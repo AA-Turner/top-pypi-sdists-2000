@@ -231,9 +231,9 @@ class LaunchProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_nimblestudio as interfaces_aws_nimblestudio
+            from aws_cdk.interfaces import aws_nimblestudio as interfaces_nimblestudio
             
-            launch_profile_reference = interfaces_aws_nimblestudio.LaunchProfileReference()
+            launch_profile_reference = interfaces_nimblestudio.LaunchProfileReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -264,9 +264,9 @@ class StreamingImageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_nimblestudio as interfaces_aws_nimblestudio
+            from aws_cdk.interfaces import aws_nimblestudio as interfaces_nimblestudio
             
-            streaming_image_reference = interfaces_aws_nimblestudio.StreamingImageReference()
+            streaming_image_reference = interfaces_nimblestudio.StreamingImageReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -297,9 +297,9 @@ class StudioComponentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_nimblestudio as interfaces_aws_nimblestudio
+            from aws_cdk.interfaces import aws_nimblestudio as interfaces_nimblestudio
             
-            studio_component_reference = interfaces_aws_nimblestudio.StudioComponentReference()
+            studio_component_reference = interfaces_nimblestudio.StudioComponentReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -332,9 +332,9 @@ class StudioReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_nimblestudio as interfaces_aws_nimblestudio
+            from aws_cdk.interfaces import aws_nimblestudio as interfaces_nimblestudio
             
-            studio_reference = interfaces_aws_nimblestudio.StudioReference(
+            studio_reference = interfaces_nimblestudio.StudioReference(
                 studio_id="studioId"
             )
         '''

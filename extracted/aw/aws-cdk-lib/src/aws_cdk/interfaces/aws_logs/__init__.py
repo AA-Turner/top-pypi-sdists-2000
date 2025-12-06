@@ -63,9 +63,9 @@ class AccountPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            account_policy_reference = interfaces_aws_logs.AccountPolicyReference(
+            account_policy_reference = interfaces_logs.AccountPolicyReference(
                 account_id="accountId",
                 policy_name="policyName",
                 policy_type="policyType"
@@ -141,9 +141,9 @@ class DeliveryDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            delivery_destination_reference = interfaces_aws_logs.DeliveryDestinationReference(
+            delivery_destination_reference = interfaces_logs.DeliveryDestinationReference(
                 delivery_destination_arn="deliveryDestinationArn",
                 delivery_destination_name="deliveryDestinationName"
             )
@@ -206,9 +206,9 @@ class DeliveryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            delivery_reference = interfaces_aws_logs.DeliveryReference(
+            delivery_reference = interfaces_logs.DeliveryReference(
                 delivery_arn="deliveryArn",
                 delivery_id="deliveryId"
             )
@@ -274,9 +274,9 @@ class DeliverySourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            delivery_source_reference = interfaces_aws_logs.DeliverySourceReference(
+            delivery_source_reference = interfaces_logs.DeliverySourceReference(
                 delivery_source_arn="deliverySourceArn",
                 delivery_source_name="deliverySourceName"
             )
@@ -342,9 +342,9 @@ class DestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            destination_reference = interfaces_aws_logs.DestinationReference(
+            destination_reference = interfaces_logs.DestinationReference(
                 destination_arn="destinationArn",
                 destination_name="destinationName"
             )
@@ -1031,9 +1031,9 @@ class IntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            integration_reference = interfaces_aws_logs.IntegrationReference(
+            integration_reference = interfaces_logs.IntegrationReference(
                 integration_name="integrationName"
             )
         '''
@@ -1080,9 +1080,9 @@ class LogAnomalyDetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            log_anomaly_detector_reference = interfaces_aws_logs.LogAnomalyDetectorReference(
+            log_anomaly_detector_reference = interfaces_logs.LogAnomalyDetectorReference(
                 anomaly_detector_arn="anomalyDetectorArn"
             )
         '''
@@ -1135,9 +1135,9 @@ class LogGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            log_group_reference = interfaces_aws_logs.LogGroupReference(
+            log_group_reference = interfaces_logs.LogGroupReference(
                 log_group_arn="logGroupArn",
                 log_group_name="logGroupName"
             )
@@ -1203,9 +1203,9 @@ class LogStreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            log_stream_reference = interfaces_aws_logs.LogStreamReference(
+            log_stream_reference = interfaces_logs.LogStreamReference(
                 log_group_name="logGroupName",
                 log_stream_name="logStreamName"
             )
@@ -1268,9 +1268,9 @@ class MetricFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            metric_filter_reference = interfaces_aws_logs.MetricFilterReference(
+            metric_filter_reference = interfaces_logs.MetricFilterReference(
                 filter_name="filterName",
                 log_group_name="logGroupName"
             )
@@ -1327,9 +1327,9 @@ class QueryDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            query_definition_reference = interfaces_aws_logs.QueryDefinitionReference(
+            query_definition_reference = interfaces_logs.QueryDefinitionReference(
                 query_definition_id="queryDefinitionId"
             )
         '''
@@ -1376,9 +1376,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            resource_policy_reference = interfaces_aws_logs.ResourcePolicyReference(
+            resource_policy_reference = interfaces_logs.ResourcePolicyReference(
                 policy_name="policyName"
             )
         '''
@@ -1431,9 +1431,9 @@ class SubscriptionFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            subscription_filter_reference = interfaces_aws_logs.SubscriptionFilterReference(
+            subscription_filter_reference = interfaces_logs.SubscriptionFilterReference(
                 filter_name="filterName",
                 log_group_name="logGroupName"
             )
@@ -1490,9 +1490,9 @@ class TransformerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+            from aws_cdk.interfaces import aws_logs as interfaces_logs
             
-            transformer_reference = interfaces_aws_logs.TransformerReference(
+            transformer_reference = interfaces_logs.TransformerReference(
                 log_group_identifier="logGroupIdentifier"
             )
         '''

@@ -51,9 +51,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dsql as interfaces_aws_dsql
+            from aws_cdk.interfaces import aws_dsql as interfaces_dsql
             
-            cluster_reference = interfaces_aws_dsql.ClusterReference(
+            cluster_reference = interfaces_dsql.ClusterReference(
                 identifier="identifier"
             )
         '''

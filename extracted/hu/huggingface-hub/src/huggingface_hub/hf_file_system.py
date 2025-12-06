@@ -140,21 +140,25 @@ class HfFileSystem(fsspec.AbstractFileSystem, metaclass=_Cached):
     Usage:
 
     ```python
-    >>> from huggingface_hub import HfFileSystem
-
-    >>> fs = HfFileSystem()
+    >>> from huggingface_hub import hffs
 
     >>> # List files
-    >>> fs.glob("my-username/my-model/*.bin")
+    >>> hffs.glob("my-username/my-model/*.bin")
     ['my-username/my-model/pytorch_model.bin']
-    >>> fs.ls("datasets/my-username/my-dataset", detail=False)
+    >>> hffs.ls("datasets/my-username/my-dataset", detail=False)
     ['datasets/my-username/my-dataset/.gitattributes', 'datasets/my-username/my-dataset/README.md', 'datasets/my-username/my-dataset/data.json']
 
     >>> # Read/write files
-    >>> with fs.open("my-username/my-model/pytorch_model.bin") as f:
+    >>> with hffs.open("my-username/my-model/pytorch_model.bin") as f:
     ...     data = f.read()
-    >>> with fs.open("my-username/my-model/pytorch_model.bin", "wb") as f:
+    >>> with hffs.open("my-username/my-model/pytorch_model.bin", "wb") as f:
     ...     f.write(data)
+    ```
+
+    Specify a token for authentication:
+    ```python
+    >>> from huggingface_hub import HfFileSystem
+    >>> hffs = HfFileSystem(token=token)
     ```
     """
 
@@ -339,14 +343,14 @@ class HfFileSystem(fsspec.AbstractFileSystem, metaclass=_Cached):
                     (resolved_path.repo_type, resolved_path.repo_id, resolved_path.revision), None
                 )
 
-    def _open(
+    def _open(  # type: ignore[override]
         self,
         path: str,
         mode: str = "rb",
-        revision: Optional[str] = None,
         block_size: Optional[int] = None,
+        revision: Optional[str] = None,
         **kwargs,
-    ) -> "HfFileSystemFile":
+    ) -> Union["HfFileSystemFile", "HfFileSystemStreamFile"]:
         block_size = block_size if block_size is not None else self.block_size
         if block_size is not None:
             kwargs["block_size"] = block_size
@@ -593,7 +597,7 @@ class HfFileSystem(fsspec.AbstractFileSystem, metaclass=_Cached):
         path = self.resolve_path(path, revision=kwargs.get("revision")).unresolve()
         yield from super().walk(path, *args, **kwargs)
 
-    def glob(self, path: str, **kwargs) -> list[str]:
+    def glob(self, path: str, maxdepth: Optional[int] = None, **kwargs) -> list[str]:
         """
         Find files by glob-matching.
 
@@ -607,7 +611,7 @@ class HfFileSystem(fsspec.AbstractFileSystem, metaclass=_Cached):
             `list[str]`: List of paths matching the pattern.
         """
         path = self.resolve_path(path, revision=kwargs.get("revision")).unresolve()
-        return super().glob(path, **kwargs)
+        return super().glob(path, maxdepth=maxdepth, **kwargs)
 
     def find(
         self,
@@ -1201,7 +1205,6 @@ class HfFileSystemStreamFile(fsspec.spec.AbstractBufferedFile):
                 "GET",
                 url,
                 headers=headers,
-                retry_on_status_codes=(500, 502, 503, 504),
                 timeout=constants.HF_HUB_DOWNLOAD_TIMEOUT,
             )
         )
@@ -1267,3 +1270,6 @@ def make_instance(cls, args, kwargs, instance_state):
     for attr, state_value in instance_state.items():
         setattr(fs, attr, state_value)
     return fs
+
+
+hffs = HfFileSystem()

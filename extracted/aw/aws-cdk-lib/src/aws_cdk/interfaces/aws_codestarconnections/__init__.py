@@ -51,9 +51,9 @@ class ConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codestarconnections as interfaces_aws_codestarconnections
+            from aws_cdk.interfaces import aws_codestarconnections as interfaces_codestarconnections
             
-            connection_reference = interfaces_aws_codestarconnections.ConnectionReference(
+            connection_reference = interfaces_codestarconnections.ConnectionReference(
                 connection_arn="connectionArn"
             )
         '''
@@ -241,9 +241,9 @@ class RepositoryLinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codestarconnections as interfaces_aws_codestarconnections
+            from aws_cdk.interfaces import aws_codestarconnections as interfaces_codestarconnections
             
-            repository_link_reference = interfaces_aws_codestarconnections.RepositoryLinkReference(
+            repository_link_reference = interfaces_codestarconnections.RepositoryLinkReference(
                 repository_link_arn="repositoryLinkArn"
             )
         '''
@@ -291,9 +291,9 @@ class SyncConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codestarconnections as interfaces_aws_codestarconnections
+            from aws_cdk.interfaces import aws_codestarconnections as interfaces_codestarconnections
             
-            sync_configuration_reference = interfaces_aws_codestarconnections.SyncConfigurationReference(
+            sync_configuration_reference = interfaces_codestarconnections.SyncConfigurationReference(
                 resource_name="resourceName",
                 sync_type="syncType"
             )

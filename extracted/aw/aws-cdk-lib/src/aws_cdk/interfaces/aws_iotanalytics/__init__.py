@@ -51,9 +51,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotanalytics as interfaces_aws_iotanalytics
+            from aws_cdk.interfaces import aws_iotanalytics as interfaces_iotanalytics
             
-            channel_reference = interfaces_aws_iotanalytics.ChannelReference(
+            channel_reference = interfaces_iotanalytics.ChannelReference(
                 channel_name="channelName"
             )
         '''
@@ -100,9 +100,9 @@ class DatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotanalytics as interfaces_aws_iotanalytics
+            from aws_cdk.interfaces import aws_iotanalytics as interfaces_iotanalytics
             
-            dataset_reference = interfaces_aws_iotanalytics.DatasetReference(
+            dataset_reference = interfaces_iotanalytics.DatasetReference(
                 dataset_name="datasetName"
             )
         '''
@@ -149,9 +149,9 @@ class DatastoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotanalytics as interfaces_aws_iotanalytics
+            from aws_cdk.interfaces import aws_iotanalytics as interfaces_iotanalytics
             
-            datastore_reference = interfaces_aws_iotanalytics.DatastoreReference(
+            datastore_reference = interfaces_iotanalytics.DatastoreReference(
                 datastore_name="datastoreName"
             )
         '''
@@ -378,9 +378,9 @@ class PipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotanalytics as interfaces_aws_iotanalytics
+            from aws_cdk.interfaces import aws_iotanalytics as interfaces_iotanalytics
             
-            pipeline_reference = interfaces_aws_iotanalytics.PipelineReference(
+            pipeline_reference = interfaces_iotanalytics.PipelineReference(
                 pipeline_name="pipelineName"
             )
         '''

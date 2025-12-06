@@ -51,9 +51,9 @@ class AccountAuditConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            account_audit_configuration_reference = interfaces_aws_iot.AccountAuditConfigurationReference(
+            account_audit_configuration_reference = interfaces_iot.AccountAuditConfigurationReference(
                 account_id="accountId"
             )
         '''
@@ -109,9 +109,9 @@ class AuthorizerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            authorizer_reference = interfaces_aws_iot.AuthorizerReference(
+            authorizer_reference = interfaces_iot.AuthorizerReference(
                 authorizer_arn="authorizerArn",
                 authorizer_name="authorizerName"
             )
@@ -177,9 +177,9 @@ class BillingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            billing_group_reference = interfaces_aws_iot.BillingGroupReference(
+            billing_group_reference = interfaces_iot.BillingGroupReference(
                 billing_group_arn="billingGroupArn",
                 billing_group_name="billingGroupName"
             )
@@ -245,9 +245,9 @@ class CACertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            c_aCertificate_reference = interfaces_aws_iot.CACertificateReference(
+            c_aCertificate_reference = interfaces_iot.CACertificateReference(
                 ca_certificate_arn="caCertificateArn",
                 ca_certificate_id="caCertificateId"
             )
@@ -313,9 +313,9 @@ class CertificateProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            certificate_provider_reference = interfaces_aws_iot.CertificateProviderReference(
+            certificate_provider_reference = interfaces_iot.CertificateProviderReference(
                 certificate_provider_arn="certificateProviderArn",
                 certificate_provider_name="certificateProviderName"
             )
@@ -381,9 +381,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            certificate_reference = interfaces_aws_iot.CertificateReference(
+            certificate_reference = interfaces_iot.CertificateReference(
                 certificate_arn="certificateArn",
                 certificate_id="certificateId"
             )
@@ -441,9 +441,9 @@ class CommandReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            command_reference = interfaces_aws_iot.CommandReference(
+            command_reference = interfaces_iot.CommandReference(
                 command_arn="commandArn",
                 command_id="commandId"
             )
@@ -500,9 +500,9 @@ class CustomMetricReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            custom_metric_reference = interfaces_aws_iot.CustomMetricReference(
+            custom_metric_reference = interfaces_iot.CustomMetricReference(
                 metric_name="metricName"
             )
         '''
@@ -555,9 +555,9 @@ class DimensionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            dimension_reference = interfaces_aws_iot.DimensionReference(
+            dimension_reference = interfaces_iot.DimensionReference(
                 dimension_arn="dimensionArn",
                 dimension_name="dimensionName"
             )
@@ -623,9 +623,9 @@ class DomainConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            domain_configuration_reference = interfaces_aws_iot.DomainConfigurationReference(
+            domain_configuration_reference = interfaces_iot.DomainConfigurationReference(
                 domain_configuration_arn="domainConfigurationArn",
                 domain_configuration_name="domainConfigurationName"
             )
@@ -682,9 +682,9 @@ class EncryptionConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            encryption_configuration_reference = interfaces_aws_iot.EncryptionConfigurationReference(
+            encryption_configuration_reference = interfaces_iot.EncryptionConfigurationReference(
                 account_id="accountId"
             )
         '''
@@ -731,9 +731,9 @@ class FleetMetricReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            fleet_metric_reference = interfaces_aws_iot.FleetMetricReference(
+            fleet_metric_reference = interfaces_iot.FleetMetricReference(
                 metric_name="metricName"
             )
         '''
@@ -2145,9 +2145,9 @@ class JobTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            job_template_reference = interfaces_aws_iot.JobTemplateReference(
+            job_template_reference = interfaces_iot.JobTemplateReference(
                 job_template_arn="jobTemplateArn",
                 job_template_id="jobTemplateId"
             )
@@ -2204,9 +2204,9 @@ class LoggingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            logging_reference = interfaces_aws_iot.LoggingReference(
+            logging_reference = interfaces_iot.LoggingReference(
                 account_id="accountId"
             )
         '''
@@ -2262,9 +2262,9 @@ class MitigationActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            mitigation_action_reference = interfaces_aws_iot.MitigationActionReference(
+            mitigation_action_reference = interfaces_iot.MitigationActionReference(
                 action_name="actionName",
                 mitigation_action_arn="mitigationActionArn"
             )
@@ -2321,9 +2321,9 @@ class PolicyPrincipalAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            policy_principal_attachment_reference = interfaces_aws_iot.PolicyPrincipalAttachmentReference(
+            policy_principal_attachment_reference = interfaces_iot.PolicyPrincipalAttachmentReference(
                 policy_principal_attachment_id="policyPrincipalAttachmentId"
             )
         '''
@@ -2371,9 +2371,9 @@ class PolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            policy_reference = interfaces_aws_iot.PolicyReference(
+            policy_reference = interfaces_iot.PolicyReference(
                 policy_arn="policyArn",
                 policy_id="policyId"
             )
@@ -2430,9 +2430,9 @@ class ProvisioningTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            provisioning_template_reference = interfaces_aws_iot.ProvisioningTemplateReference(
+            provisioning_template_reference = interfaces_iot.ProvisioningTemplateReference(
                 template_name="templateName"
             )
         '''
@@ -2479,9 +2479,9 @@ class ResourceSpecificLoggingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            resource_specific_logging_reference = interfaces_aws_iot.ResourceSpecificLoggingReference(
+            resource_specific_logging_reference = interfaces_iot.ResourceSpecificLoggingReference(
                 target_id="targetId"
             )
         '''
@@ -2534,9 +2534,9 @@ class RoleAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            role_alias_reference = interfaces_aws_iot.RoleAliasReference(
+            role_alias_reference = interfaces_iot.RoleAliasReference(
                 role_alias="roleAlias",
                 role_alias_arn="roleAliasArn"
             )
@@ -2602,9 +2602,9 @@ class ScheduledAuditReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            scheduled_audit_reference = interfaces_aws_iot.ScheduledAuditReference(
+            scheduled_audit_reference = interfaces_iot.ScheduledAuditReference(
                 scheduled_audit_arn="scheduledAuditArn",
                 scheduled_audit_name="scheduledAuditName"
             )
@@ -2670,9 +2670,9 @@ class SecurityProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            security_profile_reference = interfaces_aws_iot.SecurityProfileReference(
+            security_profile_reference = interfaces_iot.SecurityProfileReference(
                 security_profile_arn="securityProfileArn",
                 security_profile_name="securityProfileName"
             )
@@ -2729,9 +2729,9 @@ class SoftwarePackageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            software_package_reference = interfaces_aws_iot.SoftwarePackageReference(
+            software_package_reference = interfaces_iot.SoftwarePackageReference(
                 package_name="packageName"
             )
         '''
@@ -2784,9 +2784,9 @@ class SoftwarePackageVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            software_package_version_reference = interfaces_aws_iot.SoftwarePackageVersionReference(
+            software_package_version_reference = interfaces_iot.SoftwarePackageVersionReference(
                 package_name="packageName",
                 version_name="versionName"
             )
@@ -2852,9 +2852,9 @@ class ThingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            thing_group_reference = interfaces_aws_iot.ThingGroupReference(
+            thing_group_reference = interfaces_iot.ThingGroupReference(
                 thing_group_arn="thingGroupArn",
                 thing_group_name="thingGroupName"
             )
@@ -2911,9 +2911,9 @@ class ThingPrincipalAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            thing_principal_attachment_reference = interfaces_aws_iot.ThingPrincipalAttachmentReference(
+            thing_principal_attachment_reference = interfaces_iot.ThingPrincipalAttachmentReference(
                 thing_principal_attachment_id="thingPrincipalAttachmentId"
             )
         '''
@@ -2961,9 +2961,9 @@ class ThingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            thing_reference = interfaces_aws_iot.ThingReference(
+            thing_reference = interfaces_iot.ThingReference(
                 thing_arn="thingArn",
                 thing_name="thingName"
             )
@@ -3029,9 +3029,9 @@ class ThingTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            thing_type_reference = interfaces_aws_iot.ThingTypeReference(
+            thing_type_reference = interfaces_iot.ThingTypeReference(
                 thing_type_arn="thingTypeArn",
                 thing_type_name="thingTypeName"
             )
@@ -3088,9 +3088,9 @@ class TopicRuleDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            topic_rule_destination_reference = interfaces_aws_iot.TopicRuleDestinationReference(
+            topic_rule_destination_reference = interfaces_iot.TopicRuleDestinationReference(
                 topic_rule_destination_arn="topicRuleDestinationArn"
             )
         '''
@@ -3143,9 +3143,9 @@ class TopicRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iot as interfaces_aws_iot
+            from aws_cdk.interfaces import aws_iot as interfaces_iot
             
-            topic_rule_reference = interfaces_aws_iot.TopicRuleReference(
+            topic_rule_reference = interfaces_iot.TopicRuleReference(
                 rule_name="ruleName",
                 topic_rule_arn="topicRuleArn"
             )

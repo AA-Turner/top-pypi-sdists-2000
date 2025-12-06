@@ -52,9 +52,9 @@ class CustomDBEngineVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            custom_dBEngine_version_reference = interfaces_aws_rds.CustomDBEngineVersionReference(
+            custom_dBEngine_version_reference = interfaces_rds.CustomDBEngineVersionReference(
                 engine="engine",
                 engine_version="engineVersion"
             )
@@ -111,9 +111,9 @@ class DBClusterParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bCluster_parameter_group_reference = interfaces_aws_rds.DBClusterParameterGroupReference(
+            d_bCluster_parameter_group_reference = interfaces_rds.DBClusterParameterGroupReference(
                 db_cluster_parameter_group_name="dbClusterParameterGroupName"
             )
         '''
@@ -169,9 +169,9 @@ class DBClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bCluster_reference = interfaces_aws_rds.DBClusterReference(
+            d_bCluster_reference = interfaces_rds.DBClusterReference(
                 db_cluster_arn="dbClusterArn",
                 db_cluster_identifier="dbClusterIdentifier"
             )
@@ -237,9 +237,9 @@ class DBInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bInstance_reference = interfaces_aws_rds.DBInstanceReference(
+            d_bInstance_reference = interfaces_rds.DBInstanceReference(
                 db_instance_arn="dbInstanceArn",
                 db_instance_identifier="dbInstanceIdentifier"
             )
@@ -296,9 +296,9 @@ class DBParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bParameter_group_reference = interfaces_aws_rds.DBParameterGroupReference(
+            d_bParameter_group_reference = interfaces_rds.DBParameterGroupReference(
                 db_parameter_group_name="dbParameterGroupName"
             )
         '''
@@ -354,9 +354,9 @@ class DBProxyEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bProxy_endpoint_reference = interfaces_aws_rds.DBProxyEndpointReference(
+            d_bProxy_endpoint_reference = interfaces_rds.DBProxyEndpointReference(
                 db_proxy_endpoint_arn="dbProxyEndpointArn",
                 db_proxy_endpoint_name="dbProxyEndpointName"
             )
@@ -419,9 +419,9 @@ class DBProxyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bProxy_reference = interfaces_aws_rds.DBProxyReference(
+            d_bProxy_reference = interfaces_rds.DBProxyReference(
                 db_proxy_arn="dbProxyArn",
                 db_proxy_name="dbProxyName"
             )
@@ -478,9 +478,9 @@ class DBProxyTargetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bProxy_target_group_reference = interfaces_aws_rds.DBProxyTargetGroupReference(
+            d_bProxy_target_group_reference = interfaces_rds.DBProxyTargetGroupReference(
                 target_group_arn="targetGroupArn"
             )
         '''
@@ -527,9 +527,9 @@ class DBSecurityGroupIngressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bSecurity_group_ingress_reference = interfaces_aws_rds.DBSecurityGroupIngressReference(
+            d_bSecurity_group_ingress_reference = interfaces_rds.DBSecurityGroupIngressReference(
                 db_security_group_ingress_id="dbSecurityGroupIngressId"
             )
         '''
@@ -576,9 +576,9 @@ class DBSecurityGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bSecurity_group_reference = interfaces_aws_rds.DBSecurityGroupReference(
+            d_bSecurity_group_reference = interfaces_rds.DBSecurityGroupReference(
                 db_security_group_id="dbSecurityGroupId"
             )
         '''
@@ -625,9 +625,9 @@ class DBShardGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bShard_group_reference = interfaces_aws_rds.DBShardGroupReference(
+            d_bShard_group_reference = interfaces_rds.DBShardGroupReference(
                 db_shard_group_identifier="dbShardGroupIdentifier"
             )
         '''
@@ -674,9 +674,9 @@ class DBSubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            d_bSubnet_group_reference = interfaces_aws_rds.DBSubnetGroupReference(
+            d_bSubnet_group_reference = interfaces_rds.DBSubnetGroupReference(
                 db_subnet_group_name="dbSubnetGroupName"
             )
         '''
@@ -723,9 +723,9 @@ class EventSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            event_subscription_reference = interfaces_aws_rds.EventSubscriptionReference(
+            event_subscription_reference = interfaces_rds.EventSubscriptionReference(
                 subscription_name="subscriptionName"
             )
         '''
@@ -772,9 +772,9 @@ class GlobalClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            global_cluster_reference = interfaces_aws_rds.GlobalClusterReference(
+            global_cluster_reference = interfaces_rds.GlobalClusterReference(
                 global_cluster_identifier="globalClusterIdentifier"
             )
         '''
@@ -1541,9 +1541,9 @@ class IntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            integration_reference = interfaces_aws_rds.IntegrationReference(
+            integration_reference = interfaces_rds.IntegrationReference(
                 integration_arn="integrationArn"
             )
         '''
@@ -1590,9 +1590,9 @@ class OptionGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rds as interfaces_aws_rds
+            from aws_cdk.interfaces import aws_rds as interfaces_rds
             
-            option_group_reference = interfaces_aws_rds.OptionGroupReference(
+            option_group_reference = interfaces_rds.OptionGroupReference(
                 option_group_name="optionGroupName"
             )
         '''

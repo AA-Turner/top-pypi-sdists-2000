@@ -51,9 +51,9 @@ class DBClusterParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdb as interfaces_aws_docdb
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
-            d_bCluster_parameter_group_reference = interfaces_aws_docdb.DBClusterParameterGroupReference(
+            d_bCluster_parameter_group_reference = interfaces_docdb.DBClusterParameterGroupReference(
                 db_cluster_parameter_group_id="dbClusterParameterGroupId"
             )
         '''
@@ -100,9 +100,9 @@ class DBClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdb as interfaces_aws_docdb
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
-            d_bCluster_reference = interfaces_aws_docdb.DBClusterReference(
+            d_bCluster_reference = interfaces_docdb.DBClusterReference(
                 db_cluster_id="dbClusterId"
             )
         '''
@@ -149,9 +149,9 @@ class DBInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdb as interfaces_aws_docdb
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
-            d_bInstance_reference = interfaces_aws_docdb.DBInstanceReference(
+            d_bInstance_reference = interfaces_docdb.DBInstanceReference(
                 db_instance_id="dbInstanceId"
             )
         '''
@@ -198,9 +198,9 @@ class DBSubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdb as interfaces_aws_docdb
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
-            d_bSubnet_group_reference = interfaces_aws_docdb.DBSubnetGroupReference(
+            d_bSubnet_group_reference = interfaces_docdb.DBSubnetGroupReference(
                 db_subnet_group_id="dbSubnetGroupId"
             )
         '''
@@ -247,9 +247,9 @@ class EventSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_docdb as interfaces_aws_docdb
+            from aws_cdk.interfaces import aws_docdb as interfaces_docdb
             
-            event_subscription_reference = interfaces_aws_docdb.EventSubscriptionReference(
+            event_subscription_reference = interfaces_docdb.EventSubscriptionReference(
                 event_subscription_id="eventSubscriptionId"
             )
         '''

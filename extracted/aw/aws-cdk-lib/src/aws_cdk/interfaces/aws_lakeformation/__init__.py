@@ -66,9 +66,9 @@ class DataCellsFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            data_cells_filter_reference = interfaces_aws_lakeformation.DataCellsFilterReference(
+            data_cells_filter_reference = interfaces_lakeformation.DataCellsFilterReference(
                 database_name="databaseName",
                 data_cells_filter_name="dataCellsFilterName",
                 table_catalog_id="tableCatalogId",
@@ -145,9 +145,9 @@ class DataLakeSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            data_lake_settings_reference = interfaces_aws_lakeformation.DataLakeSettingsReference(
+            data_lake_settings_reference = interfaces_lakeformation.DataLakeSettingsReference(
                 data_lake_settings_id="dataLakeSettingsId"
             )
         '''
@@ -517,9 +517,9 @@ class PermissionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            permissions_reference = interfaces_aws_lakeformation.PermissionsReference(
+            permissions_reference = interfaces_lakeformation.PermissionsReference(
                 permissions_id="permissionsId"
             )
         '''
@@ -575,9 +575,9 @@ class PrincipalPermissionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            principal_permissions_reference = interfaces_aws_lakeformation.PrincipalPermissionsReference(
+            principal_permissions_reference = interfaces_lakeformation.PrincipalPermissionsReference(
                 principal_identifier="principalIdentifier",
                 resource_identifier="resourceIdentifier"
             )
@@ -634,9 +634,9 @@ class ResourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            resource_reference = interfaces_aws_lakeformation.ResourceReference(
+            resource_reference = interfaces_lakeformation.ResourceReference(
                 resource_id="resourceId"
             )
         '''
@@ -692,9 +692,9 @@ class TagAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            tag_association_reference = interfaces_aws_lakeformation.TagAssociationReference(
+            tag_association_reference = interfaces_lakeformation.TagAssociationReference(
                 resource_identifier="resourceIdentifier",
                 tags_identifier="tagsIdentifier"
             )
@@ -751,9 +751,9 @@ class TagReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lakeformation as interfaces_aws_lakeformation
+            from aws_cdk.interfaces import aws_lakeformation as interfaces_lakeformation
             
-            tag_reference = interfaces_aws_lakeformation.TagReference(
+            tag_reference = interfaces_lakeformation.TagReference(
                 tag_key="tagKey"
             )
         '''

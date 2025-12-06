@@ -51,9 +51,9 @@ class ConfigurationManagerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmquicksetup as interfaces_aws_ssmquicksetup
+            from aws_cdk.interfaces import aws_ssmquicksetup as interfaces_ssmquicksetup
             
-            configuration_manager_reference = interfaces_aws_ssmquicksetup.ConfigurationManagerReference(
+            configuration_manager_reference = interfaces_ssmquicksetup.ConfigurationManagerReference(
                 manager_arn="managerArn"
             )
         '''
@@ -194,9 +194,9 @@ class LifecycleAutomationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmquicksetup as interfaces_aws_ssmquicksetup
+            from aws_cdk.interfaces import aws_ssmquicksetup as interfaces_ssmquicksetup
             
-            lifecycle_automation_reference = interfaces_aws_ssmquicksetup.LifecycleAutomationReference(
+            lifecycle_automation_reference = interfaces_ssmquicksetup.LifecycleAutomationReference(
                 association_id="associationId"
             )
         '''

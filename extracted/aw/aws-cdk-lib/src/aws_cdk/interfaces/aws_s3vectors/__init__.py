@@ -188,9 +188,9 @@ class IndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3vectors as interfaces_aws_s3vectors
+            from aws_cdk.interfaces import aws_s3vectors as interfaces_s3vectors
             
-            index_reference = interfaces_aws_s3vectors.IndexReference(
+            index_reference = interfaces_s3vectors.IndexReference(
                 index_arn="indexArn"
             )
         '''
@@ -237,9 +237,9 @@ class VectorBucketPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3vectors as interfaces_aws_s3vectors
+            from aws_cdk.interfaces import aws_s3vectors as interfaces_s3vectors
             
-            vector_bucket_policy_reference = interfaces_aws_s3vectors.VectorBucketPolicyReference(
+            vector_bucket_policy_reference = interfaces_s3vectors.VectorBucketPolicyReference(
                 vector_bucket_arn="vectorBucketArn"
             )
         '''
@@ -286,9 +286,9 @@ class VectorBucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3vectors as interfaces_aws_s3vectors
+            from aws_cdk.interfaces import aws_s3vectors as interfaces_s3vectors
             
-            vector_bucket_reference = interfaces_aws_s3vectors.VectorBucketReference(
+            vector_bucket_reference = interfaces_s3vectors.VectorBucketReference(
                 vector_bucket_arn="vectorBucketArn"
             )
         '''

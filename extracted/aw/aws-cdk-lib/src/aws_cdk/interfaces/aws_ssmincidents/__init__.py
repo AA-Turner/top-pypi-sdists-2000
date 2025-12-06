@@ -141,9 +141,9 @@ class ReplicationSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmincidents as interfaces_aws_ssmincidents
+            from aws_cdk.interfaces import aws_ssmincidents as interfaces_ssmincidents
             
-            replication_set_reference = interfaces_aws_ssmincidents.ReplicationSetReference(
+            replication_set_reference = interfaces_ssmincidents.ReplicationSetReference(
                 replication_set_arn="replicationSetArn"
             )
         '''
@@ -190,9 +190,9 @@ class ResponsePlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmincidents as interfaces_aws_ssmincidents
+            from aws_cdk.interfaces import aws_ssmincidents as interfaces_ssmincidents
             
-            response_plan_reference = interfaces_aws_ssmincidents.ResponsePlanReference(
+            response_plan_reference = interfaces_ssmincidents.ResponsePlanReference(
                 response_plan_arn="responsePlanArn"
             )
         '''

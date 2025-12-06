@@ -97,9 +97,9 @@ class PipeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pipes as interfaces_aws_pipes
+            from aws_cdk.interfaces import aws_pipes as interfaces_pipes
             
-            pipe_reference = interfaces_aws_pipes.PipeReference(
+            pipe_reference = interfaces_pipes.PipeReference(
                 pipe_arn="pipeArn",
                 pipe_name="pipeName"
             )

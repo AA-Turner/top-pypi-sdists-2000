@@ -23111,11 +23111,11 @@ class AssetCode(
         import aws_cdk as cdk
         from aws_cdk import aws_appsync as appsync
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         asset_code = appsync.AssetCode("path",

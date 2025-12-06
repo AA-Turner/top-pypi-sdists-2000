@@ -60,9 +60,9 @@ class AppImageConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            app_image_config_reference = interfaces_aws_sagemaker.AppImageConfigReference(
+            app_image_config_reference = interfaces_sagemaker.AppImageConfigReference(
                 app_image_config_arn="appImageConfigArn",
                 app_image_config_name="appImageConfigName"
             )
@@ -137,9 +137,9 @@ class AppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            app_reference = interfaces_aws_sagemaker.AppReference(
+            app_reference = interfaces_sagemaker.AppReference(
                 app_arn="appArn",
                 app_name="appName",
                 app_type="appType",
@@ -226,9 +226,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            cluster_reference = interfaces_aws_sagemaker.ClusterReference(
+            cluster_reference = interfaces_sagemaker.ClusterReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -284,9 +284,9 @@ class CodeRepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            code_repository_reference = interfaces_aws_sagemaker.CodeRepositoryReference(
+            code_repository_reference = interfaces_sagemaker.CodeRepositoryReference(
                 code_repository_id="codeRepositoryId",
                 code_repository_name="codeRepositoryName"
             )
@@ -343,9 +343,9 @@ class DataQualityJobDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            data_quality_job_definition_reference = interfaces_aws_sagemaker.DataQualityJobDefinitionReference(
+            data_quality_job_definition_reference = interfaces_sagemaker.DataQualityJobDefinitionReference(
                 job_definition_arn="jobDefinitionArn"
             )
         '''
@@ -392,9 +392,9 @@ class DeviceFleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            device_fleet_reference = interfaces_aws_sagemaker.DeviceFleetReference(
+            device_fleet_reference = interfaces_sagemaker.DeviceFleetReference(
                 device_fleet_name="deviceFleetName"
             )
         '''
@@ -441,9 +441,9 @@ class DeviceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            device_reference = interfaces_aws_sagemaker.DeviceReference(
+            device_reference = interfaces_sagemaker.DeviceReference(
                 device_name="deviceName"
             )
         '''
@@ -491,9 +491,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            domain_reference = interfaces_aws_sagemaker.DomainReference(
+            domain_reference = interfaces_sagemaker.DomainReference(
                 domain_arn="domainArn",
                 domain_id="domainId"
             )
@@ -559,9 +559,9 @@ class EndpointConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            endpoint_config_reference = interfaces_aws_sagemaker.EndpointConfigReference(
+            endpoint_config_reference = interfaces_sagemaker.EndpointConfigReference(
                 endpoint_config_id="endpointConfigId",
                 endpoint_config_name="endpointConfigName"
             )
@@ -618,9 +618,9 @@ class EndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            endpoint_reference = interfaces_aws_sagemaker.EndpointReference(
+            endpoint_reference = interfaces_sagemaker.EndpointReference(
                 endpoint_arn="endpointArn"
             )
         '''
@@ -667,9 +667,9 @@ class FeatureGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            feature_group_reference = interfaces_aws_sagemaker.FeatureGroupReference(
+            feature_group_reference = interfaces_sagemaker.FeatureGroupReference(
                 feature_group_name="featureGroupName"
             )
         '''
@@ -2274,9 +2274,9 @@ class ImageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            image_reference = interfaces_aws_sagemaker.ImageReference(
+            image_reference = interfaces_sagemaker.ImageReference(
                 image_arn="imageArn"
             )
         '''
@@ -2323,9 +2323,9 @@ class ImageVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            image_version_reference = interfaces_aws_sagemaker.ImageVersionReference(
+            image_version_reference = interfaces_sagemaker.ImageVersionReference(
                 image_version_arn="imageVersionArn"
             )
         '''
@@ -2372,9 +2372,9 @@ class InferenceComponentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            inference_component_reference = interfaces_aws_sagemaker.InferenceComponentReference(
+            inference_component_reference = interfaces_sagemaker.InferenceComponentReference(
                 inference_component_arn="inferenceComponentArn"
             )
         '''
@@ -2430,9 +2430,9 @@ class InferenceExperimentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            inference_experiment_reference = interfaces_aws_sagemaker.InferenceExperimentReference(
+            inference_experiment_reference = interfaces_sagemaker.InferenceExperimentReference(
                 inference_experiment_arn="inferenceExperimentArn",
                 inference_experiment_name="inferenceExperimentName"
             )
@@ -2489,9 +2489,9 @@ class MlflowTrackingServerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            mlflow_tracking_server_reference = interfaces_aws_sagemaker.MlflowTrackingServerReference(
+            mlflow_tracking_server_reference = interfaces_sagemaker.MlflowTrackingServerReference(
                 tracking_server_name="trackingServerName"
             )
         '''
@@ -2538,9 +2538,9 @@ class ModelBiasJobDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_bias_job_definition_reference = interfaces_aws_sagemaker.ModelBiasJobDefinitionReference(
+            model_bias_job_definition_reference = interfaces_sagemaker.ModelBiasJobDefinitionReference(
                 job_definition_arn="jobDefinitionArn"
             )
         '''
@@ -2596,9 +2596,9 @@ class ModelCardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_card_reference = interfaces_aws_sagemaker.ModelCardReference(
+            model_card_reference = interfaces_sagemaker.ModelCardReference(
                 model_card_arn="modelCardArn",
                 model_card_name="modelCardName"
             )
@@ -2655,9 +2655,9 @@ class ModelExplainabilityJobDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_explainability_job_definition_reference = interfaces_aws_sagemaker.ModelExplainabilityJobDefinitionReference(
+            model_explainability_job_definition_reference = interfaces_sagemaker.ModelExplainabilityJobDefinitionReference(
                 job_definition_arn="jobDefinitionArn"
             )
         '''
@@ -2704,9 +2704,9 @@ class ModelPackageGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_package_group_reference = interfaces_aws_sagemaker.ModelPackageGroupReference(
+            model_package_group_reference = interfaces_sagemaker.ModelPackageGroupReference(
                 model_package_group_arn="modelPackageGroupArn"
             )
         '''
@@ -2753,9 +2753,9 @@ class ModelPackageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_package_reference = interfaces_aws_sagemaker.ModelPackageReference(
+            model_package_reference = interfaces_sagemaker.ModelPackageReference(
                 model_package_arn="modelPackageArn"
             )
         '''
@@ -2802,9 +2802,9 @@ class ModelQualityJobDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_quality_job_definition_reference = interfaces_aws_sagemaker.ModelQualityJobDefinitionReference(
+            model_quality_job_definition_reference = interfaces_sagemaker.ModelQualityJobDefinitionReference(
                 job_definition_arn="jobDefinitionArn"
             )
         '''
@@ -2852,9 +2852,9 @@ class ModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            model_reference = interfaces_aws_sagemaker.ModelReference(
+            model_reference = interfaces_sagemaker.ModelReference(
                 model_id="modelId",
                 model_name="modelName"
             )
@@ -2911,9 +2911,9 @@ class MonitoringScheduleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            monitoring_schedule_reference = interfaces_aws_sagemaker.MonitoringScheduleReference(
+            monitoring_schedule_reference = interfaces_sagemaker.MonitoringScheduleReference(
                 monitoring_schedule_arn="monitoringScheduleArn"
             )
         '''
@@ -2969,9 +2969,9 @@ class NotebookInstanceLifecycleConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            notebook_instance_lifecycle_config_reference = interfaces_aws_sagemaker.NotebookInstanceLifecycleConfigReference(
+            notebook_instance_lifecycle_config_reference = interfaces_sagemaker.NotebookInstanceLifecycleConfigReference(
                 notebook_instance_lifecycle_config_id="notebookInstanceLifecycleConfigId",
                 notebook_instance_lifecycle_config_name="notebookInstanceLifecycleConfigName"
             )
@@ -3037,9 +3037,9 @@ class NotebookInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            notebook_instance_reference = interfaces_aws_sagemaker.NotebookInstanceReference(
+            notebook_instance_reference = interfaces_sagemaker.NotebookInstanceReference(
                 notebook_instance_id="notebookInstanceId",
                 notebook_instance_name="notebookInstanceName"
             )
@@ -3096,9 +3096,9 @@ class PartnerAppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            partner_app_reference = interfaces_aws_sagemaker.PartnerAppReference(
+            partner_app_reference = interfaces_sagemaker.PartnerAppReference(
                 partner_app_arn="partnerAppArn"
             )
         '''
@@ -3145,9 +3145,9 @@ class PipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            pipeline_reference = interfaces_aws_sagemaker.PipelineReference(
+            pipeline_reference = interfaces_sagemaker.PipelineReference(
                 pipeline_name="pipelineName"
             )
         '''
@@ -3194,9 +3194,9 @@ class ProcessingJobReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            processing_job_reference = interfaces_aws_sagemaker.ProcessingJobReference(
+            processing_job_reference = interfaces_sagemaker.ProcessingJobReference(
                 processing_job_arn="processingJobArn"
             )
         '''
@@ -3243,9 +3243,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            project_reference = interfaces_aws_sagemaker.ProjectReference(
+            project_reference = interfaces_sagemaker.ProjectReference(
                 project_arn="projectArn"
             )
         '''
@@ -3304,9 +3304,9 @@ class SpaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            space_reference = interfaces_aws_sagemaker.SpaceReference(
+            space_reference = interfaces_sagemaker.SpaceReference(
                 domain_id="domainId",
                 space_arn="spaceArn",
                 space_name="spaceName"
@@ -3382,9 +3382,9 @@ class StudioLifecycleConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            studio_lifecycle_config_reference = interfaces_aws_sagemaker.StudioLifecycleConfigReference(
+            studio_lifecycle_config_reference = interfaces_sagemaker.StudioLifecycleConfigReference(
                 studio_lifecycle_config_arn="studioLifecycleConfigArn",
                 studio_lifecycle_config_name="studioLifecycleConfigName"
             )
@@ -3453,9 +3453,9 @@ class UserProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            user_profile_reference = interfaces_aws_sagemaker.UserProfileReference(
+            user_profile_reference = interfaces_sagemaker.UserProfileReference(
                 domain_id="domainId",
                 user_profile_arn="userProfileArn",
                 user_profile_name="userProfileName"
@@ -3528,9 +3528,9 @@ class WorkteamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sagemaker as interfaces_aws_sagemaker
+            from aws_cdk.interfaces import aws_sagemaker as interfaces_sagemaker
             
-            workteam_reference = interfaces_aws_sagemaker.WorkteamReference(
+            workteam_reference = interfaces_sagemaker.WorkteamReference(
                 workteam_id="workteamId",
                 workteam_name="workteamName"
             )

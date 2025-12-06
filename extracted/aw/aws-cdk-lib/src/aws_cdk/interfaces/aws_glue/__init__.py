@@ -51,9 +51,9 @@ class ClassifierReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            classifier_reference = interfaces_aws_glue.ClassifierReference(
+            classifier_reference = interfaces_glue.ClassifierReference(
                 classifier_id="classifierId"
             )
         '''
@@ -100,9 +100,9 @@ class ConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            connection_reference = interfaces_aws_glue.ConnectionReference(
+            connection_reference = interfaces_glue.ConnectionReference(
                 connection_id="connectionId"
             )
         '''
@@ -149,9 +149,9 @@ class CrawlerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            crawler_reference = interfaces_aws_glue.CrawlerReference(
+            crawler_reference = interfaces_glue.CrawlerReference(
                 crawler_name="crawlerName"
             )
         '''
@@ -198,9 +198,9 @@ class CustomEntityTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            custom_entity_type_reference = interfaces_aws_glue.CustomEntityTypeReference(
+            custom_entity_type_reference = interfaces_glue.CustomEntityTypeReference(
                 custom_entity_type_id="customEntityTypeId"
             )
         '''
@@ -249,9 +249,9 @@ class DataCatalogEncryptionSettingsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            data_catalog_encryption_settings_reference = interfaces_aws_glue.DataCatalogEncryptionSettingsReference(
+            data_catalog_encryption_settings_reference = interfaces_glue.DataCatalogEncryptionSettingsReference(
                 data_catalog_encryption_settings_id="dataCatalogEncryptionSettingsId"
             )
         '''
@@ -298,9 +298,9 @@ class DataQualityRulesetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            data_quality_ruleset_reference = interfaces_aws_glue.DataQualityRulesetReference(
+            data_quality_ruleset_reference = interfaces_glue.DataQualityRulesetReference(
                 data_quality_ruleset_id="dataQualityRulesetId"
             )
         '''
@@ -347,9 +347,9 @@ class DatabaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            database_reference = interfaces_aws_glue.DatabaseReference(
+            database_reference = interfaces_glue.DatabaseReference(
                 database_name="databaseName"
             )
         '''
@@ -396,9 +396,9 @@ class DevEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            dev_endpoint_reference = interfaces_aws_glue.DevEndpointReference(
+            dev_endpoint_reference = interfaces_glue.DevEndpointReference(
                 dev_endpoint_id="devEndpointId"
             )
         '''
@@ -1543,9 +1543,9 @@ class IdentityCenterConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            identity_center_configuration_reference = interfaces_aws_glue.IdentityCenterConfigurationReference(
+            identity_center_configuration_reference = interfaces_glue.IdentityCenterConfigurationReference(
                 account_id="accountId"
             )
         '''
@@ -1601,9 +1601,9 @@ class IntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            integration_reference = interfaces_aws_glue.IntegrationReference(
+            integration_reference = interfaces_glue.IntegrationReference(
                 integration_arn="integrationArn",
                 integration_name="integrationName"
             )
@@ -1669,9 +1669,9 @@ class IntegrationResourcePropertyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            integration_resource_property_reference = interfaces_aws_glue.IntegrationResourcePropertyReference(
+            integration_resource_property_reference = interfaces_glue.IntegrationResourcePropertyReference(
                 resource_arn="resourceArn",
                 resource_property_arn="resourcePropertyArn"
             )
@@ -1728,9 +1728,9 @@ class JobReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            job_reference = interfaces_aws_glue.JobReference(
+            job_reference = interfaces_glue.JobReference(
                 job_name="jobName"
             )
         '''
@@ -1777,9 +1777,9 @@ class MLTransformReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            m_lTransform_reference = interfaces_aws_glue.MLTransformReference(
+            m_lTransform_reference = interfaces_glue.MLTransformReference(
                 ml_transform_id="mlTransformId"
             )
         '''
@@ -1826,9 +1826,9 @@ class PartitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            partition_reference = interfaces_aws_glue.PartitionReference(
+            partition_reference = interfaces_glue.PartitionReference(
                 partition_id="partitionId"
             )
         '''
@@ -1875,9 +1875,9 @@ class RegistryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            registry_reference = interfaces_aws_glue.RegistryReference(
+            registry_reference = interfaces_glue.RegistryReference(
                 registry_arn="registryArn"
             )
         '''
@@ -1924,9 +1924,9 @@ class SchemaReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            schema_reference = interfaces_aws_glue.SchemaReference(
+            schema_reference = interfaces_glue.SchemaReference(
                 schema_arn="schemaArn"
             )
         '''
@@ -1985,9 +1985,9 @@ class SchemaVersionMetadataReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            schema_version_metadata_reference = interfaces_aws_glue.SchemaVersionMetadataReference(
+            schema_version_metadata_reference = interfaces_glue.SchemaVersionMetadataReference(
                 key="key",
                 schema_version_id="schemaVersionId",
                 value="value"
@@ -2054,9 +2054,9 @@ class SchemaVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            schema_version_reference = interfaces_aws_glue.SchemaVersionReference(
+            schema_version_reference = interfaces_glue.SchemaVersionReference(
                 version_id="versionId"
             )
         '''
@@ -2103,9 +2103,9 @@ class SecurityConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            security_configuration_reference = interfaces_aws_glue.SecurityConfigurationReference(
+            security_configuration_reference = interfaces_glue.SecurityConfigurationReference(
                 security_configuration_id="securityConfigurationId"
             )
         '''
@@ -2152,9 +2152,9 @@ class TableOptimizerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            table_optimizer_reference = interfaces_aws_glue.TableOptimizerReference(
+            table_optimizer_reference = interfaces_glue.TableOptimizerReference(
                 table_optimizer_id="tableOptimizerId"
             )
         '''
@@ -2201,9 +2201,9 @@ class TableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            table_reference = interfaces_aws_glue.TableReference(
+            table_reference = interfaces_glue.TableReference(
                 table_id="tableId"
             )
         '''
@@ -2250,9 +2250,9 @@ class TriggerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            trigger_reference = interfaces_aws_glue.TriggerReference(
+            trigger_reference = interfaces_glue.TriggerReference(
                 trigger_name="triggerName"
             )
         '''
@@ -2299,9 +2299,9 @@ class UsageProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            usage_profile_reference = interfaces_aws_glue.UsageProfileReference(
+            usage_profile_reference = interfaces_glue.UsageProfileReference(
                 usage_profile_name="usageProfileName"
             )
         '''
@@ -2348,9 +2348,9 @@ class WorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_glue as interfaces_aws_glue
+            from aws_cdk.interfaces import aws_glue as interfaces_glue
             
-            workflow_reference = interfaces_aws_glue.WorkflowReference(
+            workflow_reference = interfaces_glue.WorkflowReference(
                 workflow_id="workflowId"
             )
         '''

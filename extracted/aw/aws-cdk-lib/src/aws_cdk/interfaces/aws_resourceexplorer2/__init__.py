@@ -51,9 +51,9 @@ class DefaultViewAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_aws_resourceexplorer2
+            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_resourceexplorer2
             
-            default_view_association_reference = interfaces_aws_resourceexplorer2.DefaultViewAssociationReference(
+            default_view_association_reference = interfaces_resourceexplorer2.DefaultViewAssociationReference(
                 associated_aws_principal="associatedAwsPrincipal"
             )
         '''
@@ -237,9 +237,9 @@ class IndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_aws_resourceexplorer2
+            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_resourceexplorer2
             
-            index_reference = interfaces_aws_resourceexplorer2.IndexReference(
+            index_reference = interfaces_resourceexplorer2.IndexReference(
                 index_arn="indexArn"
             )
         '''
@@ -286,9 +286,9 @@ class ViewReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_aws_resourceexplorer2
+            from aws_cdk.interfaces import aws_resourceexplorer2 as interfaces_resourceexplorer2
             
-            view_reference = interfaces_aws_resourceexplorer2.ViewReference(
+            view_reference = interfaces_resourceexplorer2.ViewReference(
                 view_arn="viewArn"
             )
         '''

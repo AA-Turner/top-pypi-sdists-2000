@@ -60,9 +60,9 @@ class ChannelAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            channel_association_reference = interfaces_aws_notifications.ChannelAssociationReference(
+            channel_association_reference = interfaces_notifications.ChannelAssociationReference(
                 channel_association_arn="channelAssociationArn",
                 notification_configuration_arn="notificationConfigurationArn"
             )
@@ -119,9 +119,9 @@ class EventRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            event_rule_reference = interfaces_aws_notifications.EventRuleReference(
+            event_rule_reference = interfaces_notifications.EventRuleReference(
                 event_rule_arn="eventRuleArn"
             )
         '''
@@ -516,9 +516,9 @@ class ManagedNotificationAccountContactAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            managed_notification_account_contact_association_reference = interfaces_aws_notifications.ManagedNotificationAccountContactAssociationReference(
+            managed_notification_account_contact_association_reference = interfaces_notifications.ManagedNotificationAccountContactAssociationReference(
                 contact_identifier="contactIdentifier",
                 managed_notification_configuration_arn="managedNotificationConfigurationArn"
             )
@@ -584,9 +584,9 @@ class ManagedNotificationAdditionalChannelAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            managed_notification_additional_channel_association_reference = interfaces_aws_notifications.ManagedNotificationAdditionalChannelAssociationReference(
+            managed_notification_additional_channel_association_reference = interfaces_notifications.ManagedNotificationAdditionalChannelAssociationReference(
                 channel_arn="channelArn",
                 managed_notification_configuration_arn="managedNotificationConfigurationArn"
             )
@@ -643,9 +643,9 @@ class NotificationConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            notification_configuration_reference = interfaces_aws_notifications.NotificationConfigurationReference(
+            notification_configuration_reference = interfaces_notifications.NotificationConfigurationReference(
                 notification_configuration_arn="notificationConfigurationArn"
             )
         '''
@@ -692,9 +692,9 @@ class NotificationHubReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            notification_hub_reference = interfaces_aws_notifications.NotificationHubReference(
+            notification_hub_reference = interfaces_notifications.NotificationHubReference(
                 region="region"
             )
         '''
@@ -750,9 +750,9 @@ class OrganizationalUnitAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notifications as interfaces_aws_notifications
+            from aws_cdk.interfaces import aws_notifications as interfaces_notifications
             
-            organizational_unit_association_reference = interfaces_aws_notifications.OrganizationalUnitAssociationReference(
+            organizational_unit_association_reference = interfaces_notifications.OrganizationalUnitAssociationReference(
                 notification_configuration_arn="notificationConfigurationArn",
                 organizational_unit_id="organizationalUnitId"
             )

@@ -60,9 +60,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emrserverless as interfaces_aws_emrserverless
+            from aws_cdk.interfaces import aws_emrserverless as interfaces_emrserverless
             
-            application_reference = interfaces_aws_emrserverless.ApplicationReference(
+            application_reference = interfaces_emrserverless.ApplicationReference(
                 application_arn="applicationArn",
                 application_id="applicationId"
             )

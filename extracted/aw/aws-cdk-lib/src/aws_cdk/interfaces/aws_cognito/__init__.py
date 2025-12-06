@@ -814,9 +814,9 @@ class IdentityPoolPrincipalTagReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            identity_pool_principal_tag_reference = interfaces_aws_cognito.IdentityPoolPrincipalTagReference(
+            identity_pool_principal_tag_reference = interfaces_cognito.IdentityPoolPrincipalTagReference(
                 identity_pool_id="identityPoolId",
                 identity_provider_name="identityProviderName"
             )
@@ -873,9 +873,9 @@ class IdentityPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            identity_pool_reference = interfaces_aws_cognito.IdentityPoolReference(
+            identity_pool_reference = interfaces_cognito.IdentityPoolReference(
                 identity_pool_id="identityPoolId"
             )
         '''
@@ -922,9 +922,9 @@ class IdentityPoolRoleAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            identity_pool_role_attachment_reference = interfaces_aws_cognito.IdentityPoolRoleAttachmentReference(
+            identity_pool_role_attachment_reference = interfaces_cognito.IdentityPoolRoleAttachmentReference(
                 identity_pool_role_attachment_id="identityPoolRoleAttachmentId"
             )
         '''
@@ -971,9 +971,9 @@ class LogDeliveryConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            log_delivery_configuration_reference = interfaces_aws_cognito.LogDeliveryConfigurationReference(
+            log_delivery_configuration_reference = interfaces_cognito.LogDeliveryConfigurationReference(
                 log_delivery_configuration_id="logDeliveryConfigurationId"
             )
         '''
@@ -1029,9 +1029,9 @@ class ManagedLoginBrandingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            managed_login_branding_reference = interfaces_aws_cognito.ManagedLoginBrandingReference(
+            managed_login_branding_reference = interfaces_cognito.ManagedLoginBrandingReference(
                 managed_login_branding_id="managedLoginBrandingId",
                 user_pool_id="userPoolId"
             )
@@ -1089,9 +1089,9 @@ class TermsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            terms_reference = interfaces_aws_cognito.TermsReference(
+            terms_reference = interfaces_cognito.TermsReference(
                 terms_id="termsId",
                 user_pool_id="userPoolId"
             )
@@ -1149,9 +1149,9 @@ class UserPoolClientReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_client_reference = interfaces_aws_cognito.UserPoolClientReference(
+            user_pool_client_reference = interfaces_cognito.UserPoolClientReference(
                 client_id="clientId",
                 user_pool_id="userPoolId"
             )
@@ -1209,9 +1209,9 @@ class UserPoolDomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_domain_reference = interfaces_aws_cognito.UserPoolDomainReference(
+            user_pool_domain_reference = interfaces_cognito.UserPoolDomainReference(
                 domain="domain",
                 user_pool_id="userPoolId"
             )
@@ -1269,9 +1269,9 @@ class UserPoolGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_group_reference = interfaces_aws_cognito.UserPoolGroupReference(
+            user_pool_group_reference = interfaces_cognito.UserPoolGroupReference(
                 group_name="groupName",
                 user_pool_id="userPoolId"
             )
@@ -1334,9 +1334,9 @@ class UserPoolIdentityProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_identity_provider_reference = interfaces_aws_cognito.UserPoolIdentityProviderReference(
+            user_pool_identity_provider_reference = interfaces_cognito.UserPoolIdentityProviderReference(
                 provider_name="providerName",
                 user_pool_id="userPoolId"
             )
@@ -1399,9 +1399,9 @@ class UserPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_reference = interfaces_aws_cognito.UserPoolReference(
+            user_pool_reference = interfaces_cognito.UserPoolReference(
                 user_pool_arn="userPoolArn",
                 user_pool_id="userPoolId"
             )
@@ -1459,9 +1459,9 @@ class UserPoolResourceServerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_resource_server_reference = interfaces_aws_cognito.UserPoolResourceServerReference(
+            user_pool_resource_server_reference = interfaces_cognito.UserPoolResourceServerReference(
                 identifier="identifier",
                 user_pool_id="userPoolId"
             )
@@ -1519,9 +1519,9 @@ class UserPoolRiskConfigurationAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_risk_configuration_attachment_reference = interfaces_aws_cognito.UserPoolRiskConfigurationAttachmentReference(
+            user_pool_risk_configuration_attachment_reference = interfaces_cognito.UserPoolRiskConfigurationAttachmentReference(
                 client_id="clientId",
                 user_pool_id="userPoolId"
             )
@@ -1579,9 +1579,9 @@ class UserPoolUICustomizationAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_uICustomization_attachment_reference = interfaces_aws_cognito.UserPoolUICustomizationAttachmentReference(
+            user_pool_uICustomization_attachment_reference = interfaces_cognito.UserPoolUICustomizationAttachmentReference(
                 client_id="clientId",
                 user_pool_id="userPoolId"
             )
@@ -1639,9 +1639,9 @@ class UserPoolUserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_user_reference = interfaces_aws_cognito.UserPoolUserReference(
+            user_pool_user_reference = interfaces_cognito.UserPoolUserReference(
                 username="username",
                 user_pool_id="userPoolId"
             )
@@ -1710,9 +1710,9 @@ class UserPoolUserToGroupAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cognito as interfaces_aws_cognito
+            from aws_cdk.interfaces import aws_cognito as interfaces_cognito
             
-            user_pool_user_to_group_attachment_reference = interfaces_aws_cognito.UserPoolUserToGroupAttachmentReference(
+            user_pool_user_to_group_attachment_reference = interfaces_cognito.UserPoolUserToGroupAttachmentReference(
                 group_name="groupName",
                 username="username",
                 user_pool_id="userPoolId"

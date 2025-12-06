@@ -60,9 +60,9 @@ class AccessGrantReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            access_grant_reference = interfaces_aws_s3.AccessGrantReference(
+            access_grant_reference = interfaces_s3.AccessGrantReference(
                 access_grant_arn="accessGrantArn",
                 access_grant_id="accessGrantId"
             )
@@ -119,9 +119,9 @@ class AccessGrantsInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            access_grants_instance_reference = interfaces_aws_s3.AccessGrantsInstanceReference(
+            access_grants_instance_reference = interfaces_s3.AccessGrantsInstanceReference(
                 access_grants_instance_arn="accessGrantsInstanceArn"
             )
         '''
@@ -177,9 +177,9 @@ class AccessGrantsLocationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            access_grants_location_reference = interfaces_aws_s3.AccessGrantsLocationReference(
+            access_grants_location_reference = interfaces_s3.AccessGrantsLocationReference(
                 access_grants_location_arn="accessGrantsLocationArn",
                 access_grants_location_id="accessGrantsLocationId"
             )
@@ -245,9 +245,9 @@ class AccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            access_point_reference = interfaces_aws_s3.AccessPointReference(
+            access_point_reference = interfaces_s3.AccessPointReference(
                 access_point_arn="accessPointArn",
                 access_point_name="accessPointName"
             )
@@ -304,9 +304,9 @@ class BucketPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            bucket_policy_reference = interfaces_aws_s3.BucketPolicyReference(
+            bucket_policy_reference = interfaces_s3.BucketPolicyReference(
                 bucket="bucket"
             )
         '''
@@ -354,9 +354,9 @@ class BucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            bucket_reference = interfaces_aws_s3.BucketReference(
+            bucket_reference = interfaces_s3.BucketReference(
                 bucket_arn="bucketArn",
                 bucket_name="bucketName"
             )
@@ -869,9 +869,9 @@ class MultiRegionAccessPointPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            multi_region_access_point_policy_reference = interfaces_aws_s3.MultiRegionAccessPointPolicyReference(
+            multi_region_access_point_policy_reference = interfaces_s3.MultiRegionAccessPointPolicyReference(
                 mrap_name="mrapName"
             )
         '''
@@ -918,9 +918,9 @@ class MultiRegionAccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            multi_region_access_point_reference = interfaces_aws_s3.MultiRegionAccessPointReference(
+            multi_region_access_point_reference = interfaces_s3.MultiRegionAccessPointReference(
                 multi_region_access_point_name="multiRegionAccessPointName"
             )
         '''
@@ -976,9 +976,9 @@ class StorageLensGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            storage_lens_group_reference = interfaces_aws_s3.StorageLensGroupReference(
+            storage_lens_group_reference = interfaces_s3.StorageLensGroupReference(
                 storage_lens_group_arn="storageLensGroupArn",
                 storage_lens_group_name="storageLensGroupName"
             )
@@ -1035,9 +1035,9 @@ class StorageLensReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3 as interfaces_aws_s3
+            from aws_cdk.interfaces import aws_s3 as interfaces_s3
             
-            storage_lens_reference = interfaces_aws_s3.StorageLensReference(
+            storage_lens_reference = interfaces_s3.StorageLensReference(
                 storage_lens_id="storageLensId"
             )
         '''

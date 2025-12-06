@@ -96,9 +96,9 @@ class InvoiceUnitReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_invoicing as interfaces_aws_invoicing
+            from aws_cdk.interfaces import aws_invoicing as interfaces_invoicing
             
-            invoice_unit_reference = interfaces_aws_invoicing.InvoiceUnitReference(
+            invoice_unit_reference = interfaces_invoicing.InvoiceUnitReference(
                 invoice_unit_arn="invoiceUnitArn"
             )
         '''

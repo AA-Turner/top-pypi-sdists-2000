@@ -51,9 +51,9 @@ class DocumentClassifierReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_comprehend as interfaces_aws_comprehend
+            from aws_cdk.interfaces import aws_comprehend as interfaces_comprehend
             
-            document_classifier_reference = interfaces_aws_comprehend.DocumentClassifierReference(
+            document_classifier_reference = interfaces_comprehend.DocumentClassifierReference(
                 document_classifier_arn="documentClassifierArn"
             )
         '''
@@ -100,9 +100,9 @@ class FlywheelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_comprehend as interfaces_aws_comprehend
+            from aws_cdk.interfaces import aws_comprehend as interfaces_comprehend
             
-            flywheel_reference = interfaces_aws_comprehend.FlywheelReference(
+            flywheel_reference = interfaces_comprehend.FlywheelReference(
                 flywheel_arn="flywheelArn"
             )
         '''

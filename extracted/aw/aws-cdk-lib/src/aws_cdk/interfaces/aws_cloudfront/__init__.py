@@ -51,9 +51,9 @@ class AnycastIpListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            anycast_ip_list_reference = interfaces_aws_cloudfront.AnycastIpListReference(
+            anycast_ip_list_reference = interfaces_cloudfront.AnycastIpListReference(
                 anycast_ip_list_id="anycastIpListId"
             )
         '''
@@ -100,9 +100,9 @@ class CachePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            cache_policy_reference = interfaces_aws_cloudfront.CachePolicyReference(
+            cache_policy_reference = interfaces_cloudfront.CachePolicyReference(
                 cache_policy_id="cachePolicyId"
             )
         '''
@@ -151,9 +151,9 @@ class CloudFrontOriginAccessIdentityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            cloud_front_origin_access_identity_reference = interfaces_aws_cloudfront.CloudFrontOriginAccessIdentityReference(
+            cloud_front_origin_access_identity_reference = interfaces_cloudfront.CloudFrontOriginAccessIdentityReference(
                 cloud_front_origin_access_identity_id="cloudFrontOriginAccessIdentityId"
             )
         '''
@@ -209,9 +209,9 @@ class ConnectionFunctionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            connection_function_reference = interfaces_aws_cloudfront.ConnectionFunctionReference(
+            connection_function_reference = interfaces_cloudfront.ConnectionFunctionReference(
                 connection_function_arn="connectionFunctionArn",
                 connection_function_id="connectionFunctionId"
             )
@@ -277,9 +277,9 @@ class ConnectionGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            connection_group_reference = interfaces_aws_cloudfront.ConnectionGroupReference(
+            connection_group_reference = interfaces_cloudfront.ConnectionGroupReference(
                 connection_group_arn="connectionGroupArn",
                 connection_group_id="connectionGroupId"
             )
@@ -336,9 +336,9 @@ class ContinuousDeploymentPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            continuous_deployment_policy_reference = interfaces_aws_cloudfront.ContinuousDeploymentPolicyReference(
+            continuous_deployment_policy_reference = interfaces_cloudfront.ContinuousDeploymentPolicyReference(
                 continuous_deployment_policy_id="continuousDeploymentPolicyId"
             )
         '''
@@ -385,9 +385,9 @@ class DistributionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            distribution_reference = interfaces_aws_cloudfront.DistributionReference(
+            distribution_reference = interfaces_cloudfront.DistributionReference(
                 distribution_id="distributionId"
             )
         '''
@@ -443,9 +443,9 @@ class DistributionTenantReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            distribution_tenant_reference = interfaces_aws_cloudfront.DistributionTenantReference(
+            distribution_tenant_reference = interfaces_cloudfront.DistributionTenantReference(
                 distribution_tenant_arn="distributionTenantArn",
                 distribution_tenant_id="distributionTenantId"
             )
@@ -502,9 +502,9 @@ class FunctionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            function_reference = interfaces_aws_cloudfront.FunctionReference(
+            function_reference = interfaces_cloudfront.FunctionReference(
                 function_arn="functionArn"
             )
         '''
@@ -1475,9 +1475,9 @@ class KeyGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            key_group_reference = interfaces_aws_cloudfront.KeyGroupReference(
+            key_group_reference = interfaces_cloudfront.KeyGroupReference(
                 key_group_id="keyGroupId"
             )
         '''
@@ -1533,9 +1533,9 @@ class KeyValueStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            key_value_store_reference = interfaces_aws_cloudfront.KeyValueStoreReference(
+            key_value_store_reference = interfaces_cloudfront.KeyValueStoreReference(
                 key_value_store_arn="keyValueStoreArn",
                 key_value_store_name="keyValueStoreName"
             )
@@ -1592,9 +1592,9 @@ class MonitoringSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            monitoring_subscription_reference = interfaces_aws_cloudfront.MonitoringSubscriptionReference(
+            monitoring_subscription_reference = interfaces_cloudfront.MonitoringSubscriptionReference(
                 distribution_id="distributionId"
             )
         '''
@@ -1641,9 +1641,9 @@ class OriginAccessControlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            origin_access_control_reference = interfaces_aws_cloudfront.OriginAccessControlReference(
+            origin_access_control_reference = interfaces_cloudfront.OriginAccessControlReference(
                 origin_access_control_id="originAccessControlId"
             )
         '''
@@ -1690,9 +1690,9 @@ class OriginRequestPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            origin_request_policy_reference = interfaces_aws_cloudfront.OriginRequestPolicyReference(
+            origin_request_policy_reference = interfaces_cloudfront.OriginRequestPolicyReference(
                 origin_request_policy_id="originRequestPolicyId"
             )
         '''
@@ -1739,9 +1739,9 @@ class PublicKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            public_key_reference = interfaces_aws_cloudfront.PublicKeyReference(
+            public_key_reference = interfaces_cloudfront.PublicKeyReference(
                 public_key_id="publicKeyId"
             )
         '''
@@ -1788,9 +1788,9 @@ class RealtimeLogConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            realtime_log_config_reference = interfaces_aws_cloudfront.RealtimeLogConfigReference(
+            realtime_log_config_reference = interfaces_cloudfront.RealtimeLogConfigReference(
                 realtime_log_config_arn="realtimeLogConfigArn"
             )
         '''
@@ -1837,9 +1837,9 @@ class ResponseHeadersPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            response_headers_policy_reference = interfaces_aws_cloudfront.ResponseHeadersPolicyReference(
+            response_headers_policy_reference = interfaces_cloudfront.ResponseHeadersPolicyReference(
                 response_headers_policy_id="responseHeadersPolicyId"
             )
         '''
@@ -1886,9 +1886,9 @@ class StreamingDistributionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            streaming_distribution_reference = interfaces_aws_cloudfront.StreamingDistributionReference(
+            streaming_distribution_reference = interfaces_cloudfront.StreamingDistributionReference(
                 streaming_distribution_id="streamingDistributionId"
             )
         '''
@@ -1944,9 +1944,9 @@ class TrustStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            trust_store_reference = interfaces_aws_cloudfront.TrustStoreReference(
+            trust_store_reference = interfaces_cloudfront.TrustStoreReference(
                 trust_store_arn="trustStoreArn",
                 trust_store_id="trustStoreId"
             )
@@ -2009,9 +2009,9 @@ class VpcOriginReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            vpc_origin_reference = interfaces_aws_cloudfront.VpcOriginReference(
+            vpc_origin_reference = interfaces_cloudfront.VpcOriginReference(
                 vpc_origin_arn="vpcOriginArn",
                 vpc_origin_id="vpcOriginId"
             )

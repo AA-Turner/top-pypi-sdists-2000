@@ -60,9 +60,9 @@ class ApiDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            api_destination_reference = interfaces_aws_events.ApiDestinationReference(
+            api_destination_reference = interfaces_events.ApiDestinationReference(
                 api_destination_arn="apiDestinationArn",
                 api_destination_name="apiDestinationName"
             )
@@ -125,9 +125,9 @@ class ArchiveReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            archive_reference = interfaces_aws_events.ArchiveReference(
+            archive_reference = interfaces_events.ArchiveReference(
                 archive_arn="archiveArn",
                 archive_name="archiveName"
             )
@@ -193,9 +193,9 @@ class ConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            connection_reference = interfaces_aws_events.ConnectionReference(
+            connection_reference = interfaces_events.ConnectionReference(
                 connection_arn="connectionArn",
                 connection_name="connectionName"
             )
@@ -258,9 +258,9 @@ class EndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            endpoint_reference = interfaces_aws_events.EndpointReference(
+            endpoint_reference = interfaces_events.EndpointReference(
                 endpoint_arn="endpointArn",
                 endpoint_name="endpointName"
             )
@@ -323,9 +323,9 @@ class EventBusPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            event_bus_policy_reference = interfaces_aws_events.EventBusPolicyReference(
+            event_bus_policy_reference = interfaces_events.EventBusPolicyReference(
                 event_bus_name="eventBusName",
                 statement_id="statementId"
             )
@@ -388,9 +388,9 @@ class EventBusReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            event_bus_reference = interfaces_aws_events.EventBusReference(
+            event_bus_reference = interfaces_events.EventBusReference(
                 event_bus_arn="eventBusArn",
                 event_bus_name="eventBusName"
             )
@@ -762,9 +762,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_events as interfaces_aws_events
+            from aws_cdk.interfaces import aws_events as interfaces_events
             
-            rule_reference = interfaces_aws_events.RuleReference(
+            rule_reference = interfaces_events.RuleReference(
                 rule_arn="ruleArn"
             )
         '''

@@ -72,6 +72,7 @@ from ..interfaces.aws_securityhub import (
     AutomationRuleReference as _AutomationRuleReference_840d6e74,
     AutomationRuleV2Reference as _AutomationRuleV2Reference_0c38f3c7,
     ConfigurationPolicyReference as _ConfigurationPolicyReference_1c2fb12f,
+    ConnectorV2Reference as _ConnectorV2Reference_50d6cc1e,
     DelegatedAdminReference as _DelegatedAdminReference_bebc4b15,
     FindingAggregatorReference as _FindingAggregatorReference_653c7463,
     HubReference as _HubReference_30eead86,
@@ -80,6 +81,7 @@ from ..interfaces.aws_securityhub import (
     IAutomationRuleRef as _IAutomationRuleRef_87633460,
     IAutomationRuleV2Ref as _IAutomationRuleV2Ref_9909169c,
     IConfigurationPolicyRef as _IConfigurationPolicyRef_c5d7ee65,
+    IConnectorV2Ref as _IConnectorV2Ref_a02a9d81,
     IDelegatedAdminRef as _IDelegatedAdminRef_1537f0f1,
     IFindingAggregatorRef as _IFindingAggregatorRef_bdf7f80f,
     IHubRef as _IHubRef_afbeae07,
@@ -6432,6 +6434,769 @@ class CfnConfigurationPolicyProps:
 
     def __repr__(self) -> str:
         return "CfnConfigurationPolicyProps(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.implements(_IInspectable_c2943556, _IConnectorV2Ref_a02a9d81, _ITaggableV2_4e6798f8)
+class CfnConnectorV2(
+    _CfnResource_9df397a6,
+    metaclass=jsii.JSIIMeta,
+    jsii_type="aws-cdk-lib.aws_securityhub.CfnConnectorV2",
+):
+    '''Resource schema for AWS::SecurityHub::ConnectorV2.
+
+    :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html
+    :cloudformationResource: AWS::SecurityHub::ConnectorV2
+    :exampleMetadata: fixture=_generated
+
+    Example::
+
+        # The code below shows an example of how to instantiate this type.
+        # The values are placeholders you should change.
+        from aws_cdk import aws_securityhub as securityhub
+        
+        cfn_connector_v2 = securityhub.CfnConnectorV2(self, "MyCfnConnectorV2",
+            name="name",
+            provider=securityhub.CfnConnectorV2.ProviderProperty(
+                jira_cloud=securityhub.CfnConnectorV2.JiraCloudProperty(
+                    project_key="projectKey",
+        
+                    # the properties below are optional
+                    auth_status="authStatus",
+                    auth_url="authUrl",
+                    cloud_id="cloudId",
+                    domain="domain"
+                ),
+                service_now=securityhub.CfnConnectorV2.ServiceNowProperty(
+                    instance_name="instanceName",
+                    secret_arn="secretArn",
+        
+                    # the properties below are optional
+                    auth_status="authStatus"
+                )
+            ),
+        
+            # the properties below are optional
+            description="description",
+            kms_key_arn="kmsKeyArn",
+            tags={
+                "tags_key": "tags"
+            }
+        )
+    '''
+
+    def __init__(
+        self,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        *,
+        name: builtins.str,
+        provider: typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorV2.ProviderProperty", typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Create a new ``AWS::SecurityHub::ConnectorV2``.
+
+        :param scope: Scope in which this resource is defined.
+        :param id: Construct identifier for this resource (unique in its scope).
+        :param name: The name of the connector.
+        :param provider: The provider configuration of the connector.
+        :param description: A description of the connector.
+        :param kms_key_arn: The ARN of KMS key used for the connector.
+        :param tags: A key-value pair to associate with a resource.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0ef6634a11594ce6670b3fa3a22acf7613b48c83a9615d9927bda1afc4564ad4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+        props = CfnConnectorV2Props(
+            name=name,
+            provider=provider,
+            description=description,
+            kms_key_arn=kms_key_arn,
+            tags=tags,
+        )
+
+        jsii.create(self.__class__, self, [scope, id, props])
+
+    @jsii.member(jsii_name="isCfnConnectorV2")
+    @builtins.classmethod
+    def is_cfn_connector_v2(cls, x: typing.Any) -> builtins.bool:
+        '''Checks whether the given object is a CfnConnectorV2.
+
+        :param x: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__f7af960b05b6392c2952e21863efdeef58ba48d43f660310cc4fd0e265e49ff0)
+            check_type(argname="argument x", value=x, expected_type=type_hints["x"])
+        return typing.cast(builtins.bool, jsii.sinvoke(cls, "isCfnConnectorV2", [x]))
+
+    @jsii.member(jsii_name="inspect")
+    def inspect(self, inspector: _TreeInspector_488e0dd5) -> None:
+        '''Examines the CloudFormation resource and discloses attributes.
+
+        :param inspector: tree inspector to collect and process attributes.
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6ea2a93eaa5b900c241a2f7d23ee43cd86df86c2c287d8eb84fcadbec796480e)
+            check_type(argname="argument inspector", value=inspector, expected_type=type_hints["inspector"])
+        return typing.cast(None, jsii.invoke(self, "inspect", [inspector]))
+
+    @jsii.member(jsii_name="renderProperties")
+    def _render_properties(
+        self,
+        props: typing.Mapping[builtins.str, typing.Any],
+    ) -> typing.Mapping[builtins.str, typing.Any]:
+        '''
+        :param props: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__b6e8c1da3acb488e9c7f60d89c5aafae3306336d3dc86225662a02f8c0942780)
+            check_type(argname="argument props", value=props, expected_type=type_hints["props"])
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.invoke(self, "renderProperties", [props]))
+
+    @jsii.python.classproperty
+    @jsii.member(jsii_name="CFN_RESOURCE_TYPE_NAME")
+    def CFN_RESOURCE_TYPE_NAME(cls) -> builtins.str:
+        '''The CloudFormation resource type name for this resource class.'''
+        return typing.cast(builtins.str, jsii.sget(cls, "CFN_RESOURCE_TYPE_NAME"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrConnectorArn")
+    def attr_connector_arn(self) -> builtins.str:
+        '''The ARN of the connector.
+
+        :cloudformationAttribute: ConnectorArn
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrConnectorArn"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrConnectorId")
+    def attr_connector_id(self) -> builtins.str:
+        '''The ID of the connector.
+
+        :cloudformationAttribute: ConnectorId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrConnectorId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrConnectorStatus")
+    def attr_connector_status(self) -> builtins.str:
+        '''The status of the connector.
+
+        :cloudformationAttribute: ConnectorStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrConnectorStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrCreatedAt")
+    def attr_created_at(self) -> builtins.str:
+        '''The timestamp formatted in ISO8601.
+
+        :cloudformationAttribute: CreatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrCreatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastCheckedAt")
+    def attr_last_checked_at(self) -> builtins.str:
+        '''The timestamp formatted in ISO8601.
+
+        :cloudformationAttribute: LastCheckedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastCheckedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrLastUpdatedAt")
+    def attr_last_updated_at(self) -> builtins.str:
+        '''The timestamp formatted in ISO8601.
+
+        :cloudformationAttribute: LastUpdatedAt
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrLastUpdatedAt"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrMessage")
+    def attr_message(self) -> builtins.str:
+        '''The message of the connector status change.
+
+        :cloudformationAttribute: Message
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrMessage"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProviderJiraCloudAuthStatus")
+    def attr_provider_jira_cloud_auth_status(self) -> builtins.str:
+        '''The auth status of the connector.
+
+        :cloudformationAttribute: Provider.JiraCloud.AuthStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProviderJiraCloudAuthStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProviderJiraCloudAuthUrl")
+    def attr_provider_jira_cloud_auth_url(self) -> builtins.str:
+        '''The authUrl of the JiraCloud connector.
+
+        :cloudformationAttribute: Provider.JiraCloud.AuthUrl
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProviderJiraCloudAuthUrl"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProviderJiraCloudCloudId")
+    def attr_provider_jira_cloud_cloud_id(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Provider.JiraCloud.CloudId
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProviderJiraCloudCloudId"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProviderJiraCloudDomain")
+    def attr_provider_jira_cloud_domain(self) -> builtins.str:
+        '''
+        :cloudformationAttribute: Provider.JiraCloud.Domain
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProviderJiraCloudDomain"))
+
+    @builtins.property
+    @jsii.member(jsii_name="attrProviderServiceNowAuthStatus")
+    def attr_provider_service_now_auth_status(self) -> builtins.str:
+        '''The auth status of the connector.
+
+        :cloudformationAttribute: Provider.ServiceNow.AuthStatus
+        '''
+        return typing.cast(builtins.str, jsii.get(self, "attrProviderServiceNowAuthStatus"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cdkTagManager")
+    def cdk_tag_manager(self) -> _TagManager_0a598cb3:
+        '''Tag Manager which manages the tags for this resource.'''
+        return typing.cast(_TagManager_0a598cb3, jsii.get(self, "cdkTagManager"))
+
+    @builtins.property
+    @jsii.member(jsii_name="cfnProperties")
+    def _cfn_properties(self) -> typing.Mapping[builtins.str, typing.Any]:
+        return typing.cast(typing.Mapping[builtins.str, typing.Any], jsii.get(self, "cfnProperties"))
+
+    @builtins.property
+    @jsii.member(jsii_name="connectorV2Ref")
+    def connector_v2_ref(self) -> _ConnectorV2Reference_50d6cc1e:
+        '''A reference to a ConnectorV2 resource.'''
+        return typing.cast(_ConnectorV2Reference_50d6cc1e, jsii.get(self, "connectorV2Ref"))
+
+    @builtins.property
+    @jsii.member(jsii_name="name")
+    def name(self) -> builtins.str:
+        '''The name of the connector.'''
+        return typing.cast(builtins.str, jsii.get(self, "name"))
+
+    @name.setter
+    def name(self, value: builtins.str) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__8937c14ade3aeff623f2afdf9d2c5fc108df53f8603aba5cbe23026720008044)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="provider")
+    def provider(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.ProviderProperty"]:
+        '''The provider configuration of the connector.'''
+        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.ProviderProperty"], jsii.get(self, "provider"))
+
+    @provider.setter
+    def provider(
+        self,
+        value: typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.ProviderProperty"],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__37d69446ea0f60c346731bd16f461f6b4bce869266956fe4f85b1771665e62f9)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "provider", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="description")
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description of the connector.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "description"))
+
+    @description.setter
+    def description(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__87ae79d00760e54d016c2f30405a4f7d52107027fd91937bf462f2994bd0ef44)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="kmsKeyArn")
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of KMS key used for the connector.'''
+        return typing.cast(typing.Optional[builtins.str], jsii.get(self, "kmsKeyArn"))
+
+    @kms_key_arn.setter
+    def kms_key_arn(self, value: typing.Optional[builtins.str]) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__01a34e512a6a272b220ff7ab037cce18ae53c8f9f0208d79fece3895e8e9b400)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "kmsKeyArn", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="tags")
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A key-value pair to associate with a resource.'''
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], jsii.get(self, "tags"))
+
+    @tags.setter
+    def tags(
+        self,
+        value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ac72e62418072a31c573c483dc22453150eff1b7712f1df2e3e690c1675a714f)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "tags", value) # pyright: ignore[reportArgumentType]
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_securityhub.CfnConnectorV2.JiraCloudProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "project_key": "projectKey",
+            "auth_status": "authStatus",
+            "auth_url": "authUrl",
+            "cloud_id": "cloudId",
+            "domain": "domain",
+        },
+    )
+    class JiraCloudProperty:
+        def __init__(
+            self,
+            *,
+            project_key: builtins.str,
+            auth_status: typing.Optional[builtins.str] = None,
+            auth_url: typing.Optional[builtins.str] = None,
+            cloud_id: typing.Optional[builtins.str] = None,
+            domain: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param project_key: 
+            :param auth_status: The auth status of the connector.
+            :param auth_url: The authUrl of the JiraCloud connector.
+            :param cloud_id: 
+            :param domain: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_securityhub as securityhub
+                
+                jira_cloud_property = securityhub.CfnConnectorV2.JiraCloudProperty(
+                    project_key="projectKey",
+                
+                    # the properties below are optional
+                    auth_status="authStatus",
+                    auth_url="authUrl",
+                    cloud_id="cloudId",
+                    domain="domain"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__20d820e23009cc975b8258d2a12e361a9ed558cc6740f528b53e55ce13aab2fa)
+                check_type(argname="argument project_key", value=project_key, expected_type=type_hints["project_key"])
+                check_type(argname="argument auth_status", value=auth_status, expected_type=type_hints["auth_status"])
+                check_type(argname="argument auth_url", value=auth_url, expected_type=type_hints["auth_url"])
+                check_type(argname="argument cloud_id", value=cloud_id, expected_type=type_hints["cloud_id"])
+                check_type(argname="argument domain", value=domain, expected_type=type_hints["domain"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "project_key": project_key,
+            }
+            if auth_status is not None:
+                self._values["auth_status"] = auth_status
+            if auth_url is not None:
+                self._values["auth_url"] = auth_url
+            if cloud_id is not None:
+                self._values["cloud_id"] = cloud_id
+            if domain is not None:
+                self._values["domain"] = domain
+
+        @builtins.property
+        def project_key(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html#cfn-securityhub-connectorv2-jiracloud-projectkey
+            '''
+            result = self._values.get("project_key")
+            assert result is not None, "Required property 'project_key' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def auth_status(self) -> typing.Optional[builtins.str]:
+            '''The auth status of the connector.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html#cfn-securityhub-connectorv2-jiracloud-authstatus
+            '''
+            result = self._values.get("auth_status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def auth_url(self) -> typing.Optional[builtins.str]:
+            '''The authUrl of the JiraCloud connector.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html#cfn-securityhub-connectorv2-jiracloud-authurl
+            '''
+            result = self._values.get("auth_url")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def cloud_id(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html#cfn-securityhub-connectorv2-jiracloud-cloudid
+            '''
+            result = self._values.get("cloud_id")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        @builtins.property
+        def domain(self) -> typing.Optional[builtins.str]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-jiracloud.html#cfn-securityhub-connectorv2-jiracloud-domain
+            '''
+            result = self._values.get("domain")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "JiraCloudProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_securityhub.CfnConnectorV2.ProviderProperty",
+        jsii_struct_bases=[],
+        name_mapping={"jira_cloud": "jiraCloud", "service_now": "serviceNow"},
+    )
+    class ProviderProperty:
+        def __init__(
+            self,
+            *,
+            jira_cloud: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorV2.JiraCloudProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            service_now: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnConnectorV2.ServiceNowProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param jira_cloud: 
+            :param service_now: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-provider.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_securityhub as securityhub
+                
+                provider_property = securityhub.CfnConnectorV2.ProviderProperty(
+                    jira_cloud=securityhub.CfnConnectorV2.JiraCloudProperty(
+                        project_key="projectKey",
+                
+                        # the properties below are optional
+                        auth_status="authStatus",
+                        auth_url="authUrl",
+                        cloud_id="cloudId",
+                        domain="domain"
+                    ),
+                    service_now=securityhub.CfnConnectorV2.ServiceNowProperty(
+                        instance_name="instanceName",
+                        secret_arn="secretArn",
+                
+                        # the properties below are optional
+                        auth_status="authStatus"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__385615b63cd2c77c5b846bc27e032e61da566cc349ee44e0c13fe7ff15cebefb)
+                check_type(argname="argument jira_cloud", value=jira_cloud, expected_type=type_hints["jira_cloud"])
+                check_type(argname="argument service_now", value=service_now, expected_type=type_hints["service_now"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if jira_cloud is not None:
+                self._values["jira_cloud"] = jira_cloud
+            if service_now is not None:
+                self._values["service_now"] = service_now
+
+        @builtins.property
+        def jira_cloud(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.JiraCloudProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-provider.html#cfn-securityhub-connectorv2-provider-jiracloud
+            '''
+            result = self._values.get("jira_cloud")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.JiraCloudProperty"]], result)
+
+        @builtins.property
+        def service_now(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.ServiceNowProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-provider.html#cfn-securityhub-connectorv2-provider-servicenow
+            '''
+            result = self._values.get("service_now")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnConnectorV2.ServiceNowProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ProviderProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_securityhub.CfnConnectorV2.ServiceNowProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "instance_name": "instanceName",
+            "secret_arn": "secretArn",
+            "auth_status": "authStatus",
+        },
+    )
+    class ServiceNowProperty:
+        def __init__(
+            self,
+            *,
+            instance_name: builtins.str,
+            secret_arn: builtins.str,
+            auth_status: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''
+            :param instance_name: 
+            :param secret_arn: The ARN of secrets manager containing ClientId and ClientSecret.
+            :param auth_status: The auth status of the connector.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-servicenow.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_securityhub as securityhub
+                
+                service_now_property = securityhub.CfnConnectorV2.ServiceNowProperty(
+                    instance_name="instanceName",
+                    secret_arn="secretArn",
+                
+                    # the properties below are optional
+                    auth_status="authStatus"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__c9261e5bfe87195b9604579de19b671c0310c6b802d16f0bacaf6f2451b7c4a5)
+                check_type(argname="argument instance_name", value=instance_name, expected_type=type_hints["instance_name"])
+                check_type(argname="argument secret_arn", value=secret_arn, expected_type=type_hints["secret_arn"])
+                check_type(argname="argument auth_status", value=auth_status, expected_type=type_hints["auth_status"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "instance_name": instance_name,
+                "secret_arn": secret_arn,
+            }
+            if auth_status is not None:
+                self._values["auth_status"] = auth_status
+
+        @builtins.property
+        def instance_name(self) -> builtins.str:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-servicenow.html#cfn-securityhub-connectorv2-servicenow-instancename
+            '''
+            result = self._values.get("instance_name")
+            assert result is not None, "Required property 'instance_name' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def secret_arn(self) -> builtins.str:
+            '''The ARN of secrets manager containing ClientId and ClientSecret.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-servicenow.html#cfn-securityhub-connectorv2-servicenow-secretarn
+            '''
+            result = self._values.get("secret_arn")
+            assert result is not None, "Required property 'secret_arn' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def auth_status(self) -> typing.Optional[builtins.str]:
+            '''The auth status of the connector.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-securityhub-connectorv2-servicenow.html#cfn-securityhub-connectorv2-servicenow-authstatus
+            '''
+            result = self._values.get("auth_status")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "ServiceNowProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_securityhub.CfnConnectorV2Props",
+    jsii_struct_bases=[],
+    name_mapping={
+        "name": "name",
+        "provider": "provider",
+        "description": "description",
+        "kms_key_arn": "kmsKeyArn",
+        "tags": "tags",
+    },
+)
+class CfnConnectorV2Props:
+    def __init__(
+        self,
+        *,
+        name: builtins.str,
+        provider: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorV2.ProviderProperty, typing.Dict[builtins.str, typing.Any]]],
+        description: typing.Optional[builtins.str] = None,
+        kms_key_arn: typing.Optional[builtins.str] = None,
+        tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+    ) -> None:
+        '''Properties for defining a ``CfnConnectorV2``.
+
+        :param name: The name of the connector.
+        :param provider: The provider configuration of the connector.
+        :param description: A description of the connector.
+        :param kms_key_arn: The ARN of KMS key used for the connector.
+        :param tags: A key-value pair to associate with a resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import aws_securityhub as securityhub
+            
+            cfn_connector_v2_props = securityhub.CfnConnectorV2Props(
+                name="name",
+                provider=securityhub.CfnConnectorV2.ProviderProperty(
+                    jira_cloud=securityhub.CfnConnectorV2.JiraCloudProperty(
+                        project_key="projectKey",
+            
+                        # the properties below are optional
+                        auth_status="authStatus",
+                        auth_url="authUrl",
+                        cloud_id="cloudId",
+                        domain="domain"
+                    ),
+                    service_now=securityhub.CfnConnectorV2.ServiceNowProperty(
+                        instance_name="instanceName",
+                        secret_arn="secretArn",
+            
+                        # the properties below are optional
+                        auth_status="authStatus"
+                    )
+                ),
+            
+                # the properties below are optional
+                description="description",
+                kms_key_arn="kmsKeyArn",
+                tags={
+                    "tags_key": "tags"
+                }
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__d7eb684c01b31a114c5ccc5912e10ad8d27fda026f10fb4e2e21308ede23e75c)
+            check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            check_type(argname="argument provider", value=provider, expected_type=type_hints["provider"])
+            check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument kms_key_arn", value=kms_key_arn, expected_type=type_hints["kms_key_arn"])
+            check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "name": name,
+            "provider": provider,
+        }
+        if description is not None:
+            self._values["description"] = description
+        if kms_key_arn is not None:
+            self._values["kms_key_arn"] = kms_key_arn
+        if tags is not None:
+            self._values["tags"] = tags
+
+    @builtins.property
+    def name(self) -> builtins.str:
+        '''The name of the connector.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html#cfn-securityhub-connectorv2-name
+        '''
+        result = self._values.get("name")
+        assert result is not None, "Required property 'name' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def provider(
+        self,
+    ) -> typing.Union[_IResolvable_da3f097b, CfnConnectorV2.ProviderProperty]:
+        '''The provider configuration of the connector.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html#cfn-securityhub-connectorv2-provider
+        '''
+        result = self._values.get("provider")
+        assert result is not None, "Required property 'provider' is missing"
+        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnConnectorV2.ProviderProperty], result)
+
+    @builtins.property
+    def description(self) -> typing.Optional[builtins.str]:
+        '''A description of the connector.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html#cfn-securityhub-connectorv2-description
+        '''
+        result = self._values.get("description")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def kms_key_arn(self) -> typing.Optional[builtins.str]:
+        '''The ARN of KMS key used for the connector.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html#cfn-securityhub-connectorv2-kmskeyarn
+        '''
+        result = self._values.get("kms_key_arn")
+        return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def tags(self) -> typing.Optional[typing.Mapping[builtins.str, builtins.str]]:
+        '''A key-value pair to associate with a resource.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-securityhub-connectorv2.html#cfn-securityhub-connectorv2-tags
+        '''
+        result = self._values.get("tags")
+        return typing.cast(typing.Optional[typing.Mapping[builtins.str, builtins.str]], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "CfnConnectorV2Props(%s)" % ", ".join(
             k + "=" + repr(v) for k, v in self._values.items()
         )
 
@@ -13334,6 +14099,8 @@ __all__ = [
     "CfnAutomationRuleV2Props",
     "CfnConfigurationPolicy",
     "CfnConfigurationPolicyProps",
+    "CfnConnectorV2",
+    "CfnConnectorV2Props",
     "CfnDelegatedAdmin",
     "CfnDelegatedAdminProps",
     "CfnFindingAggregator",
@@ -14005,6 +14772,106 @@ def _typecheckingstub__9df36e470a5cb19a48e0918f07ba5c7fe4f2f6e13983d94bef33b262d
     configuration_policy: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConfigurationPolicy.PolicyProperty, typing.Dict[builtins.str, typing.Any]]],
     name: builtins.str,
     description: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0ef6634a11594ce6670b3fa3a22acf7613b48c83a9615d9927bda1afc4564ad4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    *,
+    name: builtins.str,
+    provider: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorV2.ProviderProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
+    tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__f7af960b05b6392c2952e21863efdeef58ba48d43f660310cc4fd0e265e49ff0(
+    x: typing.Any,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6ea2a93eaa5b900c241a2f7d23ee43cd86df86c2c287d8eb84fcadbec796480e(
+    inspector: _TreeInspector_488e0dd5,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__b6e8c1da3acb488e9c7f60d89c5aafae3306336d3dc86225662a02f8c0942780(
+    props: typing.Mapping[builtins.str, typing.Any],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__8937c14ade3aeff623f2afdf9d2c5fc108df53f8603aba5cbe23026720008044(
+    value: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__37d69446ea0f60c346731bd16f461f6b4bce869266956fe4f85b1771665e62f9(
+    value: typing.Union[_IResolvable_da3f097b, CfnConnectorV2.ProviderProperty],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__87ae79d00760e54d016c2f30405a4f7d52107027fd91937bf462f2994bd0ef44(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__01a34e512a6a272b220ff7ab037cce18ae53c8f9f0208d79fece3895e8e9b400(
+    value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__ac72e62418072a31c573c483dc22453150eff1b7712f1df2e3e690c1675a714f(
+    value: typing.Optional[typing.Mapping[builtins.str, builtins.str]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__20d820e23009cc975b8258d2a12e361a9ed558cc6740f528b53e55ce13aab2fa(
+    *,
+    project_key: builtins.str,
+    auth_status: typing.Optional[builtins.str] = None,
+    auth_url: typing.Optional[builtins.str] = None,
+    cloud_id: typing.Optional[builtins.str] = None,
+    domain: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__385615b63cd2c77c5b846bc27e032e61da566cc349ee44e0c13fe7ff15cebefb(
+    *,
+    jira_cloud: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorV2.JiraCloudProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    service_now: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorV2.ServiceNowProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__c9261e5bfe87195b9604579de19b671c0310c6b802d16f0bacaf6f2451b7c4a5(
+    *,
+    instance_name: builtins.str,
+    secret_arn: builtins.str,
+    auth_status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d7eb684c01b31a114c5ccc5912e10ad8d27fda026f10fb4e2e21308ede23e75c(
+    *,
+    name: builtins.str,
+    provider: typing.Union[_IResolvable_da3f097b, typing.Union[CfnConnectorV2.ProviderProperty, typing.Dict[builtins.str, typing.Any]]],
+    description: typing.Optional[builtins.str] = None,
+    kms_key_arn: typing.Optional[builtins.str] = None,
     tags: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
 ) -> None:
     """Type checking stubs"""

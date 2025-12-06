@@ -51,9 +51,9 @@ class BillingViewReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_billing as interfaces_aws_billing
+            from aws_cdk.interfaces import aws_billing as interfaces_billing
             
-            billing_view_reference = interfaces_aws_billing.BillingViewReference(
+            billing_view_reference = interfaces_billing.BillingViewReference(
                 billing_view_arn="billingViewArn"
             )
         '''

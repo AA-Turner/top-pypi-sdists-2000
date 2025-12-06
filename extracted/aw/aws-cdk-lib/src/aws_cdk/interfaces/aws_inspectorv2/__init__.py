@@ -51,9 +51,9 @@ class CisScanConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_aws_inspectorv2
+            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_inspectorv2
             
-            cis_scan_configuration_reference = interfaces_aws_inspectorv2.CisScanConfigurationReference(
+            cis_scan_configuration_reference = interfaces_inspectorv2.CisScanConfigurationReference(
                 cis_scan_configuration_arn="cisScanConfigurationArn"
             )
         '''
@@ -100,9 +100,9 @@ class CodeSecurityIntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_aws_inspectorv2
+            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_inspectorv2
             
-            code_security_integration_reference = interfaces_aws_inspectorv2.CodeSecurityIntegrationReference(
+            code_security_integration_reference = interfaces_inspectorv2.CodeSecurityIntegrationReference(
                 code_security_integration_arn="codeSecurityIntegrationArn"
             )
         '''
@@ -151,9 +151,9 @@ class CodeSecurityScanConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_aws_inspectorv2
+            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_inspectorv2
             
-            code_security_scan_configuration_reference = interfaces_aws_inspectorv2.CodeSecurityScanConfigurationReference(
+            code_security_scan_configuration_reference = interfaces_inspectorv2.CodeSecurityScanConfigurationReference(
                 code_security_scan_configuration_arn="codeSecurityScanConfigurationArn"
             )
         '''
@@ -200,9 +200,9 @@ class FilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_aws_inspectorv2
+            from aws_cdk.interfaces import aws_inspectorv2 as interfaces_inspectorv2
             
-            filter_reference = interfaces_aws_inspectorv2.FilterReference(
+            filter_reference = interfaces_inspectorv2.FilterReference(
                 filter_arn="filterArn"
             )
         '''

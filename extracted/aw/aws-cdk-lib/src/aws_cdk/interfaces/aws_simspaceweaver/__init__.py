@@ -96,9 +96,9 @@ class SimulationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_simspaceweaver as interfaces_aws_simspaceweaver
+            from aws_cdk.interfaces import aws_simspaceweaver as interfaces_simspaceweaver
             
-            simulation_reference = interfaces_aws_simspaceweaver.SimulationReference(
+            simulation_reference = interfaces_simspaceweaver.SimulationReference(
                 simulation_name="simulationName"
             )
         '''

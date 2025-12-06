@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appintegrations as interfaces_aws_appintegrations
+            from aws_cdk.interfaces import aws_appintegrations as interfaces_appintegrations
             
-            application_reference = interfaces_aws_appintegrations.ApplicationReference(
+            application_reference = interfaces_appintegrations.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''
@@ -109,9 +109,9 @@ class DataIntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appintegrations as interfaces_aws_appintegrations
+            from aws_cdk.interfaces import aws_appintegrations as interfaces_appintegrations
             
-            data_integration_reference = interfaces_aws_appintegrations.DataIntegrationReference(
+            data_integration_reference = interfaces_appintegrations.DataIntegrationReference(
                 data_integration_arn="dataIntegrationArn",
                 data_integration_id="dataIntegrationId"
             )
@@ -177,9 +177,9 @@ class EventIntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appintegrations as interfaces_aws_appintegrations
+            from aws_cdk.interfaces import aws_appintegrations as interfaces_appintegrations
             
-            event_integration_reference = interfaces_aws_appintegrations.EventIntegrationReference(
+            event_integration_reference = interfaces_appintegrations.EventIntegrationReference(
                 event_integration_arn="eventIntegrationArn",
                 event_integration_name="eventIntegrationName"
             )

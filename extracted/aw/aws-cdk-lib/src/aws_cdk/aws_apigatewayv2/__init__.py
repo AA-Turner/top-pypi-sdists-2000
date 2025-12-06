@@ -14370,9 +14370,9 @@ class IntegrationCredentials(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_apigatewayv2 as apigatewayv2
-        from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+        from aws_cdk.interfaces import aws_iam as interfaces_iam
         
-        # role_ref: interfaces_aws_iam.IRoleRef
+        # role_ref: interfaces_iam.IRoleRef
         
         integration_credentials = apigatewayv2.IntegrationCredentials.from_role(role_ref)
     '''

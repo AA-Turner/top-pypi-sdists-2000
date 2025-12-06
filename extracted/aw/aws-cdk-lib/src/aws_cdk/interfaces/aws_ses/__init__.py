@@ -53,9 +53,9 @@ class ConfigurationSetEventDestinationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            configuration_set_event_destination_reference = interfaces_aws_ses.ConfigurationSetEventDestinationReference(
+            configuration_set_event_destination_reference = interfaces_ses.ConfigurationSetEventDestinationReference(
                 configuration_set_event_destination_id="configurationSetEventDestinationId"
             )
         '''
@@ -102,9 +102,9 @@ class ConfigurationSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            configuration_set_reference = interfaces_aws_ses.ConfigurationSetReference(
+            configuration_set_reference = interfaces_ses.ConfigurationSetReference(
                 configuration_set_name="configurationSetName"
             )
         '''
@@ -151,9 +151,9 @@ class ContactListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            contact_list_reference = interfaces_aws_ses.ContactListReference(
+            contact_list_reference = interfaces_ses.ContactListReference(
                 contact_list_name="contactListName"
             )
         '''
@@ -200,9 +200,9 @@ class DedicatedIpPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            dedicated_ip_pool_reference = interfaces_aws_ses.DedicatedIpPoolReference(
+            dedicated_ip_pool_reference = interfaces_ses.DedicatedIpPoolReference(
                 pool_name="poolName"
             )
         '''
@@ -249,9 +249,9 @@ class EmailIdentityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            email_identity_reference = interfaces_aws_ses.EmailIdentityReference(
+            email_identity_reference = interfaces_ses.EmailIdentityReference(
                 email_identity="emailIdentity"
             )
         '''
@@ -1178,9 +1178,9 @@ class MailManagerAddonInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_addon_instance_reference = interfaces_aws_ses.MailManagerAddonInstanceReference(
+            mail_manager_addon_instance_reference = interfaces_ses.MailManagerAddonInstanceReference(
                 addon_instance_arn="addonInstanceArn",
                 addon_instance_id="addonInstanceId"
             )
@@ -1246,9 +1246,9 @@ class MailManagerAddonSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_addon_subscription_reference = interfaces_aws_ses.MailManagerAddonSubscriptionReference(
+            mail_manager_addon_subscription_reference = interfaces_ses.MailManagerAddonSubscriptionReference(
                 addon_subscription_arn="addonSubscriptionArn",
                 addon_subscription_id="addonSubscriptionId"
             )
@@ -1314,9 +1314,9 @@ class MailManagerAddressListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_address_list_reference = interfaces_aws_ses.MailManagerAddressListReference(
+            mail_manager_address_list_reference = interfaces_ses.MailManagerAddressListReference(
                 address_list_arn="addressListArn",
                 address_list_id="addressListId"
             )
@@ -1374,9 +1374,9 @@ class MailManagerArchiveReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_archive_reference = interfaces_aws_ses.MailManagerArchiveReference(
+            mail_manager_archive_reference = interfaces_ses.MailManagerArchiveReference(
                 archive_arn="archiveArn",
                 archive_id="archiveId"
             )
@@ -1442,9 +1442,9 @@ class MailManagerIngressPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_ingress_point_reference = interfaces_aws_ses.MailManagerIngressPointReference(
+            mail_manager_ingress_point_reference = interfaces_ses.MailManagerIngressPointReference(
                 ingress_point_arn="ingressPointArn",
                 ingress_point_id="ingressPointId"
             )
@@ -1502,9 +1502,9 @@ class MailManagerRelayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_relay_reference = interfaces_aws_ses.MailManagerRelayReference(
+            mail_manager_relay_reference = interfaces_ses.MailManagerRelayReference(
                 relay_arn="relayArn",
                 relay_id="relayId"
             )
@@ -1567,9 +1567,9 @@ class MailManagerRuleSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_rule_set_reference = interfaces_aws_ses.MailManagerRuleSetReference(
+            mail_manager_rule_set_reference = interfaces_ses.MailManagerRuleSetReference(
                 rule_set_arn="ruleSetArn",
                 rule_set_id="ruleSetId"
             )
@@ -1635,9 +1635,9 @@ class MailManagerTrafficPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            mail_manager_traffic_policy_reference = interfaces_aws_ses.MailManagerTrafficPolicyReference(
+            mail_manager_traffic_policy_reference = interfaces_ses.MailManagerTrafficPolicyReference(
                 traffic_policy_arn="trafficPolicyArn",
                 traffic_policy_id="trafficPolicyId"
             )
@@ -1694,9 +1694,9 @@ class MultiRegionEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            multi_region_endpoint_reference = interfaces_aws_ses.MultiRegionEndpointReference(
+            multi_region_endpoint_reference = interfaces_ses.MultiRegionEndpointReference(
                 endpoint_name="endpointName"
             )
         '''
@@ -1743,9 +1743,9 @@ class ReceiptFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            receipt_filter_reference = interfaces_aws_ses.ReceiptFilterReference(
+            receipt_filter_reference = interfaces_ses.ReceiptFilterReference(
                 receipt_filter_id="receiptFilterId"
             )
         '''
@@ -1792,9 +1792,9 @@ class ReceiptRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            receipt_rule_reference = interfaces_aws_ses.ReceiptRuleReference(
+            receipt_rule_reference = interfaces_ses.ReceiptRuleReference(
                 receipt_rule_id="receiptRuleId"
             )
         '''
@@ -1841,9 +1841,9 @@ class ReceiptRuleSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            receipt_rule_set_reference = interfaces_aws_ses.ReceiptRuleSetReference(
+            receipt_rule_set_reference = interfaces_ses.ReceiptRuleSetReference(
                 receipt_rule_set_id="receiptRuleSetId"
             )
         '''
@@ -1890,9 +1890,9 @@ class TemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            template_reference = interfaces_aws_ses.TemplateReference(
+            template_reference = interfaces_ses.TemplateReference(
                 template_id="templateId"
             )
         '''
@@ -1939,9 +1939,9 @@ class VdmAttributesReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ses as interfaces_aws_ses
+            from aws_cdk.interfaces import aws_ses as interfaces_ses
             
-            vdm_attributes_reference = interfaces_aws_ses.VdmAttributesReference(
+            vdm_attributes_reference = interfaces_ses.VdmAttributesReference(
                 vdm_attributes_resource_id="vdmAttributesResourceId"
             )
         '''

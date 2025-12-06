@@ -51,9 +51,9 @@ class AccountReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_certificatemanager as interfaces_aws_certificatemanager
+            from aws_cdk.interfaces import aws_certificatemanager as interfaces_certificatemanager
             
-            account_reference = interfaces_aws_certificatemanager.AccountReference(
+            account_reference = interfaces_certificatemanager.AccountReference(
                 account_id="accountId"
             )
         '''
@@ -100,9 +100,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_certificatemanager as interfaces_aws_certificatemanager
+            from aws_cdk.interfaces import aws_certificatemanager as interfaces_certificatemanager
             
-            certificate_reference = interfaces_aws_certificatemanager.CertificateReference(
+            certificate_reference = interfaces_certificatemanager.CertificateReference(
                 certificate_id="certificateId"
             )
         '''

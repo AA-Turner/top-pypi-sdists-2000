@@ -51,9 +51,9 @@ class AliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            alias_reference = interfaces_aws_lambda.AliasReference(
+            alias_reference = interfaces_lambda.AliasReference(
                 alias_arn="aliasArn"
             )
         '''
@@ -109,9 +109,9 @@ class CapacityProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            capacity_provider_reference = interfaces_aws_lambda.CapacityProviderReference(
+            capacity_provider_reference = interfaces_lambda.CapacityProviderReference(
                 capacity_provider_arn="capacityProviderArn",
                 capacity_provider_name="capacityProviderName"
             )
@@ -168,9 +168,9 @@ class CodeSigningConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            code_signing_config_reference = interfaces_aws_lambda.CodeSigningConfigReference(
+            code_signing_config_reference = interfaces_lambda.CodeSigningConfigReference(
                 code_signing_config_arn="codeSigningConfigArn"
             )
         '''
@@ -218,9 +218,9 @@ class EventInvokeConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            event_invoke_config_reference = interfaces_aws_lambda.EventInvokeConfigReference(
+            event_invoke_config_reference = interfaces_lambda.EventInvokeConfigReference(
                 function_name="functionName",
                 qualifier="qualifier"
             )
@@ -286,9 +286,9 @@ class EventSourceMappingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            event_source_mapping_reference = interfaces_aws_lambda.EventSourceMappingReference(
+            event_source_mapping_reference = interfaces_lambda.EventSourceMappingReference(
                 event_source_mapping_arn="eventSourceMappingArn",
                 event_source_mapping_id="eventSourceMappingId"
             )
@@ -351,9 +351,9 @@ class FunctionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            function_reference = interfaces_aws_lambda.FunctionReference(
+            function_reference = interfaces_lambda.FunctionReference(
                 function_arn="functionArn",
                 function_name="functionName"
             )
@@ -907,9 +907,9 @@ class LayerVersionPermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            layer_version_permission_reference = interfaces_aws_lambda.LayerVersionPermissionReference(
+            layer_version_permission_reference = interfaces_lambda.LayerVersionPermissionReference(
                 layer_version_permission_id="layerVersionPermissionId"
             )
         '''
@@ -956,9 +956,9 @@ class LayerVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            layer_version_reference = interfaces_aws_lambda.LayerVersionReference(
+            layer_version_reference = interfaces_lambda.LayerVersionReference(
                 layer_version_arn="layerVersionArn"
             )
         '''
@@ -1011,9 +1011,9 @@ class PermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            permission_reference = interfaces_aws_lambda.PermissionReference(
+            permission_reference = interfaces_lambda.PermissionReference(
                 function_name="functionName",
                 permission_id="permissionId"
             )
@@ -1070,9 +1070,9 @@ class UrlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            url_reference = interfaces_aws_lambda.UrlReference(
+            url_reference = interfaces_lambda.UrlReference(
                 function_arn="functionArn"
             )
         '''
@@ -1119,9 +1119,9 @@ class VersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
-            version_reference = interfaces_aws_lambda.VersionReference(
+            version_reference = interfaces_lambda.VersionReference(
                 function_arn="functionArn"
             )
         '''

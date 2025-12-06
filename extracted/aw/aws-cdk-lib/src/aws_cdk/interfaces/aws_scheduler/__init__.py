@@ -150,9 +150,9 @@ class ScheduleGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_scheduler as interfaces_aws_scheduler
+            from aws_cdk.interfaces import aws_scheduler as interfaces_scheduler
             
-            schedule_group_reference = interfaces_aws_scheduler.ScheduleGroupReference(
+            schedule_group_reference = interfaces_scheduler.ScheduleGroupReference(
                 schedule_group_arn="scheduleGroupArn",
                 schedule_group_name="scheduleGroupName"
             )
@@ -215,9 +215,9 @@ class ScheduleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_scheduler as interfaces_aws_scheduler
+            from aws_cdk.interfaces import aws_scheduler as interfaces_scheduler
             
-            schedule_reference = interfaces_aws_scheduler.ScheduleReference(
+            schedule_reference = interfaces_scheduler.ScheduleReference(
                 schedule_arn="scheduleArn",
                 schedule_name="scheduleName"
             )

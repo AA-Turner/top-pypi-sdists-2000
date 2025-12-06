@@ -57,9 +57,9 @@ class AllowListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_macie as interfaces_aws_macie
+            from aws_cdk.interfaces import aws_macie as interfaces_macie
             
-            allow_list_reference = interfaces_aws_macie.AllowListReference(
+            allow_list_reference = interfaces_macie.AllowListReference(
                 allow_list_arn="allowListArn",
                 allow_list_id="allowListId"
             )
@@ -125,9 +125,9 @@ class CustomDataIdentifierReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_macie as interfaces_aws_macie
+            from aws_cdk.interfaces import aws_macie as interfaces_macie
             
-            custom_data_identifier_reference = interfaces_aws_macie.CustomDataIdentifierReference(
+            custom_data_identifier_reference = interfaces_macie.CustomDataIdentifierReference(
                 custom_data_identifier_arn="customDataIdentifierArn",
                 custom_data_identifier_id="customDataIdentifierId"
             )
@@ -193,9 +193,9 @@ class FindingsFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_macie as interfaces_aws_macie
+            from aws_cdk.interfaces import aws_macie as interfaces_macie
             
-            findings_filter_reference = interfaces_aws_macie.FindingsFilterReference(
+            findings_filter_reference = interfaces_macie.FindingsFilterReference(
                 findings_filter_arn="findingsFilterArn",
                 findings_filter_id="findingsFilterId"
             )
@@ -432,9 +432,9 @@ class SessionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_macie as interfaces_aws_macie
+            from aws_cdk.interfaces import aws_macie as interfaces_macie
             
-            session_reference = interfaces_aws_macie.SessionReference(
+            session_reference = interfaces_macie.SessionReference(
                 aws_account_id="awsAccountId"
             )
         '''

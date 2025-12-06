@@ -5604,12 +5604,12 @@ class BaseServiceOptions:
             from aws_cdk import aws_ecs as ecs
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_servicediscovery as servicediscovery
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # cluster: ecs.Cluster
             # container_definition: ecs.ContainerDefinition
             # deployment_lifecycle_hook_target: ecs.IDeploymentLifecycleHookTarget
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # log_driver: ecs.LogDriver
             # namespace: servicediscovery.INamespace
             # role: iam.Role
@@ -6061,12 +6061,12 @@ class BaseServiceProps(BaseServiceOptions):
             from aws_cdk import aws_ecs as ecs
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_servicediscovery as servicediscovery
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # cluster: ecs.Cluster
             # container_definition: ecs.ContainerDefinition
             # deployment_lifecycle_hook_target: ecs.IDeploymentLifecycleHookTarget
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # log_driver: ecs.LogDriver
             # namespace: servicediscovery.INamespace
             # role: iam.Role
@@ -25896,9 +25896,9 @@ class ClusterGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_ecs as ecs
-        from aws_cdk.interfaces import aws_ecs as interfaces_aws_ecs
+        from aws_cdk.interfaces import aws_ecs as interfaces_ecs
         
-        # cluster_ref: interfaces_aws_ecs.IClusterRef
+        # cluster_ref: interfaces_ecs.IClusterRef
         
         cluster_grants = ecs.ClusterGrants.from_cluster(cluster_ref)
     '''
@@ -42617,9 +42617,9 @@ class ServiceConnectService:
             import aws_cdk as cdk
             from aws_cdk import aws_ecs as ecs
             from aws_cdk import aws_iam as iam
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # role: iam.Role
             
             service_connect_service = ecs.ServiceConnectService(
@@ -46600,11 +46600,11 @@ class AssetEnvironmentFile(
         import aws_cdk as cdk
         from aws_cdk import aws_ecs as ecs
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         asset_environment_file = ecs.AssetEnvironmentFile("path",

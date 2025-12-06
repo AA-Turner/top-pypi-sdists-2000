@@ -57,9 +57,9 @@ class AwsLogSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securitylake as interfaces_aws_securitylake
+            from aws_cdk.interfaces import aws_securitylake as interfaces_securitylake
             
-            aws_log_source_reference = interfaces_aws_securitylake.AwsLogSourceReference(
+            aws_log_source_reference = interfaces_securitylake.AwsLogSourceReference(
                 source_name="sourceName",
                 source_version="sourceVersion"
             )
@@ -116,9 +116,9 @@ class DataLakeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securitylake as interfaces_aws_securitylake
+            from aws_cdk.interfaces import aws_securitylake as interfaces_securitylake
             
-            data_lake_reference = interfaces_aws_securitylake.DataLakeReference(
+            data_lake_reference = interfaces_securitylake.DataLakeReference(
                 data_lake_arn="dataLakeArn"
             )
         '''
@@ -347,9 +347,9 @@ class SubscriberNotificationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securitylake as interfaces_aws_securitylake
+            from aws_cdk.interfaces import aws_securitylake as interfaces_securitylake
             
-            subscriber_notification_reference = interfaces_aws_securitylake.SubscriberNotificationReference(
+            subscriber_notification_reference = interfaces_securitylake.SubscriberNotificationReference(
                 subscriber_arn="subscriberArn"
             )
         '''
@@ -396,9 +396,9 @@ class SubscriberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_securitylake as interfaces_aws_securitylake
+            from aws_cdk.interfaces import aws_securitylake as interfaces_securitylake
             
-            subscriber_reference = interfaces_aws_securitylake.SubscriberReference(
+            subscriber_reference = interfaces_securitylake.SubscriberReference(
                 subscriber_arn="subscriberArn"
             )
         '''

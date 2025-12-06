@@ -1275,6 +1275,45 @@ class CloudAssembly(
 
         jsii.create(self.__class__, self, [directory, load_options])
 
+    @jsii.member(jsii_name="cleanupTemporaryDirectories")
+    @builtins.classmethod
+    def cleanup_temporary_directories(cls) -> None:
+        '''Cleans up any temporary assembly directories that got created in this process.
+
+        If a Cloud Assembly is emitted to a temporary directory, its directory gets
+        added to a list. This function iterates over that list and deletes each
+        directory in it, to free up disk space.
+
+        This function will normally be called automatically during Node process
+        exit and so you don't need to call this. However, some test environments do
+        not properly trigger Node's ``exit`` event. Notably: Jest does not trigger
+        the ``exit`` event (`https://github.com/jestjs/jest/issues/10927 <https://github.com/jestjs/jest/issues/10927>`_).
+
+
+        Cleaning up temporary directories in jest
+
+        For Jest, you have to make sure this function is called at the end of the
+        test suite instead::
+
+           import { CloudAssembly } from 'aws-cdk-lib/cx-api';
+
+           afterAll(CloudAssembly.cleanupTemporaryDirectories);
+
+        Alternatively, you can use the ``setupFilesAfterEnv`` feature and use a
+        provided helper script to automatically inject the above into every
+        test file, so you don't have to do it by hand::
+
+           $ npx jest --setupFilesAfterEnv aws-cdk-lib/testhelpers/jest-autoclean
+
+        Or put the following into ``jest.config.js``::
+
+           module.exports = {
+             // ...
+             setupFilesAfterEnv: ['aws-cdk-lib/testhelpers/jest-cleanup'],
+           };
+        '''
+        return typing.cast(None, jsii.sinvoke(cls, "cleanupTemporaryDirectories", []))
+
     @jsii.member(jsii_name="isCloudAssembly")
     @builtins.classmethod
     def is_cloud_assembly(cls, x: typing.Any) -> builtins.bool:

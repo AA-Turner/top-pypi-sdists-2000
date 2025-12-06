@@ -51,9 +51,9 @@ class AppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resiliencehub as interfaces_aws_resiliencehub
+            from aws_cdk.interfaces import aws_resiliencehub as interfaces_resiliencehub
             
-            app_reference = interfaces_aws_resiliencehub.AppReference(
+            app_reference = interfaces_resiliencehub.AppReference(
                 app_arn="appArn"
             )
         '''
@@ -192,9 +192,9 @@ class ResiliencyPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_resiliencehub as interfaces_aws_resiliencehub
+            from aws_cdk.interfaces import aws_resiliencehub as interfaces_resiliencehub
             
-            resiliency_policy_reference = interfaces_aws_resiliencehub.ResiliencyPolicyReference(
+            resiliency_policy_reference = interfaces_resiliencehub.ResiliencyPolicyReference(
                 policy_arn="policyArn"
             )
         '''

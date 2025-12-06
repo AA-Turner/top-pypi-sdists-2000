@@ -51,9 +51,9 @@ class FarmReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            farm_reference = interfaces_aws_deadline.FarmReference(
+            farm_reference = interfaces_deadline.FarmReference(
                 farm_arn="farmArn"
             )
         '''
@@ -100,9 +100,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            fleet_reference = interfaces_aws_deadline.FleetReference(
+            fleet_reference = interfaces_deadline.FleetReference(
                 fleet_arn="fleetArn"
             )
         '''
@@ -648,9 +648,9 @@ class LicenseEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            license_endpoint_reference = interfaces_aws_deadline.LicenseEndpointReference(
+            license_endpoint_reference = interfaces_deadline.LicenseEndpointReference(
                 license_endpoint_arn="licenseEndpointArn"
             )
         '''
@@ -698,9 +698,9 @@ class LimitReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            limit_reference = interfaces_aws_deadline.LimitReference(
+            limit_reference = interfaces_deadline.LimitReference(
                 farm_id="farmId",
                 limit_id="limitId"
             )
@@ -757,9 +757,9 @@ class MeteredProductReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            metered_product_reference = interfaces_aws_deadline.MeteredProductReference(
+            metered_product_reference = interfaces_deadline.MeteredProductReference(
                 metered_product_arn="meteredProductArn"
             )
         '''
@@ -806,9 +806,9 @@ class MonitorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            monitor_reference = interfaces_aws_deadline.MonitorReference(
+            monitor_reference = interfaces_deadline.MonitorReference(
                 monitor_arn="monitorArn"
             )
         '''
@@ -867,9 +867,9 @@ class QueueEnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            queue_environment_reference = interfaces_aws_deadline.QueueEnvironmentReference(
+            queue_environment_reference = interfaces_deadline.QueueEnvironmentReference(
                 farm_id="farmId",
                 queue_environment_id="queueEnvironmentId",
                 queue_id="queueId"
@@ -944,9 +944,9 @@ class QueueFleetAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            queue_fleet_association_reference = interfaces_aws_deadline.QueueFleetAssociationReference(
+            queue_fleet_association_reference = interfaces_deadline.QueueFleetAssociationReference(
                 farm_id="farmId",
                 fleet_id="fleetId",
                 queue_id="queueId"
@@ -1021,9 +1021,9 @@ class QueueLimitAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            queue_limit_association_reference = interfaces_aws_deadline.QueueLimitAssociationReference(
+            queue_limit_association_reference = interfaces_deadline.QueueLimitAssociationReference(
                 farm_id="farmId",
                 limit_id="limitId",
                 queue_id="queueId"
@@ -1090,9 +1090,9 @@ class QueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            queue_reference = interfaces_aws_deadline.QueueReference(
+            queue_reference = interfaces_deadline.QueueReference(
                 queue_arn="queueArn"
             )
         '''
@@ -1145,9 +1145,9 @@ class StorageProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_deadline as interfaces_aws_deadline
+            from aws_cdk.interfaces import aws_deadline as interfaces_deadline
             
-            storage_profile_reference = interfaces_aws_deadline.StorageProfileReference(
+            storage_profile_reference = interfaces_deadline.StorageProfileReference(
                 farm_id="farmId",
                 storage_profile_id="storageProfileId"
             )

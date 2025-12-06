@@ -143,9 +143,9 @@ class MicrosoftADReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_directoryservice as interfaces_aws_directoryservice
+            from aws_cdk.interfaces import aws_directoryservice as interfaces_directoryservice
             
-            microsoft_aDReference = interfaces_aws_directoryservice.MicrosoftADReference(
+            microsoft_aDReference = interfaces_directoryservice.MicrosoftADReference(
                 microsoft_ad_id="microsoftAdId"
             )
         '''
@@ -192,9 +192,9 @@ class SimpleADReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_directoryservice as interfaces_aws_directoryservice
+            from aws_cdk.interfaces import aws_directoryservice as interfaces_directoryservice
             
-            simple_aDReference = interfaces_aws_directoryservice.SimpleADReference(
+            simple_aDReference = interfaces_directoryservice.SimpleADReference(
                 directory_id="directoryId"
             )
         '''

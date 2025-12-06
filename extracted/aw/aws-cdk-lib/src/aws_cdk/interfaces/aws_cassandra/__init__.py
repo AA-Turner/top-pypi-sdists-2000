@@ -186,9 +186,9 @@ class KeyspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cassandra as interfaces_aws_cassandra
+            from aws_cdk.interfaces import aws_cassandra as interfaces_cassandra
             
-            keyspace_reference = interfaces_aws_cassandra.KeyspaceReference(
+            keyspace_reference = interfaces_cassandra.KeyspaceReference(
                 keyspace_name="keyspaceName"
             )
         '''
@@ -241,9 +241,9 @@ class TableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cassandra as interfaces_aws_cassandra
+            from aws_cdk.interfaces import aws_cassandra as interfaces_cassandra
             
-            table_reference = interfaces_aws_cassandra.TableReference(
+            table_reference = interfaces_cassandra.TableReference(
                 keyspace_name="keyspaceName",
                 table_name="tableName"
             )
@@ -301,9 +301,9 @@ class TypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cassandra as interfaces_aws_cassandra
+            from aws_cdk.interfaces import aws_cassandra as interfaces_cassandra
             
-            type_reference = interfaces_aws_cassandra.TypeReference(
+            type_reference = interfaces_cassandra.TypeReference(
                 keyspace_name="keyspaceName",
                 type_name="typeName"
             )

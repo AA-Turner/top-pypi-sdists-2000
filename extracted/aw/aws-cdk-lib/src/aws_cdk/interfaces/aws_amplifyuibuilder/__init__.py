@@ -63,9 +63,9 @@ class ComponentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_aws_amplifyuibuilder
+            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_amplifyuibuilder
             
-            component_reference = interfaces_aws_amplifyuibuilder.ComponentReference(
+            component_reference = interfaces_amplifyuibuilder.ComponentReference(
                 app_id="appId",
                 component_id="componentId",
                 environment_name="environmentName"
@@ -144,9 +144,9 @@ class FormReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_aws_amplifyuibuilder
+            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_amplifyuibuilder
             
-            form_reference = interfaces_aws_amplifyuibuilder.FormReference(
+            form_reference = interfaces_amplifyuibuilder.FormReference(
                 app_id="appId",
                 environment_name="environmentName",
                 form_id="formId"
@@ -360,9 +360,9 @@ class ThemeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_aws_amplifyuibuilder
+            from aws_cdk.interfaces import aws_amplifyuibuilder as interfaces_amplifyuibuilder
             
-            theme_reference = interfaces_aws_amplifyuibuilder.ThemeReference(
+            theme_reference = interfaces_amplifyuibuilder.ThemeReference(
                 app_id="appId",
                 environment_name="environmentName",
                 theme_id="themeId"

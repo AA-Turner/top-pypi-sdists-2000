@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_m2 as interfaces_aws_m2
+            from aws_cdk.interfaces import aws_m2 as interfaces_m2
             
-            application_reference = interfaces_aws_m2.ApplicationReference(
+            application_reference = interfaces_m2.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''
@@ -100,9 +100,9 @@ class DeploymentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_m2 as interfaces_aws_m2
+            from aws_cdk.interfaces import aws_m2 as interfaces_m2
             
-            deployment_reference = interfaces_aws_m2.DeploymentReference(
+            deployment_reference = interfaces_m2.DeploymentReference(
                 application_id="applicationId"
             )
         '''
@@ -149,9 +149,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_m2 as interfaces_aws_m2
+            from aws_cdk.interfaces import aws_m2 as interfaces_m2
             
-            environment_reference = interfaces_aws_m2.EnvironmentReference(
+            environment_reference = interfaces_m2.EnvironmentReference(
                 environment_arn="environmentArn"
             )
         '''

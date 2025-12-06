@@ -51,9 +51,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codebuild as interfaces_aws_codebuild
+            from aws_cdk.interfaces import aws_codebuild as interfaces_codebuild
             
-            fleet_reference = interfaces_aws_codebuild.FleetReference(
+            fleet_reference = interfaces_codebuild.FleetReference(
                 fleet_arn="fleetArn"
             )
         '''
@@ -281,9 +281,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codebuild as interfaces_aws_codebuild
+            from aws_cdk.interfaces import aws_codebuild as interfaces_codebuild
             
-            project_reference = interfaces_aws_codebuild.ProjectReference(
+            project_reference = interfaces_codebuild.ProjectReference(
                 project_arn="projectArn",
                 project_id="projectId"
             )
@@ -349,9 +349,9 @@ class ReportGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codebuild as interfaces_aws_codebuild
+            from aws_cdk.interfaces import aws_codebuild as interfaces_codebuild
             
-            report_group_reference = interfaces_aws_codebuild.ReportGroupReference(
+            report_group_reference = interfaces_codebuild.ReportGroupReference(
                 report_group_arn="reportGroupArn",
                 report_group_id="reportGroupId"
             )
@@ -408,9 +408,9 @@ class SourceCredentialReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codebuild as interfaces_aws_codebuild
+            from aws_cdk.interfaces import aws_codebuild as interfaces_codebuild
             
-            source_credential_reference = interfaces_aws_codebuild.SourceCredentialReference(
+            source_credential_reference = interfaces_codebuild.SourceCredentialReference(
                 source_credential_id="sourceCredentialId"
             )
         '''

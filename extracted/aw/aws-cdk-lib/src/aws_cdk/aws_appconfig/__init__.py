@@ -11139,13 +11139,13 @@ class SourcedConfigurationOptions(ConfigurationOptions):
             # The values are placeholders you should change.
             from aws_cdk import aws_appconfig as appconfig
             from aws_cdk import aws_kms as kms
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
             # configuration_source: appconfig.ConfigurationSource
             # deployment_strategy: appconfig.DeploymentStrategy
             # environment: appconfig.Environment
             # key: kms.Key
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             # validator: appconfig.IValidator
             
             sourced_configuration_options = appconfig.SourcedConfigurationOptions(

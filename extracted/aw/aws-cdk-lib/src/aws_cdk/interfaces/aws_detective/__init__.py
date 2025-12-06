@@ -51,9 +51,9 @@ class GraphReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_detective as interfaces_aws_detective
+            from aws_cdk.interfaces import aws_detective as interfaces_detective
             
-            graph_reference = interfaces_aws_detective.GraphReference(
+            graph_reference = interfaces_detective.GraphReference(
                 graph_arn="graphArn"
             )
         '''
@@ -236,9 +236,9 @@ class MemberInvitationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_detective as interfaces_aws_detective
+            from aws_cdk.interfaces import aws_detective as interfaces_detective
             
-            member_invitation_reference = interfaces_aws_detective.MemberInvitationReference(
+            member_invitation_reference = interfaces_detective.MemberInvitationReference(
                 graph_arn="graphArn",
                 member_id="memberId"
             )
@@ -295,9 +295,9 @@ class OrganizationAdminReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_detective as interfaces_aws_detective
+            from aws_cdk.interfaces import aws_detective as interfaces_detective
             
-            organization_admin_reference = interfaces_aws_detective.OrganizationAdminReference(
+            organization_admin_reference = interfaces_detective.OrganizationAdminReference(
                 account_id="accountId"
             )
         '''

@@ -366,6 +366,9 @@ class CfnTable(
                 min_snapshots_to_keep=123,
                 status="status"
             ),
+            storage_class_configuration=s3tables.CfnTable.StorageClassConfigurationProperty(
+                storage_class="storageClass"
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -386,6 +389,7 @@ class CfnTable(
         compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.CompactionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.IcebergMetadataProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.SnapshotManagementProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTable.StorageClassConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         without_metadata: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -400,6 +404,7 @@ class CfnTable(
         :param compaction: Contains details about the compaction settings for an Iceberg table.
         :param iceberg_metadata: Contains details about the metadata for an Iceberg table.
         :param snapshot_management: Contains details about the Iceberg snapshot management settings for the table.
+        :param storage_class_configuration: Specifies storage class settings for the table.
         :param tags: User tags (key-value pairs) to associate with the table.
         :param without_metadata: Indicates that you don't want to specify a schema for the table. This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
         '''
@@ -415,6 +420,7 @@ class CfnTable(
             compaction=compaction,
             iceberg_metadata=iceberg_metadata,
             snapshot_management=snapshot_management,
+            storage_class_configuration=storage_class_configuration,
             tags=tags,
             without_metadata=without_metadata,
         )
@@ -623,6 +629,24 @@ class CfnTable(
             type_hints = typing.get_type_hints(_typecheckingstub__c6c432f4785ee47d59f072204756d42650b9fc3dd3e85a79139ab4f11fb72a43)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "snapshotManagement", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="storageClassConfiguration")
+    def storage_class_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StorageClassConfigurationProperty"]]:
+        '''Specifies storage class settings for the table.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StorageClassConfigurationProperty"]], jsii.get(self, "storageClassConfiguration"))
+
+    @storage_class_configuration.setter
+    def storage_class_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTable.StorageClassConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ea3c2d362d15c7224a3738a3840e46d5cbefdc7e92912f6cd5b11579c5ccede3)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageClassConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1035,6 +1059,61 @@ class CfnTable(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3tables.CfnTable.StorageClassConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"storage_class": "storageClass"},
+    )
+    class StorageClassConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            storage_class: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies storage class settings for the table.
+
+            :param storage_class: The storage class for the table.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-table-storageclassconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3tables as s3tables
+                
+                storage_class_configuration_property = s3tables.CfnTable.StorageClassConfigurationProperty(
+                    storage_class="storageClass"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__563bcef7a3325307b864d89faec4254d09e33cd9621ad501254550469894b861)
+                check_type(argname="argument storage_class", value=storage_class, expected_type=type_hints["storage_class"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if storage_class is not None:
+                self._values["storage_class"] = storage_class
+
+        @builtins.property
+        def storage_class(self) -> typing.Optional[builtins.str]:
+            '''The storage class for the table.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-table-storageclassconfiguration.html#cfn-s3tables-table-storageclassconfiguration-storageclass
+            '''
+            result = self._values.get("storage_class")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StorageClassConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
 
 @jsii.implements(_IInspectable_c2943556, _ITableBucketRef_26c8a832, _ITaggableV2_4e6798f8)
 class CfnTableBucket(
@@ -1077,6 +1156,9 @@ class CfnTableBucket(
             metrics_configuration=s3tables.CfnTableBucket.MetricsConfigurationProperty(
                 status="status"
             ),
+            storage_class_configuration=s3tables.CfnTableBucket.StorageClassConfigurationProperty(
+                storage_class="storageClass"
+            ),
             tags=[CfnTag(
                 key="key",
                 value="value"
@@ -1097,6 +1179,7 @@ class CfnTableBucket(
         table_bucket_name: builtins.str,
         encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.EncryptionConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.MetricsConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.StorageClassConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnTableBucket.UnreferencedFileRemovalProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1107,6 +1190,7 @@ class CfnTableBucket(
         :param table_bucket_name: The name for the table bucket.
         :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
         :param metrics_configuration: Settings governing the Metric configuration for the table bucket.
+        :param storage_class_configuration: Specifies storage class settings for the table bucket.
         :param tags: User tags (key-value pairs) to associate with the table bucket.
         :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
         '''
@@ -1118,6 +1202,7 @@ class CfnTableBucket(
             table_bucket_name=table_bucket_name,
             encryption_configuration=encryption_configuration,
             metrics_configuration=metrics_configuration,
+            storage_class_configuration=storage_class_configuration,
             tags=tags,
             unreferenced_file_removal=unreferenced_file_removal,
         )
@@ -1251,6 +1336,24 @@ class CfnTableBucket(
             type_hints = typing.get_type_hints(_typecheckingstub__31b7ae51d65703ba2d4aa73c08a7a5a34ad19b1ca27dd0de7d23e3e5bc20d595)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "metricsConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="storageClassConfiguration")
+    def storage_class_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.StorageClassConfigurationProperty"]]:
+        '''Specifies storage class settings for the table bucket.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.StorageClassConfigurationProperty"]], jsii.get(self, "storageClassConfiguration"))
+
+    @storage_class_configuration.setter
+    def storage_class_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnTableBucket.StorageClassConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__81704c8fd77fa700477675d5b83302d93072b2e166550281993e154ea1ac1c36)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "storageClassConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="tags")
@@ -1409,6 +1512,61 @@ class CfnTableBucket(
 
         def __repr__(self) -> str:
             return "MetricsConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3tables.CfnTableBucket.StorageClassConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"storage_class": "storageClass"},
+    )
+    class StorageClassConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            storage_class: typing.Optional[builtins.str] = None,
+        ) -> None:
+            '''Specifies storage class settings for the table bucket.
+
+            :param storage_class: The storage class for the table bucket.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-tablebucket-storageclassconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3tables as s3tables
+                
+                storage_class_configuration_property = s3tables.CfnTableBucket.StorageClassConfigurationProperty(
+                    storage_class="storageClass"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__1ccca8ea96b1a2a505f25fdb95f88303626f2373f413d6009bc588849745e54f)
+                check_type(argname="argument storage_class", value=storage_class, expected_type=type_hints["storage_class"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if storage_class is not None:
+                self._values["storage_class"] = storage_class
+
+        @builtins.property
+        def storage_class(self) -> typing.Optional[builtins.str]:
+            '''The storage class for the table bucket.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3tables-tablebucket-storageclassconfiguration.html#cfn-s3tables-tablebucket-storageclassconfiguration-storageclass
+            '''
+            result = self._values.get("storage_class")
+            return typing.cast(typing.Optional[builtins.str], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StorageClassConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -1730,6 +1888,7 @@ class CfnTableBucketPolicyProps:
         "table_bucket_name": "tableBucketName",
         "encryption_configuration": "encryptionConfiguration",
         "metrics_configuration": "metricsConfiguration",
+        "storage_class_configuration": "storageClassConfiguration",
         "tags": "tags",
         "unreferenced_file_removal": "unreferencedFileRemoval",
     },
@@ -1741,6 +1900,7 @@ class CfnTableBucketProps:
         table_bucket_name: builtins.str,
         encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
@@ -1749,6 +1909,7 @@ class CfnTableBucketProps:
         :param table_bucket_name: The name for the table bucket.
         :param encryption_configuration: Configuration specifying how data should be encrypted. This structure defines the encryption algorithm and optional KMS key to be used for server-side encryption.
         :param metrics_configuration: Settings governing the Metric configuration for the table bucket.
+        :param storage_class_configuration: Specifies storage class settings for the table bucket.
         :param tags: User tags (key-value pairs) to associate with the table bucket.
         :param unreferenced_file_removal: The unreferenced file removal settings for your table bucket. Unreferenced file removal identifies and deletes all objects that are not referenced by any table snapshots. For more information, see the `*Amazon S3 User Guide* <https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-table-buckets-maintenance.html>`_ .
 
@@ -1772,6 +1933,9 @@ class CfnTableBucketProps:
                 metrics_configuration=s3tables.CfnTableBucket.MetricsConfigurationProperty(
                     status="status"
                 ),
+                storage_class_configuration=s3tables.CfnTableBucket.StorageClassConfigurationProperty(
+                    storage_class="storageClass"
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -1788,6 +1952,7 @@ class CfnTableBucketProps:
             check_type(argname="argument table_bucket_name", value=table_bucket_name, expected_type=type_hints["table_bucket_name"])
             check_type(argname="argument encryption_configuration", value=encryption_configuration, expected_type=type_hints["encryption_configuration"])
             check_type(argname="argument metrics_configuration", value=metrics_configuration, expected_type=type_hints["metrics_configuration"])
+            check_type(argname="argument storage_class_configuration", value=storage_class_configuration, expected_type=type_hints["storage_class_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument unreferenced_file_removal", value=unreferenced_file_removal, expected_type=type_hints["unreferenced_file_removal"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -1797,6 +1962,8 @@ class CfnTableBucketProps:
             self._values["encryption_configuration"] = encryption_configuration
         if metrics_configuration is not None:
             self._values["metrics_configuration"] = metrics_configuration
+        if storage_class_configuration is not None:
+            self._values["storage_class_configuration"] = storage_class_configuration
         if tags is not None:
             self._values["tags"] = tags
         if unreferenced_file_removal is not None:
@@ -1835,6 +2002,17 @@ class CfnTableBucketProps:
         '''
         result = self._values.get("metrics_configuration")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.MetricsConfigurationProperty]], result)
+
+    @builtins.property
+    def storage_class_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.StorageClassConfigurationProperty]]:
+        '''Specifies storage class settings for the table bucket.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-tablebucket.html#cfn-s3tables-tablebucket-storageclassconfiguration
+        '''
+        result = self._values.get("storage_class_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.StorageClassConfigurationProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2119,6 +2297,7 @@ class CfnTablePolicyProps:
         "compaction": "compaction",
         "iceberg_metadata": "icebergMetadata",
         "snapshot_management": "snapshotManagement",
+        "storage_class_configuration": "storageClassConfiguration",
         "tags": "tags",
         "without_metadata": "withoutMetadata",
     },
@@ -2134,6 +2313,7 @@ class CfnTableProps:
         compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
         without_metadata: typing.Optional[builtins.str] = None,
     ) -> None:
@@ -2146,6 +2326,7 @@ class CfnTableProps:
         :param compaction: Contains details about the compaction settings for an Iceberg table.
         :param iceberg_metadata: Contains details about the metadata for an Iceberg table.
         :param snapshot_management: Contains details about the Iceberg snapshot management settings for the table.
+        :param storage_class_configuration: Specifies storage class settings for the table.
         :param tags: User tags (key-value pairs) to associate with the table.
         :param without_metadata: Indicates that you don't want to specify a schema for the table. This property is mutually exclusive to ``IcebergMetadata`` , and its only possible value is ``Yes`` .
 
@@ -2185,6 +2366,9 @@ class CfnTableProps:
                     min_snapshots_to_keep=123,
                     status="status"
                 ),
+                storage_class_configuration=s3tables.CfnTable.StorageClassConfigurationProperty(
+                    storage_class="storageClass"
+                ),
                 tags=[CfnTag(
                     key="key",
                     value="value"
@@ -2201,6 +2385,7 @@ class CfnTableProps:
             check_type(argname="argument compaction", value=compaction, expected_type=type_hints["compaction"])
             check_type(argname="argument iceberg_metadata", value=iceberg_metadata, expected_type=type_hints["iceberg_metadata"])
             check_type(argname="argument snapshot_management", value=snapshot_management, expected_type=type_hints["snapshot_management"])
+            check_type(argname="argument storage_class_configuration", value=storage_class_configuration, expected_type=type_hints["storage_class_configuration"])
             check_type(argname="argument tags", value=tags, expected_type=type_hints["tags"])
             check_type(argname="argument without_metadata", value=without_metadata, expected_type=type_hints["without_metadata"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -2215,6 +2400,8 @@ class CfnTableProps:
             self._values["iceberg_metadata"] = iceberg_metadata
         if snapshot_management is not None:
             self._values["snapshot_management"] = snapshot_management
+        if storage_class_configuration is not None:
+            self._values["storage_class_configuration"] = storage_class_configuration
         if tags is not None:
             self._values["tags"] = tags
         if without_metadata is not None:
@@ -2292,6 +2479,17 @@ class CfnTableProps:
         '''
         result = self._values.get("snapshot_management")
         return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.SnapshotManagementProperty]], result)
+
+    @builtins.property
+    def storage_class_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.StorageClassConfigurationProperty]]:
+        '''Specifies storage class settings for the table.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-s3tables-table.html#cfn-s3tables-table-storageclassconfiguration
+        '''
+        result = self._values.get("storage_class_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.StorageClassConfigurationProperty]], result)
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
@@ -2399,6 +2597,7 @@ def _typecheckingstub__9cb6d8b27037c33c46017d3b0b00b52a14bbd8c0a922c03aca7fff9e3
     compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     without_metadata: typing.Optional[builtins.str] = None,
 ) -> None:
@@ -2471,6 +2670,12 @@ def _typecheckingstub__c6c432f4785ee47d59f072204756d42650b9fc3dd3e85a79139ab4f11
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__ea3c2d362d15c7224a3738a3840e46d5cbefdc7e92912f6cd5b11579c5ccede3(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTable.StorageClassConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__325161e5105ae7e0c745e5ef4817aaec57d30e105c6645c3b5269abbe859cdf2(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -2523,6 +2728,13 @@ def _typecheckingstub__fa9c2ac7b8956daecf8522166700dd475625d08f131913fda8e014752
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__563bcef7a3325307b864d89faec4254d09e33cd9621ad501254550469894b861(
+    *,
+    storage_class: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__de433918cd34eecbcaab0e81b6a287f71a48dd308c2f4d42e07a0e19ce5af0e2(
     scope: _constructs_77d1e7e8.Construct,
     id: builtins.str,
@@ -2530,6 +2742,7 @@ def _typecheckingstub__de433918cd34eecbcaab0e81b6a287f71a48dd308c2f4d42e07a0e19c
     table_bucket_name: builtins.str,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -2578,6 +2791,12 @@ def _typecheckingstub__31b7ae51d65703ba2d4aa73c08a7a5a34ad19b1ca27dd0de7d23e3e5b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__81704c8fd77fa700477675d5b83302d93072b2e166550281993e154ea1ac1c36(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnTableBucket.StorageClassConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__3bd32e36df516fe785d94d21a1dc923e712becb1b93de4a82fa887f57a6b4823(
     value: typing.Optional[typing.List[_CfnTag_f6864754]],
 ) -> None:
@@ -2601,6 +2820,13 @@ def _typecheckingstub__659e946ab1ee4bc0eb13a519adc57d2cb4431347d47a9e6cb4d4086a8
 def _typecheckingstub__4a462a1fa51e0d85b1c1c751eb482494c139c2d0cdff10d84286172c932d17d6(
     *,
     status: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__1ccca8ea96b1a2a505f25fdb95f88303626f2373f413d6009bc588849745e54f(
+    *,
+    storage_class: typing.Optional[builtins.str] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2667,6 +2893,7 @@ def _typecheckingstub__6fb9342a13c0e9f7b21679814e793d7ccc0964ccfe53bc5e0916676b6
     table_bucket_name: builtins.str,
     encryption_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.EncryptionConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     metrics_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.MetricsConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     unreferenced_file_removal: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTableBucket.UnreferencedFileRemovalProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -2730,6 +2957,7 @@ def _typecheckingstub__6346a05fb3e021dceca566705037999fa06de23c2e117b37dcdd3e468
     compaction: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.CompactionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     iceberg_metadata: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.IcebergMetadataProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     snapshot_management: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.SnapshotManagementProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_class_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnTable.StorageClassConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     tags: typing.Optional[typing.Sequence[typing.Union[_CfnTag_f6864754, typing.Dict[builtins.str, typing.Any]]]] = None,
     without_metadata: typing.Optional[builtins.str] = None,
 ) -> None:

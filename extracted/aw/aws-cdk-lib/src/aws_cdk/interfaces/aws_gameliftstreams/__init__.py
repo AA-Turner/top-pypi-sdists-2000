@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gameliftstreams as interfaces_aws_gameliftstreams
+            from aws_cdk.interfaces import aws_gameliftstreams as interfaces_gameliftstreams
             
-            application_reference = interfaces_aws_gameliftstreams.ApplicationReference(
+            application_reference = interfaces_gameliftstreams.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''
@@ -190,9 +190,9 @@ class StreamGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gameliftstreams as interfaces_aws_gameliftstreams
+            from aws_cdk.interfaces import aws_gameliftstreams as interfaces_gameliftstreams
             
-            stream_group_reference = interfaces_aws_gameliftstreams.StreamGroupReference(
+            stream_group_reference = interfaces_gameliftstreams.StreamGroupReference(
                 stream_group_arn="streamGroupArn"
             )
         '''

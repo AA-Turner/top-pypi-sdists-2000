@@ -102,9 +102,9 @@ class RepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codecommit as interfaces_aws_codecommit
+            from aws_cdk.interfaces import aws_codecommit as interfaces_codecommit
             
-            repository_reference = interfaces_aws_codecommit.RepositoryReference(
+            repository_reference = interfaces_codecommit.RepositoryReference(
                 repository_arn="repositoryArn",
                 repository_id="repositoryId"
             )

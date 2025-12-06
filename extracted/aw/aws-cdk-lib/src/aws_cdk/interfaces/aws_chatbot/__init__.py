@@ -51,9 +51,9 @@ class CustomActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_chatbot as interfaces_aws_chatbot
+            from aws_cdk.interfaces import aws_chatbot as interfaces_chatbot
             
-            custom_action_reference = interfaces_aws_chatbot.CustomActionReference(
+            custom_action_reference = interfaces_chatbot.CustomActionReference(
                 custom_action_arn="customActionArn"
             )
         '''
@@ -249,9 +249,9 @@ class MicrosoftTeamsChannelConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_chatbot as interfaces_aws_chatbot
+            from aws_cdk.interfaces import aws_chatbot as interfaces_chatbot
             
-            microsoft_teams_channel_configuration_reference = interfaces_aws_chatbot.MicrosoftTeamsChannelConfigurationReference(
+            microsoft_teams_channel_configuration_reference = interfaces_chatbot.MicrosoftTeamsChannelConfigurationReference(
                 microsoft_teams_channel_configuration_arn="microsoftTeamsChannelConfigurationArn"
             )
         '''
@@ -298,9 +298,9 @@ class SlackChannelConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_chatbot as interfaces_aws_chatbot
+            from aws_cdk.interfaces import aws_chatbot as interfaces_chatbot
             
-            slack_channel_configuration_reference = interfaces_aws_chatbot.SlackChannelConfigurationReference(
+            slack_channel_configuration_reference = interfaces_chatbot.SlackChannelConfigurationReference(
                 slack_channel_configuration_arn="slackChannelConfigurationArn"
             )
         '''

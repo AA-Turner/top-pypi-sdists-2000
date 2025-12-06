@@ -51,9 +51,9 @@ class CapacityManagerDataExportReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            capacity_manager_data_export_reference = interfaces_aws_ec2.CapacityManagerDataExportReference(
+            capacity_manager_data_export_reference = interfaces_ec2.CapacityManagerDataExportReference(
                 capacity_manager_data_export_id="capacityManagerDataExportId"
             )
         '''
@@ -100,9 +100,9 @@ class CapacityReservationFleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            capacity_reservation_fleet_reference = interfaces_aws_ec2.CapacityReservationFleetReference(
+            capacity_reservation_fleet_reference = interfaces_ec2.CapacityReservationFleetReference(
                 capacity_reservation_fleet_id="capacityReservationFleetId"
             )
         '''
@@ -158,9 +158,9 @@ class CapacityReservationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            capacity_reservation_reference = interfaces_aws_ec2.CapacityReservationReference(
+            capacity_reservation_reference = interfaces_ec2.CapacityReservationReference(
                 capacity_reservation_arn="capacityReservationArn",
                 capacity_reservation_id="capacityReservationId"
             )
@@ -217,9 +217,9 @@ class CarrierGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            carrier_gateway_reference = interfaces_aws_ec2.CarrierGatewayReference(
+            carrier_gateway_reference = interfaces_ec2.CarrierGatewayReference(
                 carrier_gateway_id="carrierGatewayId"
             )
         '''
@@ -266,9 +266,9 @@ class ClientVpnAuthorizationRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            client_vpn_authorization_rule_reference = interfaces_aws_ec2.ClientVpnAuthorizationRuleReference(
+            client_vpn_authorization_rule_reference = interfaces_ec2.ClientVpnAuthorizationRuleReference(
                 client_vpn_authorization_rule_id="clientVpnAuthorizationRuleId"
             )
         '''
@@ -315,9 +315,9 @@ class ClientVpnEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            client_vpn_endpoint_reference = interfaces_aws_ec2.ClientVpnEndpointReference(
+            client_vpn_endpoint_reference = interfaces_ec2.ClientVpnEndpointReference(
                 client_vpn_endpoint_id="clientVpnEndpointId"
             )
         '''
@@ -364,9 +364,9 @@ class ClientVpnRouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            client_vpn_route_reference = interfaces_aws_ec2.ClientVpnRouteReference(
+            client_vpn_route_reference = interfaces_ec2.ClientVpnRouteReference(
                 client_vpn_route_id="clientVpnRouteId"
             )
         '''
@@ -419,9 +419,9 @@ class ClientVpnTargetNetworkAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            client_vpn_target_network_association_reference = interfaces_aws_ec2.ClientVpnTargetNetworkAssociationReference(
+            client_vpn_target_network_association_reference = interfaces_ec2.ClientVpnTargetNetworkAssociationReference(
                 client_vpn_target_network_association_id="clientVpnTargetNetworkAssociationId"
             )
         '''
@@ -468,9 +468,9 @@ class CustomerGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            customer_gateway_reference = interfaces_aws_ec2.CustomerGatewayReference(
+            customer_gateway_reference = interfaces_ec2.CustomerGatewayReference(
                 customer_gateway_id="customerGatewayId"
             )
         '''
@@ -517,9 +517,9 @@ class DHCPOptionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            d_hCPOptions_reference = interfaces_aws_ec2.DHCPOptionsReference(
+            d_hCPOptions_reference = interfaces_ec2.DHCPOptionsReference(
                 dhcp_options_id="dhcpOptionsId"
             )
         '''
@@ -566,9 +566,9 @@ class EC2FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            e_c2_fleet_reference = interfaces_aws_ec2.EC2FleetReference(
+            e_c2_fleet_reference = interfaces_ec2.EC2FleetReference(
                 fleet_id="fleetId"
             )
         '''
@@ -615,9 +615,9 @@ class EIPAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            e_iPAssociation_reference = interfaces_aws_ec2.EIPAssociationReference(
+            e_iPAssociation_reference = interfaces_ec2.EIPAssociationReference(
                 eip_association_id="eipAssociationId"
             )
         '''
@@ -665,9 +665,9 @@ class EIPReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            e_iPReference = interfaces_aws_ec2.EIPReference(
+            e_iPReference = interfaces_ec2.EIPReference(
                 allocation_id="allocationId",
                 public_ip="publicIp"
             )
@@ -724,9 +724,9 @@ class EgressOnlyInternetGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            egress_only_internet_gateway_reference = interfaces_aws_ec2.EgressOnlyInternetGatewayReference(
+            egress_only_internet_gateway_reference = interfaces_ec2.EgressOnlyInternetGatewayReference(
                 egress_only_internet_gateway_id="egressOnlyInternetGatewayId"
             )
         '''
@@ -779,9 +779,9 @@ class EnclaveCertificateIamRoleAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            enclave_certificate_iam_role_association_reference = interfaces_aws_ec2.EnclaveCertificateIamRoleAssociationReference(
+            enclave_certificate_iam_role_association_reference = interfaces_ec2.EnclaveCertificateIamRoleAssociationReference(
                 certificate_arn="certificateArn",
                 role_arn="roleArn"
             )
@@ -838,9 +838,9 @@ class FlowLogReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            flow_log_reference = interfaces_aws_ec2.FlowLogReference(
+            flow_log_reference = interfaces_ec2.FlowLogReference(
                 flow_log_id="flowLogId"
             )
         '''
@@ -887,9 +887,9 @@ class GatewayRouteTableAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            gateway_route_table_association_reference = interfaces_aws_ec2.GatewayRouteTableAssociationReference(
+            gateway_route_table_association_reference = interfaces_ec2.GatewayRouteTableAssociationReference(
                 gateway_id="gatewayId"
             )
         '''
@@ -936,9 +936,9 @@ class HostReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            host_reference = interfaces_aws_ec2.HostReference(
+            host_reference = interfaces_ec2.HostReference(
                 host_id="hostId"
             )
         '''
@@ -3241,7 +3241,7 @@ class IPAMAllocationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMAllocation_reference = {
                 "cidr": "cidr",
@@ -3316,7 +3316,7 @@ class IPAMPoolCidrReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMPool_cidr_reference = {
                 "ipam_pool_cidr_id": "ipamPoolCidrId",
@@ -3381,7 +3381,7 @@ class IPAMPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMPool_reference = {
                 "ipam_pool_arn": "ipamPoolArn",
@@ -3441,7 +3441,7 @@ class IPAMReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMReference = {
                 "ipam_arn": "ipamArn",
@@ -3509,7 +3509,7 @@ class IPAMResourceDiscoveryAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMResource_discovery_association_reference = {
                 "ipam_resource_discovery_association_arn": "ipamResourceDiscoveryAssociationArn",
@@ -3577,7 +3577,7 @@ class IPAMResourceDiscoveryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMResource_discovery_reference = {
                 "ipam_resource_discovery_arn": "ipamResourceDiscoveryArn",
@@ -3642,7 +3642,7 @@ class IPAMScopeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
             i_pAMScope_reference = {
                 "ipam_scope_arn": "ipamScopeArn",
@@ -6615,9 +6615,9 @@ class InstanceConnectEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            instance_connect_endpoint_reference = interfaces_aws_ec2.InstanceConnectEndpointReference(
+            instance_connect_endpoint_reference = interfaces_ec2.InstanceConnectEndpointReference(
                 instance_connect_endpoint_id="instanceConnectEndpointId"
             )
         '''
@@ -6664,9 +6664,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            instance_reference = interfaces_aws_ec2.InstanceReference(
+            instance_reference = interfaces_ec2.InstanceReference(
                 instance_id="instanceId"
             )
         '''
@@ -6713,9 +6713,9 @@ class InternetGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            internet_gateway_reference = interfaces_aws_ec2.InternetGatewayReference(
+            internet_gateway_reference = interfaces_ec2.InternetGatewayReference(
                 internet_gateway_id="internetGatewayId"
             )
         '''
@@ -6762,9 +6762,9 @@ class IpPoolRouteTableAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            ip_pool_route_table_association_reference = interfaces_aws_ec2.IpPoolRouteTableAssociationReference(
+            ip_pool_route_table_association_reference = interfaces_ec2.IpPoolRouteTableAssociationReference(
                 association_id="associationId"
             )
         '''
@@ -6811,9 +6811,9 @@ class KeyPairReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            key_pair_reference = interfaces_aws_ec2.KeyPairReference(
+            key_pair_reference = interfaces_ec2.KeyPairReference(
                 key_name="keyName"
             )
         '''
@@ -6860,9 +6860,9 @@ class LaunchTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            launch_template_reference = interfaces_aws_ec2.LaunchTemplateReference(
+            launch_template_reference = interfaces_ec2.LaunchTemplateReference(
                 launch_template_id="launchTemplateId"
             )
         '''
@@ -6918,9 +6918,9 @@ class LocalGatewayRouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_route_reference = interfaces_aws_ec2.LocalGatewayRouteReference(
+            local_gateway_route_reference = interfaces_ec2.LocalGatewayRouteReference(
                 destination_cidr_block="destinationCidrBlock",
                 local_gateway_route_table_id="localGatewayRouteTableId"
             )
@@ -6986,9 +6986,9 @@ class LocalGatewayRouteTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_route_table_reference = interfaces_aws_ec2.LocalGatewayRouteTableReference(
+            local_gateway_route_table_reference = interfaces_ec2.LocalGatewayRouteTableReference(
                 local_gateway_route_table_arn="localGatewayRouteTableArn",
                 local_gateway_route_table_id="localGatewayRouteTableId"
             )
@@ -7051,9 +7051,9 @@ class LocalGatewayRouteTableVPCAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_route_table_vPCAssociation_reference = interfaces_aws_ec2.LocalGatewayRouteTableVPCAssociationReference(
+            local_gateway_route_table_vPCAssociation_reference = interfaces_ec2.LocalGatewayRouteTableVPCAssociationReference(
                 local_gateway_route_table_vpc_association_id="localGatewayRouteTableVpcAssociationId"
             )
         '''
@@ -7106,9 +7106,9 @@ class LocalGatewayRouteTableVirtualInterfaceGroupAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_route_table_virtual_interface_group_association_reference = interfaces_aws_ec2.LocalGatewayRouteTableVirtualInterfaceGroupAssociationReference(
+            local_gateway_route_table_virtual_interface_group_association_reference = interfaces_ec2.LocalGatewayRouteTableVirtualInterfaceGroupAssociationReference(
                 local_gateway_route_table_virtual_interface_group_association_id="localGatewayRouteTableVirtualInterfaceGroupAssociationId"
             )
         '''
@@ -7166,9 +7166,9 @@ class LocalGatewayVirtualInterfaceGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_virtual_interface_group_reference = interfaces_aws_ec2.LocalGatewayVirtualInterfaceGroupReference(
+            local_gateway_virtual_interface_group_reference = interfaces_ec2.LocalGatewayVirtualInterfaceGroupReference(
                 local_gateway_virtual_interface_group_arn="localGatewayVirtualInterfaceGroupArn",
                 local_gateway_virtual_interface_group_id="localGatewayVirtualInterfaceGroupId"
             )
@@ -7227,9 +7227,9 @@ class LocalGatewayVirtualInterfaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            local_gateway_virtual_interface_reference = interfaces_aws_ec2.LocalGatewayVirtualInterfaceReference(
+            local_gateway_virtual_interface_reference = interfaces_ec2.LocalGatewayVirtualInterfaceReference(
                 local_gateway_virtual_interface_id="localGatewayVirtualInterfaceId"
             )
         '''
@@ -7276,9 +7276,9 @@ class NatGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            nat_gateway_reference = interfaces_aws_ec2.NatGatewayReference(
+            nat_gateway_reference = interfaces_ec2.NatGatewayReference(
                 nat_gateway_id="natGatewayId"
             )
         '''
@@ -7325,9 +7325,9 @@ class NetworkAclEntryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_acl_entry_reference = interfaces_aws_ec2.NetworkAclEntryReference(
+            network_acl_entry_reference = interfaces_ec2.NetworkAclEntryReference(
                 network_acl_entry_id="networkAclEntryId"
             )
         '''
@@ -7374,9 +7374,9 @@ class NetworkAclReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_acl_reference = interfaces_aws_ec2.NetworkAclReference(
+            network_acl_reference = interfaces_ec2.NetworkAclReference(
                 network_acl_id="networkAclId"
             )
         '''
@@ -7432,9 +7432,9 @@ class NetworkInsightsAccessScopeAnalysisReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_insights_access_scope_analysis_reference = interfaces_aws_ec2.NetworkInsightsAccessScopeAnalysisReference(
+            network_insights_access_scope_analysis_reference = interfaces_ec2.NetworkInsightsAccessScopeAnalysisReference(
                 network_insights_access_scope_analysis_arn="networkInsightsAccessScopeAnalysisArn",
                 network_insights_access_scope_analysis_id="networkInsightsAccessScopeAnalysisId"
             )
@@ -7500,9 +7500,9 @@ class NetworkInsightsAccessScopeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_insights_access_scope_reference = interfaces_aws_ec2.NetworkInsightsAccessScopeReference(
+            network_insights_access_scope_reference = interfaces_ec2.NetworkInsightsAccessScopeReference(
                 network_insights_access_scope_arn="networkInsightsAccessScopeArn",
                 network_insights_access_scope_id="networkInsightsAccessScopeId"
             )
@@ -7568,9 +7568,9 @@ class NetworkInsightsAnalysisReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_insights_analysis_reference = interfaces_aws_ec2.NetworkInsightsAnalysisReference(
+            network_insights_analysis_reference = interfaces_ec2.NetworkInsightsAnalysisReference(
                 network_insights_analysis_arn="networkInsightsAnalysisArn",
                 network_insights_analysis_id="networkInsightsAnalysisId"
             )
@@ -7636,9 +7636,9 @@ class NetworkInsightsPathReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_insights_path_reference = interfaces_aws_ec2.NetworkInsightsPathReference(
+            network_insights_path_reference = interfaces_ec2.NetworkInsightsPathReference(
                 network_insights_path_arn="networkInsightsPathArn",
                 network_insights_path_id="networkInsightsPathId"
             )
@@ -7695,9 +7695,9 @@ class NetworkInterfaceAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_interface_attachment_reference = interfaces_aws_ec2.NetworkInterfaceAttachmentReference(
+            network_interface_attachment_reference = interfaces_ec2.NetworkInterfaceAttachmentReference(
                 attachment_id="attachmentId"
             )
         '''
@@ -7744,9 +7744,9 @@ class NetworkInterfacePermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_interface_permission_reference = interfaces_aws_ec2.NetworkInterfacePermissionReference(
+            network_interface_permission_reference = interfaces_ec2.NetworkInterfacePermissionReference(
                 network_interface_permission_id="networkInterfacePermissionId"
             )
         '''
@@ -7793,9 +7793,9 @@ class NetworkInterfaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_interface_reference = interfaces_aws_ec2.NetworkInterfaceReference(
+            network_interface_reference = interfaces_ec2.NetworkInterfaceReference(
                 network_interface_id="networkInterfaceId"
             )
         '''
@@ -7857,9 +7857,9 @@ class NetworkPerformanceMetricSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            network_performance_metric_subscription_reference = interfaces_aws_ec2.NetworkPerformanceMetricSubscriptionReference(
+            network_performance_metric_subscription_reference = interfaces_ec2.NetworkPerformanceMetricSubscriptionReference(
                 destination="destination",
                 metric="metric",
                 source="source",
@@ -7936,9 +7936,9 @@ class PlacementGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            placement_group_reference = interfaces_aws_ec2.PlacementGroupReference(
+            placement_group_reference = interfaces_ec2.PlacementGroupReference(
                 group_name="groupName"
             )
         '''
@@ -7994,9 +7994,9 @@ class PrefixListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            prefix_list_reference = interfaces_aws_ec2.PrefixListReference(
+            prefix_list_reference = interfaces_ec2.PrefixListReference(
                 prefix_list_arn="prefixListArn",
                 prefix_list_id="prefixListId"
             )
@@ -8059,9 +8059,9 @@ class RouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_reference = interfaces_aws_ec2.RouteReference(
+            route_reference = interfaces_ec2.RouteReference(
                 cidr_block="cidrBlock",
                 route_table_id="routeTableId"
             )
@@ -8119,9 +8119,9 @@ class RouteServerAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_server_association_reference = interfaces_aws_ec2.RouteServerAssociationReference(
+            route_server_association_reference = interfaces_ec2.RouteServerAssociationReference(
                 route_server_id="routeServerId",
                 vpc_id="vpcId"
             )
@@ -8187,9 +8187,9 @@ class RouteServerEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_server_endpoint_reference = interfaces_aws_ec2.RouteServerEndpointReference(
+            route_server_endpoint_reference = interfaces_ec2.RouteServerEndpointReference(
                 route_server_endpoint_arn="routeServerEndpointArn",
                 route_server_endpoint_id="routeServerEndpointId"
             )
@@ -8255,9 +8255,9 @@ class RouteServerPeerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_server_peer_reference = interfaces_aws_ec2.RouteServerPeerReference(
+            route_server_peer_reference = interfaces_ec2.RouteServerPeerReference(
                 route_server_peer_arn="routeServerPeerArn",
                 route_server_peer_id="routeServerPeerId"
             )
@@ -8323,9 +8323,9 @@ class RouteServerPropagationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_server_propagation_reference = interfaces_aws_ec2.RouteServerPropagationReference(
+            route_server_propagation_reference = interfaces_ec2.RouteServerPropagationReference(
                 route_server_id="routeServerId",
                 route_table_id="routeTableId"
             )
@@ -8391,9 +8391,9 @@ class RouteServerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_server_reference = interfaces_aws_ec2.RouteServerReference(
+            route_server_reference = interfaces_ec2.RouteServerReference(
                 route_server_arn="routeServerArn",
                 route_server_id="routeServerId"
             )
@@ -8450,9 +8450,9 @@ class RouteTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            route_table_reference = interfaces_aws_ec2.RouteTableReference(
+            route_table_reference = interfaces_ec2.RouteTableReference(
                 route_table_id="routeTableId"
             )
         '''
@@ -8499,9 +8499,9 @@ class SecurityGroupEgressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            security_group_egress_reference = interfaces_aws_ec2.SecurityGroupEgressReference(
+            security_group_egress_reference = interfaces_ec2.SecurityGroupEgressReference(
                 security_group_egress_id="securityGroupEgressId"
             )
         '''
@@ -8548,9 +8548,9 @@ class SecurityGroupIngressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            security_group_ingress_reference = interfaces_aws_ec2.SecurityGroupIngressReference(
+            security_group_ingress_reference = interfaces_ec2.SecurityGroupIngressReference(
                 security_group_ingress_id="securityGroupIngressId"
             )
         '''
@@ -8597,9 +8597,9 @@ class SecurityGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            security_group_reference = interfaces_aws_ec2.SecurityGroupReference(
+            security_group_reference = interfaces_ec2.SecurityGroupReference(
                 security_group_id="securityGroupId"
             )
         '''
@@ -8647,9 +8647,9 @@ class SecurityGroupVpcAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            security_group_vpc_association_reference = interfaces_aws_ec2.SecurityGroupVpcAssociationReference(
+            security_group_vpc_association_reference = interfaces_ec2.SecurityGroupVpcAssociationReference(
                 group_id="groupId",
                 vpc_id="vpcId"
             )
@@ -8706,9 +8706,9 @@ class SnapshotBlockPublicAccessReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            snapshot_block_public_access_reference = interfaces_aws_ec2.SnapshotBlockPublicAccessReference(
+            snapshot_block_public_access_reference = interfaces_ec2.SnapshotBlockPublicAccessReference(
                 account_id="accountId"
             )
         '''
@@ -8755,9 +8755,9 @@ class SpotFleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            spot_fleet_reference = interfaces_aws_ec2.SpotFleetReference(
+            spot_fleet_reference = interfaces_ec2.SpotFleetReference(
                 spot_fleet_id="spotFleetId"
             )
         '''
@@ -8804,9 +8804,9 @@ class SubnetCidrBlockReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            subnet_cidr_block_reference = interfaces_aws_ec2.SubnetCidrBlockReference(
+            subnet_cidr_block_reference = interfaces_ec2.SubnetCidrBlockReference(
                 subnet_cidr_block_id="subnetCidrBlockId"
             )
         '''
@@ -8853,9 +8853,9 @@ class SubnetNetworkAclAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            subnet_network_acl_association_reference = interfaces_aws_ec2.SubnetNetworkAclAssociationReference(
+            subnet_network_acl_association_reference = interfaces_ec2.SubnetNetworkAclAssociationReference(
                 association_id="associationId"
             )
         '''
@@ -8902,9 +8902,9 @@ class SubnetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            subnet_reference = interfaces_aws_ec2.SubnetReference(
+            subnet_reference = interfaces_ec2.SubnetReference(
                 subnet_id="subnetId"
             )
         '''
@@ -8953,9 +8953,9 @@ class SubnetRouteTableAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            subnet_route_table_association_reference = interfaces_aws_ec2.SubnetRouteTableAssociationReference(
+            subnet_route_table_association_reference = interfaces_ec2.SubnetRouteTableAssociationReference(
                 subnet_route_table_association_id="subnetRouteTableAssociationId"
             )
         '''
@@ -9002,9 +9002,9 @@ class TrafficMirrorFilterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            traffic_mirror_filter_reference = interfaces_aws_ec2.TrafficMirrorFilterReference(
+            traffic_mirror_filter_reference = interfaces_ec2.TrafficMirrorFilterReference(
                 traffic_mirror_filter_id="trafficMirrorFilterId"
             )
         '''
@@ -9051,9 +9051,9 @@ class TrafficMirrorFilterRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            traffic_mirror_filter_rule_reference = interfaces_aws_ec2.TrafficMirrorFilterRuleReference(
+            traffic_mirror_filter_rule_reference = interfaces_ec2.TrafficMirrorFilterRuleReference(
                 traffic_mirror_filter_rule_id="trafficMirrorFilterRuleId"
             )
         '''
@@ -9100,9 +9100,9 @@ class TrafficMirrorSessionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            traffic_mirror_session_reference = interfaces_aws_ec2.TrafficMirrorSessionReference(
+            traffic_mirror_session_reference = interfaces_ec2.TrafficMirrorSessionReference(
                 traffic_mirror_session_id="trafficMirrorSessionId"
             )
         '''
@@ -9149,9 +9149,9 @@ class TrafficMirrorTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            traffic_mirror_target_reference = interfaces_aws_ec2.TrafficMirrorTargetReference(
+            traffic_mirror_target_reference = interfaces_ec2.TrafficMirrorTargetReference(
                 traffic_mirror_target_id="trafficMirrorTargetId"
             )
         '''
@@ -9198,9 +9198,9 @@ class TransitGatewayAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_attachment_reference = interfaces_aws_ec2.TransitGatewayAttachmentReference(
+            transit_gateway_attachment_reference = interfaces_ec2.TransitGatewayAttachmentReference(
                 transit_gateway_attachment_id="transitGatewayAttachmentId"
             )
         '''
@@ -9247,9 +9247,9 @@ class TransitGatewayConnectPeerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_connect_peer_reference = interfaces_aws_ec2.TransitGatewayConnectPeerReference(
+            transit_gateway_connect_peer_reference = interfaces_ec2.TransitGatewayConnectPeerReference(
                 transit_gateway_connect_peer_id="transitGatewayConnectPeerId"
             )
         '''
@@ -9296,9 +9296,9 @@ class TransitGatewayConnectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_connect_reference = interfaces_aws_ec2.TransitGatewayConnectReference(
+            transit_gateway_connect_reference = interfaces_ec2.TransitGatewayConnectReference(
                 transit_gateway_attachment_id="transitGatewayAttachmentId"
             )
         '''
@@ -9354,9 +9354,9 @@ class TransitGatewayMeteringPolicyEntryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_metering_policy_entry_reference = interfaces_aws_ec2.TransitGatewayMeteringPolicyEntryReference(
+            transit_gateway_metering_policy_entry_reference = interfaces_ec2.TransitGatewayMeteringPolicyEntryReference(
                 policy_rule_number="policyRuleNumber",
                 transit_gateway_metering_policy_id="transitGatewayMeteringPolicyId"
             )
@@ -9415,9 +9415,9 @@ class TransitGatewayMeteringPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_metering_policy_reference = interfaces_aws_ec2.TransitGatewayMeteringPolicyReference(
+            transit_gateway_metering_policy_reference = interfaces_ec2.TransitGatewayMeteringPolicyReference(
                 transit_gateway_metering_policy_id="transitGatewayMeteringPolicyId"
             )
         '''
@@ -9476,9 +9476,9 @@ class TransitGatewayMulticastDomainAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_multicast_domain_association_reference = interfaces_aws_ec2.TransitGatewayMulticastDomainAssociationReference(
+            transit_gateway_multicast_domain_association_reference = interfaces_ec2.TransitGatewayMulticastDomainAssociationReference(
                 subnet_id="subnetId",
                 transit_gateway_attachment_id="transitGatewayAttachmentId",
                 transit_gateway_multicast_domain_id="transitGatewayMulticastDomainId"
@@ -9554,9 +9554,9 @@ class TransitGatewayMulticastDomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_multicast_domain_reference = interfaces_aws_ec2.TransitGatewayMulticastDomainReference(
+            transit_gateway_multicast_domain_reference = interfaces_ec2.TransitGatewayMulticastDomainReference(
                 transit_gateway_multicast_domain_arn="transitGatewayMulticastDomainArn",
                 transit_gateway_multicast_domain_id="transitGatewayMulticastDomainId"
             )
@@ -9625,9 +9625,9 @@ class TransitGatewayMulticastGroupMemberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_multicast_group_member_reference = interfaces_aws_ec2.TransitGatewayMulticastGroupMemberReference(
+            transit_gateway_multicast_group_member_reference = interfaces_ec2.TransitGatewayMulticastGroupMemberReference(
                 group_ip_address="groupIpAddress",
                 network_interface_id="networkInterfaceId",
                 transit_gateway_multicast_domain_id="transitGatewayMulticastDomainId"
@@ -9706,9 +9706,9 @@ class TransitGatewayMulticastGroupSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_multicast_group_source_reference = interfaces_aws_ec2.TransitGatewayMulticastGroupSourceReference(
+            transit_gateway_multicast_group_source_reference = interfaces_ec2.TransitGatewayMulticastGroupSourceReference(
                 group_ip_address="groupIpAddress",
                 network_interface_id="networkInterfaceId",
                 transit_gateway_multicast_domain_id="transitGatewayMulticastDomainId"
@@ -9775,9 +9775,9 @@ class TransitGatewayPeeringAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_peering_attachment_reference = interfaces_aws_ec2.TransitGatewayPeeringAttachmentReference(
+            transit_gateway_peering_attachment_reference = interfaces_ec2.TransitGatewayPeeringAttachmentReference(
                 transit_gateway_attachment_id="transitGatewayAttachmentId"
             )
         '''
@@ -9833,9 +9833,9 @@ class TransitGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_reference = interfaces_aws_ec2.TransitGatewayReference(
+            transit_gateway_reference = interfaces_ec2.TransitGatewayReference(
                 transit_gateway_arn="transitGatewayArn",
                 transit_gateway_id="transitGatewayId"
             )
@@ -9901,9 +9901,9 @@ class TransitGatewayRouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_route_reference = interfaces_aws_ec2.TransitGatewayRouteReference(
+            transit_gateway_route_reference = interfaces_ec2.TransitGatewayRouteReference(
                 destination_cidr_block="destinationCidrBlock",
                 transit_gateway_route_table_id="transitGatewayRouteTableId"
             )
@@ -9969,9 +9969,9 @@ class TransitGatewayRouteTableAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_route_table_association_reference = interfaces_aws_ec2.TransitGatewayRouteTableAssociationReference(
+            transit_gateway_route_table_association_reference = interfaces_ec2.TransitGatewayRouteTableAssociationReference(
                 transit_gateway_attachment_id="transitGatewayAttachmentId",
                 transit_gateway_route_table_id="transitGatewayRouteTableId"
             )
@@ -10037,9 +10037,9 @@ class TransitGatewayRouteTablePropagationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_route_table_propagation_reference = interfaces_aws_ec2.TransitGatewayRouteTablePropagationReference(
+            transit_gateway_route_table_propagation_reference = interfaces_ec2.TransitGatewayRouteTablePropagationReference(
                 transit_gateway_attachment_id="transitGatewayAttachmentId",
                 transit_gateway_route_table_id="transitGatewayRouteTableId"
             )
@@ -10096,9 +10096,9 @@ class TransitGatewayRouteTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_route_table_reference = interfaces_aws_ec2.TransitGatewayRouteTableReference(
+            transit_gateway_route_table_reference = interfaces_ec2.TransitGatewayRouteTableReference(
                 transit_gateway_route_table_id="transitGatewayRouteTableId"
             )
         '''
@@ -10147,9 +10147,9 @@ class TransitGatewayVpcAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            transit_gateway_vpc_attachment_reference = interfaces_aws_ec2.TransitGatewayVpcAttachmentReference(
+            transit_gateway_vpc_attachment_reference = interfaces_ec2.TransitGatewayVpcAttachmentReference(
                 transit_gateway_vpc_attachment_id="transitGatewayVpcAttachmentId"
             )
         '''
@@ -10196,9 +10196,9 @@ class VPCBlockPublicAccessExclusionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCBlock_public_access_exclusion_reference = interfaces_aws_ec2.VPCBlockPublicAccessExclusionReference(
+            v_pCBlock_public_access_exclusion_reference = interfaces_ec2.VPCBlockPublicAccessExclusionReference(
                 exclusion_id="exclusionId"
             )
         '''
@@ -10245,9 +10245,9 @@ class VPCBlockPublicAccessOptionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCBlock_public_access_options_reference = interfaces_aws_ec2.VPCBlockPublicAccessOptionsReference(
+            v_pCBlock_public_access_options_reference = interfaces_ec2.VPCBlockPublicAccessOptionsReference(
                 account_id="accountId"
             )
         '''
@@ -10300,9 +10300,9 @@ class VPCCidrBlockReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCCidr_block_reference = interfaces_aws_ec2.VPCCidrBlockReference(
+            v_pCCidr_block_reference = interfaces_ec2.VPCCidrBlockReference(
                 vpc_cidr_block_id="vpcCidrBlockId",
                 vpc_id="vpcId"
             )
@@ -10360,9 +10360,9 @@ class VPCDHCPOptionsAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCDHCPOptions_association_reference = interfaces_aws_ec2.VPCDHCPOptionsAssociationReference(
+            v_pCDHCPOptions_association_reference = interfaces_ec2.VPCDHCPOptionsAssociationReference(
                 dhcp_options_id="dhcpOptionsId",
                 vpc_id="vpcId"
             )
@@ -10419,9 +10419,9 @@ class VPCEncryptionControlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCEncryption_control_reference = interfaces_aws_ec2.VPCEncryptionControlReference(
+            v_pCEncryption_control_reference = interfaces_ec2.VPCEncryptionControlReference(
                 vpc_encryption_control_id="vpcEncryptionControlId"
             )
         '''
@@ -10474,9 +10474,9 @@ class VPCEndpointConnectionNotificationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCEndpoint_connection_notification_reference = interfaces_aws_ec2.VPCEndpointConnectionNotificationReference(
+            v_pCEndpoint_connection_notification_reference = interfaces_ec2.VPCEndpointConnectionNotificationReference(
                 vpc_endpoint_connection_notification_id="vpcEndpointConnectionNotificationId"
             )
         '''
@@ -10523,9 +10523,9 @@ class VPCEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCEndpoint_reference = interfaces_aws_ec2.VPCEndpointReference(
+            v_pCEndpoint_reference = interfaces_ec2.VPCEndpointReference(
                 vpc_endpoint_id="vpcEndpointId"
             )
         '''
@@ -10572,9 +10572,9 @@ class VPCEndpointServicePermissionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCEndpoint_service_permissions_reference = interfaces_aws_ec2.VPCEndpointServicePermissionsReference(
+            v_pCEndpoint_service_permissions_reference = interfaces_ec2.VPCEndpointServicePermissionsReference(
                 service_id="serviceId"
             )
         '''
@@ -10621,9 +10621,9 @@ class VPCEndpointServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCEndpoint_service_reference = interfaces_aws_ec2.VPCEndpointServiceReference(
+            v_pCEndpoint_service_reference = interfaces_ec2.VPCEndpointServiceReference(
                 service_id="serviceId"
             )
         '''
@@ -10671,9 +10671,9 @@ class VPCGatewayAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCGateway_attachment_reference = interfaces_aws_ec2.VPCGatewayAttachmentReference(
+            v_pCGateway_attachment_reference = interfaces_ec2.VPCGatewayAttachmentReference(
                 attachment_type="attachmentType",
                 vpc_id="vpcId"
             )
@@ -10730,9 +10730,9 @@ class VPCPeeringConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCPeering_connection_reference = interfaces_aws_ec2.VPCPeeringConnectionReference(
+            v_pCPeering_connection_reference = interfaces_ec2.VPCPeeringConnectionReference(
                 vpc_peering_connection_id="vpcPeeringConnectionId"
             )
         '''
@@ -10779,9 +10779,9 @@ class VPCReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pCReference = interfaces_aws_ec2.VPCReference(
+            v_pCReference = interfaces_ec2.VPCReference(
                 vpc_id="vpcId"
             )
         '''
@@ -10828,9 +10828,9 @@ class VPNConcentratorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pNConcentrator_reference = interfaces_aws_ec2.VPNConcentratorReference(
+            v_pNConcentrator_reference = interfaces_ec2.VPNConcentratorReference(
                 vpn_concentrator_id="vpnConcentratorId"
             )
         '''
@@ -10877,9 +10877,9 @@ class VPNConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pNConnection_reference = interfaces_aws_ec2.VPNConnectionReference(
+            v_pNConnection_reference = interfaces_ec2.VPNConnectionReference(
                 vpn_connection_id="vpnConnectionId"
             )
         '''
@@ -10935,9 +10935,9 @@ class VPNConnectionRouteReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pNConnection_route_reference = interfaces_aws_ec2.VPNConnectionRouteReference(
+            v_pNConnection_route_reference = interfaces_ec2.VPNConnectionRouteReference(
                 destination_cidr_block="destinationCidrBlock",
                 vpn_connection_id="vpnConnectionId"
             )
@@ -10994,9 +10994,9 @@ class VPNGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pNGateway_reference = interfaces_aws_ec2.VPNGatewayReference(
+            v_pNGateway_reference = interfaces_ec2.VPNGatewayReference(
                 vpn_gateway_id="vpnGatewayId"
             )
         '''
@@ -11043,9 +11043,9 @@ class VPNGatewayRoutePropagationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            v_pNGateway_route_propagation_reference = interfaces_aws_ec2.VPNGatewayRoutePropagationReference(
+            v_pNGateway_route_propagation_reference = interfaces_ec2.VPNGatewayRoutePropagationReference(
                 vpn_gateway_route_propagation_id="vpnGatewayRoutePropagationId"
             )
         '''
@@ -11092,9 +11092,9 @@ class VerifiedAccessEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            verified_access_endpoint_reference = interfaces_aws_ec2.VerifiedAccessEndpointReference(
+            verified_access_endpoint_reference = interfaces_ec2.VerifiedAccessEndpointReference(
                 verified_access_endpoint_id="verifiedAccessEndpointId"
             )
         '''
@@ -11150,9 +11150,9 @@ class VerifiedAccessGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            verified_access_group_reference = interfaces_aws_ec2.VerifiedAccessGroupReference(
+            verified_access_group_reference = interfaces_ec2.VerifiedAccessGroupReference(
                 verified_access_group_arn="verifiedAccessGroupArn",
                 verified_access_group_id="verifiedAccessGroupId"
             )
@@ -11209,9 +11209,9 @@ class VerifiedAccessInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            verified_access_instance_reference = interfaces_aws_ec2.VerifiedAccessInstanceReference(
+            verified_access_instance_reference = interfaces_ec2.VerifiedAccessInstanceReference(
                 verified_access_instance_id="verifiedAccessInstanceId"
             )
         '''
@@ -11260,9 +11260,9 @@ class VerifiedAccessTrustProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            verified_access_trust_provider_reference = interfaces_aws_ec2.VerifiedAccessTrustProviderReference(
+            verified_access_trust_provider_reference = interfaces_ec2.VerifiedAccessTrustProviderReference(
                 verified_access_trust_provider_id="verifiedAccessTrustProviderId"
             )
         '''
@@ -11310,9 +11310,9 @@ class VolumeAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            volume_attachment_reference = interfaces_aws_ec2.VolumeAttachmentReference(
+            volume_attachment_reference = interfaces_ec2.VolumeAttachmentReference(
                 instance_id="instanceId",
                 volume_id="volumeId"
             )
@@ -11369,9 +11369,9 @@ class VolumeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ec2 as interfaces_aws_ec2
+            from aws_cdk.interfaces import aws_ec2 as interfaces_ec2
             
-            volume_reference = interfaces_aws_ec2.VolumeReference(
+            volume_reference = interfaces_ec2.VolumeReference(
                 volume_id="volumeId"
             )
         '''

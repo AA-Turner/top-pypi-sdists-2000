@@ -52,9 +52,9 @@ class APIKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            a_pIKey_reference = interfaces_aws_location.APIKeyReference(
+            a_pIKey_reference = interfaces_location.APIKeyReference(
                 api_key_arn="apiKeyArn",
                 key_name="keyName"
             )
@@ -120,9 +120,9 @@ class GeofenceCollectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            geofence_collection_reference = interfaces_aws_location.GeofenceCollectionReference(
+            geofence_collection_reference = interfaces_location.GeofenceCollectionReference(
                 collection_name="collectionName",
                 geofence_collection_arn="geofenceCollectionArn"
             )
@@ -495,9 +495,9 @@ class MapReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            map_reference = interfaces_aws_location.MapReference(
+            map_reference = interfaces_location.MapReference(
                 map_arn="mapArn",
                 map_name="mapName"
             )
@@ -560,9 +560,9 @@ class PlaceIndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            place_index_reference = interfaces_aws_location.PlaceIndexReference(
+            place_index_reference = interfaces_location.PlaceIndexReference(
                 index_name="indexName",
                 place_index_arn="placeIndexArn"
             )
@@ -628,9 +628,9 @@ class RouteCalculatorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            route_calculator_reference = interfaces_aws_location.RouteCalculatorReference(
+            route_calculator_reference = interfaces_location.RouteCalculatorReference(
                 calculator_name="calculatorName",
                 route_calculator_arn="routeCalculatorArn"
             )
@@ -693,9 +693,9 @@ class TrackerConsumerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            tracker_consumer_reference = interfaces_aws_location.TrackerConsumerReference(
+            tracker_consumer_reference = interfaces_location.TrackerConsumerReference(
                 consumer_arn="consumerArn",
                 tracker_name="trackerName"
             )
@@ -758,9 +758,9 @@ class TrackerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_location as interfaces_aws_location
+            from aws_cdk.interfaces import aws_location as interfaces_location
             
-            tracker_reference = interfaces_aws_location.TrackerReference(
+            tracker_reference = interfaces_location.TrackerReference(
                 tracker_arn="trackerArn",
                 tracker_name="trackerName"
             )

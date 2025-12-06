@@ -51,9 +51,9 @@ class AnomalyDetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aps as interfaces_aws_aps
+            from aws_cdk.interfaces import aws_aps as interfaces_aps
             
-            anomaly_detector_reference = interfaces_aws_aps.AnomalyDetectorReference(
+            anomaly_detector_reference = interfaces_aps.AnomalyDetectorReference(
                 anomaly_detector_arn="anomalyDetectorArn"
             )
         '''
@@ -325,9 +325,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aps as interfaces_aws_aps
+            from aws_cdk.interfaces import aws_aps as interfaces_aps
             
-            resource_policy_reference = interfaces_aws_aps.ResourcePolicyReference(
+            resource_policy_reference = interfaces_aps.ResourcePolicyReference(
                 workspace_arn="workspaceArn"
             )
         '''
@@ -374,9 +374,9 @@ class RuleGroupsNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aps as interfaces_aws_aps
+            from aws_cdk.interfaces import aws_aps as interfaces_aps
             
-            rule_groups_namespace_reference = interfaces_aws_aps.RuleGroupsNamespaceReference(
+            rule_groups_namespace_reference = interfaces_aps.RuleGroupsNamespaceReference(
                 rule_groups_namespace_arn="ruleGroupsNamespaceArn"
             )
         '''
@@ -423,9 +423,9 @@ class ScraperReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aps as interfaces_aws_aps
+            from aws_cdk.interfaces import aws_aps as interfaces_aps
             
-            scraper_reference = interfaces_aws_aps.ScraperReference(
+            scraper_reference = interfaces_aps.ScraperReference(
                 scraper_arn="scraperArn"
             )
         '''
@@ -472,9 +472,9 @@ class WorkspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_aps as interfaces_aws_aps
+            from aws_cdk.interfaces import aws_aps as interfaces_aps
             
-            workspace_reference = interfaces_aws_aps.WorkspaceReference(
+            workspace_reference = interfaces_aps.WorkspaceReference(
                 workspace_arn="workspaceArn"
             )
         '''

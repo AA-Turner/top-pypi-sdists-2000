@@ -51,9 +51,9 @@ class BillingGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_billingconductor as interfaces_aws_billingconductor
+            from aws_cdk.interfaces import aws_billingconductor as interfaces_billingconductor
             
-            billing_group_reference = interfaces_aws_billingconductor.BillingGroupReference(
+            billing_group_reference = interfaces_billingconductor.BillingGroupReference(
                 billing_group_arn="billingGroupArn"
             )
         '''
@@ -100,9 +100,9 @@ class CustomLineItemReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_billingconductor as interfaces_aws_billingconductor
+            from aws_cdk.interfaces import aws_billingconductor as interfaces_billingconductor
             
-            custom_line_item_reference = interfaces_aws_billingconductor.CustomLineItemReference(
+            custom_line_item_reference = interfaces_billingconductor.CustomLineItemReference(
                 custom_line_item_arn="customLineItemArn"
             )
         '''
@@ -337,9 +337,9 @@ class PricingPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_billingconductor as interfaces_aws_billingconductor
+            from aws_cdk.interfaces import aws_billingconductor as interfaces_billingconductor
             
-            pricing_plan_reference = interfaces_aws_billingconductor.PricingPlanReference(
+            pricing_plan_reference = interfaces_billingconductor.PricingPlanReference(
                 pricing_plan_arn="pricingPlanArn"
             )
         '''
@@ -386,9 +386,9 @@ class PricingRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_billingconductor as interfaces_aws_billingconductor
+            from aws_cdk.interfaces import aws_billingconductor as interfaces_billingconductor
             
-            pricing_rule_reference = interfaces_aws_billingconductor.PricingRuleReference(
+            pricing_rule_reference = interfaces_billingconductor.PricingRuleReference(
                 pricing_rule_arn="pricingRuleArn"
             )
         '''

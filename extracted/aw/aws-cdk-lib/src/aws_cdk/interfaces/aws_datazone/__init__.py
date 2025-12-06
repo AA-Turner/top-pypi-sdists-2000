@@ -52,9 +52,9 @@ class ConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            connection_reference = interfaces_aws_datazone.ConnectionReference(
+            connection_reference = interfaces_datazone.ConnectionReference(
                 connection_id="connectionId",
                 domain_id="domainId"
             )
@@ -117,9 +117,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            data_source_reference = interfaces_aws_datazone.DataSourceReference(
+            data_source_reference = interfaces_datazone.DataSourceReference(
                 data_source_id="dataSourceId",
                 domain_id="domainId"
             )
@@ -177,9 +177,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            domain_reference = interfaces_aws_datazone.DomainReference(
+            domain_reference = interfaces_datazone.DomainReference(
                 domain_arn="domainArn",
                 domain_id="domainId"
             )
@@ -242,9 +242,9 @@ class DomainUnitReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            domain_unit_reference = interfaces_aws_datazone.DomainUnitReference(
+            domain_unit_reference = interfaces_datazone.DomainUnitReference(
                 domain_id="domainId",
                 domain_unit_id="domainUnitId"
             )
@@ -313,9 +313,9 @@ class EnvironmentActionsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            environment_actions_reference = interfaces_aws_datazone.EnvironmentActionsReference(
+            environment_actions_reference = interfaces_datazone.EnvironmentActionsReference(
                 domain_id="domainId",
                 environment_actions_id="environmentActionsId",
                 environment_id="environmentId"
@@ -391,9 +391,9 @@ class EnvironmentBlueprintConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            environment_blueprint_configuration_reference = interfaces_aws_datazone.EnvironmentBlueprintConfigurationReference(
+            environment_blueprint_configuration_reference = interfaces_datazone.EnvironmentBlueprintConfigurationReference(
                 domain_id="domainId",
                 environment_blueprint_id="environmentBlueprintId"
             )
@@ -459,9 +459,9 @@ class EnvironmentProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            environment_profile_reference = interfaces_aws_datazone.EnvironmentProfileReference(
+            environment_profile_reference = interfaces_datazone.EnvironmentProfileReference(
                 domain_id="domainId",
                 environment_profile_id="environmentProfileId"
             )
@@ -524,9 +524,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            environment_reference = interfaces_aws_datazone.EnvironmentReference(
+            environment_reference = interfaces_datazone.EnvironmentReference(
                 domain_id="domainId",
                 environment_id="environmentId"
             )
@@ -592,9 +592,9 @@ class FormTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            form_type_reference = interfaces_aws_datazone.FormTypeReference(
+            form_type_reference = interfaces_datazone.FormTypeReference(
                 domain_identifier="domainIdentifier",
                 form_type_identifier="formTypeIdentifier"
             )
@@ -657,9 +657,9 @@ class GroupProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            group_profile_reference = interfaces_aws_datazone.GroupProfileReference(
+            group_profile_reference = interfaces_datazone.GroupProfileReference(
                 domain_id="domainId",
                 group_profile_id="groupProfileId"
             )
@@ -1505,9 +1505,9 @@ class OwnerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            owner_reference = interfaces_aws_datazone.OwnerReference(
+            owner_reference = interfaces_datazone.OwnerReference(
                 domain_identifier="domainIdentifier",
                 entity_identifier="entityIdentifier",
                 entity_type="entityType",
@@ -1612,9 +1612,9 @@ class PolicyGrantReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            policy_grant_reference = interfaces_aws_datazone.PolicyGrantReference(
+            policy_grant_reference = interfaces_datazone.PolicyGrantReference(
                 domain_identifier="domainIdentifier",
                 entity_identifier="entityIdentifier",
                 entity_type="entityType",
@@ -1716,9 +1716,9 @@ class ProjectMembershipReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            project_membership_reference = interfaces_aws_datazone.ProjectMembershipReference(
+            project_membership_reference = interfaces_datazone.ProjectMembershipReference(
                 domain_identifier="domainIdentifier",
                 member_identifier="memberIdentifier",
                 member_identifier_type="memberIdentifierType",
@@ -1801,9 +1801,9 @@ class ProjectProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            project_profile_reference = interfaces_aws_datazone.ProjectProfileReference(
+            project_profile_reference = interfaces_datazone.ProjectProfileReference(
                 domain_identifier="domainIdentifier",
                 identifier="identifier"
             )
@@ -1861,9 +1861,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            project_reference = interfaces_aws_datazone.ProjectReference(
+            project_reference = interfaces_datazone.ProjectReference(
                 domain_id="domainId",
                 project_id="projectId"
             )
@@ -1932,9 +1932,9 @@ class SubscriptionTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            subscription_target_reference = interfaces_aws_datazone.SubscriptionTargetReference(
+            subscription_target_reference = interfaces_datazone.SubscriptionTargetReference(
                 domain_id="domainId",
                 environment_id="environmentId",
                 subscription_target_id="subscriptionTargetId"
@@ -2007,9 +2007,9 @@ class UserProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datazone as interfaces_aws_datazone
+            from aws_cdk.interfaces import aws_datazone as interfaces_datazone
             
-            user_profile_reference = interfaces_aws_datazone.UserProfileReference(
+            user_profile_reference = interfaces_datazone.UserProfileReference(
                 domain_id="domainId",
                 user_profile_id="userProfileId"
             )

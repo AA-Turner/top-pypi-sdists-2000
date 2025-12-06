@@ -51,9 +51,9 @@ class ComputeEnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            compute_environment_reference = interfaces_aws_batch.ComputeEnvironmentReference(
+            compute_environment_reference = interfaces_batch.ComputeEnvironmentReference(
                 compute_environment_arn="computeEnvironmentArn"
             )
         '''
@@ -100,9 +100,9 @@ class ConsumableResourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            consumable_resource_reference = interfaces_aws_batch.ConsumableResourceReference(
+            consumable_resource_reference = interfaces_batch.ConsumableResourceReference(
                 consumable_resource_arn="consumableResourceArn"
             )
         '''
@@ -428,9 +428,9 @@ class JobDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            job_definition_reference = interfaces_aws_batch.JobDefinitionReference(
+            job_definition_reference = interfaces_batch.JobDefinitionReference(
                 job_definition_arn="jobDefinitionArn",
                 job_definition_name="jobDefinitionName"
             )
@@ -487,9 +487,9 @@ class JobQueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            job_queue_reference = interfaces_aws_batch.JobQueueReference(
+            job_queue_reference = interfaces_batch.JobQueueReference(
                 job_queue_arn="jobQueueArn"
             )
         '''
@@ -536,9 +536,9 @@ class SchedulingPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            scheduling_policy_reference = interfaces_aws_batch.SchedulingPolicyReference(
+            scheduling_policy_reference = interfaces_batch.SchedulingPolicyReference(
                 scheduling_policy_arn="schedulingPolicyArn"
             )
         '''
@@ -585,9 +585,9 @@ class ServiceEnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_batch as interfaces_aws_batch
+            from aws_cdk.interfaces import aws_batch as interfaces_batch
             
-            service_environment_reference = interfaces_aws_batch.ServiceEnvironmentReference(
+            service_environment_reference = interfaces_batch.ServiceEnvironmentReference(
                 service_environment_arn="serviceEnvironmentArn"
             )
         '''

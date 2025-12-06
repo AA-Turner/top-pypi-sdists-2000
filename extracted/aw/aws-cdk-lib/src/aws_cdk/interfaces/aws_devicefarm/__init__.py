@@ -51,9 +51,9 @@ class DevicePoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            device_pool_reference = interfaces_aws_devicefarm.DevicePoolReference(
+            device_pool_reference = interfaces_devicefarm.DevicePoolReference(
                 device_pool_arn="devicePoolArn"
             )
         '''
@@ -372,9 +372,9 @@ class InstanceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            instance_profile_reference = interfaces_aws_devicefarm.InstanceProfileReference(
+            instance_profile_reference = interfaces_devicefarm.InstanceProfileReference(
                 instance_profile_arn="instanceProfileArn"
             )
         '''
@@ -421,9 +421,9 @@ class NetworkProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            network_profile_reference = interfaces_aws_devicefarm.NetworkProfileReference(
+            network_profile_reference = interfaces_devicefarm.NetworkProfileReference(
                 network_profile_arn="networkProfileArn"
             )
         '''
@@ -470,9 +470,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            project_reference = interfaces_aws_devicefarm.ProjectReference(
+            project_reference = interfaces_devicefarm.ProjectReference(
                 project_arn="projectArn"
             )
         '''
@@ -519,9 +519,9 @@ class TestGridProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            test_grid_project_reference = interfaces_aws_devicefarm.TestGridProjectReference(
+            test_grid_project_reference = interfaces_devicefarm.TestGridProjectReference(
                 test_grid_project_arn="testGridProjectArn"
             )
         '''
@@ -568,9 +568,9 @@ class VPCEConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_devicefarm as interfaces_aws_devicefarm
+            from aws_cdk.interfaces import aws_devicefarm as interfaces_devicefarm
             
-            v_pCEConfiguration_reference = interfaces_aws_devicefarm.VPCEConfigurationReference(
+            v_pCEConfiguration_reference = interfaces_devicefarm.VPCEConfigurationReference(
                 vpce_configuration_arn="vpceConfigurationArn"
             )
         '''

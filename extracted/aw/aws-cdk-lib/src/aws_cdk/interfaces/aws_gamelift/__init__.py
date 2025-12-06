@@ -52,9 +52,9 @@ class AliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            alias_reference = interfaces_aws_gamelift.AliasReference(
+            alias_reference = interfaces_gamelift.AliasReference(
                 alias_arn="aliasArn",
                 alias_id="aliasId"
             )
@@ -112,9 +112,9 @@ class BuildReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            build_reference = interfaces_aws_gamelift.BuildReference(
+            build_reference = interfaces_gamelift.BuildReference(
                 build_arn="buildArn",
                 build_id="buildId"
             )
@@ -172,9 +172,9 @@ class ContainerFleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            container_fleet_reference = interfaces_aws_gamelift.ContainerFleetReference(
+            container_fleet_reference = interfaces_gamelift.ContainerFleetReference(
                 fleet_arn="fleetArn",
                 fleet_id="fleetId"
             )
@@ -240,9 +240,9 @@ class ContainerGroupDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            container_group_definition_reference = interfaces_aws_gamelift.ContainerGroupDefinitionReference(
+            container_group_definition_reference = interfaces_gamelift.ContainerGroupDefinitionReference(
                 container_group_definition_arn="containerGroupDefinitionArn",
                 container_group_definition_name="containerGroupDefinitionName"
             )
@@ -300,9 +300,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            fleet_reference = interfaces_aws_gamelift.FleetReference(
+            fleet_reference = interfaces_gamelift.FleetReference(
                 fleet_arn="fleetArn",
                 fleet_id="fleetId"
             )
@@ -359,9 +359,9 @@ class GameServerGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            game_server_group_reference = interfaces_aws_gamelift.GameServerGroupReference(
+            game_server_group_reference = interfaces_gamelift.GameServerGroupReference(
                 game_server_group_arn="gameServerGroupArn"
             )
         '''
@@ -417,9 +417,9 @@ class GameSessionQueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            game_session_queue_reference = interfaces_aws_gamelift.GameSessionQueueReference(
+            game_session_queue_reference = interfaces_gamelift.GameSessionQueueReference(
                 game_session_queue_arn="gameSessionQueueArn",
                 game_session_queue_name="gameSessionQueueName"
             )
@@ -981,9 +981,9 @@ class LocationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            location_reference = interfaces_aws_gamelift.LocationReference(
+            location_reference = interfaces_gamelift.LocationReference(
                 location_arn="locationArn",
                 location_name="locationName"
             )
@@ -1049,9 +1049,9 @@ class MatchmakingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            matchmaking_configuration_reference = interfaces_aws_gamelift.MatchmakingConfigurationReference(
+            matchmaking_configuration_reference = interfaces_gamelift.MatchmakingConfigurationReference(
                 matchmaking_configuration_arn="matchmakingConfigurationArn",
                 matchmaking_configuration_name="matchmakingConfigurationName"
             )
@@ -1117,9 +1117,9 @@ class MatchmakingRuleSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            matchmaking_rule_set_reference = interfaces_aws_gamelift.MatchmakingRuleSetReference(
+            matchmaking_rule_set_reference = interfaces_gamelift.MatchmakingRuleSetReference(
                 matchmaking_rule_set_arn="matchmakingRuleSetArn",
                 matchmaking_rule_set_name="matchmakingRuleSetName"
             )
@@ -1177,9 +1177,9 @@ class ScriptReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_gamelift as interfaces_aws_gamelift
+            from aws_cdk.interfaces import aws_gamelift as interfaces_gamelift
             
-            script_reference = interfaces_aws_gamelift.ScriptReference(
+            script_reference = interfaces_gamelift.ScriptReference(
                 script_arn="scriptArn",
                 script_id="scriptId"
             )

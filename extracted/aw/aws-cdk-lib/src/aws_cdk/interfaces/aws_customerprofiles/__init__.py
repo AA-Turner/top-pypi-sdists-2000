@@ -60,9 +60,9 @@ class CalculatedAttributeDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            calculated_attribute_definition_reference = interfaces_aws_customerprofiles.CalculatedAttributeDefinitionReference(
+            calculated_attribute_definition_reference = interfaces_customerprofiles.CalculatedAttributeDefinitionReference(
                 calculated_attribute_name="calculatedAttributeName",
                 domain_name="domainName"
             )
@@ -119,9 +119,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            domain_reference = interfaces_aws_customerprofiles.DomainReference(
+            domain_reference = interfaces_customerprofiles.DomainReference(
                 domain_name="domainName"
             )
         '''
@@ -180,9 +180,9 @@ class EventStreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            event_stream_reference = interfaces_aws_customerprofiles.EventStreamReference(
+            event_stream_reference = interfaces_customerprofiles.EventStreamReference(
                 domain_name="domainName",
                 event_stream_arn="eventStreamArn",
                 event_stream_name="eventStreamName"
@@ -258,9 +258,9 @@ class EventTriggerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            event_trigger_reference = interfaces_aws_customerprofiles.EventTriggerReference(
+            event_trigger_reference = interfaces_customerprofiles.EventTriggerReference(
                 domain_name="domainName",
                 event_trigger_name="eventTriggerName"
             )
@@ -647,9 +647,9 @@ class IntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            integration_reference = interfaces_aws_customerprofiles.IntegrationReference(
+            integration_reference = interfaces_customerprofiles.IntegrationReference(
                 domain_name="domainName",
                 uri="uri"
             )
@@ -712,9 +712,9 @@ class ObjectTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            object_type_reference = interfaces_aws_customerprofiles.ObjectTypeReference(
+            object_type_reference = interfaces_customerprofiles.ObjectTypeReference(
                 domain_name="domainName",
                 object_type_name="objectTypeName"
             )
@@ -783,9 +783,9 @@ class SegmentDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_customerprofiles as interfaces_aws_customerprofiles
+            from aws_cdk.interfaces import aws_customerprofiles as interfaces_customerprofiles
             
-            segment_definition_reference = interfaces_aws_customerprofiles.SegmentDefinitionReference(
+            segment_definition_reference = interfaces_customerprofiles.SegmentDefinitionReference(
                 domain_name="domainName",
                 segment_definition_arn="segmentDefinitionArn",
                 segment_definition_name="segmentDefinitionName"

@@ -186,9 +186,9 @@ class QueueInlinePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sqs as interfaces_aws_sqs
+            from aws_cdk.interfaces import aws_sqs as interfaces_sqs
             
-            queue_inline_policy_reference = interfaces_aws_sqs.QueueInlinePolicyReference(
+            queue_inline_policy_reference = interfaces_sqs.QueueInlinePolicyReference(
                 queue="queue"
             )
         '''
@@ -235,9 +235,9 @@ class QueuePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sqs as interfaces_aws_sqs
+            from aws_cdk.interfaces import aws_sqs as interfaces_sqs
             
-            queue_policy_reference = interfaces_aws_sqs.QueuePolicyReference(
+            queue_policy_reference = interfaces_sqs.QueuePolicyReference(
                 queue_policy_id="queuePolicyId"
             )
         '''
@@ -285,9 +285,9 @@ class QueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sqs as interfaces_aws_sqs
+            from aws_cdk.interfaces import aws_sqs as interfaces_sqs
             
-            queue_reference = interfaces_aws_sqs.QueueReference(
+            queue_reference = interfaces_sqs.QueueReference(
                 queue_arn="queueArn",
                 queue_url="queueUrl"
             )

@@ -60,9 +60,9 @@ class FirewallDomainListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            firewall_domain_list_reference = interfaces_aws_route53resolver.FirewallDomainListReference(
+            firewall_domain_list_reference = interfaces_route53resolver.FirewallDomainListReference(
                 firewall_domain_list_arn="firewallDomainListArn",
                 firewall_domain_list_id="firewallDomainListId"
             )
@@ -128,9 +128,9 @@ class FirewallRuleGroupAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            firewall_rule_group_association_reference = interfaces_aws_route53resolver.FirewallRuleGroupAssociationReference(
+            firewall_rule_group_association_reference = interfaces_route53resolver.FirewallRuleGroupAssociationReference(
                 firewall_rule_group_association_arn="firewallRuleGroupAssociationArn",
                 firewall_rule_group_association_id="firewallRuleGroupAssociationId"
             )
@@ -196,9 +196,9 @@ class FirewallRuleGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            firewall_rule_group_reference = interfaces_aws_route53resolver.FirewallRuleGroupReference(
+            firewall_rule_group_reference = interfaces_route53resolver.FirewallRuleGroupReference(
                 firewall_rule_group_arn="firewallRuleGroupArn",
                 firewall_rule_group_id="firewallRuleGroupId"
             )
@@ -793,9 +793,9 @@ class OutpostResolverReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            outpost_resolver_reference = interfaces_aws_route53resolver.OutpostResolverReference(
+            outpost_resolver_reference = interfaces_route53resolver.OutpostResolverReference(
                 outpost_resolver_arn="outpostResolverArn",
                 outpost_resolver_id="outpostResolverId"
             )
@@ -852,9 +852,9 @@ class ResolverConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_config_reference = interfaces_aws_route53resolver.ResolverConfigReference(
+            resolver_config_reference = interfaces_route53resolver.ResolverConfigReference(
                 resource_id="resourceId"
             )
         '''
@@ -901,9 +901,9 @@ class ResolverDNSSECConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_dNSSECConfig_reference = interfaces_aws_route53resolver.ResolverDNSSECConfigReference(
+            resolver_dNSSECConfig_reference = interfaces_route53resolver.ResolverDNSSECConfigReference(
                 resolver_dnssec_config_id="resolverDnssecConfigId"
             )
         '''
@@ -959,9 +959,9 @@ class ResolverEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_endpoint_reference = interfaces_aws_route53resolver.ResolverEndpointReference(
+            resolver_endpoint_reference = interfaces_route53resolver.ResolverEndpointReference(
                 resolver_endpoint_arn="resolverEndpointArn",
                 resolver_endpoint_id="resolverEndpointId"
             )
@@ -1024,9 +1024,9 @@ class ResolverQueryLoggingConfigAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_query_logging_config_association_reference = interfaces_aws_route53resolver.ResolverQueryLoggingConfigAssociationReference(
+            resolver_query_logging_config_association_reference = interfaces_route53resolver.ResolverQueryLoggingConfigAssociationReference(
                 resolver_query_logging_config_association_id="resolverQueryLoggingConfigAssociationId"
             )
         '''
@@ -1082,9 +1082,9 @@ class ResolverQueryLoggingConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_query_logging_config_reference = interfaces_aws_route53resolver.ResolverQueryLoggingConfigReference(
+            resolver_query_logging_config_reference = interfaces_route53resolver.ResolverQueryLoggingConfigReference(
                 resolver_query_logging_config_arn="resolverQueryLoggingConfigArn",
                 resolver_query_logging_config_id="resolverQueryLoggingConfigId"
             )
@@ -1141,9 +1141,9 @@ class ResolverRuleAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_rule_association_reference = interfaces_aws_route53resolver.ResolverRuleAssociationReference(
+            resolver_rule_association_reference = interfaces_route53resolver.ResolverRuleAssociationReference(
                 resolver_rule_association_id="resolverRuleAssociationId"
             )
         '''
@@ -1199,9 +1199,9 @@ class ResolverRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53resolver as interfaces_aws_route53resolver
+            from aws_cdk.interfaces import aws_route53resolver as interfaces_route53resolver
             
-            resolver_rule_reference = interfaces_aws_route53resolver.ResolverRuleReference(
+            resolver_rule_reference = interfaces_route53resolver.ResolverRuleReference(
                 resolver_rule_arn="resolverRuleArn",
                 resolver_rule_id="resolverRuleId"
             )

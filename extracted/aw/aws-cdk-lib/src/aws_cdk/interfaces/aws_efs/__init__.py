@@ -60,9 +60,9 @@ class AccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_efs as interfaces_aws_efs
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            access_point_reference = interfaces_aws_efs.AccessPointReference(
+            access_point_reference = interfaces_efs.AccessPointReference(
                 access_point_arn="accessPointArn",
                 access_point_id="accessPointId"
             )
@@ -128,9 +128,9 @@ class FileSystemReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_efs as interfaces_aws_efs
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            file_system_reference = interfaces_aws_efs.FileSystemReference(
+            file_system_reference = interfaces_efs.FileSystemReference(
                 file_system_arn="fileSystemArn",
                 file_system_id="fileSystemId"
             )
@@ -322,9 +322,9 @@ class MountTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_efs as interfaces_aws_efs
+            from aws_cdk.interfaces import aws_efs as interfaces_efs
             
-            mount_target_reference = interfaces_aws_efs.MountTargetReference(
+            mount_target_reference = interfaces_efs.MountTargetReference(
                 mount_target_id="mountTargetId"
             )
         '''

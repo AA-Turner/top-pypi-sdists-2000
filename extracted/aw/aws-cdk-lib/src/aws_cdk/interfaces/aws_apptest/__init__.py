@@ -102,9 +102,9 @@ class TestCaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apptest as interfaces_aws_apptest
+            from aws_cdk.interfaces import aws_apptest as interfaces_apptest
             
-            test_case_reference = interfaces_aws_apptest.TestCaseReference(
+            test_case_reference = interfaces_apptest.TestCaseReference(
                 test_case_arn="testCaseArn",
                 test_case_id="testCaseId"
             )

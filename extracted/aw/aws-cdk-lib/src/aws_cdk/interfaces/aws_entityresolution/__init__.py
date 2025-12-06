@@ -286,9 +286,9 @@ class IdMappingWorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_entityresolution as interfaces_aws_entityresolution
+            from aws_cdk.interfaces import aws_entityresolution as interfaces_entityresolution
             
-            id_mapping_workflow_reference = interfaces_aws_entityresolution.IdMappingWorkflowReference(
+            id_mapping_workflow_reference = interfaces_entityresolution.IdMappingWorkflowReference(
                 workflow_name="workflowName"
             )
         '''
@@ -344,9 +344,9 @@ class IdNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_entityresolution as interfaces_aws_entityresolution
+            from aws_cdk.interfaces import aws_entityresolution as interfaces_entityresolution
             
-            id_namespace_reference = interfaces_aws_entityresolution.IdNamespaceReference(
+            id_namespace_reference = interfaces_entityresolution.IdNamespaceReference(
                 id_namespace_arn="idNamespaceArn",
                 id_namespace_name="idNamespaceName"
             )
@@ -403,9 +403,9 @@ class MatchingWorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_entityresolution as interfaces_aws_entityresolution
+            from aws_cdk.interfaces import aws_entityresolution as interfaces_entityresolution
             
-            matching_workflow_reference = interfaces_aws_entityresolution.MatchingWorkflowReference(
+            matching_workflow_reference = interfaces_entityresolution.MatchingWorkflowReference(
                 workflow_name="workflowName"
             )
         '''
@@ -461,9 +461,9 @@ class PolicyStatementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_entityresolution as interfaces_aws_entityresolution
+            from aws_cdk.interfaces import aws_entityresolution as interfaces_entityresolution
             
-            policy_statement_reference = interfaces_aws_entityresolution.PolicyStatementReference(
+            policy_statement_reference = interfaces_entityresolution.PolicyStatementReference(
                 policy_statement_arn="policyStatementArn",
                 statement_id="statementId"
             )
@@ -520,9 +520,9 @@ class SchemaMappingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_entityresolution as interfaces_aws_entityresolution
+            from aws_cdk.interfaces import aws_entityresolution as interfaces_entityresolution
             
-            schema_mapping_reference = interfaces_aws_entityresolution.SchemaMappingReference(
+            schema_mapping_reference = interfaces_entityresolution.SchemaMappingReference(
                 schema_name="schemaName"
             )
         '''

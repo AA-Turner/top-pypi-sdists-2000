@@ -51,9 +51,9 @@ class AgentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            agent_reference = interfaces_aws_datasync.AgentReference(
+            agent_reference = interfaces_datasync.AgentReference(
                 agent_arn="agentArn"
             )
         '''
@@ -687,9 +687,9 @@ class LocationAzureBlobReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_azure_blob_reference = interfaces_aws_datasync.LocationAzureBlobReference(
+            location_azure_blob_reference = interfaces_datasync.LocationAzureBlobReference(
                 location_arn="locationArn"
             )
         '''
@@ -736,9 +736,9 @@ class LocationEFSReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_eFSReference = interfaces_aws_datasync.LocationEFSReference(
+            location_eFSReference = interfaces_datasync.LocationEFSReference(
                 location_arn="locationArn"
             )
         '''
@@ -785,9 +785,9 @@ class LocationFSxLustreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_fSx_lustre_reference = interfaces_aws_datasync.LocationFSxLustreReference(
+            location_fSx_lustre_reference = interfaces_datasync.LocationFSxLustreReference(
                 location_arn="locationArn"
             )
         '''
@@ -834,9 +834,9 @@ class LocationFSxONTAPReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_fSx_oNTAPReference = interfaces_aws_datasync.LocationFSxONTAPReference(
+            location_fSx_oNTAPReference = interfaces_datasync.LocationFSxONTAPReference(
                 location_arn="locationArn"
             )
         '''
@@ -883,9 +883,9 @@ class LocationFSxOpenZFSReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_fSx_open_zFSReference = interfaces_aws_datasync.LocationFSxOpenZFSReference(
+            location_fSx_open_zFSReference = interfaces_datasync.LocationFSxOpenZFSReference(
                 location_arn="locationArn"
             )
         '''
@@ -932,9 +932,9 @@ class LocationFSxWindowsReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_fSx_windows_reference = interfaces_aws_datasync.LocationFSxWindowsReference(
+            location_fSx_windows_reference = interfaces_datasync.LocationFSxWindowsReference(
                 location_arn="locationArn"
             )
         '''
@@ -981,9 +981,9 @@ class LocationHDFSReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_hDFSReference = interfaces_aws_datasync.LocationHDFSReference(
+            location_hDFSReference = interfaces_datasync.LocationHDFSReference(
                 location_arn="locationArn"
             )
         '''
@@ -1030,9 +1030,9 @@ class LocationNFSReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_nFSReference = interfaces_aws_datasync.LocationNFSReference(
+            location_nFSReference = interfaces_datasync.LocationNFSReference(
                 location_arn="locationArn"
             )
         '''
@@ -1079,9 +1079,9 @@ class LocationObjectStorageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_object_storage_reference = interfaces_aws_datasync.LocationObjectStorageReference(
+            location_object_storage_reference = interfaces_datasync.LocationObjectStorageReference(
                 location_arn="locationArn"
             )
         '''
@@ -1128,9 +1128,9 @@ class LocationS3Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_s3_reference = interfaces_aws_datasync.LocationS3Reference(
+            location_s3_reference = interfaces_datasync.LocationS3Reference(
                 location_arn="locationArn"
             )
         '''
@@ -1177,9 +1177,9 @@ class LocationSMBReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            location_sMBReference = interfaces_aws_datasync.LocationSMBReference(
+            location_sMBReference = interfaces_datasync.LocationSMBReference(
                 location_arn="locationArn"
             )
         '''
@@ -1226,9 +1226,9 @@ class TaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datasync as interfaces_aws_datasync
+            from aws_cdk.interfaces import aws_datasync as interfaces_datasync
             
-            task_reference = interfaces_aws_datasync.TaskReference(
+            task_reference = interfaces_datasync.TaskReference(
                 task_arn="taskArn"
             )
         '''

@@ -57,9 +57,9 @@ class DatastoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_healthimaging as interfaces_aws_healthimaging
+            from aws_cdk.interfaces import aws_healthimaging as interfaces_healthimaging
             
-            datastore_reference = interfaces_aws_healthimaging.DatastoreReference(
+            datastore_reference = interfaces_healthimaging.DatastoreReference(
                 datastore_arn="datastoreArn",
                 datastore_id="datastoreId"
             )

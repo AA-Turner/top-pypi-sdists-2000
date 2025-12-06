@@ -51,9 +51,9 @@ class AcceptedPortfolioShareReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            accepted_portfolio_share_reference = interfaces_aws_servicecatalog.AcceptedPortfolioShareReference(
+            accepted_portfolio_share_reference = interfaces_servicecatalog.AcceptedPortfolioShareReference(
                 accepted_portfolio_share_id="acceptedPortfolioShareId"
             )
         '''
@@ -100,9 +100,9 @@ class CloudFormationProductReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            cloud_formation_product_reference = interfaces_aws_servicecatalog.CloudFormationProductReference(
+            cloud_formation_product_reference = interfaces_servicecatalog.CloudFormationProductReference(
                 cloud_formation_product_id="cloudFormationProductId"
             )
         '''
@@ -149,9 +149,9 @@ class CloudFormationProvisionedProductReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            cloud_formation_provisioned_product_reference = interfaces_aws_servicecatalog.CloudFormationProvisionedProductReference(
+            cloud_formation_provisioned_product_reference = interfaces_servicecatalog.CloudFormationProvisionedProductReference(
                 provisioned_product_id="provisionedProductId"
             )
         '''
@@ -964,9 +964,9 @@ class LaunchNotificationConstraintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            launch_notification_constraint_reference = interfaces_aws_servicecatalog.LaunchNotificationConstraintReference(
+            launch_notification_constraint_reference = interfaces_servicecatalog.LaunchNotificationConstraintReference(
                 launch_notification_constraint_id="launchNotificationConstraintId"
             )
         '''
@@ -1013,9 +1013,9 @@ class LaunchRoleConstraintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            launch_role_constraint_reference = interfaces_aws_servicecatalog.LaunchRoleConstraintReference(
+            launch_role_constraint_reference = interfaces_servicecatalog.LaunchRoleConstraintReference(
                 launch_role_constraint_id="launchRoleConstraintId"
             )
         '''
@@ -1062,9 +1062,9 @@ class LaunchTemplateConstraintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            launch_template_constraint_reference = interfaces_aws_servicecatalog.LaunchTemplateConstraintReference(
+            launch_template_constraint_reference = interfaces_servicecatalog.LaunchTemplateConstraintReference(
                 launch_template_constraint_id="launchTemplateConstraintId"
             )
         '''
@@ -1117,9 +1117,9 @@ class PortfolioPrincipalAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            portfolio_principal_association_reference = interfaces_aws_servicecatalog.PortfolioPrincipalAssociationReference(
+            portfolio_principal_association_reference = interfaces_servicecatalog.PortfolioPrincipalAssociationReference(
                 portfolio_id="portfolioId",
                 principal_arn="principalArn"
             )
@@ -1177,9 +1177,9 @@ class PortfolioProductAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            portfolio_product_association_reference = interfaces_aws_servicecatalog.PortfolioProductAssociationReference(
+            portfolio_product_association_reference = interfaces_servicecatalog.PortfolioProductAssociationReference(
                 portfolio_id="portfolioId",
                 product_id="productId"
             )
@@ -1236,9 +1236,9 @@ class PortfolioReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            portfolio_reference = interfaces_aws_servicecatalog.PortfolioReference(
+            portfolio_reference = interfaces_servicecatalog.PortfolioReference(
                 portfolio_id="portfolioId"
             )
         '''
@@ -1286,9 +1286,9 @@ class PortfolioShareReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            portfolio_share_reference = interfaces_aws_servicecatalog.PortfolioShareReference(
+            portfolio_share_reference = interfaces_servicecatalog.PortfolioShareReference(
                 account_id="accountId",
                 portfolio_id="portfolioId"
             )
@@ -1345,9 +1345,9 @@ class ResourceUpdateConstraintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            resource_update_constraint_reference = interfaces_aws_servicecatalog.ResourceUpdateConstraintReference(
+            resource_update_constraint_reference = interfaces_servicecatalog.ResourceUpdateConstraintReference(
                 resource_update_constraint_id="resourceUpdateConstraintId"
             )
         '''
@@ -1406,9 +1406,9 @@ class ServiceActionAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            service_action_association_reference = interfaces_aws_servicecatalog.ServiceActionAssociationReference(
+            service_action_association_reference = interfaces_servicecatalog.ServiceActionAssociationReference(
                 product_id="productId",
                 provisioning_artifact_id="provisioningArtifactId",
                 service_action_id="serviceActionId"
@@ -1475,9 +1475,9 @@ class ServiceActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            service_action_reference = interfaces_aws_servicecatalog.ServiceActionReference(
+            service_action_reference = interfaces_servicecatalog.ServiceActionReference(
                 service_action_id="serviceActionId"
             )
         '''
@@ -1524,9 +1524,9 @@ class StackSetConstraintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            stack_set_constraint_reference = interfaces_aws_servicecatalog.StackSetConstraintReference(
+            stack_set_constraint_reference = interfaces_servicecatalog.StackSetConstraintReference(
                 stack_set_constraint_id="stackSetConstraintId"
             )
         '''
@@ -1579,9 +1579,9 @@ class TagOptionAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            tag_option_association_reference = interfaces_aws_servicecatalog.TagOptionAssociationReference(
+            tag_option_association_reference = interfaces_servicecatalog.TagOptionAssociationReference(
                 resource_id="resourceId",
                 tag_option_id="tagOptionId"
             )
@@ -1638,9 +1638,9 @@ class TagOptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicecatalog as interfaces_aws_servicecatalog
+            from aws_cdk.interfaces import aws_servicecatalog as interfaces_servicecatalog
             
-            tag_option_reference = interfaces_aws_servicecatalog.TagOptionReference(
+            tag_option_reference = interfaces_servicecatalog.TagOptionReference(
                 tag_option_id="tagOptionId"
             )
         '''

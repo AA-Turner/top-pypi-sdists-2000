@@ -195,9 +195,9 @@ class JobTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconvert as interfaces_aws_mediaconvert
+            from aws_cdk.interfaces import aws_mediaconvert as interfaces_mediaconvert
             
-            job_template_reference = interfaces_aws_mediaconvert.JobTemplateReference(
+            job_template_reference = interfaces_mediaconvert.JobTemplateReference(
                 job_template_arn="jobTemplateArn",
                 job_template_id="jobTemplateId"
             )
@@ -255,9 +255,9 @@ class PresetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconvert as interfaces_aws_mediaconvert
+            from aws_cdk.interfaces import aws_mediaconvert as interfaces_mediaconvert
             
-            preset_reference = interfaces_aws_mediaconvert.PresetReference(
+            preset_reference = interfaces_mediaconvert.PresetReference(
                 preset_arn="presetArn",
                 preset_id="presetId"
             )
@@ -315,9 +315,9 @@ class QueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconvert as interfaces_aws_mediaconvert
+            from aws_cdk.interfaces import aws_mediaconvert as interfaces_mediaconvert
             
-            queue_reference = interfaces_aws_mediaconvert.QueueReference(
+            queue_reference = interfaces_mediaconvert.QueueReference(
                 queue_arn="queueArn",
                 queue_id="queueId"
             )

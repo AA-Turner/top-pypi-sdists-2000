@@ -51,9 +51,9 @@ class BudgetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_budgets as interfaces_aws_budgets
+            from aws_cdk.interfaces import aws_budgets as interfaces_budgets
             
-            budget_reference = interfaces_aws_budgets.BudgetReference(
+            budget_reference = interfaces_budgets.BudgetReference(
                 budget_id="budgetId"
             )
         '''
@@ -101,9 +101,9 @@ class BudgetsActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_budgets as interfaces_aws_budgets
+            from aws_cdk.interfaces import aws_budgets as interfaces_budgets
             
-            budgets_action_reference = interfaces_aws_budgets.BudgetsActionReference(
+            budgets_action_reference = interfaces_budgets.BudgetsActionReference(
                 action_id="actionId",
                 budget_name="budgetName"
             )

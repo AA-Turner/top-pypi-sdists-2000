@@ -51,9 +51,9 @@ class ContactChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_aws_ssmcontacts
+            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_ssmcontacts
             
-            contact_channel_reference = interfaces_aws_ssmcontacts.ContactChannelReference(
+            contact_channel_reference = interfaces_ssmcontacts.ContactChannelReference(
                 contact_channel_arn="contactChannelArn"
             )
         '''
@@ -100,9 +100,9 @@ class ContactReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_aws_ssmcontacts
+            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_ssmcontacts
             
-            contact_reference = interfaces_aws_ssmcontacts.ContactReference(
+            contact_reference = interfaces_ssmcontacts.ContactReference(
                 contact_arn="contactArn"
             )
         '''
@@ -329,9 +329,9 @@ class PlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_aws_ssmcontacts
+            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_ssmcontacts
             
-            plan_reference = interfaces_aws_ssmcontacts.PlanReference(
+            plan_reference = interfaces_ssmcontacts.PlanReference(
                 plan_arn="planArn"
             )
         '''
@@ -378,9 +378,9 @@ class RotationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_aws_ssmcontacts
+            from aws_cdk.interfaces import aws_ssmcontacts as interfaces_ssmcontacts
             
-            rotation_reference = interfaces_aws_ssmcontacts.RotationReference(
+            rotation_reference = interfaces_ssmcontacts.RotationReference(
                 rotation_arn="rotationArn"
             )
         '''

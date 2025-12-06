@@ -8024,16 +8024,15 @@ class CfnParameterProps:
 
         Example::
 
-            param = CfnParameter(self, "ParameterName")
-            
-            # If the parameter is a String
-            param.value_as_string
-            
-            # If the parameter is a Number
-            param.value_as_number
-            
-            # If the parameter is a List
-            param.value_as_list
+            stack = Stack()
+            dur_token = CfnParameter(stack, "MyParameter",
+                type="Number",
+                default=60
+            )
+            CustomResource(stack, "MyCustomResource",
+                service_token="MyServiceToken",
+                service_timeout=Duration.seconds(dur_token.value_as_number)
+            )
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__6d425fa390023c3d5a204065fa1d0abca878458a00e8f9bd0859be42e4cc9e66)
@@ -39003,6 +39002,7 @@ __all__ = [
     "aws_deadline",
     "aws_detective",
     "aws_devicefarm",
+    "aws_devopsagent",
     "aws_devopsguru",
     "aws_directoryservice",
     "aws_dlm",
@@ -39313,6 +39313,7 @@ from . import aws_dax
 from . import aws_deadline
 from . import aws_detective
 from . import aws_devicefarm
+from . import aws_devopsagent
 from . import aws_devopsguru
 from . import aws_directoryservice
 from . import aws_dlm

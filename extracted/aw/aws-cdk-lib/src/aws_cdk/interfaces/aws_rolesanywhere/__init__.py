@@ -51,9 +51,9 @@ class CRLReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_aws_rolesanywhere
+            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_rolesanywhere
             
-            c_rLReference = interfaces_aws_rolesanywhere.CRLReference(
+            c_rLReference = interfaces_rolesanywhere.CRLReference(
                 crl_id="crlId"
             )
         '''
@@ -236,9 +236,9 @@ class ProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_aws_rolesanywhere
+            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_rolesanywhere
             
-            profile_reference = interfaces_aws_rolesanywhere.ProfileReference(
+            profile_reference = interfaces_rolesanywhere.ProfileReference(
                 profile_arn="profileArn",
                 profile_id="profileId"
             )
@@ -304,9 +304,9 @@ class TrustAnchorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_aws_rolesanywhere
+            from aws_cdk.interfaces import aws_rolesanywhere as interfaces_rolesanywhere
             
-            trust_anchor_reference = interfaces_aws_rolesanywhere.TrustAnchorReference(
+            trust_anchor_reference = interfaces_rolesanywhere.TrustAnchorReference(
                 trust_anchor_arn="trustAnchorArn",
                 trust_anchor_id="trustAnchorId"
             )

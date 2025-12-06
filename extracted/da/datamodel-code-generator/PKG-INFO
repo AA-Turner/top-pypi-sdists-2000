@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: datamodel-code-generator
-Version: 0.40.0
+Version: 0.41.0
 Summary: Datamodel Code Generator
 Project-URL: Homepage, https://github.com/koxudaxi/datamodel-code-generator
 Project-URL: Source, https://github.com/koxudaxi/datamodel-code-generator
@@ -432,6 +432,9 @@ Typing customization:
                         times.
   --use-annotated       Use typing.Annotated for Field(). Also, `--field-constraints` option
                         will be enabled.
+  --use-enum-values-in-discriminator
+                        Use enum member literals in discriminator fields instead of string
+                        literals
   --use-generic-container-types
                         Use generic container types for type hinting (typing.Sequence,
                         typing.Mapping). If `--use-standard-collections` option is set, then
@@ -592,6 +595,10 @@ OpenAPI-only options:
                         query parameters (Only OpenAPI)
   --openapi-scopes {schemas,paths,tags,parameters,webhooks} [{schemas,paths,tags,parameters,webhooks} ...]
                         Scopes of OpenAPI model generation (default: schemas)
+  --read-only-write-only-model-type {request-response,all}
+                        Model generation for readOnly/writeOnly fields: ''request-response'' =
+                        Request/Response models only (no base model), ''all'' = Base + Request
+                        + Response models.
   --strict-nullable     Treat default field as a non-nullable field (Only OpenAPI)
   --use-operation-id-as-name
                         use operation id of OpenAPI as class names of models

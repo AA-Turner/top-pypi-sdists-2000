@@ -51,9 +51,9 @@ class FlowTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotthingsgraph as interfaces_aws_iotthingsgraph
+            from aws_cdk.interfaces import aws_iotthingsgraph as interfaces_iotthingsgraph
             
-            flow_template_reference = interfaces_aws_iotthingsgraph.FlowTemplateReference(
+            flow_template_reference = interfaces_iotthingsgraph.FlowTemplateReference(
                 flow_template_id="flowTemplateId"
             )
         '''

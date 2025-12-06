@@ -2205,9 +2205,9 @@ class Behavior:
             import aws_cdk as cdk
             from aws_cdk import aws_cloudfront as cloudfront
             from aws_cdk import aws_lambda as lambda_
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            # function_ref: interfaces_aws_cloudfront.IFunctionRef
+            # function_ref: interfaces_cloudfront.IFunctionRef
             # key_group: cloudfront.KeyGroup
             # version: lambda.Version
             
@@ -21671,9 +21671,9 @@ class DistributionGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_cloudfront as cloudfront
-        from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+        from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
         
-        # distribution_ref: interfaces_aws_cloudfront.IDistributionRef
+        # distribution_ref: interfaces_cloudfront.IDistributionRef
         
         distribution_grants = cloudfront.DistributionGrants.from_distribution(distribution_ref)
     '''
@@ -22498,9 +22498,9 @@ class FunctionAssociation:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_cloudfront as cloudfront
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
-            # function_ref: interfaces_aws_cloudfront.IFunctionRef
+            # function_ref: interfaces_cloudfront.IFunctionRef
             
             function_association = cloudfront.FunctionAssociation(
                 event_type=cloudfront.FunctionEventType.VIEWER_REQUEST,
@@ -23992,11 +23992,11 @@ class InlineImportSource(
         import aws_cdk as cdk
         from aws_cdk import aws_cloudfront as cloudfront
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         inline_import_source = cloudfront.InlineImportSource.from_asset("path",
@@ -28411,11 +28411,11 @@ class S3ImportSource(
         import aws_cdk as cdk
         from aws_cdk import aws_cloudfront as cloudfront
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         s3_import_source = cloudfront.S3ImportSource.from_asset("path",
@@ -29021,10 +29021,10 @@ class SourceConfiguration:
             from aws_cdk import aws_cloudfront as cloudfront
             from aws_cdk import aws_lambda as lambda_
             from aws_cdk import aws_s3 as s3
-            from aws_cdk.interfaces import aws_cloudfront as interfaces_aws_cloudfront
+            from aws_cdk.interfaces import aws_cloudfront as interfaces_cloudfront
             
             # bucket: s3.Bucket
-            # function_ref: interfaces_aws_cloudfront.IFunctionRef
+            # function_ref: interfaces_cloudfront.IFunctionRef
             # key_group: cloudfront.KeyGroup
             # origin_access_identity: cloudfront.OriginAccessIdentity
             # version: lambda.Version
@@ -30147,11 +30147,11 @@ class AssetImportSource(
         import aws_cdk as cdk
         from aws_cdk import aws_cloudfront as cloudfront
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # docker_image: cdk.DockerImage
         # grantable: iam.IGrantable
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         # local_bundling: cdk.ILocalBundling
         
         asset_import_source = cloudfront.AssetImportSource.from_asset("path",

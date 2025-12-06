@@ -3659,9 +3659,9 @@ class QueueGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sqs.QueueG
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sqs as sqs
-        from aws_cdk.interfaces import aws_sqs as interfaces_aws_sqs
+        from aws_cdk.interfaces import aws_sqs as interfaces_sqs
         
-        # queue_ref: interfaces_aws_sqs.IQueueRef
+        # queue_ref: interfaces_sqs.IQueueRef
         
         queue_grants = sqs.QueueGrants.from_queue(queue_ref)
     '''

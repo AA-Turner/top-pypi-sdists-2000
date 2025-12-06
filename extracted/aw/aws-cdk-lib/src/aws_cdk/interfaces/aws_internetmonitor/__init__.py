@@ -102,9 +102,9 @@ class MonitorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_internetmonitor as interfaces_aws_internetmonitor
+            from aws_cdk.interfaces import aws_internetmonitor as interfaces_internetmonitor
             
-            monitor_reference = interfaces_aws_internetmonitor.MonitorReference(
+            monitor_reference = interfaces_internetmonitor.MonitorReference(
                 monitor_arn="monitorArn",
                 monitor_name="monitorName"
             )

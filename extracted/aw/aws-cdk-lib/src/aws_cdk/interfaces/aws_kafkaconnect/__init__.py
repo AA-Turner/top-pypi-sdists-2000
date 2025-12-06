@@ -51,9 +51,9 @@ class ConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_aws_kafkaconnect
+            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_kafkaconnect
             
-            connector_reference = interfaces_aws_kafkaconnect.ConnectorReference(
+            connector_reference = interfaces_kafkaconnect.ConnectorReference(
                 connector_arn="connectorArn"
             )
         '''
@@ -100,9 +100,9 @@ class CustomPluginReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_aws_kafkaconnect
+            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_kafkaconnect
             
-            custom_plugin_reference = interfaces_aws_kafkaconnect.CustomPluginReference(
+            custom_plugin_reference = interfaces_kafkaconnect.CustomPluginReference(
                 custom_plugin_arn="customPluginArn"
             )
         '''
@@ -286,9 +286,9 @@ class WorkerConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_aws_kafkaconnect
+            from aws_cdk.interfaces import aws_kafkaconnect as interfaces_kafkaconnect
             
-            worker_configuration_reference = interfaces_aws_kafkaconnect.WorkerConfigurationReference(
+            worker_configuration_reference = interfaces_kafkaconnect.WorkerConfigurationReference(
                 worker_configuration_arn="workerConfigurationArn"
             )
         '''

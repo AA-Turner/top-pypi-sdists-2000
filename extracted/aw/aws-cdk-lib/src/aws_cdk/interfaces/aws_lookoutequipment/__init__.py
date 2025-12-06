@@ -107,9 +107,9 @@ class InferenceSchedulerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lookoutequipment as interfaces_aws_lookoutequipment
+            from aws_cdk.interfaces import aws_lookoutequipment as interfaces_lookoutequipment
             
-            inference_scheduler_reference = interfaces_aws_lookoutequipment.InferenceSchedulerReference(
+            inference_scheduler_reference = interfaces_lookoutequipment.InferenceSchedulerReference(
                 inference_scheduler_arn="inferenceSchedulerArn",
                 inference_scheduler_name="inferenceSchedulerName"
             )

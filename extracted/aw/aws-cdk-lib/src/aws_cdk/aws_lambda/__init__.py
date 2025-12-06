@@ -1418,6 +1418,27 @@ fn = lambda_.Function(self, "MyFunction",
 version = fn.current_version
 ```
 
+## Lambda with Durable Configuration
+
+Lambda functions can be configured with durability to enable long-running, stateful executions.
+
+```python
+fn = lambda_.Function(self, "MyFunction",
+    runtime=lambda_.Runtime.NODEJS_24_X,
+    handler="index.handler",
+    code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler")),
+    durable_config=lambda.DurableConfig(execution_timeout=Duration.hours(1), retention_period=Duration.days(30))
+)
+```
+
+*Note:* If adding the `durableConfig` property to an existing lambda function, a resource replacement will be triggered.
+For the resource replacement to succeed, you cannot explicitly set the `functionName` parameter, or else it will
+result in CloudFormation deployment errors. Modifying the parameters within `durableConfig` will not trigger a resource replacement.
+
+*Further Note:* Deletion for durable functions will wait for all running executions to complete. CloudFormation will wait up to 1 hour,
+after which the stack update or deletion will timeout. If you have functions that are stuck deleting, please check if there
+are any running executions for the function.
+
 ## AutoScaling
 
 You can use Application AutoScaling to automatically configure the provisioned concurrency for your functions. AutoScaling can be set to track utilization or be based on a schedule. To configure AutoScaling on a function alias:
@@ -4584,6 +4605,48 @@ class CfnCapacityProvider(
             type_hints = typing.get_type_hints(_typecheckingstub__1ee84dc64a4d013d3e3844e200e21b7f164f926ad0dfb29a11a63fd570b6a426)
             check_type(argname="argument resource", value=resource, expected_type=type_hints["resource"])
         return typing.cast(builtins.str, jsii.sinvoke(cls, "arnForCapacityProvider", [resource]))
+
+    @jsii.member(jsii_name="fromCapacityProviderArn")
+    @builtins.classmethod
+    def from_capacity_provider_arn(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        arn: builtins.str,
+    ) -> _ICapacityProviderRef_2d9bc4af:
+        '''Creates a new ICapacityProviderRef from an ARN.
+
+        :param scope: -
+        :param id: -
+        :param arn: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__5e3d3801470964f09ca0d200b6be89938037f07530d35bb6b14986842d9e8bb4)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument arn", value=arn, expected_type=type_hints["arn"])
+        return typing.cast(_ICapacityProviderRef_2d9bc4af, jsii.sinvoke(cls, "fromCapacityProviderArn", [scope, id, arn]))
+
+    @jsii.member(jsii_name="fromCapacityProviderName")
+    @builtins.classmethod
+    def from_capacity_provider_name(
+        cls,
+        scope: _constructs_77d1e7e8.Construct,
+        id: builtins.str,
+        capacity_provider_name: builtins.str,
+    ) -> _ICapacityProviderRef_2d9bc4af:
+        '''Creates a new ICapacityProviderRef from a capacityProviderName.
+
+        :param scope: -
+        :param id: -
+        :param capacity_provider_name: -
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__77f467df9172499b7787ff5edaacdc254c6b8b095220fa6410109fd54e9b6c23)
+            check_type(argname="argument scope", value=scope, expected_type=type_hints["scope"])
+            check_type(argname="argument id", value=id, expected_type=type_hints["id"])
+            check_type(argname="argument capacity_provider_name", value=capacity_provider_name, expected_type=type_hints["capacity_provider_name"])
+        return typing.cast(_ICapacityProviderRef_2d9bc4af, jsii.sinvoke(cls, "fromCapacityProviderName", [scope, id, capacity_provider_name]))
 
     @jsii.member(jsii_name="isCfnCapacityProvider")
     @builtins.classmethod
@@ -9072,6 +9135,12 @@ class CfnFunction(
                 target_arn="targetArn"
             ),
             description="description",
+            durable_config=lambda.CfnFunction.DurableConfigProperty(
+                execution_timeout=123,
+        
+                # the properties below are optional
+                retention_period_in_days=123
+            ),
             environment=lambda.CfnFunction.EnvironmentProperty(
                 variables={
                     "variables_key": "variables"
@@ -9149,6 +9218,7 @@ class CfnFunction(
         code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DeadLetterConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.DurableConfigProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EnvironmentProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.EphemeralStorageProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union["CfnFunction.FileSystemConfigProperty", typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -9184,6 +9254,7 @@ class CfnFunction(
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
+        :param durable_config: 
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
@@ -9220,6 +9291,7 @@ class CfnFunction(
             code_signing_config_arn=code_signing_config_arn,
             dead_letter_config=dead_letter_config,
             description=description,
+            durable_config=durable_config,
             environment=environment,
             ephemeral_storage=ephemeral_storage,
             file_system_configs=file_system_configs,
@@ -9500,6 +9572,23 @@ class CfnFunction(
             type_hints = typing.get_type_hints(_typecheckingstub__9adaa36c21a67de531bddc847ecff2947d2a1b03b4f9d8d078da3e6849878bae)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "description", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="durableConfig")
+    def durable_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]], jsii.get(self, "durableConfig"))
+
+    @durable_config.setter
+    def durable_config(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnFunction.DurableConfigProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__6d689f4ecbf183f4657451c14bc06108d6e3689e24bf76b6cc31fb72be5fa1b5)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "durableConfig", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="environment")
@@ -10128,6 +10217,87 @@ class CfnFunction(
 
         def __repr__(self) -> str:
             return "DeadLetterConfigProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_lambda.CfnFunction.DurableConfigProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "execution_timeout": "executionTimeout",
+            "retention_period_in_days": "retentionPeriodInDays",
+        },
+    )
+    class DurableConfigProperty:
+        def __init__(
+            self,
+            *,
+            execution_timeout: jsii.Number,
+            retention_period_in_days: typing.Optional[jsii.Number] = None,
+        ) -> None:
+            '''
+            :param execution_timeout: The amount of time (in seconds) that Lambda allows a durable function to run before stopping it. The maximum is one 366-day year or 31,622,400 seconds.
+            :param retention_period_in_days: The number of days after a durable execution is closed that Lambda retains its history, from one to 90 days. The default is 14 days. Default: - 14
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-durableconfig.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_lambda as lambda_
+                
+                durable_config_property = lambda.CfnFunction.DurableConfigProperty(
+                    execution_timeout=123,
+                
+                    # the properties below are optional
+                    retention_period_in_days=123
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bffb7f8b9f38dd65e6f04bd819c15a75d9dc95ce2172504b12d728437c01ac16)
+                check_type(argname="argument execution_timeout", value=execution_timeout, expected_type=type_hints["execution_timeout"])
+                check_type(argname="argument retention_period_in_days", value=retention_period_in_days, expected_type=type_hints["retention_period_in_days"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "execution_timeout": execution_timeout,
+            }
+            if retention_period_in_days is not None:
+                self._values["retention_period_in_days"] = retention_period_in_days
+
+        @builtins.property
+        def execution_timeout(self) -> jsii.Number:
+            '''The amount of time (in seconds) that Lambda allows a durable function to run before stopping it.
+
+            The maximum is one 366-day year or 31,622,400 seconds.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-durableconfig.html#cfn-lambda-function-durableconfig-executiontimeout
+            '''
+            result = self._values.get("execution_timeout")
+            assert result is not None, "Required property 'execution_timeout' is missing"
+            return typing.cast(jsii.Number, result)
+
+        @builtins.property
+        def retention_period_in_days(self) -> typing.Optional[jsii.Number]:
+            '''The number of days after a durable execution is closed that Lambda retains its history, from one to 90 days.
+
+            The default is 14 days.
+
+            :default: - 14
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-lambda-function-durableconfig.html#cfn-lambda-function-durableconfig-retentionperiodindays
+            '''
+            result = self._values.get("retention_period_in_days")
+            return typing.cast(typing.Optional[jsii.Number], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "DurableConfigProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -11124,6 +11294,7 @@ class CfnFunction(
         "code_signing_config_arn": "codeSigningConfigArn",
         "dead_letter_config": "deadLetterConfig",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "ephemeral_storage": "ephemeralStorage",
         "file_system_configs": "fileSystemConfigs",
@@ -11160,6 +11331,7 @@ class CfnFunctionProps:
         code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
         dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DurableConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -11193,6 +11365,7 @@ class CfnFunctionProps:
         :param code_signing_config_arn: To enable code signing for this function, specify the ARN of a code-signing configuration. A code-signing configuration includes a set of signing profiles, which define the trusted publishers for this function.
         :param dead_letter_config: A dead-letter queue configuration that specifies the queue or topic where Lambda sends asynchronous events when they fail processing. For more information, see `Dead-letter queues <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async.html#invocation-dlq>`_ .
         :param description: A description of the function.
+        :param durable_config: 
         :param environment: Environment variables that are accessible from function code during execution.
         :param ephemeral_storage: The size of the function's ``/tmp`` directory in MB. The default value is 512, but it can be any whole number between 512 and 10,240 MB.
         :param file_system_configs: Connection settings for an Amazon EFS file system. To connect a function to a file system, a mount target must be available in every Availability Zone that your function connects to. If your template contains an `AWS::EFS::MountTarget <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-efs-mounttarget.html>`_ resource, you must also specify a ``DependsOn`` attribute to ensure that the mount target is created or updated before the function. For more information about using the ``DependsOn`` attribute, see `DependsOn Attribute <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-dependson.html>`_ .
@@ -11253,6 +11426,12 @@ class CfnFunctionProps:
                     target_arn="targetArn"
                 ),
                 description="description",
+                durable_config=lambda.CfnFunction.DurableConfigProperty(
+                    execution_timeout=123,
+            
+                    # the properties below are optional
+                    retention_period_in_days=123
+                ),
                 environment=lambda.CfnFunction.EnvironmentProperty(
                     variables={
                         "variables_key": "variables"
@@ -11326,6 +11505,7 @@ class CfnFunctionProps:
             check_type(argname="argument code_signing_config_arn", value=code_signing_config_arn, expected_type=type_hints["code_signing_config_arn"])
             check_type(argname="argument dead_letter_config", value=dead_letter_config, expected_type=type_hints["dead_letter_config"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument ephemeral_storage", value=ephemeral_storage, expected_type=type_hints["ephemeral_storage"])
             check_type(argname="argument file_system_configs", value=file_system_configs, expected_type=type_hints["file_system_configs"])
@@ -11363,6 +11543,8 @@ class CfnFunctionProps:
             self._values["dead_letter_config"] = dead_letter_config
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if ephemeral_storage is not None:
@@ -11490,6 +11672,16 @@ class CfnFunctionProps:
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DurableConfigProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html#cfn-lambda-function-durableconfig
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DurableConfigProperty]], result)
 
     @builtins.property
     def environment(
@@ -12592,10 +12784,10 @@ class CfnParametersCodeProps:
             # The values are placeholders you should change.
             import aws_cdk as cdk
             from aws_cdk import aws_lambda as lambda_
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # cfn_parameter: cdk.CfnParameter
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             
             cfn_parameters_code_props = lambda.CfnParametersCodeProps(
                 bucket_name_param=cfn_parameter,
@@ -14300,22 +14492,19 @@ class Code(metaclass=jsii.JSIIAbstractClass, jsii_type="aws-cdk-lib.aws_lambda.C
 
     Example::
 
-        import aws_cdk.aws_signer as signer
-        
-        
-        signing_profile = signer.SigningProfile(self, "SigningProfile",
-            platform=signer.Platform.AWS_LAMBDA_SHA384_ECDSA
+        my_function_handler = lambda_.Function(self, "MyFunction",
+            code=lambda_.Code.from_asset("resource/myfunction"),
+            runtime=lambda_.Runtime.NODEJS_LATEST,
+            handler="index.handler"
         )
         
-        code_signing_config = lambda_.CodeSigningConfig(self, "CodeSigningConfig",
-            signing_profiles=[signing_profile]
+        event_rule = cloudtrail.Trail.on_event(self, "MyCloudWatchEvent",
+            target=targets.LambdaFunction(my_function_handler)
         )
         
-        lambda_.Function(self, "Function",
-            code_signing_config=code_signing_config,
-            runtime=lambda_.Runtime.NODEJS_18_X,
-            handler="index.handler",
-            code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler"))
+        event_rule.add_event_pattern(
+            account=["123456789012"],
+            source=["aws.s3"]
         )
     '''
 
@@ -15133,12 +15322,12 @@ class CustomCommandOptions(_AssetOptions_2aa69621):
             import aws_cdk as cdk
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_lambda as lambda_
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # command_options: Any
             # docker_image: cdk.DockerImage
             # grantable: iam.IGrantable
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # local_bundling: cdk.ILocalBundling
             
             custom_command_options = lambda.CustomCommandOptions(
@@ -15909,6 +16098,85 @@ class _DockerImageCodeProxy(DockerImageCode):
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the abstract class
 typing.cast(typing.Any, DockerImageCode).__jsii_proxy_class__ = lambda : _DockerImageCodeProxy
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.aws_lambda.DurableConfig",
+    jsii_struct_bases=[],
+    name_mapping={
+        "execution_timeout": "executionTimeout",
+        "retention_period": "retentionPeriod",
+    },
+)
+class DurableConfig:
+    def __init__(
+        self,
+        *,
+        execution_timeout: _Duration_4839e8c3,
+        retention_period: typing.Optional[_Duration_4839e8c3] = None,
+    ) -> None:
+        '''Configuration for durable functions.
+
+        Lambda durable functions allow for long-running executions with persistent state.
+
+        :param execution_timeout: The amount of time that Lambda allows a durable function to run before stopping it. Must be between 1 and 31,622,400 seconds (366 days).
+        :param retention_period: The number of days after a durable execution is closed that Lambda retains its history. Must be between 1 and 90 days. The underlying configuration is expressed in whole numbers of days. Providing a Duration that does not represent a whole number of days will result in a runtime or deployment error. Default: Duration.days(14)
+
+        :exampleMetadata: infused
+
+        Example::
+
+            fn = lambda_.Function(self, "MyFunction",
+                runtime=lambda_.Runtime.NODEJS_24_X,
+                handler="index.handler",
+                code=lambda_.Code.from_asset(path.join(__dirname, "lambda-handler")),
+                durable_config=lambda.DurableConfig(execution_timeout=Duration.hours(1), retention_period=Duration.days(30))
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__e8f86dce25cadfc04a058e64fe90920598220b2e237ce98dec4e37a0432cb9cb)
+            check_type(argname="argument execution_timeout", value=execution_timeout, expected_type=type_hints["execution_timeout"])
+            check_type(argname="argument retention_period", value=retention_period, expected_type=type_hints["retention_period"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "execution_timeout": execution_timeout,
+        }
+        if retention_period is not None:
+            self._values["retention_period"] = retention_period
+
+    @builtins.property
+    def execution_timeout(self) -> _Duration_4839e8c3:
+        '''The amount of time that Lambda allows a durable function to run before stopping it.
+
+        Must be between 1 and 31,622,400 seconds (366 days).
+        '''
+        result = self._values.get("execution_timeout")
+        assert result is not None, "Required property 'execution_timeout' is missing"
+        return typing.cast(_Duration_4839e8c3, result)
+
+    @builtins.property
+    def retention_period(self) -> typing.Optional[_Duration_4839e8c3]:
+        '''The number of days after a durable execution is closed that Lambda retains its history.
+
+        Must be between 1 and 90 days.
+
+        The underlying configuration is expressed in whole numbers of days. Providing a Duration that
+        does not represent a whole number of days will result in a runtime or deployment error.
+
+        :default: Duration.days(14)
+        '''
+        result = self._values.get("retention_period")
+        return typing.cast(typing.Optional[_Duration_4839e8c3], result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DurableConfig(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
 
 
 class EcrImageCode(
@@ -18249,6 +18517,7 @@ class FunctionAttributes:
         "dead_letter_queue_enabled": "deadLetterQueueEnabled",
         "dead_letter_topic": "deadLetterTopic",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "environment_encryption": "environmentEncryption",
         "ephemeral_storage_size": "ephemeralStorageSize",
@@ -18306,6 +18575,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -18360,6 +18630,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -18409,16 +18680,16 @@ class FunctionOptions(EventInvokeConfigOptions):
             from aws_cdk import aws_logs as logs
             from aws_cdk import aws_sns as sns
             from aws_cdk import aws_sqs as sqs
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
-            from aws_cdk.interfaces import aws_lambda as interfaces_aws_lambda
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
+            from aws_cdk.interfaces import aws_lambda as interfaces_lambda
             
             # adot_layer_version: lambda.AdotLayerVersion
             # architecture: lambda.Architecture
-            # code_signing_config_ref: interfaces_aws_lambda.ICodeSigningConfigRef
+            # code_signing_config_ref: interfaces_lambda.ICodeSigningConfigRef
             # destination: lambda.IDestination
             # event_source: lambda.IEventSource
             # file_system: lambda.FileSystem
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # lambda_insights_version: lambda.LambdaInsightsVersion
             # layer_version: lambda.LayerVersion
             # log_group: logs.LogGroup
@@ -18465,6 +18736,12 @@ class FunctionOptions(EventInvokeConfigOptions):
                 dead_letter_queue_enabled=False,
                 dead_letter_topic=topic,
                 description="description",
+                durable_config=lambda.DurableConfig(
+                    execution_timeout=cdk.Duration.minutes(30),
+            
+                    # the properties below are optional
+                    retention_period=cdk.Duration.minutes(30)
+                ),
                 environment={
                     "environment_key": "environment"
                 },
@@ -18521,6 +18798,8 @@ class FunctionOptions(EventInvokeConfigOptions):
             adot_instrumentation = AdotInstrumentationConfig(**adot_instrumentation)
         if isinstance(current_version_options, dict):
             current_version_options = VersionOptions(**current_version_options)
+        if isinstance(durable_config, dict):
+            durable_config = DurableConfig(**durable_config)
         if isinstance(log_retention_retry_options, dict):
             log_retention_retry_options = LogRetentionRetryOptions(**log_retention_retry_options)
         if isinstance(vpc_subnets, dict):
@@ -18544,6 +18823,7 @@ class FunctionOptions(EventInvokeConfigOptions):
             check_type(argname="argument dead_letter_queue_enabled", value=dead_letter_queue_enabled, expected_type=type_hints["dead_letter_queue_enabled"])
             check_type(argname="argument dead_letter_topic", value=dead_letter_topic, expected_type=type_hints["dead_letter_topic"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument environment_encryption", value=environment_encryption, expected_type=type_hints["environment_encryption"])
             check_type(argname="argument ephemeral_storage_size", value=ephemeral_storage_size, expected_type=type_hints["ephemeral_storage_size"])
@@ -18613,6 +18893,8 @@ class FunctionOptions(EventInvokeConfigOptions):
             self._values["dead_letter_topic"] = dead_letter_topic
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if environment_encryption is not None:
@@ -18871,6 +19153,18 @@ class FunctionOptions(EventInvokeConfigOptions):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(self) -> typing.Optional[DurableConfig]:
+        '''The durable configuration for the function.
+
+        If durability is added to an existing function, a resource replacement will be triggered.
+        See the 'durableConfig' section in the module README for more details.
+
+        :default: - No durable configuration
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[DurableConfig], result)
 
     @builtins.property
     def environment(
@@ -19336,6 +19630,7 @@ class FunctionOptions(EventInvokeConfigOptions):
         "dead_letter_queue_enabled": "deadLetterQueueEnabled",
         "dead_letter_topic": "deadLetterTopic",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "environment_encryption": "environmentEncryption",
         "ephemeral_storage_size": "ephemeralStorageSize",
@@ -19396,6 +19691,7 @@ class FunctionProps(FunctionOptions):
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -19452,6 +19748,7 @@ class FunctionProps(FunctionOptions):
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -19519,6 +19816,8 @@ class FunctionProps(FunctionOptions):
             adot_instrumentation = AdotInstrumentationConfig(**adot_instrumentation)
         if isinstance(current_version_options, dict):
             current_version_options = VersionOptions(**current_version_options)
+        if isinstance(durable_config, dict):
+            durable_config = DurableConfig(**durable_config)
         if isinstance(log_retention_retry_options, dict):
             log_retention_retry_options = LogRetentionRetryOptions(**log_retention_retry_options)
         if isinstance(vpc_subnets, dict):
@@ -19542,6 +19841,7 @@ class FunctionProps(FunctionOptions):
             check_type(argname="argument dead_letter_queue_enabled", value=dead_letter_queue_enabled, expected_type=type_hints["dead_letter_queue_enabled"])
             check_type(argname="argument dead_letter_topic", value=dead_letter_topic, expected_type=type_hints["dead_letter_topic"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument environment_encryption", value=environment_encryption, expected_type=type_hints["environment_encryption"])
             check_type(argname="argument ephemeral_storage_size", value=ephemeral_storage_size, expected_type=type_hints["ephemeral_storage_size"])
@@ -19618,6 +19918,8 @@ class FunctionProps(FunctionOptions):
             self._values["dead_letter_topic"] = dead_letter_topic
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if environment_encryption is not None:
@@ -19876,6 +20178,18 @@ class FunctionProps(FunctionOptions):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(self) -> typing.Optional[DurableConfig]:
+        '''The durable configuration for the function.
+
+        If durability is added to an existing function, a resource replacement will be triggered.
+        See the 'durableConfig' section in the module README for more details.
+
+        :default: - No durable configuration
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[DurableConfig], result)
 
     @builtins.property
     def environment(
@@ -26013,10 +26327,10 @@ class S3CodeV2(
         # The values are placeholders you should change.
         from aws_cdk import aws_lambda as lambda_
         from aws_cdk import aws_s3 as s3
-        from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+        from aws_cdk.interfaces import aws_kms as interfaces_kms
         
         # bucket: s3.Bucket
-        # key_ref: interfaces_aws_kms.IKeyRef
+        # key_ref: interfaces_kms.IKeyRef
         
         s3_code_v2 = lambda_.S3CodeV2(bucket, "key",
             object_version="objectVersion",
@@ -26232,6 +26546,7 @@ class SchemaRegistryProps:
         "dead_letter_queue_enabled": "deadLetterQueueEnabled",
         "dead_letter_topic": "deadLetterTopic",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "environment_encryption": "environmentEncryption",
         "ephemeral_storage_size": "ephemeralStorageSize",
@@ -26294,6 +26609,7 @@ class SingletonFunctionProps(FunctionProps):
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -26353,6 +26669,7 @@ class SingletonFunctionProps(FunctionProps):
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -26407,6 +26724,8 @@ class SingletonFunctionProps(FunctionProps):
             adot_instrumentation = AdotInstrumentationConfig(**adot_instrumentation)
         if isinstance(current_version_options, dict):
             current_version_options = VersionOptions(**current_version_options)
+        if isinstance(durable_config, dict):
+            durable_config = DurableConfig(**durable_config)
         if isinstance(log_retention_retry_options, dict):
             log_retention_retry_options = LogRetentionRetryOptions(**log_retention_retry_options)
         if isinstance(vpc_subnets, dict):
@@ -26430,6 +26749,7 @@ class SingletonFunctionProps(FunctionProps):
             check_type(argname="argument dead_letter_queue_enabled", value=dead_letter_queue_enabled, expected_type=type_hints["dead_letter_queue_enabled"])
             check_type(argname="argument dead_letter_topic", value=dead_letter_topic, expected_type=type_hints["dead_letter_topic"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument environment_encryption", value=environment_encryption, expected_type=type_hints["environment_encryption"])
             check_type(argname="argument ephemeral_storage_size", value=ephemeral_storage_size, expected_type=type_hints["ephemeral_storage_size"])
@@ -26509,6 +26829,8 @@ class SingletonFunctionProps(FunctionProps):
             self._values["dead_letter_topic"] = dead_letter_topic
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if environment_encryption is not None:
@@ -26769,6 +27091,18 @@ class SingletonFunctionProps(FunctionProps):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(self) -> typing.Optional[DurableConfig]:
+        '''The durable configuration for the function.
+
+        If durability is added to an existing function, a resource replacement will be triggered.
+        See the 'durableConfig' section in the module README for more details.
+
+        :default: - No durable configuration
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[DurableConfig], result)
 
     @builtins.property
     def environment(
@@ -29642,6 +29976,7 @@ class CodeSigningConfig(
         "dead_letter_queue_enabled": "deadLetterQueueEnabled",
         "dead_letter_topic": "deadLetterTopic",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "environment_encryption": "environmentEncryption",
         "ephemeral_storage_size": "ephemeralStorageSize",
@@ -29700,6 +30035,7 @@ class DockerImageFunctionProps(FunctionOptions):
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -29755,6 +30091,7 @@ class DockerImageFunctionProps(FunctionOptions):
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -29803,6 +30140,8 @@ class DockerImageFunctionProps(FunctionOptions):
             adot_instrumentation = AdotInstrumentationConfig(**adot_instrumentation)
         if isinstance(current_version_options, dict):
             current_version_options = VersionOptions(**current_version_options)
+        if isinstance(durable_config, dict):
+            durable_config = DurableConfig(**durable_config)
         if isinstance(log_retention_retry_options, dict):
             log_retention_retry_options = LogRetentionRetryOptions(**log_retention_retry_options)
         if isinstance(vpc_subnets, dict):
@@ -29826,6 +30165,7 @@ class DockerImageFunctionProps(FunctionOptions):
             check_type(argname="argument dead_letter_queue_enabled", value=dead_letter_queue_enabled, expected_type=type_hints["dead_letter_queue_enabled"])
             check_type(argname="argument dead_letter_topic", value=dead_letter_topic, expected_type=type_hints["dead_letter_topic"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument environment_encryption", value=environment_encryption, expected_type=type_hints["environment_encryption"])
             check_type(argname="argument ephemeral_storage_size", value=ephemeral_storage_size, expected_type=type_hints["ephemeral_storage_size"])
@@ -29898,6 +30238,8 @@ class DockerImageFunctionProps(FunctionOptions):
             self._values["dead_letter_topic"] = dead_letter_topic
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if environment_encryption is not None:
@@ -30156,6 +30498,18 @@ class DockerImageFunctionProps(FunctionOptions):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(self) -> typing.Optional[DurableConfig]:
+        '''The durable configuration for the function.
+
+        If durability is added to an existing function, a resource replacement will be triggered.
+        See the 'durableConfig' section in the module README for more details.
+
+        :default: - No durable configuration
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[DurableConfig], result)
 
     @builtins.property
     def environment(
@@ -31960,6 +32314,7 @@ class SingletonFunction(
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -32020,6 +32375,7 @@ class SingletonFunction(
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -32082,6 +32438,7 @@ class SingletonFunction(
             dead_letter_queue_enabled=dead_letter_queue_enabled,
             dead_letter_topic=dead_letter_topic,
             description=description,
+            durable_config=durable_config,
             environment=environment,
             environment_encryption=environment_encryption,
             ephemeral_storage_size=ephemeral_storage_size,
@@ -33031,6 +33388,7 @@ class Function(
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -33089,6 +33447,7 @@ class Function(
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -33149,6 +33508,7 @@ class Function(
             dead_letter_queue_enabled=dead_letter_queue_enabled,
             dead_letter_topic=dead_letter_topic,
             description=description,
+            durable_config=durable_config,
             environment=environment,
             environment_encryption=environment_encryption,
             ephemeral_storage_size=ephemeral_storage_size,
@@ -33934,6 +34294,7 @@ class DockerImageFunction(
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -33990,6 +34351,7 @@ class DockerImageFunction(
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -34048,6 +34410,7 @@ class DockerImageFunction(
             dead_letter_queue_enabled=dead_letter_queue_enabled,
             dead_letter_topic=dead_letter_topic,
             description=description,
+            durable_config=durable_config,
             environment=environment,
             environment_encryption=environment_encryption,
             ephemeral_storage_size=ephemeral_storage_size,
@@ -34159,6 +34522,7 @@ __all__ = [
     "DockerImageCode",
     "DockerImageFunction",
     "DockerImageFunctionProps",
+    "DurableConfig",
     "EcrImageCode",
     "EcrImageCodeProps",
     "EnvironmentOptions",
@@ -34545,6 +34909,22 @@ def _typecheckingstub__a330cee966095402be57b20cbf348c99c8e7dbae1f12bacb4337a8681
 
 def _typecheckingstub__1ee84dc64a4d013d3e3844e200e21b7f164f926ad0dfb29a11a63fd570b6a426(
     resource: _ICapacityProviderRef_2d9bc4af,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__5e3d3801470964f09ca0d200b6be89938037f07530d35bb6b14986842d9e8bb4(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__77f467df9172499b7787ff5edaacdc254c6b8b095220fa6410109fd54e9b6c23(
+    scope: _constructs_77d1e7e8.Construct,
+    id: builtins.str,
+    capacity_provider_name: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35244,6 +35624,7 @@ def _typecheckingstub__d971f3872acf20816e6da364ff9e6bec83fe2e68bbb9a7debc845b400
     code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DurableConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -35349,6 +35730,12 @@ def _typecheckingstub__8e7260bd37534ff38acbffbc9ae7d7473b79520cd7320ebd30eb30dda
 
 def _typecheckingstub__9adaa36c21a67de531bddc847ecff2947d2a1b03b4f9d8d078da3e6849878bae(
     value: typing.Optional[builtins.str],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6d689f4ecbf183f4657451c14bc06108d6e3689e24bf76b6cc31fb72be5fa1b5(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnFunction.DurableConfigProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -35517,6 +35904,14 @@ def _typecheckingstub__a812f89a4720ebfd342e2bae3205898204a71a6d7c463a024623d8c6b
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bffb7f8b9f38dd65e6f04bd819c15a75d9dc95ce2172504b12d728437c01ac16(
+    *,
+    execution_timeout: jsii.Number,
+    retention_period_in_days: typing.Optional[jsii.Number] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__1e6acbe5ce51d5a0f4abaff5a4e2373a76927c34b3ec39525f796932f708bde1(
     *,
     variables: typing.Optional[typing.Union[typing.Mapping[builtins.str, builtins.str], _IResolvable_da3f097b]] = None,
@@ -35630,6 +36025,7 @@ def _typecheckingstub__06b7f494e25475a49ebed0d7ed6d0fca9653b5fa5e00ded0cba4fc40a
     code_signing_config_arn: typing.Optional[typing.Union[builtins.str, _ICodeSigningConfigRef_1d909622]] = None,
     dead_letter_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DeadLetterConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.DurableConfigProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     environment: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EnvironmentProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ephemeral_storage: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.EphemeralStorageProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     file_system_configs: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnFunction.FileSystemConfigProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
@@ -36370,6 +36766,14 @@ def _typecheckingstub__5da1bfa983f51013181a622617f984d1361ab84bd63c101a85256915a
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__e8f86dce25cadfc04a058e64fe90920598220b2e237ce98dec4e37a0432cb9cb(
+    *,
+    execution_timeout: _Duration_4839e8c3,
+    retention_period: typing.Optional[_Duration_4839e8c3] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__691e176891c7595692ae5e2b0e727d9f4d5fe9a231772407da646e0bd81ecb1e(
     repository: _IRepository_e6004aa6,
     *,
@@ -36596,6 +37000,7 @@ def _typecheckingstub__59918bb957d892739733c7a5849db990615fe5329709ad7ba703e0ee4
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -36653,6 +37058,7 @@ def _typecheckingstub__94e70d11aa3c53737d418dbb9983973dfc06dbdef5c8cc30613cc3c6d
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -37279,6 +37685,7 @@ def _typecheckingstub__68a03ec9f866a29c77aabcf8328c63a49511790fa9714874f255b3292
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -37606,6 +38013,7 @@ def _typecheckingstub__04dd97f4b18c00e7ee0981f2428664401ae0b75dbda6102ea3ef53d08
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -37879,6 +38287,7 @@ def _typecheckingstub__e7b766bff13bb7266787cec9bebb600187e19c1672e530bb9cfa31649
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -38110,6 +38519,7 @@ def _typecheckingstub__724895b6b59aaf2b678ef25f2beca19fb114fc04ff6b37edef28e12b3
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -38262,6 +38672,7 @@ def _typecheckingstub__368a49fe1f866c7ea7986c57b6f8488d0fddea8f62bf05ec1ed7eb09b
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[DurableConfig, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,

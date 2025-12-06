@@ -199,9 +199,9 @@ class ProfileAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53profiles as interfaces_aws_route53profiles
+            from aws_cdk.interfaces import aws_route53profiles as interfaces_route53profiles
             
-            profile_association_reference = interfaces_aws_route53profiles.ProfileAssociationReference(
+            profile_association_reference = interfaces_route53profiles.ProfileAssociationReference(
                 profile_association_id="profileAssociationId",
                 resource_id="resourceId"
             )
@@ -259,9 +259,9 @@ class ProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53profiles as interfaces_aws_route53profiles
+            from aws_cdk.interfaces import aws_route53profiles as interfaces_route53profiles
             
-            profile_reference = interfaces_aws_route53profiles.ProfileReference(
+            profile_reference = interfaces_route53profiles.ProfileReference(
                 profile_arn="profileArn",
                 profile_id="profileId"
             )
@@ -318,9 +318,9 @@ class ProfileResourceAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53profiles as interfaces_aws_route53profiles
+            from aws_cdk.interfaces import aws_route53profiles as interfaces_route53profiles
             
-            profile_resource_association_reference = interfaces_aws_route53profiles.ProfileResourceAssociationReference(
+            profile_resource_association_reference = interfaces_route53profiles.ProfileResourceAssociationReference(
                 profile_resource_association_id="profileResourceAssociationId"
             )
         '''

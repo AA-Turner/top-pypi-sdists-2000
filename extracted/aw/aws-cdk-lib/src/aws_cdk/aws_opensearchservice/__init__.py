@@ -6086,9 +6086,9 @@ class DomainGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_opensearchservice as opensearchservice
-        from aws_cdk.interfaces import aws_opensearchservice as interfaces_aws_opensearchservice
+        from aws_cdk.interfaces import aws_opensearchservice as interfaces_opensearchservice
         
-        # domain_ref: interfaces_aws_opensearchservice.IDomainRef
+        # domain_ref: interfaces_opensearchservice.IDomainRef
         
         domain_grants = opensearchservice.DomainGrants.from_domain(domain_ref)
     '''

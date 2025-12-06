@@ -63,9 +63,9 @@ class AggregationAuthorizationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            aggregation_authorization_reference = interfaces_aws_config.AggregationAuthorizationReference(
+            aggregation_authorization_reference = interfaces_config.AggregationAuthorizationReference(
                 aggregation_authorization_arn="aggregationAuthorizationArn",
                 authorized_account_id="authorizedAccountId",
                 authorized_aws_region="authorizedAwsRegion"
@@ -141,9 +141,9 @@ class ConfigRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            config_rule_reference = interfaces_aws_config.ConfigRuleReference(
+            config_rule_reference = interfaces_config.ConfigRuleReference(
                 config_rule_arn="configRuleArn",
                 config_rule_name="configRuleName"
             )
@@ -209,9 +209,9 @@ class ConfigurationAggregatorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            configuration_aggregator_reference = interfaces_aws_config.ConfigurationAggregatorReference(
+            configuration_aggregator_reference = interfaces_config.ConfigurationAggregatorReference(
                 configuration_aggregator_arn="configurationAggregatorArn",
                 configuration_aggregator_name="configurationAggregatorName"
             )
@@ -268,9 +268,9 @@ class ConfigurationRecorderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            configuration_recorder_reference = interfaces_aws_config.ConfigurationRecorderReference(
+            configuration_recorder_reference = interfaces_config.ConfigurationRecorderReference(
                 configuration_recorder_id="configurationRecorderId"
             )
         '''
@@ -317,9 +317,9 @@ class ConformancePackReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            conformance_pack_reference = interfaces_aws_config.ConformancePackReference(
+            conformance_pack_reference = interfaces_config.ConformancePackReference(
                 conformance_pack_name="conformancePackName"
             )
         '''
@@ -366,9 +366,9 @@ class DeliveryChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            delivery_channel_reference = interfaces_aws_config.DeliveryChannelReference(
+            delivery_channel_reference = interfaces_config.DeliveryChannelReference(
                 delivery_channel_id="deliveryChannelId"
             )
         '''
@@ -881,9 +881,9 @@ class OrganizationConfigRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            organization_config_rule_reference = interfaces_aws_config.OrganizationConfigRuleReference(
+            organization_config_rule_reference = interfaces_config.OrganizationConfigRuleReference(
                 organization_config_rule_id="organizationConfigRuleId"
             )
         '''
@@ -932,9 +932,9 @@ class OrganizationConformancePackReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            organization_conformance_pack_reference = interfaces_aws_config.OrganizationConformancePackReference(
+            organization_conformance_pack_reference = interfaces_config.OrganizationConformancePackReference(
                 organization_conformance_pack_name="organizationConformancePackName"
             )
         '''
@@ -981,9 +981,9 @@ class RemediationConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            remediation_configuration_reference = interfaces_aws_config.RemediationConfigurationReference(
+            remediation_configuration_reference = interfaces_config.RemediationConfigurationReference(
                 remediation_configuration_id="remediationConfigurationId"
             )
         '''
@@ -1030,9 +1030,9 @@ class StoredQueryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_config as interfaces_aws_config
+            from aws_cdk.interfaces import aws_config as interfaces_config
             
-            stored_query_reference = interfaces_aws_config.StoredQueryReference(
+            stored_query_reference = interfaces_config.StoredQueryReference(
                 query_name="queryName"
             )
         '''

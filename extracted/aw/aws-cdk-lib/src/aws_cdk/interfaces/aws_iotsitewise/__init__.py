@@ -60,9 +60,9 @@ class AccessPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            access_policy_reference = interfaces_aws_iotsitewise.AccessPolicyReference(
+            access_policy_reference = interfaces_iotsitewise.AccessPolicyReference(
                 access_policy_arn="accessPolicyArn",
                 access_policy_id="accessPolicyId"
             )
@@ -128,9 +128,9 @@ class AssetModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            asset_model_reference = interfaces_aws_iotsitewise.AssetModelReference(
+            asset_model_reference = interfaces_iotsitewise.AssetModelReference(
                 asset_model_arn="assetModelArn",
                 asset_model_id="assetModelId"
             )
@@ -188,9 +188,9 @@ class AssetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            asset_reference = interfaces_aws_iotsitewise.AssetReference(
+            asset_reference = interfaces_iotsitewise.AssetReference(
                 asset_arn="assetArn",
                 asset_id="assetId"
             )
@@ -256,9 +256,9 @@ class ComputationModelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            computation_model_reference = interfaces_aws_iotsitewise.ComputationModelReference(
+            computation_model_reference = interfaces_iotsitewise.ComputationModelReference(
                 computation_model_arn="computationModelArn",
                 computation_model_id="computationModelId"
             )
@@ -321,9 +321,9 @@ class DashboardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            dashboard_reference = interfaces_aws_iotsitewise.DashboardReference(
+            dashboard_reference = interfaces_iotsitewise.DashboardReference(
                 dashboard_arn="dashboardArn",
                 dashboard_id="dashboardId"
             )
@@ -381,9 +381,9 @@ class DatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            dataset_reference = interfaces_aws_iotsitewise.DatasetReference(
+            dataset_reference = interfaces_iotsitewise.DatasetReference(
                 dataset_arn="datasetArn",
                 dataset_id="datasetId"
             )
@@ -440,9 +440,9 @@ class GatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            gateway_reference = interfaces_aws_iotsitewise.GatewayReference(
+            gateway_reference = interfaces_iotsitewise.GatewayReference(
                 gateway_id="gatewayId"
             )
         '''
@@ -897,9 +897,9 @@ class PortalReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            portal_reference = interfaces_aws_iotsitewise.PortalReference(
+            portal_reference = interfaces_iotsitewise.PortalReference(
                 portal_arn="portalArn",
                 portal_id="portalId"
             )
@@ -957,9 +957,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotsitewise as interfaces_aws_iotsitewise
+            from aws_cdk.interfaces import aws_iotsitewise as interfaces_iotsitewise
             
-            project_reference = interfaces_aws_iotsitewise.ProjectReference(
+            project_reference = interfaces_iotsitewise.ProjectReference(
                 project_arn="projectArn",
                 project_id="projectId"
             )

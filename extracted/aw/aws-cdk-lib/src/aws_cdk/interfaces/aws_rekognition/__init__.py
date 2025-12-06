@@ -57,9 +57,9 @@ class CollectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rekognition as interfaces_aws_rekognition
+            from aws_cdk.interfaces import aws_rekognition as interfaces_rekognition
             
-            collection_reference = interfaces_aws_rekognition.CollectionReference(
+            collection_reference = interfaces_rekognition.CollectionReference(
                 collection_arn="collectionArn",
                 collection_id="collectionId"
             )
@@ -257,9 +257,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rekognition as interfaces_aws_rekognition
+            from aws_cdk.interfaces import aws_rekognition as interfaces_rekognition
             
-            project_reference = interfaces_aws_rekognition.ProjectReference(
+            project_reference = interfaces_rekognition.ProjectReference(
                 project_arn="projectArn",
                 project_name="projectName"
             )
@@ -325,9 +325,9 @@ class StreamProcessorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rekognition as interfaces_aws_rekognition
+            from aws_cdk.interfaces import aws_rekognition as interfaces_rekognition
             
-            stream_processor_reference = interfaces_aws_rekognition.StreamProcessorReference(
+            stream_processor_reference = interfaces_rekognition.StreamProcessorReference(
                 stream_processor_arn="streamProcessorArn",
                 stream_processor_name="streamProcessorName"
             )

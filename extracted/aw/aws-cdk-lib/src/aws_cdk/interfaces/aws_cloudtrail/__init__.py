@@ -51,9 +51,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudtrail as interfaces_aws_cloudtrail
+            from aws_cdk.interfaces import aws_cloudtrail as interfaces_cloudtrail
             
-            channel_reference = interfaces_aws_cloudtrail.ChannelReference(
+            channel_reference = interfaces_cloudtrail.ChannelReference(
                 channel_arn="channelArn"
             )
         '''
@@ -100,9 +100,9 @@ class DashboardReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudtrail as interfaces_aws_cloudtrail
+            from aws_cdk.interfaces import aws_cloudtrail as interfaces_cloudtrail
             
-            dashboard_reference = interfaces_aws_cloudtrail.DashboardReference(
+            dashboard_reference = interfaces_cloudtrail.DashboardReference(
                 dashboard_arn="dashboardArn"
             )
         '''
@@ -149,9 +149,9 @@ class EventDataStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudtrail as interfaces_aws_cloudtrail
+            from aws_cdk.interfaces import aws_cloudtrail as interfaces_cloudtrail
             
-            event_data_store_reference = interfaces_aws_cloudtrail.EventDataStoreReference(
+            event_data_store_reference = interfaces_cloudtrail.EventDataStoreReference(
                 event_data_store_arn="eventDataStoreArn"
             )
         '''
@@ -423,9 +423,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudtrail as interfaces_aws_cloudtrail
+            from aws_cdk.interfaces import aws_cloudtrail as interfaces_cloudtrail
             
-            resource_policy_reference = interfaces_aws_cloudtrail.ResourcePolicyReference(
+            resource_policy_reference = interfaces_cloudtrail.ResourcePolicyReference(
                 resource_arn="resourceArn"
             )
         '''
@@ -473,9 +473,9 @@ class TrailReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloudtrail as interfaces_aws_cloudtrail
+            from aws_cdk.interfaces import aws_cloudtrail as interfaces_cloudtrail
             
-            trail_reference = interfaces_aws_cloudtrail.TrailReference(
+            trail_reference = interfaces_cloudtrail.TrailReference(
                 trail_arn="trailArn",
                 trail_name="trailName"
             )

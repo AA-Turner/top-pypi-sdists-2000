@@ -396,9 +396,9 @@ table = dynamodb.TableV2(self, "Table",
 )
 ```
 
-#### Compound Keys
+#### Multi-attribute Keys
 
-Global secondary indexes support compound keys, allowing you to specify multiple partition keys and/or multiple sort keys. This enables more flexible query patterns for complex data models.
+Global secondary indexes support multi-attribute keys, allowing you to specify multiple partition keys and/or multiple sort keys. This enables more flexible query patterns for complex data models.
 
 **Key Constraints:**
 
@@ -410,13 +410,13 @@ Global secondary indexes support compound keys, allowing you to specify multiple
 * For multiple keys, you **must** use the plural parameters (`partitionKeys` and/or `sortKeys`)
 * **Keys cannot be added or modified after index creation** - attempting to add additional keys to an existing index will result in an error
 
-**Example with compound partition and sort keys:**
+**Example with multi-attribute partition and sort keys:**
 
 ```python
 table = dynamodb.TableV2(self, "Table",
     partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING),
     global_secondary_indexes=[dynamodb.GlobalSecondaryIndexPropsV2(
-        index_name="compound-gsi",
+        index_name="multi-attribute-gsi",
         partition_keys=[dynamodb.Attribute(name="gsi_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="gsi_pk2", type=dynamodb.AttributeType.NUMBER)
         ],
         sort_keys=[dynamodb.Attribute(name="gsi_sk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="gsi_sk2", type=dynamodb.AttributeType.BINARY)
@@ -443,10 +443,10 @@ table.add_global_secondary_index(
     partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
 )
 
-# Add a GSI with compound keys
+# Add a GSI with multi-attribute keys
 table.add_global_secondary_index(
-    index_name="compound-gsi2",
-    partition_keys=[dynamodb.Attribute(name="compound_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="compound_pk2", type=dynamodb.AttributeType.NUMBER)
+    index_name="multi-attribute-gsi2",
+    partition_keys=[dynamodb.Attribute(name="multi-attribute_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="multi-attribute_pk2", type=dynamodb.AttributeType.NUMBER)
     ],
     sort_key=dynamodb.Attribute(name="sk", type=dynamodb.AttributeType.STRING)
 )
@@ -10494,8 +10494,8 @@ class SchemaOptions:
     ) -> None:
         '''Represents the table schema attributes.
 
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
 
         :exampleMetadata: fixture=_generated
 
@@ -10535,7 +10535,7 @@ class SchemaOptions:
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
-        ``partitionKeys`` field if the partition key is a compound key (consists of
+        ``partitionKeys`` field if the partition key is a multi-attribute key (consists of
         multiple fields).
 
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
@@ -10548,7 +10548,7 @@ class SchemaOptions:
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
-        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple
         fields).
 
         :default: - no sort key
@@ -10671,10 +10671,10 @@ class StreamGrants(
         # The values are placeholders you should change.
         from aws_cdk import aws_dynamodb as dynamodb
         from aws_cdk import aws_kms as kms
-        from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+        from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
         
         # key: kms.Key
-        # table_ref: interfaces_aws_dynamodb.ITableRef
+        # table_ref: interfaces_dynamodb.ITableRef
         
         stream_grants = dynamodb.StreamGrants(
             table=table_ref,
@@ -10782,10 +10782,10 @@ class StreamGrantsProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_dynamodb as dynamodb
             from aws_cdk import aws_kms as kms
-            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
             
             # key: kms.Key
-            # table_ref: interfaces_aws_dynamodb.ITableRef
+            # table_ref: interfaces_dynamodb.ITableRef
             
             stream_grants_props = dynamodb.StreamGrantsProps(
                 table=table_ref,
@@ -13605,11 +13605,11 @@ class TableGrants(
         # The values are placeholders you should change.
         from aws_cdk import aws_dynamodb as dynamodb
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+        from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
         
         # encrypted_resource: iam.IEncryptedResource
         # resource_with_policy_v2: iam.IResourceWithPolicyV2
-        # table_ref: interfaces_aws_dynamodb.ITableRef
+        # table_ref: interfaces_dynamodb.ITableRef
         
         table_grants = dynamodb.TableGrants(
             table=table_ref,
@@ -13765,11 +13765,11 @@ class TableGrantsProps:
             # The values are placeholders you should change.
             from aws_cdk import aws_dynamodb as dynamodb
             from aws_cdk import aws_iam as iam
-            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
             
             # encrypted_resource: iam.IEncryptedResource
             # resource_with_policy_v2: iam.IResourceWithPolicyV2
-            # table_ref: interfaces_aws_dynamodb.ITableRef
+            # table_ref: interfaces_dynamodb.ITableRef
             
             table_grants_props = dynamodb.TableGrantsProps(
                 table=table_ref,
@@ -13922,8 +13922,8 @@ class TableOptions(SchemaOptions):
 
         Use ``TableProps`` for all table properties
 
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
         :param billing_mode: Specify how you are charged for read and write throughput and how you manage capacity. Default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
@@ -14116,7 +14116,7 @@ class TableOptions(SchemaOptions):
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
-        ``partitionKeys`` field if the partition key is a compound key (consists of
+        ``partitionKeys`` field if the partition key is a multi-attribute key (consists of
         multiple fields).
 
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
@@ -14129,7 +14129,7 @@ class TableOptions(SchemaOptions):
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
-        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple
         fields).
 
         :default: - no sort key
@@ -14719,8 +14719,8 @@ class TableProps(TableOptions):
     ) -> None:
         '''Properties for a DynamoDB Table.
 
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
         :param billing_mode: Specify how you are charged for read and write throughput and how you manage capacity. Default: PROVISIONED if ``replicationRegions`` is not specified, PAY_PER_REQUEST otherwise
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
@@ -14879,7 +14879,7 @@ class TableProps(TableOptions):
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
-        ``partitionKeys`` field if the partition key is a compound key (consists of
+        ``partitionKeys`` field if the partition key is a multi-attribute key (consists of
         multiple fields).
 
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
@@ -14892,7 +14892,7 @@ class TableProps(TableOptions):
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
-        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple
         fields).
 
         :default: - no sort key
@@ -15881,11 +15881,11 @@ class TableV2(
 
         :param max_read_request_units: The maximum read request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
         :param max_write_request_units: The maximum write request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Multi-attribute partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
-        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
+        :param sort_keys: Multi-attribute sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
         :param index_name: The name of the secondary index.
@@ -16428,15 +16428,15 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         :param index_name: The name of the secondary index.
         :param non_key_attributes: The non-key attributes that are projected into the secondary index. Default: - No additional attributes
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
         :param contributor_insights_enabled: (deprecated) Whether CloudWatch contributor insights is enabled for the specified global secondary index. Default: false
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
         :param max_read_request_units: The maximum read request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
         :param max_write_request_units: The maximum write request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
-        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Multi-attribute partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
-        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
+        :param sort_keys: Multi-attribute sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
 
@@ -16542,7 +16542,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
-        ``partitionKeys`` field if the partition key is a compound key (consists of
+        ``partitionKeys`` field if the partition key is a multi-attribute key (consists of
         multiple fields).
 
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
@@ -16555,7 +16555,7 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
-        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple
         fields).
 
         :default: - no sort key
@@ -16611,13 +16611,13 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
 
     @builtins.property
     def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
-        '''Compound partition key.
+        '''Multi-attribute partition key.
 
         If a single field forms the partition key, you can use either
         ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly
         one of these must be specified.
 
-        You must use ``partitionKeys`` field if the partition key is a compound key
+        You must use ``partitionKeys`` field if the partition key is a multi-attribute key
         (consists of multiple fields).
 
         NOTE: although the name of this field makes it sound like it creates
@@ -16644,13 +16644,13 @@ class GlobalSecondaryIndexProps(SecondaryIndexProps, SchemaOptions):
 
     @builtins.property
     def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
-        '''Compound sort key.
+        '''Multi-attribute sort key.
 
         If a single field forms the sort key, you can use either
         ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these
         may be specified.
 
-        You must use ``sortKeys`` field if the sort key is a compound key
+        You must use ``sortKeys`` field if the sort key is a multi-attribute key
         (consists of multiple fields).
 
         NOTE: although the name of this field makes it sound like it creates
@@ -16738,11 +16738,11 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
         :param max_read_request_units: The maximum read request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
         :param max_write_request_units: The maximum write request units. Note: This can only be configured if the primary table billing is PAY_PER_REQUEST. Default: - inherited from the primary table.
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Multi-attribute partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
-        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
+        :param sort_keys: Multi-attribute sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity. Note: This can only be configured if the primary table billing is provisioned. Default: - inherited from the primary table.
 
@@ -16764,10 +16764,10 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
                 partition_key=dynamodb.Attribute(name="pk", type=dynamodb.AttributeType.STRING)
             )
             
-            # Add a GSI with compound keys
+            # Add a GSI with multi-attribute keys
             table.add_global_secondary_index(
-                index_name="compound-gsi2",
-                partition_keys=[dynamodb.Attribute(name="compound_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="compound_pk2", type=dynamodb.AttributeType.NUMBER)
+                index_name="multi-attribute-gsi2",
+                partition_keys=[dynamodb.Attribute(name="multi-attribute_pk1", type=dynamodb.AttributeType.STRING), dynamodb.Attribute(name="multi-attribute_pk2", type=dynamodb.AttributeType.NUMBER)
                 ],
                 sort_key=dynamodb.Attribute(name="sk", type=dynamodb.AttributeType.STRING)
             )
@@ -16870,7 +16870,7 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         '''Partition key attribute definition.
 
         If a single field forms the partition key, you can use this field.  Use the
-        ``partitionKeys`` field if the partition key is a compound key (consists of
+        ``partitionKeys`` field if the partition key is a multi-attribute key (consists of
         multiple fields).
 
         :default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
@@ -16880,13 +16880,13 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
 
     @builtins.property
     def partition_keys(self) -> typing.Optional[typing.List[Attribute]]:
-        '''Compound partition key.
+        '''Multi-attribute partition key.
 
         If a single field forms the partition key, you can use either
         ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly
         one of these must be specified.
 
-        You must use ``partitionKeys`` field if the partition key is a compound key
+        You must use ``partitionKeys`` field if the partition key is a multi-attribute key
         (consists of multiple fields).
 
         NOTE: although the name of this field makes it sound like it creates
@@ -16916,7 +16916,7 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
         '''Sort key attribute definition.
 
         If a single field forms the sort key, you can use this field.  Use the
-        ``sortKeys`` field if the sort key is a compound key (consists of multiple
+        ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple
         fields).
 
         :default: - no sort key
@@ -16926,13 +16926,13 @@ class GlobalSecondaryIndexPropsV2(SecondaryIndexProps):
 
     @builtins.property
     def sort_keys(self) -> typing.Optional[typing.List[Attribute]]:
-        '''Compound sort key.
+        '''Multi-attribute sort key.
 
         If a single field forms the sort key, you can use either
         ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these
         may be specified.
 
-        You must use ``sortKeys`` field if the sort key is a compound key
+        You must use ``sortKeys`` field if the sort key is a multi-attribute key
         (consists of multiple fields).
 
         NOTE: although the name of this field makes it sound like it creates
@@ -17741,8 +17741,8 @@ class Table(
         :param wait_for_replication_to_finish: [WARNING: Use this flag with caution, misusing this flag may cause deleting existing replicas, refer to the detailed documentation for more information] Indicates whether CloudFormation stack waits for replication to finish. If set to false, the CloudFormation resource will mark the resource as created and replication will be completed asynchronously. This property is ignored if replicationRegions property is not set. WARNING: DO NOT UNSET this property if adding/removing multiple replicationRegions in one deployment, as CloudFormation only supports one region replication at a time. CDK overcomes this limitation by waiting for replication to finish before starting new replicationRegion. If the custom resource which handles replication has a physical resource ID with the format ``region`` instead of ``tablename-region`` (this would happen if the custom resource hasn't received an event since v1.91.0), DO NOT SET this property to false without making a change to the table name. This will cause the existing replicas to be deleted. Default: true
         :param warm_throughput: Specify values to pre-warm you DynamoDB Table Warm Throughput feature is not available for Global Table replicas using the ``Table`` construct. To enable Warm Throughput, use the ``TableV2`` construct instead. Default: - warm throughput is not configured
         :param write_capacity: The write capacity for the table. Careful if you add Global Secondary Indexes, as those will share the table's provisioned throughput. Can only be provided if billingMode is Provisioned. Default: 5
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__b92f0ed514f00b57a2a41d754e55fe495d22b05b0ad4711b80ce004570089cd7)
@@ -17891,16 +17891,16 @@ class Table(
         :param contributor_insights_specification: Whether CloudWatch contributor insights is enabled and what mode is selected. Default: - contributor insights is not enabled
         :param max_read_request_units: The maximum read request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
         :param max_write_request_units: The maximum write request units for the global secondary index. Can only be provided if table billingMode is PAY_PER_REQUEST. Default: - on-demand throughput is disabled
-        :param partition_keys: Compound partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param partition_keys: Multi-attribute partition key. If a single field forms the partition key, you can use either ``partitionKey`` or ``partitionKeys`` to specify the partition key. Exactly one of these must be specified. You must use ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields. The order of fields is not important. Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
         :param read_capacity: The read capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
-        :param sort_keys: Compound sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
+        :param sort_keys: Multi-attribute sort key. If a single field forms the sort key, you can use either ``sortKey`` or ``sortKeys`` to specify the sort key. At most one of these may be specified. You must use ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). NOTE: although the name of this field makes it sound like it creates multiple keys, it does not. It defines a single key that consists of of multiple fields at the same time. NOTE: The order of fields is important! Default: - no sort key
         :param warm_throughput: The warm throughput configuration for the global secondary index. Default: - no warm throughput is configured
         :param write_capacity: The write capacity for the global secondary index. Can only be provided if table billingMode is Provisioned or undefined. Default: 5
         :param index_name: The name of the secondary index.
         :param non_key_attributes: The non-key attributes that are projected into the secondary index. Default: - No additional attributes
         :param projection_type: The set of attributes that are projected into the secondary index. Default: ALL
-        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a compound key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
-        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a compound key (consists of multiple fields). Default: - no sort key
+        :param partition_key: Partition key attribute definition. If a single field forms the partition key, you can use this field. Use the ``partitionKeys`` field if the partition key is a multi-attribute key (consists of multiple fields). Default: - exactly one of ``partitionKey`` and ``partitionKeys`` must be specified.
+        :param sort_key: Sort key attribute definition. If a single field forms the sort key, you can use this field. Use the ``sortKeys`` field if the sort key is a multi-attribute key (consists of multiple fields). Default: - no sort key
         '''
         props = GlobalSecondaryIndexProps(
             contributor_insights_enabled=contributor_insights_enabled,

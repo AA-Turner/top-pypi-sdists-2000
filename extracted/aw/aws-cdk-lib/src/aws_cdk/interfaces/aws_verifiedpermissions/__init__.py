@@ -246,9 +246,9 @@ class IdentitySourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_aws_verifiedpermissions
+            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_verifiedpermissions
             
-            identity_source_reference = interfaces_aws_verifiedpermissions.IdentitySourceReference(
+            identity_source_reference = interfaces_verifiedpermissions.IdentitySourceReference(
                 identity_source_id="identitySourceId",
                 policy_store_id="policyStoreId"
             )
@@ -311,9 +311,9 @@ class PolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_aws_verifiedpermissions
+            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_verifiedpermissions
             
-            policy_reference = interfaces_aws_verifiedpermissions.PolicyReference(
+            policy_reference = interfaces_verifiedpermissions.PolicyReference(
                 policy_id="policyId",
                 policy_store_id="policyStoreId"
             )
@@ -379,9 +379,9 @@ class PolicyStoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_aws_verifiedpermissions
+            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_verifiedpermissions
             
-            policy_store_reference = interfaces_aws_verifiedpermissions.PolicyStoreReference(
+            policy_store_reference = interfaces_verifiedpermissions.PolicyStoreReference(
                 policy_store_arn="policyStoreArn",
                 policy_store_id="policyStoreId"
             )
@@ -447,9 +447,9 @@ class PolicyTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_aws_verifiedpermissions
+            from aws_cdk.interfaces import aws_verifiedpermissions as interfaces_verifiedpermissions
             
-            policy_template_reference = interfaces_aws_verifiedpermissions.PolicyTemplateReference(
+            policy_template_reference = interfaces_verifiedpermissions.PolicyTemplateReference(
                 policy_store_id="policyStoreId",
                 policy_template_id="policyTemplateId"
             )

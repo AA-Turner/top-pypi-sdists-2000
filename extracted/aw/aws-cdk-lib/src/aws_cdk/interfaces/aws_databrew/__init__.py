@@ -51,9 +51,9 @@ class DatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            dataset_reference = interfaces_aws_databrew.DatasetReference(
+            dataset_reference = interfaces_databrew.DatasetReference(
                 dataset_name="datasetName"
             )
         '''
@@ -370,9 +370,9 @@ class JobReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            job_reference = interfaces_aws_databrew.JobReference(
+            job_reference = interfaces_databrew.JobReference(
                 job_name="jobName"
             )
         '''
@@ -419,9 +419,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            project_reference = interfaces_aws_databrew.ProjectReference(
+            project_reference = interfaces_databrew.ProjectReference(
                 project_name="projectName"
             )
         '''
@@ -468,9 +468,9 @@ class RecipeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            recipe_reference = interfaces_aws_databrew.RecipeReference(
+            recipe_reference = interfaces_databrew.RecipeReference(
                 recipe_name="recipeName"
             )
         '''
@@ -517,9 +517,9 @@ class RulesetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            ruleset_reference = interfaces_aws_databrew.RulesetReference(
+            ruleset_reference = interfaces_databrew.RulesetReference(
                 ruleset_name="rulesetName"
             )
         '''
@@ -566,9 +566,9 @@ class ScheduleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_databrew as interfaces_aws_databrew
+            from aws_cdk.interfaces import aws_databrew as interfaces_databrew
             
-            schedule_reference = interfaces_aws_databrew.ScheduleReference(
+            schedule_reference = interfaces_databrew.ScheduleReference(
                 schedule_name="scheduleName"
             )
         '''

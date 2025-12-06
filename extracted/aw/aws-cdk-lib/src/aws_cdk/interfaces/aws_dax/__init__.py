@@ -52,9 +52,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dax as interfaces_aws_dax
+            from aws_cdk.interfaces import aws_dax as interfaces_dax
             
-            cluster_reference = interfaces_aws_dax.ClusterReference(
+            cluster_reference = interfaces_dax.ClusterReference(
                 cluster_arn="clusterArn",
                 cluster_id="clusterId"
             )
@@ -246,9 +246,9 @@ class ParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dax as interfaces_aws_dax
+            from aws_cdk.interfaces import aws_dax as interfaces_dax
             
-            parameter_group_reference = interfaces_aws_dax.ParameterGroupReference(
+            parameter_group_reference = interfaces_dax.ParameterGroupReference(
                 parameter_group_id="parameterGroupId"
             )
         '''
@@ -295,9 +295,9 @@ class SubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dax as interfaces_aws_dax
+            from aws_cdk.interfaces import aws_dax as interfaces_dax
             
-            subnet_group_reference = interfaces_aws_dax.SubnetGroupReference(
+            subnet_group_reference = interfaces_dax.SubnetGroupReference(
                 subnet_group_id="subnetGroupId"
             )
         '''

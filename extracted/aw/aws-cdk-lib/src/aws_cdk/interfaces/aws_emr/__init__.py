@@ -51,9 +51,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            cluster_reference = interfaces_aws_emr.ClusterReference(
+            cluster_reference = interfaces_emr.ClusterReference(
                 cluster_id="clusterId"
             )
         '''
@@ -460,9 +460,9 @@ class InstanceFleetConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            instance_fleet_config_reference = interfaces_aws_emr.InstanceFleetConfigReference(
+            instance_fleet_config_reference = interfaces_emr.InstanceFleetConfigReference(
                 instance_fleet_config_id="instanceFleetConfigId"
             )
         '''
@@ -509,9 +509,9 @@ class InstanceGroupConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            instance_group_config_reference = interfaces_aws_emr.InstanceGroupConfigReference(
+            instance_group_config_reference = interfaces_emr.InstanceGroupConfigReference(
                 instance_group_config_id="instanceGroupConfigId"
             )
         '''
@@ -558,9 +558,9 @@ class SecurityConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            security_configuration_reference = interfaces_aws_emr.SecurityConfigurationReference(
+            security_configuration_reference = interfaces_emr.SecurityConfigurationReference(
                 security_configuration_name="securityConfigurationName"
             )
         '''
@@ -607,9 +607,9 @@ class StepReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            step_reference = interfaces_aws_emr.StepReference(
+            step_reference = interfaces_emr.StepReference(
                 step_id="stepId"
             )
         '''
@@ -657,9 +657,9 @@ class StudioReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            studio_reference = interfaces_aws_emr.StudioReference(
+            studio_reference = interfaces_emr.StudioReference(
                 studio_arn="studioArn",
                 studio_id="studioId"
             )
@@ -728,9 +728,9 @@ class StudioSessionMappingReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            studio_session_mapping_reference = interfaces_aws_emr.StudioSessionMappingReference(
+            studio_session_mapping_reference = interfaces_emr.StudioSessionMappingReference(
                 identity_name="identityName",
                 identity_type="identityType",
                 studio_id="studioId"
@@ -797,9 +797,9 @@ class WALWorkspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_emr as interfaces_aws_emr
+            from aws_cdk.interfaces import aws_emr as interfaces_emr
             
-            w_aLWorkspace_reference = interfaces_aws_emr.WALWorkspaceReference(
+            w_aLWorkspace_reference = interfaces_emr.WALWorkspaceReference(
                 wal_workspace_name="walWorkspaceName"
             )
         '''

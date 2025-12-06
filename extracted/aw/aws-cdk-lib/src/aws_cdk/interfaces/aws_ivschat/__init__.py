@@ -143,9 +143,9 @@ class LoggingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivschat as interfaces_aws_ivschat
+            from aws_cdk.interfaces import aws_ivschat as interfaces_ivschat
             
-            logging_configuration_reference = interfaces_aws_ivschat.LoggingConfigurationReference(
+            logging_configuration_reference = interfaces_ivschat.LoggingConfigurationReference(
                 logging_configuration_arn="loggingConfigurationArn"
             )
         '''
@@ -192,9 +192,9 @@ class RoomReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivschat as interfaces_aws_ivschat
+            from aws_cdk.interfaces import aws_ivschat as interfaces_ivschat
             
-            room_reference = interfaces_aws_ivschat.RoomReference(
+            room_reference = interfaces_ivschat.RoomReference(
                 room_arn="roomArn"
             )
         '''

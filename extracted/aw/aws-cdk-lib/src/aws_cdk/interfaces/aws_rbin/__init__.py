@@ -96,9 +96,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rbin as interfaces_aws_rbin
+            from aws_cdk.interfaces import aws_rbin as interfaces_rbin
             
-            rule_reference = interfaces_aws_rbin.RuleReference(
+            rule_reference = interfaces_rbin.RuleReference(
                 rule_arn="ruleArn"
             )
         '''

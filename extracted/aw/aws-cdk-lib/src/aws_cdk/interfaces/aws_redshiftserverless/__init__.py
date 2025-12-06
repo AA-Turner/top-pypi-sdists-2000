@@ -190,9 +190,9 @@ class NamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_aws_redshiftserverless
+            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_redshiftserverless
             
-            namespace_reference = interfaces_aws_redshiftserverless.NamespaceReference(
+            namespace_reference = interfaces_redshiftserverless.NamespaceReference(
                 namespace_name="namespaceName"
             )
         '''
@@ -239,9 +239,9 @@ class SnapshotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_aws_redshiftserverless
+            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_redshiftserverless
             
-            snapshot_reference = interfaces_aws_redshiftserverless.SnapshotReference(
+            snapshot_reference = interfaces_redshiftserverless.SnapshotReference(
                 snapshot_name="snapshotName"
             )
         '''
@@ -288,9 +288,9 @@ class WorkgroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_aws_redshiftserverless
+            from aws_cdk.interfaces import aws_redshiftserverless as interfaces_redshiftserverless
             
-            workgroup_reference = interfaces_aws_redshiftserverless.WorkgroupReference(
+            workgroup_reference = interfaces_redshiftserverless.WorkgroupReference(
                 workgroup_name="workgroupName"
             )
         '''

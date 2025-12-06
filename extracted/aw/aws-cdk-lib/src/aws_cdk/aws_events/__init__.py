@@ -9059,9 +9059,9 @@ class EventBusGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_events as events
-        from aws_cdk.interfaces import aws_events as interfaces_aws_events
+        from aws_cdk.interfaces import aws_events as interfaces_events
         
-        # event_bus_ref: interfaces_aws_events.IEventBusRef
+        # event_bus_ref: interfaces_events.IEventBusRef
         
         event_bus_grants = events.EventBusGrants.from_event_bus(event_bus_ref)
     '''

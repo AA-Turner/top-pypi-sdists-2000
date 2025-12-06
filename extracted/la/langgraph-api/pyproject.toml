@@ -67,6 +67,7 @@ dev = [
     "langgraph-checkpoint-sqlite>=3.0.0",
     "datadog-api-client>=2.0.0",
     "ty==0.0.1-alpha.21",
+    "py-spy>=0.4.1",
 ]
 
 

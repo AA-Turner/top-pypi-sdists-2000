@@ -51,9 +51,9 @@ class AnomalyMonitorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ce as interfaces_aws_ce
+            from aws_cdk.interfaces import aws_ce as interfaces_ce
             
-            anomaly_monitor_reference = interfaces_aws_ce.AnomalyMonitorReference(
+            anomaly_monitor_reference = interfaces_ce.AnomalyMonitorReference(
                 monitor_arn="monitorArn"
             )
         '''
@@ -100,9 +100,9 @@ class AnomalySubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ce as interfaces_aws_ce
+            from aws_cdk.interfaces import aws_ce as interfaces_ce
             
-            anomaly_subscription_reference = interfaces_aws_ce.AnomalySubscriptionReference(
+            anomaly_subscription_reference = interfaces_ce.AnomalySubscriptionReference(
                 subscription_arn="subscriptionArn"
             )
         '''
@@ -149,9 +149,9 @@ class CostCategoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ce as interfaces_aws_ce
+            from aws_cdk.interfaces import aws_ce as interfaces_ce
             
-            cost_category_reference = interfaces_aws_ce.CostCategoryReference(
+            cost_category_reference = interfaces_ce.CostCategoryReference(
                 cost_category_arn="costCategoryArn"
             )
         '''

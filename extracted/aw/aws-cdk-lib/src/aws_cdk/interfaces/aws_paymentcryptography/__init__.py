@@ -51,9 +51,9 @@ class AliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_paymentcryptography as interfaces_aws_paymentcryptography
+            from aws_cdk.interfaces import aws_paymentcryptography as interfaces_paymentcryptography
             
-            alias_reference = interfaces_aws_paymentcryptography.AliasReference(
+            alias_reference = interfaces_paymentcryptography.AliasReference(
                 alias_name="aliasName"
             )
         '''
@@ -190,9 +190,9 @@ class KeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_paymentcryptography as interfaces_aws_paymentcryptography
+            from aws_cdk.interfaces import aws_paymentcryptography as interfaces_paymentcryptography
             
-            key_reference = interfaces_aws_paymentcryptography.KeyReference(
+            key_reference = interfaces_paymentcryptography.KeyReference(
                 key_identifier="keyIdentifier"
             )
         '''

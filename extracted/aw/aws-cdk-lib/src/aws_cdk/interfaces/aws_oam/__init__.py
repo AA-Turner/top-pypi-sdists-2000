@@ -141,9 +141,9 @@ class LinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_oam as interfaces_aws_oam
+            from aws_cdk.interfaces import aws_oam as interfaces_oam
             
-            link_reference = interfaces_aws_oam.LinkReference(
+            link_reference = interfaces_oam.LinkReference(
                 link_arn="linkArn"
             )
         '''
@@ -190,9 +190,9 @@ class SinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_oam as interfaces_aws_oam
+            from aws_cdk.interfaces import aws_oam as interfaces_oam
             
-            sink_reference = interfaces_aws_oam.SinkReference(
+            sink_reference = interfaces_oam.SinkReference(
                 sink_arn="sinkArn"
             )
         '''

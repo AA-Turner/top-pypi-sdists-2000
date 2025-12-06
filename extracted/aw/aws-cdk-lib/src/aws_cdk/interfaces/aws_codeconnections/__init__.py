@@ -51,9 +51,9 @@ class ConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codeconnections as interfaces_aws_codeconnections
+            from aws_cdk.interfaces import aws_codeconnections as interfaces_codeconnections
             
-            connection_reference = interfaces_aws_codeconnections.ConnectionReference(
+            connection_reference = interfaces_codeconnections.ConnectionReference(
                 connection_arn="connectionArn"
             )
         '''

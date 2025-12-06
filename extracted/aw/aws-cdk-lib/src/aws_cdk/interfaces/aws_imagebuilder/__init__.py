@@ -51,9 +51,9 @@ class ComponentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            component_reference = interfaces_aws_imagebuilder.ComponentReference(
+            component_reference = interfaces_imagebuilder.ComponentReference(
                 component_arn="componentArn"
             )
         '''
@@ -100,9 +100,9 @@ class ContainerRecipeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            container_recipe_reference = interfaces_aws_imagebuilder.ContainerRecipeReference(
+            container_recipe_reference = interfaces_imagebuilder.ContainerRecipeReference(
                 container_recipe_arn="containerRecipeArn"
             )
         '''
@@ -149,9 +149,9 @@ class DistributionConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            distribution_configuration_reference = interfaces_aws_imagebuilder.DistributionConfigurationReference(
+            distribution_configuration_reference = interfaces_imagebuilder.DistributionConfigurationReference(
                 distribution_configuration_arn="distributionConfigurationArn"
             )
         '''
@@ -615,9 +615,9 @@ class ImagePipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            image_pipeline_reference = interfaces_aws_imagebuilder.ImagePipelineReference(
+            image_pipeline_reference = interfaces_imagebuilder.ImagePipelineReference(
                 image_pipeline_arn="imagePipelineArn"
             )
         '''
@@ -664,9 +664,9 @@ class ImageRecipeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            image_recipe_reference = interfaces_aws_imagebuilder.ImageRecipeReference(
+            image_recipe_reference = interfaces_imagebuilder.ImageRecipeReference(
                 image_recipe_arn="imageRecipeArn"
             )
         '''
@@ -713,9 +713,9 @@ class ImageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            image_reference = interfaces_aws_imagebuilder.ImageReference(
+            image_reference = interfaces_imagebuilder.ImageReference(
                 image_arn="imageArn"
             )
         '''
@@ -764,9 +764,9 @@ class InfrastructureConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            infrastructure_configuration_reference = interfaces_aws_imagebuilder.InfrastructureConfigurationReference(
+            infrastructure_configuration_reference = interfaces_imagebuilder.InfrastructureConfigurationReference(
                 infrastructure_configuration_arn="infrastructureConfigurationArn"
             )
         '''
@@ -813,9 +813,9 @@ class LifecyclePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            lifecycle_policy_reference = interfaces_aws_imagebuilder.LifecyclePolicyReference(
+            lifecycle_policy_reference = interfaces_imagebuilder.LifecyclePolicyReference(
                 lifecycle_policy_arn="lifecyclePolicyArn"
             )
         '''
@@ -862,9 +862,9 @@ class WorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_imagebuilder as interfaces_aws_imagebuilder
+            from aws_cdk.interfaces import aws_imagebuilder as interfaces_imagebuilder
             
-            workflow_reference = interfaces_aws_imagebuilder.WorkflowReference(
+            workflow_reference = interfaces_imagebuilder.WorkflowReference(
                 workflow_arn="workflowArn"
             )
         '''

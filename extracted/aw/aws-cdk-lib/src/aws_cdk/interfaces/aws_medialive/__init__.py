@@ -63,9 +63,9 @@ class ChannelPlacementGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            channel_placement_group_reference = interfaces_aws_medialive.ChannelPlacementGroupReference(
+            channel_placement_group_reference = interfaces_medialive.ChannelPlacementGroupReference(
                 channel_placement_group_arn="channelPlacementGroupArn",
                 channel_placement_group_id="channelPlacementGroupId",
                 cluster_id="clusterId"
@@ -133,9 +133,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            channel_reference = interfaces_aws_medialive.ChannelReference(
+            channel_reference = interfaces_medialive.ChannelReference(
                 channel_arn="channelArn",
                 channel_id="channelId"
             )
@@ -201,9 +201,9 @@ class CloudWatchAlarmTemplateGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            cloud_watch_alarm_template_group_reference = interfaces_aws_medialive.CloudWatchAlarmTemplateGroupReference(
+            cloud_watch_alarm_template_group_reference = interfaces_medialive.CloudWatchAlarmTemplateGroupReference(
                 cloud_watch_alarm_template_group_arn="cloudWatchAlarmTemplateGroupArn",
                 identifier="identifier"
             )
@@ -269,9 +269,9 @@ class CloudWatchAlarmTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            cloud_watch_alarm_template_reference = interfaces_aws_medialive.CloudWatchAlarmTemplateReference(
+            cloud_watch_alarm_template_reference = interfaces_medialive.CloudWatchAlarmTemplateReference(
                 cloud_watch_alarm_template_arn="cloudWatchAlarmTemplateArn",
                 identifier="identifier"
             )
@@ -329,9 +329,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            cluster_reference = interfaces_aws_medialive.ClusterReference(
+            cluster_reference = interfaces_medialive.ClusterReference(
                 cluster_arn="clusterArn",
                 cluster_id="clusterId"
             )
@@ -397,9 +397,9 @@ class EventBridgeRuleTemplateGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            event_bridge_rule_template_group_reference = interfaces_aws_medialive.EventBridgeRuleTemplateGroupReference(
+            event_bridge_rule_template_group_reference = interfaces_medialive.EventBridgeRuleTemplateGroupReference(
                 event_bridge_rule_template_group_arn="eventBridgeRuleTemplateGroupArn",
                 identifier="identifier"
             )
@@ -465,9 +465,9 @@ class EventBridgeRuleTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            event_bridge_rule_template_reference = interfaces_aws_medialive.EventBridgeRuleTemplateReference(
+            event_bridge_rule_template_reference = interfaces_medialive.EventBridgeRuleTemplateReference(
                 event_bridge_rule_template_arn="eventBridgeRuleTemplateArn",
                 identifier="identifier"
             )
@@ -1175,9 +1175,9 @@ class InputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            input_reference = interfaces_aws_medialive.InputReference(
+            input_reference = interfaces_medialive.InputReference(
                 input_arn="inputArn",
                 input_id="inputId"
             )
@@ -1243,9 +1243,9 @@ class InputSecurityGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            input_security_group_reference = interfaces_aws_medialive.InputSecurityGroupReference(
+            input_security_group_reference = interfaces_medialive.InputSecurityGroupReference(
                 input_security_group_arn="inputSecurityGroupArn",
                 input_security_group_id="inputSecurityGroupId"
             )
@@ -1308,9 +1308,9 @@ class MultiplexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            multiplex_reference = interfaces_aws_medialive.MultiplexReference(
+            multiplex_reference = interfaces_medialive.MultiplexReference(
                 multiplex_arn="multiplexArn",
                 multiplex_id="multiplexId"
             )
@@ -1373,9 +1373,9 @@ class MultiplexprogramReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            multiplexprogram_reference = interfaces_aws_medialive.MultiplexprogramReference(
+            multiplexprogram_reference = interfaces_medialive.MultiplexprogramReference(
                 multiplex_id="multiplexId",
                 program_name="programName"
             )
@@ -1433,9 +1433,9 @@ class NetworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            network_reference = interfaces_aws_medialive.NetworkReference(
+            network_reference = interfaces_medialive.NetworkReference(
                 network_arn="networkArn",
                 network_id="networkId"
             )
@@ -1498,9 +1498,9 @@ class SdiSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            sdi_source_reference = interfaces_aws_medialive.SdiSourceReference(
+            sdi_source_reference = interfaces_medialive.SdiSourceReference(
                 sdi_source_arn="sdiSourceArn",
                 sdi_source_id="sdiSourceId"
             )
@@ -1563,9 +1563,9 @@ class SignalMapReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_medialive as interfaces_aws_medialive
+            from aws_cdk.interfaces import aws_medialive as interfaces_medialive
             
-            signal_map_reference = interfaces_aws_medialive.SignalMapReference(
+            signal_map_reference = interfaces_medialive.SignalMapReference(
                 identifier="identifier",
                 signal_map_arn="signalMapArn"
             )

@@ -96,9 +96,9 @@ class WorkspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_grafana as interfaces_aws_grafana
+            from aws_cdk.interfaces import aws_grafana as interfaces_grafana
             
-            workspace_reference = interfaces_aws_grafana.WorkspaceReference(
+            workspace_reference = interfaces_grafana.WorkspaceReference(
                 workspace_id="workspaceId"
             )
         '''

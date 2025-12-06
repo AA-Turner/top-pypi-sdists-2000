@@ -51,9 +51,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codeartifact as interfaces_aws_codeartifact
+            from aws_cdk.interfaces import aws_codeartifact as interfaces_codeartifact
             
-            domain_reference = interfaces_aws_codeartifact.DomainReference(
+            domain_reference = interfaces_codeartifact.DomainReference(
                 domain_arn="domainArn"
             )
         '''
@@ -235,9 +235,9 @@ class PackageGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codeartifact as interfaces_aws_codeartifact
+            from aws_cdk.interfaces import aws_codeartifact as interfaces_codeartifact
             
-            package_group_reference = interfaces_aws_codeartifact.PackageGroupReference(
+            package_group_reference = interfaces_codeartifact.PackageGroupReference(
                 package_group_arn="packageGroupArn"
             )
         '''
@@ -284,9 +284,9 @@ class RepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codeartifact as interfaces_aws_codeartifact
+            from aws_cdk.interfaces import aws_codeartifact as interfaces_codeartifact
             
-            repository_reference = interfaces_aws_codeartifact.RepositoryReference(
+            repository_reference = interfaces_codeartifact.RepositoryReference(
                 repository_arn="repositoryArn"
             )
         '''

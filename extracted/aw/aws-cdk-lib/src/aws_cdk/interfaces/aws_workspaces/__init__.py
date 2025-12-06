@@ -51,9 +51,9 @@ class ConnectionAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspaces as interfaces_aws_workspaces
+            from aws_cdk.interfaces import aws_workspaces as interfaces_workspaces
             
-            connection_alias_reference = interfaces_aws_workspaces.ConnectionAliasReference(
+            connection_alias_reference = interfaces_workspaces.ConnectionAliasReference(
                 alias_id="aliasId"
             )
         '''
@@ -235,9 +235,9 @@ class WorkspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspaces as interfaces_aws_workspaces
+            from aws_cdk.interfaces import aws_workspaces as interfaces_workspaces
             
-            workspace_reference = interfaces_aws_workspaces.WorkspaceReference(
+            workspace_reference = interfaces_workspaces.WorkspaceReference(
                 workspace_id="workspaceId"
             )
         '''
@@ -285,9 +285,9 @@ class WorkspacesPoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspaces as interfaces_aws_workspaces
+            from aws_cdk.interfaces import aws_workspaces as interfaces_workspaces
             
-            workspaces_pool_reference = interfaces_aws_workspaces.WorkspacesPoolReference(
+            workspaces_pool_reference = interfaces_workspaces.WorkspacesPoolReference(
                 pool_arn="poolArn",
                 pool_id="poolId"
             )

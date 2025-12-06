@@ -51,9 +51,9 @@ class EmailContactReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_notificationscontacts as interfaces_aws_notificationscontacts
+            from aws_cdk.interfaces import aws_notificationscontacts as interfaces_notificationscontacts
             
-            email_contact_reference = interfaces_aws_notificationscontacts.EmailContactReference(
+            email_contact_reference = interfaces_notificationscontacts.EmailContactReference(
                 email_contact_arn="emailContactArn"
             )
         '''

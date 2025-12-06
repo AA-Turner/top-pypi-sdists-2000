@@ -52,9 +52,9 @@ class AlarmReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            alarm_reference = interfaces_aws_lightsail.AlarmReference(
+            alarm_reference = interfaces_lightsail.AlarmReference(
                 alarm_arn="alarmArn",
                 alarm_name="alarmName"
             )
@@ -112,9 +112,9 @@ class BucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            bucket_reference = interfaces_aws_lightsail.BucketReference(
+            bucket_reference = interfaces_lightsail.BucketReference(
                 bucket_arn="bucketArn",
                 bucket_name="bucketName"
             )
@@ -180,9 +180,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            certificate_reference = interfaces_aws_lightsail.CertificateReference(
+            certificate_reference = interfaces_lightsail.CertificateReference(
                 certificate_arn="certificateArn",
                 certificate_name="certificateName"
             )
@@ -245,9 +245,9 @@ class ContainerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            container_reference = interfaces_aws_lightsail.ContainerReference(
+            container_reference = interfaces_lightsail.ContainerReference(
                 container_arn="containerArn",
                 service_name="serviceName"
             )
@@ -313,9 +313,9 @@ class DatabaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            database_reference = interfaces_aws_lightsail.DatabaseReference(
+            database_reference = interfaces_lightsail.DatabaseReference(
                 database_arn="databaseArn",
                 relational_database_name="relationalDatabaseName"
             )
@@ -373,9 +373,9 @@ class DiskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            disk_reference = interfaces_aws_lightsail.DiskReference(
+            disk_reference = interfaces_lightsail.DiskReference(
                 disk_arn="diskArn",
                 disk_name="diskName"
             )
@@ -441,9 +441,9 @@ class DiskSnapshotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            disk_snapshot_reference = interfaces_aws_lightsail.DiskSnapshotReference(
+            disk_snapshot_reference = interfaces_lightsail.DiskSnapshotReference(
                 disk_snapshot_arn="diskSnapshotArn",
                 disk_snapshot_name="diskSnapshotName"
             )
@@ -509,9 +509,9 @@ class DistributionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            distribution_reference = interfaces_aws_lightsail.DistributionReference(
+            distribution_reference = interfaces_lightsail.DistributionReference(
                 distribution_arn="distributionArn",
                 distribution_name="distributionName"
             )
@@ -569,9 +569,9 @@ class DomainReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            domain_reference = interfaces_aws_lightsail.DomainReference(
+            domain_reference = interfaces_lightsail.DomainReference(
                 domain_arn="domainArn",
                 domain_name="domainName"
             )
@@ -1270,9 +1270,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            instance_reference = interfaces_aws_lightsail.InstanceReference(
+            instance_reference = interfaces_lightsail.InstanceReference(
                 instance_arn="instanceArn",
                 instance_name="instanceName"
             )
@@ -1338,9 +1338,9 @@ class InstanceSnapshotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            instance_snapshot_reference = interfaces_aws_lightsail.InstanceSnapshotReference(
+            instance_snapshot_reference = interfaces_lightsail.InstanceSnapshotReference(
                 instance_snapshot_arn="instanceSnapshotArn",
                 instance_snapshot_name="instanceSnapshotName"
             )
@@ -1406,9 +1406,9 @@ class LoadBalancerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            load_balancer_reference = interfaces_aws_lightsail.LoadBalancerReference(
+            load_balancer_reference = interfaces_lightsail.LoadBalancerReference(
                 load_balancer_arn="loadBalancerArn",
                 load_balancer_name="loadBalancerName"
             )
@@ -1477,9 +1477,9 @@ class LoadBalancerTlsCertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            load_balancer_tls_certificate_reference = interfaces_aws_lightsail.LoadBalancerTlsCertificateReference(
+            load_balancer_tls_certificate_reference = interfaces_lightsail.LoadBalancerTlsCertificateReference(
                 certificate_name="certificateName",
                 load_balancer_name="loadBalancerName",
                 load_balancer_tls_certificate_arn="loadBalancerTlsCertificateArn"
@@ -1552,9 +1552,9 @@ class StaticIpReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lightsail as interfaces_aws_lightsail
+            from aws_cdk.interfaces import aws_lightsail as interfaces_lightsail
             
-            static_ip_reference = interfaces_aws_lightsail.StaticIpReference(
+            static_ip_reference = interfaces_lightsail.StaticIpReference(
                 static_ip_arn="staticIpArn",
                 static_ip_name="staticIpName"
             )

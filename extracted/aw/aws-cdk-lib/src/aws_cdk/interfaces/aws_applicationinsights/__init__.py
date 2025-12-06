@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationinsights as interfaces_aws_applicationinsights
+            from aws_cdk.interfaces import aws_applicationinsights as interfaces_applicationinsights
             
-            application_reference = interfaces_aws_applicationinsights.ApplicationReference(
+            application_reference = interfaces_applicationinsights.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''

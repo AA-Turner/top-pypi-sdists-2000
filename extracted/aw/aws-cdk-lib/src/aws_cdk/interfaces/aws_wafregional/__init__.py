@@ -51,9 +51,9 @@ class ByteMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            byte_match_set_reference = interfaces_aws_wafregional.ByteMatchSetReference(
+            byte_match_set_reference = interfaces_wafregional.ByteMatchSetReference(
                 byte_match_set_id="byteMatchSetId"
             )
         '''
@@ -100,9 +100,9 @@ class GeoMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            geo_match_set_reference = interfaces_aws_wafregional.GeoMatchSetReference(
+            geo_match_set_reference = interfaces_wafregional.GeoMatchSetReference(
                 geo_match_set_id="geoMatchSetId"
             )
         '''
@@ -284,7 +284,7 @@ class IPSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
             i_pSet_reference = {
                 "ip_set_id": "ipSetId"
@@ -699,9 +699,9 @@ class RateBasedRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            rate_based_rule_reference = interfaces_aws_wafregional.RateBasedRuleReference(
+            rate_based_rule_reference = interfaces_wafregional.RateBasedRuleReference(
                 rate_based_rule_id="rateBasedRuleId"
             )
         '''
@@ -748,9 +748,9 @@ class RegexPatternSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            regex_pattern_set_reference = interfaces_aws_wafregional.RegexPatternSetReference(
+            regex_pattern_set_reference = interfaces_wafregional.RegexPatternSetReference(
                 regex_pattern_set_id="regexPatternSetId"
             )
         '''
@@ -797,9 +797,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            rule_reference = interfaces_aws_wafregional.RuleReference(
+            rule_reference = interfaces_wafregional.RuleReference(
                 rule_id="ruleId"
             )
         '''
@@ -846,9 +846,9 @@ class SizeConstraintSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            size_constraint_set_reference = interfaces_aws_wafregional.SizeConstraintSetReference(
+            size_constraint_set_reference = interfaces_wafregional.SizeConstraintSetReference(
                 size_constraint_set_id="sizeConstraintSetId"
             )
         '''
@@ -895,9 +895,9 @@ class SqlInjectionMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            sql_injection_match_set_reference = interfaces_aws_wafregional.SqlInjectionMatchSetReference(
+            sql_injection_match_set_reference = interfaces_wafregional.SqlInjectionMatchSetReference(
                 sql_injection_match_set_id="sqlInjectionMatchSetId"
             )
         '''
@@ -944,9 +944,9 @@ class WebACLAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            web_aCLAssociation_reference = interfaces_aws_wafregional.WebACLAssociationReference(
+            web_aCLAssociation_reference = interfaces_wafregional.WebACLAssociationReference(
                 web_acl_association_id="webAclAssociationId"
             )
         '''
@@ -993,9 +993,9 @@ class WebACLReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            web_aCLReference = interfaces_aws_wafregional.WebACLReference(
+            web_aCLReference = interfaces_wafregional.WebACLReference(
                 web_acl_id="webAclId"
             )
         '''
@@ -1042,9 +1042,9 @@ class XssMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafregional as interfaces_aws_wafregional
+            from aws_cdk.interfaces import aws_wafregional as interfaces_wafregional
             
-            xss_match_set_reference = interfaces_aws_wafregional.XssMatchSetReference(
+            xss_match_set_reference = interfaces_wafregional.XssMatchSetReference(
                 xss_match_set_id="xssMatchSetId"
             )
         '''

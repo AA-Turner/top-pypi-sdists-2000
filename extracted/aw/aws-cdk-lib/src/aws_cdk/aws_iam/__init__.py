@@ -12185,9 +12185,9 @@ class RoleGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_iam.RoleGra
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_iam as iam
-        from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+        from aws_cdk.interfaces import aws_iam as interfaces_iam
         
-        # role_ref: interfaces_aws_iam.IRoleRef
+        # role_ref: interfaces_iam.IRoleRef
         
         role_grants = iam.RoleGrants.from_role(role_ref)
     '''

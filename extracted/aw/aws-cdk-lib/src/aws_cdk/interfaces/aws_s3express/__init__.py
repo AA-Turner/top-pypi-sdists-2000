@@ -60,9 +60,9 @@ class AccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3express as interfaces_aws_s3express
+            from aws_cdk.interfaces import aws_s3express as interfaces_s3express
             
-            access_point_reference = interfaces_aws_s3express.AccessPointReference(
+            access_point_reference = interfaces_s3express.AccessPointReference(
                 access_point_arn="accessPointArn",
                 access_point_name="accessPointName"
             )
@@ -119,9 +119,9 @@ class BucketPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3express as interfaces_aws_s3express
+            from aws_cdk.interfaces import aws_s3express as interfaces_s3express
             
-            bucket_policy_reference = interfaces_aws_s3express.BucketPolicyReference(
+            bucket_policy_reference = interfaces_s3express.BucketPolicyReference(
                 bucket="bucket"
             )
         '''
@@ -177,9 +177,9 @@ class DirectoryBucketReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3express as interfaces_aws_s3express
+            from aws_cdk.interfaces import aws_s3express as interfaces_s3express
             
-            directory_bucket_reference = interfaces_aws_s3express.DirectoryBucketReference(
+            directory_bucket_reference = interfaces_s3express.DirectoryBucketReference(
                 bucket_name="bucketName",
                 directory_bucket_arn="directoryBucketArn"
             )

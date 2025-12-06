@@ -51,9 +51,9 @@ class ClusterParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            cluster_parameter_group_reference = interfaces_aws_redshift.ClusterParameterGroupReference(
+            cluster_parameter_group_reference = interfaces_redshift.ClusterParameterGroupReference(
                 parameter_group_name="parameterGroupName"
             )
         '''
@@ -100,9 +100,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            cluster_reference = interfaces_aws_redshift.ClusterReference(
+            cluster_reference = interfaces_redshift.ClusterReference(
                 cluster_identifier="clusterIdentifier"
             )
         '''
@@ -151,9 +151,9 @@ class ClusterSecurityGroupIngressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            cluster_security_group_ingress_reference = interfaces_aws_redshift.ClusterSecurityGroupIngressReference(
+            cluster_security_group_ingress_reference = interfaces_redshift.ClusterSecurityGroupIngressReference(
                 cluster_security_group_ingress_id="clusterSecurityGroupIngressId"
             )
         '''
@@ -200,9 +200,9 @@ class ClusterSecurityGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            cluster_security_group_reference = interfaces_aws_redshift.ClusterSecurityGroupReference(
+            cluster_security_group_reference = interfaces_redshift.ClusterSecurityGroupReference(
                 cluster_security_group_id="clusterSecurityGroupId"
             )
         '''
@@ -249,9 +249,9 @@ class ClusterSubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            cluster_subnet_group_reference = interfaces_aws_redshift.ClusterSubnetGroupReference(
+            cluster_subnet_group_reference = interfaces_redshift.ClusterSubnetGroupReference(
                 cluster_subnet_group_name="clusterSubnetGroupName"
             )
         '''
@@ -298,9 +298,9 @@ class EndpointAccessReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            endpoint_access_reference = interfaces_aws_redshift.EndpointAccessReference(
+            endpoint_access_reference = interfaces_redshift.EndpointAccessReference(
                 endpoint_name="endpointName"
             )
         '''
@@ -353,9 +353,9 @@ class EndpointAuthorizationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            endpoint_authorization_reference = interfaces_aws_redshift.EndpointAuthorizationReference(
+            endpoint_authorization_reference = interfaces_redshift.EndpointAuthorizationReference(
                 account="account",
                 cluster_identifier="clusterIdentifier"
             )
@@ -412,9 +412,9 @@ class EventSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            event_subscription_reference = interfaces_aws_redshift.EventSubscriptionReference(
+            event_subscription_reference = interfaces_redshift.EventSubscriptionReference(
                 subscription_name="subscriptionName"
             )
         '''
@@ -923,9 +923,9 @@ class IntegrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            integration_reference = interfaces_aws_redshift.IntegrationReference(
+            integration_reference = interfaces_redshift.IntegrationReference(
                 integration_arn="integrationArn"
             )
         '''
@@ -972,9 +972,9 @@ class ScheduledActionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_redshift as interfaces_aws_redshift
+            from aws_cdk.interfaces import aws_redshift as interfaces_redshift
             
-            scheduled_action_reference = interfaces_aws_redshift.ScheduledActionReference(
+            scheduled_action_reference = interfaces_redshift.ScheduledActionReference(
                 scheduled_action_name="scheduledActionName"
             )
         '''

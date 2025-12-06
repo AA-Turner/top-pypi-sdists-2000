@@ -52,9 +52,9 @@ class BrowserCustomReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            browser_custom_reference = interfaces_aws_bedrockagentcore.BrowserCustomReference(
+            browser_custom_reference = interfaces_bedrockagentcore.BrowserCustomReference(
                 browser_arn="browserArn",
                 browser_id="browserId"
             )
@@ -120,9 +120,9 @@ class CodeInterpreterCustomReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            code_interpreter_custom_reference = interfaces_aws_bedrockagentcore.CodeInterpreterCustomReference(
+            code_interpreter_custom_reference = interfaces_bedrockagentcore.CodeInterpreterCustomReference(
                 code_interpreter_arn="codeInterpreterArn",
                 code_interpreter_id="codeInterpreterId"
             )
@@ -188,9 +188,9 @@ class GatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            gateway_reference = interfaces_aws_bedrockagentcore.GatewayReference(
+            gateway_reference = interfaces_bedrockagentcore.GatewayReference(
                 gateway_arn="gatewayArn",
                 gateway_identifier="gatewayIdentifier"
             )
@@ -253,9 +253,9 @@ class GatewayTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            gateway_target_reference = interfaces_aws_bedrockagentcore.GatewayTargetReference(
+            gateway_target_reference = interfaces_bedrockagentcore.GatewayTargetReference(
                 gateway_identifier="gatewayIdentifier",
                 target_id="targetId"
             )
@@ -682,9 +682,9 @@ class MemoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            memory_reference = interfaces_aws_bedrockagentcore.MemoryReference(
+            memory_reference = interfaces_bedrockagentcore.MemoryReference(
                 memory_arn="memoryArn"
             )
         '''
@@ -731,9 +731,9 @@ class RuntimeEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            runtime_endpoint_reference = interfaces_aws_bedrockagentcore.RuntimeEndpointReference(
+            runtime_endpoint_reference = interfaces_bedrockagentcore.RuntimeEndpointReference(
                 agent_runtime_endpoint_arn="agentRuntimeEndpointArn"
             )
         '''
@@ -789,9 +789,9 @@ class RuntimeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            runtime_reference = interfaces_aws_bedrockagentcore.RuntimeReference(
+            runtime_reference = interfaces_bedrockagentcore.RuntimeReference(
                 agent_runtime_arn="agentRuntimeArn",
                 agent_runtime_id="agentRuntimeId"
             )
@@ -857,9 +857,9 @@ class WorkloadIdentityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_aws_bedrockagentcore
+            from aws_cdk.interfaces import aws_bedrockagentcore as interfaces_bedrockagentcore
             
-            workload_identity_reference = interfaces_aws_bedrockagentcore.WorkloadIdentityReference(
+            workload_identity_reference = interfaces_bedrockagentcore.WorkloadIdentityReference(
                 workload_identity_arn="workloadIdentityArn",
                 workload_identity_name="workloadIdentityName"
             )

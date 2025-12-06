@@ -51,9 +51,9 @@ class DatasetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_personalize as interfaces_aws_personalize
+            from aws_cdk.interfaces import aws_personalize as interfaces_personalize
             
-            dataset_group_reference = interfaces_aws_personalize.DatasetGroupReference(
+            dataset_group_reference = interfaces_personalize.DatasetGroupReference(
                 dataset_group_arn="datasetGroupArn"
             )
         '''
@@ -100,9 +100,9 @@ class DatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_personalize as interfaces_aws_personalize
+            from aws_cdk.interfaces import aws_personalize as interfaces_personalize
             
-            dataset_reference = interfaces_aws_personalize.DatasetReference(
+            dataset_reference = interfaces_personalize.DatasetReference(
                 dataset_arn="datasetArn"
             )
         '''
@@ -329,9 +329,9 @@ class SchemaReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_personalize as interfaces_aws_personalize
+            from aws_cdk.interfaces import aws_personalize as interfaces_personalize
             
-            schema_reference = interfaces_aws_personalize.SchemaReference(
+            schema_reference = interfaces_personalize.SchemaReference(
                 schema_arn="schemaArn"
             )
         '''
@@ -378,9 +378,9 @@ class SolutionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_personalize as interfaces_aws_personalize
+            from aws_cdk.interfaces import aws_personalize as interfaces_personalize
             
-            solution_reference = interfaces_aws_personalize.SolutionReference(
+            solution_reference = interfaces_personalize.SolutionReference(
                 solution_arn="solutionArn"
             )
         '''

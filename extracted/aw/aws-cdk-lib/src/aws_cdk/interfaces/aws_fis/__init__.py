@@ -51,9 +51,9 @@ class ExperimentTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fis as interfaces_aws_fis
+            from aws_cdk.interfaces import aws_fis as interfaces_fis
             
-            experiment_template_reference = interfaces_aws_fis.ExperimentTemplateReference(
+            experiment_template_reference = interfaces_fis.ExperimentTemplateReference(
                 experiment_template_id="experimentTemplateId"
             )
         '''
@@ -201,9 +201,9 @@ class TargetAccountConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fis as interfaces_aws_fis
+            from aws_cdk.interfaces import aws_fis as interfaces_fis
             
-            target_account_configuration_reference = interfaces_aws_fis.TargetAccountConfigurationReference(
+            target_account_configuration_reference = interfaces_fis.TargetAccountConfigurationReference(
                 account_id="accountId",
                 experiment_template_id="experimentTemplateId"
             )

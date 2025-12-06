@@ -156,7 +156,7 @@ class IPSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
             i_pSet_reference = {
                 "ip_set_arn": "ipSetArn",
@@ -415,9 +415,9 @@ class LoggingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
-            logging_configuration_reference = interfaces_aws_wafv2.LoggingConfigurationReference(
+            logging_configuration_reference = interfaces_wafv2.LoggingConfigurationReference(
                 resource_arn="resourceArn"
             )
         '''
@@ -479,9 +479,9 @@ class RegexPatternSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
-            regex_pattern_set_reference = interfaces_aws_wafv2.RegexPatternSetReference(
+            regex_pattern_set_reference = interfaces_wafv2.RegexPatternSetReference(
                 regex_pattern_set_arn="regexPatternSetArn",
                 regex_pattern_set_id="regexPatternSetId",
                 regex_pattern_set_name="regexPatternSetName",
@@ -573,9 +573,9 @@ class RuleGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
-            rule_group_reference = interfaces_aws_wafv2.RuleGroupReference(
+            rule_group_reference = interfaces_wafv2.RuleGroupReference(
                 rule_group_arn="ruleGroupArn",
                 rule_group_id="ruleGroupId",
                 rule_group_name="ruleGroupName",
@@ -658,9 +658,9 @@ class WebACLAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
-            web_aCLAssociation_reference = interfaces_aws_wafv2.WebACLAssociationReference(
+            web_aCLAssociation_reference = interfaces_wafv2.WebACLAssociationReference(
                 resource_arn="resourceArn",
                 web_acl_arn="webAclArn"
             )
@@ -732,9 +732,9 @@ class WebACLReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wafv2 as interfaces_aws_wafv2
+            from aws_cdk.interfaces import aws_wafv2 as interfaces_wafv2
             
-            web_aCLReference = interfaces_aws_wafv2.WebACLReference(
+            web_aCLReference = interfaces_wafv2.WebACLReference(
                 scope="scope",
                 web_acl_arn="webAclArn",
                 web_acl_id="webAclId",

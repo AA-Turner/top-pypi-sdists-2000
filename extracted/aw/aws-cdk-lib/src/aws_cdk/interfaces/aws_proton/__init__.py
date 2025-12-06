@@ -53,9 +53,9 @@ class EnvironmentAccountConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_proton as interfaces_aws_proton
+            from aws_cdk.interfaces import aws_proton as interfaces_proton
             
-            environment_account_connection_reference = interfaces_aws_proton.EnvironmentAccountConnectionReference(
+            environment_account_connection_reference = interfaces_proton.EnvironmentAccountConnectionReference(
                 environment_account_connection_arn="environmentAccountConnectionArn"
             )
         '''
@@ -102,9 +102,9 @@ class EnvironmentTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_proton as interfaces_aws_proton
+            from aws_cdk.interfaces import aws_proton as interfaces_proton
             
-            environment_template_reference = interfaces_aws_proton.EnvironmentTemplateReference(
+            environment_template_reference = interfaces_proton.EnvironmentTemplateReference(
                 environment_template_arn="environmentTemplateArn"
             )
         '''
@@ -292,9 +292,9 @@ class ServiceTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_proton as interfaces_aws_proton
+            from aws_cdk.interfaces import aws_proton as interfaces_proton
             
-            service_template_reference = interfaces_aws_proton.ServiceTemplateReference(
+            service_template_reference = interfaces_proton.ServiceTemplateReference(
                 service_template_arn="serviceTemplateArn"
             )
         '''

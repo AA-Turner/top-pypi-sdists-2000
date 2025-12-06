@@ -51,9 +51,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            fleet_reference = interfaces_aws_robomaker.FleetReference(
+            fleet_reference = interfaces_robomaker.FleetReference(
                 fleet_arn="fleetArn"
             )
         '''
@@ -380,9 +380,9 @@ class RobotApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            robot_application_reference = interfaces_aws_robomaker.RobotApplicationReference(
+            robot_application_reference = interfaces_robomaker.RobotApplicationReference(
                 robot_application_arn="robotApplicationArn"
             )
         '''
@@ -429,9 +429,9 @@ class RobotApplicationVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            robot_application_version_reference = interfaces_aws_robomaker.RobotApplicationVersionReference(
+            robot_application_version_reference = interfaces_robomaker.RobotApplicationVersionReference(
                 robot_application_version_arn="robotApplicationVersionArn"
             )
         '''
@@ -478,9 +478,9 @@ class RobotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            robot_reference = interfaces_aws_robomaker.RobotReference(
+            robot_reference = interfaces_robomaker.RobotReference(
                 robot_arn="robotArn"
             )
         '''
@@ -527,9 +527,9 @@ class SimulationApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            simulation_application_reference = interfaces_aws_robomaker.SimulationApplicationReference(
+            simulation_application_reference = interfaces_robomaker.SimulationApplicationReference(
                 simulation_application_arn="simulationApplicationArn"
             )
         '''
@@ -578,9 +578,9 @@ class SimulationApplicationVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_robomaker as interfaces_aws_robomaker
+            from aws_cdk.interfaces import aws_robomaker as interfaces_robomaker
             
-            simulation_application_version_reference = interfaces_aws_robomaker.SimulationApplicationVersionReference(
+            simulation_application_version_reference = interfaces_robomaker.SimulationApplicationVersionReference(
                 simulation_application_version_arn="simulationApplicationVersionArn"
             )
         '''

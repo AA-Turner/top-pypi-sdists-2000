@@ -63,9 +63,9 @@ class AgentAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            agent_alias_reference = interfaces_aws_bedrock.AgentAliasReference(
+            agent_alias_reference = interfaces_bedrock.AgentAliasReference(
                 agent_alias_arn="agentAliasArn",
                 agent_alias_id="agentAliasId",
                 agent_id="agentId"
@@ -133,9 +133,9 @@ class AgentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            agent_reference = interfaces_aws_bedrock.AgentReference(
+            agent_reference = interfaces_bedrock.AgentReference(
                 agent_arn="agentArn",
                 agent_id="agentId"
             )
@@ -192,9 +192,9 @@ class ApplicationInferenceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            application_inference_profile_reference = interfaces_aws_bedrock.ApplicationInferenceProfileReference(
+            application_inference_profile_reference = interfaces_bedrock.ApplicationInferenceProfileReference(
                 inference_profile_identifier="inferenceProfileIdentifier"
             )
         '''
@@ -241,9 +241,9 @@ class AutomatedReasoningPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            automated_reasoning_policy_reference = interfaces_aws_bedrock.AutomatedReasoningPolicyReference(
+            automated_reasoning_policy_reference = interfaces_bedrock.AutomatedReasoningPolicyReference(
                 policy_arn="policyArn"
             )
         '''
@@ -291,9 +291,9 @@ class AutomatedReasoningPolicyVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            automated_reasoning_policy_version_reference = interfaces_aws_bedrock.AutomatedReasoningPolicyVersionReference(
+            automated_reasoning_policy_version_reference = interfaces_bedrock.AutomatedReasoningPolicyVersionReference(
                 policy_arn="policyArn",
                 version="version"
             )
@@ -350,9 +350,9 @@ class BlueprintReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            blueprint_reference = interfaces_aws_bedrock.BlueprintReference(
+            blueprint_reference = interfaces_bedrock.BlueprintReference(
                 blueprint_arn="blueprintArn"
             )
         '''
@@ -399,9 +399,9 @@ class DataAutomationProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            data_automation_project_reference = interfaces_aws_bedrock.DataAutomationProjectReference(
+            data_automation_project_reference = interfaces_bedrock.DataAutomationProjectReference(
                 project_arn="projectArn"
             )
         '''
@@ -457,9 +457,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            data_source_reference = interfaces_aws_bedrock.DataSourceReference(
+            data_source_reference = interfaces_bedrock.DataSourceReference(
                 data_source_id="dataSourceId",
                 knowledge_base_id="knowledgeBaseId"
             )
@@ -517,9 +517,9 @@ class FlowAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            flow_alias_reference = interfaces_aws_bedrock.FlowAliasReference(
+            flow_alias_reference = interfaces_bedrock.FlowAliasReference(
                 flow_alias_arn="flowAliasArn",
                 flow_arn="flowArn"
             )
@@ -576,9 +576,9 @@ class FlowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            flow_reference = interfaces_aws_bedrock.FlowReference(
+            flow_reference = interfaces_bedrock.FlowReference(
                 flow_arn="flowArn"
             )
         '''
@@ -626,9 +626,9 @@ class FlowVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            flow_version_reference = interfaces_aws_bedrock.FlowVersionReference(
+            flow_version_reference = interfaces_bedrock.FlowVersionReference(
                 flow_arn="flowArn",
                 version="version"
             )
@@ -685,9 +685,9 @@ class GuardrailReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            guardrail_reference = interfaces_aws_bedrock.GuardrailReference(
+            guardrail_reference = interfaces_bedrock.GuardrailReference(
                 guardrail_arn="guardrailArn"
             )
         '''
@@ -735,9 +735,9 @@ class GuardrailVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            guardrail_version_reference = interfaces_aws_bedrock.GuardrailVersionReference(
+            guardrail_version_reference = interfaces_bedrock.GuardrailVersionReference(
                 guardrail_id="guardrailId",
                 version="version"
             )
@@ -1573,9 +1573,9 @@ class IntelligentPromptRouterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            intelligent_prompt_router_reference = interfaces_aws_bedrock.IntelligentPromptRouterReference(
+            intelligent_prompt_router_reference = interfaces_bedrock.IntelligentPromptRouterReference(
                 prompt_router_arn="promptRouterArn"
             )
         '''
@@ -1631,9 +1631,9 @@ class KnowledgeBaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            knowledge_base_reference = interfaces_aws_bedrock.KnowledgeBaseReference(
+            knowledge_base_reference = interfaces_bedrock.KnowledgeBaseReference(
                 knowledge_base_arn="knowledgeBaseArn",
                 knowledge_base_id="knowledgeBaseId"
             )
@@ -1690,9 +1690,9 @@ class PromptReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            prompt_reference = interfaces_aws_bedrock.PromptReference(
+            prompt_reference = interfaces_bedrock.PromptReference(
                 prompt_arn="promptArn"
             )
         '''
@@ -1739,9 +1739,9 @@ class PromptVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_bedrock as interfaces_aws_bedrock
+            from aws_cdk.interfaces import aws_bedrock as interfaces_bedrock
             
-            prompt_version_reference = interfaces_aws_bedrock.PromptVersionReference(
+            prompt_version_reference = interfaces_bedrock.PromptVersionReference(
                 prompt_version_arn="promptVersionArn"
             )
         '''

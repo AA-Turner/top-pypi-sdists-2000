@@ -60,9 +60,9 @@ class EnvironmentEC2Reference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cloud9 as interfaces_aws_cloud9
+            from aws_cdk.interfaces import aws_cloud9 as interfaces_cloud9
             
-            environment_eC2_reference = interfaces_aws_cloud9.EnvironmentEC2Reference(
+            environment_eC2_reference = interfaces_cloud9.EnvironmentEC2Reference(
                 environment_ec2_arn="environmentEc2Arn",
                 environment_ec2_id="environmentEc2Id"
             )

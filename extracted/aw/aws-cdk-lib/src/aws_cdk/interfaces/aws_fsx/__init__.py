@@ -51,9 +51,9 @@ class DataRepositoryAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            data_repository_association_reference = interfaces_aws_fsx.DataRepositoryAssociationReference(
+            data_repository_association_reference = interfaces_fsx.DataRepositoryAssociationReference(
                 association_id="associationId"
             )
         '''
@@ -100,9 +100,9 @@ class FileSystemReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            file_system_reference = interfaces_aws_fsx.FileSystemReference(
+            file_system_reference = interfaces_fsx.FileSystemReference(
                 file_system_id="fileSystemId"
             )
         '''
@@ -421,9 +421,9 @@ class S3AccessPointAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            s3_access_point_attachment_reference = interfaces_aws_fsx.S3AccessPointAttachmentReference(
+            s3_access_point_attachment_reference = interfaces_fsx.S3AccessPointAttachmentReference(
                 s3_access_point_attachment_name="s3AccessPointAttachmentName"
             )
         '''
@@ -470,9 +470,9 @@ class SnapshotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            snapshot_reference = interfaces_aws_fsx.SnapshotReference(
+            snapshot_reference = interfaces_fsx.SnapshotReference(
                 snapshot_id="snapshotId"
             )
         '''
@@ -519,9 +519,9 @@ class StorageVirtualMachineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            storage_virtual_machine_reference = interfaces_aws_fsx.StorageVirtualMachineReference(
+            storage_virtual_machine_reference = interfaces_fsx.StorageVirtualMachineReference(
                 storage_virtual_machine_id="storageVirtualMachineId"
             )
         '''
@@ -568,9 +568,9 @@ class VolumeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fsx as interfaces_aws_fsx
+            from aws_cdk.interfaces import aws_fsx as interfaces_fsx
             
-            volume_reference = interfaces_aws_fsx.VolumeReference(
+            volume_reference = interfaces_fsx.VolumeReference(
                 volume_id="volumeId"
             )
         '''

@@ -51,9 +51,9 @@ class CapacityReservationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_athena as interfaces_aws_athena
+            from aws_cdk.interfaces import aws_athena as interfaces_athena
             
-            capacity_reservation_reference = interfaces_aws_athena.CapacityReservationReference(
+            capacity_reservation_reference = interfaces_athena.CapacityReservationReference(
                 capacity_reservation_arn="capacityReservationArn"
             )
         '''
@@ -100,9 +100,9 @@ class DataCatalogReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_athena as interfaces_aws_athena
+            from aws_cdk.interfaces import aws_athena as interfaces_athena
             
-            data_catalog_reference = interfaces_aws_athena.DataCatalogReference(
+            data_catalog_reference = interfaces_athena.DataCatalogReference(
                 data_catalog_name="dataCatalogName"
             )
         '''
@@ -374,9 +374,9 @@ class NamedQueryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_athena as interfaces_aws_athena
+            from aws_cdk.interfaces import aws_athena as interfaces_athena
             
-            named_query_reference = interfaces_aws_athena.NamedQueryReference(
+            named_query_reference = interfaces_athena.NamedQueryReference(
                 named_query_id="namedQueryId"
             )
         '''
@@ -429,9 +429,9 @@ class PreparedStatementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_athena as interfaces_aws_athena
+            from aws_cdk.interfaces import aws_athena as interfaces_athena
             
-            prepared_statement_reference = interfaces_aws_athena.PreparedStatementReference(
+            prepared_statement_reference = interfaces_athena.PreparedStatementReference(
                 statement_name="statementName",
                 work_group="workGroup"
             )
@@ -488,9 +488,9 @@ class WorkGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_athena as interfaces_aws_athena
+            from aws_cdk.interfaces import aws_athena as interfaces_athena
             
-            work_group_reference = interfaces_aws_athena.WorkGroupReference(
+            work_group_reference = interfaces_athena.WorkGroupReference(
                 work_group_name="workGroupName"
             )
         '''

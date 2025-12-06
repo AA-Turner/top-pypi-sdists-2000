@@ -51,9 +51,9 @@ class ChannelGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_aws_mediapackagev2
+            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_mediapackagev2
             
-            channel_group_reference = interfaces_aws_mediapackagev2.ChannelGroupReference(
+            channel_group_reference = interfaces_mediapackagev2.ChannelGroupReference(
                 channel_group_arn="channelGroupArn"
             )
         '''
@@ -109,9 +109,9 @@ class ChannelPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_aws_mediapackagev2
+            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_mediapackagev2
             
-            channel_policy_reference = interfaces_aws_mediapackagev2.ChannelPolicyReference(
+            channel_policy_reference = interfaces_mediapackagev2.ChannelPolicyReference(
                 channel_group_name="channelGroupName",
                 channel_name="channelName"
             )
@@ -168,9 +168,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_aws_mediapackagev2
+            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_mediapackagev2
             
-            channel_reference = interfaces_aws_mediapackagev2.ChannelReference(
+            channel_reference = interfaces_mediapackagev2.ChannelReference(
                 channel_arn="channelArn"
             )
         '''
@@ -460,9 +460,9 @@ class OriginEndpointPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_aws_mediapackagev2
+            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_mediapackagev2
             
-            origin_endpoint_policy_reference = interfaces_aws_mediapackagev2.OriginEndpointPolicyReference(
+            origin_endpoint_policy_reference = interfaces_mediapackagev2.OriginEndpointPolicyReference(
                 channel_group_name="channelGroupName",
                 channel_name="channelName",
                 origin_endpoint_name="originEndpointName"
@@ -529,9 +529,9 @@ class OriginEndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_aws_mediapackagev2
+            from aws_cdk.interfaces import aws_mediapackagev2 as interfaces_mediapackagev2
             
-            origin_endpoint_reference = interfaces_aws_mediapackagev2.OriginEndpointReference(
+            origin_endpoint_reference = interfaces_mediapackagev2.OriginEndpointReference(
                 origin_endpoint_arn="originEndpointArn"
             )
         '''

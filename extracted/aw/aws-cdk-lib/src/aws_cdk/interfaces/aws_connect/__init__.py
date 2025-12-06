@@ -51,9 +51,9 @@ class AgentStatusReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            agent_status_reference = interfaces_aws_connect.AgentStatusReference(
+            agent_status_reference = interfaces_connect.AgentStatusReference(
                 agent_status_arn="agentStatusArn"
             )
         '''
@@ -101,9 +101,9 @@ class ApprovedOriginReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            approved_origin_reference = interfaces_aws_connect.ApprovedOriginReference(
+            approved_origin_reference = interfaces_connect.ApprovedOriginReference(
                 instance_id="instanceId",
                 origin="origin"
             )
@@ -160,9 +160,9 @@ class ContactFlowModuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            contact_flow_module_reference = interfaces_aws_connect.ContactFlowModuleReference(
+            contact_flow_module_reference = interfaces_connect.ContactFlowModuleReference(
                 contact_flow_module_arn="contactFlowModuleArn"
             )
         '''
@@ -209,9 +209,9 @@ class ContactFlowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            contact_flow_reference = interfaces_aws_connect.ContactFlowReference(
+            contact_flow_reference = interfaces_connect.ContactFlowReference(
                 contact_flow_arn="contactFlowArn"
             )
         '''
@@ -258,9 +258,9 @@ class ContactFlowVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            contact_flow_version_reference = interfaces_aws_connect.ContactFlowVersionReference(
+            contact_flow_version_reference = interfaces_connect.ContactFlowVersionReference(
                 contact_flow_version_arn="contactFlowVersionArn"
             )
         '''
@@ -291,6 +291,152 @@ class ContactFlowVersionReference:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_connect.DataTableAttributeReference",
+    jsii_struct_bases=[],
+    name_mapping={
+        "attribute_id": "attributeId",
+        "data_table_arn": "dataTableArn",
+        "instance_arn": "instanceArn",
+    },
+)
+class DataTableAttributeReference:
+    def __init__(
+        self,
+        *,
+        attribute_id: builtins.str,
+        data_table_arn: builtins.str,
+        instance_arn: builtins.str,
+    ) -> None:
+        '''A reference to a DataTableAttribute resource.
+
+        :param attribute_id: The AttributeId of the DataTableAttribute resource.
+        :param data_table_arn: The DataTableArn of the DataTableAttribute resource.
+        :param instance_arn: The InstanceArn of the DataTableAttribute resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
+            
+            data_table_attribute_reference = interfaces_connect.DataTableAttributeReference(
+                attribute_id="attributeId",
+                data_table_arn="dataTableArn",
+                instance_arn="instanceArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__89e5c1d586322eb5f50ced0dfce17a7353fcfd770475aabc413e355fcebf55c8)
+            check_type(argname="argument attribute_id", value=attribute_id, expected_type=type_hints["attribute_id"])
+            check_type(argname="argument data_table_arn", value=data_table_arn, expected_type=type_hints["data_table_arn"])
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "attribute_id": attribute_id,
+            "data_table_arn": data_table_arn,
+            "instance_arn": instance_arn,
+        }
+
+    @builtins.property
+    def attribute_id(self) -> builtins.str:
+        '''The AttributeId of the DataTableAttribute resource.'''
+        result = self._values.get("attribute_id")
+        assert result is not None, "Required property 'attribute_id' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def data_table_arn(self) -> builtins.str:
+        '''The DataTableArn of the DataTableAttribute resource.'''
+        result = self._values.get("data_table_arn")
+        assert result is not None, "Required property 'data_table_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def instance_arn(self) -> builtins.str:
+        '''The InstanceArn of the DataTableAttribute resource.'''
+        result = self._values.get("instance_arn")
+        assert result is not None, "Required property 'instance_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataTableAttributeReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
+    jsii_type="aws-cdk-lib.interfaces.aws_connect.DataTableReference",
+    jsii_struct_bases=[],
+    name_mapping={"data_table_arn": "dataTableArn", "instance_arn": "instanceArn"},
+)
+class DataTableReference:
+    def __init__(
+        self,
+        *,
+        data_table_arn: builtins.str,
+        instance_arn: builtins.str,
+    ) -> None:
+        '''A reference to a DataTable resource.
+
+        :param data_table_arn: The Arn of the DataTable resource.
+        :param instance_arn: The InstanceArn of the DataTable resource.
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
+            
+            data_table_reference = interfaces_connect.DataTableReference(
+                data_table_arn="dataTableArn",
+                instance_arn="instanceArn"
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__67ba9770097234b94f825ce5d9299c6c020d31311df11a5f307f8a110b95ce7e)
+            check_type(argname="argument data_table_arn", value=data_table_arn, expected_type=type_hints["data_table_arn"])
+            check_type(argname="argument instance_arn", value=instance_arn, expected_type=type_hints["instance_arn"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {
+            "data_table_arn": data_table_arn,
+            "instance_arn": instance_arn,
+        }
+
+    @builtins.property
+    def data_table_arn(self) -> builtins.str:
+        '''The Arn of the DataTable resource.'''
+        result = self._values.get("data_table_arn")
+        assert result is not None, "Required property 'data_table_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def instance_arn(self) -> builtins.str:
+        '''The InstanceArn of the DataTable resource.'''
+        result = self._values.get("instance_arn")
+        assert result is not None, "Required property 'instance_arn' is missing"
+        return typing.cast(builtins.str, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "DataTableReference(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.interfaces.aws_connect.EmailAddressReference",
     jsii_struct_bases=[],
     name_mapping={"email_address_arn": "emailAddressArn"},
@@ -307,9 +453,9 @@ class EmailAddressReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            email_address_reference = interfaces_aws_connect.EmailAddressReference(
+            email_address_reference = interfaces_connect.EmailAddressReference(
                 email_address_arn="emailAddressArn"
             )
         '''
@@ -356,9 +502,9 @@ class EvaluationFormReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            evaluation_form_reference = interfaces_aws_connect.EvaluationFormReference(
+            evaluation_form_reference = interfaces_connect.EvaluationFormReference(
                 evaluation_form_arn="evaluationFormArn"
             )
         '''
@@ -405,9 +551,9 @@ class HoursOfOperationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            hours_of_operation_reference = interfaces_aws_connect.HoursOfOperationReference(
+            hours_of_operation_reference = interfaces_connect.HoursOfOperationReference(
                 hours_of_operation_arn="hoursOfOperationArn"
             )
         '''
@@ -660,6 +806,96 @@ class _IContactFlowVersionRefProxy(
 
 # Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
 typing.cast(typing.Any, IContactFlowVersionRef).__jsii_proxy_class__ = lambda : _IContactFlowVersionRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IDataTableAttributeRef")
+class IDataTableAttributeRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTableAttribute.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableAttributeRef")
+    def data_table_attribute_ref(self) -> DataTableAttributeReference:
+        '''(experimental) A reference to a DataTableAttribute resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDataTableAttributeRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTableAttribute.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_connect.IDataTableAttributeRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableAttributeRef")
+    def data_table_attribute_ref(self) -> DataTableAttributeReference:
+        '''(experimental) A reference to a DataTableAttribute resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(DataTableAttributeReference, jsii.get(self, "dataTableAttributeRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDataTableAttributeRef).__jsii_proxy_class__ = lambda : _IDataTableAttributeRefProxy
+
+
+@jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IDataTableRef")
+class IDataTableRef(
+    _constructs_77d1e7e8.IConstruct,
+    _IEnvironmentAware_f39049ee,
+    typing_extensions.Protocol,
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTable.
+
+    :stability: experimental
+    '''
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableRef")
+    def data_table_ref(self) -> DataTableReference:
+        '''(experimental) A reference to a DataTable resource.
+
+        :stability: experimental
+        '''
+        ...
+
+
+class _IDataTableRefProxy(
+    jsii.proxy_for(_constructs_77d1e7e8.IConstruct), # type: ignore[misc]
+    jsii.proxy_for(_IEnvironmentAware_f39049ee), # type: ignore[misc]
+):
+    '''(experimental) Indicates that this resource can be referenced as a DataTable.
+
+    :stability: experimental
+    '''
+
+    __jsii_type__: typing.ClassVar[str] = "aws-cdk-lib.interfaces.aws_connect.IDataTableRef"
+
+    @builtins.property
+    @jsii.member(jsii_name="dataTableRef")
+    def data_table_ref(self) -> DataTableReference:
+        '''(experimental) A reference to a DataTable resource.
+
+        :stability: experimental
+        '''
+        return typing.cast(DataTableReference, jsii.get(self, "dataTableRef"))
+
+# Adding a "__jsii_proxy_class__(): typing.Type" function to the interface
+typing.cast(typing.Any, IDataTableRef).__jsii_proxy_class__ = lambda : _IDataTableRefProxy
 
 
 @jsii.interface(jsii_type="aws-cdk-lib.interfaces.aws_connect.IEmailAddressRef")
@@ -1677,9 +1913,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            instance_reference = interfaces_aws_connect.InstanceReference(
+            instance_reference = interfaces_connect.InstanceReference(
                 instance_arn="instanceArn"
             )
         '''
@@ -1738,9 +1974,9 @@ class InstanceStorageConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            instance_storage_config_reference = interfaces_aws_connect.InstanceStorageConfigReference(
+            instance_storage_config_reference = interfaces_connect.InstanceStorageConfigReference(
                 association_id="associationId",
                 instance_arn="instanceArn",
                 resource_type="resourceType"
@@ -1819,9 +2055,9 @@ class IntegrationAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            integration_association_reference = interfaces_aws_connect.IntegrationAssociationReference(
+            integration_association_reference = interfaces_connect.IntegrationAssociationReference(
                 instance_id="instanceId",
                 integration_arn="integrationArn",
                 integration_type="integrationType"
@@ -1888,9 +2124,9 @@ class PhoneNumberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            phone_number_reference = interfaces_aws_connect.PhoneNumberReference(
+            phone_number_reference = interfaces_connect.PhoneNumberReference(
                 phone_number_arn="phoneNumberArn"
             )
         '''
@@ -1946,9 +2182,9 @@ class PredefinedAttributeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            predefined_attribute_reference = interfaces_aws_connect.PredefinedAttributeReference(
+            predefined_attribute_reference = interfaces_connect.PredefinedAttributeReference(
                 instance_arn="instanceArn",
                 predefined_attribute_name="predefinedAttributeName"
             )
@@ -2005,9 +2241,9 @@ class PromptReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            prompt_reference = interfaces_aws_connect.PromptReference(
+            prompt_reference = interfaces_connect.PromptReference(
                 prompt_arn="promptArn"
             )
         '''
@@ -2054,9 +2290,9 @@ class QueueReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            queue_reference = interfaces_aws_connect.QueueReference(
+            queue_reference = interfaces_connect.QueueReference(
                 queue_arn="queueArn"
             )
         '''
@@ -2103,9 +2339,9 @@ class QuickConnectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            quick_connect_reference = interfaces_aws_connect.QuickConnectReference(
+            quick_connect_reference = interfaces_connect.QuickConnectReference(
                 quick_connect_arn="quickConnectArn"
             )
         '''
@@ -2152,9 +2388,9 @@ class RoutingProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            routing_profile_reference = interfaces_aws_connect.RoutingProfileReference(
+            routing_profile_reference = interfaces_connect.RoutingProfileReference(
                 routing_profile_arn="routingProfileArn"
             )
         '''
@@ -2201,9 +2437,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            rule_reference = interfaces_aws_connect.RuleReference(
+            rule_reference = interfaces_connect.RuleReference(
                 rule_arn="ruleArn"
             )
         '''
@@ -2256,9 +2492,9 @@ class SecurityKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            security_key_reference = interfaces_aws_connect.SecurityKeyReference(
+            security_key_reference = interfaces_connect.SecurityKeyReference(
                 association_id="associationId",
                 instance_id="instanceId"
             )
@@ -2315,9 +2551,9 @@ class SecurityProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            security_profile_reference = interfaces_aws_connect.SecurityProfileReference(
+            security_profile_reference = interfaces_connect.SecurityProfileReference(
                 security_profile_arn="securityProfileArn"
             )
         '''
@@ -2364,9 +2600,9 @@ class TaskTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            task_template_reference = interfaces_aws_connect.TaskTemplateReference(
+            task_template_reference = interfaces_connect.TaskTemplateReference(
                 task_template_arn="taskTemplateArn"
             )
         '''
@@ -2413,9 +2649,9 @@ class TrafficDistributionGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            traffic_distribution_group_reference = interfaces_aws_connect.TrafficDistributionGroupReference(
+            traffic_distribution_group_reference = interfaces_connect.TrafficDistributionGroupReference(
                 traffic_distribution_group_arn="trafficDistributionGroupArn"
             )
         '''
@@ -2462,9 +2698,9 @@ class UserHierarchyGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            user_hierarchy_group_reference = interfaces_aws_connect.UserHierarchyGroupReference(
+            user_hierarchy_group_reference = interfaces_connect.UserHierarchyGroupReference(
                 user_hierarchy_group_arn="userHierarchyGroupArn"
             )
         '''
@@ -2511,9 +2747,9 @@ class UserHierarchyStructureReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            user_hierarchy_structure_reference = interfaces_aws_connect.UserHierarchyStructureReference(
+            user_hierarchy_structure_reference = interfaces_connect.UserHierarchyStructureReference(
                 user_hierarchy_structure_arn="userHierarchyStructureArn"
             )
         '''
@@ -2560,9 +2796,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            user_reference = interfaces_aws_connect.UserReference(
+            user_reference = interfaces_connect.UserReference(
                 user_arn="userArn"
             )
         '''
@@ -2609,9 +2845,9 @@ class ViewReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            view_reference = interfaces_aws_connect.ViewReference(
+            view_reference = interfaces_connect.ViewReference(
                 view_arn="viewArn"
             )
         '''
@@ -2658,9 +2894,9 @@ class ViewVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_connect as interfaces_aws_connect
+            from aws_cdk.interfaces import aws_connect as interfaces_connect
             
-            view_version_reference = interfaces_aws_connect.ViewVersionReference(
+            view_version_reference = interfaces_connect.ViewVersionReference(
                 view_version_arn="viewVersionArn"
             )
         '''
@@ -2696,6 +2932,8 @@ __all__ = [
     "ContactFlowModuleReference",
     "ContactFlowReference",
     "ContactFlowVersionReference",
+    "DataTableAttributeReference",
+    "DataTableReference",
     "EmailAddressReference",
     "EvaluationFormReference",
     "HoursOfOperationReference",
@@ -2704,6 +2942,8 @@ __all__ = [
     "IContactFlowModuleRef",
     "IContactFlowRef",
     "IContactFlowVersionRef",
+    "IDataTableAttributeRef",
+    "IDataTableRef",
     "IEmailAddressRef",
     "IEvaluationFormRef",
     "IHoursOfOperationRef",
@@ -2781,6 +3021,23 @@ def _typecheckingstub__8dfa181ff2c0859219dbf48106492ecead1b4da0281898a69b709514d
 def _typecheckingstub__6f8ed10dcdc4a77bc2068dd63220cfc0b8add9c5c8c1020fec0826fbf1cecaa1(
     *,
     contact_flow_version_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__89e5c1d586322eb5f50ced0dfce17a7353fcfd770475aabc413e355fcebf55c8(
+    *,
+    attribute_id: builtins.str,
+    data_table_arn: builtins.str,
+    instance_arn: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__67ba9770097234b94f825ce5d9299c6c020d31311df11a5f307f8a110b95ce7e(
+    *,
+    data_table_arn: builtins.str,
+    instance_arn: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -2945,5 +3202,5 @@ def _typecheckingstub__deae179674b96a536a16655001cf7da75f0dd842cd313daf145cd60cc
     """Type checking stubs"""
     pass
 
-for cls in [IAgentStatusRef, IApprovedOriginRef, IContactFlowModuleRef, IContactFlowRef, IContactFlowVersionRef, IEmailAddressRef, IEvaluationFormRef, IHoursOfOperationRef, IInstanceRef, IInstanceStorageConfigRef, IIntegrationAssociationRef, IPhoneNumberRef, IPredefinedAttributeRef, IPromptRef, IQueueRef, IQuickConnectRef, IRoutingProfileRef, IRuleRef, ISecurityKeyRef, ISecurityProfileRef, ITaskTemplateRef, ITrafficDistributionGroupRef, IUserHierarchyGroupRef, IUserHierarchyStructureRef, IUserRef, IViewRef, IViewVersionRef]:
+for cls in [IAgentStatusRef, IApprovedOriginRef, IContactFlowModuleRef, IContactFlowRef, IContactFlowVersionRef, IDataTableAttributeRef, IDataTableRef, IEmailAddressRef, IEvaluationFormRef, IHoursOfOperationRef, IInstanceRef, IInstanceStorageConfigRef, IIntegrationAssociationRef, IPhoneNumberRef, IPredefinedAttributeRef, IPromptRef, IQueueRef, IQuickConnectRef, IRoutingProfileRef, IRuleRef, ISecurityKeyRef, ISecurityProfileRef, ITaskTemplateRef, ITrafficDistributionGroupRef, IUserHierarchyGroupRef, IUserHierarchyStructureRef, IUserRef, IViewRef, IViewVersionRef]:
     typing.cast(typing.Any, cls).__protocol_attrs__ = typing.cast(typing.Any, cls).__protocol_attrs__ - set(['__jsii_proxy_class__', '__jsii_type__'])

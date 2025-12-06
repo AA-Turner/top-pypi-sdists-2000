@@ -60,9 +60,9 @@ class DeliveryStreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisfirehose as interfaces_aws_kinesisfirehose
+            from aws_cdk.interfaces import aws_kinesisfirehose as interfaces_kinesisfirehose
             
-            delivery_stream_reference = interfaces_aws_kinesisfirehose.DeliveryStreamReference(
+            delivery_stream_reference = interfaces_kinesisfirehose.DeliveryStreamReference(
                 delivery_stream_arn="deliveryStreamArn",
                 delivery_stream_name="deliveryStreamName"
             )

@@ -51,9 +51,9 @@ class AutoScalingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apprunner as interfaces_aws_apprunner
+            from aws_cdk.interfaces import aws_apprunner as interfaces_apprunner
             
-            auto_scaling_configuration_reference = interfaces_aws_apprunner.AutoScalingConfigurationReference(
+            auto_scaling_configuration_reference = interfaces_apprunner.AutoScalingConfigurationReference(
                 auto_scaling_configuration_arn="autoScalingConfigurationArn"
             )
         '''
@@ -331,9 +331,9 @@ class ObservabilityConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apprunner as interfaces_aws_apprunner
+            from aws_cdk.interfaces import aws_apprunner as interfaces_apprunner
             
-            observability_configuration_reference = interfaces_aws_apprunner.ObservabilityConfigurationReference(
+            observability_configuration_reference = interfaces_apprunner.ObservabilityConfigurationReference(
                 observability_configuration_arn="observabilityConfigurationArn"
             )
         '''
@@ -380,9 +380,9 @@ class ServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apprunner as interfaces_aws_apprunner
+            from aws_cdk.interfaces import aws_apprunner as interfaces_apprunner
             
-            service_reference = interfaces_aws_apprunner.ServiceReference(
+            service_reference = interfaces_apprunner.ServiceReference(
                 service_arn="serviceArn"
             )
         '''
@@ -429,9 +429,9 @@ class VpcConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apprunner as interfaces_aws_apprunner
+            from aws_cdk.interfaces import aws_apprunner as interfaces_apprunner
             
-            vpc_connector_reference = interfaces_aws_apprunner.VpcConnectorReference(
+            vpc_connector_reference = interfaces_apprunner.VpcConnectorReference(
                 vpc_connector_arn="vpcConnectorArn"
             )
         '''
@@ -478,9 +478,9 @@ class VpcIngressConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_apprunner as interfaces_aws_apprunner
+            from aws_cdk.interfaces import aws_apprunner as interfaces_apprunner
             
-            vpc_ingress_connection_reference = interfaces_aws_apprunner.VpcIngressConnectionReference(
+            vpc_ingress_connection_reference = interfaces_apprunner.VpcIngressConnectionReference(
                 vpc_ingress_connection_arn="vpcIngressConnectionArn"
             )
         '''

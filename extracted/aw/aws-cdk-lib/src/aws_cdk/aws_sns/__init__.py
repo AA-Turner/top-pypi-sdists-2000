@@ -6209,9 +6209,9 @@ class TopicGrants(metaclass=jsii.JSIIMeta, jsii_type="aws-cdk-lib.aws_sns.TopicG
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_sns as sns
-        from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+        from aws_cdk.interfaces import aws_sns as interfaces_sns
         
-        # topic_ref: interfaces_aws_sns.ITopicRef
+        # topic_ref: interfaces_sns.ITopicRef
         
         topic_grants = sns.TopicGrants.from_topic(topic_ref)
     '''

@@ -63,9 +63,9 @@ class AgreementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            agreement_reference = interfaces_aws_transfer.AgreementReference(
+            agreement_reference = interfaces_transfer.AgreementReference(
                 agreement_arn="agreementArn",
                 agreement_id="agreementId",
                 server_id="serverId"
@@ -141,9 +141,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            certificate_reference = interfaces_aws_transfer.CertificateReference(
+            certificate_reference = interfaces_transfer.CertificateReference(
                 certificate_arn="certificateArn",
                 certificate_id="certificateId"
             )
@@ -206,9 +206,9 @@ class ConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            connector_reference = interfaces_aws_transfer.ConnectorReference(
+            connector_reference = interfaces_transfer.ConnectorReference(
                 connector_arn="connectorArn",
                 connector_id="connectorId"
             )
@@ -626,9 +626,9 @@ class ProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            profile_reference = interfaces_aws_transfer.ProfileReference(
+            profile_reference = interfaces_transfer.ProfileReference(
                 profile_arn="profileArn",
                 profile_id="profileId"
             )
@@ -685,9 +685,9 @@ class ServerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            server_reference = interfaces_aws_transfer.ServerReference(
+            server_reference = interfaces_transfer.ServerReference(
                 server_arn="serverArn"
             )
         '''
@@ -734,9 +734,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            user_reference = interfaces_aws_transfer.UserReference(
+            user_reference = interfaces_transfer.UserReference(
                 user_arn="userArn"
             )
         '''
@@ -783,9 +783,9 @@ class WebAppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            web_app_reference = interfaces_aws_transfer.WebAppReference(
+            web_app_reference = interfaces_transfer.WebAppReference(
                 web_app_arn="webAppArn"
             )
         '''
@@ -838,9 +838,9 @@ class WorkflowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_transfer as interfaces_aws_transfer
+            from aws_cdk.interfaces import aws_transfer as interfaces_transfer
             
-            workflow_reference = interfaces_aws_transfer.WorkflowReference(
+            workflow_reference = interfaces_transfer.WorkflowReference(
                 workflow_arn="workflowArn",
                 workflow_id="workflowId"
             )

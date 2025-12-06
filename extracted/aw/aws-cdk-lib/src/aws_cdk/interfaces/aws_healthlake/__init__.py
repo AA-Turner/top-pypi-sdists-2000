@@ -57,9 +57,9 @@ class FHIRDatastoreReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_healthlake as interfaces_aws_healthlake
+            from aws_cdk.interfaces import aws_healthlake as interfaces_healthlake
             
-            f_hIRDatastore_reference = interfaces_aws_healthlake.FHIRDatastoreReference(
+            f_hIRDatastore_reference = interfaces_healthlake.FHIRDatastoreReference(
                 datastore_arn="datastoreArn",
                 datastore_id="datastoreId"
             )

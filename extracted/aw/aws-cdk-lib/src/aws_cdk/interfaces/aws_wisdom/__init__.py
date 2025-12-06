@@ -63,9 +63,9 @@ class AIAgentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iAgent_reference = interfaces_aws_wisdom.AIAgentReference(
+            a_iAgent_reference = interfaces_wisdom.AIAgentReference(
                 ai_agent_arn="aiAgentArn",
                 ai_agent_id="aiAgentId",
                 assistant_id="assistantId"
@@ -144,9 +144,9 @@ class AIAgentVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iAgent_version_reference = interfaces_aws_wisdom.AIAgentVersionReference(
+            a_iAgent_version_reference = interfaces_wisdom.AIAgentVersionReference(
                 ai_agent_id="aiAgentId",
                 assistant_id="assistantId",
                 version_number="versionNumber"
@@ -225,9 +225,9 @@ class AIGuardrailReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iGuardrail_reference = interfaces_aws_wisdom.AIGuardrailReference(
+            a_iGuardrail_reference = interfaces_wisdom.AIGuardrailReference(
                 ai_guardrail_arn="aiGuardrailArn",
                 ai_guardrail_id="aiGuardrailId",
                 assistant_id="assistantId"
@@ -306,9 +306,9 @@ class AIGuardrailVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iGuardrail_version_reference = interfaces_aws_wisdom.AIGuardrailVersionReference(
+            a_iGuardrail_version_reference = interfaces_wisdom.AIGuardrailVersionReference(
                 ai_guardrail_id="aiGuardrailId",
                 assistant_id="assistantId",
                 version_number="versionNumber"
@@ -387,9 +387,9 @@ class AIPromptReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iPrompt_reference = interfaces_aws_wisdom.AIPromptReference(
+            a_iPrompt_reference = interfaces_wisdom.AIPromptReference(
                 ai_prompt_arn="aiPromptArn",
                 ai_prompt_id="aiPromptId",
                 assistant_id="assistantId"
@@ -468,9 +468,9 @@ class AIPromptVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            a_iPrompt_version_reference = interfaces_aws_wisdom.AIPromptVersionReference(
+            a_iPrompt_version_reference = interfaces_wisdom.AIPromptVersionReference(
                 ai_prompt_id="aiPromptId",
                 assistant_id="assistantId",
                 version_number="versionNumber"
@@ -549,9 +549,9 @@ class AssistantAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            assistant_association_reference = interfaces_aws_wisdom.AssistantAssociationReference(
+            assistant_association_reference = interfaces_wisdom.AssistantAssociationReference(
                 assistant_association_arn="assistantAssociationArn",
                 assistant_association_id="assistantAssociationId",
                 assistant_id="assistantId"
@@ -624,9 +624,9 @@ class AssistantReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            assistant_reference = interfaces_aws_wisdom.AssistantReference(
+            assistant_reference = interfaces_wisdom.AssistantReference(
                 assistant_arn="assistantArn",
                 assistant_id="assistantId"
             )
@@ -1234,9 +1234,9 @@ class KnowledgeBaseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            knowledge_base_reference = interfaces_aws_wisdom.KnowledgeBaseReference(
+            knowledge_base_reference = interfaces_wisdom.KnowledgeBaseReference(
                 knowledge_base_arn="knowledgeBaseArn",
                 knowledge_base_id="knowledgeBaseId"
             )
@@ -1293,9 +1293,9 @@ class MessageTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            message_template_reference = interfaces_aws_wisdom.MessageTemplateReference(
+            message_template_reference = interfaces_wisdom.MessageTemplateReference(
                 message_template_arn="messageTemplateArn"
             )
         '''
@@ -1342,9 +1342,9 @@ class MessageTemplateVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            message_template_version_reference = interfaces_aws_wisdom.MessageTemplateVersionReference(
+            message_template_version_reference = interfaces_wisdom.MessageTemplateVersionReference(
                 message_template_version_arn="messageTemplateVersionArn"
             )
         '''
@@ -1391,9 +1391,9 @@ class QuickResponseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_wisdom as interfaces_aws_wisdom
+            from aws_cdk.interfaces import aws_wisdom as interfaces_wisdom
             
-            quick_response_reference = interfaces_aws_wisdom.QuickResponseReference(
+            quick_response_reference = interfaces_wisdom.QuickResponseReference(
                 quick_response_arn="quickResponseArn"
             )
         '''

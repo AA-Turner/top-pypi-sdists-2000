@@ -10123,9 +10123,9 @@ class CrossAccountDestinationProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_logs as logs
-            from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+            from aws_cdk.interfaces import aws_iam as interfaces_iam
             
-            # role_ref: interfaces_aws_iam.IRoleRef
+            # role_ref: interfaces_iam.IRoleRef
             
             cross_account_destination_props = logs.CrossAccountDestinationProps(
                 role=role_ref,
@@ -13770,9 +13770,9 @@ class LogGroupGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
-        from aws_cdk.interfaces import aws_logs as interfaces_aws_logs
+        from aws_cdk.interfaces import aws_logs as interfaces_logs
         
-        # log_group_ref: interfaces_aws_logs.ILogGroupRef
+        # log_group_ref: interfaces_logs.ILogGroupRef
         
         log_group_grants = logs.LogGroupGrants.from_log_group(log_group_ref)
     '''
@@ -18338,9 +18338,9 @@ class CrossAccountDestination(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_logs as logs
-        from aws_cdk.interfaces import aws_iam as interfaces_aws_iam
+        from aws_cdk.interfaces import aws_iam as interfaces_iam
         
-        # role_ref: interfaces_aws_iam.IRoleRef
+        # role_ref: interfaces_iam.IRoleRef
         
         cross_account_destination = logs.CrossAccountDestination(self, "MyCrossAccountDestination",
             role=role_ref,

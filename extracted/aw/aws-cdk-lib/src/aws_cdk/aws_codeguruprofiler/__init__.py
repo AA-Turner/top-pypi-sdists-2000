@@ -935,9 +935,9 @@ class ProfilingGroupGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_codeguruprofiler as codeguruprofiler
-        from aws_cdk.interfaces import aws_codeguruprofiler as interfaces_aws_codeguruprofiler
+        from aws_cdk.interfaces import aws_codeguruprofiler as interfaces_codeguruprofiler
         
-        # profiling_group_ref: interfaces_aws_codeguruprofiler.IProfilingGroupRef
+        # profiling_group_ref: interfaces_codeguruprofiler.IProfilingGroupRef
         
         profiling_group_grants = codeguruprofiler.ProfilingGroupGrants.from_profiling_group(profiling_group_ref)
     '''

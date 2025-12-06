@@ -51,9 +51,9 @@ class ChannelPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            channel_policy_reference = interfaces_aws_mediatailor.ChannelPolicyReference(
+            channel_policy_reference = interfaces_mediatailor.ChannelPolicyReference(
                 channel_name="channelName"
             )
         '''
@@ -106,9 +106,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            channel_reference = interfaces_aws_mediatailor.ChannelReference(
+            channel_reference = interfaces_mediatailor.ChannelReference(
                 channel_arn="channelArn",
                 channel_name="channelName"
             )
@@ -449,9 +449,9 @@ class LiveSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            live_source_reference = interfaces_aws_mediatailor.LiveSourceReference(
+            live_source_reference = interfaces_mediatailor.LiveSourceReference(
                 live_source_arn="liveSourceArn",
                 live_source_name="liveSourceName",
                 source_location_name="sourceLocationName"
@@ -527,9 +527,9 @@ class PlaybackConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            playback_configuration_reference = interfaces_aws_mediatailor.PlaybackConfigurationReference(
+            playback_configuration_reference = interfaces_mediatailor.PlaybackConfigurationReference(
                 playback_configuration_arn="playbackConfigurationArn",
                 playback_configuration_name="playbackConfigurationName"
             )
@@ -595,9 +595,9 @@ class SourceLocationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            source_location_reference = interfaces_aws_mediatailor.SourceLocationReference(
+            source_location_reference = interfaces_mediatailor.SourceLocationReference(
                 source_location_arn="sourceLocationArn",
                 source_location_name="sourceLocationName"
             )
@@ -666,9 +666,9 @@ class VodSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediatailor as interfaces_aws_mediatailor
+            from aws_cdk.interfaces import aws_mediatailor as interfaces_mediatailor
             
-            vod_source_reference = interfaces_aws_mediatailor.VodSourceReference(
+            vod_source_reference = interfaces_mediatailor.VodSourceReference(
                 source_location_name="sourceLocationName",
                 vod_source_arn="vodSourceArn",
                 vod_source_name="vodSourceName"

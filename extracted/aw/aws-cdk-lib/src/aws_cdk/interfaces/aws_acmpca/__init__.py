@@ -51,9 +51,9 @@ class CertificateAuthorityActivationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_acmpca as interfaces_aws_acmpca
+            from aws_cdk.interfaces import aws_acmpca as interfaces_acmpca
             
-            certificate_authority_activation_reference = interfaces_aws_acmpca.CertificateAuthorityActivationReference(
+            certificate_authority_activation_reference = interfaces_acmpca.CertificateAuthorityActivationReference(
                 certificate_authority_arn="certificateAuthorityArn"
             )
         '''
@@ -100,9 +100,9 @@ class CertificateAuthorityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_acmpca as interfaces_aws_acmpca
+            from aws_cdk.interfaces import aws_acmpca as interfaces_acmpca
             
-            certificate_authority_reference = interfaces_aws_acmpca.CertificateAuthorityReference(
+            certificate_authority_reference = interfaces_acmpca.CertificateAuthorityReference(
                 certificate_authority_arn="certificateAuthorityArn"
             )
         '''
@@ -158,9 +158,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_acmpca as interfaces_aws_acmpca
+            from aws_cdk.interfaces import aws_acmpca as interfaces_acmpca
             
-            certificate_reference = interfaces_aws_acmpca.CertificateReference(
+            certificate_reference = interfaces_acmpca.CertificateReference(
                 certificate_arn="certificateArn",
                 certificate_authority_arn="certificateAuthorityArn"
             )
@@ -412,9 +412,9 @@ class PermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_acmpca as interfaces_aws_acmpca
+            from aws_cdk.interfaces import aws_acmpca as interfaces_acmpca
             
-            permission_reference = interfaces_aws_acmpca.PermissionReference(
+            permission_reference = interfaces_acmpca.PermissionReference(
                 certificate_authority_arn="certificateAuthorityArn",
                 principal="principal"
             )

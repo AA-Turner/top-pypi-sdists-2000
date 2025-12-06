@@ -51,9 +51,9 @@ class AppMonitorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rum as interfaces_aws_rum
+            from aws_cdk.interfaces import aws_rum as interfaces_rum
             
-            app_monitor_reference = interfaces_aws_rum.AppMonitorReference(
+            app_monitor_reference = interfaces_rum.AppMonitorReference(
                 app_monitor_name="appMonitorName"
             )
         '''

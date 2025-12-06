@@ -51,9 +51,9 @@ class GroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_xray as interfaces_aws_xray
+            from aws_cdk.interfaces import aws_xray as interfaces_xray
             
-            group_reference = interfaces_aws_xray.GroupReference(
+            group_reference = interfaces_xray.GroupReference(
                 group_arn="groupArn"
             )
         '''
@@ -282,9 +282,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_xray as interfaces_aws_xray
+            from aws_cdk.interfaces import aws_xray as interfaces_xray
             
-            resource_policy_reference = interfaces_aws_xray.ResourcePolicyReference(
+            resource_policy_reference = interfaces_xray.ResourcePolicyReference(
                 policy_name="policyName"
             )
         '''
@@ -331,9 +331,9 @@ class SamplingRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_xray as interfaces_aws_xray
+            from aws_cdk.interfaces import aws_xray as interfaces_xray
             
-            sampling_rule_reference = interfaces_aws_xray.SamplingRuleReference(
+            sampling_rule_reference = interfaces_xray.SamplingRuleReference(
                 rule_arn="ruleArn"
             )
         '''
@@ -380,9 +380,9 @@ class TransactionSearchConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_xray as interfaces_aws_xray
+            from aws_cdk.interfaces import aws_xray as interfaces_xray
             
-            transaction_search_config_reference = interfaces_aws_xray.TransactionSearchConfigReference(
+            transaction_search_config_reference = interfaces_xray.TransactionSearchConfigReference(
                 account_id="accountId"
             )
         '''

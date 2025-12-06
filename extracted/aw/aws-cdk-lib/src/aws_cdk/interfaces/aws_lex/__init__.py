@@ -63,9 +63,9 @@ class BotAliasReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lex as interfaces_aws_lex
+            from aws_cdk.interfaces import aws_lex as interfaces_lex
             
-            bot_alias_reference = interfaces_aws_lex.BotAliasReference(
+            bot_alias_reference = interfaces_lex.BotAliasReference(
                 bot_alias_arn="botAliasArn",
                 bot_alias_id="botAliasId",
                 bot_id="botId"
@@ -133,9 +133,9 @@ class BotReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lex as interfaces_aws_lex
+            from aws_cdk.interfaces import aws_lex as interfaces_lex
             
-            bot_reference = interfaces_aws_lex.BotReference(
+            bot_reference = interfaces_lex.BotReference(
                 bot_arn="botArn",
                 bot_id="botId"
             )
@@ -193,9 +193,9 @@ class BotVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lex as interfaces_aws_lex
+            from aws_cdk.interfaces import aws_lex as interfaces_lex
             
-            bot_version_reference = interfaces_aws_lex.BotVersionReference(
+            bot_version_reference = interfaces_lex.BotVersionReference(
                 bot_id="botId",
                 bot_version="botVersion"
             )
@@ -432,9 +432,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lex as interfaces_aws_lex
+            from aws_cdk.interfaces import aws_lex as interfaces_lex
             
-            resource_policy_reference = interfaces_aws_lex.ResourcePolicyReference(
+            resource_policy_reference = interfaces_lex.ResourcePolicyReference(
                 resource_policy_id="resourcePolicyId"
             )
         '''

@@ -51,9 +51,9 @@ class GrantReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_licensemanager as interfaces_aws_licensemanager
+            from aws_cdk.interfaces import aws_licensemanager as interfaces_licensemanager
             
-            grant_reference = interfaces_aws_licensemanager.GrantReference(
+            grant_reference = interfaces_licensemanager.GrantReference(
                 grant_arn="grantArn"
             )
         '''
@@ -190,9 +190,9 @@ class LicenseReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_licensemanager as interfaces_aws_licensemanager
+            from aws_cdk.interfaces import aws_licensemanager as interfaces_licensemanager
             
-            license_reference = interfaces_aws_licensemanager.LicenseReference(
+            license_reference = interfaces_licensemanager.LicenseReference(
                 license_arn="licenseArn"
             )
         '''

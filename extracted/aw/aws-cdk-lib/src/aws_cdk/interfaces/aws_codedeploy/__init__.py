@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codedeploy as interfaces_aws_codedeploy
+            from aws_cdk.interfaces import aws_codedeploy as interfaces_codedeploy
             
-            application_reference = interfaces_aws_codedeploy.ApplicationReference(
+            application_reference = interfaces_codedeploy.ApplicationReference(
                 application_name="applicationName"
             )
         '''
@@ -100,9 +100,9 @@ class DeploymentConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codedeploy as interfaces_aws_codedeploy
+            from aws_cdk.interfaces import aws_codedeploy as interfaces_codedeploy
             
-            deployment_config_reference = interfaces_aws_codedeploy.DeploymentConfigReference(
+            deployment_config_reference = interfaces_codedeploy.DeploymentConfigReference(
                 deployment_config_name="deploymentConfigName"
             )
         '''
@@ -149,9 +149,9 @@ class DeploymentGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codedeploy as interfaces_aws_codedeploy
+            from aws_cdk.interfaces import aws_codedeploy as interfaces_codedeploy
             
-            deployment_group_reference = interfaces_aws_codedeploy.DeploymentGroupReference(
+            deployment_group_reference = interfaces_codedeploy.DeploymentGroupReference(
                 deployment_group_id="deploymentGroupId"
             )
         '''

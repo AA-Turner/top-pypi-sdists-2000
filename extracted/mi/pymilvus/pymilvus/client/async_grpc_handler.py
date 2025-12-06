@@ -1,6 +1,5 @@
 import asyncio
 import base64
-import copy
 import json
 import socket
 import time
@@ -24,7 +23,7 @@ from pymilvus.exceptions import (
 )
 from pymilvus.grpc_gen import common_pb2, milvus_pb2_grpc
 from pymilvus.grpc_gen import milvus_pb2 as milvus_types
-from pymilvus.orm.schema import Function
+from pymilvus.orm.schema import Function, Highlighter
 from pymilvus.settings import Config
 
 from . import entity_helper, ts_utils, utils
@@ -36,6 +35,7 @@ from .check import (
     is_legal_port,
 )
 from .constants import ITERATOR_SESSION_TS_FIELD
+from .embedding_list import EmbeddingList
 from .interceptor import _api_level_md
 from .prepare import Prepare
 from .search_result import SearchResult
@@ -43,7 +43,6 @@ from .types import (
     AnalyzeResult,
     CompactionState,
     DatabaseInfo,
-    DataType,
     HybridExtraList,
     IndexState,
     LoadState,
@@ -830,6 +829,7 @@ class AsyncGrpcHandler:
         round_decimal: int = -1,
         timeout: Optional[float] = None,
         ranker: Optional[Function] = None,
+        highlighter: Optional[Highlighter] = None,
         **kwargs,
     ):
         await self.ensure_channel_ready()
@@ -843,6 +843,12 @@ class AsyncGrpcHandler:
             guarantee_timestamp=kwargs.get("guarantee_timestamp"),
             timeout=timeout,
         )
+
+        # Convert EmbeddingList to flat array if present
+        if isinstance(data, list) and len(data) > 0 and isinstance(data[0], EmbeddingList):
+            data = [emb_list.to_flat_array() for emb_list in data]
+            kwargs["is_embedding_list"] = True
+
         request = Prepare.search_requests_with_expr(
             collection_name,
             data,
@@ -854,6 +860,7 @@ class AsyncGrpcHandler:
             output_fields,
             round_decimal,
             ranker=ranker,
+            highlighter=highlighter,
             **kwargs,
         )
         return await self._execute_search(request, timeout, round_decimal=round_decimal, **kwargs)
@@ -883,9 +890,16 @@ class AsyncGrpcHandler:
 
         requests = []
         for req in reqs:
+            data = req.data
+            req_kwargs = dict(kwargs)
+            # Convert EmbeddingList to flat array if present
+            if isinstance(data, list) and len(data) > 0 and isinstance(data[0], EmbeddingList):
+                data = [emb_list.to_flat_array() for emb_list in data]
+                req_kwargs["is_embedding_list"] = True
+
             search_request = Prepare.search_requests_with_expr(
                 collection_name,
-                req.data,
+                data,
                 req.anns_field,
                 req.param,
                 req.limit,
@@ -893,7 +907,7 @@ class AsyncGrpcHandler:
                 partition_names=partition_names,
                 round_decimal=round_decimal,
                 expr_params=req.expr_params,
-                **kwargs,
+                **req_kwargs,
             )
             requests.append(search_request)
 
@@ -921,30 +935,12 @@ class AsyncGrpcHandler:
         **kwargs,
     ):
         index_name = kwargs.pop("index_name", Config.IndexName)
-        copy_kwargs = copy.deepcopy(kwargs)
 
-        collection_desc = await self.describe_collection(
-            collection_name, timeout=timeout, **copy_kwargs
-        )
         await self.ensure_channel_ready()
-        valid_field = False
-        for fields in collection_desc["fields"]:
-            if field_name != fields["name"]:
-                continue
-            valid_field = True
-            if fields["type"] not in {
-                DataType.FLOAT_VECTOR,
-                DataType.BINARY_VECTOR,
-                DataType.FLOAT16_VECTOR,
-                DataType.BFLOAT16_VECTOR,
-                DataType.SPARSE_FLOAT_VECTOR,
-                DataType.INT8_VECTOR,
-            }:
-                break
-
-        if not valid_field:
-            raise MilvusException(message=f"cannot create index on non-existed field: {field_name}")
-
+        # Note: Field validation is handled by the server.
+        # Client-side validation for nested fields (e.g., "chunks[text_vector]")
+        # is not reliable as it only checks top-level field names.
+        # Let the server perform the validation instead.
         index_param = Prepare.create_index_request(
             collection_name, field_name, params, index_name=index_name
         )

@@ -51,9 +51,9 @@ class AppReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            app_reference = interfaces_aws_opsworks.AppReference(
+            app_reference = interfaces_opsworks.AppReference(
                 app_id="appId"
             )
         '''
@@ -102,9 +102,9 @@ class ElasticLoadBalancerAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            elastic_load_balancer_attachment_reference = interfaces_aws_opsworks.ElasticLoadBalancerAttachmentReference(
+            elastic_load_balancer_attachment_reference = interfaces_opsworks.ElasticLoadBalancerAttachmentReference(
                 elastic_load_balancer_attachment_id="elasticLoadBalancerAttachmentId"
             )
         '''
@@ -472,9 +472,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            instance_reference = interfaces_aws_opsworks.InstanceReference(
+            instance_reference = interfaces_opsworks.InstanceReference(
                 instance_id="instanceId"
             )
         '''
@@ -521,9 +521,9 @@ class LayerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            layer_reference = interfaces_aws_opsworks.LayerReference(
+            layer_reference = interfaces_opsworks.LayerReference(
                 layer_id="layerId"
             )
         '''
@@ -570,9 +570,9 @@ class StackReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            stack_reference = interfaces_aws_opsworks.StackReference(
+            stack_reference = interfaces_opsworks.StackReference(
                 stack_id="stackId"
             )
         '''
@@ -619,9 +619,9 @@ class UserProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            user_profile_reference = interfaces_aws_opsworks.UserProfileReference(
+            user_profile_reference = interfaces_opsworks.UserProfileReference(
                 user_profile_id="userProfileId"
             )
         '''
@@ -668,9 +668,9 @@ class VolumeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_opsworks as interfaces_aws_opsworks
+            from aws_cdk.interfaces import aws_opsworks as interfaces_opsworks
             
-            volume_reference = interfaces_aws_opsworks.VolumeReference(
+            volume_reference = interfaces_opsworks.VolumeReference(
                 volume_id="volumeId"
             )
         '''

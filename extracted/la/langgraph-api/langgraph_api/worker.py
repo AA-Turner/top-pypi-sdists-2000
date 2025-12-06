@@ -103,8 +103,8 @@ async def worker(
             "run_attempt": attempt,
             "thread_id": str(run.get("thread_id")),
             "assistant_id": str(run.get("assistant_id")),
-            "graph_id": _get_graph_id(run),
-            "request_id": _get_request_id(run),
+            "graph_id": str(_get_graph_id(run)),
+            "request_id": str(_get_request_id(run)),
         }
     )
     run_stream_started_at_dt = datetime.now(UTC)
@@ -159,7 +159,7 @@ async def worker(
             if attempt > BG_JOB_MAX_RETRIES:
                 await logger.aerror(
                     "Run exceeded max attempts",
-                    run_id=run["run_id"],
+                    run_id=str(run["run_id"]),
                     run_completed_in_ms=(
                         int((time.time() * 1_000) - request_created_at)
                         if request_created_at is not None

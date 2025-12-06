@@ -60,9 +60,9 @@ class AppBlockBuilderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            app_block_builder_reference = interfaces_aws_appstream.AppBlockBuilderReference(
+            app_block_builder_reference = interfaces_appstream.AppBlockBuilderReference(
                 app_block_builder_arn="appBlockBuilderArn",
                 app_block_builder_name="appBlockBuilderName"
             )
@@ -119,9 +119,9 @@ class AppBlockReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            app_block_reference = interfaces_aws_appstream.AppBlockReference(
+            app_block_reference = interfaces_appstream.AppBlockReference(
                 app_block_arn="appBlockArn"
             )
         '''
@@ -180,9 +180,9 @@ class ApplicationEntitlementAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            application_entitlement_association_reference = interfaces_aws_appstream.ApplicationEntitlementAssociationReference(
+            application_entitlement_association_reference = interfaces_appstream.ApplicationEntitlementAssociationReference(
                 application_identifier="applicationIdentifier",
                 entitlement_name="entitlementName",
                 stack_name="stackName"
@@ -255,9 +255,9 @@ class ApplicationFleetAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            application_fleet_association_reference = interfaces_aws_appstream.ApplicationFleetAssociationReference(
+            application_fleet_association_reference = interfaces_appstream.ApplicationFleetAssociationReference(
                 application_arn="applicationArn",
                 fleet_name="fleetName"
             )
@@ -314,9 +314,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            application_reference = interfaces_aws_appstream.ApplicationReference(
+            application_reference = interfaces_appstream.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''
@@ -363,9 +363,9 @@ class DirectoryConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            directory_config_reference = interfaces_aws_appstream.DirectoryConfigReference(
+            directory_config_reference = interfaces_appstream.DirectoryConfigReference(
                 directory_name="directoryName"
             )
         '''
@@ -418,9 +418,9 @@ class EntitlementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            entitlement_reference = interfaces_aws_appstream.EntitlementReference(
+            entitlement_reference = interfaces_appstream.EntitlementReference(
                 entitlement_name="entitlementName",
                 stack_name="stackName"
             )
@@ -477,9 +477,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            fleet_reference = interfaces_aws_appstream.FleetReference(
+            fleet_reference = interfaces_appstream.FleetReference(
                 fleet_id="fleetId"
             )
         '''
@@ -1123,9 +1123,9 @@ class ImageBuilderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            image_builder_reference = interfaces_aws_appstream.ImageBuilderReference(
+            image_builder_reference = interfaces_appstream.ImageBuilderReference(
                 image_builder_name="imageBuilderName"
             )
         '''
@@ -1172,9 +1172,9 @@ class StackFleetAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            stack_fleet_association_reference = interfaces_aws_appstream.StackFleetAssociationReference(
+            stack_fleet_association_reference = interfaces_appstream.StackFleetAssociationReference(
                 stack_fleet_association_id="stackFleetAssociationId"
             )
         '''
@@ -1221,9 +1221,9 @@ class StackReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            stack_reference = interfaces_aws_appstream.StackReference(
+            stack_reference = interfaces_appstream.StackReference(
                 stack_id="stackId"
             )
         '''
@@ -1270,9 +1270,9 @@ class StackUserAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            stack_user_association_reference = interfaces_aws_appstream.StackUserAssociationReference(
+            stack_user_association_reference = interfaces_appstream.StackUserAssociationReference(
                 stack_user_association_id="stackUserAssociationId"
             )
         '''
@@ -1319,9 +1319,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appstream as interfaces_aws_appstream
+            from aws_cdk.interfaces import aws_appstream as interfaces_appstream
             
-            user_reference = interfaces_aws_appstream.UserReference(
+            user_reference = interfaces_appstream.UserReference(
                 user_id="userId"
             )
         '''

@@ -3349,9 +3349,9 @@ class DomainGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_elasticsearch as elasticsearch
-        from aws_cdk.interfaces import aws_elasticsearch as interfaces_aws_elasticsearch
+        from aws_cdk.interfaces import aws_elasticsearch as interfaces_elasticsearch
         
-        # domain_ref: interfaces_aws_elasticsearch.IDomainRef
+        # domain_ref: interfaces_elasticsearch.IDomainRef
         
         domain_grants = elasticsearch.DomainGrants.from_domain(domain_ref)
     '''

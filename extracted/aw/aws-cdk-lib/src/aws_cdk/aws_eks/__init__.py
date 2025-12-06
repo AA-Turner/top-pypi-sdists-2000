@@ -21709,11 +21709,11 @@ class ClusterOptions(CommonClusterOptions):
             from aws_cdk import aws_eks as eks
             from aws_cdk import aws_iam as iam
             from aws_cdk import aws_lambda as lambda_
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
             # alb_controller_version: eks.AlbControllerVersion
             # endpoint_access: eks.EndpointAccess
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # kubernetes_version: eks.KubernetesVersion
             # layer_version: lambda.LayerVersion
             # policy: Any

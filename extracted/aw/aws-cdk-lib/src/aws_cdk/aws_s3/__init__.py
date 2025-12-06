@@ -13850,6 +13850,9 @@ class CfnStorageLens(
                         advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
                             is_enabled=False
                         ),
+                        advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                            is_enabled=False
+                        ),
                         detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
                             is_enabled=False
                         ),
@@ -13873,6 +13876,9 @@ class CfnStorageLens(
                         is_enabled=False
                     ),
                     advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
+                        is_enabled=False
+                    ),
+                    advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
                         is_enabled=False
                     ),
                     detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
@@ -13910,16 +13916,56 @@ class CfnStorageLens(
                             sses3=sses3
                         ),
                         prefix="prefix"
+                    ),
+                    storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                        is_enabled=False,
+        
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        )
                     )
                 ),
                 exclude=s3.CfnStorageLens.BucketsAndRegionsProperty(
                     buckets=["buckets"],
                     regions=["regions"]
                 ),
+                expanded_prefixes_data_export=s3.CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty(
+                    s3_bucket_destination=s3.CfnStorageLens.S3BucketDestinationProperty(
+                        account_id="accountId",
+                        arn="arn",
+                        format="format",
+                        output_schema_version="outputSchemaVersion",
+        
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        ),
+                        prefix="prefix"
+                    ),
+                    storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                        is_enabled=False,
+        
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        )
+                    )
+                ),
                 include=s3.CfnStorageLens.BucketsAndRegionsProperty(
                     buckets=["buckets"],
                     regions=["regions"]
                 ),
+                prefix_delimiter="prefixDelimiter",
                 storage_lens_arn="storageLensArn"
             ),
         
@@ -14065,6 +14111,7 @@ class CfnStorageLens(
             "activity_metrics": "activityMetrics",
             "advanced_cost_optimization_metrics": "advancedCostOptimizationMetrics",
             "advanced_data_protection_metrics": "advancedDataProtectionMetrics",
+            "advanced_performance_metrics": "advancedPerformanceMetrics",
             "detailed_status_codes_metrics": "detailedStatusCodesMetrics",
             "storage_lens_group_level": "storageLensGroupLevel",
         },
@@ -14077,6 +14124,7 @@ class CfnStorageLens(
             activity_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.ActivityMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             advanced_cost_optimization_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedCostOptimizationMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             advanced_data_protection_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedDataProtectionMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            advanced_performance_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedPerformanceMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             detailed_status_codes_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.DetailedStatusCodesMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             storage_lens_group_level: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.StorageLensGroupLevelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -14086,6 +14134,7 @@ class CfnStorageLens(
             :param activity_metrics: This property contains the details of account-level activity metrics for S3 Storage Lens.
             :param advanced_cost_optimization_metrics: This property contains the details of account-level advanced cost optimization metrics for S3 Storage Lens.
             :param advanced_data_protection_metrics: This property contains the details of account-level advanced data protection metrics for S3 Storage Lens.
+            :param advanced_performance_metrics: Advanced Performance Metrics.
             :param detailed_status_codes_metrics: This property contains the details of account-level detailed status code metrics for S3 Storage Lens.
             :param storage_lens_group_level: This property determines the scope of Storage Lens group data that is displayed in the Storage Lens dashboard.
 
@@ -14107,6 +14156,9 @@ class CfnStorageLens(
                             is_enabled=False
                         ),
                         advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
+                            is_enabled=False
+                        ),
+                        advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
                             is_enabled=False
                         ),
                         detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
@@ -14134,6 +14186,9 @@ class CfnStorageLens(
                     advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
                         is_enabled=False
                     ),
+                    advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                        is_enabled=False
+                    ),
                     detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
                         is_enabled=False
                     ),
@@ -14151,6 +14206,7 @@ class CfnStorageLens(
                 check_type(argname="argument activity_metrics", value=activity_metrics, expected_type=type_hints["activity_metrics"])
                 check_type(argname="argument advanced_cost_optimization_metrics", value=advanced_cost_optimization_metrics, expected_type=type_hints["advanced_cost_optimization_metrics"])
                 check_type(argname="argument advanced_data_protection_metrics", value=advanced_data_protection_metrics, expected_type=type_hints["advanced_data_protection_metrics"])
+                check_type(argname="argument advanced_performance_metrics", value=advanced_performance_metrics, expected_type=type_hints["advanced_performance_metrics"])
                 check_type(argname="argument detailed_status_codes_metrics", value=detailed_status_codes_metrics, expected_type=type_hints["detailed_status_codes_metrics"])
                 check_type(argname="argument storage_lens_group_level", value=storage_lens_group_level, expected_type=type_hints["storage_lens_group_level"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
@@ -14162,6 +14218,8 @@ class CfnStorageLens(
                 self._values["advanced_cost_optimization_metrics"] = advanced_cost_optimization_metrics
             if advanced_data_protection_metrics is not None:
                 self._values["advanced_data_protection_metrics"] = advanced_data_protection_metrics
+            if advanced_performance_metrics is not None:
+                self._values["advanced_performance_metrics"] = advanced_performance_metrics
             if detailed_status_codes_metrics is not None:
                 self._values["detailed_status_codes_metrics"] = detailed_status_codes_metrics
             if storage_lens_group_level is not None:
@@ -14213,6 +14271,17 @@ class CfnStorageLens(
             '''
             result = self._values.get("advanced_data_protection_metrics")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedDataProtectionMetricsProperty"]], result)
+
+        @builtins.property
+        def advanced_performance_metrics(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedPerformanceMetricsProperty"]]:
+            '''Advanced Performance Metrics.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-accountlevel.html#cfn-s3-storagelens-accountlevel-advancedperformancemetrics
+            '''
+            result = self._values.get("advanced_performance_metrics")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedPerformanceMetricsProperty"]], result)
 
         @builtins.property
         def detailed_status_codes_metrics(
@@ -14431,6 +14500,63 @@ class CfnStorageLens(
             )
 
     @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3.CfnStorageLens.AdvancedPerformanceMetricsProperty",
+        jsii_struct_bases=[],
+        name_mapping={"is_enabled": "isEnabled"},
+    )
+    class AdvancedPerformanceMetricsProperty:
+        def __init__(
+            self,
+            *,
+            is_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+        ) -> None:
+            '''Advanced Performance Metrics.
+
+            :param is_enabled: Specifies whether the Advanced Performance Metrics is enabled or disabled.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-advancedperformancemetrics.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3 as s3
+                
+                advanced_performance_metrics_property = s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                    is_enabled=False
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__bfd684f877b4c9f9bcd55e7ac311b34d99e4a96b15072071948207ba09c54b8c)
+                check_type(argname="argument is_enabled", value=is_enabled, expected_type=type_hints["is_enabled"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if is_enabled is not None:
+                self._values["is_enabled"] = is_enabled
+
+        @builtins.property
+        def is_enabled(
+            self,
+        ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
+            '''Specifies whether the Advanced Performance Metrics is enabled or disabled.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-advancedperformancemetrics.html#cfn-s3-storagelens-advancedperformancemetrics-isenabled
+            '''
+            result = self._values.get("is_enabled")
+            return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "AdvancedPerformanceMetricsProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
         jsii_type="aws-cdk-lib.aws_s3.CfnStorageLens.AwsOrgProperty",
         jsii_struct_bases=[],
         name_mapping={"arn": "arn"},
@@ -14489,6 +14615,7 @@ class CfnStorageLens(
             "activity_metrics": "activityMetrics",
             "advanced_cost_optimization_metrics": "advancedCostOptimizationMetrics",
             "advanced_data_protection_metrics": "advancedDataProtectionMetrics",
+            "advanced_performance_metrics": "advancedPerformanceMetrics",
             "detailed_status_codes_metrics": "detailedStatusCodesMetrics",
             "prefix_level": "prefixLevel",
         },
@@ -14500,6 +14627,7 @@ class CfnStorageLens(
             activity_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.ActivityMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             advanced_cost_optimization_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedCostOptimizationMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             advanced_data_protection_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedDataProtectionMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            advanced_performance_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AdvancedPerformanceMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             detailed_status_codes_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.DetailedStatusCodesMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             prefix_level: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.PrefixLevelProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
@@ -14508,6 +14636,7 @@ class CfnStorageLens(
             :param activity_metrics: A property for bucket-level activity metrics for S3 Storage Lens.
             :param advanced_cost_optimization_metrics: A property for bucket-level advanced cost optimization metrics for S3 Storage Lens.
             :param advanced_data_protection_metrics: A property for bucket-level advanced data protection metrics for S3 Storage Lens.
+            :param advanced_performance_metrics: Advanced Performance Metrics.
             :param detailed_status_codes_metrics: A property for bucket-level detailed status code metrics for S3 Storage Lens.
             :param prefix_level: A property for bucket-level prefix-level storage metrics for S3 Storage Lens.
 
@@ -14530,6 +14659,9 @@ class CfnStorageLens(
                     advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
                         is_enabled=False
                     ),
+                    advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                        is_enabled=False
+                    ),
                     detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
                         is_enabled=False
                     ),
@@ -14550,6 +14682,7 @@ class CfnStorageLens(
                 check_type(argname="argument activity_metrics", value=activity_metrics, expected_type=type_hints["activity_metrics"])
                 check_type(argname="argument advanced_cost_optimization_metrics", value=advanced_cost_optimization_metrics, expected_type=type_hints["advanced_cost_optimization_metrics"])
                 check_type(argname="argument advanced_data_protection_metrics", value=advanced_data_protection_metrics, expected_type=type_hints["advanced_data_protection_metrics"])
+                check_type(argname="argument advanced_performance_metrics", value=advanced_performance_metrics, expected_type=type_hints["advanced_performance_metrics"])
                 check_type(argname="argument detailed_status_codes_metrics", value=detailed_status_codes_metrics, expected_type=type_hints["detailed_status_codes_metrics"])
                 check_type(argname="argument prefix_level", value=prefix_level, expected_type=type_hints["prefix_level"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
@@ -14559,6 +14692,8 @@ class CfnStorageLens(
                 self._values["advanced_cost_optimization_metrics"] = advanced_cost_optimization_metrics
             if advanced_data_protection_metrics is not None:
                 self._values["advanced_data_protection_metrics"] = advanced_data_protection_metrics
+            if advanced_performance_metrics is not None:
+                self._values["advanced_performance_metrics"] = advanced_performance_metrics
             if detailed_status_codes_metrics is not None:
                 self._values["detailed_status_codes_metrics"] = detailed_status_codes_metrics
             if prefix_level is not None:
@@ -14596,6 +14731,17 @@ class CfnStorageLens(
             '''
             result = self._values.get("advanced_data_protection_metrics")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedDataProtectionMetricsProperty"]], result)
+
+        @builtins.property
+        def advanced_performance_metrics(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedPerformanceMetricsProperty"]]:
+            '''Advanced Performance Metrics.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-bucketlevel.html#cfn-s3-storagelens-bucketlevel-advancedperformancemetrics
+            '''
+            result = self._values.get("advanced_performance_metrics")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.AdvancedPerformanceMetricsProperty"]], result)
 
         @builtins.property
         def detailed_status_codes_metrics(
@@ -14766,6 +14912,7 @@ class CfnStorageLens(
         name_mapping={
             "cloud_watch_metrics": "cloudWatchMetrics",
             "s3_bucket_destination": "s3BucketDestination",
+            "storage_lens_table_destination": "storageLensTableDestination",
         },
     )
     class DataExportProperty:
@@ -14774,11 +14921,13 @@ class CfnStorageLens(
             *,
             cloud_watch_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.CloudWatchMetricsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             s3_bucket_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.S3BucketDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            storage_lens_table_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.StorageLensTableDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         ) -> None:
             '''This resource contains the details of the Amazon S3 Storage Lens metrics export.
 
             :param cloud_watch_metrics: This property enables the Amazon CloudWatch publishing option for S3 Storage Lens metrics.
             :param s3_bucket_destination: This property contains the details of the bucket where the S3 Storage Lens metrics export will be placed.
+            :param storage_lens_table_destination: S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-dataexport.html
             :exampleMetadata: fixture=_generated
@@ -14809,6 +14958,17 @@ class CfnStorageLens(
                             sses3=sses3
                         ),
                         prefix="prefix"
+                    ),
+                    storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                        is_enabled=False,
+                
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        )
                     )
                 )
             '''
@@ -14816,11 +14976,14 @@ class CfnStorageLens(
                 type_hints = typing.get_type_hints(_typecheckingstub__a5415b7761e741045a3673411c342accaddbe416c25eec56d4d092232613ed75)
                 check_type(argname="argument cloud_watch_metrics", value=cloud_watch_metrics, expected_type=type_hints["cloud_watch_metrics"])
                 check_type(argname="argument s3_bucket_destination", value=s3_bucket_destination, expected_type=type_hints["s3_bucket_destination"])
+                check_type(argname="argument storage_lens_table_destination", value=storage_lens_table_destination, expected_type=type_hints["storage_lens_table_destination"])
             self._values: typing.Dict[builtins.str, typing.Any] = {}
             if cloud_watch_metrics is not None:
                 self._values["cloud_watch_metrics"] = cloud_watch_metrics
             if s3_bucket_destination is not None:
                 self._values["s3_bucket_destination"] = s3_bucket_destination
+            if storage_lens_table_destination is not None:
+                self._values["storage_lens_table_destination"] = storage_lens_table_destination
 
         @builtins.property
         def cloud_watch_metrics(
@@ -14843,6 +15006,17 @@ class CfnStorageLens(
             '''
             result = self._values.get("s3_bucket_destination")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.S3BucketDestinationProperty"]], result)
+
+        @builtins.property
+        def storage_lens_table_destination(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensTableDestinationProperty"]]:
+            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-dataexport.html#cfn-s3-storagelens-dataexport-storagelenstabledestination
+            '''
+            result = self._values.get("storage_lens_table_destination")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensTableDestinationProperty"]], result)
 
         def __eq__(self, rhs: typing.Any) -> builtins.bool:
             return isinstance(rhs, self.__class__) and rhs._values == self._values
@@ -15442,7 +15616,9 @@ class CfnStorageLens(
             "aws_org": "awsOrg",
             "data_export": "dataExport",
             "exclude": "exclude",
+            "expanded_prefixes_data_export": "expandedPrefixesDataExport",
             "include": "include",
+            "prefix_delimiter": "prefixDelimiter",
             "storage_lens_arn": "storageLensArn",
         },
     )
@@ -15456,7 +15632,9 @@ class CfnStorageLens(
             aws_org: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.AwsOrgProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             data_export: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.DataExportProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             exclude: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.BucketsAndRegionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            expanded_prefixes_data_export: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
             include: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.BucketsAndRegionsProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            prefix_delimiter: typing.Optional[builtins.str] = None,
             storage_lens_arn: typing.Optional[builtins.str] = None,
         ) -> None:
             '''This is the property of the Amazon S3 Storage Lens configuration.
@@ -15467,7 +15645,9 @@ class CfnStorageLens(
             :param aws_org: This property contains the details of the AWS Organization for the S3 Storage Lens configuration.
             :param data_export: This property contains the details of this S3 Storage Lens configuration's metrics export.
             :param exclude: This property contains the details of the bucket and or Regions excluded for Amazon S3 Storage Lens configuration.
+            :param expanded_prefixes_data_export: Expanded Prefixes Data Export.
             :param include: This property contains the details of the bucket and or Regions included for Amazon S3 Storage Lens configuration.
+            :param prefix_delimiter: The delimiter to divide S3 key into hierarchy of prefixes.
             :param storage_lens_arn: This property contains the details of the ARN of the S3 Storage Lens configuration. This property is read-only.
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensconfiguration.html
@@ -15493,6 +15673,9 @@ class CfnStorageLens(
                             advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
                                 is_enabled=False
                             ),
+                            advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                                is_enabled=False
+                            ),
                             detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
                                 is_enabled=False
                             ),
@@ -15516,6 +15699,9 @@ class CfnStorageLens(
                             is_enabled=False
                         ),
                         advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
+                            is_enabled=False
+                        ),
+                        advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
                             is_enabled=False
                         ),
                         detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
@@ -15553,16 +15739,56 @@ class CfnStorageLens(
                                 sses3=sses3
                             ),
                             prefix="prefix"
+                        ),
+                        storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                            is_enabled=False,
+                
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            )
                         )
                     ),
                     exclude=s3.CfnStorageLens.BucketsAndRegionsProperty(
                         buckets=["buckets"],
                         regions=["regions"]
                     ),
+                    expanded_prefixes_data_export=s3.CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty(
+                        s3_bucket_destination=s3.CfnStorageLens.S3BucketDestinationProperty(
+                            account_id="accountId",
+                            arn="arn",
+                            format="format",
+                            output_schema_version="outputSchemaVersion",
+                
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            ),
+                            prefix="prefix"
+                        ),
+                        storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                            is_enabled=False,
+                
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            )
+                        )
+                    ),
                     include=s3.CfnStorageLens.BucketsAndRegionsProperty(
                         buckets=["buckets"],
                         regions=["regions"]
                     ),
+                    prefix_delimiter="prefixDelimiter",
                     storage_lens_arn="storageLensArn"
                 )
             '''
@@ -15574,7 +15800,9 @@ class CfnStorageLens(
                 check_type(argname="argument aws_org", value=aws_org, expected_type=type_hints["aws_org"])
                 check_type(argname="argument data_export", value=data_export, expected_type=type_hints["data_export"])
                 check_type(argname="argument exclude", value=exclude, expected_type=type_hints["exclude"])
+                check_type(argname="argument expanded_prefixes_data_export", value=expanded_prefixes_data_export, expected_type=type_hints["expanded_prefixes_data_export"])
                 check_type(argname="argument include", value=include, expected_type=type_hints["include"])
+                check_type(argname="argument prefix_delimiter", value=prefix_delimiter, expected_type=type_hints["prefix_delimiter"])
                 check_type(argname="argument storage_lens_arn", value=storage_lens_arn, expected_type=type_hints["storage_lens_arn"])
             self._values: typing.Dict[builtins.str, typing.Any] = {
                 "account_level": account_level,
@@ -15587,8 +15815,12 @@ class CfnStorageLens(
                 self._values["data_export"] = data_export
             if exclude is not None:
                 self._values["exclude"] = exclude
+            if expanded_prefixes_data_export is not None:
+                self._values["expanded_prefixes_data_export"] = expanded_prefixes_data_export
             if include is not None:
                 self._values["include"] = include
+            if prefix_delimiter is not None:
+                self._values["prefix_delimiter"] = prefix_delimiter
             if storage_lens_arn is not None:
                 self._values["storage_lens_arn"] = storage_lens_arn
 
@@ -15658,6 +15890,17 @@ class CfnStorageLens(
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.BucketsAndRegionsProperty"]], result)
 
         @builtins.property
+        def expanded_prefixes_data_export(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty"]]:
+            '''Expanded Prefixes Data Export.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensconfiguration.html#cfn-s3-storagelens-storagelensconfiguration-expandedprefixesdataexport
+            '''
+            result = self._values.get("expanded_prefixes_data_export")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty"]], result)
+
+        @builtins.property
         def include(
             self,
         ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.BucketsAndRegionsProperty"]]:
@@ -15667,6 +15910,15 @@ class CfnStorageLens(
             '''
             result = self._values.get("include")
             return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.BucketsAndRegionsProperty"]], result)
+
+        @builtins.property
+        def prefix_delimiter(self) -> typing.Optional[builtins.str]:
+            '''The delimiter to divide S3 key into hierarchy of prefixes.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensconfiguration.html#cfn-s3-storagelens-storagelensconfiguration-prefixdelimiter
+            '''
+            result = self._values.get("prefix_delimiter")
+            return typing.cast(typing.Optional[builtins.str], result)
 
         @builtins.property
         def storage_lens_arn(self) -> typing.Optional[builtins.str]:
@@ -15687,6 +15939,109 @@ class CfnStorageLens(
 
         def __repr__(self) -> str:
             return "StorageLensConfigurationProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3.CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "s3_bucket_destination": "s3BucketDestination",
+            "storage_lens_table_destination": "storageLensTableDestination",
+        },
+    )
+    class StorageLensExpandedPrefixesDataExportProperty:
+        def __init__(
+            self,
+            *,
+            s3_bucket_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.S3BucketDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            storage_lens_table_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.StorageLensTableDestinationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''Expanded Prefixes Data Export.
+
+            :param s3_bucket_destination: S3 bucket destination settings for the Amazon S3 Storage Lens metrics export.
+            :param storage_lens_table_destination: S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3 as s3
+                
+                # sses3: Any
+                
+                storage_lens_expanded_prefixes_data_export_property = s3.CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty(
+                    s3_bucket_destination=s3.CfnStorageLens.S3BucketDestinationProperty(
+                        account_id="accountId",
+                        arn="arn",
+                        format="format",
+                        output_schema_version="outputSchemaVersion",
+                
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        ),
+                        prefix="prefix"
+                    ),
+                    storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                        is_enabled=False,
+                
+                        # the properties below are optional
+                        encryption=s3.CfnStorageLens.EncryptionProperty(
+                            ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                key_id="keyId"
+                            ),
+                            sses3=sses3
+                        )
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__11a68c5e565fd5ac2ecb87022657fe6eff225111d93534e333c36af5fafb11f4)
+                check_type(argname="argument s3_bucket_destination", value=s3_bucket_destination, expected_type=type_hints["s3_bucket_destination"])
+                check_type(argname="argument storage_lens_table_destination", value=storage_lens_table_destination, expected_type=type_hints["storage_lens_table_destination"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {}
+            if s3_bucket_destination is not None:
+                self._values["s3_bucket_destination"] = s3_bucket_destination
+            if storage_lens_table_destination is not None:
+                self._values["storage_lens_table_destination"] = storage_lens_table_destination
+
+        @builtins.property
+        def s3_bucket_destination(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.S3BucketDestinationProperty"]]:
+            '''S3 bucket destination settings for the Amazon S3 Storage Lens metrics export.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html#cfn-s3-storagelens-storagelensexpandedprefixesdataexport-s3bucketdestination
+            '''
+            result = self._values.get("s3_bucket_destination")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.S3BucketDestinationProperty"]], result)
+
+        @builtins.property
+        def storage_lens_table_destination(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensTableDestinationProperty"]]:
+            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelensexpandedprefixesdataexport.html#cfn-s3-storagelens-storagelensexpandedprefixesdataexport-storagelenstabledestination
+            '''
+            result = self._values.get("storage_lens_table_destination")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.StorageLensTableDestinationProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StorageLensExpandedPrefixesDataExportProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -15823,6 +16178,88 @@ class CfnStorageLens(
 
         def __repr__(self) -> str:
             return "StorageLensGroupSelectionCriteriaProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_s3.CfnStorageLens.StorageLensTableDestinationProperty",
+        jsii_struct_bases=[],
+        name_mapping={"is_enabled": "isEnabled", "encryption": "encryption"},
+    )
+    class StorageLensTableDestinationProperty:
+        def __init__(
+            self,
+            *,
+            is_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+            encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnStorageLens.EncryptionProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''S3 Tables destination settings for the Amazon S3 Storage Lens metrics export.
+
+            :param is_enabled: Specifies whether the export to S3 Tables is enabled or disabled.
+            :param encryption: Configures the server-side encryption for Amazon S3 Storage Lens report files with either S3-managed keys (SSE-S3) or KMS-managed keys (SSE-KMS).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_s3 as s3
+                
+                # sses3: Any
+                
+                storage_lens_table_destination_property = s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                    is_enabled=False,
+                
+                    # the properties below are optional
+                    encryption=s3.CfnStorageLens.EncryptionProperty(
+                        ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                            key_id="keyId"
+                        ),
+                        sses3=sses3
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__d0a8596ea4d1beae41103ac9489f1c011e505ea388c766c3d28085057808942f)
+                check_type(argname="argument is_enabled", value=is_enabled, expected_type=type_hints["is_enabled"])
+                check_type(argname="argument encryption", value=encryption, expected_type=type_hints["encryption"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "is_enabled": is_enabled,
+            }
+            if encryption is not None:
+                self._values["encryption"] = encryption
+
+        @builtins.property
+        def is_enabled(self) -> typing.Union[builtins.bool, _IResolvable_da3f097b]:
+            '''Specifies whether the export to S3 Tables is enabled or disabled.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html#cfn-s3-storagelens-storagelenstabledestination-isenabled
+            '''
+            result = self._values.get("is_enabled")
+            assert result is not None, "Required property 'is_enabled' is missing"
+            return typing.cast(typing.Union[builtins.bool, _IResolvable_da3f097b], result)
+
+        @builtins.property
+        def encryption(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.EncryptionProperty"]]:
+            '''Configures the server-side encryption for Amazon S3 Storage Lens report files with either S3-managed keys (SSE-S3) or KMS-managed keys (SSE-KMS).
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-storagelens-storagelenstabledestination.html#cfn-s3-storagelens-storagelenstabledestination-encryption
+            '''
+            result = self._values.get("encryption")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnStorageLens.EncryptionProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "StorageLensTableDestinationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -16897,6 +17334,9 @@ class CfnStorageLensProps:
                             advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
                                 is_enabled=False
                             ),
+                            advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
+                                is_enabled=False
+                            ),
                             detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
                                 is_enabled=False
                             ),
@@ -16920,6 +17360,9 @@ class CfnStorageLensProps:
                             is_enabled=False
                         ),
                         advanced_data_protection_metrics=s3.CfnStorageLens.AdvancedDataProtectionMetricsProperty(
+                            is_enabled=False
+                        ),
+                        advanced_performance_metrics=s3.CfnStorageLens.AdvancedPerformanceMetricsProperty(
                             is_enabled=False
                         ),
                         detailed_status_codes_metrics=s3.CfnStorageLens.DetailedStatusCodesMetricsProperty(
@@ -16957,16 +17400,56 @@ class CfnStorageLensProps:
                                 sses3=sses3
                             ),
                             prefix="prefix"
+                        ),
+                        storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                            is_enabled=False,
+            
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            )
                         )
                     ),
                     exclude=s3.CfnStorageLens.BucketsAndRegionsProperty(
                         buckets=["buckets"],
                         regions=["regions"]
                     ),
+                    expanded_prefixes_data_export=s3.CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty(
+                        s3_bucket_destination=s3.CfnStorageLens.S3BucketDestinationProperty(
+                            account_id="accountId",
+                            arn="arn",
+                            format="format",
+                            output_schema_version="outputSchemaVersion",
+            
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            ),
+                            prefix="prefix"
+                        ),
+                        storage_lens_table_destination=s3.CfnStorageLens.StorageLensTableDestinationProperty(
+                            is_enabled=False,
+            
+                            # the properties below are optional
+                            encryption=s3.CfnStorageLens.EncryptionProperty(
+                                ssekms=s3.CfnStorageLens.SSEKMSProperty(
+                                    key_id="keyId"
+                                ),
+                                sses3=sses3
+                            )
+                        )
+                    ),
                     include=s3.CfnStorageLens.BucketsAndRegionsProperty(
                         buckets=["buckets"],
                         regions=["regions"]
                     ),
+                    prefix_delimiter="prefixDelimiter",
                     storage_lens_arn="storageLensArn"
                 ),
             
@@ -24750,6 +25233,7 @@ def _typecheckingstub__8da469c622dc599cd8ec42cba6c799e0f9447fcab65eca2a0b4b35a4c
     activity_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.ActivityMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     advanced_cost_optimization_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedCostOptimizationMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     advanced_data_protection_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedDataProtectionMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    advanced_performance_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedPerformanceMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     detailed_status_codes_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.DetailedStatusCodesMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     storage_lens_group_level: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.StorageLensGroupLevelProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -24777,6 +25261,13 @@ def _typecheckingstub__406e515a536dcd62d71bfed774ccc44329625c6969d609ab497ea14d4
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__bfd684f877b4c9f9bcd55e7ac311b34d99e4a96b15072071948207ba09c54b8c(
+    *,
+    is_enabled: typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__179c032420f587fc3949636785b013a5c36b91ae7bf0cd7ae3853d01377a9718(
     *,
     arn: builtins.str,
@@ -24789,6 +25280,7 @@ def _typecheckingstub__6e13645d1e400ccd41b4e10c0a8767831bbd988faacb10c2b66ba5496
     activity_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.ActivityMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     advanced_cost_optimization_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedCostOptimizationMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     advanced_data_protection_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedDataProtectionMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    advanced_performance_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AdvancedPerformanceMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     detailed_status_codes_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.DetailedStatusCodesMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     prefix_level: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.PrefixLevelProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
@@ -24814,6 +25306,7 @@ def _typecheckingstub__a5415b7761e741045a3673411c342accaddbe416c25eec56d4d092232
     *,
     cloud_watch_metrics: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.CloudWatchMetricsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     s3_bucket_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.S3BucketDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_lens_table_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.StorageLensTableDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24884,8 +25377,18 @@ def _typecheckingstub__cc27b3dd4fb3e68e7c85745fd1a4a4b6316224b2e871c3592a2d4df8f
     aws_org: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.AwsOrgProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     data_export: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.DataExportProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     exclude: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.BucketsAndRegionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    expanded_prefixes_data_export: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.StorageLensExpandedPrefixesDataExportProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     include: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.BucketsAndRegionsProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    prefix_delimiter: typing.Optional[builtins.str] = None,
     storage_lens_arn: typing.Optional[builtins.str] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__11a68c5e565fd5ac2ecb87022657fe6eff225111d93534e333c36af5fafb11f4(
+    *,
+    s3_bucket_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.S3BucketDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    storage_lens_table_destination: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.StorageLensTableDestinationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -24901,6 +25404,14 @@ def _typecheckingstub__690b98e6028082e60be1e9c6f7c940cf8843045c5d962764a553a0da8
     *,
     exclude: typing.Optional[typing.Sequence[builtins.str]] = None,
     include: typing.Optional[typing.Sequence[builtins.str]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__d0a8596ea4d1beae41103ac9489f1c011e505ea388c766c3d28085057808942f(
+    *,
+    is_enabled: typing.Union[builtins.bool, _IResolvable_da3f097b],
+    encryption: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnStorageLens.EncryptionProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
     pass

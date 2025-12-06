@@ -49,9 +49,9 @@ class ApiReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            api_reference = interfaces_aws_sam.ApiReference()
+            api_reference = interfaces_sam.ApiReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -82,9 +82,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            application_reference = interfaces_aws_sam.ApplicationReference()
+            application_reference = interfaces_sam.ApplicationReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -115,9 +115,9 @@ class FunctionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            function_reference = interfaces_aws_sam.FunctionReference()
+            function_reference = interfaces_sam.FunctionReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -148,9 +148,9 @@ class HttpApiReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            http_api_reference = interfaces_aws_sam.HttpApiReference()
+            http_api_reference = interfaces_sam.HttpApiReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -496,9 +496,9 @@ class LayerVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            layer_version_reference = interfaces_aws_sam.LayerVersionReference()
+            layer_version_reference = interfaces_sam.LayerVersionReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -529,9 +529,9 @@ class SimpleTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            simple_table_reference = interfaces_aws_sam.SimpleTableReference()
+            simple_table_reference = interfaces_sam.SimpleTableReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 
@@ -562,9 +562,9 @@ class StateMachineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sam as interfaces_aws_sam
+            from aws_cdk.interfaces import aws_sam as interfaces_sam
             
-            state_machine_reference = interfaces_aws_sam.StateMachineReference()
+            state_machine_reference = interfaces_sam.StateMachineReference()
         '''
         self._values: typing.Dict[builtins.str, typing.Any] = {}
 

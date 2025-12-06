@@ -51,9 +51,9 @@ class ChallengeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorscep as interfaces_aws_pcaconnectorscep
+            from aws_cdk.interfaces import aws_pcaconnectorscep as interfaces_pcaconnectorscep
             
-            challenge_reference = interfaces_aws_pcaconnectorscep.ChallengeReference(
+            challenge_reference = interfaces_pcaconnectorscep.ChallengeReference(
                 challenge_arn="challengeArn"
             )
         '''
@@ -100,9 +100,9 @@ class ConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorscep as interfaces_aws_pcaconnectorscep
+            from aws_cdk.interfaces import aws_pcaconnectorscep as interfaces_pcaconnectorscep
             
-            connector_reference = interfaces_aws_pcaconnectorscep.ConnectorReference(
+            connector_reference = interfaces_pcaconnectorscep.ConnectorReference(
                 connector_arn="connectorArn"
             )
         '''

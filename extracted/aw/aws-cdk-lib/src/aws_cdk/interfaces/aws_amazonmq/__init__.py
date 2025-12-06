@@ -52,9 +52,9 @@ class BrokerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amazonmq as interfaces_aws_amazonmq
+            from aws_cdk.interfaces import aws_amazonmq as interfaces_amazonmq
             
-            broker_reference = interfaces_aws_amazonmq.BrokerReference(
+            broker_reference = interfaces_amazonmq.BrokerReference(
                 broker_arn="brokerArn",
                 broker_id="brokerId"
             )
@@ -111,9 +111,9 @@ class ConfigurationAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amazonmq as interfaces_aws_amazonmq
+            from aws_cdk.interfaces import aws_amazonmq as interfaces_amazonmq
             
-            configuration_association_reference = interfaces_aws_amazonmq.ConfigurationAssociationReference(
+            configuration_association_reference = interfaces_amazonmq.ConfigurationAssociationReference(
                 configuration_association_id="configurationAssociationId"
             )
         '''
@@ -169,9 +169,9 @@ class ConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_amazonmq as interfaces_aws_amazonmq
+            from aws_cdk.interfaces import aws_amazonmq as interfaces_amazonmq
             
-            configuration_reference = interfaces_aws_amazonmq.ConfigurationReference(
+            configuration_reference = interfaces_amazonmq.ConfigurationReference(
                 configuration_arn="configurationArn",
                 configuration_id="configurationId"
             )

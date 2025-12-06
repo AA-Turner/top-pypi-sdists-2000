@@ -157,9 +157,9 @@ class ScalableTargetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_aws_applicationautoscaling
+            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
             
-            scalable_target_reference = interfaces_aws_applicationautoscaling.ScalableTargetReference(
+            scalable_target_reference = interfaces_applicationautoscaling.ScalableTargetReference(
                 resource_id="resourceId",
                 scalable_dimension="scalableDimension",
                 service_namespace="serviceNamespace"
@@ -235,9 +235,9 @@ class ScalingPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_aws_applicationautoscaling
+            from aws_cdk.interfaces import aws_applicationautoscaling as interfaces_applicationautoscaling
             
-            scaling_policy_reference = interfaces_aws_applicationautoscaling.ScalingPolicyReference(
+            scaling_policy_reference = interfaces_applicationautoscaling.ScalingPolicyReference(
                 scalable_dimension="scalableDimension",
                 scaling_policy_arn="scalingPolicyArn"
             )

@@ -51,9 +51,9 @@ class ByteMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            byte_match_set_reference = interfaces_aws_waf.ByteMatchSetReference(
+            byte_match_set_reference = interfaces_waf.ByteMatchSetReference(
                 byte_match_set_id="byteMatchSetId"
             )
         '''
@@ -190,7 +190,7 @@ class IPSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
             i_pSet_reference = {
                 "ip_set_id": "ipSetId"
@@ -464,9 +464,9 @@ class RuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            rule_reference = interfaces_aws_waf.RuleReference(
+            rule_reference = interfaces_waf.RuleReference(
                 rule_id="ruleId"
             )
         '''
@@ -513,9 +513,9 @@ class SizeConstraintSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            size_constraint_set_reference = interfaces_aws_waf.SizeConstraintSetReference(
+            size_constraint_set_reference = interfaces_waf.SizeConstraintSetReference(
                 size_constraint_set_id="sizeConstraintSetId"
             )
         '''
@@ -562,9 +562,9 @@ class SqlInjectionMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            sql_injection_match_set_reference = interfaces_aws_waf.SqlInjectionMatchSetReference(
+            sql_injection_match_set_reference = interfaces_waf.SqlInjectionMatchSetReference(
                 sql_injection_match_set_id="sqlInjectionMatchSetId"
             )
         '''
@@ -611,9 +611,9 @@ class WebACLReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            web_aCLReference = interfaces_aws_waf.WebACLReference(
+            web_aCLReference = interfaces_waf.WebACLReference(
                 web_acl_id="webAclId"
             )
         '''
@@ -660,9 +660,9 @@ class XssMatchSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_waf as interfaces_aws_waf
+            from aws_cdk.interfaces import aws_waf as interfaces_waf
             
-            xss_match_set_reference = interfaces_aws_waf.XssMatchSetReference(
+            xss_match_set_reference = interfaces_waf.XssMatchSetReference(
                 xss_match_set_id="xssMatchSetId"
             )
         '''

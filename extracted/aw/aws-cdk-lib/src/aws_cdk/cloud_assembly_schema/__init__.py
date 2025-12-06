@@ -4875,14 +4875,14 @@ class FeatureFlag:
         *,
         explanation: typing.Optional[builtins.str] = None,
         recommended_value: typing.Any = None,
-        unconfigured_behaves_like: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+        unconfigured_behaves_like: typing.Optional[typing.Union["UnconfiguredBehavesLike", typing.Dict[builtins.str, typing.Any]]] = None,
         user_value: typing.Any = None,
     ) -> None:
         '''A single feature flag.
 
         :param explanation: Explanation about the purpose of this flag that can be shown to the user. Default: - No description
         :param recommended_value: The library-recommended value for this flag, if any. It is possible that there is no recommended value. Default: - No recommended value.
-        :param unconfigured_behaves_like: The value of the flag if it is unconfigured. Default: - No value
+        :param unconfigured_behaves_like: The value of the flag that produces the same behavior as when the flag is not configured at all. The structure of this field is a historical accident. The type of this field should have been boolean, which should have contained the default value for the flag appropriate for the *current* version of the CDK library. We are not rectifying this accident because doing so Instead, the canonical way to access this value is by evaluating ``unconfiguredBehavesLike?.v2 ?? false``. Default: false
         :param user_value: The value configured by the user. This is the value configured at the root of the tree. Users may also have configured values at specific locations in the tree; we don't report on those. Default: - Not configured by the user
 
         :exampleMetadata: fixture=_generated
@@ -4894,18 +4894,22 @@ class FeatureFlag:
             from aws_cdk import cloud_assembly_schema
             
             # recommended_value: Any
-            # unconfigured_behaves_like: Any
             # user_value: Any
+            # v1: Any
+            # v2: Any
             
             feature_flag = FeatureFlag(
                 explanation="explanation",
                 recommended_value=recommended_value,
-                unconfigured_behaves_like={
-                    "unconfigured_behaves_like_key": unconfigured_behaves_like
-                },
+                unconfigured_behaves_like=UnconfiguredBehavesLike(
+                    v1=v1,
+                    v2=v2
+                ),
                 user_value=user_value
             )
         '''
+        if isinstance(unconfigured_behaves_like, dict):
+            unconfigured_behaves_like = UnconfiguredBehavesLike(**unconfigured_behaves_like)
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__d7ccfacd89aa44cd30dd2b6b40d937da9546cf5f11f13266ca45710d4e373233)
             check_type(argname="argument explanation", value=explanation, expected_type=type_hints["explanation"])
@@ -4943,15 +4947,21 @@ class FeatureFlag:
         return typing.cast(typing.Any, result)
 
     @builtins.property
-    def unconfigured_behaves_like(
-        self,
-    ) -> typing.Optional[typing.Mapping[builtins.str, typing.Any]]:
-        '''The value of the flag if it is unconfigured.
+    def unconfigured_behaves_like(self) -> typing.Optional["UnconfiguredBehavesLike"]:
+        '''The value of the flag that produces the same behavior as when the flag is not configured at all.
 
-        :default: - No value
+        The structure of this field is a historical accident. The type of this field
+        should have been boolean, which should have contained the default value for
+        the flag appropriate for the *current* version of the CDK library. We are
+        not rectifying this accident because doing so
+
+        Instead, the canonical way to access this value is by evaluating
+        ``unconfiguredBehavesLike?.v2 ?? false``.
+
+        :default: false
         '''
         result = self._values.get("unconfigured_behaves_like")
-        return typing.cast(typing.Optional[typing.Mapping[builtins.str, typing.Any]], result)
+        return typing.cast(typing.Optional["UnconfiguredBehavesLike"], result)
 
     @builtins.property
     def user_value(self) -> typing.Any:
@@ -5007,17 +5017,19 @@ class FeatureFlagReportProperties:
             from aws_cdk import cloud_assembly_schema
             
             # recommended_value: Any
-            # unconfigured_behaves_like: Any
             # user_value: Any
+            # v1: Any
+            # v2: Any
             
             feature_flag_report_properties = FeatureFlagReportProperties(
                 flags={
                     "flags_key": FeatureFlag(
                         explanation="explanation",
                         recommended_value=recommended_value,
-                        unconfigured_behaves_like={
-                            "unconfigured_behaves_like_key": unconfigured_behaves_like
-                        },
+                        unconfigured_behaves_like=UnconfiguredBehavesLike(
+                            v1=v1,
+                            v2=v2
+                        ),
                         user_value=user_value
                     )
                 },
@@ -7941,6 +7953,82 @@ class TreeArtifactProperties:
 
 
 @jsii.data_type(
+    jsii_type="aws-cdk-lib.cloud_assembly_schema.UnconfiguredBehavesLike",
+    jsii_struct_bases=[],
+    name_mapping={"v1": "v1", "v2": "v2"},
+)
+class UnconfiguredBehavesLike:
+    def __init__(self, *, v1: typing.Any = None, v2: typing.Any = None) -> None:
+        '''
+        :param v1: Historical accident, don't use. This value may be present, but it should never be used. The actual value is in the ``v2`` field, regardless of the version of the CDK library. Default: - ignore
+        :param v2: The value of the flag that produces the same behavior as when the flag is not configured at all. Even though it is called 'v2', this is the official name of this field. In any future versions of CDK (v3, v4, ...), this field will still be called 'v2'. The structure of this field is a historical accident. See the comment on ``unconfiguredBehavesLike`` for more information. Default: false
+
+        :exampleMetadata: fixture=_generated
+
+        Example::
+
+            # The code below shows an example of how to instantiate this type.
+            # The values are placeholders you should change.
+            from aws_cdk import cloud_assembly_schema
+            
+            # v1: Any
+            # v2: Any
+            
+            unconfigured_behaves_like = UnconfiguredBehavesLike(
+                v1=v1,
+                v2=v2
+            )
+        '''
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__caf7f415b13e4b8b8fe665a8c3c45311cfc86ffd8c0d9404530f34ee2e62f2bc)
+            check_type(argname="argument v1", value=v1, expected_type=type_hints["v1"])
+            check_type(argname="argument v2", value=v2, expected_type=type_hints["v2"])
+        self._values: typing.Dict[builtins.str, typing.Any] = {}
+        if v1 is not None:
+            self._values["v1"] = v1
+        if v2 is not None:
+            self._values["v2"] = v2
+
+    @builtins.property
+    def v1(self) -> typing.Any:
+        '''Historical accident, don't use.
+
+        This value may be present, but it should never be used. The actual value is
+        in the ``v2`` field, regardless of the version of the CDK library.
+
+        :default: - ignore
+        '''
+        result = self._values.get("v1")
+        return typing.cast(typing.Any, result)
+
+    @builtins.property
+    def v2(self) -> typing.Any:
+        '''The value of the flag that produces the same behavior as when the flag is not configured at all.
+
+        Even though it is called 'v2', this is the official name of this field. In
+        any future versions of CDK (v3, v4, ...), this field will still be called 'v2'.
+
+        The structure of this field is a historical accident. See the comment on
+        ``unconfiguredBehavesLike`` for more information.
+
+        :default: false
+        '''
+        result = self._values.get("v2")
+        return typing.cast(typing.Any, result)
+
+    def __eq__(self, rhs: typing.Any) -> builtins.bool:
+        return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+    def __ne__(self, rhs: typing.Any) -> builtins.bool:
+        return not (rhs == self)
+
+    def __repr__(self) -> str:
+        return "UnconfiguredBehavesLike(%s)" % ", ".join(
+            k + "=" + repr(v) for k, v in self._values.items()
+        )
+
+
+@jsii.data_type(
     jsii_type="aws-cdk-lib.cloud_assembly_schema.VpcContextQuery",
     jsii_struct_bases=[ContextLookupRoleOptions],
     name_mapping={
@@ -9252,6 +9340,7 @@ __all__ = [
     "TestCase",
     "TestOptions",
     "TreeArtifactProperties",
+    "UnconfiguredBehavesLike",
     "VpcContextQuery",
 ]
 
@@ -9594,7 +9683,7 @@ def _typecheckingstub__d7ccfacd89aa44cd30dd2b6b40d937da9546cf5f11f13266ca45710d4
     *,
     explanation: typing.Optional[builtins.str] = None,
     recommended_value: typing.Any = None,
-    unconfigured_behaves_like: typing.Optional[typing.Mapping[builtins.str, typing.Any]] = None,
+    unconfigured_behaves_like: typing.Optional[typing.Union[UnconfiguredBehavesLike, typing.Dict[builtins.str, typing.Any]]] = None,
     user_value: typing.Any = None,
 ) -> None:
     """Type checking stubs"""
@@ -9869,6 +9958,14 @@ def _typecheckingstub__87885fac73fc14075c22fe051717d21aa5da7c4113e34310cff21b849
 def _typecheckingstub__4f49fc9c74b07ac016f6f246ae2bfaa0eea6382d75f9ee62c77e3b2446eec513(
     *,
     file: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__caf7f415b13e4b8b8fe665a8c3c45311cfc86ffd8c0d9404530f34ee2e62f2bc(
+    *,
+    v1: typing.Any = None,
+    v2: typing.Any = None,
 ) -> None:
     """Type checking stubs"""
     pass

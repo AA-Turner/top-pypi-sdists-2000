@@ -51,9 +51,9 @@ class BatchScramSecretReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            batch_scram_secret_reference = interfaces_aws_msk.BatchScramSecretReference(
+            batch_scram_secret_reference = interfaces_msk.BatchScramSecretReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -100,9 +100,9 @@ class ClusterPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            cluster_policy_reference = interfaces_aws_msk.ClusterPolicyReference(
+            cluster_policy_reference = interfaces_msk.ClusterPolicyReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -149,9 +149,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            cluster_reference = interfaces_aws_msk.ClusterReference(
+            cluster_reference = interfaces_msk.ClusterReference(
                 cluster_arn="clusterArn"
             )
         '''
@@ -198,9 +198,9 @@ class ConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            configuration_reference = interfaces_aws_msk.ConfigurationReference(
+            configuration_reference = interfaces_msk.ConfigurationReference(
                 configuration_arn="configurationArn"
             )
         '''
@@ -562,9 +562,9 @@ class ReplicatorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            replicator_reference = interfaces_aws_msk.ReplicatorReference(
+            replicator_reference = interfaces_msk.ReplicatorReference(
                 replicator_arn="replicatorArn"
             )
         '''
@@ -611,9 +611,9 @@ class ServerlessClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            serverless_cluster_reference = interfaces_aws_msk.ServerlessClusterReference(
+            serverless_cluster_reference = interfaces_msk.ServerlessClusterReference(
                 serverless_cluster_arn="serverlessClusterArn"
             )
         '''
@@ -660,9 +660,9 @@ class VpcConnectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_msk as interfaces_aws_msk
+            from aws_cdk.interfaces import aws_msk as interfaces_msk
             
-            vpc_connection_reference = interfaces_aws_msk.VpcConnectionReference(
+            vpc_connection_reference = interfaces_msk.VpcConnectionReference(
                 vpc_connection_arn="vpcConnectionArn"
             )
         '''

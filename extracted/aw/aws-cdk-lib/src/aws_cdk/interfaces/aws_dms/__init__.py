@@ -51,9 +51,9 @@ class CertificateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            certificate_reference = interfaces_aws_dms.CertificateReference(
+            certificate_reference = interfaces_dms.CertificateReference(
                 certificate_id="certificateId"
             )
         '''
@@ -100,9 +100,9 @@ class DataMigrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            data_migration_reference = interfaces_aws_dms.DataMigrationReference(
+            data_migration_reference = interfaces_dms.DataMigrationReference(
                 data_migration_arn="dataMigrationArn"
             )
         '''
@@ -149,9 +149,9 @@ class DataProviderReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            data_provider_reference = interfaces_aws_dms.DataProviderReference(
+            data_provider_reference = interfaces_dms.DataProviderReference(
                 data_provider_arn="dataProviderArn"
             )
         '''
@@ -198,9 +198,9 @@ class EndpointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            endpoint_reference = interfaces_aws_dms.EndpointReference(
+            endpoint_reference = interfaces_dms.EndpointReference(
                 endpoint_id="endpointId"
             )
         '''
@@ -247,9 +247,9 @@ class EventSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            event_subscription_reference = interfaces_aws_dms.EventSubscriptionReference(
+            event_subscription_reference = interfaces_dms.EventSubscriptionReference(
                 event_subscription_id="eventSubscriptionId"
             )
         '''
@@ -791,9 +791,9 @@ class InstanceProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            instance_profile_reference = interfaces_aws_dms.InstanceProfileReference(
+            instance_profile_reference = interfaces_dms.InstanceProfileReference(
                 instance_profile_arn="instanceProfileArn"
             )
         '''
@@ -840,9 +840,9 @@ class MigrationProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            migration_project_reference = interfaces_aws_dms.MigrationProjectReference(
+            migration_project_reference = interfaces_dms.MigrationProjectReference(
                 migration_project_arn="migrationProjectArn"
             )
         '''
@@ -889,9 +889,9 @@ class ReplicationConfigReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            replication_config_reference = interfaces_aws_dms.ReplicationConfigReference(
+            replication_config_reference = interfaces_dms.ReplicationConfigReference(
                 replication_config_arn="replicationConfigArn"
             )
         '''
@@ -938,9 +938,9 @@ class ReplicationInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            replication_instance_reference = interfaces_aws_dms.ReplicationInstanceReference(
+            replication_instance_reference = interfaces_dms.ReplicationInstanceReference(
                 replication_instance_id="replicationInstanceId"
             )
         '''
@@ -987,9 +987,9 @@ class ReplicationSubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            replication_subnet_group_reference = interfaces_aws_dms.ReplicationSubnetGroupReference(
+            replication_subnet_group_reference = interfaces_dms.ReplicationSubnetGroupReference(
                 replication_subnet_group_id="replicationSubnetGroupId"
             )
         '''
@@ -1036,9 +1036,9 @@ class ReplicationTaskReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dms as interfaces_aws_dms
+            from aws_cdk.interfaces import aws_dms as interfaces_dms
             
-            replication_task_reference = interfaces_aws_dms.ReplicationTaskReference(
+            replication_task_reference = interfaces_dms.ReplicationTaskReference(
                 replication_task_id="replicationTaskId"
             )
         '''

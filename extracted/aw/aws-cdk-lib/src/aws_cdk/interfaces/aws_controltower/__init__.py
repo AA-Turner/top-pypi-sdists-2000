@@ -51,9 +51,9 @@ class EnabledBaselineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_controltower as interfaces_aws_controltower
+            from aws_cdk.interfaces import aws_controltower as interfaces_controltower
             
-            enabled_baseline_reference = interfaces_aws_controltower.EnabledBaselineReference(
+            enabled_baseline_reference = interfaces_controltower.EnabledBaselineReference(
                 enabled_baseline_identifier="enabledBaselineIdentifier"
             )
         '''
@@ -109,9 +109,9 @@ class EnabledControlReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_controltower as interfaces_aws_controltower
+            from aws_cdk.interfaces import aws_controltower as interfaces_controltower
             
-            enabled_control_reference = interfaces_aws_controltower.EnabledControlReference(
+            enabled_control_reference = interfaces_controltower.EnabledControlReference(
                 control_identifier="controlIdentifier",
                 target_identifier="targetIdentifier"
             )
@@ -314,9 +314,9 @@ class LandingZoneReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_controltower as interfaces_aws_controltower
+            from aws_cdk.interfaces import aws_controltower as interfaces_controltower
             
-            landing_zone_reference = interfaces_aws_controltower.LandingZoneReference(
+            landing_zone_reference = interfaces_controltower.LandingZoneReference(
                 landing_zone_arn="landingZoneArn",
                 landing_zone_identifier="landingZoneIdentifier"
             )

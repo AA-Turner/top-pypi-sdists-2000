@@ -60,9 +60,9 @@ class BackupPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            backup_plan_reference = interfaces_aws_backup.BackupPlanReference(
+            backup_plan_reference = interfaces_backup.BackupPlanReference(
                 backup_plan_arn="backupPlanArn",
                 backup_plan_id="backupPlanId"
             )
@@ -119,9 +119,9 @@ class BackupSelectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            backup_selection_reference = interfaces_aws_backup.BackupSelectionReference(
+            backup_selection_reference = interfaces_backup.BackupSelectionReference(
                 backup_selection_id="backupSelectionId"
             )
         '''
@@ -177,9 +177,9 @@ class BackupVaultReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            backup_vault_reference = interfaces_aws_backup.BackupVaultReference(
+            backup_vault_reference = interfaces_backup.BackupVaultReference(
                 backup_vault_arn="backupVaultArn",
                 backup_vault_name="backupVaultName"
             )
@@ -236,9 +236,9 @@ class FrameworkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            framework_reference = interfaces_aws_backup.FrameworkReference(
+            framework_reference = interfaces_backup.FrameworkReference(
                 framework_arn="frameworkArn"
             )
         '''
@@ -653,9 +653,9 @@ class LogicallyAirGappedBackupVaultReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            logically_air_gapped_backup_vault_reference = interfaces_aws_backup.LogicallyAirGappedBackupVaultReference(
+            logically_air_gapped_backup_vault_reference = interfaces_backup.LogicallyAirGappedBackupVaultReference(
                 backup_vault_name="backupVaultName"
             )
         '''
@@ -702,9 +702,9 @@ class ReportPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            report_plan_reference = interfaces_aws_backup.ReportPlanReference(
+            report_plan_reference = interfaces_backup.ReportPlanReference(
                 report_plan_arn="reportPlanArn"
             )
         '''
@@ -760,9 +760,9 @@ class RestoreTestingPlanReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            restore_testing_plan_reference = interfaces_aws_backup.RestoreTestingPlanReference(
+            restore_testing_plan_reference = interfaces_backup.RestoreTestingPlanReference(
                 restore_testing_plan_arn="restoreTestingPlanArn",
                 restore_testing_plan_name="restoreTestingPlanName"
             )
@@ -828,9 +828,9 @@ class RestoreTestingSelectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backup as interfaces_aws_backup
+            from aws_cdk.interfaces import aws_backup as interfaces_backup
             
-            restore_testing_selection_reference = interfaces_aws_backup.RestoreTestingSelectionReference(
+            restore_testing_selection_reference = interfaces_backup.RestoreTestingSelectionReference(
                 restore_testing_plan_name="restoreTestingPlanName",
                 restore_testing_selection_name="restoreTestingSelectionName"
             )

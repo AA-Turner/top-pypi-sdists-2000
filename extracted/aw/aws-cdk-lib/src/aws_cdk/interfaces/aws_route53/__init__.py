@@ -60,9 +60,9 @@ class CidrCollectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            cidr_collection_reference = interfaces_aws_route53.CidrCollectionReference(
+            cidr_collection_reference = interfaces_route53.CidrCollectionReference(
                 cidr_collection_arn="cidrCollectionArn",
                 cidr_collection_id="cidrCollectionId"
             )
@@ -119,9 +119,9 @@ class DNSSECReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            d_nSSECReference = interfaces_aws_route53.DNSSECReference(
+            d_nSSECReference = interfaces_route53.DNSSECReference(
                 hosted_zone_id="hostedZoneId"
             )
         '''
@@ -168,9 +168,9 @@ class HealthCheckReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            health_check_reference = interfaces_aws_route53.HealthCheckReference(
+            health_check_reference = interfaces_route53.HealthCheckReference(
                 health_check_id="healthCheckId"
             )
         '''
@@ -217,9 +217,9 @@ class HostedZoneReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            hosted_zone_reference = interfaces_aws_route53.HostedZoneReference(
+            hosted_zone_reference = interfaces_route53.HostedZoneReference(
                 hosted_zone_id="hostedZoneId"
             )
         '''
@@ -590,9 +590,9 @@ class KeySigningKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            key_signing_key_reference = interfaces_aws_route53.KeySigningKeyReference(
+            key_signing_key_reference = interfaces_route53.KeySigningKeyReference(
                 hosted_zone_id="hostedZoneId",
                 key_signing_key_name="keySigningKeyName"
             )
@@ -649,9 +649,9 @@ class RecordSetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            record_set_group_reference = interfaces_aws_route53.RecordSetGroupReference(
+            record_set_group_reference = interfaces_route53.RecordSetGroupReference(
                 record_set_group_id="recordSetGroupId"
             )
         '''
@@ -698,9 +698,9 @@ class RecordSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_route53 as interfaces_aws_route53
+            from aws_cdk.interfaces import aws_route53 as interfaces_route53
             
-            record_set_reference = interfaces_aws_route53.RecordSetReference(
+            record_set_reference = interfaces_route53.RecordSetReference(
                 record_set_id="recordSetId"
             )
         '''

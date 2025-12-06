@@ -51,9 +51,9 @@ class HypervisorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_backupgateway as interfaces_aws_backupgateway
+            from aws_cdk.interfaces import aws_backupgateway as interfaces_backupgateway
             
-            hypervisor_reference = interfaces_aws_backupgateway.HypervisorReference(
+            hypervisor_reference = interfaces_backupgateway.HypervisorReference(
                 hypervisor_arn="hypervisorArn"
             )
         '''

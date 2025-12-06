@@ -52,9 +52,9 @@ class ACLReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            a_cLReference = interfaces_aws_memorydb.ACLReference(
+            a_cLReference = interfaces_memorydb.ACLReference(
                 acl_arn="aclArn",
                 acl_name="aclName"
             )
@@ -117,9 +117,9 @@ class ClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            cluster_reference = interfaces_aws_memorydb.ClusterReference(
+            cluster_reference = interfaces_memorydb.ClusterReference(
                 cluster_arn="clusterArn",
                 cluster_name="clusterName"
             )
@@ -455,9 +455,9 @@ class MultiRegionClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            multi_region_cluster_reference = interfaces_aws_memorydb.MultiRegionClusterReference(
+            multi_region_cluster_reference = interfaces_memorydb.MultiRegionClusterReference(
                 multi_region_cluster_arn="multiRegionClusterArn",
                 multi_region_cluster_name="multiRegionClusterName"
             )
@@ -523,9 +523,9 @@ class ParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            parameter_group_reference = interfaces_aws_memorydb.ParameterGroupReference(
+            parameter_group_reference = interfaces_memorydb.ParameterGroupReference(
                 parameter_group_arn="parameterGroupArn",
                 parameter_group_name="parameterGroupName"
             )
@@ -591,9 +591,9 @@ class SubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            subnet_group_reference = interfaces_aws_memorydb.SubnetGroupReference(
+            subnet_group_reference = interfaces_memorydb.SubnetGroupReference(
                 subnet_group_arn="subnetGroupArn",
                 subnet_group_name="subnetGroupName"
             )
@@ -651,9 +651,9 @@ class UserReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_memorydb as interfaces_aws_memorydb
+            from aws_cdk.interfaces import aws_memorydb as interfaces_memorydb
             
-            user_reference = interfaces_aws_memorydb.UserReference(
+            user_reference = interfaces_memorydb.UserReference(
                 user_arn="userArn",
                 user_name="userName"
             )

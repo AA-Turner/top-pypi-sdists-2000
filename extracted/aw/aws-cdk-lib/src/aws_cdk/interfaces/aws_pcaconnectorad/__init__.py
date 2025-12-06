@@ -51,9 +51,9 @@ class ConnectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_aws_pcaconnectorad
+            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_pcaconnectorad
             
-            connector_reference = interfaces_aws_pcaconnectorad.ConnectorReference(
+            connector_reference = interfaces_pcaconnectorad.ConnectorReference(
                 connector_arn="connectorArn"
             )
         '''
@@ -100,9 +100,9 @@ class DirectoryRegistrationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_aws_pcaconnectorad
+            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_pcaconnectorad
             
-            directory_registration_reference = interfaces_aws_pcaconnectorad.DirectoryRegistrationReference(
+            directory_registration_reference = interfaces_pcaconnectorad.DirectoryRegistrationReference(
                 directory_registration_arn="directoryRegistrationArn"
             )
         '''
@@ -393,9 +393,9 @@ class ServicePrincipalNameReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_aws_pcaconnectorad
+            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_pcaconnectorad
             
-            service_principal_name_reference = interfaces_aws_pcaconnectorad.ServicePrincipalNameReference(
+            service_principal_name_reference = interfaces_pcaconnectorad.ServicePrincipalNameReference(
                 connector_arn="connectorArn",
                 directory_registration_arn="directoryRegistrationArn"
             )
@@ -461,9 +461,9 @@ class TemplateGroupAccessControlEntryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_aws_pcaconnectorad
+            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_pcaconnectorad
             
-            template_group_access_control_entry_reference = interfaces_aws_pcaconnectorad.TemplateGroupAccessControlEntryReference(
+            template_group_access_control_entry_reference = interfaces_pcaconnectorad.TemplateGroupAccessControlEntryReference(
                 group_security_identifier="groupSecurityIdentifier",
                 template_arn="templateArn"
             )
@@ -520,9 +520,9 @@ class TemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_aws_pcaconnectorad
+            from aws_cdk.interfaces import aws_pcaconnectorad as interfaces_pcaconnectorad
             
-            template_reference = interfaces_aws_pcaconnectorad.TemplateReference(
+            template_reference = interfaces_pcaconnectorad.TemplateReference(
                 template_arn="templateArn"
             )
         '''

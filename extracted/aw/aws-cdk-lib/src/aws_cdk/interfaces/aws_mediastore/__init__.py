@@ -57,9 +57,9 @@ class ContainerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediastore as interfaces_aws_mediastore
+            from aws_cdk.interfaces import aws_mediastore as interfaces_mediastore
             
-            container_reference = interfaces_aws_mediastore.ContainerReference(
+            container_reference = interfaces_mediastore.ContainerReference(
                 container_id="containerId",
                 container_name="containerName"
             )

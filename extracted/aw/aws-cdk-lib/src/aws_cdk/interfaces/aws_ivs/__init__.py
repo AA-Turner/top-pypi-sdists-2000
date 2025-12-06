@@ -51,9 +51,9 @@ class ChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            channel_reference = interfaces_aws_ivs.ChannelReference(
+            channel_reference = interfaces_ivs.ChannelReference(
                 channel_arn="channelArn"
             )
         '''
@@ -100,9 +100,9 @@ class EncoderConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            encoder_configuration_reference = interfaces_aws_ivs.EncoderConfigurationReference(
+            encoder_configuration_reference = interfaces_ivs.EncoderConfigurationReference(
                 encoder_configuration_arn="encoderConfigurationArn"
             )
         '''
@@ -601,9 +601,9 @@ class IngestConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            ingest_configuration_reference = interfaces_aws_ivs.IngestConfigurationReference(
+            ingest_configuration_reference = interfaces_ivs.IngestConfigurationReference(
                 ingest_configuration_arn="ingestConfigurationArn"
             )
         '''
@@ -650,9 +650,9 @@ class PlaybackKeyPairReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            playback_key_pair_reference = interfaces_aws_ivs.PlaybackKeyPairReference(
+            playback_key_pair_reference = interfaces_ivs.PlaybackKeyPairReference(
                 playback_key_pair_arn="playbackKeyPairArn"
             )
         '''
@@ -699,9 +699,9 @@ class PlaybackRestrictionPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            playback_restriction_policy_reference = interfaces_aws_ivs.PlaybackRestrictionPolicyReference(
+            playback_restriction_policy_reference = interfaces_ivs.PlaybackRestrictionPolicyReference(
                 playback_restriction_policy_arn="playbackRestrictionPolicyArn"
             )
         '''
@@ -748,9 +748,9 @@ class PublicKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            public_key_reference = interfaces_aws_ivs.PublicKeyReference(
+            public_key_reference = interfaces_ivs.PublicKeyReference(
                 public_key_arn="publicKeyArn"
             )
         '''
@@ -797,9 +797,9 @@ class RecordingConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            recording_configuration_reference = interfaces_aws_ivs.RecordingConfigurationReference(
+            recording_configuration_reference = interfaces_ivs.RecordingConfigurationReference(
                 recording_configuration_arn="recordingConfigurationArn"
             )
         '''
@@ -846,9 +846,9 @@ class StageReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            stage_reference = interfaces_aws_ivs.StageReference(
+            stage_reference = interfaces_ivs.StageReference(
                 stage_arn="stageArn"
             )
         '''
@@ -895,9 +895,9 @@ class StorageConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            storage_configuration_reference = interfaces_aws_ivs.StorageConfigurationReference(
+            storage_configuration_reference = interfaces_ivs.StorageConfigurationReference(
                 storage_configuration_arn="storageConfigurationArn"
             )
         '''
@@ -944,9 +944,9 @@ class StreamKeyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ivs as interfaces_aws_ivs
+            from aws_cdk.interfaces import aws_ivs as interfaces_ivs
             
-            stream_key_reference = interfaces_aws_ivs.StreamKeyReference(
+            stream_key_reference = interfaces_ivs.StreamKeyReference(
                 stream_key_arn="streamKeyArn"
             )
         '''

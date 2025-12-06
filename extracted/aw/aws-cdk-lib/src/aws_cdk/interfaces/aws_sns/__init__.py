@@ -231,9 +231,9 @@ class SubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+            from aws_cdk.interfaces import aws_sns as interfaces_sns
             
-            subscription_reference = interfaces_aws_sns.SubscriptionReference(
+            subscription_reference = interfaces_sns.SubscriptionReference(
                 subscription_arn="subscriptionArn"
             )
         '''
@@ -280,9 +280,9 @@ class TopicInlinePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+            from aws_cdk.interfaces import aws_sns as interfaces_sns
             
-            topic_inline_policy_reference = interfaces_aws_sns.TopicInlinePolicyReference(
+            topic_inline_policy_reference = interfaces_sns.TopicInlinePolicyReference(
                 topic_arn="topicArn"
             )
         '''
@@ -329,9 +329,9 @@ class TopicPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+            from aws_cdk.interfaces import aws_sns as interfaces_sns
             
-            topic_policy_reference = interfaces_aws_sns.TopicPolicyReference(
+            topic_policy_reference = interfaces_sns.TopicPolicyReference(
                 topic_policy_id="topicPolicyId"
             )
         '''
@@ -378,9 +378,9 @@ class TopicReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_sns as interfaces_aws_sns
+            from aws_cdk.interfaces import aws_sns as interfaces_sns
             
-            topic_reference = interfaces_aws_sns.TopicReference(
+            topic_reference = interfaces_sns.TopicReference(
                 topic_arn="topicArn"
             )
         '''

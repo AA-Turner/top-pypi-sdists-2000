@@ -57,9 +57,9 @@ class BridgeOutputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            bridge_output_reference = interfaces_aws_mediaconnect.BridgeOutputReference(
+            bridge_output_reference = interfaces_mediaconnect.BridgeOutputReference(
                 bridge_arn="bridgeArn",
                 bridge_output_name="bridgeOutputName"
             )
@@ -116,9 +116,9 @@ class BridgeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            bridge_reference = interfaces_aws_mediaconnect.BridgeReference(
+            bridge_reference = interfaces_mediaconnect.BridgeReference(
                 bridge_arn="bridgeArn"
             )
         '''
@@ -171,9 +171,9 @@ class BridgeSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            bridge_source_reference = interfaces_aws_mediaconnect.BridgeSourceReference(
+            bridge_source_reference = interfaces_mediaconnect.BridgeSourceReference(
                 bridge_arn="bridgeArn",
                 bridge_source_name="bridgeSourceName"
             )
@@ -230,9 +230,9 @@ class FlowEntitlementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            flow_entitlement_reference = interfaces_aws_mediaconnect.FlowEntitlementReference(
+            flow_entitlement_reference = interfaces_mediaconnect.FlowEntitlementReference(
                 entitlement_arn="entitlementArn"
             )
         '''
@@ -279,9 +279,9 @@ class FlowOutputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            flow_output_reference = interfaces_aws_mediaconnect.FlowOutputReference(
+            flow_output_reference = interfaces_mediaconnect.FlowOutputReference(
                 output_arn="outputArn"
             )
         '''
@@ -328,9 +328,9 @@ class FlowReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            flow_reference = interfaces_aws_mediaconnect.FlowReference(
+            flow_reference = interfaces_mediaconnect.FlowReference(
                 flow_arn="flowArn"
             )
         '''
@@ -377,9 +377,9 @@ class FlowSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            flow_source_reference = interfaces_aws_mediaconnect.FlowSourceReference(
+            flow_source_reference = interfaces_mediaconnect.FlowSourceReference(
                 source_arn="sourceArn"
             )
         '''
@@ -435,9 +435,9 @@ class FlowVpcInterfaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            flow_vpc_interface_reference = interfaces_aws_mediaconnect.FlowVpcInterfaceReference(
+            flow_vpc_interface_reference = interfaces_mediaconnect.FlowVpcInterfaceReference(
                 flow_arn="flowArn",
                 flow_vpc_interface_name="flowVpcInterfaceName"
             )
@@ -494,9 +494,9 @@ class GatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            gateway_reference = interfaces_aws_mediaconnect.GatewayReference(
+            gateway_reference = interfaces_mediaconnect.GatewayReference(
                 gateway_arn="gatewayArn"
             )
         '''
@@ -1089,9 +1089,9 @@ class RouterInputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            router_input_reference = interfaces_aws_mediaconnect.RouterInputReference(
+            router_input_reference = interfaces_mediaconnect.RouterInputReference(
                 router_input_arn="routerInputArn"
             )
         '''
@@ -1138,9 +1138,9 @@ class RouterNetworkInterfaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            router_network_interface_reference = interfaces_aws_mediaconnect.RouterNetworkInterfaceReference(
+            router_network_interface_reference = interfaces_mediaconnect.RouterNetworkInterfaceReference(
                 router_network_interface_arn="routerNetworkInterfaceArn"
             )
         '''
@@ -1187,9 +1187,9 @@ class RouterOutputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_mediaconnect as interfaces_aws_mediaconnect
+            from aws_cdk.interfaces import aws_mediaconnect as interfaces_mediaconnect
             
-            router_output_reference = interfaces_aws_mediaconnect.RouterOutputReference(
+            router_output_reference = interfaces_mediaconnect.RouterOutputReference(
                 router_output_arn="routerOutputArn"
             )
         '''

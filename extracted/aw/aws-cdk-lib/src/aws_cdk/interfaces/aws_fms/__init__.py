@@ -186,9 +186,9 @@ class NotificationChannelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fms as interfaces_aws_fms
+            from aws_cdk.interfaces import aws_fms as interfaces_fms
             
-            notification_channel_reference = interfaces_aws_fms.NotificationChannelReference(
+            notification_channel_reference = interfaces_fms.NotificationChannelReference(
                 sns_topic_arn="snsTopicArn"
             )
         '''
@@ -236,9 +236,9 @@ class PolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fms as interfaces_aws_fms
+            from aws_cdk.interfaces import aws_fms as interfaces_fms
             
-            policy_reference = interfaces_aws_fms.PolicyReference(
+            policy_reference = interfaces_fms.PolicyReference(
                 policy_arn="policyArn",
                 policy_id="policyId"
             )
@@ -295,9 +295,9 @@ class ResourceSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_fms as interfaces_aws_fms
+            from aws_cdk.interfaces import aws_fms as interfaces_fms
             
-            resource_set_reference = interfaces_aws_fms.ResourceSetReference(
+            resource_set_reference = interfaces_fms.ResourceSetReference(
                 resource_set_id="resourceSetId"
             )
         '''

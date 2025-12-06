@@ -186,9 +186,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesis as interfaces_aws_kinesis
+            from aws_cdk.interfaces import aws_kinesis as interfaces_kinesis
             
-            resource_policy_reference = interfaces_aws_kinesis.ResourcePolicyReference(
+            resource_policy_reference = interfaces_kinesis.ResourcePolicyReference(
                 resource_arn="resourceArn"
             )
         '''
@@ -235,9 +235,9 @@ class StreamConsumerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesis as interfaces_aws_kinesis
+            from aws_cdk.interfaces import aws_kinesis as interfaces_kinesis
             
-            stream_consumer_reference = interfaces_aws_kinesis.StreamConsumerReference(
+            stream_consumer_reference = interfaces_kinesis.StreamConsumerReference(
                 consumer_arn="consumerArn"
             )
         '''
@@ -285,9 +285,9 @@ class StreamReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesis as interfaces_aws_kinesis
+            from aws_cdk.interfaces import aws_kinesis as interfaces_kinesis
             
-            stream_reference = interfaces_aws_kinesis.StreamReference(
+            stream_reference = interfaces_kinesis.StreamReference(
                 stream_arn="streamArn",
                 stream_name="streamName"
             )

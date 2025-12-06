@@ -51,9 +51,9 @@ class DBClusterParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            d_bCluster_parameter_group_reference = interfaces_aws_neptune.DBClusterParameterGroupReference(
+            d_bCluster_parameter_group_reference = interfaces_neptune.DBClusterParameterGroupReference(
                 db_cluster_parameter_group_name="dbClusterParameterGroupName"
             )
         '''
@@ -100,9 +100,9 @@ class DBClusterReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            d_bCluster_reference = interfaces_aws_neptune.DBClusterReference(
+            d_bCluster_reference = interfaces_neptune.DBClusterReference(
                 db_cluster_identifier="dbClusterIdentifier"
             )
         '''
@@ -149,9 +149,9 @@ class DBInstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            d_bInstance_reference = interfaces_aws_neptune.DBInstanceReference(
+            d_bInstance_reference = interfaces_neptune.DBInstanceReference(
                 db_instance_identifier="dbInstanceIdentifier"
             )
         '''
@@ -198,9 +198,9 @@ class DBParameterGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            d_bParameter_group_reference = interfaces_aws_neptune.DBParameterGroupReference(
+            d_bParameter_group_reference = interfaces_neptune.DBParameterGroupReference(
                 db_parameter_group_name="dbParameterGroupName"
             )
         '''
@@ -247,9 +247,9 @@ class DBSubnetGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            d_bSubnet_group_reference = interfaces_aws_neptune.DBSubnetGroupReference(
+            d_bSubnet_group_reference = interfaces_neptune.DBSubnetGroupReference(
                 db_subnet_group_name="dbSubnetGroupName"
             )
         '''
@@ -296,9 +296,9 @@ class EventSubscriptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_neptune as interfaces_aws_neptune
+            from aws_cdk.interfaces import aws_neptune as interfaces_neptune
             
-            event_subscription_reference = interfaces_aws_neptune.EventSubscriptionReference(
+            event_subscription_reference = interfaces_neptune.EventSubscriptionReference(
                 subscription_name="subscriptionName"
             )
         '''

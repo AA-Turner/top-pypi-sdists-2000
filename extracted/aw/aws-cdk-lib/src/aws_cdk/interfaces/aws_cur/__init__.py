@@ -96,9 +96,9 @@ class ReportDefinitionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cur as interfaces_aws_cur
+            from aws_cdk.interfaces import aws_cur as interfaces_cur
             
-            report_definition_reference = interfaces_aws_cur.ReportDefinitionReference(
+            report_definition_reference = interfaces_cur.ReportDefinitionReference(
                 report_name="reportName"
             )
         '''

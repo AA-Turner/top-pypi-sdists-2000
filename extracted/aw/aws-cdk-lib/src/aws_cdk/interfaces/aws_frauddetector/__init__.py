@@ -51,9 +51,9 @@ class DetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            detector_reference = interfaces_aws_frauddetector.DetectorReference(
+            detector_reference = interfaces_frauddetector.DetectorReference(
                 detector_arn="detectorArn"
             )
         '''
@@ -100,9 +100,9 @@ class EntityTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            entity_type_reference = interfaces_aws_frauddetector.EntityTypeReference(
+            entity_type_reference = interfaces_frauddetector.EntityTypeReference(
                 entity_type_arn="entityTypeArn"
             )
         '''
@@ -149,9 +149,9 @@ class EventTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            event_type_reference = interfaces_aws_frauddetector.EventTypeReference(
+            event_type_reference = interfaces_frauddetector.EventTypeReference(
                 event_type_arn="eventTypeArn"
             )
         '''
@@ -513,9 +513,9 @@ class LabelReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            label_reference = interfaces_aws_frauddetector.LabelReference(
+            label_reference = interfaces_frauddetector.LabelReference(
                 label_arn="labelArn"
             )
         '''
@@ -562,9 +562,9 @@ class ListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            list_reference = interfaces_aws_frauddetector.ListReference(
+            list_reference = interfaces_frauddetector.ListReference(
                 list_arn="listArn"
             )
         '''
@@ -611,9 +611,9 @@ class OutcomeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            outcome_reference = interfaces_aws_frauddetector.OutcomeReference(
+            outcome_reference = interfaces_frauddetector.OutcomeReference(
                 outcome_arn="outcomeArn"
             )
         '''
@@ -660,9 +660,9 @@ class VariableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_frauddetector as interfaces_aws_frauddetector
+            from aws_cdk.interfaces import aws_frauddetector as interfaces_frauddetector
             
-            variable_reference = interfaces_aws_frauddetector.VariableReference(
+            variable_reference = interfaces_frauddetector.VariableReference(
                 variable_arn="variableArn"
             )
         '''

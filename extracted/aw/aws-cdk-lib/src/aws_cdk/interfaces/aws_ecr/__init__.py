@@ -475,9 +475,9 @@ class PublicRepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            public_repository_reference = interfaces_aws_ecr.PublicRepositoryReference(
+            public_repository_reference = interfaces_ecr.PublicRepositoryReference(
                 public_repository_arn="publicRepositoryArn",
                 repository_name="repositoryName"
             )
@@ -534,9 +534,9 @@ class PullThroughCacheRuleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            pull_through_cache_rule_reference = interfaces_aws_ecr.PullThroughCacheRuleReference(
+            pull_through_cache_rule_reference = interfaces_ecr.PullThroughCacheRuleReference(
                 ecr_repository_prefix="ecrRepositoryPrefix"
             )
         '''
@@ -583,9 +583,9 @@ class PullTimeUpdateExclusionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            pull_time_update_exclusion_reference = interfaces_aws_ecr.PullTimeUpdateExclusionReference(
+            pull_time_update_exclusion_reference = interfaces_ecr.PullTimeUpdateExclusionReference(
                 principal_arn="principalArn"
             )
         '''
@@ -632,9 +632,9 @@ class RegistryPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            registry_policy_reference = interfaces_aws_ecr.RegistryPolicyReference(
+            registry_policy_reference = interfaces_ecr.RegistryPolicyReference(
                 registry_id="registryId"
             )
         '''
@@ -681,9 +681,9 @@ class RegistryScanningConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            registry_scanning_configuration_reference = interfaces_aws_ecr.RegistryScanningConfigurationReference(
+            registry_scanning_configuration_reference = interfaces_ecr.RegistryScanningConfigurationReference(
                 registry_id="registryId"
             )
         '''
@@ -730,9 +730,9 @@ class ReplicationConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            replication_configuration_reference = interfaces_aws_ecr.ReplicationConfigurationReference(
+            replication_configuration_reference = interfaces_ecr.ReplicationConfigurationReference(
                 registry_id="registryId"
             )
         '''
@@ -779,9 +779,9 @@ class RepositoryCreationTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            repository_creation_template_reference = interfaces_aws_ecr.RepositoryCreationTemplateReference(
+            repository_creation_template_reference = interfaces_ecr.RepositoryCreationTemplateReference(
                 prefix="prefix"
             )
         '''
@@ -837,9 +837,9 @@ class RepositoryReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            repository_reference = interfaces_aws_ecr.RepositoryReference(
+            repository_reference = interfaces_ecr.RepositoryReference(
                 repository_arn="repositoryArn",
                 repository_name="repositoryName"
             )
@@ -896,9 +896,9 @@ class SigningConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ecr as interfaces_aws_ecr
+            from aws_cdk.interfaces import aws_ecr as interfaces_ecr
             
-            signing_configuration_reference = interfaces_aws_ecr.SigningConfigurationReference(
+            signing_configuration_reference = interfaces_ecr.SigningConfigurationReference(
                 registry_id="registryId"
             )
         '''

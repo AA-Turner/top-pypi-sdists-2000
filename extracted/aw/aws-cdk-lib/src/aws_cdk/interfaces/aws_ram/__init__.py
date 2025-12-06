@@ -141,9 +141,9 @@ class PermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ram as interfaces_aws_ram
+            from aws_cdk.interfaces import aws_ram as interfaces_ram
             
-            permission_reference = interfaces_aws_ram.PermissionReference(
+            permission_reference = interfaces_ram.PermissionReference(
                 permission_arn="permissionArn"
             )
         '''
@@ -190,9 +190,9 @@ class ResourceShareReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_ram as interfaces_aws_ram
+            from aws_cdk.interfaces import aws_ram as interfaces_ram
             
-            resource_share_reference = interfaces_aws_ram.ResourceShareReference(
+            resource_share_reference = interfaces_ram.ResourceShareReference(
                 resource_share_arn="resourceShareArn"
             )
         '''

@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_systemsmanagersap as interfaces_aws_systemsmanagersap
+            from aws_cdk.interfaces import aws_systemsmanagersap as interfaces_systemsmanagersap
             
-            application_reference = interfaces_aws_systemsmanagersap.ApplicationReference(
+            application_reference = interfaces_systemsmanagersap.ApplicationReference(
                 application_arn="applicationArn"
             )
         '''

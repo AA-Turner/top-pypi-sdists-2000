@@ -13007,9 +13007,9 @@ class StateMachineGrantsProps:
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
             from aws_cdk import aws_stepfunctions as stepfunctions
-            from aws_cdk.interfaces import aws_stepfunctions as interfaces_aws_stepfunctions
+            from aws_cdk.interfaces import aws_stepfunctions as interfaces_stepfunctions
             
-            # state_machine_ref: interfaces_aws_stepfunctions.IStateMachineRef
+            # state_machine_ref: interfaces_stepfunctions.IStateMachineRef
             
             state_machine_grants_props = stepfunctions.StateMachineGrantsProps(
                 resource=state_machine_ref

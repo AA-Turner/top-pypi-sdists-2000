@@ -161,16 +161,16 @@ class CfnChannel(
 
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
-        :param authorized: Whether the channel is authorized. Default: - false
-        :param container_format: Indicates which content-packaging format is used (MPEG-TS or fMP4). If multitrackInputConfiguration is specified and enabled is true, then containerFormat is required and must be set to FRAGMENTED_MP4. Otherwise, containerFormat may be set to TS or FRAGMENTED_MP4. Default: TS. Default: - "TS"
-        :param insecure_ingest: Whether the channel allows insecure ingest. Default: - false
-        :param latency_mode: Channel latency mode. Default: - "LOW"
+        :param authorized: Whether the channel is authorized. *Default* : ``false`` Default: - false
+        :param container_format: Indicates which content-packaging format is used (MPEG-TS or fMP4). If ``multitrackInputConfiguration`` is specified and ``enabled`` is ``true`` , then ``containerFormat`` is required and must be set to ``FRAGMENTED_MP4`` . Otherwise, ``containerFormat`` may be set to ``TS`` or ``FRAGMENTED_MP4`` . Default: ``TS`` . Default: - "TS"
+        :param insecure_ingest: Whether the channel allows insecure RTMP ingest. *Default* : ``false`` Default: - false
+        :param latency_mode: Channel latency mode. Valid values:. - ``NORMAL`` : Use NORMAL to broadcast and deliver live video up to Full HD. - ``LOW`` : Use LOW for near real-time interactions with viewers. .. epigraph:: In the console, ``LOW`` and ``NORMAL`` correspond to ``Ultra-low`` and ``Standard`` , respectively. *Default* : ``LOW`` Default: - "LOW"
         :param multitrack_input_configuration: Object specifying multitrack input configuration. Default: no multitrack input configuration is specified.
-        :param name: Channel. Default: - "-"
-        :param preset: Optional transcode preset for the channel. This is selectable only for ADVANCED_HD and ADVANCED_SD channel types. For those channel types, the default preset is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD), preset is the empty string ("").
-        :param recording_configuration_arn: Recording Configuration ARN. A value other than an empty string indicates that recording is enabled. Default: "" (recording is disabled). Default: - ""
-        :param tags: A list of key-value pairs that contain metadata for the asset model.
-        :param type: Channel type, which determines the allowable resolution and bitrate. If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately. Default: - "STANDARD"
+        :param name: Channel name. Default: - "-"
+        :param preset: An optional transcode preset for the channel. This is selectable only for ``ADVANCED_HD`` and ``ADVANCED_SD`` channel types. For those channel types, the default preset is ``HIGHER_BANDWIDTH_DELIVERY`` . For other channel types ( ``BASIC`` and ``STANDARD`` ), ``preset`` is the empty string ("").
+        :param recording_configuration_arn: The ARN of a RecordingConfiguration resource. An empty string indicates that recording is disabled for the channel. A RecordingConfiguration ARN indicates that recording is enabled using the specified recording configuration. See the `RecordingConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html>`_ resource for more information and an example. *Default* : "" (empty string, recording is disabled) Default: - ""
+        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-tag.html>`_ .
+        :param type: The channel type, which determines the allowable resolution and bitrate. *If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.* For details, see `Channel Types <https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html>`_ . *Default* : ``STANDARD`` Default: - "STANDARD"
         '''
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__998485c6924ca07e096c10b7976e238a36e5cfb75264ee66a67de472363369d6)
@@ -247,7 +247,9 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="attrArn")
     def attr_arn(self) -> builtins.str:
-        '''Channel ARN is automatically generated on creation and assigned as the unique identifier.
+        '''The channel ARN.
+
+        For example: ``arn:aws:ivs:us-west-2:123456789012:channel/abcdABCDefgh``
 
         :cloudformationAttribute: Arn
         '''
@@ -258,6 +260,8 @@ class CfnChannel(
     def attr_ingest_endpoint(self) -> builtins.str:
         '''Channel ingest endpoint, part of the definition of an ingest server, used when you set up streaming software.
 
+        For example: ``a1b2c3d4e5f6.global-contribute.live-video.net``
+
         :cloudformationAttribute: IngestEndpoint
         '''
         return typing.cast(builtins.str, jsii.get(self, "attrIngestEndpoint"))
@@ -265,7 +269,9 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="attrPlaybackUrl")
     def attr_playback_url(self) -> builtins.str:
-        '''Channel Playback URL.
+        '''Channel playback URL.
+
+        For example: ``https://a1b2c3d4e5f6.us-west-2.playback.live-video.net/api/video/v1/us-west-2.123456789012.channel.abcdEFGH.m3u8``
 
         :cloudformationAttribute: PlaybackUrl
         '''
@@ -324,7 +330,7 @@ class CfnChannel(
     def insecure_ingest(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Whether the channel allows insecure ingest.'''
+        '''Whether the channel allows insecure RTMP ingest.'''
         return typing.cast(typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]], jsii.get(self, "insecureIngest"))
 
     @insecure_ingest.setter
@@ -340,7 +346,10 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="latencyMode")
     def latency_mode(self) -> typing.Optional[builtins.str]:
-        '''Channel latency mode.'''
+        '''Channel latency mode.
+
+        Valid values:.
+        '''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "latencyMode"))
 
     @latency_mode.setter
@@ -371,7 +380,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="name")
     def name(self) -> typing.Optional[builtins.str]:
-        '''Channel.'''
+        '''Channel name.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "name"))
 
     @name.setter
@@ -384,7 +393,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="preset")
     def preset(self) -> typing.Optional[builtins.str]:
-        '''Optional transcode preset for the channel.'''
+        '''An optional transcode preset for the channel.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "preset"))
 
     @preset.setter
@@ -397,7 +406,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="recordingConfigurationArn")
     def recording_configuration_arn(self) -> typing.Optional[builtins.str]:
-        '''Recording Configuration ARN.'''
+        '''The ARN of a RecordingConfiguration resource.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "recordingConfigurationArn"))
 
     @recording_configuration_arn.setter
@@ -410,7 +419,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="tagsRaw")
     def tags_raw(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A list of key-value pairs that contain metadata for the asset model.'''
+        '''An array of key-value pairs to apply to this resource.'''
         return typing.cast(typing.Optional[typing.List[_CfnTag_f6864754]], jsii.get(self, "tagsRaw"))
 
     @tags_raw.setter
@@ -423,7 +432,7 @@ class CfnChannel(
     @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> typing.Optional[builtins.str]:
-        '''Channel type, which determines the allowable resolution and bitrate.'''
+        '''The channel type, which determines the allowable resolution and bitrate.'''
         return typing.cast(typing.Optional[builtins.str], jsii.get(self, "type"))
 
     @type.setter
@@ -452,9 +461,9 @@ class CfnChannel(
         ) -> None:
             '''A complex type that specifies multitrack input configuration.
 
-            :param enabled: Indicates whether multitrack input is enabled. Can be set to true only if channel type is STANDARD. Setting enabled to true with any other channel type will cause an exception. If true, then policy, maximumResolution, and containerFormat are required, and containerFormat must be set to FRAGMENTED_MP4. Default: false. Default: - false
-            :param maximum_resolution: Maximum resolution for multitrack input. Required if enabled is true.
-            :param policy: Indicates whether multitrack input is allowed or required. Required if enabled is true.
+            :param enabled: Indicates whether multitrack input is enabled. Can be set to ``true`` only if channel type is ``STANDARD`` . Setting ``enabled`` to ``true`` with any other channel type will cause an exception. If ``true`` , then ``policy`` , ``maximumResolution`` , and ``containerFormat`` are required, and ``containerFormat`` must be set to ``FRAGMENTED_MP4`` . Default: ``false`` . Default: - false
+            :param maximum_resolution: Maximum resolution for multitrack input. Required if ``enabled`` is ``true`` .
+            :param policy: Indicates whether multitrack input is allowed or required. Required if ``enabled`` is ``true`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-multitrackinputconfiguration.html
             :exampleMetadata: fixture=_generated
@@ -490,7 +499,7 @@ class CfnChannel(
         ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
             '''Indicates whether multitrack input is enabled.
 
-            Can be set to true only if channel type is STANDARD. Setting enabled to true with any other channel type will cause an exception. If true, then policy, maximumResolution, and containerFormat are required, and containerFormat must be set to FRAGMENTED_MP4. Default: false.
+            Can be set to ``true`` only if channel type is ``STANDARD`` . Setting ``enabled`` to ``true`` with any other channel type will cause an exception. If ``true`` , then ``policy`` , ``maximumResolution`` , and ``containerFormat`` are required, and ``containerFormat`` must be set to ``FRAGMENTED_MP4`` . Default: ``false`` .
 
             :default: - false
 
@@ -503,7 +512,7 @@ class CfnChannel(
         def maximum_resolution(self) -> typing.Optional[builtins.str]:
             '''Maximum resolution for multitrack input.
 
-            Required if enabled is true.
+            Required if ``enabled`` is ``true`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-multitrackinputconfiguration.html#cfn-ivs-channel-multitrackinputconfiguration-maximumresolution
             '''
@@ -514,7 +523,7 @@ class CfnChannel(
         def policy(self) -> typing.Optional[builtins.str]:
             '''Indicates whether multitrack input is allowed or required.
 
-            Required if enabled is true.
+            Required if ``enabled`` is ``true`` .
 
             :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-multitrackinputconfiguration.html#cfn-ivs-channel-multitrackinputconfiguration-policy
             '''
@@ -566,16 +575,16 @@ class CfnChannelProps:
     ) -> None:
         '''Properties for defining a ``CfnChannel``.
 
-        :param authorized: Whether the channel is authorized. Default: - false
-        :param container_format: Indicates which content-packaging format is used (MPEG-TS or fMP4). If multitrackInputConfiguration is specified and enabled is true, then containerFormat is required and must be set to FRAGMENTED_MP4. Otherwise, containerFormat may be set to TS or FRAGMENTED_MP4. Default: TS. Default: - "TS"
-        :param insecure_ingest: Whether the channel allows insecure ingest. Default: - false
-        :param latency_mode: Channel latency mode. Default: - "LOW"
+        :param authorized: Whether the channel is authorized. *Default* : ``false`` Default: - false
+        :param container_format: Indicates which content-packaging format is used (MPEG-TS or fMP4). If ``multitrackInputConfiguration`` is specified and ``enabled`` is ``true`` , then ``containerFormat`` is required and must be set to ``FRAGMENTED_MP4`` . Otherwise, ``containerFormat`` may be set to ``TS`` or ``FRAGMENTED_MP4`` . Default: ``TS`` . Default: - "TS"
+        :param insecure_ingest: Whether the channel allows insecure RTMP ingest. *Default* : ``false`` Default: - false
+        :param latency_mode: Channel latency mode. Valid values:. - ``NORMAL`` : Use NORMAL to broadcast and deliver live video up to Full HD. - ``LOW`` : Use LOW for near real-time interactions with viewers. .. epigraph:: In the console, ``LOW`` and ``NORMAL`` correspond to ``Ultra-low`` and ``Standard`` , respectively. *Default* : ``LOW`` Default: - "LOW"
         :param multitrack_input_configuration: Object specifying multitrack input configuration. Default: no multitrack input configuration is specified.
-        :param name: Channel. Default: - "-"
-        :param preset: Optional transcode preset for the channel. This is selectable only for ADVANCED_HD and ADVANCED_SD channel types. For those channel types, the default preset is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD), preset is the empty string ("").
-        :param recording_configuration_arn: Recording Configuration ARN. A value other than an empty string indicates that recording is enabled. Default: "" (recording is disabled). Default: - ""
-        :param tags: A list of key-value pairs that contain metadata for the asset model.
-        :param type: Channel type, which determines the allowable resolution and bitrate. If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately. Default: - "STANDARD"
+        :param name: Channel name. Default: - "-"
+        :param preset: An optional transcode preset for the channel. This is selectable only for ``ADVANCED_HD`` and ``ADVANCED_SD`` channel types. For those channel types, the default preset is ``HIGHER_BANDWIDTH_DELIVERY`` . For other channel types ( ``BASIC`` and ``STANDARD`` ), ``preset`` is the empty string ("").
+        :param recording_configuration_arn: The ARN of a RecordingConfiguration resource. An empty string indicates that recording is disabled for the channel. A RecordingConfiguration ARN indicates that recording is enabled using the specified recording configuration. See the `RecordingConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html>`_ resource for more information and an example. *Default* : "" (empty string, recording is disabled) Default: - ""
+        :param tags: An array of key-value pairs to apply to this resource. For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-tag.html>`_ .
+        :param type: The channel type, which determines the allowable resolution and bitrate. *If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.* For details, see `Channel Types <https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html>`_ . *Default* : ``STANDARD`` Default: - "STANDARD"
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html
         :exampleMetadata: fixture=_generated
@@ -646,6 +655,8 @@ class CfnChannelProps:
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
         '''Whether the channel is authorized.
 
+        *Default* : ``false``
+
         :default: - false
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-authorized
@@ -657,7 +668,7 @@ class CfnChannelProps:
     def container_format(self) -> typing.Optional[builtins.str]:
         '''Indicates which content-packaging format is used (MPEG-TS or fMP4).
 
-        If multitrackInputConfiguration is specified and enabled is true, then containerFormat is required and must be set to FRAGMENTED_MP4. Otherwise, containerFormat may be set to TS or FRAGMENTED_MP4. Default: TS.
+        If ``multitrackInputConfiguration`` is specified and ``enabled`` is ``true`` , then ``containerFormat`` is required and must be set to ``FRAGMENTED_MP4`` . Otherwise, ``containerFormat`` may be set to ``TS`` or ``FRAGMENTED_MP4`` . Default: ``TS`` .
 
         :default: - "TS"
 
@@ -670,7 +681,9 @@ class CfnChannelProps:
     def insecure_ingest(
         self,
     ) -> typing.Optional[typing.Union[builtins.bool, _IResolvable_da3f097b]]:
-        '''Whether the channel allows insecure ingest.
+        '''Whether the channel allows insecure RTMP ingest.
+
+        *Default* : ``false``
 
         :default: - false
 
@@ -681,7 +694,16 @@ class CfnChannelProps:
 
     @builtins.property
     def latency_mode(self) -> typing.Optional[builtins.str]:
-        '''Channel latency mode.
+        '''Channel latency mode. Valid values:.
+
+        - ``NORMAL`` : Use NORMAL to broadcast and deliver live video up to Full HD.
+        - ``LOW`` : Use LOW for near real-time interactions with viewers.
+
+        .. epigraph::
+
+           In the  console, ``LOW`` and ``NORMAL`` correspond to ``Ultra-low`` and ``Standard`` , respectively.
+
+        *Default* : ``LOW``
 
         :default: - "LOW"
 
@@ -705,7 +727,7 @@ class CfnChannelProps:
 
     @builtins.property
     def name(self) -> typing.Optional[builtins.str]:
-        '''Channel.
+        '''Channel name.
 
         :default: - "-"
 
@@ -716,9 +738,9 @@ class CfnChannelProps:
 
     @builtins.property
     def preset(self) -> typing.Optional[builtins.str]:
-        '''Optional transcode preset for the channel.
+        '''An optional transcode preset for the channel.
 
-        This is selectable only for ADVANCED_HD and ADVANCED_SD channel types. For those channel types, the default preset is HIGHER_BANDWIDTH_DELIVERY. For other channel types (BASIC and STANDARD), preset is the empty string ("").
+        This is selectable only for ``ADVANCED_HD`` and ``ADVANCED_SD`` channel types. For those channel types, the default preset is ``HIGHER_BANDWIDTH_DELIVERY`` . For other channel types ( ``BASIC`` and ``STANDARD`` ), ``preset`` is the empty string ("").
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-preset
         '''
@@ -729,9 +751,11 @@ class CfnChannelProps:
     def recording_configuration_arn(
         self,
     ) -> typing.Optional[typing.Union[builtins.str, _IRecordingConfigurationRef_fa8c07f5]]:
-        '''Recording Configuration ARN.
+        '''The ARN of a RecordingConfiguration resource.
 
-        A value other than an empty string indicates that recording is enabled. Default: "" (recording is disabled).
+        An empty string indicates that recording is disabled for the channel. A RecordingConfiguration ARN indicates that recording is enabled using the specified recording configuration. See the `RecordingConfiguration <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-recordingconfiguration.html>`_ resource for more information and an example.
+
+        *Default* : "" (empty string, recording is disabled)
 
         :default: - ""
 
@@ -742,7 +766,9 @@ class CfnChannelProps:
 
     @builtins.property
     def tags(self) -> typing.Optional[typing.List[_CfnTag_f6864754]]:
-        '''A list of key-value pairs that contain metadata for the asset model.
+        '''An array of key-value pairs to apply to this resource.
+
+        For more information, see `Tag <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-ivs-channel-tag.html>`_ .
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ivs-channel.html#cfn-ivs-channel-tags
         '''
@@ -751,9 +777,11 @@ class CfnChannelProps:
 
     @builtins.property
     def type(self) -> typing.Optional[builtins.str]:
-        '''Channel type, which determines the allowable resolution and bitrate.
+        '''The channel type, which determines the allowable resolution and bitrate.
 
-        If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.
+        *If you exceed the allowable resolution or bitrate, the stream probably will disconnect immediately.* For details, see `Channel Types <https://docs.aws.amazon.com/ivs/latest/LowLatencyAPIReference/channel-types.html>`_ .
+
+        *Default* : ``STANDARD``
 
         :default: - "STANDARD"
 

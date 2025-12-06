@@ -51,9 +51,9 @@ class AlertReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lookoutmetrics as interfaces_aws_lookoutmetrics
+            from aws_cdk.interfaces import aws_lookoutmetrics as interfaces_lookoutmetrics
             
-            alert_reference = interfaces_aws_lookoutmetrics.AlertReference(
+            alert_reference = interfaces_lookoutmetrics.AlertReference(
                 alert_arn="alertArn"
             )
         '''
@@ -100,9 +100,9 @@ class AnomalyDetectorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lookoutmetrics as interfaces_aws_lookoutmetrics
+            from aws_cdk.interfaces import aws_lookoutmetrics as interfaces_lookoutmetrics
             
-            anomaly_detector_reference = interfaces_aws_lookoutmetrics.AnomalyDetectorReference(
+            anomaly_detector_reference = interfaces_lookoutmetrics.AnomalyDetectorReference(
                 anomaly_detector_arn="anomalyDetectorArn"
             )
         '''

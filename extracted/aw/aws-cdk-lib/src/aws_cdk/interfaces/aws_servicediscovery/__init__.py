@@ -60,9 +60,9 @@ class HttpNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicediscovery as interfaces_aws_servicediscovery
+            from aws_cdk.interfaces import aws_servicediscovery as interfaces_servicediscovery
             
-            http_namespace_reference = interfaces_aws_servicediscovery.HttpNamespaceReference(
+            http_namespace_reference = interfaces_servicediscovery.HttpNamespaceReference(
                 http_namespace_arn="httpNamespaceArn",
                 http_namespace_id="httpNamespaceId"
             )
@@ -350,9 +350,9 @@ class InstanceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicediscovery as interfaces_aws_servicediscovery
+            from aws_cdk.interfaces import aws_servicediscovery as interfaces_servicediscovery
             
-            instance_reference = interfaces_aws_servicediscovery.InstanceReference(
+            instance_reference = interfaces_servicediscovery.InstanceReference(
                 instance_id="instanceId"
             )
         '''
@@ -408,9 +408,9 @@ class PrivateDnsNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicediscovery as interfaces_aws_servicediscovery
+            from aws_cdk.interfaces import aws_servicediscovery as interfaces_servicediscovery
             
-            private_dns_namespace_reference = interfaces_aws_servicediscovery.PrivateDnsNamespaceReference(
+            private_dns_namespace_reference = interfaces_servicediscovery.PrivateDnsNamespaceReference(
                 private_dns_namespace_arn="privateDnsNamespaceArn",
                 private_dns_namespace_id="privateDnsNamespaceId"
             )
@@ -476,9 +476,9 @@ class PublicDnsNamespaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicediscovery as interfaces_aws_servicediscovery
+            from aws_cdk.interfaces import aws_servicediscovery as interfaces_servicediscovery
             
-            public_dns_namespace_reference = interfaces_aws_servicediscovery.PublicDnsNamespaceReference(
+            public_dns_namespace_reference = interfaces_servicediscovery.PublicDnsNamespaceReference(
                 public_dns_namespace_arn="publicDnsNamespaceArn",
                 public_dns_namespace_id="publicDnsNamespaceId"
             )
@@ -536,9 +536,9 @@ class ServiceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_servicediscovery as interfaces_aws_servicediscovery
+            from aws_cdk.interfaces import aws_servicediscovery as interfaces_servicediscovery
             
-            service_reference = interfaces_aws_servicediscovery.ServiceReference(
+            service_reference = interfaces_servicediscovery.ServiceReference(
                 service_arn="serviceArn",
                 service_id="serviceId"
             )

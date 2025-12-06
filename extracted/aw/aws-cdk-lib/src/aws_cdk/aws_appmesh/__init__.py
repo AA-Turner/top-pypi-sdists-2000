@@ -27774,9 +27774,9 @@ class VirtualGatewayGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
-        from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+        from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
         
-        # virtual_gateway_ref: interfaces_aws_appmesh.IVirtualGatewayRef
+        # virtual_gateway_ref: interfaces_appmesh.IVirtualGatewayRef
         
         virtual_gateway_grants = appmesh.VirtualGatewayGrants.from_virtual_gateway(virtual_gateway_ref)
     '''
@@ -28652,9 +28652,9 @@ class VirtualNodeGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_appmesh as appmesh
-        from aws_cdk.interfaces import aws_appmesh as interfaces_aws_appmesh
+        from aws_cdk.interfaces import aws_appmesh as interfaces_appmesh
         
-        # virtual_node_ref: interfaces_aws_appmesh.IVirtualNodeRef
+        # virtual_node_ref: interfaces_appmesh.IVirtualNodeRef
         
         virtual_node_grants = appmesh.VirtualNodeGrants.from_virtual_node(virtual_node_ref)
     '''

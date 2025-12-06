@@ -57,9 +57,9 @@ class AccessorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_managedblockchain as interfaces_aws_managedblockchain
+            from aws_cdk.interfaces import aws_managedblockchain as interfaces_managedblockchain
             
-            accessor_reference = interfaces_aws_managedblockchain.AccessorReference(
+            accessor_reference = interfaces_managedblockchain.AccessorReference(
                 accessor_arn="accessorArn",
                 accessor_id="accessorId"
             )
@@ -251,9 +251,9 @@ class MemberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_managedblockchain as interfaces_aws_managedblockchain
+            from aws_cdk.interfaces import aws_managedblockchain as interfaces_managedblockchain
             
-            member_reference = interfaces_aws_managedblockchain.MemberReference(
+            member_reference = interfaces_managedblockchain.MemberReference(
                 member_id="memberId"
             )
         '''
@@ -301,9 +301,9 @@ class NodeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_managedblockchain as interfaces_aws_managedblockchain
+            from aws_cdk.interfaces import aws_managedblockchain as interfaces_managedblockchain
             
-            node_reference = interfaces_aws_managedblockchain.NodeReference(
+            node_reference = interfaces_managedblockchain.NodeReference(
                 node_arn="nodeArn",
                 node_id="nodeId"
             )

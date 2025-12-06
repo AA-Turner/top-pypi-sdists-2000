@@ -280,9 +280,9 @@ class InboundExternalLinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_rtbfabric
             
-            inbound_external_link_reference = interfaces_aws_rtbfabric.InboundExternalLinkReference(
+            inbound_external_link_reference = interfaces_rtbfabric.InboundExternalLinkReference(
                 inbound_external_link_arn="inboundExternalLinkArn"
             )
         '''
@@ -329,9 +329,9 @@ class LinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_rtbfabric
             
-            link_reference = interfaces_aws_rtbfabric.LinkReference(
+            link_reference = interfaces_rtbfabric.LinkReference(
                 link_arn="linkArn"
             )
         '''
@@ -378,9 +378,9 @@ class OutboundExternalLinkReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_rtbfabric
             
-            outbound_external_link_reference = interfaces_aws_rtbfabric.OutboundExternalLinkReference(
+            outbound_external_link_reference = interfaces_rtbfabric.OutboundExternalLinkReference(
                 outbound_external_link_arn="outboundExternalLinkArn"
             )
         '''
@@ -427,9 +427,9 @@ class RequesterGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_rtbfabric
             
-            requester_gateway_reference = interfaces_aws_rtbfabric.RequesterGatewayReference(
+            requester_gateway_reference = interfaces_rtbfabric.RequesterGatewayReference(
                 requester_gateway_arn="requesterGatewayArn"
             )
         '''
@@ -476,9 +476,9 @@ class ResponderGatewayReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_rtbfabric as interfaces_aws_rtbfabric
+            from aws_cdk.interfaces import aws_rtbfabric as interfaces_rtbfabric
             
-            responder_gateway_reference = interfaces_aws_rtbfabric.ResponderGatewayReference(
+            responder_gateway_reference = interfaces_rtbfabric.ResponderGatewayReference(
                 responder_gateway_arn="responderGatewayArn"
             )
         '''

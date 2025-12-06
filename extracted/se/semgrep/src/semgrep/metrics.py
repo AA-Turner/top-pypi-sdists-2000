@@ -514,9 +514,27 @@ class Metrics:
                 deployment_name=deployment_name,
                 tool_name=tool_name,
                 session_id=session_id,
+                errors=[],
             )
         except Exception as e:
             self.log_exception("add_mcp", e)
+
+    def cli_matches_to_findings(
+        self, matches: list[dict[str, Any]]
+    ) -> list[tuple[str, Finding]]:
+        return [
+            (
+                finding["check_id"],
+                Finding(
+                    path=finding["path"],
+                    line=finding["start"]["line"],
+                    col=finding["start"]["col"],
+                    offset=finding["start"]["offset"],
+                    severity=finding["extra"]["severity"],
+                ),
+            )
+            for finding in matches
+        ]
 
     def add_mcp_scan_metrics(
         self,
@@ -535,23 +553,27 @@ class Metrics:
             self.payload.mcp.rules = rules
             self.payload.mcp.num_scanned_files = len(results.paths["scanned"])
             self.payload.mcp.num_findings = len(results.results)
-            self.payload.mcp.findings = [
-                (
-                    finding["check_id"],
-                    Finding(
-                        path=finding["path"],
-                        line=finding["start"]["line"],
-                        col=finding["start"]["col"],
-                        offset=finding["start"]["offset"],
-                        severity=finding["extra"]["severity"],
-                    ),
-                )
-                for finding in results.results
-            ]
+            self.payload.mcp.findings = self.cli_matches_to_findings(results.results)
             self.payload.mcp.errors = [error["message"] for error in results.errors]
             self.payload.mcp.num_lines = num_lines_scanned
         except Exception as e:
             self.log_exception("add_mcp_scan", e)
+
+    def add_mcp_findings_metrics(
+        self,
+        tps: list[tuple[str, Finding]],
+        fps: list[tuple[str, Finding]],
+        skips: list[tuple[str, Finding]],
+    ) -> None:
+        try:
+            self.payload.mcp.num_tps = len(tps)
+            self.payload.mcp.tps = tps
+            self.payload.mcp.num_fps = len(fps)
+            self.payload.mcp.fps = fps
+            self.payload.mcp.num_skips = len(skips)
+            self.payload.mcp.skips = skips
+        except Exception as e:
+            self.log_exception("add_mcp_findings_metrics", e)
 
     def add_mcp_git_info(self, git_info: Optional[dict[str, str]]) -> None:
         try:
@@ -561,6 +583,15 @@ class Metrics:
                 self.payload.mcp.git_branch = git_info["branch"]
         except Exception as e:
             self.log_exception("add_mcp_git_info", e)
+
+    def add_mcp_error(self, error: str) -> None:
+        try:
+            if self.payload.mcp.errors is None:
+                self.payload.mcp.errors = [error]
+            else:
+                self.payload.mcp.errors.append(error)
+        except Exception as e:
+            self.log_exception("add_mcp_error", e)
 
     def as_json(self) -> str:
         value = self.payload.to_json()

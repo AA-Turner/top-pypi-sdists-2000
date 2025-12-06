@@ -51,9 +51,9 @@ class ComponentVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrassv2 as interfaces_aws_greengrassv2
+            from aws_cdk.interfaces import aws_greengrassv2 as interfaces_greengrassv2
             
-            component_version_reference = interfaces_aws_greengrassv2.ComponentVersionReference(
+            component_version_reference = interfaces_greengrassv2.ComponentVersionReference(
                 component_version_arn="componentVersionArn"
             )
         '''
@@ -100,9 +100,9 @@ class DeploymentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_greengrassv2 as interfaces_aws_greengrassv2
+            from aws_cdk.interfaces import aws_greengrassv2 as interfaces_greengrassv2
             
-            deployment_reference = interfaces_aws_greengrassv2.DeploymentReference(
+            deployment_reference = interfaces_greengrassv2.DeploymentReference(
                 deployment_id="deploymentId"
             )
         '''

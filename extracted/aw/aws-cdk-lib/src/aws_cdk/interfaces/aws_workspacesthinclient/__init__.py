@@ -60,9 +60,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_workspacesthinclient as interfaces_aws_workspacesthinclient
+            from aws_cdk.interfaces import aws_workspacesthinclient as interfaces_workspacesthinclient
             
-            environment_reference = interfaces_aws_workspacesthinclient.EnvironmentReference(
+            environment_reference = interfaces_workspacesthinclient.EnvironmentReference(
                 environment_arn="environmentArn",
                 environment_id="environmentId"
             )

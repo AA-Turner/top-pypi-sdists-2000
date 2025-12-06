@@ -51,9 +51,9 @@ class AccessPointPolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3objectlambda as interfaces_aws_s3objectlambda
+            from aws_cdk.interfaces import aws_s3objectlambda as interfaces_s3objectlambda
             
-            access_point_policy_reference = interfaces_aws_s3objectlambda.AccessPointPolicyReference(
+            access_point_policy_reference = interfaces_s3objectlambda.AccessPointPolicyReference(
                 object_lambda_access_point="objectLambdaAccessPoint"
             )
         '''
@@ -109,9 +109,9 @@ class AccessPointReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_s3objectlambda as interfaces_aws_s3objectlambda
+            from aws_cdk.interfaces import aws_s3objectlambda as interfaces_s3objectlambda
             
-            access_point_reference = interfaces_aws_s3objectlambda.AccessPointReference(
+            access_point_reference = interfaces_s3objectlambda.AccessPointReference(
                 access_point_arn="accessPointArn",
                 access_point_name="accessPointName"
             )

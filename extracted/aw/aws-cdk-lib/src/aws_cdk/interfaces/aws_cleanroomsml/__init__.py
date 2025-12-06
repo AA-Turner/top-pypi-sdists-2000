@@ -98,9 +98,9 @@ class TrainingDatasetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_cleanroomsml as interfaces_aws_cleanroomsml
+            from aws_cdk.interfaces import aws_cleanroomsml as interfaces_cleanroomsml
             
-            training_dataset_reference = interfaces_aws_cleanroomsml.TrainingDatasetReference(
+            training_dataset_reference = interfaces_cleanroomsml.TrainingDatasetReference(
                 training_dataset_arn="trainingDatasetArn"
             )
         '''

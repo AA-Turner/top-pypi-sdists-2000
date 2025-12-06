@@ -51,9 +51,9 @@ class ApplicationOutputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_aws_kinesisanalytics
+            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_kinesisanalytics
             
-            application_output_reference = interfaces_aws_kinesisanalytics.ApplicationOutputReference(
+            application_output_reference = interfaces_kinesisanalytics.ApplicationOutputReference(
                 application_output_id="applicationOutputId"
             )
         '''
@@ -100,9 +100,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_aws_kinesisanalytics
+            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_kinesisanalytics
             
-            application_reference = interfaces_aws_kinesisanalytics.ApplicationReference(
+            application_reference = interfaces_kinesisanalytics.ApplicationReference(
                 application_id="applicationId"
             )
         '''
@@ -151,9 +151,9 @@ class ApplicationReferenceDataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_aws_kinesisanalytics
+            from aws_cdk.interfaces import aws_kinesisanalytics as interfaces_kinesisanalytics
             
-            application_reference_data_source_reference = interfaces_aws_kinesisanalytics.ApplicationReferenceDataSourceReference(
+            application_reference_data_source_reference = interfaces_kinesisanalytics.ApplicationReferenceDataSourceReference(
                 application_reference_data_source_id="applicationReferenceDataSourceId"
             )
         '''

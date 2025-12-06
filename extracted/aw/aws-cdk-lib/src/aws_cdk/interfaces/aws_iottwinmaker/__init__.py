@@ -63,9 +63,9 @@ class ComponentTypeReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_aws_iottwinmaker
+            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_iottwinmaker
             
-            component_type_reference = interfaces_aws_iottwinmaker.ComponentTypeReference(
+            component_type_reference = interfaces_iottwinmaker.ComponentTypeReference(
                 component_type_arn="componentTypeArn",
                 component_type_id="componentTypeId",
                 workspace_id="workspaceId"
@@ -144,9 +144,9 @@ class EntityReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_aws_iottwinmaker
+            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_iottwinmaker
             
-            entity_reference = interfaces_aws_iottwinmaker.EntityReference(
+            entity_reference = interfaces_iottwinmaker.EntityReference(
                 entity_arn="entityArn",
                 entity_id="entityId",
                 workspace_id="workspaceId"
@@ -450,9 +450,9 @@ class SceneReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_aws_iottwinmaker
+            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_iottwinmaker
             
-            scene_reference = interfaces_aws_iottwinmaker.SceneReference(
+            scene_reference = interfaces_iottwinmaker.SceneReference(
                 scene_arn="sceneArn",
                 scene_id="sceneId",
                 workspace_id="workspaceId"
@@ -531,9 +531,9 @@ class SyncJobReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_aws_iottwinmaker
+            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_iottwinmaker
             
-            sync_job_reference = interfaces_aws_iottwinmaker.SyncJobReference(
+            sync_job_reference = interfaces_iottwinmaker.SyncJobReference(
                 sync_job_arn="syncJobArn",
                 sync_source="syncSource",
                 workspace_id="workspaceId"
@@ -606,9 +606,9 @@ class WorkspaceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_aws_iottwinmaker
+            from aws_cdk.interfaces import aws_iottwinmaker as interfaces_iottwinmaker
             
-            workspace_reference = interfaces_aws_iottwinmaker.WorkspaceReference(
+            workspace_reference = interfaces_iottwinmaker.WorkspaceReference(
                 workspace_arn="workspaceArn",
                 workspace_id="workspaceId"
             )

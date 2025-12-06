@@ -57,9 +57,9 @@ class CampaignReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            campaign_reference = interfaces_aws_iotfleetwise.CampaignReference(
+            campaign_reference = interfaces_iotfleetwise.CampaignReference(
                 campaign_arn="campaignArn",
                 campaign_name="campaignName"
             )
@@ -125,9 +125,9 @@ class DecoderManifestReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            decoder_manifest_reference = interfaces_aws_iotfleetwise.DecoderManifestReference(
+            decoder_manifest_reference = interfaces_iotfleetwise.DecoderManifestReference(
                 decoder_manifest_arn="decoderManifestArn",
                 decoder_manifest_name="decoderManifestName"
             )
@@ -185,9 +185,9 @@ class FleetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            fleet_reference = interfaces_aws_iotfleetwise.FleetReference(
+            fleet_reference = interfaces_iotfleetwise.FleetReference(
                 fleet_arn="fleetArn",
                 fleet_id="fleetId"
             )
@@ -570,9 +570,9 @@ class ModelManifestReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            model_manifest_reference = interfaces_aws_iotfleetwise.ModelManifestReference(
+            model_manifest_reference = interfaces_iotfleetwise.ModelManifestReference(
                 model_manifest_arn="modelManifestArn",
                 model_manifest_name="modelManifestName"
             )
@@ -638,9 +638,9 @@ class SignalCatalogReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            signal_catalog_reference = interfaces_aws_iotfleetwise.SignalCatalogReference(
+            signal_catalog_reference = interfaces_iotfleetwise.SignalCatalogReference(
                 signal_catalog_arn="signalCatalogArn",
                 signal_catalog_name="signalCatalogName"
             )
@@ -706,9 +706,9 @@ class StateTemplateReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            state_template_reference = interfaces_aws_iotfleetwise.StateTemplateReference(
+            state_template_reference = interfaces_iotfleetwise.StateTemplateReference(
                 state_template_arn="stateTemplateArn",
                 state_template_name="stateTemplateName"
             )
@@ -771,9 +771,9 @@ class VehicleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_aws_iotfleetwise
+            from aws_cdk.interfaces import aws_iotfleetwise as interfaces_iotfleetwise
             
-            vehicle_reference = interfaces_aws_iotfleetwise.VehicleReference(
+            vehicle_reference = interfaces_iotfleetwise.VehicleReference(
                 vehicle_arn="vehicleArn",
                 vehicle_name="vehicleName"
             )

@@ -60,9 +60,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            application_reference = interfaces_aws_qbusiness.ApplicationReference(
+            application_reference = interfaces_qbusiness.ApplicationReference(
                 application_arn="applicationArn",
                 application_id="applicationId"
             )
@@ -131,9 +131,9 @@ class DataAccessorReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            data_accessor_reference = interfaces_aws_qbusiness.DataAccessorReference(
+            data_accessor_reference = interfaces_qbusiness.DataAccessorReference(
                 application_id="applicationId",
                 data_accessor_arn="dataAccessorArn",
                 data_accessor_id="dataAccessorId"
@@ -215,9 +215,9 @@ class DataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            data_source_reference = interfaces_aws_qbusiness.DataSourceReference(
+            data_source_reference = interfaces_qbusiness.DataSourceReference(
                 application_id="applicationId",
                 data_source_arn="dataSourceArn",
                 data_source_id="dataSourceId",
@@ -666,9 +666,9 @@ class IndexReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            index_reference = interfaces_aws_qbusiness.IndexReference(
+            index_reference = interfaces_qbusiness.IndexReference(
                 application_id="applicationId",
                 index_arn="indexArn",
                 index_id="indexId"
@@ -741,9 +741,9 @@ class PermissionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            permission_reference = interfaces_aws_qbusiness.PermissionReference(
+            permission_reference = interfaces_qbusiness.PermissionReference(
                 application_id="applicationId",
                 statement_id="statementId"
             )
@@ -812,9 +812,9 @@ class PluginReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            plugin_reference = interfaces_aws_qbusiness.PluginReference(
+            plugin_reference = interfaces_qbusiness.PluginReference(
                 application_id="applicationId",
                 plugin_arn="pluginArn",
                 plugin_id="pluginId"
@@ -893,9 +893,9 @@ class RetrieverReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            retriever_reference = interfaces_aws_qbusiness.RetrieverReference(
+            retriever_reference = interfaces_qbusiness.RetrieverReference(
                 application_id="applicationId",
                 retriever_arn="retrieverArn",
                 retriever_id="retrieverId"
@@ -974,9 +974,9 @@ class WebExperienceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_qbusiness as interfaces_aws_qbusiness
+            from aws_cdk.interfaces import aws_qbusiness as interfaces_qbusiness
             
-            web_experience_reference = interfaces_aws_qbusiness.WebExperienceReference(
+            web_experience_reference = interfaces_qbusiness.WebExperienceReference(
                 application_id="applicationId",
                 web_experience_arn="webExperienceArn",
                 web_experience_id="webExperienceId"

@@ -57,9 +57,9 @@ class ApplicationCloudWatchLoggingOptionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_aws_kinesisanalyticsv2
+            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_kinesisanalyticsv2
             
-            application_cloud_watch_logging_option_reference = interfaces_aws_kinesisanalyticsv2.ApplicationCloudWatchLoggingOptionReference(
+            application_cloud_watch_logging_option_reference = interfaces_kinesisanalyticsv2.ApplicationCloudWatchLoggingOptionReference(
                 application_cloud_watch_logging_option_id="applicationCloudWatchLoggingOptionId"
             )
         '''
@@ -106,9 +106,9 @@ class ApplicationOutputReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_aws_kinesisanalyticsv2
+            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_kinesisanalyticsv2
             
-            application_output_reference = interfaces_aws_kinesisanalyticsv2.ApplicationOutputReference(
+            application_output_reference = interfaces_kinesisanalyticsv2.ApplicationOutputReference(
                 application_output_id="applicationOutputId"
             )
         '''
@@ -155,9 +155,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_aws_kinesisanalyticsv2
+            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_kinesisanalyticsv2
             
-            application_reference = interfaces_aws_kinesisanalyticsv2.ApplicationReference(
+            application_reference = interfaces_kinesisanalyticsv2.ApplicationReference(
                 application_name="applicationName"
             )
         '''
@@ -206,9 +206,9 @@ class ApplicationReferenceDataSourceReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_aws_kinesisanalyticsv2
+            from aws_cdk.interfaces import aws_kinesisanalyticsv2 as interfaces_kinesisanalyticsv2
             
-            application_reference_data_source_reference = interfaces_aws_kinesisanalyticsv2.ApplicationReferenceDataSourceReference(
+            application_reference_data_source_reference = interfaces_kinesisanalyticsv2.ApplicationReferenceDataSourceReference(
                 application_reference_data_source_id="applicationReferenceDataSourceId"
             )
         '''

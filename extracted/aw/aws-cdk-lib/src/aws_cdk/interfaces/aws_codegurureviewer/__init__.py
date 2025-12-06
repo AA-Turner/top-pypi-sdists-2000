@@ -98,9 +98,9 @@ class RepositoryAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_codegurureviewer as interfaces_aws_codegurureviewer
+            from aws_cdk.interfaces import aws_codegurureviewer as interfaces_codegurureviewer
             
-            repository_association_reference = interfaces_aws_codegurureviewer.RepositoryAssociationReference(
+            repository_association_reference = interfaces_codegurureviewer.RepositoryAssociationReference(
                 association_arn="associationArn"
             )
         '''

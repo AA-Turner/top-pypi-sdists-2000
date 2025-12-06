@@ -5607,9 +5607,9 @@ class ScheduleGroupGrants(
         # The code below shows an example of how to instantiate this type.
         # The values are placeholders you should change.
         from aws_cdk import aws_scheduler as scheduler
-        from aws_cdk.interfaces import aws_scheduler as interfaces_aws_scheduler
+        from aws_cdk.interfaces import aws_scheduler as interfaces_scheduler
         
-        # schedule_group_ref: interfaces_aws_scheduler.IScheduleGroupRef
+        # schedule_group_ref: interfaces_scheduler.IScheduleGroupRef
         
         schedule_group_grants = scheduler.ScheduleGroupGrants.from_schedule_group(schedule_group_ref)
     '''

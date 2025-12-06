@@ -4380,6 +4380,23 @@ class CfnS3AccessPointAttachment(
         
         cfn_s3_access_point_attachment = fsx.CfnS3AccessPointAttachment(self, "MyCfnS3AccessPointAttachment",
             name="name",
+            type="type",
+        
+            # the properties below are optional
+            ontap_configuration=fsx.CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty(
+                file_system_identity=fsx.CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty(
+                    type="type",
+        
+                    # the properties below are optional
+                    unix_user=fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty(
+                        name="name"
+                    ),
+                    windows_user=fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty(
+                        name="name"
+                    )
+                ),
+                volume_id="volumeId"
+            ),
             open_zfs_configuration=fsx.CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty(
                 file_system_identity=fsx.CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty(
                     posix_user=fsx.CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty(
@@ -4395,9 +4412,6 @@ class CfnS3AccessPointAttachment(
                 ),
                 volume_id="volumeId"
             ),
-            type="type",
-        
-            # the properties below are optional
             s3_access_point=fsx.CfnS3AccessPointAttachment.S3AccessPointProperty(
                 alias="alias",
                 policy=policy,
@@ -4415,8 +4429,9 @@ class CfnS3AccessPointAttachment(
         id: builtins.str,
         *,
         name: builtins.str,
-        open_zfs_configuration: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
+        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
         s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.S3AccessPointProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Create a new ``AWS::FSx::S3AccessPointAttachment``.
@@ -4424,8 +4439,9 @@ class CfnS3AccessPointAttachment(
         :param scope: Scope in which this resource is defined.
         :param id: Construct identifier for this resource (unique in its scope).
         :param name: The name of the S3 access point attachment; also used for the name of the S3 access point.
-        :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param type: The type of Amazon FSx volume that the S3 access point is attached to.
+        :param ontap_configuration: 
+        :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param s3_access_point: The S3 access point configuration of the S3 access point attachment.
         '''
         if __debug__:
@@ -4434,8 +4450,9 @@ class CfnS3AccessPointAttachment(
             check_type(argname="argument id", value=id, expected_type=type_hints["id"])
         props = CfnS3AccessPointAttachmentProps(
             name=name,
-            open_zfs_configuration=open_zfs_configuration,
             type=type,
+            ontap_configuration=ontap_configuration,
+            open_zfs_configuration=open_zfs_configuration,
             s3_access_point=s3_access_point,
         )
 
@@ -4528,24 +4545,6 @@ class CfnS3AccessPointAttachment(
         jsii.set(self, "name", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
-    @jsii.member(jsii_name="openZfsConfiguration")
-    def open_zfs_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]:
-        '''The OpenZFSConfiguration of the S3 access point attachment.'''
-        return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"], jsii.get(self, "openZfsConfiguration"))
-
-    @open_zfs_configuration.setter
-    def open_zfs_configuration(
-        self,
-        value: typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"],
-    ) -> None:
-        if __debug__:
-            type_hints = typing.get_type_hints(_typecheckingstub__0756a73fef71599ffefeead45c6d0ea227439b511cdc73a360780b4f4c0df186)
-            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
-        jsii.set(self, "openZfsConfiguration", value) # pyright: ignore[reportArgumentType]
-
-    @builtins.property
     @jsii.member(jsii_name="type")
     def type(self) -> builtins.str:
         '''The type of Amazon FSx volume that the S3 access point is attached to.'''
@@ -4557,6 +4556,41 @@ class CfnS3AccessPointAttachment(
             type_hints = typing.get_type_hints(_typecheckingstub__ece88a5ab6d3a69d75415d92fc3eea5b9fd91186f1a15239e5ec10f6c6c0005a)
             check_type(argname="argument value", value=value, expected_type=type_hints["value"])
         jsii.set(self, "type", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="ontapConfiguration")
+    def ontap_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]]:
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]], jsii.get(self, "ontapConfiguration"))
+
+    @ontap_configuration.setter
+    def ontap_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__ccdbf866601ccc3fde6f940ff739a2562cc1c309ef90b42b775dd99df2fdfcaa)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "ontapConfiguration", value) # pyright: ignore[reportArgumentType]
+
+    @builtins.property
+    @jsii.member(jsii_name="openZfsConfiguration")
+    def open_zfs_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]]:
+        '''The OpenZFSConfiguration of the S3 access point attachment.'''
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]], jsii.get(self, "openZfsConfiguration"))
+
+    @open_zfs_configuration.setter
+    def open_zfs_configuration(
+        self,
+        value: typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty"]],
+    ) -> None:
+        if __debug__:
+            type_hints = typing.get_type_hints(_typecheckingstub__0756a73fef71599ffefeead45c6d0ea227439b511cdc73a360780b4f4c0df186)
+            check_type(argname="argument value", value=value, expected_type=type_hints["value"])
+        jsii.set(self, "openZfsConfiguration", value) # pyright: ignore[reportArgumentType]
 
     @builtins.property
     @jsii.member(jsii_name="s3AccessPoint")
@@ -4625,6 +4659,205 @@ class CfnS3AccessPointAttachment(
 
         def __repr__(self) -> str:
             return "FileSystemGIDProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_fsx.CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "type": "type",
+            "unix_user": "unixUser",
+            "windows_user": "windowsUser",
+        },
+    )
+    class OntapFileSystemIdentityProperty:
+        def __init__(
+            self,
+            *,
+            type: builtins.str,
+            unix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+            windows_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty", typing.Dict[builtins.str, typing.Any]]]] = None,
+        ) -> None:
+            '''
+            :param type: Specifies the FSx for ONTAP user identity type, accepts either UNIX or WINDOWS.
+            :param unix_user: 
+            :param windows_user: 
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_fsx as fsx
+                
+                ontap_file_system_identity_property = fsx.CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty(
+                    type="type",
+                
+                    # the properties below are optional
+                    unix_user=fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty(
+                        name="name"
+                    ),
+                    windows_user=fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty(
+                        name="name"
+                    )
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__8fa52e228c3f00dff810dd25b1ab25944a00d021001f5f7deba29831ba7ad146)
+                check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+                check_type(argname="argument unix_user", value=unix_user, expected_type=type_hints["unix_user"])
+                check_type(argname="argument windows_user", value=windows_user, expected_type=type_hints["windows_user"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "type": type,
+            }
+            if unix_user is not None:
+                self._values["unix_user"] = unix_user
+            if windows_user is not None:
+                self._values["windows_user"] = windows_user
+
+        @builtins.property
+        def type(self) -> builtins.str:
+            '''Specifies the FSx for ONTAP user identity type, accepts either UNIX or WINDOWS.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-type
+            '''
+            result = self._values.get("type")
+            assert result is not None, "Required property 'type' is missing"
+            return typing.cast(builtins.str, result)
+
+        @builtins.property
+        def unix_user(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-unixuser
+            '''
+            result = self._values.get("unix_user")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty"]], result)
+
+        @builtins.property
+        def windows_user(
+            self,
+        ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapfilesystemidentity.html#cfn-fsx-s3accesspointattachment-ontapfilesystemidentity-windowsuser
+            '''
+            result = self._values.get("windows_user")
+            return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty"]], result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OntapFileSystemIdentityProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name"},
+    )
+    class OntapUnixFileSystemUserProperty:
+        def __init__(self, *, name: builtins.str) -> None:
+            '''
+            :param name: The name of the UNIX user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapunixfilesystemuser.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_fsx as fsx
+                
+                ontap_unix_file_system_user_property = fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty(
+                    name="name"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__33262a68318537d884ae72ad491504359ca70f4d8684f9b525171d4fe490ef59)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''The name of the UNIX user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapunixfilesystemuser.html#cfn-fsx-s3accesspointattachment-ontapunixfilesystemuser-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OntapUnixFileSystemUserProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty",
+        jsii_struct_bases=[],
+        name_mapping={"name": "name"},
+    )
+    class OntapWindowsFileSystemUserProperty:
+        def __init__(self, *, name: builtins.str) -> None:
+            '''
+            :param name: The name of the Windows user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapwindowsfilesystemuser.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_fsx as fsx
+                
+                ontap_windows_file_system_user_property = fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty(
+                    name="name"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__6eec503de84fe72fceb217f03035b3a3c1189dee09fa8745ec2750b960f671b8)
+                check_type(argname="argument name", value=name, expected_type=type_hints["name"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "name": name,
+            }
+
+        @builtins.property
+        def name(self) -> builtins.str:
+            '''The name of the Windows user.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-ontapwindowsfilesystemuser.html#cfn-fsx-s3accesspointattachment-ontapwindowsfilesystemuser-name
+            '''
+            result = self._values.get("name")
+            assert result is not None, "Required property 'name' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "OntapWindowsFileSystemUserProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -4798,6 +5031,90 @@ class CfnS3AccessPointAttachment(
 
         def __repr__(self) -> str:
             return "OpenZFSPosixFileSystemUserProperty(%s)" % ", ".join(
+                k + "=" + repr(v) for k, v in self._values.items()
+            )
+
+    @jsii.data_type(
+        jsii_type="aws-cdk-lib.aws_fsx.CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty",
+        jsii_struct_bases=[],
+        name_mapping={
+            "file_system_identity": "fileSystemIdentity",
+            "volume_id": "volumeId",
+        },
+    )
+    class S3AccessPointOntapConfigurationProperty:
+        def __init__(
+            self,
+            *,
+            file_system_identity: typing.Union[_IResolvable_da3f097b, typing.Union["CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty", typing.Dict[builtins.str, typing.Any]]],
+            volume_id: builtins.str,
+        ) -> None:
+            '''
+            :param file_system_identity: 
+            :param volume_id: The ID of the FSx for ONTAP volume that the S3 access point is attached to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointontapconfiguration.html
+            :exampleMetadata: fixture=_generated
+
+            Example::
+
+                # The code below shows an example of how to instantiate this type.
+                # The values are placeholders you should change.
+                from aws_cdk import aws_fsx as fsx
+                
+                s3_access_point_ontap_configuration_property = fsx.CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty(
+                    file_system_identity=fsx.CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty(
+                        type="type",
+                
+                        # the properties below are optional
+                        unix_user=fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty(
+                            name="name"
+                        ),
+                        windows_user=fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty(
+                            name="name"
+                        )
+                    ),
+                    volume_id="volumeId"
+                )
+            '''
+            if __debug__:
+                type_hints = typing.get_type_hints(_typecheckingstub__623512723a65c5bd3489003d2a55e48c3b784ec61cdf28eadea014b98b2026a1)
+                check_type(argname="argument file_system_identity", value=file_system_identity, expected_type=type_hints["file_system_identity"])
+                check_type(argname="argument volume_id", value=volume_id, expected_type=type_hints["volume_id"])
+            self._values: typing.Dict[builtins.str, typing.Any] = {
+                "file_system_identity": file_system_identity,
+                "volume_id": volume_id,
+            }
+
+        @builtins.property
+        def file_system_identity(
+            self,
+        ) -> typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"]:
+            '''
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointontapconfiguration.html#cfn-fsx-s3accesspointattachment-s3accesspointontapconfiguration-filesystemidentity
+            '''
+            result = self._values.get("file_system_identity")
+            assert result is not None, "Required property 'file_system_identity' is missing"
+            return typing.cast(typing.Union[_IResolvable_da3f097b, "CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty"], result)
+
+        @builtins.property
+        def volume_id(self) -> builtins.str:
+            '''The ID of the FSx for ONTAP volume that the S3 access point is attached to.
+
+            :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-fsx-s3accesspointattachment-s3accesspointontapconfiguration.html#cfn-fsx-s3accesspointattachment-s3accesspointontapconfiguration-volumeid
+            '''
+            result = self._values.get("volume_id")
+            assert result is not None, "Required property 'volume_id' is missing"
+            return typing.cast(builtins.str, result)
+
+        def __eq__(self, rhs: typing.Any) -> builtins.bool:
+            return isinstance(rhs, self.__class__) and rhs._values == self._values
+
+        def __ne__(self, rhs: typing.Any) -> builtins.bool:
+            return not (rhs == self)
+
+        def __repr__(self) -> str:
+            return "S3AccessPointOntapConfigurationProperty(%s)" % ", ".join(
                 k + "=" + repr(v) for k, v in self._values.items()
             )
 
@@ -5057,8 +5374,9 @@ class CfnS3AccessPointAttachment(
     jsii_struct_bases=[],
     name_mapping={
         "name": "name",
-        "open_zfs_configuration": "openZfsConfiguration",
         "type": "type",
+        "ontap_configuration": "ontapConfiguration",
+        "open_zfs_configuration": "openZfsConfiguration",
         "s3_access_point": "s3AccessPoint",
     },
 )
@@ -5067,15 +5385,17 @@ class CfnS3AccessPointAttachmentProps:
         self,
         *,
         name: builtins.str,
-        open_zfs_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
         type: builtins.str,
+        ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+        open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
         s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     ) -> None:
         '''Properties for defining a ``CfnS3AccessPointAttachment``.
 
         :param name: The name of the S3 access point attachment; also used for the name of the S3 access point.
-        :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param type: The type of Amazon FSx volume that the S3 access point is attached to.
+        :param ontap_configuration: 
+        :param open_zfs_configuration: The OpenZFSConfiguration of the S3 access point attachment.
         :param s3_access_point: The S3 access point configuration of the S3 access point attachment.
 
         :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html
@@ -5091,6 +5411,23 @@ class CfnS3AccessPointAttachmentProps:
             
             cfn_s3_access_point_attachment_props = fsx.CfnS3AccessPointAttachmentProps(
                 name="name",
+                type="type",
+            
+                # the properties below are optional
+                ontap_configuration=fsx.CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty(
+                    file_system_identity=fsx.CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty(
+                        type="type",
+            
+                        # the properties below are optional
+                        unix_user=fsx.CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty(
+                            name="name"
+                        ),
+                        windows_user=fsx.CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty(
+                            name="name"
+                        )
+                    ),
+                    volume_id="volumeId"
+                ),
                 open_zfs_configuration=fsx.CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty(
                     file_system_identity=fsx.CfnS3AccessPointAttachment.OpenZFSFileSystemIdentityProperty(
                         posix_user=fsx.CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty(
@@ -5106,9 +5443,6 @@ class CfnS3AccessPointAttachmentProps:
                     ),
                     volume_id="volumeId"
                 ),
-                type="type",
-            
-                # the properties below are optional
                 s3_access_point=fsx.CfnS3AccessPointAttachment.S3AccessPointProperty(
                     alias="alias",
                     policy=policy,
@@ -5122,14 +5456,18 @@ class CfnS3AccessPointAttachmentProps:
         if __debug__:
             type_hints = typing.get_type_hints(_typecheckingstub__f8d86aefcd2904a1c36c865f774d6ff97130a2707963573cf5c4a4173e91ab0e)
             check_type(argname="argument name", value=name, expected_type=type_hints["name"])
-            check_type(argname="argument open_zfs_configuration", value=open_zfs_configuration, expected_type=type_hints["open_zfs_configuration"])
             check_type(argname="argument type", value=type, expected_type=type_hints["type"])
+            check_type(argname="argument ontap_configuration", value=ontap_configuration, expected_type=type_hints["ontap_configuration"])
+            check_type(argname="argument open_zfs_configuration", value=open_zfs_configuration, expected_type=type_hints["open_zfs_configuration"])
             check_type(argname="argument s3_access_point", value=s3_access_point, expected_type=type_hints["s3_access_point"])
         self._values: typing.Dict[builtins.str, typing.Any] = {
             "name": name,
-            "open_zfs_configuration": open_zfs_configuration,
             "type": type,
         }
+        if ontap_configuration is not None:
+            self._values["ontap_configuration"] = ontap_configuration
+        if open_zfs_configuration is not None:
+            self._values["open_zfs_configuration"] = open_zfs_configuration
         if s3_access_point is not None:
             self._values["s3_access_point"] = s3_access_point
 
@@ -5146,18 +5484,6 @@ class CfnS3AccessPointAttachmentProps:
         return typing.cast(builtins.str, result)
 
     @builtins.property
-    def open_zfs_configuration(
-        self,
-    ) -> typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]:
-        '''The OpenZFSConfiguration of the S3 access point attachment.
-
-        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-openzfsconfiguration
-        '''
-        result = self._values.get("open_zfs_configuration")
-        assert result is not None, "Required property 'open_zfs_configuration' is missing"
-        return typing.cast(typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty], result)
-
-    @builtins.property
     def type(self) -> builtins.str:
         '''The type of Amazon FSx volume that the S3 access point is attached to.
 
@@ -5166,6 +5492,27 @@ class CfnS3AccessPointAttachmentProps:
         result = self._values.get("type")
         assert result is not None, "Required property 'type' is missing"
         return typing.cast(builtins.str, result)
+
+    @builtins.property
+    def ontap_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty]]:
+        '''
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-ontapconfiguration
+        '''
+        result = self._values.get("ontap_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty]], result)
+
+    @builtins.property
+    def open_zfs_configuration(
+        self,
+    ) -> typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]]:
+        '''The OpenZFSConfiguration of the S3 access point attachment.
+
+        :see: http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-fsx-s3accesspointattachment.html#cfn-fsx-s3accesspointattachment-openzfsconfiguration
+        '''
+        result = self._values.get("open_zfs_configuration")
+        return typing.cast(typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]], result)
 
     @builtins.property
     def s3_access_point(
@@ -8512,9 +8859,9 @@ class FileSystemProps:
             import aws_cdk as cdk
             from aws_cdk import aws_ec2 as ec2
             from aws_cdk import aws_fsx as fsx
-            from aws_cdk.interfaces import aws_kms as interfaces_aws_kms
+            from aws_cdk.interfaces import aws_kms as interfaces_kms
             
-            # key_ref: interfaces_aws_kms.IKeyRef
+            # key_ref: interfaces_kms.IKeyRef
             # security_group: ec2.SecurityGroup
             # vpc: ec2.Vpc
             
@@ -10192,8 +10539,9 @@ def _typecheckingstub__f51e0b107c6c6ca8bc284dbcf4013f6c7bcdd088cb084476fdf615b4d
     id: builtins.str,
     *,
     name: builtins.str,
-    open_zfs_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     type: builtins.str,
+    ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""
@@ -10223,14 +10571,20 @@ def _typecheckingstub__644edd6bd850880f5ebd47e103e56e49b7d7f21e620f2807e12dac453
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__0756a73fef71599ffefeead45c6d0ea227439b511cdc73a360780b4f4c0df186(
-    value: typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty],
+def _typecheckingstub__ece88a5ab6d3a69d75415d92fc3eea5b9fd91186f1a15239e5ec10f6c6c0005a(
+    value: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
 
-def _typecheckingstub__ece88a5ab6d3a69d75415d92fc3eea5b9fd91186f1a15239e5ec10f6c6c0005a(
-    value: builtins.str,
+def _typecheckingstub__ccdbf866601ccc3fde6f940ff739a2562cc1c309ef90b42b775dd99df2fdfcaa(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty]],
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__0756a73fef71599ffefeead45c6d0ea227439b511cdc73a360780b4f4c0df186(
+    value: typing.Optional[typing.Union[_IResolvable_da3f097b, CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty]],
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10248,6 +10602,29 @@ def _typecheckingstub__72efd25b3b6057030d910de35b2f8e4104cb66dc72f89dc8ebb3b89da
     """Type checking stubs"""
     pass
 
+def _typecheckingstub__8fa52e228c3f00dff810dd25b1ab25944a00d021001f5f7deba29831ba7ad146(
+    *,
+    type: builtins.str,
+    unix_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.OntapUnixFileSystemUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    windows_user: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.OntapWindowsFileSystemUserProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__33262a68318537d884ae72ad491504359ca70f4d8684f9b525171d4fe490ef59(
+    *,
+    name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__6eec503de84fe72fceb217f03035b3a3c1189dee09fa8745ec2750b960f671b8(
+    *,
+    name: builtins.str,
+) -> None:
+    """Type checking stubs"""
+    pass
+
 def _typecheckingstub__af3bbbb456f8fdedf7c641c4786d89bf08acb663687e1b91f1ffdb83ab9819cb(
     *,
     posix_user: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.OpenZFSPosixFileSystemUserProperty, typing.Dict[builtins.str, typing.Any]]],
@@ -10261,6 +10638,14 @@ def _typecheckingstub__3decc490fdc822be6603dab799c80c7e004416dbd58cc34ea290fa556
     gid: jsii.Number,
     uid: jsii.Number,
     secondary_gids: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Sequence[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.FileSystemGIDProperty, typing.Dict[builtins.str, typing.Any]]]]]] = None,
+) -> None:
+    """Type checking stubs"""
+    pass
+
+def _typecheckingstub__623512723a65c5bd3489003d2a55e48c3b784ec61cdf28eadea014b98b2026a1(
+    *,
+    file_system_identity: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.OntapFileSystemIdentityProperty, typing.Dict[builtins.str, typing.Any]]],
+    volume_id: builtins.str,
 ) -> None:
     """Type checking stubs"""
     pass
@@ -10293,8 +10678,9 @@ def _typecheckingstub__ca5b9e5f42caf136a78ce4c94fb03a42b36504167d07de97e63171ff1
 def _typecheckingstub__f8d86aefcd2904a1c36c865f774d6ff97130a2707963573cf5c4a4173e91ab0e(
     *,
     name: builtins.str,
-    open_zfs_configuration: typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]],
     type: builtins.str,
+    ontap_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOntapConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
+    open_zfs_configuration: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointOpenZFSConfigurationProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
     s3_access_point: typing.Optional[typing.Union[_IResolvable_da3f097b, typing.Union[CfnS3AccessPointAttachment.S3AccessPointProperty, typing.Dict[builtins.str, typing.Any]]]] = None,
 ) -> None:
     """Type checking stubs"""

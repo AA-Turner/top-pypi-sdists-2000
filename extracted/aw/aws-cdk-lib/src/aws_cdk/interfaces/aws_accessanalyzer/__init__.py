@@ -51,9 +51,9 @@ class AnalyzerReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_accessanalyzer as interfaces_aws_accessanalyzer
+            from aws_cdk.interfaces import aws_accessanalyzer as interfaces_accessanalyzer
             
-            analyzer_reference = interfaces_aws_accessanalyzer.AnalyzerReference(
+            analyzer_reference = interfaces_accessanalyzer.AnalyzerReference(
                 analyzer_arn="analyzerArn"
             )
         '''

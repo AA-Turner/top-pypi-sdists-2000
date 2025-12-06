@@ -57,9 +57,9 @@ class GlobalTableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
             
-            global_table_reference = interfaces_aws_dynamodb.GlobalTableReference(
+            global_table_reference = interfaces_dynamodb.GlobalTableReference(
                 global_table_arn="globalTableArn",
                 table_name="tableName"
             )
@@ -207,9 +207,9 @@ class TableReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_dynamodb as interfaces_aws_dynamodb
+            from aws_cdk.interfaces import aws_dynamodb as interfaces_dynamodb
             
-            table_reference = interfaces_aws_dynamodb.TableReference(
+            table_reference = interfaces_dynamodb.TableReference(
                 table_arn="tableArn",
                 table_name="tableName"
             )

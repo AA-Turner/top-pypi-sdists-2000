@@ -65,6 +65,7 @@ from ...aws_lambda import (
     ApplicationLogLevel as _ApplicationLogLevel_cd92660a,
     Architecture as _Architecture_12d5a53f,
     Code as _Code_7848f942,
+    DurableConfig as _DurableConfig_05b238fa,
     EventInvokeConfigOptions as _EventInvokeConfigOptions_42b67f17,
     EventSourceMapping as _EventSourceMapping_556828d7,
     EventSourceMappingOptions as _EventSourceMappingOptions_b3f2bb85,
@@ -175,6 +176,7 @@ class EdgeFunction(
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -234,6 +236,7 @@ class EdgeFunction(
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -295,6 +298,7 @@ class EdgeFunction(
             dead_letter_queue_enabled=dead_letter_queue_enabled,
             dead_letter_topic=dead_letter_topic,
             description=description,
+            durable_config=durable_config,
             environment=environment,
             environment_encryption=environment_encryption,
             ephemeral_storage_size=ephemeral_storage_size,
@@ -1045,6 +1049,7 @@ class EdgeFunction(
         "dead_letter_queue_enabled": "deadLetterQueueEnabled",
         "dead_letter_topic": "deadLetterTopic",
         "description": "description",
+        "durable_config": "durableConfig",
         "environment": "environment",
         "environment_encryption": "environmentEncryption",
         "ephemeral_storage_size": "ephemeralStorageSize",
@@ -1106,6 +1111,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
         dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
         description: typing.Optional[builtins.str] = None,
+        durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
         environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
         environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
         ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -1164,6 +1170,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         :param dead_letter_queue_enabled: Enabled DLQ. If ``deadLetterQueue`` is undefined, an SQS queue with default options will be defined for your Function. Default: - false unless ``deadLetterQueue`` is set, which implies DLQ is enabled.
         :param dead_letter_topic: The SNS topic to use as a DLQ. Note that if ``deadLetterQueueEnabled`` is set to ``true``, an SQS queue will be created rather than an SNS topic. Using an SNS topic as a DLQ requires this property to be set explicitly. Default: - no SNS topic
         :param description: A description of the function. Default: - No description.
+        :param durable_config: The durable configuration for the function. If durability is added to an existing function, a resource replacement will be triggered. See the 'durableConfig' section in the module README for more details. Default: - No durable configuration
         :param environment: Key-value pairs that Lambda caches and makes available for your Lambda functions. Use environment variables to apply configuration changes, such as test and production environment configurations, without changing your Lambda function source code. Default: - No environment variables.
         :param environment_encryption: The AWS KMS key that's used to encrypt your function's environment variables. Default: - AWS Lambda creates and uses an AWS managed customer master key (CMK).
         :param ephemeral_storage_size: The size of the function’s /tmp directory in MiB. Default: 512 MiB
@@ -1230,6 +1237,8 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             adot_instrumentation = _AdotInstrumentationConfig_7c38d65d(**adot_instrumentation)
         if isinstance(current_version_options, dict):
             current_version_options = _VersionOptions_981bb3c0(**current_version_options)
+        if isinstance(durable_config, dict):
+            durable_config = _DurableConfig_05b238fa(**durable_config)
         if isinstance(log_retention_retry_options, dict):
             log_retention_retry_options = _LogRetentionRetryOptions_ad797a7a(**log_retention_retry_options)
         if isinstance(vpc_subnets, dict):
@@ -1253,6 +1262,7 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             check_type(argname="argument dead_letter_queue_enabled", value=dead_letter_queue_enabled, expected_type=type_hints["dead_letter_queue_enabled"])
             check_type(argname="argument dead_letter_topic", value=dead_letter_topic, expected_type=type_hints["dead_letter_topic"])
             check_type(argname="argument description", value=description, expected_type=type_hints["description"])
+            check_type(argname="argument durable_config", value=durable_config, expected_type=type_hints["durable_config"])
             check_type(argname="argument environment", value=environment, expected_type=type_hints["environment"])
             check_type(argname="argument environment_encryption", value=environment_encryption, expected_type=type_hints["environment_encryption"])
             check_type(argname="argument ephemeral_storage_size", value=ephemeral_storage_size, expected_type=type_hints["ephemeral_storage_size"])
@@ -1330,6 +1340,8 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
             self._values["dead_letter_topic"] = dead_letter_topic
         if description is not None:
             self._values["description"] = description
+        if durable_config is not None:
+            self._values["durable_config"] = durable_config
         if environment is not None:
             self._values["environment"] = environment
         if environment_encryption is not None:
@@ -1594,6 +1606,18 @@ class EdgeFunctionProps(_FunctionProps_a308e854):
         '''
         result = self._values.get("description")
         return typing.cast(typing.Optional[builtins.str], result)
+
+    @builtins.property
+    def durable_config(self) -> typing.Optional[_DurableConfig_05b238fa]:
+        '''The durable configuration for the function.
+
+        If durability is added to an existing function, a resource replacement will be triggered.
+        See the 'durableConfig' section in the module README for more details.
+
+        :default: - No durable configuration
+        '''
+        result = self._values.get("durable_config")
+        return typing.cast(typing.Optional[_DurableConfig_05b238fa], result)
 
     @builtins.property
     def environment(
@@ -2122,6 +2146,7 @@ def _typecheckingstub__b2f96e5632f259adb036f7aba2bbc7c19fd9840c647d67a10a8135cb3
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,
@@ -2306,6 +2331,7 @@ def _typecheckingstub__709cdcb05c7a5fc7f7bcd1d72557097c39c5c534076a00b6b8db807bd
     dead_letter_queue_enabled: typing.Optional[builtins.bool] = None,
     dead_letter_topic: typing.Optional[_ITopic_9eca4852] = None,
     description: typing.Optional[builtins.str] = None,
+    durable_config: typing.Optional[typing.Union[_DurableConfig_05b238fa, typing.Dict[builtins.str, typing.Any]]] = None,
     environment: typing.Optional[typing.Mapping[builtins.str, builtins.str]] = None,
     environment_encryption: typing.Optional[_IKeyRef_d4fc6ef3] = None,
     ephemeral_storage_size: typing.Optional[_Size_7b441c34] = None,

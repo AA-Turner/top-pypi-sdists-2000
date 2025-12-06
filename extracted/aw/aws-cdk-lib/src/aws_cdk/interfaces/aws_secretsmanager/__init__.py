@@ -237,9 +237,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_secretsmanager as interfaces_aws_secretsmanager
+            from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
-            resource_policy_reference = interfaces_aws_secretsmanager.ResourcePolicyReference(
+            resource_policy_reference = interfaces_secretsmanager.ResourcePolicyReference(
                 resource_policy_id="resourcePolicyId"
             )
         '''
@@ -286,9 +286,9 @@ class RotationScheduleReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_secretsmanager as interfaces_aws_secretsmanager
+            from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
-            rotation_schedule_reference = interfaces_aws_secretsmanager.RotationScheduleReference(
+            rotation_schedule_reference = interfaces_secretsmanager.RotationScheduleReference(
                 rotation_schedule_id="rotationScheduleId"
             )
         '''
@@ -335,9 +335,9 @@ class SecretReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_secretsmanager as interfaces_aws_secretsmanager
+            from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
-            secret_reference = interfaces_aws_secretsmanager.SecretReference(
+            secret_reference = interfaces_secretsmanager.SecretReference(
                 secret_id="secretId"
             )
         '''
@@ -384,9 +384,9 @@ class SecretTargetAttachmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_secretsmanager as interfaces_aws_secretsmanager
+            from aws_cdk.interfaces import aws_secretsmanager as interfaces_secretsmanager
             
-            secret_target_attachment_reference = interfaces_aws_secretsmanager.SecretTargetAttachmentReference(
+            secret_target_attachment_reference = interfaces_secretsmanager.SecretTargetAttachmentReference(
                 secret_target_attachment_id="secretTargetAttachmentId"
             )
         '''

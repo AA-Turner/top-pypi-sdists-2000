@@ -102,9 +102,9 @@ class ProjectReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_lookoutvision as interfaces_aws_lookoutvision
+            from aws_cdk.interfaces import aws_lookoutvision as interfaces_lookoutvision
             
-            project_reference = interfaces_aws_lookoutvision.ProjectReference(
+            project_reference = interfaces_lookoutvision.ProjectReference(
                 project_arn="projectArn",
                 project_name="projectName"
             )

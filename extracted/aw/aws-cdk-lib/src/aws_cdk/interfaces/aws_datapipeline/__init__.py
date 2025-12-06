@@ -96,9 +96,9 @@ class PipelineReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_datapipeline as interfaces_aws_datapipeline
+            from aws_cdk.interfaces import aws_datapipeline as interfaces_datapipeline
             
-            pipeline_reference = interfaces_aws_datapipeline.PipelineReference(
+            pipeline_reference = interfaces_datapipeline.PipelineReference(
                 pipeline_id="pipelineId"
             )
         '''

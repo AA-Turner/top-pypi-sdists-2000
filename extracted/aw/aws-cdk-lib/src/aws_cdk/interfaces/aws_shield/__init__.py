@@ -51,9 +51,9 @@ class DRTAccessReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_shield as interfaces_aws_shield
+            from aws_cdk.interfaces import aws_shield as interfaces_shield
             
-            d_rTAccess_reference = interfaces_aws_shield.DRTAccessReference(
+            d_rTAccess_reference = interfaces_shield.DRTAccessReference(
                 account_id="accountId"
             )
         '''
@@ -280,9 +280,9 @@ class ProactiveEngagementReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_shield as interfaces_aws_shield
+            from aws_cdk.interfaces import aws_shield as interfaces_shield
             
-            proactive_engagement_reference = interfaces_aws_shield.ProactiveEngagementReference(
+            proactive_engagement_reference = interfaces_shield.ProactiveEngagementReference(
                 account_id="accountId"
             )
         '''
@@ -329,9 +329,9 @@ class ProtectionGroupReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_shield as interfaces_aws_shield
+            from aws_cdk.interfaces import aws_shield as interfaces_shield
             
-            protection_group_reference = interfaces_aws_shield.ProtectionGroupReference(
+            protection_group_reference = interfaces_shield.ProtectionGroupReference(
                 protection_group_arn="protectionGroupArn"
             )
         '''
@@ -378,9 +378,9 @@ class ProtectionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_shield as interfaces_aws_shield
+            from aws_cdk.interfaces import aws_shield as interfaces_shield
             
-            protection_reference = interfaces_aws_shield.ProtectionReference(
+            protection_reference = interfaces_shield.ProtectionReference(
                 protection_arn="protectionArn"
             )
         '''

@@ -60,9 +60,9 @@ class ConfigurationSetReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            configuration_set_reference = interfaces_aws_smsvoice.ConfigurationSetReference(
+            configuration_set_reference = interfaces_smsvoice.ConfigurationSetReference(
                 configuration_set_arn="configurationSetArn",
                 configuration_set_name="configurationSetName"
             )
@@ -445,9 +445,9 @@ class OptOutListReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            opt_out_list_reference = interfaces_aws_smsvoice.OptOutListReference(
+            opt_out_list_reference = interfaces_smsvoice.OptOutListReference(
                 opt_out_list_arn="optOutListArn",
                 opt_out_list_name="optOutListName"
             )
@@ -513,9 +513,9 @@ class PhoneNumberReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            phone_number_reference = interfaces_aws_smsvoice.PhoneNumberReference(
+            phone_number_reference = interfaces_smsvoice.PhoneNumberReference(
                 phone_number_arn="phoneNumberArn",
                 phone_number_id="phoneNumberId"
             )
@@ -573,9 +573,9 @@ class PoolReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            pool_reference = interfaces_aws_smsvoice.PoolReference(
+            pool_reference = interfaces_smsvoice.PoolReference(
                 pool_arn="poolArn",
                 pool_id="poolId"
             )
@@ -641,9 +641,9 @@ class ProtectConfigurationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            protect_configuration_reference = interfaces_aws_smsvoice.ProtectConfigurationReference(
+            protect_configuration_reference = interfaces_smsvoice.ProtectConfigurationReference(
                 protect_configuration_arn="protectConfigurationArn",
                 protect_configuration_id="protectConfigurationId"
             )
@@ -700,9 +700,9 @@ class ResourcePolicyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            resource_policy_reference = interfaces_aws_smsvoice.ResourcePolicyReference(
+            resource_policy_reference = interfaces_smsvoice.ResourcePolicyReference(
                 resource_arn="resourceArn"
             )
         '''
@@ -761,9 +761,9 @@ class SenderIdReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_smsvoice as interfaces_aws_smsvoice
+            from aws_cdk.interfaces import aws_smsvoice as interfaces_smsvoice
             
-            sender_id_reference = interfaces_aws_smsvoice.SenderIdReference(
+            sender_id_reference = interfaces_smsvoice.SenderIdReference(
                 iso_country_code="isoCountryCode",
                 sender_id="senderId",
                 sender_id_arn="senderIdArn"

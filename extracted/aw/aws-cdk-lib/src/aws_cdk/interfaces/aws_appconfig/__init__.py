@@ -51,9 +51,9 @@ class ApplicationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            application_reference = interfaces_aws_appconfig.ApplicationReference(
+            application_reference = interfaces_appconfig.ApplicationReference(
                 application_id="applicationId"
             )
         '''
@@ -109,9 +109,9 @@ class ConfigurationProfileReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            configuration_profile_reference = interfaces_aws_appconfig.ConfigurationProfileReference(
+            configuration_profile_reference = interfaces_appconfig.ConfigurationProfileReference(
                 application_id="applicationId",
                 configuration_profile_id="configurationProfileId"
             )
@@ -180,9 +180,9 @@ class DeploymentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            deployment_reference = interfaces_aws_appconfig.DeploymentReference(
+            deployment_reference = interfaces_appconfig.DeploymentReference(
                 application_id="applicationId",
                 deployment_number="deploymentNumber",
                 environment_id="environmentId"
@@ -249,9 +249,9 @@ class DeploymentStrategyReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            deployment_strategy_reference = interfaces_aws_appconfig.DeploymentStrategyReference(
+            deployment_strategy_reference = interfaces_appconfig.DeploymentStrategyReference(
                 deployment_strategy_id="deploymentStrategyId"
             )
         '''
@@ -307,9 +307,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            environment_reference = interfaces_aws_appconfig.EnvironmentReference(
+            environment_reference = interfaces_appconfig.EnvironmentReference(
                 application_id="applicationId",
                 environment_id="environmentId"
             )
@@ -375,9 +375,9 @@ class ExtensionAssociationReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            extension_association_reference = interfaces_aws_appconfig.ExtensionAssociationReference(
+            extension_association_reference = interfaces_appconfig.ExtensionAssociationReference(
                 extension_association_arn="extensionAssociationArn",
                 extension_association_id="extensionAssociationId"
             )
@@ -440,9 +440,9 @@ class ExtensionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            extension_reference = interfaces_aws_appconfig.ExtensionReference(
+            extension_reference = interfaces_appconfig.ExtensionReference(
                 extension_arn="extensionArn",
                 extension_id="extensionId"
             )
@@ -511,9 +511,9 @@ class HostedConfigurationVersionReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_appconfig as interfaces_aws_appconfig
+            from aws_cdk.interfaces import aws_appconfig as interfaces_appconfig
             
-            hosted_configuration_version_reference = interfaces_aws_appconfig.HostedConfigurationVersionReference(
+            hosted_configuration_version_reference = interfaces_appconfig.HostedConfigurationVersionReference(
                 application_id="applicationId",
                 configuration_profile_id="configurationProfileId",
                 version_number="versionNumber"

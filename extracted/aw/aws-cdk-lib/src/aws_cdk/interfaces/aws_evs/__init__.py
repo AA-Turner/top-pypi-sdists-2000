@@ -60,9 +60,9 @@ class EnvironmentReference:
 
             # The code below shows an example of how to instantiate this type.
             # The values are placeholders you should change.
-            from aws_cdk.interfaces import aws_evs as interfaces_aws_evs
+            from aws_cdk.interfaces import aws_evs as interfaces_evs
             
-            environment_reference = interfaces_aws_evs.EnvironmentReference(
+            environment_reference = interfaces_evs.EnvironmentReference(
                 environment_arn="environmentArn",
                 environment_id="environmentId"
             )
