@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
+// Copyright ijl (2018-2025)
 
 use crate::opt::{APPEND_NEWLINE, INDENT_2, Opt};
 use crate::serialize::obtype::{ObType, pyobject_to_obtype};
@@ -28,7 +29,7 @@ pub(crate) fn serialize(
     match res {
         Ok(()) => Ok(buf.finish(opt_enabled!(opts, APPEND_NEWLINE))),
         Err(err) => {
-            ffi!(Py_DECREF(buf.bytes_ptr().as_ptr()));
+            buf.abort();
             Err(err.to_string())
         }
     }

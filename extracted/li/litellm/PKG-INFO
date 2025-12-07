@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: litellm
-Version: 1.80.7
+Version: 1.80.8
 Summary: Library to easily interface with LLM API providers
 License: MIT
 Author: BerriAI
@@ -40,8 +40,8 @@ Requires-Dist: httpx (>=0.23.0)
 Requires-Dist: importlib-metadata (>=6.8.0)
 Requires-Dist: jinja2 (>=3.1.2,<4.0.0)
 Requires-Dist: jsonschema (>=4.22.0,<5.0.0)
-Requires-Dist: litellm-enterprise (==0.1.22) ; extra == "proxy"
-Requires-Dist: litellm-proxy-extras (==0.4.9) ; extra == "proxy"
+Requires-Dist: litellm-enterprise (==0.1.23) ; extra == "proxy"
+Requires-Dist: litellm-proxy-extras (==0.4.11) ; extra == "proxy"
 Requires-Dist: mcp (>=1.21.2,<2.0.0) ; (python_version >= "3.10") and (extra == "proxy")
 Requires-Dist: mlflow (>3.1.4) ; (python_version >= "3.10") and (extra == "mlflow")
 Requires-Dist: numpydoc ; extra == "utils"
@@ -349,8 +349,6 @@ echo 'LITELLM_MASTER_KEY="sk-1234"' > .env
 # password generator to get a random hash for litellm salt key
 echo 'LITELLM_SALT_KEY="sk-1234"' >> .env
 
-source .env
-
 # Start
 docker compose up
 ```
@@ -423,7 +421,7 @@ curl 'http://0.0.0.0:4000/key/generate' \
 | [Fireworks AI (`fireworks_ai`)](https://docs.litellm.ai/docs/providers/fireworks_ai) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
 | [FriendliAI (`friendliai`)](https://docs.litellm.ai/docs/providers/friendliai) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
 | [Galadriel (`galadriel`)](https://docs.litellm.ai/docs/providers/galadriel) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
-| [GitHub Copilot (`github_copilot`)](https://docs.litellm.ai/docs/providers/github_copilot) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
+| [GitHub Copilot (`github_copilot`)](https://docs.litellm.ai/docs/providers/github_copilot) | ✅ | ✅ | ✅ | ✅ |  |  |  |  |  |  |
 | [GitHub Models (`github`)](https://docs.litellm.ai/docs/providers/github) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
 | [Google - PaLM](https://docs.litellm.ai/docs/providers/palm) | ✅ | ✅ | ✅ |  |  |  |  |  |  |  |
 | [Google - Vertex AI (`vertex_ai`)](https://docs.litellm.ai/docs/providers/vertex) | ✅ | ✅ | ✅ | ✅ | ✅ |  |  |  |  |  |

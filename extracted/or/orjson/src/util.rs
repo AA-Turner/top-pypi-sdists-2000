@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: (Apache-2.0 OR MIT)
+// Copyright ijl (2019-2025), Marc Mueller (2023)
 
 pub(crate) const INVALID_STR: &str = "str is not valid UTF-8: surrogates not allowed";
 
@@ -41,7 +42,7 @@ macro_rules! tp_flags {
         unsafe {
             (*$ob_type)
                 .tp_flags
-                .load(std::sync::atomic::Ordering::Relaxed)
+                .load(core::sync::atomic::Ordering::Relaxed)
         }
     };
 }
@@ -306,13 +307,13 @@ macro_rules! pydict_setitem {
 
 macro_rules! reserve_minimum {
     ($writer:expr) => {
-        $writer.reserve(64);
+        $writer.reserve(128);
     };
 }
 
 macro_rules! reserve_pretty {
     ($writer:expr, $val:expr) => {
-        $writer.reserve($val + 16);
+        $writer.reserve($val + 32);
     };
 }
 
