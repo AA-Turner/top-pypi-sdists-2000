@@ -51,6 +51,7 @@ dependencies = [
 
 # Identifies all of the supported plugins
 keywords = [
+    "46elks",
     "Africas Talking",
     "Alerts",
     "Apprise API",
@@ -58,6 +59,7 @@ keywords = [
     "AWS",
     "Bark",
     "BlueSky",
+    "Brevo",
     "BulkSMS",
     "BulkVS",
     "Burst SMS",
@@ -71,6 +73,7 @@ keywords = [
     "DBus",
     "DingTalk",
     "Discord",
+    "Dot",
     "Email",
     "Emby",
     "Enigma2",
@@ -109,6 +112,7 @@ keywords = [
     "Nextcloud",
     "NextcloudTalk",
     "Notica",
+    "NotificationAPI",
     "Notifiarr",
     "Notifico",
     "Ntfy",
@@ -133,6 +137,7 @@ keywords = [
     "PushSafer",
     "Pushy",
     "QQ Push",
+    "Quote/0",
     "Reddit",
     "Resend",
     "Revolt",

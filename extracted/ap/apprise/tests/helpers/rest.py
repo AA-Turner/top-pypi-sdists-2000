@@ -118,11 +118,17 @@ class AppriseURLTester:
     def run(self, url, meta, tmpdir, mock_request, mock_post, mock_get):
         """Run a specific test."""
 
+        if meta is False:
+            # Prepare a default structure to make life easy
+            meta = {
+                "instance": TypeError,
+            }
+
         # Our expected instance
-        instance = meta.get("instance", None)
+        instance = meta.get("instance")
 
         # Our expected server objects
-        _self = meta.get("self", None)
+        _self = meta.get("self")
 
         # Our expected privacy url
         # Don't set this if don't need to check it's value
@@ -250,14 +256,18 @@ class AppriseURLTester:
                 privacy_url
             ):
                 raise AssertionError(
-                    "Privacy URL:"
+                    f"URL: {url} Privacy URL:"
                     f" '{obj.url(privacy=True)[:len(privacy_url)]}' !="
                     f" expected '{privacy_url}'"
                 )
 
-            if url_matches:
-                # Assess that our URL matches a set regex
-                assert re.search(url_matches, obj.url())
+            # Assess that our URL matches a set regex
+            if url_matches and not re.search(url_matches, obj.url()):
+                raise AssertionError(
+                    f"URL: {url} generated an reloadable "
+                    f"url() of {obj.url()} that does not match "
+                    f"'{url_matches}'"
+                )
 
             # Instantiate the exact same object again using the URL
             # from the one that was already created properly
@@ -272,21 +282,24 @@ class AppriseURLTester:
             # Our new object should produce the same url identifier
             elif obj.url_identifier != obj_cmp.url_identifier:
                 raise AssertionError(
-                    f"URL Identifier: '{obj_cmp.url_identifier}' != expected"
+                    f"URL: {url} URL Identifier: "
+                    f"'{obj_cmp.url_identifier}' != expected"
                     f" '{obj.url_identifier}'"
                 )
 
             # Back our check up
             if obj.url_id() != obj_cmp.url_id():
                 raise AssertionError(
-                    f"URL ID(): '{obj_cmp.url_id()}' != expected"
+                    f"URL: {url} URL ID(): '{obj_cmp.url_id()}' != expected"
                     f" '{obj.url_id()}'"
                 )
 
             # Verify there is no change from the old and the new
             if len(obj) != len(obj_cmp):
                 raise AssertionError(
-                    f"Target miscount {len(obj)} != {len(obj_cmp)}"
+                    f"URL: {url} generated an reloadable "
+                    f"url() of {obj.url()} produced target miscount "
+                    f"{len(obj)} != {len(obj_cmp)}"
                 )
 
             # Tidy our object
@@ -449,7 +462,8 @@ class AppriseURLTester:
                     body=self.body, title=self.title, notify_type=notify_type
                 )
                 if _resp != notify_response:
-                    raise AssertionError()
+                    raise AssertionError(
+                        f"notify() call; notify_response={_resp} on {url}")
 
                 if notify_response:
                     # If we successfully got a response, there must have been

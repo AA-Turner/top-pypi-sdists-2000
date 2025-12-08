@@ -27,7 +27,6 @@ from pyzstd import (
     ZstdError,
     ZstdFile
 )
-from pyzstd import PYZSTD_CONFIG # type: ignore
 from pyzstd._seekable_zstdfile import _SeekTable
 
 @contextmanager
@@ -40,12 +39,11 @@ def _check_deprecated(testcase):
     testcase.assertIn(
         str(warn.message),
         [
-            "pyzstd.ZstdFile()'s read_size parameter is deprecated",
-            "pyzstd.ZstdFile()'s write_size parameter is deprecated",
+            "pyzstd.SeekableZstdFile()'s read_size parameter is deprecated",
+            "pyzstd.SeekableZstdFile()'s write_size parameter is deprecated",
         ]
     )
 
-BIT_BUILD = PYZSTD_CONFIG[0]
 DECOMPRESSED = b'1234567890'
 assert len(DECOMPRESSED) == 10
 COMPRESSED = compress(DECOMPRESSED)
@@ -53,7 +51,7 @@ DICT = ZstdDict(b'a'*1024, is_raw=True)
 
 class SeekTableCase(unittest.TestCase):
     def create_table(self, sizes_lst, read_mode=True):
-        table = _SeekTable(read_mode)
+        table = _SeekTable(read_mode=read_mode)
         for item in sizes_lst:
             table.append_entry(*item)
         return table
@@ -541,7 +539,6 @@ class SeekTableCase(unittest.TestCase):
                                     'cumulated compressed size'):
             t.load_seek_table(b, seek_to_0=True)
 
-    @unittest.skipIf(BIT_BUILD == 32, 'skip in 32-bit build')
     def test_write_table(self):
         class MockError(Exception):
             pass
@@ -710,7 +707,7 @@ class SeekableZstdFileCase(unittest.TestCase):
             os.remove(filename)
 
     def test_init_bad_mode(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(TypeError):
             SeekableZstdFile(BytesIO(COMPRESSED), (3, "x"))
         with self.assertRaises(ValueError):
             SeekableZstdFile(BytesIO(COMPRESSED), "")
@@ -745,19 +742,19 @@ class SeekableZstdFileCase(unittest.TestCase):
         with self.assertRaises(TypeError):
             SeekableZstdFile(BytesIO(), "w", level_or_option='asd')
         # CHECK_UNKNOWN and anything above CHECK_ID_MAX should be invalid.
-        with self.assertRaises(ZstdError):
+        with self.assertRaises(ValueError):
             SeekableZstdFile(BytesIO(), "w", level_or_option={999:9999})
-        with self.assertRaises(ZstdError):
+        with self.assertRaises(ValueError):
             SeekableZstdFile(BytesIO(), "w", level_or_option={CParameter.windowLog:99})
 
         with self.assertRaises(TypeError):
             SeekableZstdFile(BytesIO(self.two_frames), "r", level_or_option=33)
 
-        with self.assertRaises(ValueError):
+        with self.assertRaises(OverflowError):
             SeekableZstdFile(BytesIO(self.two_frames),
                              level_or_option={DParameter.windowLogMax:2**31})
 
-        with self.assertRaises(ZstdError):
+        with self.assertRaises(ValueError):
             SeekableZstdFile(BytesIO(self.two_frames),
                              level_or_option={444:333})
 
@@ -859,7 +856,7 @@ class SeekableZstdFileCase(unittest.TestCase):
             return get_file
 
         # test .close() method
-        with patch("io.open", mock_open(io.open)):
+        with patch("builtins.open", mock_open(io.open)):
             with self.assertRaisesRegex(OSError, 'xyz'):
                 SeekableZstdFile(filename, 'ab')
 
@@ -1410,7 +1407,7 @@ class SeekableZstdFileCase(unittest.TestCase):
             return get_file
 
         # append 1
-        with patch("io.open", mock_open(io.open)):
+        with patch("builtins.open", mock_open(io.open)):
             with self.assertWarnsRegex(RuntimeWarning,
                                        (r"at the end of the file "
                                         r"can't be overwritten"
@@ -1422,7 +1419,7 @@ class SeekableZstdFileCase(unittest.TestCase):
             f.close()
 
         # append 2
-        with patch("io.open", mock_open(io.open)):
+        with patch("builtins.open", mock_open(io.open)):
             with self.assertWarnsRegex(RuntimeWarning,
                                        (r"at the end of the file "
                                         r"can't be overwritten"
@@ -1468,7 +1465,7 @@ class SeekableZstdFileCase(unittest.TestCase):
             return get_file
 
         # append
-        with patch("io.open", mock_open(io.open)):
+        with patch("builtins.open", mock_open(io.open)):
             with self.assertRaisesRegex(
                     TypeError,
                     (r"In SeekableZstdFile's append mode \('a', 'ab'\),"

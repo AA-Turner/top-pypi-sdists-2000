@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: black
-Version: 25.11.0
+Version: 25.12.0
 Summary: The uncompromising code formatter.
 Project-URL: Documentation, https://black.readthedocs.io/
 Project-URL: Changelog, https://github.com/psf/black/blob/main/CHANGES.md
@@ -16,7 +16,6 @@ Classifier: Intended Audience :: Developers
 Classifier: Operating System :: OS Independent
 Classifier: Programming Language :: Python
 Classifier: Programming Language :: Python :: 3 :: Only
-Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Classifier: Programming Language :: Python :: 3.11
 Classifier: Programming Language :: Python :: 3.12
@@ -24,7 +23,7 @@ Classifier: Programming Language :: Python :: 3.13
 Classifier: Programming Language :: Python :: 3.14
 Classifier: Topic :: Software Development :: Libraries :: Python Modules
 Classifier: Topic :: Software Development :: Quality Assurance
-Requires-Python: >=3.9
+Requires-Python: >=3.10
 Requires-Dist: click>=8.0.0
 Requires-Dist: mypy-extensions>=0.4.3
 Requires-Dist: packaging>=22.0
@@ -85,8 +84,9 @@ Try it out now using the [Black Playground](https://black.vercel.app). Watch the
 
 ### Installation
 
-_Black_ can be installed by running `pip install black`. It requires Python 3.9+ to run.
-If you want to format Jupyter Notebooks, install with `pip install "black[jupyter]"`.
+_Black_ can be installed by running `pip install black`. It requires Python 3.10+ to
+run. If you want to format Jupyter Notebooks, install with
+`pip install "black[jupyter]"`.
 
 ### Usage
 
@@ -272,6 +272,38 @@ Flying Circus is expected. We are not savages.
 
 And if you _really_ need to slap somebody, do it with a fish while dancing.
 # Change Log
+
+## 25.12.0
+
+### Highlights
+
+- Black no longer supports running with Python 3.9 (#4842)
+
+### Stable style
+
+- Fix bug where comments preceding `# fmt: off`/`# fmt: on` blocks were incorrectly
+  removed, particularly affecting Jupytext's `# %% [markdown]` comments (#4845)
+- Fix crash when multiple `# fmt: skip` comments are used in a multi-part if-clause, on
+  string literals, or on dictionary entries with long lines (#4872)
+- Fix possible crash when `fmt: ` directives aren't on the top level (#4856)
+
+### Preview style
+
+- Fix `fmt: skip` skipping the line after instead of the line it's on (#4855)
+- Remove unnecessary parentheses from the left-hand side of assignments while preserving
+  magic trailing commas and intentional multiline formatting (#4865)
+- Fix `fix_fmt_skip_in_one_liners` crashing on `with` statements (#4853)
+- Fix `fix_fmt_skip_in_one_liners` crashing on annotated parameters (#4854)
+- Fix new lines being added after imports with `# fmt: skip` on them (#4894)
+
+### Packaging
+
+- Releases now include arm64 Windows binaries and wheels (#4814)
+
+### Integrations
+
+- Add `output-file` input to GitHub Action `psf/black` to write formatter output to a
+  file for artifact capture and log cleanliness (#4824)
 
 ## 25.11.0
 
