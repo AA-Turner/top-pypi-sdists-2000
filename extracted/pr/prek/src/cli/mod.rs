@@ -14,7 +14,8 @@ use prek_consts::env_vars::EnvVars;
 use crate::config::{HookType, Language, Stage};
 
 mod auto_update;
-mod clean;
+mod cache_clean;
+mod cache_size;
 mod completion;
 mod hook_impl;
 mod install;
@@ -28,7 +29,8 @@ mod try_repo;
 mod validate;
 
 pub(crate) use auto_update::auto_update;
-pub(crate) use clean::clean;
+pub(crate) use cache_clean::cache_clean;
+pub(crate) use cache_size::cache_size;
 use completion::selector_completer;
 pub(crate) use hook_impl::hook_impl;
 pub(crate) use install::{init_template_dir, install, install_hooks, uninstall};
@@ -40,7 +42,7 @@ pub(crate) use self_update::self_update;
 pub(crate) use try_repo::try_repo;
 pub(crate) use validate::{validate_configs, validate_manifest};
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq, Eq)]
 pub(crate) enum ExitStatus {
     /// The command succeeded.
     Success,
@@ -80,6 +82,16 @@ pub enum ColorChoice {
 
     /// Disables colored output.
     Never,
+}
+
+impl From<ColorChoice> for anstream::ColorChoice {
+    fn from(value: ColorChoice) -> Self {
+        match value {
+            ColorChoice::Auto => Self::Auto,
+            ColorChoice::Always => Self::Always,
+            ColorChoice::Never => Self::Never,
+        }
+    }
 }
 
 const STYLES: Styles = Styles::styled()
@@ -433,8 +445,13 @@ pub(crate) struct RunArgs {
     pub(crate) last_commit: bool,
 
     /// The stage during which the hook is fired.
-    #[arg(long, default_value_t = Stage::PreCommit, value_enum)]
-    pub(crate) hook_stage: Stage,
+    ///
+    /// When specified, only hooks configured for that stage (for example `manual`,
+    /// `pre-commit`, or `pre-commit`) will run.
+    /// Defaults to `pre-commit` if not specified.
+    /// For hooks specified directly in the command line, fallback to `manual` stage if no hooks found for `pre-commit` stage.
+    #[arg(long, value_enum)]
+    pub(crate) hook_stage: Option<Stage>,
 
     /// When hooks fail, run `git diff` directly afterward.
     #[arg(long)]
@@ -623,6 +640,15 @@ pub(crate) enum CacheCommand {
     GC,
     /// Remove all prek cached data.
     Clean,
+    /// Show the size of the prek cache.
+    Size(SizeArgs),
+}
+
+#[derive(Args, Debug)]
+pub struct SizeArgs {
+    /// Display the cache size in human-readable format (e.g., `1.2 GiB` instead of raw bytes).
+    #[arg(long = "human", short = 'H', alias = "human-readable")]
+    pub(crate) human: bool,
 }
 
 #[derive(Debug, Args)]

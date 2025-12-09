@@ -6,6 +6,7 @@ import os
 
 import structlog
 from starlette.applications import Starlette
+from starlette.middleware import Middleware
 from starlette.requests import Request
 from starlette.responses import HTMLResponse, JSONResponse, Response
 from starlette.routing import BaseRoute, Route
@@ -24,6 +25,7 @@ from langgraph_api.auth.middleware import auth_middleware
 from langgraph_api.config import (
     FF_PYSPY_PROFILING_ENABLED,
     HTTP_CONFIG,
+    LANGGRAPH_ENCRYPTION,
     MIGRATIONS_PATH,
     MOUNT_PREFIX,
 )
@@ -70,6 +72,13 @@ unshadowable_meta_routes: list[BaseRoute] = [
 ]
 
 middleware_for_protected_routes = [auth_middleware]
+
+# Add encryption context middleware if encryption is configured
+if LANGGRAPH_ENCRYPTION:
+    from langgraph_api.api.encryption_middleware import EncryptionContextMiddleware
+
+    middleware_for_protected_routes.append(Middleware(EncryptionContextMiddleware))
+
 protected_routes: list[BaseRoute] = []
 
 if HTTP_CONFIG:

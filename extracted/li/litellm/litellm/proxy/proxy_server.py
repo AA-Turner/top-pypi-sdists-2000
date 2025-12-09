@@ -568,7 +568,7 @@ ui_message = (
 )
 ui_message += "\n\n💸 [```LiteLLM Model Cost Map```](https://models.litellm.ai/)."
 
-ui_message += f"\n\n🔎 [```LiteLLM Model Hub```]({model_hub_link}). See available models on the proxy. [**Docs**](https://docs.litellm.ai/docs/proxy/model_hub)"
+ui_message += f"\n\n🔎 [```LiteLLM Model Hub```]({model_hub_link}). See available models on the proxy. [**Docs**](https://docs.litellm.ai/docs/proxy/ai_hub)"
 
 custom_swagger_message = "[**Customize Swagger Docs**](https://docs.litellm.ai/docs/proxy/enterprise#swagger-docs---custom-routes--branding)"
 
@@ -1121,6 +1121,8 @@ litellm.logging_callback_manager.add_litellm_callback(model_max_budget_limiter)
 redis_usage_cache: Optional[RedisCache] = (
     None  # redis cache used for tracking spend, tpm/rpm limits
 )
+polling_via_cache_enabled: Union[Literal["all"], List[str], bool] = False
+polling_cache_ttl: int = 3600  # Default 1 hour TTL for polling cache
 user_custom_auth = None
 user_custom_key_generate = None
 user_custom_sso = None
@@ -2351,6 +2353,15 @@ class ProxyConfig:
                     # this is set in the cache branch
                     # see usage here: https://docs.litellm.ai/docs/proxy/caching
                     pass
+                elif key == "responses":
+                    # Initialize global polling via cache settings
+                    global polling_via_cache_enabled, polling_cache_ttl
+                    background_mode = value.get("background_mode", {})
+                    polling_via_cache_enabled = background_mode.get("polling_via_cache", False)
+                    polling_cache_ttl = background_mode.get("ttl", 3600)
+                    verbose_proxy_logger.debug(
+                        f"{blue_color_code} Initialized polling via cache: enabled={polling_via_cache_enabled}, ttl={polling_cache_ttl}{reset_color_code}"
+                    )
                 elif key == "default_team_settings":
                     for idx, team_setting in enumerate(
                         value
@@ -8609,7 +8620,19 @@ def get_image():
 
     # get current_dir
     current_dir = os.path.dirname(os.path.abspath(__file__))
-    default_logo = os.path.join(current_dir, "logo.jpg")
+    default_site_logo = os.path.join(current_dir, "logo.jpg")
+
+    is_non_root = os.getenv("LITELLM_NON_ROOT", "").lower() == "true"
+    assets_dir = "/tmp/litellm_assets" if is_non_root else current_dir
+
+    if is_non_root:
+        os.makedirs(assets_dir, exist_ok=True)
+
+    default_logo = (
+        os.path.join(assets_dir, "logo.jpg") if is_non_root else default_site_logo
+    )
+    if is_non_root and not os.path.exists(default_logo):
+        default_logo = default_site_logo
 
     logo_path = os.getenv("UI_LOGO_PATH", default_logo)
     verbose_proxy_logger.debug("Reading logo from path: %s", logo_path)
@@ -8621,7 +8644,8 @@ def get_image():
         response = client.get(logo_path)
         if response.status_code == 200:
             # Save the image to a local file
-            cache_path = os.path.join(current_dir, "cached_logo.jpg")
+            cache_dir = assets_dir if is_non_root else current_dir
+            cache_path = os.path.join(cache_dir, "cached_logo.jpg")
             with open(cache_path, "wb") as f:
                 f.write(response.content)
 
@@ -9478,7 +9502,7 @@ async def get_config():  # noqa: PLR0915
         _litellm_settings = config_data.get("litellm_settings", {})
         _general_settings = config_data.get("general_settings", {})
         environment_variables = config_data.get("environment_variables", {})
-
+        
         _success_callbacks = _litellm_settings.get("success_callback", [])
         _failure_callbacks = _litellm_settings.get("failure_callback", [])
         _success_and_failure_callbacks = _litellm_settings.get("callbacks", [])
@@ -9630,31 +9654,6 @@ async def config_yaml_endpoint(config_info: ConfigYAML):
     Note: This is a mock endpoint primarily meant for demonstration purposes, and does not actually provide or change any configurations.
     """
     return {"hello": "world"}
-
-
-@router.get(
-    "/get/litellm_model_cost_map",
-    include_in_schema=False,
-    dependencies=[Depends(user_api_key_auth)],
-)
-async def get_litellm_model_cost_map(
-    user_api_key_dict: UserAPIKeyAuth = Depends(user_api_key_auth),
-):
-    # Check if user is admin
-    if user_api_key_dict.user_role != LitellmUserRoles.PROXY_ADMIN:
-        raise HTTPException(
-            status_code=403,
-            detail=f"Access denied. Admin role required. Current role: {user_api_key_dict.user_role}",
-        )
-
-    try:
-        _model_cost_map = litellm.model_cost
-        return _model_cost_map
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Internal Server Error ({str(e)})",
-        )
 
 
 @router.post(

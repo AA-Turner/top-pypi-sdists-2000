@@ -1,3 +1,4 @@
+import io
 import logging
 import ssl
 import urllib.parse
@@ -136,19 +137,29 @@ def test_stream(tmpdir, httpbin):
         assert cassette.play_count == 1
 
 
+POST_DATA = {"key1": "value1", "key2": "value2"}
+
+
 @pytest.mark.online
-@pytest.mark.parametrize("body", ["data", "json"])
-def test_post(tmpdir, body, caplog, httpbin):
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"data": POST_DATA},
+        {"json": POST_DATA},
+        {"data": POST_DATA, "json": None},
+        {"data": None, "json": POST_DATA},
+    ],
+)
+def test_post(tmpdir, kwargs, caplog, httpbin):
     caplog.set_level(logging.INFO)
-    data = {"key1": "value1", "key2": "value2"}
-    url = httpbin.url
+    url = httpbin.url + "/post"
     with vcr.use_cassette(str(tmpdir.join("post.yaml"))):
-        _, response_json = post(url, **{body: data})
+        _, response_json = post(url, **kwargs)
 
     with vcr.use_cassette(str(tmpdir.join("post.yaml"))) as cassette:
         request = cassette.requests[0]
-        assert request.body == data
-        _, cassette_response_json = post(url, **{body: data})
+        assert request.body == POST_DATA
+        _, cassette_response_json = post(url, **kwargs)
         assert cassette_response_json == response_json
         assert cassette.play_count == 1
 
@@ -160,6 +171,17 @@ def test_post(tmpdir, body, caplog, httpbin):
         ),
         None,
     ), "Log message not found."
+
+
+@pytest.mark.online
+def test_post_data_plus_json_error(tmpdir, httpbin):
+    url = httpbin.url + "/post"
+    with (
+        vcr.use_cassette(str(tmpdir.join("post.yaml"))) as cassette,
+        pytest.raises(ValueError, match="data and json parameters can not be used at the same time"),
+    ):
+        post(url, data=POST_DATA, json=POST_DATA)
+    assert cassette.requests == []
 
 
 @pytest.mark.online
@@ -462,3 +484,19 @@ def test_filter_query_parameters(tmpdir, httpbin):
         cassette_content = f.read()
         assert "password" not in cassette_content
         assert "secret" not in cassette_content
+
+
+@pytest.mark.online
+def test_use_cassette_with_io(tmpdir, caplog, httpbin):
+    url = httpbin.url + "/post"
+
+    # test without cassettes
+    data = io.BytesIO(b"hello")
+    _, response_json = request("POST", url, output="json", data=data)
+    assert response_json["data"] == "hello"
+
+    # test with cassettes
+    data = io.BytesIO(b"hello")
+    with vcr.use_cassette(str(tmpdir.join("post.yaml"))):
+        _, response_json = request("POST", url, output="json", data=data)
+        assert response_json["data"] == "hello"

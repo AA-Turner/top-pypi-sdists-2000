@@ -128,7 +128,6 @@ strict = true
 # "virtualenv_test": because of an expensive session-scoped fixture
 # "compare_test": Because of shared-file manipulations (~/tests/actual/testing)
 # "get_zip_bytes_test": no idea why this one fails if run on separate workers
-# "needs_pth": tests that create .pth files in shared locations
 
 # How come these warnings are suppressed successfully here, but not in conftest.py??
 filterwarnings = [

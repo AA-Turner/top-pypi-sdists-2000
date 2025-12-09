@@ -10,6 +10,7 @@ import structlog
 from starlette.exceptions import HTTPException
 from typing_extensions import TypedDict
 
+from langgraph_api.encryption.context import get_encryption_context
 from langgraph_api.graph import GRAPHS, get_assistant_id
 from langgraph_api.schema import (
     All,
@@ -246,6 +247,10 @@ async def create_valid_run(
         configurable["__request_start_time_ms__"] = request_start_time
     after_seconds = cast("int", payload.get("after_seconds", 0))
     configurable["__after_seconds__"] = after_seconds
+    # Inject encryption context from middleware for worker to use during blob encryption
+    encryption_context = get_encryption_context()
+    if encryption_context:
+        config["__encryption_context__"] = encryption_context
     put_time_start = time.time()
     if_not_exists = payload.get("if_not_exists", "reject")
 

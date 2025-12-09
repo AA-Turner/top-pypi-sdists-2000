@@ -6,6 +6,7 @@ __all__ = [
     "CheckpointerConfig",
     "ConfigurableHeaders",
     "CorsConfig",
+    "EncryptionConfig",
     "HttpConfig",
     "IndexConfig",
     "MiddlewareOrders",
@@ -231,3 +232,14 @@ class AuthConfig(TypedDict, total=False):
         }
     """
     cache: CacheConfig | None
+
+
+class EncryptionConfig(TypedDict, total=False):
+    path: str
+    """Path to the encryption module in a Python file.
+
+    Example: "./encryption.py:my_encryption"
+
+    The module should export an Encrypt instance with registered
+    encryption and decryption handlers for blobs and metadata.
+    """

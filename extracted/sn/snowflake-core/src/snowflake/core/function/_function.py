@@ -2,6 +2,7 @@
 
 from concurrent.futures import Future
 from datetime import time
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any, Literal, Optional, Union, overload
 
 from pydantic import StrictStr
@@ -24,6 +25,8 @@ def _cast_result(result: Any, returns: StrictStr) -> Any:
         return int(result)
     if returns == "REAL":
         return float(result)
+    if returns == "DECFLOAT":
+        return Decimal(result)
     if returns == "TEXT":
         return str(result)
     if returns == "TIME":

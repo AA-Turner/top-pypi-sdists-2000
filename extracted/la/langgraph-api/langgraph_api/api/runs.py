@@ -1,6 +1,6 @@
 import asyncio
 from collections.abc import AsyncIterator, Awaitable, Callable
-from typing import Literal, cast
+from typing import Any, Literal, cast
 from uuid import UUID, uuid4
 
 import orjson
@@ -9,10 +9,12 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response, StreamingResponse
 
 from langgraph_api import config
+from langgraph_api.api.encryption_middleware import decrypt_response, encrypt_request
 from langgraph_api.asyncio import ValueEvent
 from langgraph_api.models.run import create_valid_run
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
 from langgraph_api.schema import CRON_FIELDS, RUN_FIELDS
+from langgraph_api.serde import json_loads
 from langgraph_api.sse import EventSourceResponse
 from langgraph_api.utils import (
     fetchone,
@@ -146,6 +148,9 @@ async def create_run(request: ApiRequest):
     """Create a run."""
     thread_id = request.path_params["thread_id"]
     payload = await request.json(RunCreateStateful)
+
+    payload = await encrypt_request(payload, "run", ["metadata"])
+
     async with connect() as conn:
         run = await create_valid_run(
             conn,
@@ -164,6 +169,7 @@ async def create_run(request: ApiRequest):
 async def create_stateless_run(request: ApiRequest):
     """Create a run."""
     payload = await request.json(RunCreateStateless)
+
     async with connect() as conn:
         run = await create_valid_run(
             conn,
@@ -420,7 +426,12 @@ async def list_runs(
             ),
         )
     await fetchone(thread)
-    return ApiResponse([run async for run in runs])
+
+    # Collect and decrypt runs
+    runs_list = [run async for run in runs]
+    runs_list = await decrypt_response(runs_list, "run", ["metadata", "kwargs"])
+
+    return ApiResponse(runs_list)
 
 
 @retry_db
@@ -441,7 +452,12 @@ async def get_run(request: ApiRequest):
             ),
         )
     await fetchone(thread)
-    return ApiResponse(await fetchone(run))
+    run_dict = await fetchone(run)
+
+    # Decrypt run metadata and kwargs
+    run_dict = await decrypt_response(run_dict, "run", ["metadata", "kwargs"])
+
+    return ApiResponse(run_dict)
 
 
 @retry_db
@@ -622,6 +638,24 @@ async def create_cron(request: ApiRequest):
     """Create a cron with new thread."""
     payload = await request.json(CronCreate)
 
+    original_metadata = payload.get("metadata") or {}
+    original_context = payload.get("context") or {}
+
+    # Encrypt for cron.metadata column with model_type="cron"
+    encrypted_cron_metadata = await encrypt_request(
+        {"metadata": original_metadata.copy()}, "cron", ["metadata"]
+    )
+    # Encrypt payload.metadata and payload.context as "run" since they're run fields
+    encrypted_payload = await encrypt_request(
+        {
+            **payload,
+            "metadata": original_metadata.copy(),
+            "context": original_context.copy(),
+        },
+        "run",
+        ["metadata", "context"],
+    )
+
     async with connect() as conn:
         cron = await Crons.put(
             conn,
@@ -629,9 +663,25 @@ async def create_cron(request: ApiRequest):
             on_run_completed=payload.get("on_run_completed", "delete"),
             end_time=payload.get("end_time"),
             schedule=payload.get("schedule"),
-            payload=payload,
+            payload=encrypted_payload,
+            metadata=encrypted_cron_metadata.get("metadata"),
         )
-    return ApiResponse(await fetchone(cron))
+    cron_dict = await fetchone(cron)
+
+    # Decrypt cron.metadata as "cron", payload.metadata and payload.context as "run"
+    cron_result = await decrypt_response(cron_dict, "cron", ["metadata"])
+    cron_dict = cast("dict[str, Any]", cron_result)
+
+    if cron_dict.get("payload"):
+        cron_payload = cron_dict["payload"]
+        if not isinstance(cron_payload, dict):
+            cron_payload = json_loads(cron_payload)
+        cron_payload = await decrypt_response(
+            cron_payload, "run", ["metadata", "context"]
+        )
+        cron_dict["payload"] = cast("dict[str, Any]", cron_payload)
+
+    return ApiResponse(cron_dict)
 
 
 @retry_db
@@ -641,6 +691,24 @@ async def create_thread_cron(request: ApiRequest):
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     payload = await request.json(ThreadCronCreate)
 
+    original_metadata = payload.get("metadata") or {}
+    original_context = payload.get("context") or {}
+
+    # Encrypt for cron.metadata column with model_type="cron"
+    encrypted_cron_metadata = await encrypt_request(
+        {"metadata": original_metadata.copy()}, "cron", ["metadata"]
+    )
+    # Encrypt payload.metadata and payload.context as "run" since they're run fields
+    encrypted_payload = await encrypt_request(
+        {
+            **payload,
+            "metadata": original_metadata.copy(),
+            "context": original_context.copy(),
+        },
+        "run",
+        ["metadata", "context"],
+    )
+
     async with connect() as conn:
         cron = await Crons.put(
             conn,
@@ -648,9 +716,25 @@ async def create_thread_cron(request: ApiRequest):
             on_run_completed=None,
             end_time=payload.get("end_time"),
             schedule=payload.get("schedule"),
-            payload=payload,
+            payload=encrypted_payload,
+            metadata=encrypted_cron_metadata.get("metadata"),
         )
-    return ApiResponse(await fetchone(cron))
+    cron_dict = await fetchone(cron)
+
+    # Decrypt cron.metadata as "cron", payload.metadata and payload.context as "run"
+    cron_result = await decrypt_response(cron_dict, "cron", ["metadata"])
+    cron_dict = cast("dict[str, Any]", cron_result)
+
+    if cron_dict.get("payload"):
+        cron_payload = cron_dict["payload"]
+        if not isinstance(cron_payload, dict):
+            cron_payload = json_loads(cron_payload)
+        cron_payload = await decrypt_response(
+            cron_payload, "run", ["metadata", "context"]
+        )
+        cron_dict["payload"] = cast("dict[str, Any]", cron_payload)
+
+    return ApiResponse(cron_dict)
 
 
 @retry_db
@@ -693,6 +777,19 @@ async def search_crons(request: ApiRequest):
     crons, response_headers = await get_pagination_headers(
         crons_iter, next_offset, offset
     )
+
+    # Decrypt cron.metadata as "cron", payload.metadata and payload.context as "run"
+    crons = await decrypt_response(crons, "cron", ["metadata"])
+
+    for cron in crons:
+        if cron.get("payload"):
+            cron_payload = cron["payload"]
+            if not isinstance(cron_payload, dict):
+                cron_payload = json_loads(cron_payload)
+            cron["payload"] = await decrypt_response(
+                cron_payload, "run", ["metadata", "context"]
+            )
+
     return ApiResponse(crons, headers=response_headers)
 
 

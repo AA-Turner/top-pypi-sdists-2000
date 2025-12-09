@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: langchain-google-community
-Version: 3.0.1
+Version: 3.0.2
 Summary: An integration package connecting miscellaneous Google's products and LangChain
 Project-URL: Homepage, https://docs.langchain.com/oss/python/integrations/providers/google
 Project-URL: Documentation, https://reference.langchain.com/python/integrations/langchain_google_community/
@@ -11,7 +11,7 @@ Project-URL: Slack, https://www.langchain.com/join-community
 Project-URL: Reddit, https://www.reddit.com/r/LangChain/
 License: MIT
 License-File: LICENSE
-Requires-Python: <3.14.0,>=3.10.0
+Requires-Python: <4.0.0,>=3.10.0
 Requires-Dist: google-api-core<3.0.0,>=2.25.0
 Requires-Dist: google-api-python-client<3.0.0,>=2.161.0
 Requires-Dist: google-cloud-core<3.0.0,>=2.4.3

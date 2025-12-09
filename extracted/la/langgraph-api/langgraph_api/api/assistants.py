@@ -14,6 +14,10 @@ from starlette.responses import Response
 from starlette.routing import BaseRoute
 
 from langgraph_api import store as api_store
+from langgraph_api.api.encryption_middleware import (
+    decrypt_response,
+    encrypt_request,
+)
 from langgraph_api.feature_flags import FF_USE_CORE_API, USE_RUNTIME_CONTEXT_API
 from langgraph_api.graph import get_assistant_id, get_graph
 from langgraph_api.grpc.ops import Assistants as GrpcAssistants
@@ -176,20 +180,34 @@ async def create_assistant(request: ApiRequest) -> ApiResponse:
             ConfigValidator.validate(config)
         except jsonschema_rs.ValidationError as e:
             raise HTTPException(status_code=422, detail=str(e)) from e
+
+    encrypted_payload = await encrypt_request(
+        payload,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+
     async with connect() as conn:
         assistant = await CrudAssistants.put(
             conn,
             assistant_id or str(uuid4()),
-            config=payload.get("config") or {},
-            context=payload.get("context") or {},
+            config=encrypted_payload.get("config") or {},
+            context=encrypted_payload.get("context"),  # None if not provided
             graph_id=payload["graph_id"],
-            metadata=payload.get("metadata") or {},
+            metadata=encrypted_payload.get("metadata") or {},
             if_exists=payload.get("if_exists") or "raise",
             name=payload.get("name") or "Untitled",
             description=payload.get("description"),
         )
 
-    return ApiResponse(await fetchone(assistant, not_found_code=409))
+    # Decrypt metadata, config, and context in response
+    assistant_data = await fetchone(assistant, not_found_code=409)
+    assistant_data = await decrypt_response(
+        assistant_data,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+    return ApiResponse(assistant_data)
 
 
 @retry_db
@@ -221,7 +239,15 @@ async def search_assistants(
     assistants, response_headers = await get_pagination_headers(
         assistants_iter, next_offset, offset
     )
-    return ApiResponse(assistants, headers=response_headers)
+
+    # Decrypt metadata, config, and context in all returned assistants
+    decrypted_assistants = await decrypt_response(
+        assistants,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+
+    return ApiResponse(decrypted_assistants, headers=response_headers)
 
 
 @retry_db
@@ -248,7 +274,15 @@ async def get_assistant(
     validate_uuid(assistant_id, "Invalid assistant ID: must be a UUID")
     async with connect() as conn:
         assistant = await CrudAssistants.get(conn, assistant_id)
-    return ApiResponse(await fetchone(assistant))
+
+    # Decrypt metadata, config, and context in response
+    assistant_data = await fetchone(assistant)
+    assistant_data = await decrypt_response(
+        assistant_data,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+    return ApiResponse(assistant_data)
 
 
 @retry_db
@@ -413,18 +447,33 @@ async def patch_assistant(
             ConfigValidator.validate(config)
         except jsonschema_rs.ValidationError as e:
             raise HTTPException(status_code=422, detail=str(e)) from e
+
+    encrypted_fields = await encrypt_request(
+        payload,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+
     async with connect() as conn:
         assistant = await CrudAssistants.patch(
             conn,
             assistant_id,
-            config=payload.get("config"),
-            context=payload.get("context"),
+            config=encrypted_fields.get("config"),
+            context=encrypted_fields.get("context"),
             graph_id=payload.get("graph_id"),
-            metadata=payload.get("metadata"),
+            metadata=encrypted_fields.get("metadata"),
             name=payload.get("name"),
             description=payload.get("description"),
         )
-    return ApiResponse(await fetchone(assistant))
+
+    # Decrypt metadata, config, and context in response
+    assistant_data = await fetchone(assistant)
+    assistant_data = await decrypt_response(
+        assistant_data,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+    return ApiResponse(assistant_data)
 
 
 @retry_db
@@ -457,7 +506,15 @@ async def get_assistant_versions(request: ApiRequest) -> ApiResponse:
         raise HTTPException(
             status_code=404, detail=f"Assistant {assistant_id} not found"
         )
-    return ApiResponse(assistants)
+
+    # Decrypt metadata, config, and context in all assistant versions
+    decrypted_assistants = await decrypt_response(
+        assistants,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+
+    return ApiResponse(decrypted_assistants)
 
 
 @retry_db
@@ -470,7 +527,15 @@ async def set_latest_assistant_version(request: ApiRequest) -> ApiResponse:
         assistant = await CrudAssistants.set_latest(
             conn, assistant_id, payload.get("version")
         )
-    return ApiResponse(await fetchone(assistant, not_found_code=404))
+
+    # Decrypt metadata, config, and context in response
+    assistant_data = await fetchone(assistant, not_found_code=404)
+    assistant_data = await decrypt_response(
+        assistant_data,
+        "assistant",
+        ["metadata", "config", "context"],
+    )
+    return ApiResponse(assistant_data)
 
 
 assistants_routes: list[BaseRoute] = [

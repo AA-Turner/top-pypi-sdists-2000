@@ -27,6 +27,7 @@ from datadog_api_client.v2.api.dora_metrics_api import DORAMetricsApi
 from datadog_api_client.v2.api.dashboard_lists_api import DashboardListsApi
 from datadog_api_client.v2.api.data_deletion_api import DataDeletionApi
 from datadog_api_client.v2.api.datasets_api import DatasetsApi
+from datadog_api_client.v2.api.deployment_gates_api import DeploymentGatesApi
 from datadog_api_client.v2.api.domain_allowlist_api import DomainAllowlistApi
 from datadog_api_client.v2.api.downtimes_api import DowntimesApi
 from datadog_api_client.v2.api.error_tracking_api import ErrorTrackingApi
@@ -43,6 +44,7 @@ from datadog_api_client.v2.api.logs_api import LogsApi
 from datadog_api_client.v2.api.logs_archives_api import LogsArchivesApi
 from datadog_api_client.v2.api.logs_custom_destinations_api import LogsCustomDestinationsApi
 from datadog_api_client.v2.api.logs_metrics_api import LogsMetricsApi
+from datadog_api_client.v2.api.logs_restriction_queries_api import LogsRestrictionQueriesApi
 from datadog_api_client.v2.api.metrics_api import MetricsApi
 from datadog_api_client.v2.api.microsoft_teams_integration_api import MicrosoftTeamsIntegrationApi
 from datadog_api_client.v2.api.monitors_api import MonitorsApi
@@ -75,7 +77,6 @@ from datadog_api_client.v2.api.spans_api import SpansApi
 from datadog_api_client.v2.api.spans_metrics_api import SpansMetricsApi
 from datadog_api_client.v2.api.static_analysis_api import StaticAnalysisApi
 from datadog_api_client.v2.api.synthetics_api import SyntheticsApi
-from datadog_api_client.v2.api.team_connections_api import TeamConnectionsApi
 from datadog_api_client.v2.api.teams_api import TeamsApi
 from datadog_api_client.v2.api.test_optimization_api import TestOptimizationApi
 from datadog_api_client.v2.api.usage_metering_api import UsageMeteringApi
@@ -113,6 +114,7 @@ __all__ = [
     "DashboardListsApi",
     "DataDeletionApi",
     "DatasetsApi",
+    "DeploymentGatesApi",
     "DomainAllowlistApi",
     "DowntimesApi",
     "ErrorTrackingApi",
@@ -129,6 +131,7 @@ __all__ = [
     "LogsArchivesApi",
     "LogsCustomDestinationsApi",
     "LogsMetricsApi",
+    "LogsRestrictionQueriesApi",
     "MetricsApi",
     "MicrosoftTeamsIntegrationApi",
     "MonitorsApi",
@@ -161,7 +164,6 @@ __all__ = [
     "SpansMetricsApi",
     "StaticAnalysisApi",
     "SyntheticsApi",
-    "TeamConnectionsApi",
     "TeamsApi",
     "TestOptimizationApi",
     "UsageMeteringApi",

@@ -2560,6 +2560,8 @@ class ClickhouseConfig(google.protobuf.message.Message):
 
         Default value: **5368709120** (5 GiB).
 
+        Change of the setting is applied with restart.
+
         For details, see [ClickHouse documentation](https://clickhouse.com/docs/operations/server-configuration-parameters/settings#vector_similarity_index_cache_size).
         """
 

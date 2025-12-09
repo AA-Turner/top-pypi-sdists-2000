@@ -19,7 +19,7 @@ import re  # noqa: F401
 from datetime import datetime
 from typing import Any, ClassVar, Dict, List, Optional, Union
 
-from pydantic import BaseModel, StrictInt, StrictStr, field_validator
+from pydantic import BaseModel, StrictInt, StrictStr
 
 import snowflake.core.function._generated.models
 
@@ -79,28 +79,6 @@ class Function(BaseModel):
         "language",
         "body",
     ]
-
-    @field_validator("returns")
-    def returns_validate_enum(cls, v):
-        if v is None:
-            return v
-        if v not in (
-            "FIXED",
-            "INT",
-            "REAL",
-            "NUMBER",
-            "TEXT",
-            "BOOLEAN",
-            "DATE",
-            "TIME",
-            "TIMESTAMP_TZ",
-            "TIMESTAMP_LTZ",
-            "TIMESTAMP_NTZ",
-        ):
-            raise ValueError(
-                "must validate the enum values ('FIXED','INT','REAL','NUMBER','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP_TZ','TIMESTAMP_LTZ','TIMESTAMP_NTZ')"
-            )
-        return v
 
     class Config:
         populate_by_name = True

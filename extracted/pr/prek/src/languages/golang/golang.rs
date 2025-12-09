@@ -30,7 +30,7 @@ impl LanguageImpl for Golang {
         let progress = reporter.on_install_start(&hook);
 
         // 1. Install Go
-        let go_dir = store.tools_path(crate::store::ToolBucket::Go);
+        let go_dir = store.tools_path(ToolBucket::Go);
         let installer = GoInstaller::new(go_dir);
 
         let (version, allows_download) = match &hook.language_request {
@@ -79,6 +79,7 @@ impl LanguageImpl for Golang {
                     .env(EnvVars::GOTOOLCHAIN, "local")
                     .env(EnvVars::GOROOT, go_root)
                     .env(EnvVars::GOBIN, bin_dir(&info.env_path))
+                    .env(EnvVars::GOFLAGS, "-modcacherw")
                     .env(EnvVars::GOPATH, &go_cache);
                 cmd
             }
@@ -147,6 +148,7 @@ impl LanguageImpl for Golang {
                 .env(EnvVars::PATH, &new_path)
                 .env(EnvVars::GOTOOLCHAIN, "local")
                 .env(EnvVars::GOBIN, &go_bin)
+                .env(EnvVars::GOFLAGS, "-modcacherw")
                 .envs(go_envs.iter().copied())
                 .args(&hook.args)
                 .args(batch)

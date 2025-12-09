@@ -51,50 +51,6 @@ class CallArgument(BaseModel):
             raise ValueError(r"""must validate the regular expression /^"([^"]|"")+"|[a-zA-Z_][a-zA-Z0-9_$]*$/""")
         return v
 
-    @field_validator("datatype")
-    def datatype_validate_enum(cls, v):
-        if v not in (
-            "ARRAY",
-            "BIGINT",
-            "BINARY",
-            "BOOLEAN",
-            "BYTEINT",
-            "CHAR",
-            "CHARACTER",
-            "DATE",
-            "DATETIME",
-            "DECIMAL",
-            "DOUBLE",
-            "DOUBLE PRECISION",
-            "FLOAT",
-            "FLOAT4",
-            "FLOAT8",
-            "GEOGRAPHY",
-            "GEOMETRY",
-            "INT",
-            "INTEGER",
-            "NUMBER",
-            "NUMERIC",
-            "OBJECT",
-            "REAL",
-            "STRING",
-            "SMALLINT",
-            "TEXT",
-            "TIME",
-            "TIMESTAMP_LTZ",
-            "TIMESTAMP_NTZ",
-            "TIMESTAMP_TZ",
-            "TINYINT",
-            "VARBINARY",
-            "VARCHAR",
-            "VARIANT",
-            "VECTOR",
-        ):
-            raise ValueError(
-                "must validate the enum values ('ARRAY','BIGINT','BINARY','BOOLEAN','BYTEINT','CHAR','CHARACTER','DATE','DATETIME','DECIMAL','DOUBLE','DOUBLE PRECISION','FLOAT','FLOAT4','FLOAT8','GEOGRAPHY','GEOMETRY','INT','INTEGER','NUMBER','NUMERIC','OBJECT','REAL','STRING','SMALLINT','TEXT','TIME','TIMESTAMP_LTZ','TIMESTAMP_NTZ','TIMESTAMP_TZ','TINYINT','VARBINARY','VARCHAR','VARIANT','VECTOR')"
-            )
-        return v
-
     class Config:
         populate_by_name = True
         validate_assignment = True

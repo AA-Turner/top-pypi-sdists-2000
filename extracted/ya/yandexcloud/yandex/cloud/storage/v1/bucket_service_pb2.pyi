@@ -141,7 +141,7 @@ class CreateBucketRequest(google.protobuf.message.Message):
     ENCRYPTION_FIELD_NUMBER: builtins.int
     VERSIONING_FIELD_NUMBER: builtins.int
     ALLOWED_PRIVATE_ENDPOINTS_FIELD_NUMBER: builtins.int
-    DISABLED_ACCESSKEY_AUTH_FIELD_NUMBER: builtins.int
+    DISABLED_STATICKEY_AUTH_FIELD_NUMBER: builtins.int
     name: builtins.str
     """Name of the bucket.
 
@@ -166,9 +166,9 @@ class CreateBucketRequest(google.protobuf.message.Message):
     """Bucket versioning status.
     For details, see [documentation](/docs/storage/concepts/versioning).
     """
-    disabled_accesskey_auth: builtins.bool
-    """An option to disable access key auth for a bucket.
-    requires permission s3:PutBucketAccessKeyAuthSettings
+    disabled_statickey_auth: builtins.bool
+    """An option to disable static key auth for a bucket.
+    requires permission s3:UpdateBucketStaticKeyAuthSettings
     """
     @property
     def anonymous_access_flags(self) -> yandex.cloud.storage.v1.bucket_pb2.AnonymousAccessFlags:
@@ -213,10 +213,10 @@ class CreateBucketRequest(google.protobuf.message.Message):
         encryption: yandex.cloud.storage.v1.bucket_pb2.Encryption | None = ...,
         versioning: yandex.cloud.storage.v1.bucket_pb2.Versioning.ValueType = ...,
         allowed_private_endpoints: yandex.cloud.storage.v1.bucket_pb2.BucketAllowedPrivateEndpoints | None = ...,
-        disabled_accesskey_auth: builtins.bool = ...,
+        disabled_statickey_auth: builtins.bool = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "encryption", b"encryption"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "default_storage_class", b"default_storage_class", "disabled_accesskey_auth", b"disabled_accesskey_auth", "encryption", b"encryption", "folder_id", b"folder_id", "max_size", b"max_size", "name", b"name", "tags", b"tags", "versioning", b"versioning"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "default_storage_class", b"default_storage_class", "disabled_statickey_auth", b"disabled_statickey_auth", "encryption", b"encryption", "folder_id", b"folder_id", "max_size", b"max_size", "name", b"name", "tags", b"tags", "versioning", b"versioning"]) -> None: ...
 
 global___CreateBucketRequest = CreateBucketRequest
 
@@ -255,7 +255,7 @@ class UpdateBucketRequest(google.protobuf.message.Message):
     OBJECT_LOCK_FIELD_NUMBER: builtins.int
     ENCRYPTION_FIELD_NUMBER: builtins.int
     ALLOWED_PRIVATE_ENDPOINTS_FIELD_NUMBER: builtins.int
-    DISABLED_ACCESSKEY_AUTH_FIELD_NUMBER: builtins.int
+    DISABLED_STATICKEY_AUTH_FIELD_NUMBER: builtins.int
     name: builtins.str
     """Name of the bucket to update.
 
@@ -276,9 +276,9 @@ class UpdateBucketRequest(google.protobuf.message.Message):
     """Bucket versioning status.
     For details, see [documentation](/docs/storage/concepts/versioning).
     """
-    disabled_accesskey_auth: builtins.bool
-    """An option to disable access key auth for a bucket.
-    requires permission s3:PutBucketAccessKeyAuthSettings
+    disabled_statickey_auth: builtins.bool
+    """An option to disable static key auth for a bucket.
+    requires permission s3:UpdateBucketStaticKeyAuthSettings
     """
     @property
     def update_mask(self) -> google.protobuf.field_mask_pb2.FieldMask:
@@ -362,10 +362,10 @@ class UpdateBucketRequest(google.protobuf.message.Message):
         object_lock: yandex.cloud.storage.v1.bucket_pb2.ObjectLock | None = ...,
         encryption: yandex.cloud.storage.v1.bucket_pb2.Encryption | None = ...,
         allowed_private_endpoints: yandex.cloud.storage.v1.bucket_pb2.BucketAllowedPrivateEndpoints | None = ...,
-        disabled_accesskey_auth: builtins.bool = ...,
+        disabled_statickey_auth: builtins.bool = ...,
     ) -> None: ...
     def HasField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "encryption", b"encryption", "object_lock", b"object_lock", "policy", b"policy", "update_mask", b"update_mask", "website_settings", b"website_settings"]) -> builtins.bool: ...
-    def ClearField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "cors", b"cors", "default_storage_class", b"default_storage_class", "disabled_accesskey_auth", b"disabled_accesskey_auth", "encryption", b"encryption", "lifecycle_rules", b"lifecycle_rules", "max_size", b"max_size", "name", b"name", "object_lock", b"object_lock", "policy", b"policy", "tags", b"tags", "update_mask", b"update_mask", "versioning", b"versioning", "website_settings", b"website_settings"]) -> None: ...
+    def ClearField(self, field_name: typing.Literal["acl", b"acl", "allowed_private_endpoints", b"allowed_private_endpoints", "anonymous_access_flags", b"anonymous_access_flags", "cors", b"cors", "default_storage_class", b"default_storage_class", "disabled_statickey_auth", b"disabled_statickey_auth", "encryption", b"encryption", "lifecycle_rules", b"lifecycle_rules", "max_size", b"max_size", "name", b"name", "object_lock", b"object_lock", "policy", b"policy", "tags", b"tags", "update_mask", b"update_mask", "versioning", b"versioning", "website_settings", b"website_settings"]) -> None: ...
 
 global___UpdateBucketRequest = UpdateBucketRequest
 
@@ -580,3 +580,144 @@ class DeleteBucketHTTPSConfigMetadata(google.protobuf.message.Message):
     def ClearField(self, field_name: typing.Literal["name", b"name"]) -> None: ...
 
 global___DeleteBucketHTTPSConfigMetadata = DeleteBucketHTTPSConfigMetadata
+
+@typing.final
+class CreateBucketInventoryConfigurationRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    BUCKET_FIELD_NUMBER: builtins.int
+    ID_FIELD_NUMBER: builtins.int
+    CONFIGURATION_FIELD_NUMBER: builtins.int
+    bucket: builtins.str
+    """Name of the bucket to update the inventory configuration for."""
+    id: builtins.str
+    """ID of the inventory configuration to set."""
+    @property
+    def configuration(self) -> yandex.cloud.storage.v1.bucket_pb2.InventoryConfiguration:
+        """Inventory configuration."""
+
+    def __init__(
+        self,
+        *,
+        bucket: builtins.str = ...,
+        id: builtins.str = ...,
+        configuration: yandex.cloud.storage.v1.bucket_pb2.InventoryConfiguration | None = ...,
+    ) -> None: ...
+    def HasField(self, field_name: typing.Literal["configuration", b"configuration"]) -> builtins.bool: ...
+    def ClearField(self, field_name: typing.Literal["bucket", b"bucket", "configuration", b"configuration", "id", b"id"]) -> None: ...
+
+global___CreateBucketInventoryConfigurationRequest = CreateBucketInventoryConfigurationRequest
+
+@typing.final
+class CreateBucketInventoryConfigurationMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    NAME_FIELD_NUMBER: builtins.int
+    name: builtins.str
+    """Bucket name for which inventory configuration will be set"""
+    def __init__(
+        self,
+        *,
+        name: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["name", b"name"]) -> None: ...
+
+global___CreateBucketInventoryConfigurationMetadata = CreateBucketInventoryConfigurationMetadata
+
+@typing.final
+class GetBucketInventoryConfigurationRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    BUCKET_FIELD_NUMBER: builtins.int
+    ID_FIELD_NUMBER: builtins.int
+    bucket: builtins.str
+    """Name of the bucket to get the inventory configuration for."""
+    id: builtins.str
+    """ID of the inventory configuration to get."""
+    def __init__(
+        self,
+        *,
+        bucket: builtins.str = ...,
+        id: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["bucket", b"bucket", "id", b"id"]) -> None: ...
+
+global___GetBucketInventoryConfigurationRequest = GetBucketInventoryConfigurationRequest
+
+@typing.final
+class DeleteBucketInventoryConfigurationRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    BUCKET_FIELD_NUMBER: builtins.int
+    ID_FIELD_NUMBER: builtins.int
+    bucket: builtins.str
+    """Name of the bucket to delete the inventory configuration for."""
+    id: builtins.str
+    """ID of the inventory configuration to delete."""
+    def __init__(
+        self,
+        *,
+        bucket: builtins.str = ...,
+        id: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["bucket", b"bucket", "id", b"id"]) -> None: ...
+
+global___DeleteBucketInventoryConfigurationRequest = DeleteBucketInventoryConfigurationRequest
+
+@typing.final
+class DeleteBucketInventoryConfigurationMetadata(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    NAME_FIELD_NUMBER: builtins.int
+    name: builtins.str
+    """Bucket name for which inventory configuration will be set"""
+    def __init__(
+        self,
+        *,
+        name: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["name", b"name"]) -> None: ...
+
+global___DeleteBucketInventoryConfigurationMetadata = DeleteBucketInventoryConfigurationMetadata
+
+@typing.final
+class ListBucketInventoryConfigurationsRequest(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    BUCKET_FIELD_NUMBER: builtins.int
+    PAGE_TOKEN_FIELD_NUMBER: builtins.int
+    bucket: builtins.str
+    """Name of the bucket to list the inventory configurations for."""
+    page_token: builtins.str
+    """Continuation token"""
+    def __init__(
+        self,
+        *,
+        bucket: builtins.str = ...,
+        page_token: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["bucket", b"bucket", "page_token", b"page_token"]) -> None: ...
+
+global___ListBucketInventoryConfigurationsRequest = ListBucketInventoryConfigurationsRequest
+
+@typing.final
+class ListBucketInventoryConfigurationsResponse(google.protobuf.message.Message):
+    DESCRIPTOR: google.protobuf.descriptor.Descriptor
+
+    CONFIGURATIONS_FIELD_NUMBER: builtins.int
+    NEXT_PAGE_TOKEN_FIELD_NUMBER: builtins.int
+    next_page_token: builtins.str
+    """Continuation token to retrieve the next page of results."""
+    @property
+    def configurations(self) -> google.protobuf.internal.containers.RepeatedCompositeFieldContainer[yandex.cloud.storage.v1.bucket_pb2.InventoryConfiguration]:
+        """List of inventory configurations."""
+
+    def __init__(
+        self,
+        *,
+        configurations: collections.abc.Iterable[yandex.cloud.storage.v1.bucket_pb2.InventoryConfiguration] | None = ...,
+        next_page_token: builtins.str = ...,
+    ) -> None: ...
+    def ClearField(self, field_name: typing.Literal["configurations", b"configurations", "next_page_token", b"next_page_token"]) -> None: ...
+
+global___ListBucketInventoryConfigurationsResponse = ListBucketInventoryConfigurationsResponse

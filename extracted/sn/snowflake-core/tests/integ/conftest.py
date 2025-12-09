@@ -45,6 +45,7 @@ from snowflake.core.sequence import SequenceCollection
 from snowflake.core.service import ServiceCollection
 from snowflake.core.stage import StageCollection
 from snowflake.core.stream import StreamCollection
+from snowflake.core.streamlit import StreamlitCollection
 from snowflake.core.table import TableCollection
 from snowflake.core.tag import TagCollection
 from snowflake.core.user import UserCollection
@@ -323,6 +324,11 @@ def functions(schema) -> FunctionCollection:
 @pytest.fixture(scope="session")
 def notebooks(schema) -> NotebookCollection:
     return schema.notebooks
+
+
+@pytest.fixture(scope="session")
+def streamlits(schema) -> StreamlitCollection:
+    return schema.streamlits
 
 
 @pytest.fixture(scope="session")

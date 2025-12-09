@@ -1,9 +1,12 @@
 import asyncio
 from random import random
+from typing import cast
 
 import structlog
 
+from langgraph_api.api.encryption_middleware import decrypt_response
 from langgraph_api.models.run import create_valid_run
+from langgraph_api.serde import json_loads
 from langgraph_api.utils import next_cron_date
 from langgraph_api.utils.config import run_in_executor
 from langgraph_api.worker import set_auth_ctx_for_run
@@ -26,6 +29,15 @@ async def cron_scheduler():
                     on_run_completed = cron.get("on_run_completed")
 
                     run_payload = cron["payload"]
+                    if not isinstance(run_payload, dict):
+                        run_payload = json_loads(run_payload)
+                    run_payload = cast("dict", run_payload)
+
+                    # Decrypt payload.metadata and payload.context (encrypted as "run" model type)
+                    if run_payload.get("metadata") or run_payload.get("context"):
+                        run_payload = await decrypt_response(
+                            run_payload, "run", ["metadata", "context"]
+                        )
 
                     if on_run_completed == "keep":
                         run_payload.setdefault("on_completion", "keep")  # type: ignore[union-attr]

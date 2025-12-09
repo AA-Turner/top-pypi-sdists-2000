@@ -5,6 +5,10 @@ from starlette.exceptions import HTTPException
 from starlette.responses import Response
 from starlette.routing import BaseRoute
 
+from langgraph_api.api.encryption_middleware import (
+    decrypt_response,
+    encrypt_request,
+)
 from langgraph_api.feature_flags import FF_USE_CORE_API
 from langgraph_api.grpc.ops import Threads as GrpcThreads
 from langgraph_api.route import ApiRequest, ApiResponse, ApiRoute
@@ -43,12 +47,20 @@ async def create_thread(
     payload = await request.json(ThreadCreate)
     if thread_id := payload.get("thread_id"):
         validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
+
+    # Encrypt metadata before storing
+    encrypted_payload = await encrypt_request(
+        payload,
+        "thread",
+        ["metadata"],
+    )
+
     async with connect() as conn:
         thread_id = thread_id or str(uuid4())
         iter = await CrudThreads.put(
             conn,
             thread_id,
-            metadata=payload.get("metadata"),
+            metadata=encrypted_payload.get("metadata") or {},
             if_exists=payload.get("if_exists") or "raise",
             ttl=payload.get("ttl"),
         )
@@ -69,7 +81,14 @@ async def create_thread(
                 detail = f"Thread {thread_id} was created, but there were problems updating the state: {e.detail}"
                 raise HTTPException(status_code=201, detail=detail) from e
 
-    return ApiResponse(await fetchone(iter, not_found_code=409))
+    # Decrypt metadata, values, interrupts, and error in response
+    thread = await fetchone(iter, not_found_code=409)
+    thread = await decrypt_response(
+        thread,
+        "thread",
+        ["metadata", "values", "interrupts", "error"],
+    )
+    return ApiResponse(thread)
 
 
 @retry_db
@@ -81,6 +100,7 @@ async def search_threads(
     select = validate_select_columns(payload.get("select") or None, THREAD_FIELDS)
     limit = int(payload.get("limit") or 10)
     offset = int(payload.get("offset") or 0)
+
     async with connect() as conn:
         threads_iter, next_offset = await CrudThreads.search(
             conn,
@@ -97,7 +117,15 @@ async def search_threads(
     threads, response_headers = await get_pagination_headers(
         threads_iter, next_offset, offset
     )
-    return ApiResponse(threads, headers=response_headers)
+
+    # Decrypt metadata, values, interrupts, and error in all returned threads
+    decrypted_threads = await decrypt_response(
+        threads,
+        "thread",
+        ["metadata", "values", "interrupts", "error"],
+    )
+
+    return ApiResponse(decrypted_threads, headers=response_headers)
 
 
 @retry_db
@@ -282,7 +310,15 @@ async def get_thread(
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     async with connect() as conn:
         thread = await CrudThreads.get(conn, thread_id)
-    return ApiResponse(await fetchone(thread))
+
+    # Decrypt metadata, values, interrupts, and error in response
+    thread_data = await fetchone(thread)
+    thread_data = await decrypt_response(
+        thread_data,
+        "thread",
+        ["metadata", "values", "interrupts", "error"],
+    )
+    return ApiResponse(thread_data)
 
 
 @retry_db
@@ -293,14 +329,29 @@ async def patch_thread(
     thread_id = request.path_params["thread_id"]
     validate_uuid(thread_id, "Invalid thread ID: must be a UUID")
     payload = await request.json(ThreadPatch)
+
+    # Encrypt metadata before storing
+    encrypted_payload = await encrypt_request(
+        payload,
+        "thread",
+        ["metadata"],
+    )
+
     async with connect() as conn:
         thread = await CrudThreads.patch(
             conn,
             thread_id,
-            metadata=payload.get("metadata", {}),
+            metadata=encrypted_payload.get("metadata") or {},
             ttl=payload.get("ttl"),
         )
-    return ApiResponse(await fetchone(thread))
+    thread_data = await fetchone(thread)
+    # Decrypt metadata, values, interrupts, and error in response
+    thread_data = await decrypt_response(
+        thread_data,
+        "thread",
+        ["metadata", "values", "interrupts", "error"],
+    )
+    return ApiResponse(thread_data)
 
 
 @retry_db

@@ -64,6 +64,25 @@ async def set_auth_ctx_for_run(
         yield None
 
 
+@asynccontextmanager
+async def set_encryption_ctx_for_run(
+    run_kwargs: dict,
+) -> AsyncGenerator[None, None]:
+    """Set encryption context from run config for checkpoint blob encryption."""
+    try:
+        from langgraph_api.encryption.context import set_encryption_context
+
+        encryption_context = run_kwargs.get("config", {}).get("__encryption_context__")
+        if encryption_context:
+            set_encryption_context(encryption_context)
+            await logger.adebug(
+                "Set encryption context for run", encryption_context=encryption_context
+            )
+    except Exception as e:
+        await logger.awarning("Failed to set encryption context for run", error=str(e))
+    yield None
+
+
 async def worker(
     run: Run,
     attempt: int,
@@ -181,7 +200,10 @@ async def worker(
                     )
 
                 raise RuntimeError(error_message)
-            async with set_auth_ctx_for_run(run["kwargs"]):
+            async with (
+                set_auth_ctx_for_run(run["kwargs"]),
+                set_encryption_ctx_for_run(run["kwargs"]),
+            ):
                 if temporary:
                     stream = astream_state(run, attempt, done)
                 else:

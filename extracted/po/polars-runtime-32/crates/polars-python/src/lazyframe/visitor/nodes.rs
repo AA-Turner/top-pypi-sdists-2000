@@ -618,9 +618,15 @@ pub(crate) fn into_py(py: Python<'_>, plan: &IR) -> PyResult<Py<PyAny>> {
                 )
                     .into_py_any(py)?,
                 FunctionIR::Rechunk => ("rechunk",).into_py_any(py)?,
-                FunctionIR::Explode { columns, schema: _ } => (
+                FunctionIR::Explode {
+                    columns,
+                    options,
+                    schema: _,
+                } => (
                     "explode",
                     columns.iter().map(|s| s.to_string()).collect::<Vec<_>>(),
+                    options.empty_as_null,
+                    options.keep_nulls,
                 )
                     .into_py_any(py)?,
                 #[cfg(feature = "pivot")]
@@ -628,12 +634,8 @@ pub(crate) fn into_py(py: Python<'_>, plan: &IR) -> PyResult<Py<PyAny>> {
                     "unpivot",
                     args.index.iter().map(|s| s.as_str()).collect::<Vec<_>>(),
                     args.on.iter().map(|s| s.as_str()).collect::<Vec<_>>(),
-                    args.variable_name
-                        .as_ref()
-                        .map_or_else(|| Ok(py.None()), |s| s.as_str().into_py_any(py))?,
-                    args.value_name
-                        .as_ref()
-                        .map_or_else(|| Ok(py.None()), |s| s.as_str().into_py_any(py))?,
+                    args.variable_name.as_str().into_py_any(py)?,
+                    args.value_name.as_str().into_py_any(py)?,
                 )
                     .into_py_any(py)?,
                 FunctionIR::RowIndex {

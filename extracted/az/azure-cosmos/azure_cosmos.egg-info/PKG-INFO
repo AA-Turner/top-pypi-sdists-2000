@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: azure-cosmos
-Version: 4.14.2
+Version: 4.14.3
 Summary: Microsoft Azure Cosmos Client Library for Python
 Home-page: https://github.com/Azure/azure-sdk-for-python
 Author: Microsoft Corporation
@@ -1176,6 +1176,12 @@ For more information see the [Code of Conduct FAQ](https://opensource.microsoft.
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## Release History
+
+### 4.14.3 (2025-12-08)
+
+#### Bugs Fixed
+* Fixed bug where client timeout/read_timeout values were not properly enforced. See [PR 42652](https://github.com/Azure/azure-sdk-for-python/pull/42652).
+* Fixed bug when passing in None for some options in `query_items` would cause unexpected errors. See [PR 44098](https://github.com/Azure/azure-sdk-for-python/pull/44098)
 
 ### 4.14.2 (2025-11-14)
 

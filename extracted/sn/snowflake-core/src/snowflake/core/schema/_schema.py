@@ -33,6 +33,7 @@ from ..sequence import SequenceCollection
 from ..service import ServiceCollection
 from ..stage import StageCollection
 from ..stream import StreamCollection
+from ..streamlit import StreamlitCollection
 from ..table import TableCollection
 from ..tag import TagCollection
 from ..task import TaskCollection
@@ -518,6 +519,18 @@ class SchemaResource(DatabaseObjectReferenceMixin[SchemaCollection]):
         >>> my_db.schemas["my_schema"].notebooks
         """
         return NotebookCollection(self)
+
+    @cached_property
+    def streamlits(self) -> StreamlitCollection:
+        """The StreamlitCollection of all Streamlits contained in this schema.
+
+        Examples
+        ________
+        Getting all streamlits in ``my_schema``:
+
+        >>> my_db.schemas["my_schema"].streamlits
+        """
+        return StreamlitCollection(self)
 
     @cached_property
     def artifact_repositories(self) -> ArtifactRepositoryCollection:

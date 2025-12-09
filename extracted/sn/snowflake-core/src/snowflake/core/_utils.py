@@ -4,6 +4,7 @@ import json
 import logging
 import re
 
+from decimal import Decimal
 from typing import TYPE_CHECKING, Any
 
 from snowflake.core.exceptions import InvalidResultError
@@ -76,6 +77,8 @@ def _cast_result(result: str, datatype: str | None) -> Any:
             return float(result)
     if datatype in ["FLOAT", "FLOAT4", "FLOAT8", "DOUBLE", "DOUBLE PRECISION", "REAL"]:
         return float(result)
+    if datatype == "DECFLOAT":
+        return Decimal(result)
     if datatype in ["VARCHAR", "STRING", "TEXT"]:
         return str(result)
     if datatype in ["CHAR", "CHARACTER"]:

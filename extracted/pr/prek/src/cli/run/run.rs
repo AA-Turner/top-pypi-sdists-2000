@@ -7,15 +7,14 @@ use std::sync::{Arc, LazyLock};
 use anyhow::{Context, Result};
 use futures::stream::{FuturesUnordered, StreamExt};
 use owo_colors::{OwoColorize, Style};
+use prek_consts::env_vars::EnvVars;
 use rand::SeedableRng;
 use rand::prelude::{SliceRandom, StdRng};
-use rustc_hash::FxHashMap;
+use rustc_hash::{FxHashMap, FxHashSet};
 use tokio::io::AsyncWriteExt;
 use tokio::sync::{OnceCell, Semaphore};
 use tracing::{debug, trace, warn};
 use unicode_width::UnicodeWidthStr;
-
-use prek_consts::env_vars::EnvVars;
 
 use crate::cli::reporter::{HookInitReporter, HookInstallReporter};
 use crate::cli::run::keeper::WorkTreeKeeper;
@@ -37,7 +36,7 @@ pub(crate) async fn run(
     config: Option<PathBuf>,
     includes: Vec<String>,
     skips: Vec<String>,
-    hook_stage: Stage,
+    hook_stage: Option<Stage>,
     from_ref: Option<String>,
     to_ref: Option<String>,
     all_files: bool,
@@ -60,7 +59,7 @@ pub(crate) async fn run(
     };
 
     // Prevent recursive post-checkout hooks.
-    if hook_stage == Stage::PostCheckout
+    if hook_stage == Some(Stage::PostCheckout)
         && EnvVars::is_set(EnvVars::PREK_INTERNAL__SKIP_POST_CHECKOUT)
     {
         return Ok(ExitStatus::Success);
@@ -92,7 +91,7 @@ pub(crate) async fn run(
         .init_hooks(store, Some(&reporter))
         .await
         .context("Failed to init hooks")?;
-    let filtered_hooks: Vec<_> = hooks
+    let selected_hooks: Vec<_> = hooks
         .into_iter()
         .filter(|h| selectors.matches_hook(h))
         .map(Arc::new)
@@ -100,7 +99,7 @@ pub(crate) async fn run(
 
     selectors.report_unused();
 
-    if filtered_hooks.is_empty() {
+    if selected_hooks.is_empty() {
         writeln!(
             printer.stderr(),
             "{}: No hooks found after filtering with the given selectors",
@@ -118,10 +117,32 @@ pub(crate) async fn run(
         return Ok(ExitStatus::Failure);
     }
 
-    let filtered_hooks = filtered_hooks
-        .into_iter()
-        .filter(|h| h.stages.contains(hook_stage))
-        .collect::<Vec<_>>();
+    let (filtered_hooks, hook_stage) = if let Some(hook_stage) = hook_stage {
+        let hooks = selected_hooks
+            .iter()
+            .filter(|h| h.stages.contains(hook_stage))
+            .cloned()
+            .collect::<Vec<_>>();
+        (hooks, hook_stage)
+    } else {
+        // Try filtering by `pre-commit` stage first.
+        let mut hook_stage = Stage::PreCommit;
+        let mut hooks = selected_hooks
+            .iter()
+            .filter(|h| h.stages.contains(Stage::PreCommit))
+            .cloned()
+            .collect::<Vec<_>>();
+        if hooks.is_empty() && selectors.includes_only_hook_targets() {
+            // If no hooks found for `pre-commit` stage, try fallback to `manual` stage for hooks specified directly.
+            hook_stage = Stage::Manual;
+            hooks = selected_hooks
+                .iter()
+                .filter(|h| h.stages.contains(Stage::Manual))
+                .cloned()
+                .collect();
+        }
+        (hooks, hook_stage)
+    };
 
     if filtered_hooks.is_empty() {
         writeln!(
@@ -576,20 +597,24 @@ async fn run_hooks(
             .push(hook);
     }
 
-    // Sort projects by their depth in the workspace.
-    let mut project_to_hooks: Vec<_> = project_to_hooks.into_iter().collect();
-    project_to_hooks.sort_by_key(|(_, hooks)| hooks[0].project().idx());
-
     let projects_len = project_to_hooks.len();
     let mut first = true;
     let mut file_modified = false;
     let mut has_unimplemented = false;
 
+    // Track files that have been consumed by orphan projects.
+    let mut consumed_files = FxHashSet::default();
+
     // Hooks might modify the files, so they must be run sequentially.
-    'outer: for (_, mut hooks) in project_to_hooks {
+    'outer: for project in workspace.all_projects() {
+        let filter = FileFilter::for_project(filenames.iter(), project, Some(&mut consumed_files));
+
+        let Some(mut hooks) = project_to_hooks.remove(project) else {
+            continue;
+        };
+
         hooks.sort_by_key(|h| h.idx);
 
-        let project = hooks[0].project();
         if projects_len > 1 || !project.is_root() {
             writeln!(
                 printer.stdout(),
@@ -601,10 +626,8 @@ async fn run_hooks(
         }
         let mut diff = git::get_diff(project.path()).await?;
 
-        // CLI flag overrides config setting
         let fail_fast = fail_fast || project.config().fail_fast.unwrap_or(false);
 
-        let filter = FileFilter::for_project(filenames.iter(), project);
         trace!(
             "Files for project `{project}` after filtered: {}",
             filter.len()

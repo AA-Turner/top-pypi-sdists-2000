@@ -11,6 +11,7 @@ from langgraph_api.config.schemas import (
     AuthConfig,
     CheckpointerConfig,
     CorsConfig,
+    EncryptionConfig,
     HttpConfig,
     SerdeConfig,
     StoreConfig,
@@ -113,7 +114,7 @@ CORS_CONFIG = env(
             "default": []
         },
         "allow_methods": {
-            "type": "array", 
+            "type": "array",
             "items": {"type": "string"},
             "default": ["GET"]
         },
@@ -198,6 +199,9 @@ if LANGGRAPH_POSTGRES_EXTENSIONS not in ("standard", "lite"):
     )
 LANGGRAPH_AUTH = env(
     "LANGGRAPH_AUTH", cast=_parse.parse_schema(AuthConfig), default=None
+)
+LANGGRAPH_ENCRYPTION = env(
+    "LANGGRAPH_ENCRYPTION", cast=_parse.parse_schema(EncryptionConfig), default=None
 )
 LANGSMITH_TENANT_ID = env("LANGSMITH_TENANT_ID", cast=str, default=None)
 LANGSMITH_AUTH_VERIFY_TENANT_ID = env(

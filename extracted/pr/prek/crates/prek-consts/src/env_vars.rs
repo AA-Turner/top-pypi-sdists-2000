@@ -9,6 +9,9 @@ impl EnvVars {
     pub const HOME: &'static str = "HOME";
     pub const CI: &'static str = "CI";
 
+    // Git related
+    pub const GIT_TERMINAL_PROMPT: &'static str = "GIT_TERMINAL_PROMPT";
+
     pub const SKIP: &'static str = "SKIP";
 
     // PREK specific environment variables, public for users
@@ -31,6 +34,7 @@ impl EnvVars {
         "PREK_INTERNAL__RUN_ORIGINAL_PRE_COMMIT";
     pub const PREK_INTERNAL__GO_BINARY_NAME: &'static str = "PREK_INTERNAL__GO_BINARY_NAME";
     pub const PREK_INTERNAL__NODE_BINARY_NAME: &'static str = "PREK_INTERNAL__NODE_BINARY_NAME";
+    pub const PREK_INTERNAL__RUSTUP_BINARY_NAME: &'static str = "PREK_INTERNAL__RUSTUP_BINARY_NAME";
     pub const PREK_GENERATE: &'static str = "PREK_GENERATE";
 
     // Python & uv related
@@ -52,6 +56,7 @@ impl EnvVars {
     pub const GOROOT: &'static str = "GOROOT";
     pub const GOPATH: &'static str = "GOPATH";
     pub const GOBIN: &'static str = "GOBIN";
+    pub const GOFLAGS: &'static str = "GOFLAGS";
 
     // Lua related
     pub const LUA_PATH: &'static str = "LUA_PATH";
@@ -62,6 +67,12 @@ impl EnvVars {
     pub const GEM_PATH: &'static str = "GEM_PATH";
     pub const BUNDLE_IGNORE_CONFIG: &'static str = "BUNDLE_IGNORE_CONFIG";
     pub const BUNDLE_GEMFILE: &'static str = "BUNDLE_GEMFILE";
+
+    // Rust related
+    pub const RUSTUP_TOOLCHAIN: &'static str = "RUSTUP_TOOLCHAIN";
+    pub const RUSTUP_AUTO_INSTALL: &'static str = "RUSTUP_AUTO_INSTALL";
+    pub const CARGO_HOME: &'static str = "CARGO_HOME";
+    pub const RUSTUP_HOME: &'static str = "RUSTUP_HOME";
 }
 
 impl EnvVars {

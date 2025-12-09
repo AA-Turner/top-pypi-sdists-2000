@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: prek
-Version: 0.2.19
+Version: 0.2.21
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Environment :: Console
 Classifier: Intended Audience :: Developers
@@ -27,6 +27,7 @@ Project-URL: Homepage, https://prek.j178.dev/
   <br/>prek
 </h1>
 
+[![prek](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/j178/prek/master/docs/assets/badge-v0.json)](https://github.com/j178/prek)
 [![CI](https://github.com/j178/prek/actions/workflows/ci.yml/badge.svg)](https://github.com/j178/prek/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/github/j178/prek/graph/badge.svg?token=MP6TY24F43)](https://codecov.io/github/j178/prek)
 [![GitHub Downloads](https://img.shields.io/github/downloads/j178/prek/total?logo=github)](https://github.com/j178/prek/releases)
@@ -80,7 +81,7 @@ On Linux and macOS:
 
 <!-- linux-standalone-install:start -->
 ```bash
-curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.19/prek-installer.sh | sh
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/j178/prek/releases/download/v0.2.21/prek-installer.sh | sh
 ```
 <!-- linux-standalone-install:end -->
 
@@ -88,7 +89,7 @@ On Windows:
 
 <!-- windows-standalone-install:start -->
 ```powershell
-powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.19/prek-installer.ps1 | iex"
+powershell -ExecutionPolicy ByPass -c "irm https://github.com/j178/prek/releases/download/v0.2.21/prek-installer.ps1 | iex"
 ```
 <!-- windows-standalone-install:end -->
 
@@ -237,6 +238,18 @@ prek is available via [Scoop](https://scoop.sh/#/apps?q=prek).
 scoop install main/prek
 ```
 <!-- scoop-install:end -->
+</details>
+
+<details>
+<summary>MacPorts</summary>
+
+<!-- macports-install:start -->
+prek is available via [MacPorts](https://ports.macports.org/port/prek/).
+
+```bash
+sudo port install prek
+```
+<!-- macports-install:end -->
 </details>
 
 <details>

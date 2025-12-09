@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, Optional
 
-from pydantic import StrictBool, StrictStr, field_validator
+from pydantic import StrictBool, StrictStr
 
 from snowflake.core.procedure._generated.models.return_type import ReturnType
 
@@ -41,50 +41,6 @@ class ReturnDataType(ReturnType):
     nullable: Optional[StrictBool] = None
 
     __properties = ["type"]
-
-    @field_validator("datatype")
-    def datatype_validate_enum(cls, v):
-        if v not in (
-            "ARRAY",
-            "BIGINT",
-            "BINARY",
-            "BOOLEAN",
-            "BYTEINT",
-            "CHAR",
-            "CHARACTER",
-            "DATE",
-            "DATETIME",
-            "DECIMAL",
-            "DOUBLE",
-            "DOUBLE PRECISION",
-            "FLOAT",
-            "FLOAT4",
-            "FLOAT8",
-            "GEOGRAPHY",
-            "GEOMETRY",
-            "INT",
-            "INTEGER",
-            "NUMBER",
-            "NUMERIC",
-            "OBJECT",
-            "REAL",
-            "STRING",
-            "SMALLINT",
-            "TEXT",
-            "TIME",
-            "TIMESTAMP_LTZ",
-            "TIMESTAMP_NTZ",
-            "TIMESTAMP_TZ",
-            "TINYINT",
-            "VARBINARY",
-            "VARCHAR",
-            "VARIANT",
-            "VECTOR",
-        ):
-            raise ValueError(
-                "must validate the enum values ('ARRAY','BIGINT','BINARY','BOOLEAN','BYTEINT','CHAR','CHARACTER','DATE','DATETIME','DECIMAL','DOUBLE','DOUBLE PRECISION','FLOAT','FLOAT4','FLOAT8','GEOGRAPHY','GEOMETRY','INT','INTEGER','NUMBER','NUMERIC','OBJECT','REAL','STRING','SMALLINT','TEXT','TIME','TIMESTAMP_LTZ','TIMESTAMP_NTZ','TIMESTAMP_TZ','TINYINT','VARBINARY','VARCHAR','VARIANT','VECTOR')"
-            )
-        return v
 
     class Config:
         populate_by_name = True

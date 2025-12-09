@@ -62,6 +62,12 @@ class Config(TypedDict, total=False):
     configurable.
     """
 
+    __encryption_context__: dict[str, Any]
+    """
+    Internal: Encryption context for encryption/decryption operations.
+    Not exposed to users.
+    """
+
 
 class Checkpoint(TypedDict):
     thread_id: str

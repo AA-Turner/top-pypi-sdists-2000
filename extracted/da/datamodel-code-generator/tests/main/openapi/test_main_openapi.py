@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 import json
 import platform
 import warnings
@@ -2121,6 +2122,18 @@ def test_main_openapi_custom_id_pydantic_v2(output_file: Path) -> None:
     )
 
 
+def test_main_openapi_serialize_as_any_pydantic_v2(output_file: Path) -> None:
+    """Test OpenAPI generation with SerializeAsAny for types with subtypes."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "serialize_as_any.yaml",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+        expected_file="serialize_as_any_pydantic_v2.py",
+        extra_args=["--output-model-type", "pydantic_v2.BaseModel", "--use-serialize-as-any"],
+    )
+
+
 @pytest.mark.skipif(
     black.__version__.split(".")[0] == "19",
     reason="Installed black doesn't support the old style",
@@ -2374,6 +2387,39 @@ def test_main_openapi_msgspec_anyof(min_version: str, output_file: Path) -> None
             "msgspec.Struct",
             "--target-python-version",
             min_version,
+        ],
+    )
+
+
+@LEGACY_BLACK_SKIP
+def test_main_openapi_msgspec_oneof_with_null(output_file: Path) -> None:
+    """Test msgspec Struct generation with oneOf containing null type."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "msgspec_oneof_with_null.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="msgspec_oneof_with_null.py",
+        extra_args=[
+            "--output-model-type",
+            "msgspec.Struct",
+        ],
+    )
+
+
+@LEGACY_BLACK_SKIP
+def test_main_openapi_msgspec_oneof_with_null_union_operator(output_file: Path) -> None:
+    """Test msgspec Struct generation with oneOf containing null type using union operator."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "msgspec_oneof_with_null.yaml",
+        output_path=output_file,
+        input_file_type="openapi",
+        assert_func=assert_file_content,
+        expected_file="msgspec_oneof_with_null_union_operator.py",
+        extra_args=[
+            "--output-model-type",
+            "msgspec.Struct",
+            "--use-union-operator",
         ],
     )
 
@@ -3242,3 +3288,33 @@ def test_main_openapi_circular_imports_mixed_prefixes(output_dir: Path) -> None:
             expected_directory=EXPECTED_OPENAPI_PATH / "circular_imports_mixed_prefixes",
             input_file_type="openapi",
         )
+
+
+def test_warning_empty_schemas_with_paths(tmp_path: Path) -> None:
+    """Test warning when components/schemas is empty but paths exist."""
+    openapi_file = tmp_path / "openapi.yaml"
+    openapi_file.write_text("""
+openapi: 3.1.0
+info:
+  title: Test
+  version: '1'
+paths:
+  /test:
+    get:
+      responses:
+        200:
+          description: OK
+""")
+
+    with pytest.warns(UserWarning, match=r"No schemas found.*--openapi-scopes paths"), contextlib.suppress(Exception):
+        generate(openapi_file)
+
+
+def test_main_allof_enum_ref(output_file: Path) -> None:
+    """Test OpenAPI generation with allOf referencing enum from another schema."""
+    run_main_and_assert(
+        input_path=OPEN_API_DATA_PATH / "allof_enum_ref.yaml",
+        output_path=output_file,
+        input_file_type=None,
+        assert_func=assert_file_content,
+    )

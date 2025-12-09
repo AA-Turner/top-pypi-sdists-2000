@@ -18,7 +18,7 @@ import re  # noqa: F401
 
 from typing import Any, Optional
 
-from pydantic import BaseModel, StrictStr, field_validator
+from pydantic import BaseModel, StrictStr
 
 
 class FunctionArgument(BaseModel):
@@ -43,28 +43,6 @@ class FunctionArgument(BaseModel):
     value: Optional[Any] = None
 
     __properties = ["name", "datatype", "value"]
-
-    @field_validator("datatype")
-    def datatype_validate_enum(cls, v):
-        if v is None:
-            return v
-        if v not in (
-            "FIXED",
-            "INT",
-            "REAL",
-            "NUMBER",
-            "TEXT",
-            "BOOLEAN",
-            "DATE",
-            "TIME",
-            "TIMESTAMP_TZ",
-            "TIMESTAMP_LTZ",
-            "TIMESTAMP_NTZ",
-        ):
-            raise ValueError(
-                "must validate the enum values ('FIXED','INT','REAL','NUMBER','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP_TZ','TIMESTAMP_LTZ','TIMESTAMP_NTZ')"
-            )
-        return v
 
     class Config:
         populate_by_name = True

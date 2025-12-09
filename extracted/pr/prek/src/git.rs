@@ -7,6 +7,7 @@ use std::sync::LazyLock;
 
 use anyhow::Result;
 use path_clean::PathClean;
+use prek_consts::env_vars::EnvVars;
 use rustc_hash::FxHashSet;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tracing::{debug, instrument, warn};
@@ -367,6 +368,9 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("origin")
         .arg(rev)
         .arg("--depth=1")
+        // Disable interactive prompts in the terminal, as they'll be erased by the progress bar
+        // animation and the process will "hang".
+        .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
         .remove_git_env()
         .check(true)
         .output()
@@ -377,6 +381,7 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("checkout")
         .arg("FETCH_HEAD")
         .remove_git_env()
+        .env(EnvVars::PREK_INTERNAL__SKIP_POST_CHECKOUT, "1")
         .check(true)
         .output()
         .await?;
@@ -390,6 +395,7 @@ async fn shallow_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("--init")
         .arg("--recursive")
         .arg("--depth=1")
+        .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
         .remove_git_env()
         .check(true)
         .output()
@@ -404,6 +410,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("fetch")
         .arg("origin")
         .arg("--tags")
+        .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
         .remove_git_env()
         .check(true)
         .output()
@@ -413,6 +420,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .current_dir(path)
         .arg("checkout")
         .arg(rev)
+        .env(EnvVars::PREK_INTERNAL__SKIP_POST_CHECKOUT, "1")
         .remove_git_env()
         .check(true)
         .output()
@@ -424,6 +432,7 @@ async fn full_clone(rev: &str, path: &Path) -> Result<(), Error> {
         .arg("update")
         .arg("--init")
         .arg("--recursive")
+        .env(EnvVars::GIT_TERMINAL_PROMPT, "0")
         .remove_git_env()
         .check(true)
         .output()
